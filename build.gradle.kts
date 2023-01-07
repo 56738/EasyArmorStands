@@ -6,9 +6,9 @@ plugins {
 
 dependencies {
     implementation(project(":easyarmorstands-api"))
-    implementation(project(":easyarmorstands-math"))
     implementation(project(":easyarmorstands-module"))
     runtimeOnly(project(":easyarmorstands-skeleton"))
+    implementation("org.joml:joml:1.10.5")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
     implementation("net.kyori:adventure-text-minimessage:4.12.0")
     implementation("me.lucko:commodore:2.2") {
@@ -31,6 +31,7 @@ tasks {
 
     shadowJar {
         val prefix = "gg.bundlegroup.easyarmorstands.lib"
+        relocate("org.joml", "$prefix.joml")
         relocate("cloud.commandframework", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")

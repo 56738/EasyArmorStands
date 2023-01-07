@@ -4,8 +4,6 @@ import gg.bundlegroup.easyarmorstands.api.Session;
 import gg.bundlegroup.easyarmorstands.api.event.PlayerEditArmorStandPoseEvent;
 import gg.bundlegroup.easyarmorstands.api.event.PlayerStartArmorStandEditorEvent;
 import gg.bundlegroup.easyarmorstands.api.event.PlayerStopArmorStandEditorEvent;
-import gg.bundlegroup.easyarmorstands.math.Matrix3x3;
-import gg.bundlegroup.easyarmorstands.math.Vector3;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,16 +11,39 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.EulerAngle;
+import org.joml.Matrix3d;
+import org.joml.Vector3d;
 
 public class EasSession implements Session {
     private final SessionManager manager;
     private final Player player;
     private final Audience audience;
     private final ArmorStand entity;
+
+    // Scratch space for calculations
+    private final Vector3d eyes = new Vector3d();
+    private final Matrix3d view = new Matrix3d();
+    private final Matrix3d inverseView = new Matrix3d();
+    private final Vector3d armorStandPos = new Vector3d();
+    private final Matrix3d armorStandYaw = new Matrix3d();
+    private final Matrix3d inverseArmorStandYaw = new Matrix3d();
+    private final Vector3d boneAngle = new Vector3d();
+    private final Matrix3d bonePose = new Matrix3d();
+    private final Matrix3d boneRotation = new Matrix3d();
+    private final Vector3d boneStart = new Vector3d();
+    private final Vector3d boneEnd = new Vector3d();
+    private final Matrix3d desiredBoneRotation = new Matrix3d();
+    private final Vector3d desiredBoneEnd = new Vector3d();
+    private final Vector3d desiredBoneDirection = new Vector3d();
+    private final Vector3d desiredBoneUp = new Vector3d();
+    private final Vector3d rightClickDistance = new Vector3d();
+
+    // View-space values, stored across ticks while dragging
+    private final Vector3d localBoneEnd = new Vector3d();
+    private final Matrix3d localBoneRotation = new Matrix3d();
+
     private int rightClickTicks = 0;
     private EasBoneType rightClickBoneType;
-    private Vector3 rightClickBoneEnd;
-    private Matrix3x3 rightClickBoneRotation;
     private BukkitTask task;
     private boolean running;
 
@@ -32,7 +53,6 @@ public class EasSession implements Session {
         this.audience = audience;
         this.entity = entity;
     }
-
 
     @Override
     public Player player() {
@@ -72,31 +92,46 @@ public class EasSession implements Session {
         return true;
     }
 
-    private Vector3 eyes() {
-        return new Vector3(player.getEyeLocation());
+    private void updateView() {
+        Location location = player.getEyeLocation();
+        eyes.set(location.getX(), location.getY(), location.getZ());
+        view.rotationZYX(
+                0,
+                -Math.toRadians(location.getYaw()),
+                Math.toRadians(location.getPitch()));
+        view.transpose(inverseView);
     }
 
-    private Matrix3x3 view() {
-        final Location location = player.getEyeLocation();
-        return new Matrix3x3(Math.toRadians(location.getPitch()), Math.toRadians(location.getYaw()));
+    private void updateArmorStand() {
+        Location location = entity.getLocation();
+        armorStandPos.set(location.getX(), location.getY(), location.getZ());
+        armorStandYaw.rotationY(-Math.toRadians(location.getYaw()));
+        armorStandYaw.transpose(inverseArmorStandYaw);
+    }
+
+    private void updateBone(EasBoneType type) {
+        armorStandYaw.transform(type.offset(entity), boneStart).add(armorStandPos);
+        Util.fromEuler(type.getPose(entity), bonePose);
+        armorStandYaw.mul(bonePose, boneRotation);
+        boneRotation.transform(type.length(entity), boneEnd).add(boneStart);
     }
 
     private void handleStartRightClick() {
-        Vector3 eyes = eyes();
-        Matrix3x3 view = view();
-        Matrix3x3 inverseView = view.transpose();
+        updateView();
+        updateArmorStand();
 
         // Find which bone we clicked
         EasBoneType bestType = null;
         double bestDistance = Double.POSITIVE_INFINITY;
         for (EasBoneType type : EasBoneType.values()) {
-            Vector3 direction = inverseView.multiply(ArmorStandModel.getBoneEnd(entity, type).subtract(eyes));
+            updateBone(type);
+            inverseView.transform(boneEnd.sub(eyes, rightClickDistance));
+            double distance = rightClickDistance.z;
             // Eliminate forward part
-            Vector3 delta = direction.multiply(new Vector3(1, 1, 0));
+            rightClickDistance.z = 0;
             // Distance from straight line
-            double deviationSquared = delta.lengthSquared();
+            double deviationSquared = rightClickDistance.lengthSquared();
             if (deviationSquared < 0.025) {
-                double distance = direction.z();
                 if (distance > 0 && distance < bestDistance) {
                     bestType = type;
                     bestDistance = distance;
@@ -107,51 +142,46 @@ public class EasSession implements Session {
         if (bestDistance > 5) {
             // Too far away or didn't click any bone end, abort
             rightClickBoneType = null;
-            rightClickBoneEnd = null;
-            rightClickBoneRotation = null;
             return;
         }
 
         // Bone properties relative to the view matrix
-        Bone bone = ArmorStandModel.getBone(entity, bestType);
+        updateBone(bestType);
         rightClickBoneType = bestType;
-        rightClickBoneEnd = inverseView.multiply(bone.end().subtract(eyes));
-        rightClickBoneRotation = inverseView.multiply(bone.rotation());
+        inverseView.transform(boneEnd.sub(eyes, localBoneEnd));
+        inverseView.mul(boneRotation, localBoneRotation);
     }
 
     private void handleHoldRightClick() {
-        if (rightClickBoneEnd == null) {
+        if (rightClickBoneType == null) {
             return;
         }
 
-        Matrix3x3 view = view();
+        updateView();
 
         // Desired bone properties in world space
-        Matrix3x3 yaw = Matrix3x3.rotateY(Math.toRadians(entity.getLocation().getYaw()));
-        Vector3 end = view.multiply(rightClickBoneEnd).add(eyes()).subtract(ArmorStandModel.getBonePosition(entity, rightClickBoneType));
-        Matrix3x3 rotation = view.multiply(rightClickBoneRotation);
-        Matrix3x3 transform = rightClickBoneType.transform();
-        Matrix3x3 result = new Matrix3x3(end, rotation.multiply(transform.multiply(Vector3.DOWN))).multiply(transform);
-        EulerAngle angle = yaw.transpose().multiply(result).getEulerAngle();
+        view.transform(localBoneEnd, desiredBoneEnd).add(eyes);
+        desiredBoneEnd.sub(boneStart, desiredBoneDirection);
+        view.mul(localBoneRotation, desiredBoneRotation);
+        desiredBoneRotation.transform(rightClickBoneType.transform().transform(Util.DOWN, desiredBoneUp));
+        desiredBoneDirection.mul(-1);
+        desiredBoneRotation.setLookAlong(desiredBoneDirection, desiredBoneUp).transpose();
+        desiredBoneRotation.mul(rightClickBoneType.transform());
+        inverseArmorStandYaw.mul(desiredBoneRotation, bonePose);
+        EulerAngle angle = Util.toEuler(bonePose, boneAngle);
 
-        PlayerEditArmorStandPoseEvent event = new PlayerEditArmorStandPoseEvent(this, rightClickBoneType.boneType(), result, angle);
+        PlayerEditArmorStandPoseEvent event = new PlayerEditArmorStandPoseEvent(this, rightClickBoneType.boneType(), angle);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
 
         rightClickBoneType.setPose(entity, angle);
-        rightClickBoneRotation = view.transpose().multiply(result);
+        inverseView.mul(desiredBoneRotation, localBoneRotation);
     }
 
     private void handleStopRightClick() {
-        if (rightClickBoneEnd == null) {
-            return;
-        }
-
         rightClickBoneType = null;
-        rightClickBoneEnd = null;
-        rightClickBoneRotation = null;
     }
 
     @Override
