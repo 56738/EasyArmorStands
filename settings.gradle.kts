@@ -1,5 +1,8 @@
 rootProject.name = "EasyArmorStands"
 
-include(":easyarmorstands-api")
-include(":easyarmorstands-module")
-include(":easyarmorstands-skeleton")
+include(":easyarmorstands")
+include(":easyarmorstands-bukkit")
+include(":easyarmorstands-bukkit-v1_9")
+include(":easyarmorstands-bukkit-v1_13")
+include(":easyarmorstands-bukkit-v1_18")
+include(":easyarmorstands-platform")
