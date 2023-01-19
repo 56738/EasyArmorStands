@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 
@@ -11,7 +12,11 @@ public class SessionListener implements EasListener {
         this.manager = manager;
     }
 
-    private boolean startEditing(EasPlayer player, EasArmorStand armorStand) {
+    private boolean startEditing(EasPlayer player, EasArmorStand armorStand, EasItem item) {
+        if (!item.isTool()) {
+            return false;
+        }
+
         if (!player.hasPermission("easyarmorstands.edit")) {
             return false;
         }
@@ -21,7 +26,7 @@ public class SessionListener implements EasListener {
     }
 
     @Override
-    public boolean onLeftClick(EasPlayer player) {
+    public boolean onLeftClick(EasPlayer player, EasItem item) {
         Session session = manager.getSession(player);
         if (session != null) {
             session.handleLeftClick();
@@ -31,16 +36,16 @@ public class SessionListener implements EasListener {
     }
 
     @Override
-    public boolean onLeftClickArmorStand(EasPlayer player, EasArmorStand armorStand) {
-        if (onLeftClick(player)) {
+    public boolean onLeftClickArmorStand(EasPlayer player, EasArmorStand armorStand, EasItem item) {
+        if (onLeftClick(player, item)) {
             return true;
         }
 
-        return startEditing(player, armorStand);
+        return startEditing(player, armorStand, item);
     }
 
     @Override
-    public boolean onRightClick(EasPlayer player) {
+    public boolean onRightClick(EasPlayer player, EasItem item) {
         Session session = manager.getSession(player);
         if (session != null) {
             session.handleRightClick();
@@ -50,12 +55,12 @@ public class SessionListener implements EasListener {
     }
 
     @Override
-    public boolean onRightClickArmorStand(EasPlayer player, EasArmorStand armorStand) {
-        if (onRightClick(player)) {
+    public boolean onRightClickArmorStand(EasPlayer player, EasArmorStand armorStand, EasItem item) {
+        if (onRightClick(player, item)) {
             return true;
         }
 
-        return startEditing(player, armorStand);
+        return startEditing(player, armorStand, item);
     }
 
     @Override

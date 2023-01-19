@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
@@ -72,6 +73,10 @@ public class BukkitPlatform implements EasPlatform, Listener {
             return getPlayer((Player) sender);
         }
         return new BukkitCommandSender(this, sender, adventure.sender(sender));
+    }
+
+    public BukkitItem getItem(ItemStack item) {
+        return new BukkitItem(this, item);
     }
 
     public BukkitArmorStand getArmorStand(ArmorStand armorStand) {

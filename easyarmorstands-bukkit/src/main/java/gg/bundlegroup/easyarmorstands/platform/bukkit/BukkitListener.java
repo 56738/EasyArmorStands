@@ -2,7 +2,6 @@ package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,28 +21,22 @@ import org.bukkit.inventory.ItemStack;
 public class BukkitListener implements Listener {
     private final BukkitPlatform platform;
     private final EasListener listener;
-    private final ToolChecker toolChecker;
     private final HeldItemGetter heldItemGetter;
 
     public BukkitListener(BukkitPlatform platform, EasListener listener) {
         this.platform = platform;
         this.listener = listener;
-        this.toolChecker = platform.toolChecker();
         this.heldItemGetter = platform.heldItemGetter();
     }
 
     @EventHandler
     public void onLeftClick(PlayerInteractEvent event) {
-        if (!isTool(event.getItem())) {
-            return;
-        }
-
         Action action = event.getAction();
         if (action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK) {
             return;
         }
 
-        if (listener.onLeftClick(platform.getPlayer(event.getPlayer()))) {
+        if (listener.onLeftClick(platform.getPlayer(event.getPlayer()), platform.getItem(event.getItem()))) {
             event.setCancelled(true);
         }
     }
@@ -56,51 +49,47 @@ public class BukkitListener implements Listener {
         }
         Player player = (Player) attacker;
 
-        if (!isHoldingTool(player)) {
-            return;
-        }
-
         Entity entity = event.getEntity();
         if (!(entity instanceof ArmorStand)) {
             return;
         }
         ArmorStand armorStand = (ArmorStand) entity;
 
-        if (listener.onLeftClickArmorStand(platform.getPlayer(player), platform.getArmorStand(armorStand))) {
-            event.setCancelled(true);
+        BukkitPlayer bukkitPlayer = platform.getPlayer(player);
+        BukkitArmorStand bukkitArmorStand = platform.getArmorStand(armorStand);
+        for (ItemStack item : heldItemGetter.getHeldItems(player)) {
+            if (listener.onLeftClickArmorStand(bukkitPlayer, bukkitArmorStand, platform.getItem(item))) {
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
-        if (!isTool(event.getItem())) {
-            return;
-        }
-
         Action action = event.getAction();
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
-        if (listener.onRightClick(platform.getPlayer(event.getPlayer()))) {
+        if (listener.onRightClick(platform.getPlayer(event.getPlayer()), platform.getItem(event.getItem()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onRightClickEntity(PlayerInteractEntityEvent event) {
-        if (!isHoldingTool(event.getPlayer())) {
-            return;
-        }
-
         Entity entity = event.getRightClicked();
         if (!(entity instanceof ArmorStand)) {
             return;
         }
         ArmorStand armorStand = (ArmorStand) entity;
 
-        if (listener.onRightClickArmorStand(platform.getPlayer(event.getPlayer()), platform.getArmorStand(armorStand))) {
-            event.setCancelled(true);
+        BukkitPlayer bukkitPlayer = platform.getPlayer(event.getPlayer());
+        BukkitArmorStand bukkitArmorStand = platform.getArmorStand(armorStand);
+        for (ItemStack item : heldItemGetter.getHeldItems(event.getPlayer())) {
+            if (listener.onRightClickArmorStand(bukkitPlayer, bukkitArmorStand, platform.getItem(item))) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -128,25 +117,4 @@ public class BukkitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         listener.onQuit(platform.getPlayer(event.getPlayer()));
     }
-
-    private boolean isTool(ItemStack item) {
-        return toolChecker.isTool(item);
-    }
-
-    private boolean isHoldingTool(Player player) {
-        for (ItemStack item : heldItemGetter.getHeldItems(player)) {
-            if (isTool(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-//        if (!isTool(player.getInventory().getItem(event.getHand()))) {
-//            return;
-//        }
-//
-//        if (!player.hasPermission("easyarmorstands.edit")) {
-//            return;
-//        }
 }

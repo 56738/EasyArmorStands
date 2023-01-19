@@ -17,6 +17,10 @@ public class TestPlatform implements EasPlatform {
         return new TestWorld(this);
     }
 
+    public TestItem createItem(boolean tool) {
+        return new TestItem(this, tool);
+    }
+
     @Override
     public CommandManager<EasCommandSender> commandManager() {
         return commandManager;
