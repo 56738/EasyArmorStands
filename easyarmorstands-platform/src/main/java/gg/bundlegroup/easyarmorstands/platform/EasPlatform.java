@@ -13,6 +13,8 @@ public interface EasPlatform {
 
     boolean canSetEntityGlowing();
 
+    boolean canSpawnParticles();
+
     Collection<? extends EasPlayer> getPlayers();
 
     void registerListener(EasListener listener);

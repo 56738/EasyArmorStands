@@ -11,6 +11,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
@@ -41,8 +42,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final EntitySpawner entitySpawner;
     private final ToolChecker toolChecker;
     private final HeldItemGetter heldItemGetter;
+    private final ParticleSpawner particleSpawner;
 
-    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter) {
+    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter, ParticleSpawner particleSpawner) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -52,6 +54,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.entitySpawner = entitySpawner;
         this.toolChecker = toolChecker;
         this.heldItemGetter = heldItemGetter;
+        this.particleSpawner = particleSpawner;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             players.put(player, getPlayer(player));
@@ -111,6 +114,11 @@ public class BukkitPlatform implements EasPlatform, Listener {
     }
 
     @Override
+    public boolean canSpawnParticles() {
+        return particleSpawner != null;
+    }
+
+    @Override
     public Collection<? extends EasPlayer> getPlayers() {
         return players.values();
     }
@@ -162,5 +170,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public HeldItemGetter heldItemGetter() {
         return heldItemGetter;
+    }
+
+    public ParticleSpawner particleSpawner() {
+        return particleSpawner;
     }
 }

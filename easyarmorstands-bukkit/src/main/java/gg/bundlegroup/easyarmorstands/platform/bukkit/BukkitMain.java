@@ -13,6 +13,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider.Priority;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -52,7 +53,8 @@ public class BukkitMain extends JavaPlugin {
                 loadFeature(EntityPersistenceSetter.Provider.class),
                 loadFeature(EntitySpawner.Provider.class),
                 loadFeature(ToolChecker.Provider.class),
-                loadFeature(HeldItemGetter.Provider.class));
+                loadFeature(HeldItemGetter.Provider.class),
+                loadFeature(ParticleSpawner.Provider.class));
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
             try {
@@ -93,7 +95,7 @@ public class BukkitMain extends JavaPlugin {
                     continue;
                 }
             } catch (Throwable e) {
-                getLogger().log(Level.SEVERE, "Failed to check " + provider.getClass().getName());
+                getLogger().log(Level.SEVERE, "Failed to check " + provider.getClass().getName(), e);
                 continue;
             }
 
@@ -101,7 +103,7 @@ public class BukkitMain extends JavaPlugin {
             try {
                 feature = provider.create();
             } catch (Throwable e) {
-                getLogger().log(Level.SEVERE, "Failed to create " + provider.getClass().getName());
+                getLogger().log(Level.SEVERE, "Failed to create " + provider.getClass().getName(), e);
                 continue;
             }
 

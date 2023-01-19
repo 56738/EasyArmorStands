@@ -21,6 +21,7 @@ dependencies {
     implementation("me.lucko:commodore:2.2") {
         isTransitive = false
     }
+    runtimeOnly(project(":easyarmorstands-bukkit-v1_8"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_9"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_11"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_13"))

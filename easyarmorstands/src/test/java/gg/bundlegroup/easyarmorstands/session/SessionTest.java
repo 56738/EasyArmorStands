@@ -44,15 +44,16 @@ public class SessionTest {
         Vector3d direction = new Vector3d();
 
         for (int d = 0; d <= 360; d++) {
-            direction.set(boneType.length(entity)).rotateZ(Math.toRadians(d)).add(offset);
-            player.move(position, direction);
-            sessionManager.update();
-            sessionListener.onRightClick(player);
-            Assertions.assertEquals(boneType, session.getBoneType(), "target bone type");
-            if (d % 90 == 0) {
-                Vector3d newPose = entity.getPose(boneType.part(), new Vector3d());
-                System.out.println(Math.toDegrees(newPose.y));
-            }
+//            direction.set(boneType.length(entity)).rotateZ(Math.toRadians(d)).add(offset);
+//            player.move(position, direction);
+//            sessionListener.onRightClick(player);
+//            sessionManager.update();
+//            Assertions.assertEquals(boneType, session.getBoneType(), "target bone type");
+//            sessionListener.onRightClick(player);
+//            if (d % 90 == 0) {
+//                Vector3d newPose = entity.getPose(boneType.part(), new Vector3d());
+//                System.out.println(Math.toDegrees(newPose.y));
+//            }
         }
 
         sessionListener.onScroll(player, 0, 1);

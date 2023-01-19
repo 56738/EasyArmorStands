@@ -3,10 +3,12 @@ package gg.bundlegroup.easyarmorstands.platform.bukkit;
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Matrix3d;
@@ -14,9 +16,12 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.awt.*;
+
 public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, ForwardingAudience.Single {
     private final Audience audience;
     private final EntityHider entityHider;
+    private final ParticleSpawner particleSpawner;
     private final Vector3d eyePosition = new Vector3d();
     private final Matrix3d eyeRotation = new Matrix3d();
 
@@ -24,6 +29,7 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
         super(platform, player);
         this.audience = audience;
         this.entityHider = platform.entityHider();
+        this.particleSpawner = platform.particleSpawner();
     }
 
     @Override
@@ -64,6 +70,49 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
     @Override
     public void giveTool() {
         get().getInventory().addItem(platform().toolChecker().createTool());
+    }
+
+    @Override
+    public void lookAt(Vector3dc target) {
+        Location location = get().getLocation();
+        location.setDirection(new Vector(target.x(), target.y(), target.z()).subtract(get().getEyeLocation().toVector()));
+        get().teleport(location);
+        update();
+    }
+
+    private Object getParticleOptions(Color color) {
+        return particleSpawner.getData(org.bukkit.Color.fromRGB(color.getRGB() & 0xFFFFFF));
+    }
+
+    @Override
+    public void showPoint(Vector3dc point, Color color) {
+        if (particleSpawner == null) {
+            return;
+        }
+        particleSpawner.spawnParticle(get(), point.x(), point.y(), point.z(), getParticleOptions(color));
+    }
+
+    @Override
+    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
+        if (particleSpawner == null) {
+            return;
+        }
+        Object options = getParticleOptions(color);
+        double distance = from.distance(to);
+        int parts = (int) Math.round(distance * 5);
+        if (parts > 100) {
+            parts = 100;
+        }
+        int min = includeEnds ? 0 : 1;
+        int max = includeEnds ? parts : parts - 1;
+        for (int i = min; i <= max; i++) {
+            double t = i / (double) parts;
+            particleSpawner.spawnParticle(get(),
+                    from.x() + t * (to.x() - from.x()),
+                    from.y() + t * (to.y() - from.y()),
+                    from.z() + t * (to.z() - from.z()),
+                    options);
+        }
     }
 
     @Override

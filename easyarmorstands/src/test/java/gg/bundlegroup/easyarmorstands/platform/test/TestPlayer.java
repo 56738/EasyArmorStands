@@ -8,6 +8,7 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,6 +72,18 @@ public class TestPlayer extends TestEntity implements EasPlayer {
 
     @Override
     public void giveTool() {
+    }
+
+    @Override
+    public void lookAt(Vector3dc target) {
+    }
+
+    @Override
+    public void showPoint(Vector3dc point, Color color) {
+    }
+
+    @Override
+    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
     }
 
     @Override

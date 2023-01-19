@@ -38,6 +38,11 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
+    public boolean canSpawnParticles() {
+        return false;
+    }
+
+    @Override
     public Collection<TestPlayer> getPlayers() {
         return players;
     }
