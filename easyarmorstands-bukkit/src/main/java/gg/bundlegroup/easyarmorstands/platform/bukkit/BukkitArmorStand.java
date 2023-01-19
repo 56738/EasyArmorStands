@@ -12,8 +12,18 @@ public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArm
     }
 
     @Override
+    public boolean isVisible() {
+        return get().isVisible();
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         get().setVisible(visible);
+    }
+
+    @Override
+    public boolean hasBasePlate() {
+        return get().hasBasePlate();
     }
 
     @Override
@@ -22,8 +32,18 @@ public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArm
     }
 
     @Override
+    public boolean hasArms() {
+        return get().hasArms();
+    }
+
+    @Override
     public void setArms(boolean arms) {
         get().setArms(arms);
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return get().hasGravity();
     }
 
     @Override
@@ -34,6 +54,11 @@ public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArm
     @Override
     public boolean isSmall() {
         return get().isSmall();
+    }
+
+    @Override
+    public void setSmall(boolean small) {
+        get().setSmall(small);
     }
 
     @Override

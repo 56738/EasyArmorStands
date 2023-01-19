@@ -41,6 +41,7 @@ public class Session {
                 e.setArms(true);
                 e.setPersistent(false);
                 e.setGravity(false);
+                e.setSmall(entity.isSmall());
                 Vector3d pose = new Vector3d();
                 for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
                     e.setPose(part, entity.getPose(part, pose));
@@ -50,8 +51,8 @@ public class Session {
                         other.hideEntity(e);
                     }
                 }
+                e.setGlowing(true);
             });
-            skeleton.setGlowing(true);
         } else {
             this.skeleton = null;
         }

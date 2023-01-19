@@ -56,7 +56,7 @@ public enum BoneType {
         this.offset = offset.mul(SCALE, new Vector3d());
         this.length = length.mul(SCALE, new Vector3d());
         this.smallOffset = this.offset.mul(0.5, new Vector3d());
-        this.smallLength = this.offset.mul(0.5, new Vector3d());
+        this.smallLength = this.length.mul(0.5, new Vector3d());
     }
 
     @Override

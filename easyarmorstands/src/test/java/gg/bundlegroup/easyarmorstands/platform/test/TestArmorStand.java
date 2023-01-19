@@ -29,8 +29,18 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     }
 
     @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    @Override
+    public boolean hasBasePlate() {
+        return basePlate;
     }
 
     @Override
@@ -39,8 +49,18 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     }
 
     @Override
+    public boolean hasArms() {
+        return arms;
+    }
+
+    @Override
     public void setArms(boolean arms) {
         this.arms = arms;
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return gravity;
     }
 
     @Override
@@ -51,6 +71,11 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     @Override
     public boolean isSmall() {
         return small;
+    }
+
+    @Override
+    public void setSmall(boolean small) {
+        this.small = small;
     }
 
     @Override
