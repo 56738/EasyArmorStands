@@ -1,16 +1,16 @@
 package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 
-public class PositionMoveManipulator implements Manipulator {
+public class PositionMoveManipulator extends Manipulator {
     private final PositionHandle handle;
     private final Vector3d offset = new Vector3d();
     private final Vector3d position = new Vector3d();
 
-    public PositionMoveManipulator(PositionHandle handle) {
+    public PositionMoveManipulator(PositionHandle handle, String name, RGBLike color) {
+        super(name, color);
         this.handle = handle;
     }
 
@@ -30,10 +30,5 @@ public class PositionMoveManipulator implements Manipulator {
         if (skeleton != null) {
             skeleton.teleport(position, yaw, 0);
         }
-    }
-
-    @Override
-    public Component getComponent() {
-        return Component.text("Move", NamedTextColor.YELLOW);
     }
 }

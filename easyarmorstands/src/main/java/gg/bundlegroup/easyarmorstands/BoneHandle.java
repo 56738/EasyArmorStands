@@ -9,7 +9,6 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,19 +39,17 @@ public class BoneHandle implements Handle {
         this.length = length.mul(SCALE, new Vector3d());
         this.smallOffset = this.offset.mul(0.5, new Vector3d());
         this.smallLength = this.length.mul(0.5, new Vector3d());
-        this.manipulators.add(new BoneAimManipulator(this));
+        this.manipulators.add(new BoneAimManipulator(this,
+                "Aim", NamedTextColor.YELLOW));
         this.manipulators.add(new BoneAxisManipulator(this,
-                Component.text("Y", NamedTextColor.GREEN),
-                new Vector3d(0, 1, 0),
-                Color.GREEN));
+                "Y", NamedTextColor.GREEN,
+                new Vector3d(0, 1, 0)));
         this.manipulators.add(new BoneAxisManipulator(this,
-                Component.text("X", NamedTextColor.RED),
-                new Vector3d(1, 0, 0),
-                Color.RED));
+                "X", NamedTextColor.RED,
+                new Vector3d(1, 0, 0)));
         this.manipulators.add(new BoneAxisManipulator(this,
-                Component.text("Z", NamedTextColor.BLUE),
-                new Vector3d(0, 0, 1),
-                Color.BLUE));
+                "Z", NamedTextColor.BLUE,
+                new Vector3d(0, 0, 1)));
     }
 
     private Vector3dc getOffset(EasArmorStand entity) {

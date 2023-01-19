@@ -1,10 +1,9 @@
 package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-
-import java.awt.*;
 
 public class Cursor {
     private final EasPlayer player;
@@ -28,7 +27,7 @@ public class Cursor {
 
     public void update() {
         player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
-        player.showPoint(current, Color.YELLOW);
+        player.showPoint(current, NamedTextColor.YELLOW);
     }
 
     public Vector3dc get() {

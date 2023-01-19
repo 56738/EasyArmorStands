@@ -1,14 +1,12 @@
 package gg.bundlegroup.easyarmorstands;
 
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
-
-public abstract class AxisManipulator implements Manipulator {
+public abstract class AxisManipulator extends Manipulator {
     private final Session session;
     private final Vector3dc axis;
-    private final Color color;
     private final Vector3d origin = new Vector3d();
     private final Vector3d axisDirection = new Vector3d();
     private final Vector3d axisStart = new Vector3d();
@@ -16,10 +14,10 @@ public abstract class AxisManipulator implements Manipulator {
     private final Vector3d axisEnd = new Vector3d();
     private double axisPos;
 
-    public AxisManipulator(Session session, Vector3dc axis, Color color) {
+    public AxisManipulator(Session session, String name, RGBLike color, Vector3dc axis) {
+        super(name, color);
         this.session = session;
         this.axis = new Vector3d(axis);
-        this.color = color;
     }
 
     protected abstract void start(Vector3d origin, Vector3d axisDirection);
@@ -51,7 +49,7 @@ public abstract class AxisManipulator implements Manipulator {
             origin.fma(axisMin, axisDirection, axisStart);
             origin.fma(axisMax, axisDirection, axisEnd);
 
-            session.getPlayer().showLine(axisStart, axisEnd, color, true);
+            session.getPlayer().showLine(axisStart, axisEnd, getColor(), true);
         }
     }
 

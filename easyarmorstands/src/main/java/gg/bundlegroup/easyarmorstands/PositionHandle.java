@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,20 +16,19 @@ public class PositionHandle implements Handle {
 
     public PositionHandle(Session session) {
         this.session = session;
-        this.manipulators.add(new PositionMoveManipulator(this));
-        this.manipulators.add(new PositionYawManipulator(this));
+        this.manipulators.add(new PositionMoveManipulator(this,
+                "Move", NamedTextColor.YELLOW));
+        this.manipulators.add(new PositionYawManipulator(this,
+                "Rotate", NamedTextColor.GOLD));
         this.manipulators.add(new PositionAxisManipulator(this,
-                Component.text("X", NamedTextColor.RED),
-                new Vector3d(1, 0, 0),
-                Color.RED));
+                "X", NamedTextColor.RED,
+                new Vector3d(1, 0, 0)));
         this.manipulators.add(new PositionAxisManipulator(this,
-                Component.text("Y", NamedTextColor.GREEN),
-                new Vector3d(0, 1, 0),
-                Color.GREEN));
+                "Y", NamedTextColor.GREEN,
+                new Vector3d(0, 1, 0)));
         this.manipulators.add(new PositionAxisManipulator(this,
-                Component.text("Z", NamedTextColor.BLUE),
-                new Vector3d(0, 0, 1),
-                Color.BLUE));
+                "Z", NamedTextColor.BLUE,
+                new Vector3d(0, 0, 1)));
     }
 
     @Override

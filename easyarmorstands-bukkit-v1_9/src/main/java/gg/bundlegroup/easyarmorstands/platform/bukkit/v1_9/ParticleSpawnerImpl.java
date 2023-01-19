@@ -1,23 +1,23 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit.v1_9;
 
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
-import org.bukkit.Color;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public class ParticleSpawnerImpl implements ParticleSpawner {
     @Override
-    public Object getData(Color color) {
+    public Object getData(RGBLike color) {
         return color;
     }
 
     @Override
     public void spawnParticle(Player player, double x, double y, double z, Object data) {
-        Color color = (Color) data;
+        RGBLike color = (RGBLike) data;
         player.spawnParticle(Particle.REDSTONE, x, y, z, 0,
-                color.getRed() / 255.0,
-                color.getGreen() / 255.0,
-                color.getBlue() / 255.0,
+                color.red() / 255.0,
+                color.green() / 255.0,
+                color.blue() / 255.0,
                 1);
     }
 

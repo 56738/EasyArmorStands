@@ -6,6 +6,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -15,8 +16,6 @@ import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-
-import java.awt.*;
 
 public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, ForwardingAudience.Single {
     private final Audience audience;
@@ -80,24 +79,20 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
         update();
     }
 
-    private Object getParticleOptions(Color color) {
-        return particleSpawner.getData(org.bukkit.Color.fromRGB(color.getRGB() & 0xFFFFFF));
-    }
-
     @Override
-    public void showPoint(Vector3dc point, Color color) {
+    public void showPoint(Vector3dc point, RGBLike color) {
         if (particleSpawner == null) {
             return;
         }
-        particleSpawner.spawnParticle(get(), point.x(), point.y(), point.z(), getParticleOptions(color));
+        particleSpawner.spawnParticle(get(), point.x(), point.y(), point.z(), particleSpawner.getData(color));
     }
 
     @Override
-    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
+    public void showLine(Vector3dc from, Vector3dc to, RGBLike color, boolean includeEnds) {
         if (particleSpawner == null) {
             return;
         }
-        Object options = getParticleOptions(color);
+        Object options = particleSpawner.getData(color);
         double distance = from.distance(to);
         int parts = (int) Math.round(distance * 5);
         if (parts > 100) {

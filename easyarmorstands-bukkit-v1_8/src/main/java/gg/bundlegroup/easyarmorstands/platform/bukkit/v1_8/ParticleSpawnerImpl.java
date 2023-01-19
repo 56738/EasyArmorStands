@@ -1,28 +1,28 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit.v1_8;
 
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
-import org.bukkit.Color;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class ParticleSpawnerImpl implements ParticleSpawner {
     @Override
-    public Object getData(Color color) {
+    public Object getData(RGBLike color) {
         return color;
     }
 
     @Override
     public void spawnParticle(Player player, double x, double y, double z, Object data) {
-        Color color = (Color) data;
+        RGBLike color = (RGBLike) data;
         player.spigot().playEffect(
                 new Location(player.getWorld(), x, y, z),
                 Effect.COLOURED_DUST,
                 0,
                 1,
-                Math.max(color.getRed() / 255f, 0.01f),
-                color.getGreen() / 255f,
-                color.getBlue() / 255f,
+                Math.max(color.red() / 255f, 0.01f),
+                color.green() / 255f,
+                color.blue() / 255f,
                 1,
                 0,
                 64

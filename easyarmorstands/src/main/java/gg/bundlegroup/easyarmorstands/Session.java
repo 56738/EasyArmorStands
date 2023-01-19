@@ -3,12 +3,12 @@ package gg.bundlegroup.easyarmorstands;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import java.awt.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +151,7 @@ public class Session {
         Vector3d temp = new Vector3d();
         for (Handle candidate : handles) {
             candidate.update();
-            player.showPoint(candidate.getPosition(), Color.WHITE);
+            player.showPoint(candidate.getPosition(), NamedTextColor.WHITE);
             candidate.getPosition().sub(player.getEyePosition(), temp).mulTranspose(player.getEyeRotation());
             double distance = temp.z;
             // Eliminate forward part

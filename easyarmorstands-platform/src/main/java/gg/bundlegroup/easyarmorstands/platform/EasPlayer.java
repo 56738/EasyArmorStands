@@ -1,9 +1,8 @@
 package gg.bundlegroup.easyarmorstands.platform;
 
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3dc;
 import org.joml.Vector3dc;
-
-import java.awt.*;
 
 public interface EasPlayer extends EasEntity, EasCommandSender {
     Vector3dc getEyePosition();
@@ -18,7 +17,7 @@ public interface EasPlayer extends EasEntity, EasCommandSender {
 
     void lookAt(Vector3dc target);
 
-    void showPoint(Vector3dc point, Color color);
+    void showPoint(Vector3dc point, RGBLike color);
 
-    void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds);
+    void showLine(Vector3dc from, Vector3dc to, RGBLike color, boolean includeEnds);
 }

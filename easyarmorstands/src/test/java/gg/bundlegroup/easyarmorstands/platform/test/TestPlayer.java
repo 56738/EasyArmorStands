@@ -2,13 +2,13 @@ package gg.bundlegroup.easyarmorstands.platform.test;
 
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,11 +79,11 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
-    public void showPoint(Vector3dc point, Color color) {
+    public void showPoint(Vector3dc point, RGBLike color) {
     }
 
     @Override
-    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
+    public void showLine(Vector3dc from, Vector3dc to, RGBLike color, boolean includeEnds) {
     }
 
     @Override

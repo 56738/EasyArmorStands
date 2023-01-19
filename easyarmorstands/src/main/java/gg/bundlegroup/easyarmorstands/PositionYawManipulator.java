@@ -1,25 +1,17 @@
 package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
-
 public class PositionYawManipulator extends AxisRotationManipulator {
     private final PositionHandle handle;
 
-    public PositionYawManipulator(PositionHandle handle) {
-        super(handle.getSession(), new Vector3d(0, 1, 0), Color.ORANGE);
+    public PositionYawManipulator(PositionHandle handle, String name, RGBLike color) {
+        super(handle.getSession(), name, color, new Vector3d(0, 1, 0));
         this.handle = handle;
-    }
-
-    @Override
-    public Component getComponent() {
-        return Component.text("Rotate", NamedTextColor.GOLD);
     }
 
     @Override

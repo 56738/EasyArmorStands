@@ -1,16 +1,13 @@
 package gg.bundlegroup.easyarmorstands;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3d;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.awt.*;
-
-public class BoneAimManipulator implements Manipulator {
-    private static final Component COMPONENT = Component.text("Aim", NamedTextColor.YELLOW);
+public class BoneAimManipulator extends Manipulator {
     private final BoneHandle handle;
     private final Vector3d origin = new Vector3d();
     private final Vector3d currentDirection = new Vector3d();
@@ -18,7 +15,8 @@ public class BoneAimManipulator implements Manipulator {
     private final Quaterniond difference = new Quaterniond();
     private final Matrix3d current = new Matrix3d();
 
-    public BoneAimManipulator(BoneHandle handle) {
+    public BoneAimManipulator(BoneHandle handle, String name, RGBLike color) {
+        super(name, color);
         this.handle = handle;
     }
 
@@ -40,13 +38,8 @@ public class BoneAimManipulator implements Manipulator {
         updateDirection(handle.getSession().getCursor().get());
         lastDirection.rotationTo(currentDirection, difference);
         lastDirection.set(currentDirection);
-        handle.getSession().getPlayer().showLine(origin, handle.getSession().getCursor().get(), Color.WHITE, false);
+        handle.getSession().getPlayer().showLine(origin, handle.getSession().getCursor().get(), NamedTextColor.WHITE, false);
         current.rotateLocal(difference);
         handle.setRotation(current);
-    }
-
-    @Override
-    public Component getComponent() {
-        return COMPONENT;
     }
 }
