@@ -9,13 +9,11 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
-    }
-}
-
 tasks {
+    withType<JavaCompile> {
+        options.release.set(8)
+    }
+
     withType<AbstractArchiveTask> {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true

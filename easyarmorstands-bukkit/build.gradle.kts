@@ -13,12 +13,12 @@ bukkit {
 
 dependencies {
     implementation(project(":easyarmorstands"))
-    compileOnly("org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT") {
+    compileOnly(libs.bukkit) {
         isTransitive = false
     }
-    implementation("net.kyori:adventure-platform-bukkit:4.2.0")
-    implementation("cloud.commandframework:cloud-paper:1.8.0")
-    implementation("me.lucko:commodore:2.2") {
+    implementation(libs.adventure.platform.bukkit)
+    implementation(libs.cloud.paper)
+    implementation(libs.commodore) {
         isTransitive = false
     }
     runtimeOnly(project(":easyarmorstands-bukkit-v1_8"))

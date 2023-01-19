@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api("org.joml:joml:1.10.5")
-    api("net.kyori:adventure-api:4.12.0")
-    api("cloud.commandframework:cloud-core:1.8.0")
+    api(libs.joml)
+    api(libs.adventure.api)
+    api(libs.cloud.core)
 }

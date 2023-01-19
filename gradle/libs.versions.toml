@@ -1,0 +1,19 @@
+[versions]
+adventure-api = "4.12.0"
+adventure-platform = "4.2.0"
+bukkit = "1.8.8-R0.1-SNAPSHOT"
+cloud = "1.8.0"
+commodore = "2.2"
+joml = "1.10.5"
+junit = "5.9.2"
+
+[libraries]
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
+adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
+cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
+cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud" }
+commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
+joml = { module = "org.joml:joml", version.ref = "joml" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
