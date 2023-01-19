@@ -18,6 +18,7 @@ dependencies {
     }
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
     runtimeOnly(project(":easyarmorstands-bukkit-v1_9"))
+    runtimeOnly(project(":easyarmorstands-bukkit-v1_11"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_13"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_18"))
 }

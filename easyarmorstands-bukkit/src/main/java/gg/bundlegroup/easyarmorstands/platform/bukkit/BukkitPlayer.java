@@ -8,12 +8,13 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BukkitPlayer extends BukkitEntity implements EasPlayer, ForwardingAudience.Single {
+public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final EntityHider entityHider;
@@ -50,10 +51,16 @@ public class BukkitPlayer extends BukkitEntity implements EasPlayer, ForwardingA
 
     @Override
     public void hideEntity(EasEntity entity) {
+        if (entityHider != null) {
+            entityHider.hideEntity(platform().plugin(), player, ((BukkitEntity<?>) entity).get());
+        }
     }
 
     @Override
     public void showEntity(EasEntity entity) {
+        if (entityHider != null) {
+            entityHider.showEntity(platform().plugin(), player, ((BukkitEntity<?>) entity).get());
+        }
     }
 
     @Override

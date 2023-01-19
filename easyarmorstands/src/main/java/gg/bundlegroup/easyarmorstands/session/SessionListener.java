@@ -50,7 +50,7 @@ public class SessionListener implements EasListener {
 //            return;
 //        }
 
-        manager.start(player, new Session(manager, player, armorStand));
+        manager.start(player, new Session(player, armorStand));
         return true;
     }
 
@@ -74,7 +74,7 @@ public class SessionListener implements EasListener {
         manager.stop(player);
     }
 
-    //    private boolean isTool(ItemStack item) {
+//        private boolean isTool(ItemStack item) {
 //        if (item == null) {
 //            return false;
 //        }

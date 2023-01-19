@@ -1,10 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.Main;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ServiceLoader;
@@ -19,7 +16,8 @@ public class BukkitMain extends JavaPlugin {
                 this,
                 loadFeature(EntityGlowSetter.Provider.class),
                 loadFeature(EntityHider.Provider.class),
-                loadFeature(EntityPersistenceSetter.Provider.class));
+                loadFeature(EntityPersistenceSetter.Provider.class),
+                loadFeature(EntitySpawner.Provider.class));
         main = new Main(platform);
     }
 

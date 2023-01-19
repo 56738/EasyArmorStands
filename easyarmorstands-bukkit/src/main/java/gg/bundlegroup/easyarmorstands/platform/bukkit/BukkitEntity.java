@@ -9,38 +9,34 @@ import org.bukkit.entity.Entity;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BukkitEntity extends BukkitWrapper implements EasEntity {
-    private final BukkitPlatform platform;
-    private final Entity entity;
+public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements EasEntity {
     private final EntityPersistenceSetter entityPersistenceSetter;
     private final EntityGlowSetter entityGlowSetter;
     private final Vector3d position = new Vector3d();
 
-    public BukkitEntity(BukkitPlatform platform, Entity entity) {
+    public BukkitEntity(BukkitPlatform platform, T entity) {
         super(platform, entity);
-        this.platform = platform;
-        this.entity = entity;
         this.entityPersistenceSetter = platform.entityPersistenceSetter();
         this.entityGlowSetter = platform.entityGlowSetter();
     }
 
     @Override
     public void update() {
-        Location location = entity.getLocation();
+        Location location = get().getLocation();
         position.set(location.getX(), location.getY(), location.getZ());
     }
 
     @Override
     public void setPersistent(boolean persistent) {
         if (entityPersistenceSetter != null) {
-            entityPersistenceSetter.setPersistent(entity, persistent);
+            entityPersistenceSetter.setPersistent(get(), persistent);
         }
     }
 
     @Override
     public void setGlowing(boolean glowing) {
         if (entityGlowSetter != null) {
-            entityGlowSetter.setGlowing(entity, glowing);
+            entityGlowSetter.setGlowing(get(), glowing);
         }
     }
 
@@ -51,16 +47,16 @@ public class BukkitEntity extends BukkitWrapper implements EasEntity {
 
     @Override
     public EasWorld getWorld() {
-        return platform.getWorld(entity.getWorld());
+        return platform().getWorld(get().getWorld());
     }
 
     @Override
     public boolean isValid() {
-        return entity.isValid();
+        return get().isValid();
     }
 
     @Override
     public void remove() {
-        entity.remove();
+        get().remove();
     }
 }

@@ -6,58 +6,55 @@ import org.bukkit.util.EulerAngle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BukkitArmorStand extends BukkitEntity implements EasArmorStand {
-    private final ArmorStand armorStand;
-
+public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArmorStand {
     public BukkitArmorStand(BukkitPlatform platform, ArmorStand armorStand) {
         super(platform, armorStand);
-        this.armorStand = armorStand;
     }
 
     @Override
     public void setVisible(boolean visible) {
-        armorStand.setVisible(visible);
+        get().setVisible(visible);
     }
 
     @Override
     public void setBasePlate(boolean basePlate) {
-        armorStand.setBasePlate(basePlate);
+        get().setBasePlate(basePlate);
     }
 
     @Override
     public void setArms(boolean arms) {
-        armorStand.setArms(arms);
+        get().setArms(arms);
     }
 
     @Override
     public void setGravity(boolean gravity) {
-        armorStand.setGravity(gravity);
+        get().setGravity(gravity);
     }
 
     @Override
     public boolean isSmall() {
-        return armorStand.isSmall();
+        return get().isSmall();
     }
 
     @Override
     public float getYaw() {
-        return armorStand.getLocation().getYaw();
+        return get().getLocation().getYaw();
     }
 
     private EulerAngle getAngle(Part part) {
         switch (part) {
             case HEAD:
-                return armorStand.getHeadPose();
+                return get().getHeadPose();
             case BODY:
-                return armorStand.getBodyPose();
+                return get().getBodyPose();
             case LEFT_ARM:
-                return armorStand.getLeftArmPose();
+                return get().getLeftArmPose();
             case RIGHT_ARM:
-                return armorStand.getRightArmPose();
+                return get().getRightArmPose();
             case LEFT_LEG:
-                return armorStand.getLeftLegPose();
+                return get().getLeftLegPose();
             case RIGHT_LEG:
-                return armorStand.getRightLegPose();
+                return get().getRightLegPose();
             default:
                 throw new IllegalArgumentException();
         }
@@ -66,22 +63,22 @@ public class BukkitArmorStand extends BukkitEntity implements EasArmorStand {
     private void setAngle(Part part, EulerAngle angle) {
         switch (part) {
             case HEAD:
-                armorStand.setHeadPose(angle);
+                get().setHeadPose(angle);
                 break;
             case BODY:
-                armorStand.setBodyPose(angle);
+                get().setBodyPose(angle);
                 break;
             case LEFT_ARM:
-                armorStand.setLeftArmPose(angle);
+                get().setLeftArmPose(angle);
                 break;
             case RIGHT_ARM:
-                armorStand.setRightArmPose(angle);
+                get().setRightArmPose(angle);
                 break;
             case LEFT_LEG:
-                armorStand.setLeftLegPose(angle);
+                get().setLeftLegPose(angle);
                 break;
             case RIGHT_LEG:
-                armorStand.setRightLegPose(angle);
+                get().setRightLegPose(angle);
                 break;
             default:
                 throw new IllegalArgumentException();

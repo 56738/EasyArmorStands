@@ -3,9 +3,7 @@ package gg.bundlegroup.easyarmorstands.session;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class SessionManager {
     private final HashMap<EasPlayer, Session> sessions = new HashMap<>();
@@ -40,13 +38,10 @@ public class SessionManager {
     }
 
     public void stopAllSessions() {
-        final List<Session> sessions = new ArrayList<>(this.sessions.values());
-        for (Session session : sessions) {
+        for (Session session : sessions.values()) {
             session.stop();
         }
-        if (!this.sessions.isEmpty()) {
-            throw new IllegalStateException();
-        }
+        sessions.clear();
     }
 
     public Session getSession(EasPlayer player) {

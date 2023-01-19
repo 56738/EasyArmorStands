@@ -5,41 +5,34 @@ import gg.bundlegroup.easyarmorstands.Util;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
 
 public class Session {
-    private final SessionManager manager;
+    private static final double RANGE = 5;
     private final EasPlayer player;
+    private final Cursor cursor;
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
-    private final double range = 5;
 
     // Scratch space for calculations
-    private final Matrix3d inverseEyeRotation = new Matrix3d();
     private final Matrix3d armorStandYaw = new Matrix3d();
-    private final Matrix3d inverseArmorStandYaw = new Matrix3d();
     private final Vector3d boneAngle = new Vector3d();
     private final Matrix3d bonePose = new Matrix3d();
     private final Matrix3d boneRotation = new Matrix3d();
     private final Vector3d boneStart = new Vector3d();
     private final Vector3d boneEnd = new Vector3d();
-    private final Matrix3d desiredBoneRotation = new Matrix3d();
-    private final Vector3d desiredBoneEnd = new Vector3d();
-    private final Vector3d desiredBoneDirection = new Vector3d();
-    private final Vector3d desiredBoneUp = new Vector3d();
     private final Vector3d targetOffset = new Vector3d();
-
-    // View-space values, stored across ticks while dragging
-    private final Vector3d localBoneEnd = new Vector3d();
-    private final Matrix3d localBoneRotation = new Matrix3d();
 
     private int rightClickTicks = 0;
     private BoneType boneType;
 
-    public Session(SessionManager manager, EasPlayer player, EasArmorStand entity) {
-        this.manager = manager;
+    public Session(EasPlayer player, EasArmorStand entity) {
         this.player = player;
+        this.cursor = new Cursor(player);
         this.entity = entity;
         if (player.platform().canSetEntityGlowing() && player.platform().canHideEntities()) {
             this.skeleton = entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
@@ -66,9 +59,8 @@ public class Session {
 
     public void handleLeftClick() {
         if (rightClickTicks > 0) {
-            handleHoldRightClick();
-            rightClickTicks = 0;
-            handleStopRightClick();
+            player.update();
+            cursor.lookAt(player.getEyePosition());
         }
     }
 
@@ -90,13 +82,13 @@ public class Session {
                 handleStopRightClick();
             }
         } else {
-            updateView();
             updateArmorStand();
             updateTarget();
         }
 
         if (boneType != null) {
-            player.sendActionBar(Component.text(boneType.toString()));
+            TextColor color = rightClickTicks > 0 ? NamedTextColor.YELLOW : NamedTextColor.GRAY;
+            player.sendActionBar(Component.text(boneType.toString(), color));
         } else {
             player.sendActionBar(Component.empty());
         }
@@ -104,13 +96,8 @@ public class Session {
         return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid());
     }
 
-    private void updateView() {
-        player.getEyeRotation().transpose(inverseEyeRotation);
-    }
-
     private void updateArmorStand() {
         armorStandYaw.rotationY(-Math.toRadians(entity.getYaw()));
-        armorStandYaw.transpose(inverseArmorStandYaw);
     }
 
     private void updateBone(BoneType type) {
@@ -128,14 +115,14 @@ public class Session {
         double bestDistance = Double.POSITIVE_INFINITY;
         for (BoneType type : BoneType.values()) {
             updateBone(type);
-            inverseEyeRotation.transform(boneEnd.sub(player.getEyePosition(), targetOffset));
+            boneEnd.sub(player.getEyePosition(), targetOffset).mulTranspose(player.getEyeRotation());
             double distance = targetOffset.z;
             // Eliminate forward part
             targetOffset.z = 0;
             // Distance from straight line
             double deviationSquared = targetOffset.lengthSquared();
             if (deviationSquared < 0.025) {
-                if (distance > 0 && distance < bestDistance && distance < range) {
+                if (distance > 0 && distance < bestDistance && distance < RANGE) {
                     bestType = type;
                     bestDistance = distance;
                 }
@@ -143,15 +130,12 @@ public class Session {
         }
 
         updateBone(bestType);
-
-        inverseEyeRotation.transform(boneEnd.sub(player.getEyePosition(), localBoneEnd));
-        inverseEyeRotation.mul(boneRotation, localBoneRotation);
     }
 
     private void handleStartRightClick() {
-        updateView();
         updateArmorStand();
         updateTarget();
+        cursor.start(boneStart, boneEnd, boneRotation);
     }
 
     private void handleHoldRightClick() {
@@ -159,20 +143,10 @@ public class Session {
             return;
         }
 
-        updateView();
-
         // Desired bone properties in world space
-        player.getEyeRotation().transform(localBoneEnd, desiredBoneEnd).add(player.getEyePosition());
-        desiredBoneEnd.sub(boneStart, desiredBoneDirection);
-        player.getEyeRotation().mul(localBoneRotation, desiredBoneRotation);
-        desiredBoneRotation.transform(boneType.transform().transform(Util.DOWN, desiredBoneUp));
-        desiredBoneDirection.mul(-1);
-        desiredBoneRotation.setLookAlong(desiredBoneDirection, desiredBoneUp).transpose();
-        desiredBoneRotation.mul(boneType.transform());
-        inverseArmorStandYaw.mul(desiredBoneRotation, bonePose);
+        bonePose.setTransposed(armorStandYaw).mul(cursor.update());
         entity.setPose(boneType.part(), Util.toEuler(bonePose, boneAngle));
         if (skeleton != null) skeleton.setPose(boneType.part(), Util.toEuler(bonePose, boneAngle));
-        inverseEyeRotation.mul(desiredBoneRotation, localBoneRotation);
     }
 
     private void handleStopRightClick() {
@@ -186,6 +160,10 @@ public class Session {
         }
         if (skeleton != null) skeleton.remove();
         player.sendActionBar(Component.empty());
+    }
+
+    public BoneType getBoneType() {
+        return boneType;
     }
 
     public EasArmorStand getEntity() {

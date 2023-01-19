@@ -2,13 +2,17 @@ package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasWrapper;
 
-public class BukkitWrapper implements EasWrapper {
+public class BukkitWrapper<T> implements EasWrapper {
     private final BukkitPlatform platform;
-    private final Object object;
+    private final T object;
 
-    public BukkitWrapper(BukkitPlatform platform, Object object) {
+    public BukkitWrapper(BukkitPlatform platform, T object) {
         this.platform = platform;
         this.object = object;
+    }
+
+    public T get() {
+        return object;
     }
 
     @Override
@@ -20,7 +24,7 @@ public class BukkitWrapper implements EasWrapper {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        return object.equals(((BukkitWrapper) obj).object);
+        return object.equals(((BukkitWrapper<?>) obj).object);
     }
 
     @Override

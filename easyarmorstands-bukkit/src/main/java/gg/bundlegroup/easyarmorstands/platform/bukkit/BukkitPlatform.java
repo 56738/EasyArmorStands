@@ -7,6 +7,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasWorld;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -30,17 +31,19 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final EntityGlowSetter entityGlowSetter;
     private final EntityHider entityHider;
     private final EntityPersistenceSetter entityPersistenceSetter;
+    private final EntitySpawner entitySpawner;
 
-    public BukkitPlatform(Plugin plugin, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter) {
+    public BukkitPlatform(Plugin plugin, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.entityGlowSetter = entityGlowSetter;
         this.entityHider = entityHider;
         this.entityPersistenceSetter = entityPersistenceSetter;
+        this.entitySpawner = entitySpawner;
     }
 
-    public BukkitEntity getEntity(Entity entity) {
-        BukkitEntity wrapper = new BukkitEntity(this, entity);
+    public <T extends Entity> BukkitEntity<T> getEntity(T entity) {
+        BukkitEntity<T> wrapper = new BukkitEntity<>(this, entity);
         wrapper.update();
         return wrapper;
     }
@@ -116,5 +119,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EntityPersistenceSetter entityPersistenceSetter() {
         return entityPersistenceSetter;
+    }
+
+    public EntitySpawner entitySpawner() {
+        return entitySpawner;
     }
 }
