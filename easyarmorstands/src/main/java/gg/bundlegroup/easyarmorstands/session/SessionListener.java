@@ -42,13 +42,9 @@ public class SessionListener implements EasListener {
             return true;
         }
 
-//        if (!isTool(player.getInventory().getItem(event.getHand()))) {
-//            return;
-//        }
-
-//        if (!player.hasPermission("easyarmorstands.edit")) {
-//            return;
-//        }
+        if (!player.hasPermission("easyarmorstands.edit")) {
+            return false;
+        }
 
         manager.start(player, new Session(player, armorStand));
         return true;
@@ -73,20 +69,4 @@ public class SessionListener implements EasListener {
     public void onQuit(EasPlayer player) {
         manager.stop(player);
     }
-
-//        private boolean isTool(ItemStack item) {
-//        if (item == null) {
-//            return false;
-//        }
-//        ItemMeta meta = item.getItemMeta();
-//        if (meta == null) {
-//            return false;
-//        }
-//        return meta.getPersistentDataContainer().has(toolKey, PersistentDataType.BYTE);
-//    }
-
-//    private boolean isHoldingTool(Player player) {
-//        PlayerInventory inventory = player.getInventory();
-//        return isTool(inventory.getItemInMainHand()) || isTool(inventory.getItemInOffHand());
-//    }
 }

@@ -1,5 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
+import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 
@@ -8,10 +10,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TestPlatform implements EasPlatform {
+    private final TestCommandManager commandManager = new TestCommandManager();
     private final Set<TestPlayer> players = new HashSet<>();
 
     public TestWorld createWorld() {
         return new TestWorld(this);
+    }
+
+    @Override
+    public CommandManager<EasCommandSender> commandManager() {
+        return commandManager;
     }
 
     @Override

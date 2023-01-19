@@ -3,7 +3,10 @@ package gg.bundlegroup.easyarmorstands.platform.test;
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -66,4 +69,12 @@ public class TestPlayer extends TestEntity implements EasPlayer {
         hiddenEntities.remove(entity);
     }
 
+    @Override
+    public void giveTool() {
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return true;
+    }
 }

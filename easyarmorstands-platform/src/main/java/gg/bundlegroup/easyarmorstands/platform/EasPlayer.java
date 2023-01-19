@@ -1,10 +1,9 @@
 package gg.bundlegroup.easyarmorstands.platform;
 
-import net.kyori.adventure.audience.Audience;
 import org.joml.Matrix3dc;
 import org.joml.Vector3dc;
 
-public interface EasPlayer extends EasEntity, Audience {
+public interface EasPlayer extends EasEntity, EasCommandSender {
     Vector3dc getEyePosition();
 
     Matrix3dc getEyeRotation();
@@ -12,4 +11,6 @@ public interface EasPlayer extends EasEntity, Audience {
     void hideEntity(EasEntity entity);
 
     void showEntity(EasEntity entity);
+
+    void giveTool();
 }

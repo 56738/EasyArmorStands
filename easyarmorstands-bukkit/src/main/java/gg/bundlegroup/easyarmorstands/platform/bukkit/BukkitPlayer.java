@@ -15,7 +15,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, ForwardingAudience.Single {
-    private final Player player;
     private final Audience audience;
     private final EntityHider entityHider;
     private final Vector3d eyePosition = new Vector3d();
@@ -23,7 +22,6 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
 
     public BukkitPlayer(BukkitPlatform platform, Player player, Audience audience) {
         super(platform, player);
-        this.player = player;
         this.audience = audience;
         this.entityHider = platform.entityHider();
     }
@@ -31,7 +29,7 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
     @Override
     public void update() {
         super.update();
-        Location location = player.getEyeLocation();
+        Location location = get().getEyeLocation();
         eyePosition.set(location.getX(), location.getY(), location.getZ());
         eyeRotation.rotationZYX(
                 0,
@@ -52,15 +50,25 @@ public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, For
     @Override
     public void hideEntity(EasEntity entity) {
         if (entityHider != null) {
-            entityHider.hideEntity(platform().plugin(), player, ((BukkitEntity<?>) entity).get());
+            entityHider.hideEntity(platform().plugin(), get(), ((BukkitEntity<?>) entity).get());
         }
     }
 
     @Override
     public void showEntity(EasEntity entity) {
         if (entityHider != null) {
-            entityHider.showEntity(platform().plugin(), player, ((BukkitEntity<?>) entity).get());
+            entityHider.showEntity(platform().plugin(), get(), ((BukkitEntity<?>) entity).get());
         }
+    }
+
+    @Override
+    public void giveTool() {
+        get().getInventory().addItem(platform().toolChecker().createTool());
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return get().hasPermission(permission);
     }
 
     @Override

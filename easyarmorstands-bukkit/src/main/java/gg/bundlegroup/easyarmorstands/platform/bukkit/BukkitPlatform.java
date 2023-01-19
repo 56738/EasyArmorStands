@@ -1,5 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
+import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
@@ -8,8 +10,11 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,25 +32,38 @@ import java.util.Map;
 public class BukkitPlatform implements EasPlatform, Listener {
     private final Plugin plugin;
     private final BukkitAudiences adventure;
+    private final CommandManager<EasCommandSender> commandManager;
     private final Map<Player, BukkitPlayer> players = new HashMap<>();
     private final EntityGlowSetter entityGlowSetter;
     private final EntityHider entityHider;
     private final EntityPersistenceSetter entityPersistenceSetter;
     private final EntitySpawner entitySpawner;
+    private final ToolChecker toolChecker;
+    private final HeldItemGetter heldItemGetter;
 
-    public BukkitPlatform(Plugin plugin, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner) {
+    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
+        this.commandManager = commandManager;
         this.entityGlowSetter = entityGlowSetter;
         this.entityHider = entityHider;
         this.entityPersistenceSetter = entityPersistenceSetter;
         this.entitySpawner = entitySpawner;
+        this.toolChecker = toolChecker;
+        this.heldItemGetter = heldItemGetter;
     }
 
     public <T extends Entity> BukkitEntity<T> getEntity(T entity) {
         BukkitEntity<T> wrapper = new BukkitEntity<>(this, entity);
         wrapper.update();
         return wrapper;
+    }
+
+    public EasCommandSender getCommandSender(CommandSender sender) {
+        if (sender instanceof Player) {
+            return getPlayer((Player) sender);
+        }
+        return new BukkitCommandSender(this, sender, adventure.sender(sender));
     }
 
     public BukkitArmorStand getArmorStand(ArmorStand armorStand) {
@@ -62,6 +80,11 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EasWorld getWorld(World world) {
         return new BukkitWorld(this, world);
+    }
+
+    @Override
+    public CommandManager<EasCommandSender> commandManager() {
+        return commandManager;
     }
 
     @Override
@@ -123,5 +146,13 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EntitySpawner entitySpawner() {
         return entitySpawner;
+    }
+
+    public ToolChecker toolChecker() {
+        return toolChecker;
+    }
+
+    public HeldItemGetter heldItemGetter() {
+        return heldItemGetter;
     }
 }

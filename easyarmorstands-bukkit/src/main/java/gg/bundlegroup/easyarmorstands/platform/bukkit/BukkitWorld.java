@@ -21,15 +21,8 @@ public class BukkitWorld extends BukkitWrapper<World> implements EasWorld {
     @Override
     public EasArmorStand spawnArmorStand(Vector3dc position, float yaw, Consumer<EasArmorStand> configure) {
         Location location = new Location(get(), position.x(), position.y(), position.z(), yaw, 0);
-        EasArmorStand entity;
-        if (entitySpawner != null) {
-            entity = platform().getArmorStand(entitySpawner.spawnEntity(
-                    location, ArmorStand.class,
-                    e -> configure.accept(platform().getArmorStand(e))));
-        } else {
-            entity = platform().getArmorStand(get().spawn(location, ArmorStand.class));
-            configure.accept(entity);
-        }
-        return entity;
+        return platform().getArmorStand(entitySpawner.spawnEntity(
+                location, ArmorStand.class,
+                e -> configure.accept(platform().getArmorStand(e))));
     }
 }
