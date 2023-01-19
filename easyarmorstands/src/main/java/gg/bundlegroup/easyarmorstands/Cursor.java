@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.session;
+package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import org.joml.Vector3d;
@@ -23,11 +23,15 @@ public class Cursor {
         this.cursor.set(cursor);
         this.cursor.sub(player.getEyePosition());
         this.cursor.mulTranspose(player.getEyeRotation());
+        this.current.set(cursor);
+    }
+
+    public void update() {
+        player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
+        player.showPoint(current, Color.YELLOW);
     }
 
     public Vector3dc get() {
-        player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
-        player.showPoint(current, Color.YELLOW);
         return current;
     }
 }

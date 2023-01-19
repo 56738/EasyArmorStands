@@ -1,0 +1,118 @@
+package gg.bundlegroup.easyarmorstands;
+
+import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.joml.Math;
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BoneHandle implements Handle {
+    private static final double SCALE = 1.0 / 16;
+    private static final Vector3d pose = new Vector3d();
+    private static final Matrix3d poseMatrix = new Matrix3d();
+    private final Session session;
+    private final EasArmorStand.Part part;
+    private final Component component;
+    private final Vector3dc offset;
+    private final Vector3dc length;
+    private final Vector3dc smallOffset;
+    private final Vector3dc smallLength;
+
+    private final Matrix3d yaw = new Matrix3d();
+    private final Vector3d start = new Vector3d();
+    private final Vector3d end = new Vector3d();
+    private final Matrix3d rotation = new Matrix3d();
+
+    private final List<Manipulator> manipulators = new ArrayList<>();
+
+    BoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3d offset, Vector3d length) {
+        this.session = session;
+        this.part = part;
+        this.component = component;
+        this.offset = offset.mul(SCALE, new Vector3d());
+        this.length = length.mul(SCALE, new Vector3d());
+        this.smallOffset = this.offset.mul(0.5, new Vector3d());
+        this.smallLength = this.length.mul(0.5, new Vector3d());
+        this.manipulators.add(new BoneAimManipulator(this));
+        this.manipulators.add(new BoneAxisManipulator(this,
+                Component.text("Y", NamedTextColor.GREEN),
+                new Vector3d(0, 1, 0),
+                Color.GREEN));
+        this.manipulators.add(new BoneAxisManipulator(this,
+                Component.text("X", NamedTextColor.RED),
+                new Vector3d(1, 0, 0),
+                Color.RED));
+        this.manipulators.add(new BoneAxisManipulator(this,
+                Component.text("Z", NamedTextColor.BLUE),
+                new Vector3d(0, 0, 1),
+                Color.BLUE));
+    }
+
+    private Vector3dc getOffset(EasArmorStand entity) {
+        if (!entity.isSmall()) {
+            return offset;
+        } else {
+            return smallOffset;
+        }
+    }
+
+    private Vector3dc getLength(EasArmorStand entity) {
+        if (!entity.isSmall()) {
+            return length;
+        } else {
+            return smallLength;
+        }
+    }
+
+    @Override
+    public void update() {
+        EasArmorStand entity = session.getEntity();
+        yaw.rotationY(-Math.toRadians(entity.getYaw()));
+        yaw.transform(getOffset(entity), start).add(entity.getPosition());
+        yaw.mul(Util.fromEuler(entity.getPose(part, pose), poseMatrix), rotation);
+        rotation.transform(getLength(entity), end).add(start);
+    }
+
+    @Override
+    public List<Manipulator> getManipulators() {
+        return manipulators;
+    }
+
+    @Override
+    public Vector3dc getPosition() {
+        return end;
+    }
+
+    @Override
+    public Component getComponent() {
+        return component;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public Vector3dc getAnchor() {
+        return start;
+    }
+
+    public Matrix3dc getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(Matrix3dc rotation) {
+        this.rotation.set(rotation);
+        Util.toEuler(poseMatrix.setTransposed(yaw).mul(rotation), pose);
+        session.getEntity().setPose(part, pose);
+        if (session.getSkeleton() != null) {
+            session.getSkeleton().setPose(part, pose);
+        }
+    }
+}

@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.session;
+package gg.bundlegroup.easyarmorstands;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;

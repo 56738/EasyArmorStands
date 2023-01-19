@@ -5,6 +5,8 @@ import org.joml.Vector3dc;
 public interface EasEntity extends EasWrapper {
     void update();
 
+    void teleport(Vector3dc position, float yaw, float pitch);
+
     void setPersistent(boolean persistent);
 
     void setGlowing(boolean glowing);

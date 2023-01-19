@@ -27,6 +27,11 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
     }
 
     @Override
+    public void teleport(Vector3dc position, float yaw, float pitch) {
+        get().teleport(new Location(get().getWorld(), position.x(), position.y(), position.z(), yaw, pitch));
+    }
+
+    @Override
     public void setPersistent(boolean persistent) {
         if (entityPersistenceSetter != null) {
             entityPersistenceSetter.setPersistent(get(), persistent);
