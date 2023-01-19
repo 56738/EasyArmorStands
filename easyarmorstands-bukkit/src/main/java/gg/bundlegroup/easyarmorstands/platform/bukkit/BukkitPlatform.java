@@ -13,6 +13,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
@@ -51,6 +52,10 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.entitySpawner = entitySpawner;
         this.toolChecker = toolChecker;
         this.heldItemGetter = heldItemGetter;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            players.put(player, getPlayer(player));
+        }
     }
 
     public <T extends Entity> BukkitEntity<T> getEntity(T entity) {
@@ -73,7 +78,10 @@ public class BukkitPlatform implements EasPlatform, Listener {
     }
 
     public BukkitPlayer getPlayer(Player player) {
-        BukkitPlayer wrapper = new BukkitPlayer(this, player, adventure.player(player));
+        BukkitPlayer wrapper = players.get(player);
+        if (wrapper == null) {
+            wrapper = new BukkitPlayer(this, player, adventure.player(player));
+        }
         wrapper.update();
         return wrapper;
     }

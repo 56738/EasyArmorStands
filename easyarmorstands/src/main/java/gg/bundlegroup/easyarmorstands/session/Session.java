@@ -25,7 +25,7 @@ public class Session {
     private final Matrix3d boneRotation = new Matrix3d();
     private final Vector3d boneStart = new Vector3d();
     private final Vector3d boneEnd = new Vector3d();
-    private final Vector3d targetOffset = new Vector3d();
+    private final Vector3d temp = new Vector3d();
 
     private int rightClickTicks = 0;
     private BoneType boneType;
@@ -61,7 +61,7 @@ public class Session {
     public void handleLeftClick() {
         if (rightClickTicks > 0) {
             player.update();
-            cursor.lookAt(player.getEyePosition());
+            cursor.look(player.getEyeRotation().transform(0, 0, -1, temp));
         }
     }
 
@@ -116,12 +116,12 @@ public class Session {
         double bestDistance = Double.POSITIVE_INFINITY;
         for (BoneType type : BoneType.values()) {
             updateBone(type);
-            boneEnd.sub(player.getEyePosition(), targetOffset).mulTranspose(player.getEyeRotation());
-            double distance = targetOffset.z;
+            boneEnd.sub(player.getEyePosition(), temp).mulTranspose(player.getEyeRotation());
+            double distance = temp.z;
             // Eliminate forward part
-            targetOffset.z = 0;
+            temp.z = 0;
             // Distance from straight line
-            double deviationSquared = targetOffset.lengthSquared();
+            double deviationSquared = temp.lengthSquared();
             if (deviationSquared < 0.025) {
                 if (distance > 0 && distance < bestDistance && distance < RANGE) {
                     bestType = type;

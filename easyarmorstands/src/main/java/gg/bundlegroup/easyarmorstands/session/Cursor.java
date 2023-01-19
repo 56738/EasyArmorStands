@@ -44,8 +44,8 @@ public class Cursor {
         return current.rotateLocal(difference);
     }
 
-    public void lookAt(Vector3dc target) {
+    public void look(Vector3dc direction) {
         current.transform(0, 1, 0, up);
-        current.rotationTowards(up, target.sub(origin, currentDirection)).mapnXZY();
+        current.rotationTowards(up, direction).mapnXZY();
     }
 }

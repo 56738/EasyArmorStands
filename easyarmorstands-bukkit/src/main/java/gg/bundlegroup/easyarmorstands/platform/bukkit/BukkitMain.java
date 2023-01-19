@@ -62,6 +62,8 @@ public class BukkitMain extends JavaPlugin {
             }
         }
 
+        getServer().getPluginManager().registerEvents(platform, this);
+
         main = new Main(platform);
     }
 
