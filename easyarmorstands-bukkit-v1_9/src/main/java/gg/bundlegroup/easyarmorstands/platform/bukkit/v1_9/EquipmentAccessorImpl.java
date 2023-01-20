@@ -53,6 +53,11 @@ public class EquipmentAccessorImpl implements EquipmentAccessor {
         }
     }
 
+    @Override
+    public boolean hasSlot(EasArmorEntity.Slot slot) {
+        return true;
+    }
+
     public static class Provider implements EquipmentAccessor.Provider {
         @Override
         public boolean isSupported() {

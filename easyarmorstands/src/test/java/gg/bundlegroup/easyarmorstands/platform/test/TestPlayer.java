@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
+import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.util.RGBLike;
@@ -85,6 +86,10 @@ public class TestPlayer extends TestEntity implements EasPlayer {
 
     @Override
     public void showLine(Vector3dc from, Vector3dc to, RGBLike color, boolean includeEnds) {
+    }
+
+    @Override
+    public void openInventory(EasInventory inventory) {
     }
 
     @Override

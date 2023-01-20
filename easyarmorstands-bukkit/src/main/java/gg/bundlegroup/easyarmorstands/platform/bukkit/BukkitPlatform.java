@@ -1,7 +1,10 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
@@ -14,6 +17,8 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -132,8 +137,27 @@ public class BukkitPlatform implements EasPlatform, Listener {
     }
 
     @Override
+    public boolean hasSlot(EasArmorEntity.Slot slot) {
+        return equipmentAccessor.hasSlot(slot);
+    }
+
+    @Override
     public Collection<? extends EasPlayer> getPlayers() {
         return players.values();
+    }
+
+    @Override
+    public EasInventory createInventory(Component title, int width, int height, EasInventoryListener listener) {
+        if (width != 9) {
+            throw new IllegalArgumentException("Invalid width");
+        }
+        if (height < 1 || height > 6) {
+            throw new IllegalArgumentException("Invalid height");
+        }
+        BukkitInventoryHolder holder = new BukkitInventoryHolder(width * height,
+                LegacyComponentSerializer.legacySection().serialize(title),
+                listener);
+        return new BukkitInventory(this, holder.getInventory());
     }
 
     @Override

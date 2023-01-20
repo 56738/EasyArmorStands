@@ -1,9 +1,13 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
+import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,8 +51,18 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
+    public boolean hasSlot(EasArmorEntity.Slot slot) {
+        return true;
+    }
+
+    @Override
     public Collection<TestPlayer> getPlayers() {
         return players;
+    }
+
+    @Override
+    public EasInventory createInventory(Component title, int width, int height, EasInventoryListener listener) {
+        return new TestInventory(this);
     }
 
     @Override

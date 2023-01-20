@@ -179,6 +179,23 @@ public class Main implements Closeable {
                             }
                         })
         );
+
+        commandManager.command(
+                commandBuilder.literal("equipment")
+                        .permission("easyarmorstands.equipment")
+                        .senderType(EasPlayer.class)
+                        .handler(context -> {
+                            EasPlayer player = (EasPlayer) context.getSender();
+                            Session session = sessionManager.getSession(player);
+                            if (session != null) {
+                                EquipmentInventory inventory = new EquipmentInventory(session.getEntity(), platform,
+                                        Component.text("Equipment"));
+                                player.openInventory(inventory.getInventory());
+                            } else {
+                                sendNoSessionError(player);
+                            }
+                        })
+        );
     }
 
     private void sendSuccess(EasCommandSender sender, String message) {

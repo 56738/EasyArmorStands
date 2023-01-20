@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
+import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
@@ -108,6 +109,11 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
                     from.z() + t * (to.z() - from.z()),
                     options);
         }
+    }
+
+    @Override
+    public void openInventory(EasInventory inventory) {
+        get().openInventory(((BukkitInventory) inventory).get());
     }
 
     @Override

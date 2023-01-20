@@ -9,6 +9,8 @@ public interface EquipmentAccessor {
 
     void setItem(EntityEquipment equipment, EasArmorEntity.Slot slot, ItemStack item);
 
+    boolean hasSlot(EasArmorEntity.Slot slot);
+
     interface Provider extends FeatureProvider<EquipmentAccessor> {
     }
 
@@ -52,6 +54,11 @@ public interface EquipmentAccessor {
                 default:
                     break;
             }
+        }
+
+        @Override
+        public boolean hasSlot(EasArmorEntity.Slot slot) {
+            return slot != EasArmorEntity.Slot.OFF_HAND;
         }
 
         @Override

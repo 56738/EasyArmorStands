@@ -1,8 +1,10 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -10,6 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,6 +24,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class BukkitListener implements Listener {
@@ -126,5 +133,58 @@ public class BukkitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         listener.onQuit(platform.getPlayer(event.getPlayer()));
+    }
+
+    private EasInventoryListener getInventoryListener(InventoryEvent event) {
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof BukkitInventoryHolder) {
+            return ((BukkitInventoryHolder) holder).getListener();
+        } else {
+            return null;
+        }
+    }
+
+    private boolean onInventoryClick(EasInventoryListener inventoryListener, int slot) {
+        Bukkit.getScheduler().runTask(platform.plugin(), inventoryListener::update);
+        return inventoryListener.onClick(slot);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        EasInventoryListener inventoryListener = getInventoryListener(event);
+        if (inventoryListener == null) {
+            return;
+        }
+        InventoryAction action = event.getAction();
+        if (action != InventoryAction.PICKUP_ALL && action != InventoryAction.PLACE_ALL && action != InventoryAction.SWAP_WITH_CURSOR) {
+            event.setCancelled(true);
+            return;
+        }
+        int slot = event.getRawSlot();
+        if (slot != event.getView().convertSlot(slot)) {
+            return;
+        }
+        if (onInventoryClick(inventoryListener, slot)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        EasInventoryListener inventoryListener = getInventoryListener(event);
+        if (inventoryListener == null) {
+            return;
+        }
+        if (event.getRawSlots().size() != 1) {
+            event.setCancelled(true);
+            return;
+        }
+        int slot = event.getRawSlots().iterator().next();
+        if (slot != event.getView().convertSlot(slot)) {
+            return;
+        }
+        if (onInventoryClick(inventoryListener, slot)) {
+            event.setCancelled(true);
+        }
     }
 }
