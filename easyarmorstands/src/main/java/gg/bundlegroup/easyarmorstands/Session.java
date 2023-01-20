@@ -64,7 +64,7 @@ public class Session {
                 new Vector3d(-1.9, 12, 0),
                 new Vector3d(0, -11, 0)));
         this.handles.add(positionHandle);
-        if (player.platform().canSetEntityGlowing() && player.platform().canHideEntities()) {
+        if (player.platform().canSetEntityGlowing()) {
             this.skeleton = entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
                 e.setVisible(false);
                 e.setBasePlate(false);

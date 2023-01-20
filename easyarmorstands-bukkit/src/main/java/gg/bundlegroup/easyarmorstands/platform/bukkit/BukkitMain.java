@@ -71,7 +71,9 @@ public class BukkitMain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        main.close();
+        if (main != null) {
+            main.close();
+        }
     }
 
     private <T extends FeatureProvider<F>, F> F loadFeature(Class<T> type) {
