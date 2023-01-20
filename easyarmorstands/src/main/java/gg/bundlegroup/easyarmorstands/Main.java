@@ -2,11 +2,13 @@ package gg.bundlegroup.easyarmorstands;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.joml.Vector3d;
 
 import java.io.Closeable;
 
@@ -135,6 +137,42 @@ public class Main implements Closeable {
                                 } else {
                                     sendSuccess(player, "Size changed to normal");
                                 }
+                            } else {
+                                sendNoSessionError(player);
+                            }
+                        })
+        );
+
+        commandManager.command(
+                commandBuilder.literal("copy")
+                        .permission("easyarmorstands.copy")
+                        .senderType(EasPlayer.class)
+                        .handler(context -> {
+                            EasPlayer player = (EasPlayer) context.getSender();
+                            Session session = sessionManager.getSession(player);
+                            if (session != null) {
+                                // Drop a copy
+                                EasArmorStand entity = session.getEntity();
+                                entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
+                                    e.setVisible(entity.isVisible());
+                                    e.setBasePlate(entity.hasBasePlate());
+                                    e.setArms(entity.hasArms());
+                                    e.setGravity(entity.hasGravity());
+                                    e.setSmall(entity.isSmall());
+                                    Vector3d pose = new Vector3d();
+                                    for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
+                                        e.setPose(part, entity.getPose(part, pose));
+                                    }
+                                    for (EasArmorStand.Slot slot : EasArmorStand.Slot.values()) {
+                                        e.setItem(slot, entity.getItem(slot));
+                                    }
+                                    e.setGlowing(entity.isGlowing());
+                                });
+
+                                // Let user move the original armor stand
+                                session.startMoving();
+
+                                sendSuccess(player, "Armor stand copied");
                             } else {
                                 sendNoSessionError(player);
                             }

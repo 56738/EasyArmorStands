@@ -39,6 +39,14 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
     }
 
     @Override
+    public boolean isGlowing() {
+        if (entityGlowSetter != null) {
+            return entityGlowSetter.isGlowing(get());
+        }
+        return false;
+    }
+
+    @Override
     public void setGlowing(boolean glowing) {
         if (entityGlowSetter != null) {
             entityGlowSetter.setGlowing(get(), glowing);

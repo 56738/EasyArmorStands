@@ -39,9 +39,18 @@ public class TestEntity extends TestWrapper implements EasEntity {
     public void teleport(Vector3dc position, float yaw, float pitch) {
     }
 
+    public boolean isPersistent() {
+        return persistent;
+    }
+
     @Override
     public void setPersistent(boolean persistent) {
         this.persistent = persistent;
+    }
+
+    @Override
+    public boolean isGlowing() {
+        return glowing;
     }
 
     @Override

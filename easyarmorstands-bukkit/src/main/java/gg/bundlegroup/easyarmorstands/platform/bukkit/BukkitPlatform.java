@@ -10,6 +10,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
@@ -44,8 +45,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final ToolChecker toolChecker;
     private final HeldItemGetter heldItemGetter;
     private final ParticleSpawner particleSpawner;
+    private final EquipmentAccessor equipmentAccessor;
 
-    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter, ParticleSpawner particleSpawner) {
+    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter, ParticleSpawner particleSpawner, EquipmentAccessor equipmentAccessor) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -56,6 +58,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.toolChecker = toolChecker;
         this.heldItemGetter = heldItemGetter;
         this.particleSpawner = particleSpawner;
+        this.equipmentAccessor = equipmentAccessor;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             players.put(player, getPlayer(player));
@@ -179,5 +182,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public ParticleSpawner particleSpawner() {
         return particleSpawner;
+    }
+
+    public EquipmentAccessor equipmentAccessor() {
+        return equipmentAccessor;
     }
 }

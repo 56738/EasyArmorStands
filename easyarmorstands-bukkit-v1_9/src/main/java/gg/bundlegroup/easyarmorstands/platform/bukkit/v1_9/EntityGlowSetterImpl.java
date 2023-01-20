@@ -9,6 +9,11 @@ public class EntityGlowSetterImpl implements EntityGlowSetter {
         entity.setGlowing(glowing);
     }
 
+    @Override
+    public boolean isGlowing(Entity entity) {
+        return entity.isGlowing();
+    }
+
     public static class Provider implements EntityGlowSetter.Provider {
         @Override
         public boolean isSupported() {

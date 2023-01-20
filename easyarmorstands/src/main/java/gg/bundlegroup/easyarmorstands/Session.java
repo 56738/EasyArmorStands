@@ -18,6 +18,7 @@ public class Session {
     private final EasPlayer player;
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
+    private final PositionHandle positionHandle;
     private final List<Handle> handles = new ArrayList<>();
     private final Cursor cursor;
 
@@ -29,6 +30,7 @@ public class Session {
         this.player = player;
         this.entity = entity;
         this.cursor = new Cursor(player);
+        this.positionHandle = new PositionHandle(this);
         this.handles.add(new BoneHandle(this,
                 EasArmorStand.Part.HEAD,
                 Component.text("Head"),
@@ -59,7 +61,7 @@ public class Session {
                 Component.text("Right leg"),
                 new Vector3d(-1.9, 12, 0),
                 new Vector3d(0, -11, 0)));
-        this.handles.add(new PositionHandle(this));
+        this.handles.add(positionHandle);
         if (player.platform().canSetEntityGlowing() && player.platform().canHideEntities()) {
             this.skeleton = entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
                 e.setVisible(false);
@@ -187,5 +189,15 @@ public class Session {
 
     public Cursor getCursor() {
         return cursor;
+    }
+
+    public void startMoving() {
+        player.update();
+        entity.update();
+        manipulatorIndex = 0;
+        handle = positionHandle;
+        handle.update();
+        cursor.start(handle.getPosition(), false);
+        handle.getManipulators().get(0).start();
     }
 }

@@ -9,6 +9,8 @@ public interface EasEntity extends EasWrapper {
 
     void setPersistent(boolean persistent);
 
+    boolean isGlowing();
+
     void setGlowing(boolean glowing);
 
     Vector3dc getPosition();
