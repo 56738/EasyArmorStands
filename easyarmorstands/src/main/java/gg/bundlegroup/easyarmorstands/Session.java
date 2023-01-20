@@ -170,7 +170,7 @@ public class Session {
 
     public void stop() {
         if (skeleton != null) skeleton.remove();
-        player.sendActionBar(Component.empty());
+        player.clearTitle();
     }
 
     public EasArmorStand getEntity() {

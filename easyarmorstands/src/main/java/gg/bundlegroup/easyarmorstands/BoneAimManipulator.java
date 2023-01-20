@@ -26,7 +26,6 @@ public class BoneAimManipulator extends Manipulator {
 
     @Override
     public void start() {
-        handle.getSession().getCursor().start(handle.getPosition(), true);
         this.origin.set(handle.getAnchor());
         this.current.set(handle.getRotation());
         updateDirection(handle.getSession().getCursor().get());
