@@ -13,7 +13,6 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider.Priority;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import org.bukkit.command.CommandSender;
@@ -54,7 +53,6 @@ public class BukkitMain extends JavaPlugin {
                 loadFeature(EntityPersistenceSetter.Provider.class),
                 loadFeature(EntitySpawner.Provider.class),
                 loadFeature(ToolChecker.Provider.class),
-                loadFeature(HeldItemGetter.Provider.class),
                 loadFeature(ParticleSpawner.Provider.class),
                 loadFeature(EquipmentAccessor.Provider.class));
 

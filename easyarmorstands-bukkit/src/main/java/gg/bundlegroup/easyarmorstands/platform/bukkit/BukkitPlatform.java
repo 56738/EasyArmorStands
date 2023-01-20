@@ -11,7 +11,6 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.HeldItemGetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -43,11 +42,18 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final EntityPersistenceSetter entityPersistenceSetter;
     private final EntitySpawner entitySpawner;
     private final ToolChecker toolChecker;
-    private final HeldItemGetter heldItemGetter;
     private final ParticleSpawner particleSpawner;
     private final EquipmentAccessor equipmentAccessor;
 
-    public BukkitPlatform(Plugin plugin, CommandManager<EasCommandSender> commandManager, EntityGlowSetter entityGlowSetter, EntityHider entityHider, EntityPersistenceSetter entityPersistenceSetter, EntitySpawner entitySpawner, ToolChecker toolChecker, HeldItemGetter heldItemGetter, ParticleSpawner particleSpawner, EquipmentAccessor equipmentAccessor) {
+    public BukkitPlatform(Plugin plugin,
+                          CommandManager<EasCommandSender> commandManager,
+                          EntityGlowSetter entityGlowSetter,
+                          EntityHider entityHider,
+                          EntityPersistenceSetter entityPersistenceSetter,
+                          EntitySpawner entitySpawner,
+                          ToolChecker toolChecker,
+                          ParticleSpawner particleSpawner,
+                          EquipmentAccessor equipmentAccessor) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -56,7 +62,6 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.entityPersistenceSetter = entityPersistenceSetter;
         this.entitySpawner = entitySpawner;
         this.toolChecker = toolChecker;
-        this.heldItemGetter = heldItemGetter;
         this.particleSpawner = particleSpawner;
         this.equipmentAccessor = equipmentAccessor;
 
@@ -174,10 +179,6 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public ToolChecker toolChecker() {
         return toolChecker;
-    }
-
-    public HeldItemGetter heldItemGetter() {
-        return heldItemGetter;
     }
 
     public ParticleSpawner particleSpawner() {

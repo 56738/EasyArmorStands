@@ -1,26 +1,26 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit.feature;
 
-import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 public interface EquipmentAccessor {
-    ItemStack getItem(EntityEquipment equipment, EasArmorStand.Slot slot);
+    ItemStack getItem(EntityEquipment equipment, EasArmorEntity.Slot slot);
 
-    void setItem(EntityEquipment equipment, EasArmorStand.Slot slot, ItemStack item);
+    void setItem(EntityEquipment equipment, EasArmorEntity.Slot slot, ItemStack item);
 
     interface Provider extends FeatureProvider<EquipmentAccessor> {
     }
 
     class Fallback implements EquipmentAccessor, Provider {
         @Override
-        public ItemStack getItem(EntityEquipment equipment, EasArmorStand.Slot slot) {
+        public ItemStack getItem(EntityEquipment equipment, EasArmorEntity.Slot slot) {
             switch (slot) {
                 case HEAD:
                     return equipment.getHelmet();
                 case BODY:
                     return equipment.getChestplate();
-                case RIGHT_HAND:
+                case MAIN_HAND:
                     return equipment.getItemInHand();
                 case LEGS:
                     return equipment.getLeggings();
@@ -32,7 +32,7 @@ public interface EquipmentAccessor {
         }
 
         @Override
-        public void setItem(EntityEquipment equipment, EasArmorStand.Slot slot, ItemStack item) {
+        public void setItem(EntityEquipment equipment, EasArmorEntity.Slot slot, ItemStack item) {
             switch (slot) {
                 case HEAD:
                     equipment.setHelmet(item);
@@ -40,7 +40,7 @@ public interface EquipmentAccessor {
                 case BODY:
                     equipment.setChestplate(item);
                     break;
-                case RIGHT_HAND:
+                case MAIN_HAND:
                     equipment.setItemInHand(item);
                     break;
                 case LEGS:

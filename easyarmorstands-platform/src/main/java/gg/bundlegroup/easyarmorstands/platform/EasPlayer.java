@@ -4,7 +4,7 @@ import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3dc;
 import org.joml.Vector3dc;
 
-public interface EasPlayer extends EasEntity, EasCommandSender {
+public interface EasPlayer extends EasArmorEntity, EasCommandSender {
     Vector3dc getEyePosition();
 
     Matrix3dc getEyeRotation();

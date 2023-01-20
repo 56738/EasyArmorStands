@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
@@ -163,7 +164,7 @@ public class Main implements Closeable {
                                     for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
                                         e.setPose(part, entity.getPose(part, pose));
                                     }
-                                    for (EasArmorStand.Slot slot : EasArmorStand.Slot.values()) {
+                                    for (EasArmorEntity.Slot slot : EasArmorEntity.Slot.values()) {
                                         e.setItem(slot, entity.getItem(slot));
                                     }
                                     e.setGlowing(entity.isGlowing());

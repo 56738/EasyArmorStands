@@ -3,7 +3,7 @@ package gg.bundlegroup.easyarmorstands.platform;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public interface EasArmorStand extends EasEntity {
+public interface EasArmorStand extends EasArmorEntity {
     boolean isVisible();
 
     void setVisible(boolean visible);
@@ -30,10 +30,6 @@ public interface EasArmorStand extends EasEntity {
 
     void setPose(Part part, Vector3dc pose);
 
-    EasItem getItem(Slot slot);
-
-    void setItem(Slot slot, EasItem item);
-
     enum Part {
         HEAD,
         BODY,
@@ -41,14 +37,5 @@ public interface EasArmorStand extends EasEntity {
         RIGHT_ARM,
         LEFT_LEG,
         RIGHT_LEG
-    }
-
-    enum Slot {
-        HEAD,
-        BODY,
-        LEFT_HAND,
-        RIGHT_HAND,
-        LEGS,
-        FEET
     }
 }

@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit.v1_9;
 
-import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -8,15 +8,15 @@ import org.bukkit.inventory.ItemStack;
 
 public class EquipmentAccessorImpl implements EquipmentAccessor {
     @Override
-    public ItemStack getItem(EntityEquipment equipment, EasArmorStand.Slot slot) {
+    public ItemStack getItem(EntityEquipment equipment, EasArmorEntity.Slot slot) {
         switch (slot) {
             case HEAD:
                 return equipment.getHelmet();
             case BODY:
                 return equipment.getChestplate();
-            case LEFT_HAND:
+            case OFF_HAND:
                 return equipment.getItemInOffHand();
-            case RIGHT_HAND:
+            case MAIN_HAND:
                 return equipment.getItemInMainHand();
             case LEGS:
                 return equipment.getLeggings();
@@ -28,7 +28,7 @@ public class EquipmentAccessorImpl implements EquipmentAccessor {
     }
 
     @Override
-    public void setItem(EntityEquipment equipment, EasArmorStand.Slot slot, ItemStack item) {
+    public void setItem(EntityEquipment equipment, EasArmorEntity.Slot slot, ItemStack item) {
         switch (slot) {
             case HEAD:
                 equipment.setHelmet(item);
@@ -36,10 +36,10 @@ public class EquipmentAccessorImpl implements EquipmentAccessor {
             case BODY:
                 equipment.setChestplate(item);
                 break;
-            case LEFT_HAND:
+            case OFF_HAND:
                 equipment.setItemInOffHand(item);
                 break;
-            case RIGHT_HAND:
+            case MAIN_HAND:
                 equipment.setItemInMainHand(item);
                 break;
             case LEGS:
@@ -54,10 +54,14 @@ public class EquipmentAccessorImpl implements EquipmentAccessor {
     }
 
     public static class Provider implements EquipmentAccessor.Provider {
-        @SuppressWarnings("ConstantValue")
         @Override
         public boolean isSupported() {
-            return EquipmentSlot.valueOf("OFF_HAND") != null;
+            try {
+                EquipmentSlot.valueOf("OFF_HAND");
+                return true;
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
         }
 
         @Override

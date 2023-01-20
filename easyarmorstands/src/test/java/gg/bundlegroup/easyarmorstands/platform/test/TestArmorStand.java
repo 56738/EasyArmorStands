@@ -1,5 +1,6 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import org.joml.Vector3d;
@@ -96,11 +97,11 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     }
 
     @Override
-    public EasItem getItem(Slot slot) {
+    public EasItem getItem(EasArmorEntity.Slot slot) {
         return null;
     }
 
     @Override
-    public void setItem(Slot slot, EasItem item) {
+    public void setItem(EasArmorEntity.Slot slot, EasItem item) {
     }
 }

@@ -1,6 +1,8 @@
 package gg.bundlegroup.easyarmorstands;
 
+import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -127,6 +129,9 @@ public class Session {
         Component title;
         if (manipulatorIndex != -1) {
             handle.update();
+            if (isToolInOffHand()) {
+                cursor.start(cursor.get(), false);
+            }
             cursor.update();
             Manipulator manipulator = handle.getManipulators().get(manipulatorIndex);
             manipulator.update();
@@ -199,5 +204,13 @@ public class Session {
         handle.update();
         cursor.start(handle.getPosition(), false);
         handle.getManipulators().get(0).start();
+    }
+
+    public boolean isToolInOffHand() {
+        EasItem item = player.getItem(EasArmorEntity.Slot.OFF_HAND);
+        if (item == null) {
+            return false;
+        }
+        return item.isTool();
     }
 }

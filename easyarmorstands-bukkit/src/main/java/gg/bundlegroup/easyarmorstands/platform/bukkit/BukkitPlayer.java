@@ -17,7 +17,7 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BukkitPlayer extends BukkitEntity<Player> implements EasPlayer, ForwardingAudience.Single {
+public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer, ForwardingAudience.Single {
     private final Audience audience;
     private final EntityHider entityHider;
     private final ParticleSpawner particleSpawner;

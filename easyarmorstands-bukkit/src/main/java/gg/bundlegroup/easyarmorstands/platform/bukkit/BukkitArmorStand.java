@@ -1,19 +1,14 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
-import gg.bundlegroup.easyarmorstands.platform.EasItem;
-import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArmorStand {
-    private final EquipmentAccessor equipmentAccessor;
-
+public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements EasArmorStand {
     public BukkitArmorStand(BukkitPlatform platform, ArmorStand armorStand) {
         super(platform, armorStand);
-        this.equipmentAccessor = platform.equipmentAccessor();
     }
 
     @Override
@@ -125,15 +120,5 @@ public class BukkitArmorStand extends BukkitEntity<ArmorStand> implements EasArm
     @Override
     public void setPose(Part part, Vector3dc pose) {
         setAngle(part, new EulerAngle(pose.x(), pose.y(), pose.z()));
-    }
-
-    @Override
-    public EasItem getItem(Slot slot) {
-        return platform().getItem(equipmentAccessor.getItem(get().getEquipment(), slot));
-    }
-
-    @Override
-    public void setItem(Slot slot, EasItem item) {
-        equipmentAccessor.setItem(get().getEquipment(), slot, ((BukkitItem) item).get());
     }
 }

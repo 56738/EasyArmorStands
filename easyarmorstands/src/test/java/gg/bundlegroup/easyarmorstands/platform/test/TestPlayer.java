@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
+import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Math;
@@ -89,5 +90,14 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     @Override
     public boolean hasPermission(String permission) {
         return true;
+    }
+
+    @Override
+    public EasItem getItem(Slot slot) {
+        return null;
+    }
+
+    @Override
+    public void setItem(Slot slot, EasItem item) {
     }
 }
