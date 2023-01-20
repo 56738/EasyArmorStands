@@ -4,6 +4,9 @@ import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class SessionListener implements EasListener {
     private final SessionManager manager;
@@ -19,6 +22,17 @@ public class SessionListener implements EasListener {
 
         if (!player.hasPermission("easyarmorstands.edit")) {
             return false;
+        }
+
+        Session oldSession = manager.getSession(armorStand);
+        if (oldSession != null) {
+            Component who = oldSession.getPlayer().get(Identity.DISPLAY_NAME)
+                    .orElseGet(() -> Component.text("Someone else"));
+            player.sendMessage(Component.text()
+                    .color(NamedTextColor.RED)
+                    .append(who)
+                    .append(Component.text(" is editing this armor stand")));
+            return true;
         }
 
         manager.start(player, new Session(player, armorStand));

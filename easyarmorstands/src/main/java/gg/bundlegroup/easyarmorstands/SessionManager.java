@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class SessionManager {
     private final HashMap<EasPlayer, Session> sessions = new HashMap<>();
 
-    void start(EasPlayer player, Session session) {
+    public void start(EasPlayer player, Session session) {
         final Session old = sessions.put(player, session);
         if (old != null) {
             old.stop();
@@ -46,5 +46,14 @@ public class SessionManager {
 
     public Session getSession(EasPlayer player) {
         return sessions.get(player);
+    }
+
+    public Session getSession(EasArmorStand armorStand) {
+        for (Session session : sessions.values()) {
+            if (session.getEntity().equals(armorStand)) {
+                return session;
+            }
+        }
+        return null;
     }
 }
