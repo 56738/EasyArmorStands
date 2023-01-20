@@ -188,9 +188,7 @@ public class Main implements Closeable {
                             EasPlayer player = (EasPlayer) context.getSender();
                             Session session = sessionManager.getSession(player);
                             if (session != null) {
-                                EquipmentInventory inventory = new EquipmentInventory(session.getEntity(), platform,
-                                        Component.text("Equipment"));
-                                player.openInventory(inventory.getInventory());
+                                session.openMenu();
                             } else {
                                 sendNoSessionError(player);
                             }

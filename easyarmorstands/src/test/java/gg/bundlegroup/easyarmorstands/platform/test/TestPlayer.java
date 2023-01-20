@@ -73,6 +73,11 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
+    public boolean isSneaking() {
+        return false;
+    }
+
+    @Override
     public void giveTool() {
     }
 

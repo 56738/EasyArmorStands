@@ -89,6 +89,9 @@ public class Session {
     }
 
     public void handleLeftClick() {
+        if (manipulatorIndex == -1 && player.isSneaking()) {
+            openMenu();
+        }
         manipulatorIndex = -1;
     }
 
@@ -204,6 +207,12 @@ public class Session {
         handle.update();
         cursor.start(handle.getPosition(), false);
         handle.getManipulators().get(0).start();
+    }
+
+    public void openMenu() {
+        EquipmentInventory inventory = new EquipmentInventory(entity, player.platform(),
+                Component.text("Equipment"));
+        player.openInventory(inventory.getInventory());
     }
 
     public boolean isToolInOffHand() {

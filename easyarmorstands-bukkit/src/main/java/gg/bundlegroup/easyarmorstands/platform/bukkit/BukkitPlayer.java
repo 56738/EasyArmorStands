@@ -68,6 +68,11 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
     }
 
     @Override
+    public boolean isSneaking() {
+        return get().isSneaking();
+    }
+
+    @Override
     public void giveTool() {
         get().getInventory().addItem(platform().toolChecker().createTool());
     }
