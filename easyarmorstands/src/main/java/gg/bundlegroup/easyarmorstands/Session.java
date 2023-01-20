@@ -21,7 +21,7 @@ public class Session {
     private final List<Handle> handles = new ArrayList<>();
     private final Cursor cursor;
 
-    private int rightClickTicks;
+    private int rightClickTicks = 5;
     private Handle handle;
     private int manipulatorIndex = -1;
 
