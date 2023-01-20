@@ -22,6 +22,8 @@ public interface EasPlatform {
 
     EasInventory createInventory(Component title, int width, int height, EasInventoryListener listener);
 
+    EasItem createPlaceholderItem();
+
     void registerListener(EasListener listener);
 
     void registerTickTask(Runnable task);

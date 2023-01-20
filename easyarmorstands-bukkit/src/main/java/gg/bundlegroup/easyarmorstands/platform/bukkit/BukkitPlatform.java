@@ -5,6 +5,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
@@ -14,6 +15,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -49,6 +51,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final ToolChecker toolChecker;
     private final ParticleSpawner particleSpawner;
     private final EquipmentAccessor equipmentAccessor;
+    private final EasItem placeholderItem;
 
     public BukkitPlatform(Plugin plugin,
                           CommandManager<EasCommandSender> commandManager,
@@ -58,7 +61,8 @@ public class BukkitPlatform implements EasPlatform, Listener {
                           EntitySpawner entitySpawner,
                           ToolChecker toolChecker,
                           ParticleSpawner particleSpawner,
-                          EquipmentAccessor equipmentAccessor) {
+                          EquipmentAccessor equipmentAccessor,
+                          ItemProvider itemProvider) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -69,6 +73,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.toolChecker = toolChecker;
         this.particleSpawner = particleSpawner;
         this.equipmentAccessor = equipmentAccessor;
+        this.placeholderItem = getItem(itemProvider.createPlaceholder());
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             players.put(player, getPlayer(player));
@@ -158,6 +163,11 @@ public class BukkitPlatform implements EasPlatform, Listener {
                 LegacyComponentSerializer.legacySection().serialize(title),
                 listener);
         return new BukkitInventory(this, holder.getInventory());
+    }
+
+    @Override
+    public EasItem createPlaceholderItem() {
+        return placeholderItem;
     }
 
     @Override

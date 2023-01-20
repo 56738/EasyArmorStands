@@ -5,6 +5,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import net.kyori.adventure.text.Component;
@@ -63,6 +64,11 @@ public class TestPlatform implements EasPlatform {
     @Override
     public EasInventory createInventory(Component title, int width, int height, EasInventoryListener listener) {
         return new TestInventory(this);
+    }
+
+    @Override
+    public EasItem createPlaceholderItem() {
+        return createItem(false);
     }
 
     @Override

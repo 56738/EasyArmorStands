@@ -14,11 +14,13 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider.Priority;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 
@@ -55,7 +57,8 @@ public class BukkitMain extends JavaPlugin {
                 loadFeature(EntitySpawner.Provider.class),
                 loadFeature(ToolChecker.Provider.class),
                 loadFeature(ParticleSpawner.Provider.class),
-                loadFeature(EquipmentAccessor.Provider.class));
+                loadFeature(EquipmentAccessor.Provider.class),
+                Objects.requireNonNull(loadFeature(ItemProvider.Provider.class), "Item provider not found"));
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
             try {
