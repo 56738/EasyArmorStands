@@ -5,6 +5,7 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import gg.bundlegroup.easyarmorstands.Main;
+import gg.bundlegroup.easyarmorstands.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
@@ -67,6 +68,10 @@ public class BukkitMain extends JavaPlugin {
         getServer().getPluginManager().registerEvents(platform, this);
 
         main = new Main(platform);
+
+        if (getServer().getPluginManager().isPluginEnabled("HeadDatabase")) {
+            getServer().getPluginManager().registerEvents(new BukkitHeadDatabaseListener(this), this);
+        }
     }
 
     @Override
@@ -74,6 +79,14 @@ public class BukkitMain extends JavaPlugin {
         if (main != null) {
             main.close();
         }
+    }
+
+    public BukkitPlatform getPlatform() {
+        return platform;
+    }
+
+    public SessionManager getSessionManager() {
+        return main.getSessionManager();
     }
 
     private <T extends FeatureProvider<F>, F> F loadFeature(Class<T> type) {

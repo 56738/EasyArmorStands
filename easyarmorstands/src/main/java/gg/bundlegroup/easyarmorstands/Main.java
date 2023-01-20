@@ -198,6 +198,10 @@ public class Main implements Closeable {
         );
     }
 
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
     private void sendSuccess(EasCommandSender sender, String message) {
         sender.sendMessage(Component.text(message, NamedTextColor.GREEN));
     }
