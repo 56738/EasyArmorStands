@@ -51,9 +51,9 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     }
 
     @Override
-    public void update() {
-        cursor.update();
-        super.update();
+    public void update(boolean freeLook) {
+        cursor.update(freeLook);
+        super.update(freeLook);
         getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
 
         Vector3dc axisDirection = getAxisDirection();

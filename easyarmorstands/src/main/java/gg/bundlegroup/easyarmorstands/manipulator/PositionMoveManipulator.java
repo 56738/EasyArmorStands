@@ -1,9 +1,9 @@
 package gg.bundlegroup.easyarmorstands.manipulator;
 
-import gg.bundlegroup.easyarmorstands.util.Cursor3D;
 import gg.bundlegroup.easyarmorstands.handle.PositionHandle;
-import gg.bundlegroup.easyarmorstands.session.Session;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.util.Cursor3D;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -27,9 +27,9 @@ public class PositionMoveManipulator extends Manipulator {
     }
 
     @Override
-    public void update() {
+    public void update(boolean freeLook) {
         Session session = handle.getSession();
-        cursor.update();
+        cursor.update(freeLook);
         getCursor().add(offset, position);
         EasArmorStand entity = handle.getSession().getEntity();
         EasArmorStand skeleton = session.getSkeleton();

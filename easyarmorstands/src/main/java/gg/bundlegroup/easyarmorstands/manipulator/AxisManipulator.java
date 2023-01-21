@@ -34,7 +34,7 @@ public abstract class AxisManipulator extends Manipulator {
     }
 
     @Override
-    public void update() {
+    public void update(boolean freeLook) {
         updateAxisPoint(getCursor());
         double axisMin = -2;
         double axisMax = 2;

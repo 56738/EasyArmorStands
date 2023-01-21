@@ -19,14 +19,22 @@ public class Cursor3D {
         if (force) {
             player.lookAt(cursor);
         }
-        this.cursor.set(cursor);
-        this.cursor.sub(player.getEyePosition());
-        this.cursor.mulTranspose(player.getEyeRotation());
         this.current.set(cursor);
+        refresh();
     }
 
-    public void update() {
-        player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
+    private void refresh() {
+        this.cursor.set(current);
+        this.cursor.sub(player.getEyePosition());
+        this.cursor.mulTranspose(player.getEyeRotation());
+    }
+
+    public void update(boolean freeLook) {
+        if (freeLook) {
+            refresh();
+        } else {
+            player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
+        }
         player.showPoint(current, NamedTextColor.YELLOW);
     }
 

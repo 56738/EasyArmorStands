@@ -38,8 +38,8 @@ public class BoneAimManipulator extends Manipulator {
     }
 
     @Override
-    public void update() {
-        cursor.update();
+    public void update(boolean freeLook) {
+        cursor.update(freeLook);
         updateDirection();
         lastDirection.rotationTo(currentDirection, difference);
         lastDirection.set(currentDirection);

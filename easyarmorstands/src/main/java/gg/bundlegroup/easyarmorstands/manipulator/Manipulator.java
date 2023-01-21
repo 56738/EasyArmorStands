@@ -16,7 +16,7 @@ public abstract class Manipulator {
 
     public abstract void start(Vector3dc cursor);
 
-    public abstract void update();
+    public abstract void update(boolean freeLook);
 
     public abstract Vector3dc getCursor();
 

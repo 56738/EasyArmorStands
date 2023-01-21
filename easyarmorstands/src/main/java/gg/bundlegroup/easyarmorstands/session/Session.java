@@ -155,7 +155,7 @@ public class Session {
         if (manipulatorIndex != -1) {
             handle.update();
             Manipulator manipulator = handle.getManipulators().get(manipulatorIndex);
-            manipulator.update();
+            manipulator.update(isToolInOffHand());
             title = manipulator.getComponent();
         } else {
             updateTargetHandle();

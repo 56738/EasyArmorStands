@@ -29,10 +29,10 @@ public class PositionAxisManipulator extends AxisManipulator {
     }
 
     @Override
-    public void update() {
-        cursor.update();
+    public void update(boolean freeLook) {
+        cursor.update(freeLook);
         getOrigin().set(handle.getPosition());
-        super.update();
+        super.update(freeLook);
 
         EasArmorStand entity = handle.getSession().getEntity();
         EasArmorStand skeleton = handle.getSession().getSkeleton();
