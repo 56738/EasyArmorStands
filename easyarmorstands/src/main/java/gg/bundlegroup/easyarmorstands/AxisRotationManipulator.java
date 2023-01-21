@@ -7,6 +7,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public abstract class AxisRotationManipulator extends AxisManipulator {
+    private final Cursor cursor;
     private final Matrix3d current = new Matrix3d();
     private final Vector3d lastDirection = new Vector3d();
     private final Vector3d currentDirection = new Vector3d();
@@ -14,10 +15,11 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
 
     public AxisRotationManipulator(Session session, String name, RGBLike color, Vector3dc axis) {
         super(session, name, color, axis);
+        this.cursor = new Cursor(session.getPlayer());
     }
 
     private void updateDirection(Vector3d dest) {
-        getSession().getCursor().get().sub(getAxisPoint(), dest);
+        cursor.get().sub(getAxisPoint(), dest);
     }
 
     protected Matrix3d getRotation() {
@@ -31,7 +33,8 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     protected abstract void onRotate(double angle);
 
     @Override
-    protected void start(Vector3d origin, Vector3d axisDirection) {
+    protected void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection) {
+        this.cursor.start(cursor, false);
         refreshRotation();
         origin.set(getAnchor());
         current.transform(getAxis(), axisDirection).normalize();
@@ -41,10 +44,16 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     }
 
     @Override
+    public Vector3dc getCursor() {
+        return cursor.get();
+    }
+
+    @Override
     public void update() {
+        cursor.update();
         super.update();
         if (getSession().getPlayer().platform().canSpawnParticles()) {
-            getSession().getPlayer().showLine(getAxisPoint(), getSession().getCursor().get(), NamedTextColor.WHITE, false);
+            getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
         }
 
         Vector3dc axisDirection = getAxisDirection();

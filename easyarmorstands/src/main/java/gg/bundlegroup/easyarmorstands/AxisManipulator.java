@@ -20,16 +20,16 @@ public abstract class AxisManipulator extends Manipulator {
         this.axis = new Vector3d(axis);
     }
 
-    protected abstract void start(Vector3d origin, Vector3d axisDirection);
+    protected abstract void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection);
 
     protected void updateAxisPoint() {
-        axisPos = session.getCursor().get().sub(origin, axisPoint).dot(axisDirection);
+        axisPos = getCursor().sub(origin, axisPoint).dot(axisDirection);
         origin.fma(axisPos, axisDirection, axisPoint);
     }
 
     @Override
-    public void start() {
-        start(origin, axisDirection);
+    public void start(Vector3dc cursor) {
+        start(cursor, origin, axisDirection);
     }
 
     @Override

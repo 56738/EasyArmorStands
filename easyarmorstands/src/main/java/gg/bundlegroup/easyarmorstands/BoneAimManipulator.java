@@ -9,6 +9,7 @@ import org.joml.Vector3dc;
 
 public class BoneAimManipulator extends Manipulator {
     private final BoneHandle handle;
+    private final Cursor cursor;
     private final Vector3d origin = new Vector3d();
     private final Vector3d currentDirection = new Vector3d();
     private final Vector3d lastDirection = new Vector3d();
@@ -18,27 +19,35 @@ public class BoneAimManipulator extends Manipulator {
     public BoneAimManipulator(BoneHandle handle, String name, RGBLike color) {
         super(name, color);
         this.handle = handle;
+        this.cursor = new Cursor(handle.getSession().getPlayer());
     }
 
-    private void updateDirection(Vector3dc cursor) {
-        cursor.sub(origin, currentDirection);
+    private void updateDirection() {
+        getCursor().sub(origin, currentDirection);
     }
 
     @Override
-    public void start() {
+    public void start(Vector3dc cursor) {
+        this.cursor.start(cursor, false);
         this.origin.set(handle.getAnchor());
         this.current.set(handle.getRotation());
-        updateDirection(handle.getSession().getCursor().get());
+        updateDirection();
         lastDirection.set(currentDirection);
     }
 
     @Override
     public void update() {
-        updateDirection(handle.getSession().getCursor().get());
+        cursor.update();
+        updateDirection();
         lastDirection.rotationTo(currentDirection, difference);
         lastDirection.set(currentDirection);
-        handle.getSession().getPlayer().showLine(origin, handle.getSession().getCursor().get(), NamedTextColor.WHITE, false);
+        handle.getSession().getPlayer().showLine(origin, getCursor(), NamedTextColor.WHITE, false);
         current.rotateLocal(difference);
         handle.setRotation(current);
+    }
+
+    @Override
+    public Vector3dc getCursor() {
+        return cursor.get();
     }
 }

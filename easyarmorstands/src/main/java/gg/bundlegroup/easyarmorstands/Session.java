@@ -10,6 +10,7 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ public class Session {
     private final EasArmorStand skeleton;
     private final PositionHandle positionHandle;
     private final List<Handle> handles = new ArrayList<>();
-    private final Cursor cursor;
 
     private int rightClickTicks = 5;
     private Handle handle;
@@ -31,7 +31,6 @@ public class Session {
     public Session(EasPlayer player, EasArmorStand entity) {
         this.player = player;
         this.entity = entity;
-        this.cursor = new Cursor(player);
         this.positionHandle = new PositionHandle(this);
         this.handles.add(new BoneHandle(this,
                 EasArmorStand.Part.HEAD,
@@ -105,8 +104,11 @@ public class Session {
             return;
         }
 
+        Vector3dc cursor;
         if (manipulatorIndex == -1) {
-            cursor.start(handle.getPosition(), false);
+            cursor = handle.getPosition();
+        } else {
+            cursor = handle.getManipulators().get(manipulatorIndex).getCursor();
         }
 
         handle.update();
@@ -118,7 +120,7 @@ public class Session {
         } else if (manipulatorIndex >= manipulators.size()) {
             manipulatorIndex = 0;
         }
-        manipulators.get(manipulatorIndex).start();
+        manipulators.get(manipulatorIndex).start(cursor);
     }
 
     public boolean update() {
@@ -132,10 +134,6 @@ public class Session {
         Component title;
         if (manipulatorIndex != -1) {
             handle.update();
-            if (isToolInOffHand()) {
-                cursor.start(cursor.get(), false);
-            }
-            cursor.update();
             Manipulator manipulator = handle.getManipulators().get(manipulatorIndex);
             manipulator.update();
             title = manipulator.getComponent();
@@ -195,18 +193,13 @@ public class Session {
         return player;
     }
 
-    public Cursor getCursor() {
-        return cursor;
-    }
-
     public void startMoving() {
         player.update();
         entity.update();
         manipulatorIndex = 0;
         handle = positionHandle;
         handle.update();
-        cursor.start(handle.getPosition(), false);
-        handle.getManipulators().get(0).start();
+        handle.getManipulators().get(0).start(handle.getPosition());
     }
 
     public void openMenu() {

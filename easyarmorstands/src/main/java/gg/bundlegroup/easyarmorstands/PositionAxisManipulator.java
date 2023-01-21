@@ -7,16 +7,19 @@ import org.joml.Vector3dc;
 
 public class PositionAxisManipulator extends AxisManipulator {
     private final PositionHandle handle;
+    private final Cursor cursor;
     private final Vector3d offset = new Vector3d();
     private final Vector3d position = new Vector3d();
 
     public PositionAxisManipulator(PositionHandle handle, String name, RGBLike color, Vector3dc axis) {
         super(handle.getSession(), name, color, axis);
         this.handle = handle;
+        this.cursor = new Cursor(handle.getSession().getPlayer());
     }
 
     @Override
-    protected void start(Vector3d origin, Vector3d axisDirection) {
+    protected void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection) {
+        this.cursor.start(cursor, false);
         origin.set(handle.getPosition());
         axisDirection.set(getAxis());
         updateAxisPoint();
@@ -25,6 +28,7 @@ public class PositionAxisManipulator extends AxisManipulator {
 
     @Override
     public void update() {
+        cursor.update();
         getOrigin().set(handle.getPosition());
         super.update();
 
@@ -36,5 +40,10 @@ public class PositionAxisManipulator extends AxisManipulator {
         if (skeleton != null) {
             skeleton.teleport(position, yaw, 0);
         }
+    }
+
+    @Override
+    public Vector3dc getCursor() {
+        return cursor.get();
     }
 }

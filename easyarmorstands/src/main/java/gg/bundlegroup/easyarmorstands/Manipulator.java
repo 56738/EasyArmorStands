@@ -3,6 +3,7 @@ package gg.bundlegroup.easyarmorstands;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
+import org.joml.Vector3dc;
 
 public abstract class Manipulator {
     private final Component component;
@@ -13,9 +14,11 @@ public abstract class Manipulator {
         this.color = color;
     }
 
-    public abstract void start();
+    public abstract void start(Vector3dc cursor);
 
     public abstract void update();
+
+    public abstract Vector3dc getCursor();
 
     public final Component getComponent() {
         return component;
