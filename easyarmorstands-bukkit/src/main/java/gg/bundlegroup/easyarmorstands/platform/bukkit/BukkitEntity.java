@@ -3,7 +3,9 @@ package gg.bundlegroup.easyarmorstands.platform.bukkit;
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasWorld;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityNameAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3d;
@@ -12,12 +14,14 @@ import org.joml.Vector3dc;
 public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements EasEntity {
     private final EntityPersistenceSetter entityPersistenceSetter;
     private final EntityGlowSetter entityGlowSetter;
+    private final EntityNameAccessor entityNameAccessor;
     private final Vector3d position = new Vector3d();
 
     public BukkitEntity(BukkitPlatform platform, T entity) {
         super(platform, entity);
         this.entityPersistenceSetter = platform.entityPersistenceSetter();
         this.entityGlowSetter = platform.entityGlowSetter();
+        this.entityNameAccessor = platform.entityNameAccessor();
     }
 
     @Override
@@ -51,6 +55,26 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
         if (entityGlowSetter != null) {
             entityGlowSetter.setGlowing(get(), glowing);
         }
+    }
+
+    @Override
+    public Component getCustomName() {
+        return entityNameAccessor.getName(get());
+    }
+
+    @Override
+    public void setCustomName(Component customName) {
+        entityNameAccessor.setName(get(), customName);
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        return get().isCustomNameVisible();
+    }
+
+    @Override
+    public void setCustomNameVisible(boolean visible) {
+        get().setCustomNameVisible(visible);
     }
 
     @Override

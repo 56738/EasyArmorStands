@@ -9,6 +9,7 @@ import gg.bundlegroup.easyarmorstands.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityNameAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
@@ -58,6 +59,7 @@ public class BukkitMain extends JavaPlugin {
                 loadFeature(ToolChecker.Provider.class),
                 loadFeature(ParticleSpawner.Provider.class),
                 loadFeature(EquipmentAccessor.Provider.class),
+                loadFeature(EntityNameAccessor.Provider.class),
                 Objects.requireNonNull(loadFeature(ItemProvider.Provider.class), "Item provider not found"));
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {

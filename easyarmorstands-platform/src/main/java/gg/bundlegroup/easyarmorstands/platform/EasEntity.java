@@ -1,5 +1,6 @@
 package gg.bundlegroup.easyarmorstands.platform;
 
+import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
 
 public interface EasEntity extends EasWrapper {
@@ -12,6 +13,14 @@ public interface EasEntity extends EasWrapper {
     boolean isGlowing();
 
     void setGlowing(boolean glowing);
+
+    Component getCustomName();
+
+    void setCustomName(Component customName);
+
+    boolean isCustomNameVisible();
+
+    void setCustomNameVisible(boolean visible);
 
     Vector3dc getPosition();
 

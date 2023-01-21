@@ -12,6 +12,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.platform.EasWorld;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityNameAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntitySpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EquipmentAccessor;
@@ -51,6 +52,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final ToolChecker toolChecker;
     private final ParticleSpawner particleSpawner;
     private final EquipmentAccessor equipmentAccessor;
+    private final EntityNameAccessor entityNameAccessor;
     private final EasItem placeholderItem;
 
     public BukkitPlatform(Plugin plugin,
@@ -62,6 +64,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
                           ToolChecker toolChecker,
                           ParticleSpawner particleSpawner,
                           EquipmentAccessor equipmentAccessor,
+                          EntityNameAccessor entityNameAccessor,
                           ItemProvider itemProvider) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
@@ -73,6 +76,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.toolChecker = toolChecker;
         this.particleSpawner = particleSpawner;
         this.equipmentAccessor = equipmentAccessor;
+        this.entityNameAccessor = entityNameAccessor;
         this.placeholderItem = getItem(itemProvider.createPlaceholder());
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -221,5 +225,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EquipmentAccessor equipmentAccessor() {
         return equipmentAccessor;
+    }
+
+    public EntityNameAccessor entityNameAccessor() {
+        return entityNameAccessor;
     }
 }

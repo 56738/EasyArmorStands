@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.test;
 
 import gg.bundlegroup.easyarmorstands.platform.EasEntity;
+import net.kyori.adventure.text.Component;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -11,6 +12,8 @@ public class TestEntity extends TestWrapper implements EasEntity {
     private boolean moved = true;
     private boolean persistent = true;
     private boolean glowing;
+    private Component customName = Component.empty();
+    private boolean customNameVisible;
     private boolean removed;
 
     public TestEntity(TestPlatform platform, TestWorld world) {
@@ -56,6 +59,26 @@ public class TestEntity extends TestWrapper implements EasEntity {
     @Override
     public void setGlowing(boolean glowing) {
         this.glowing = glowing;
+    }
+
+    @Override
+    public Component getCustomName() {
+        return customName;
+    }
+
+    @Override
+    public void setCustomName(Component customName) {
+        this.customName = customName;
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        return customNameVisible;
+    }
+
+    @Override
+    public void setCustomNameVisible(boolean visible) {
+        this.customNameVisible = visible;
     }
 
     @Override

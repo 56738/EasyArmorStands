@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.arguments.standard.StringArgument;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
@@ -9,6 +10,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.joml.Vector3d;
 
 import java.io.Closeable;
@@ -145,6 +147,33 @@ public class Main implements Closeable {
         );
 
         commandManager.command(
+                commandBuilder.literal("name")
+                        .permission("easyarmorstands.edit")
+                        .senderType(EasPlayer.class)
+                        .argument(StringArgument.optional("name", StringArgument.StringMode.GREEDY))
+                        .handler(context -> {
+                            EasPlayer player = (EasPlayer) context.getSender();
+                            Session session = sessionManager.getSession(player);
+                            if (session != null) {
+                                EasArmorStand entity = session.getEntity();
+                                if (context.contains("name")) {
+                                    String input = context.get("name");
+                                    Component name = MiniMessage.miniMessage().deserialize(input);
+                                    entity.setCustomName(name);
+                                    entity.setCustomNameVisible(true);
+                                    sendSuccess(player, "Name changed");
+                                } else {
+                                    entity.setCustomNameVisible(false);
+                                    entity.setCustomName(null);
+                                    sendSuccess(player, "Name removed");
+                                }
+                            } else {
+                                sendNoSessionError(player);
+                            }
+                        })
+        );
+
+        commandManager.command(
                 commandBuilder.literal("copy")
                         .permission("easyarmorstands.copy")
                         .senderType(EasPlayer.class)
@@ -160,6 +189,8 @@ public class Main implements Closeable {
                                     e.setArms(entity.hasArms());
                                     e.setGravity(entity.hasGravity());
                                     e.setSmall(entity.isSmall());
+                                    e.setCustomName(entity.getCustomName());
+                                    e.setCustomNameVisible(entity.isCustomNameVisible());
                                     Vector3d pose = new Vector3d();
                                     for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
                                         e.setPose(part, entity.getPose(part, pose));
