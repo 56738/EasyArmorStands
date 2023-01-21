@@ -13,7 +13,9 @@ adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", ve
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-platform" }
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-platform" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
+cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
+cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
 cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud" }
 commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
 joml = { module = "org.joml:joml", version.ref = "joml" }
