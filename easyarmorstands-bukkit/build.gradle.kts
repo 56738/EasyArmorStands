@@ -6,7 +6,7 @@ plugins {
 
 bukkit {
     name = "EasyArmorStands"
-    main = "gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStandsPlugin"
+    main = "gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands"
     apiVersion = "1.13"
     author = "56738"
     softDepend = listOf("HeadDatabase")

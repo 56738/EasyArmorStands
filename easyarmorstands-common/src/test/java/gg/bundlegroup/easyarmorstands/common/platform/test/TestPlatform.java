@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands.common.platform.test;
 
 import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
@@ -9,6 +10,8 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
+import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
@@ -63,5 +66,14 @@ public class TestPlatform implements EasPlatform {
 
     @Override
     public void registerTickTask(Runnable task) {
+    }
+
+    @Override
+    public boolean canStartSession(EasPlayer player, EasArmorStand armorStand) {
+        return true;
+    }
+
+    @Override
+    public void onSessionStarted(Session session) {
     }
 }

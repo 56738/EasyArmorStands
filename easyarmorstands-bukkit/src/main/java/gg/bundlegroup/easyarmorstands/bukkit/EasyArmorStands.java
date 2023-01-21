@@ -29,12 +29,12 @@ import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 
-public class EasyArmorStandsPlugin extends JavaPlugin {
-    private static EasyArmorStandsPlugin instance;
+public class EasyArmorStands extends JavaPlugin {
+    private static EasyArmorStands instance;
     private BukkitPlatform platform;
     private Main main;
 
-    public static EasyArmorStandsPlugin getInstance() {
+    public static EasyArmorStands getInstance() {
         return instance;
     }
 

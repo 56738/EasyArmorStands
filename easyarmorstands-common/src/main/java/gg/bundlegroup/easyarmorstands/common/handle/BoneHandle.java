@@ -101,6 +101,10 @@ public class BoneHandle implements Handle {
         return session;
     }
 
+    public EasArmorStand.Part getPart() {
+        return part;
+    }
+
     public Vector3dc getAnchor() {
         return start;
     }

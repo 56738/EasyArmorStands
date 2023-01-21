@@ -1,19 +1,27 @@
 package gg.bundlegroup.easyarmorstands.common.session;
 
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class SessionManager {
+    private final EasPlatform platform;
     private final HashMap<EasPlayer, Session> sessions = new HashMap<>();
+
+    public SessionManager(EasPlatform platform) {
+        this.platform = platform;
+    }
 
     public void start(EasPlayer player, Session session) {
         final Session old = sessions.put(player, session);
         if (old != null) {
             old.stop();
         }
+
+        platform.onSessionStarted(session);
     }
 
     public void stop(EasPlayer player) {

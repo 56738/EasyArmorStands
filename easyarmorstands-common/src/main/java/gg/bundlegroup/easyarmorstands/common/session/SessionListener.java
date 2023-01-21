@@ -3,15 +3,18 @@ package gg.bundlegroup.easyarmorstands.common.session;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class SessionListener implements EasListener {
+    private final EasPlatform platform;
     private final SessionManager manager;
 
-    public SessionListener(SessionManager manager) {
+    public SessionListener(EasPlatform platform, SessionManager manager) {
+        this.platform = platform;
         this.manager = manager;
     }
 
@@ -31,7 +34,10 @@ public class SessionListener implements EasListener {
             return true;
         }
 
-        manager.start(player, new Session(player, armorStand));
+        if (platform.canStartSession(player, armorStand)) {
+            manager.start(player, new Session(player, armorStand));
+        }
+
         return true;
     }
 

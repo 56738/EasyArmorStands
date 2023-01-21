@@ -1,30 +1,38 @@
 package gg.bundlegroup.easyarmorstands.common.manipulator;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3dc;
 
-public abstract class Manipulator {
-    private final Component component;
-    private final RGBLike color;
+/**
+ * A tool which can be used to manipulate a handle.
+ */
+public interface Manipulator {
+    /**
+     * Called when the manipulator is selected.
+     *
+     * @param cursor The current position of the cursor.
+     */
+    void start(Vector3dc cursor);
 
-    protected Manipulator(String name, RGBLike color) {
-        this.component = Component.text(name, TextColor.color(color));
-        this.color = color;
-    }
+    /**
+     * Called every tick while the manipulator is selected.
+     *
+     * @param freeLook Whether the editor is in free-look mode, i.e., player movement should not affect the cursor.
+     */
+    void update(boolean freeLook);
 
-    public abstract void start(Vector3dc cursor);
+    /**
+     * The position of the cursor, as of the last call to {@link #update}.
+     *
+     * @return The current position of the cursor.
+     */
+    Vector3dc getCursor();
 
-    public abstract void update(boolean freeLook);
-
-    public abstract Vector3dc getCursor();
-
-    public final Component getComponent() {
-        return component;
-    }
-
-    public final RGBLike getColor() {
-        return color;
-    }
+    /**
+     * The name of the manipulator.
+     * Should be very short, for example "Move" or "Y".
+     *
+     * @return The name.
+     */
+    Component getComponent();
 }

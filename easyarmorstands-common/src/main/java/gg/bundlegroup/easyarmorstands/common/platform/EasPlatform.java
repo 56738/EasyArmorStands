@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.platform;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
@@ -21,4 +22,8 @@ public interface EasPlatform {
     void registerListener(EasListener listener);
 
     void registerTickTask(Runnable task);
+
+    boolean canStartSession(EasPlayer player, EasArmorStand armorStand);
+
+    void onSessionStarted(Session session);
 }

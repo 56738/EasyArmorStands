@@ -8,6 +8,9 @@ import org.joml.Matrix3d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+/**
+ * A manipulator which allows rotation around an axis.
+ */
 public abstract class AxisRotationManipulator extends AxisManipulator {
     private final Cursor2D cursor;
     private final Matrix3d current = new Matrix3d();
@@ -15,8 +18,8 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     private final Vector3d currentDirection = new Vector3d();
     private boolean valid;
 
-    public AxisRotationManipulator(Session session, String name, RGBLike color, Vector3dc axis) {
-        super(session, name, color, axis);
+    public AxisRotationManipulator(Session session, String name, RGBLike color) {
+        super(session, name, color);
         this.cursor = new Cursor2D(session.getPlayer());
     }
 
@@ -28,22 +31,7 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
         return current;
     }
 
-    protected abstract Vector3dc getAnchor();
-
-    protected abstract void refreshRotation();
-
     protected abstract void onRotate(double angle);
-
-    @Override
-    protected void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection) {
-        refreshRotation();
-        origin.set(getAnchor());
-        current.transform(getAxis(), axisDirection).normalize();
-        updateAxisPoint(cursor);
-        this.cursor.start(getAxisPoint(), cursor, axisDirection, false);
-        updateDirection(lastDirection);
-        valid = false;
-    }
 
     @Override
     public Vector3dc getCursor() {
@@ -51,17 +39,25 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     }
 
     @Override
+    public void start(Vector3dc cursor) {
+        updateAxisPoint(cursor);
+        this.cursor.start(getAxisPoint(), cursor, getAxis(), false);
+        updateDirection(lastDirection);
+        valid = false;
+    }
+
+    @Override
     public void update(boolean freeLook) {
         cursor.update(freeLook);
         super.update(freeLook);
 
-        Vector3dc axisDirection = getAxisDirection();
+        Vector3dc axisDirection = getAxis();
         updateDirection(currentDirection);
         double angle = lastDirection.angleSigned(currentDirection, axisDirection);
         lastDirection.set(currentDirection);
 
-        getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
-        getSession().getPlayer().showCircle(getAxisPoint(), axisDirection, getColor(), 1);
+        getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
+        getPlayer().showCircle(getAxisPoint(), axisDirection, getColor(), 1);
 
         if (!valid || !Double.isFinite(angle)) {
             if (currentDirection.lengthSquared() > 0.05) {

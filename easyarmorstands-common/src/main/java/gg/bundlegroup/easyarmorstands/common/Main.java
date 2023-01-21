@@ -25,9 +25,9 @@ public class Main implements Closeable {
     private final SessionManager sessionManager;
 
     public Main(EasPlatform platform) {
-        sessionManager = new SessionManager();
+        sessionManager = new SessionManager(platform);
 
-        platform.registerListener(new SessionListener(sessionManager));
+        platform.registerListener(new SessionListener(platform, sessionManager));
         platform.registerTickTask(sessionManager::update);
 
         CommandManager<EasCommandSender> commandManager = platform.commandManager();

@@ -10,8 +10,8 @@ public class SessionTest {
     private final TestWorld world = platform.createWorld();
     private final TestPlayer player = world.createPlayer();
     private final TestArmorStand entity = world.createArmorStand();
-    private final SessionManager sessionManager = new SessionManager();
-    private final SessionListener sessionListener = new SessionListener(sessionManager);
+    private final SessionManager sessionManager = new SessionManager(platform);
+    private final SessionListener sessionListener = new SessionListener(platform, sessionManager);
 
     public SessionTest() {
         player.update();

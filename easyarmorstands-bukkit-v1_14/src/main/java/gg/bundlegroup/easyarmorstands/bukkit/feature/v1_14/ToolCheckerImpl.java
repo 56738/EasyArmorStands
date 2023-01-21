@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.feature.v1_14;
 
-import gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStandsPlugin;
+import gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ToolChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Objects;
 
 public class ToolCheckerImpl implements ToolChecker {
-    private final NamespacedKey key = new NamespacedKey(EasyArmorStandsPlugin.getInstance(), "tool");
+    private final NamespacedKey key = new NamespacedKey(EasyArmorStands.getInstance(), "tool");
 
     @Override
     public boolean isTool(ItemStack item) {

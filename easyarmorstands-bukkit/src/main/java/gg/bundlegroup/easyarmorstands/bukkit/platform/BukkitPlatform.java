@@ -1,16 +1,8 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import cloud.commandframework.CommandManager;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
-import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
-import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
-import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
-import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
-import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
-import gg.bundlegroup.easyarmorstands.common.platform.EasWorld;
+import gg.bundlegroup.easyarmorstands.bukkit.event.SessionInitializeEvent;
+import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
@@ -21,6 +13,18 @@ import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ToolChecker;
+import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
+import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
+import gg.bundlegroup.easyarmorstands.common.platform.EasWorld;
+import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -178,6 +182,23 @@ public class BukkitPlatform implements EasPlatform, Listener {
     @Override
     public void registerTickTask(Runnable task) {
         plugin.getServer().getScheduler().runTaskTimer(plugin, task, 0, 1);
+    }
+
+    @Override
+    public boolean canStartSession(EasPlayer player, EasArmorStand armorStand) {
+        SessionStartEvent event = new SessionStartEvent(
+                ((BukkitPlayer) player).get(),
+                ((BukkitArmorStand) armorStand).get());
+        plugin.getServer().getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    @Override
+    public void onSessionStarted(Session session) {
+        SessionInitializeEvent event = new SessionInitializeEvent(
+                ((BukkitPlayer) session.getPlayer()).get(),
+                session);
+        plugin.getServer().getPluginManager().callEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

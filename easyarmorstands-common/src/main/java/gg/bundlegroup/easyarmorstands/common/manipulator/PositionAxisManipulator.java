@@ -14,16 +14,16 @@ public class PositionAxisManipulator extends AxisManipulator {
     private final Vector3d position = new Vector3d();
 
     public PositionAxisManipulator(PositionHandle handle, String name, RGBLike color, Vector3dc axis) {
-        super(handle.getSession(), name, color, axis);
+        super(handle.getSession(), name, color);
         this.handle = handle;
         this.cursor = new Cursor3D(handle.getSession().getPlayer());
+        getAxis().set(axis);
     }
 
     @Override
-    protected void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection) {
+    public void start(Vector3dc cursor) {
         this.cursor.start(cursor, false);
-        origin.set(handle.getPosition());
-        axisDirection.set(getAxis());
+        getOrigin().set(handle.getPosition());
         updateAxisPoint(cursor);
         handle.getSession().getEntity().getPosition().sub(getAxisPoint(), offset);
     }

@@ -6,60 +6,66 @@ import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public abstract class AxisManipulator extends Manipulator {
-    private final Session session;
-    private final Vector3dc axis;
+/**
+ * A manipulator which displays an axis.
+ */
+public abstract class AxisManipulator extends AbstractManipulator {
     private final Vector3d origin = new Vector3d();
-    private final Vector3d axisDirection = new Vector3d();
+    private final Vector3d axis = new Vector3d();
     private final Vector3d axisStart = new Vector3d();
     private final Vector3d axisPoint = new Vector3d();
     private final Vector3d axisEnd = new Vector3d();
     private double axisPos;
 
-    public AxisManipulator(Session session, String name, RGBLike color, Vector3dc axis) {
-        super(name, color);
-        this.session = session;
-        this.axis = new Vector3d(axis);
+    public AxisManipulator(Session session, String name, RGBLike color) {
+        super(session, name, color);
     }
 
-    protected abstract void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection);
-
+    /**
+     * Updates the value of {@link #getAxisPoint()}.
+     * Already called with the value of {@link #getCursor()} by {@link #update(boolean)}, but you will have to manually
+     * call this if you need the value in your implementation of {@link #start(Vector3dc)}.
+     *
+     * @param cursor The current position of the cursor.
+     */
     protected void updateAxisPoint(Vector3dc cursor) {
-        axisPos = cursor.sub(origin, axisPoint).dot(axisDirection);
-        origin.fma(axisPos, axisDirection, axisPoint);
-    }
-
-    @Override
-    public void start(Vector3dc cursor) {
-        start(cursor, origin, axisDirection);
+        axisPos = cursor.sub(origin, axisPoint).dot(axis);
+        origin.fma(axisPos, axis, axisPoint);
     }
 
     @Override
     public void update(boolean freeLook) {
         updateAxisPoint(getCursor());
-        session.getPlayer().showLine(
-                origin.fma(Math.min(axisPos, 0) - 2, axisDirection, axisStart),
-                origin.fma(Math.max(axisPos, 0) + 2, axisDirection, axisEnd),
+        getPlayer().showLine(
+                origin.fma(Math.min(axisPos, 0) - 2, axis, axisStart),
+                origin.fma(Math.max(axisPos, 0) + 2, axis, axisEnd),
                 getColor(),
                 true);
     }
 
-    public Session getSession() {
-        return session;
-    }
-
+    /**
+     * Returns a mutable reference to the origin.
+     *
+     * @return The origin.
+     */
     public Vector3d getOrigin() {
         return origin;
     }
 
-    public Vector3dc getAxis() {
+    /**
+     * Returns a mutable reference to the direction of the axis.
+     *
+     * @return The axis.
+     */
+    public Vector3d getAxis() {
         return axis;
     }
 
-    public Vector3dc getAxisDirection() {
-        return axisDirection;
-    }
-
+    /**
+     * Returns the point along the axis which is closest to the cursor.
+     *
+     * @return The closest point on the axis.
+     */
     public Vector3dc getAxisPoint() {
         return axisPoint;
     }

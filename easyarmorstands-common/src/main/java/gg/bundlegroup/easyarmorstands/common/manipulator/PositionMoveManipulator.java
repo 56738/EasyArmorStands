@@ -7,14 +7,14 @@ import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class PositionMoveManipulator extends Manipulator {
+public class PositionMoveManipulator extends AbstractManipulator {
     private final PositionHandle handle;
     private final Cursor3D cursor;
     private final Vector3d offset = new Vector3d();
     private final Vector3d position = new Vector3d();
 
     public PositionMoveManipulator(PositionHandle handle, String name, RGBLike color) {
-        super(name, color);
+        super(handle.getSession(), name, color);
         this.handle = handle;
         this.cursor = new Cursor3D(handle.getSession().getPlayer());
     }
