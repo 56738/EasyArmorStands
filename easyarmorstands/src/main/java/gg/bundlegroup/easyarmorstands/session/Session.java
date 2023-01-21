@@ -103,7 +103,7 @@ public class Session {
         if (manipulatorIndex == -1 && player.isSneaking()) {
             openMenu();
         }
-        manipulatorIndex = -1;
+        setHandle(handle, -1);
     }
 
     public void handleRightClick() {
@@ -115,23 +115,11 @@ public class Session {
             return;
         }
 
-        Vector3dc cursor;
-        if (manipulatorIndex == -1) {
-            cursor = handle.getPosition();
-        } else {
-            cursor = handle.getManipulators().get(manipulatorIndex).getCursor();
+        int nextIndex = manipulatorIndex + 1;
+        if (nextIndex >= handle.getManipulators().size()) {
+            nextIndex = 0;
         }
-
-        handle.update();
-        manipulatorIndex++;
-        List<Manipulator> manipulators = handle.getManipulators();
-        if (manipulators.isEmpty()) {
-            manipulatorIndex = -1;
-            return;
-        } else if (manipulatorIndex >= manipulators.size()) {
-            manipulatorIndex = 0;
-        }
-        manipulators.get(manipulatorIndex).start(cursor);
+        setHandle(handle, nextIndex);
     }
 
     public boolean update() {
@@ -164,7 +152,8 @@ public class Session {
             player.clearTitle();
         }
 
-        return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid());
+        return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid()) &&
+                player.getEyePosition().distanceSquared(entity.getPosition()) < 100 * 100;
     }
 
     private void updateTargetHandle() {
@@ -187,7 +176,7 @@ public class Session {
                 }
             }
         }
-        this.handle = bestHandle;
+        setHandle(bestHandle, -1);
     }
 
     public void stop() {
@@ -204,6 +193,32 @@ public class Session {
         }
     }
 
+    public void setHandle(Handle handle, int manipulatorIndex) {
+        if (handle == this.handle && manipulatorIndex == this.manipulatorIndex) {
+            return;
+        }
+
+        if (handle != null) {
+            handle.update();
+        }
+
+        if (manipulatorIndex != -1) {
+            if (handle == null) {
+                throw new IllegalArgumentException();
+            }
+            Vector3dc cursor;
+            if (this.manipulatorIndex == -1) {
+                cursor = handle.getPosition();
+            } else {
+                cursor = this.handle.getManipulators().get(this.manipulatorIndex).getCursor();
+            }
+            handle.getManipulators().get(manipulatorIndex).start(cursor);
+        }
+
+        this.handle = handle;
+        this.manipulatorIndex = manipulatorIndex;
+    }
+
     public EasArmorStand getEntity() {
         return entity;
     }
@@ -215,10 +230,7 @@ public class Session {
     public void startMoving() {
         player.update();
         entity.update();
-        manipulatorIndex = 0;
-        handle = positionHandle;
-        handle.update();
-        handle.getManipulators().get(0).start(handle.getPosition());
+        setHandle(positionHandle, 0);
     }
 
     public void openMenu() {

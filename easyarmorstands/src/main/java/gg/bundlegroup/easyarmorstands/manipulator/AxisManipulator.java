@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands.manipulator;
 
 import gg.bundlegroup.easyarmorstands.session.Session;
 import net.kyori.adventure.util.RGBLike;
+import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -36,17 +37,9 @@ public abstract class AxisManipulator extends Manipulator {
     @Override
     public void update(boolean freeLook) {
         updateAxisPoint(getCursor());
-        double axisMin = -2;
-        double axisMax = 2;
-        if (axisPos < axisMin) {
-            axisMin = axisPos;
-        }
-        if (axisPos > axisMax) {
-            axisMax = axisPos;
-        }
         session.getPlayer().showLine(
-                origin.fma(axisMin, axisDirection, axisStart),
-                origin.fma(axisMax, axisDirection, axisEnd),
+                origin.fma(Math.min(axisPos, 0) - 2, axisDirection, axisStart),
+                origin.fma(Math.max(axisPos, 0) + 2, axisDirection, axisEnd),
                 getColor(),
                 true);
     }
