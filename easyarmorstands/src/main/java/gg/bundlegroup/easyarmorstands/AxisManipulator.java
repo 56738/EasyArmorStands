@@ -22,8 +22,8 @@ public abstract class AxisManipulator extends Manipulator {
 
     protected abstract void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection);
 
-    protected void updateAxisPoint() {
-        axisPos = getCursor().sub(origin, axisPoint).dot(axisDirection);
+    protected void updateAxisPoint(Vector3dc cursor) {
+        axisPos = cursor.sub(origin, axisPoint).dot(axisDirection);
         origin.fma(axisPos, axisDirection, axisPoint);
     }
 
@@ -34,7 +34,7 @@ public abstract class AxisManipulator extends Manipulator {
 
     @Override
     public void update() {
-        updateAxisPoint();
+        updateAxisPoint(getCursor());
         if (session.getPlayer().platform().canSpawnParticles()) {
             double axisMin = -2;
             double axisMax = 2;

@@ -7,7 +7,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public abstract class AxisRotationManipulator extends AxisManipulator {
-    private final Cursor cursor;
+    private final Cursor2D cursor;
     private final Matrix3d current = new Matrix3d();
     private final Vector3d lastDirection = new Vector3d();
     private final Vector3d currentDirection = new Vector3d();
@@ -15,7 +15,7 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
 
     public AxisRotationManipulator(Session session, String name, RGBLike color, Vector3dc axis) {
         super(session, name, color, axis);
-        this.cursor = new Cursor(session.getPlayer());
+        this.cursor = new Cursor2D(session.getPlayer());
     }
 
     private void updateDirection(Vector3d dest) {
@@ -34,11 +34,11 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
 
     @Override
     protected void start(Vector3dc cursor, Vector3d origin, Vector3d axisDirection) {
-        this.cursor.start(cursor, false);
         refreshRotation();
         origin.set(getAnchor());
         current.transform(getAxis(), axisDirection).normalize();
-        updateAxisPoint();
+        updateAxisPoint(cursor);
+        this.cursor.start(getAxisPoint(), cursor, axisDirection, false);
         updateDirection(lastDirection);
         valid = false;
     }

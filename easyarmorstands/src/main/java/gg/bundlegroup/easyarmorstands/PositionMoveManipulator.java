@@ -7,14 +7,14 @@ import org.joml.Vector3dc;
 
 public class PositionMoveManipulator extends Manipulator {
     private final PositionHandle handle;
-    private final Cursor cursor;
+    private final Cursor3D cursor;
     private final Vector3d offset = new Vector3d();
     private final Vector3d position = new Vector3d();
 
     public PositionMoveManipulator(PositionHandle handle, String name, RGBLike color) {
         super(name, color);
         this.handle = handle;
-        this.cursor = new Cursor(handle.getSession().getPlayer());
+        this.cursor = new Cursor3D(handle.getSession().getPlayer());
     }
 
     @Override

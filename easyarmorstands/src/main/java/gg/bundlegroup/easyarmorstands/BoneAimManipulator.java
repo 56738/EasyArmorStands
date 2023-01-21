@@ -9,7 +9,7 @@ import org.joml.Vector3dc;
 
 public class BoneAimManipulator extends Manipulator {
     private final BoneHandle handle;
-    private final Cursor cursor;
+    private final Cursor3D cursor;
     private final Vector3d origin = new Vector3d();
     private final Vector3d currentDirection = new Vector3d();
     private final Vector3d lastDirection = new Vector3d();
@@ -19,7 +19,7 @@ public class BoneAimManipulator extends Manipulator {
     public BoneAimManipulator(BoneHandle handle, String name, RGBLike color) {
         super(name, color);
         this.handle = handle;
-        this.cursor = new Cursor(handle.getSession().getPlayer());
+        this.cursor = new Cursor3D(handle.getSession().getPlayer());
     }
 
     private void updateDirection() {

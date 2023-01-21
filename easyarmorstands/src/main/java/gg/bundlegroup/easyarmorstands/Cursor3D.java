@@ -5,13 +5,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class Cursor {
+public class Cursor3D {
     private final EasPlayer player;
 
     private final Vector3d cursor = new Vector3d();
     private final Vector3d current = new Vector3d();
 
-    public Cursor(EasPlayer player) {
+    public Cursor3D(EasPlayer player) {
         this.player = player;
     }
 
