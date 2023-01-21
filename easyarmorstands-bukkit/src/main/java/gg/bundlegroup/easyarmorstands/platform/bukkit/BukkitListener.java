@@ -72,7 +72,8 @@ public class BukkitListener implements Listener {
         EntityEquipment equipment = player.getEquipment();
         for (EasArmorEntity.Slot hand : hands) {
             ItemStack item = equipmentAccessor.getItem(equipment, hand);
-            if (listener.onLeftClickArmorStand(bukkitPlayer, bukkitArmorStand, platform.getItem(item))) {
+            BukkitItem bukkitItem = platform.getItem(item);
+            if (listener.onLeftClickArmorStand(bukkitPlayer, bukkitArmorStand, bukkitItem, event.isCancelled())) {
                 event.setCancelled(true);
             }
         }
@@ -104,7 +105,8 @@ public class BukkitListener implements Listener {
         EntityEquipment equipment = player.getEquipment();
         for (EasArmorEntity.Slot hand : hands) {
             ItemStack item = equipmentAccessor.getItem(equipment, hand);
-            if (listener.onRightClickArmorStand(bukkitPlayer, bukkitArmorStand, platform.getItem(item))) {
+            BukkitItem bukkitItem = platform.getItem(item);
+            if (listener.onRightClickArmorStand(bukkitPlayer, bukkitArmorStand, bukkitItem, event.isCancelled())) {
                 event.setCancelled(true);
             }
         }
