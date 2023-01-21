@@ -4,6 +4,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SessionManager {
     private final HashMap<EasPlayer, Session> sessions = new HashMap<>();
@@ -23,8 +24,13 @@ public class SessionManager {
     }
 
     public void update() {
-        for (Session session : sessions.values()) {
-            session.update();
+        for (Iterator<Session> iterator = sessions.values().iterator(); iterator.hasNext(); ) {
+            Session session = iterator.next();
+            boolean valid = session.update();
+            if (!valid) {
+                iterator.remove();
+                session.stop();
+            }
         }
     }
 
