@@ -98,6 +98,18 @@ public class SessionCommands {
         }
     }
 
+    @CommandMethod("glow <glowing>")
+    @CommandPermission("easyarmorstands.edit.glow")
+    @RequiresFeature(EasFeature.ENTITY_GLOW)
+    public void setGlow(EasCommandSender sender, Session session, @Argument("glowing") boolean glowing) {
+        session.getEntity().setGlowing(glowing);
+        if (glowing) {
+            sender.sendMessage(Component.text("Armor stand glowing enabled", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Armor stand glowing disabled", NamedTextColor.GREEN));
+        }
+    }
+
     @CommandMethod("copy")
     @CommandPermission("easyarmorstands.copy")
     public void copy(EasCommandSender sender, Session session) {
