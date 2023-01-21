@@ -1,6 +1,11 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.handle;
 
+import gg.bundlegroup.easyarmorstands.util.Util;
+import gg.bundlegroup.easyarmorstands.manipulator.BoneAimManipulator;
+import gg.bundlegroup.easyarmorstands.manipulator.BoneAxisManipulator;
+import gg.bundlegroup.easyarmorstands.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Math;
@@ -31,7 +36,7 @@ public class BoneHandle implements Handle {
 
     private final List<Manipulator> manipulators = new ArrayList<>();
 
-    BoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3d offset, Vector3d length) {
+    public BoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3d offset, Vector3d length) {
         this.session = session;
         this.part = part;
         this.component = component;

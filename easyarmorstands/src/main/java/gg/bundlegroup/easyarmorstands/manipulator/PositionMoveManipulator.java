@@ -1,5 +1,8 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.manipulator;
 
+import gg.bundlegroup.easyarmorstands.util.Cursor3D;
+import gg.bundlegroup.easyarmorstands.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.session.Session;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;

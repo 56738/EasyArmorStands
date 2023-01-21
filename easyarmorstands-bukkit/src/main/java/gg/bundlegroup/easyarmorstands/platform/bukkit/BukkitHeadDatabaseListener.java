@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
-import gg.bundlegroup.easyarmorstands.Session;
-import gg.bundlegroup.easyarmorstands.SessionManager;
+import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.session.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import org.bukkit.event.EventHandler;

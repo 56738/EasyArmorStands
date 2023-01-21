@@ -1,5 +1,10 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.handle;
 
+import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.manipulator.Manipulator;
+import gg.bundlegroup.easyarmorstands.manipulator.PositionAxisManipulator;
+import gg.bundlegroup.easyarmorstands.manipulator.PositionMoveManipulator;
+import gg.bundlegroup.easyarmorstands.manipulator.PositionYawManipulator;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

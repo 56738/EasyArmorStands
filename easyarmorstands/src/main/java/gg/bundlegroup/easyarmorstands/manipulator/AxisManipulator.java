@@ -1,5 +1,6 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.manipulator;
 
+import gg.bundlegroup.easyarmorstands.session.Session;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;

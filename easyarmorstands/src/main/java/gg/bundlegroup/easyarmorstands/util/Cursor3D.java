@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.util;
 
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.format.NamedTextColor;

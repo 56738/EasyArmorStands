@@ -1,5 +1,7 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.manipulator;
 
+import gg.bundlegroup.easyarmorstands.handle.BoneHandle;
+import gg.bundlegroup.easyarmorstands.util.Cursor3D;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3d;

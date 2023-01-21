@@ -5,7 +5,7 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import gg.bundlegroup.easyarmorstands.Main;
-import gg.bundlegroup.easyarmorstands.SessionManager;
+import gg.bundlegroup.easyarmorstands.session.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;

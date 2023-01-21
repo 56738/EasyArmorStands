@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.session;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
@@ -8,12 +8,12 @@ import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import net.kyori.adventure.text.Component;
 
-public class EquipmentInventory implements EasInventoryListener {
+public class SessionInventory implements EasInventoryListener {
     private final EasArmorStand armorStand;
     private final EasInventory inventory;
     private final EasArmorEntity.Slot[] slots;
 
-    public EquipmentInventory(EasArmorStand armorStand, EasPlatform platform, Component title) {
+    public SessionInventory(EasArmorStand armorStand, EasPlatform platform, Component title) {
         this.armorStand = armorStand;
         this.inventory = platform.createInventory(title, 9, 6, this);
         this.slots = new EasArmorEntity.Slot[9 * 6];

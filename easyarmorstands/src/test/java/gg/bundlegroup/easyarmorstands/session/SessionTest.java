@@ -1,7 +1,5 @@
 package gg.bundlegroup.easyarmorstands.session;
 
-import gg.bundlegroup.easyarmorstands.SessionListener;
-import gg.bundlegroup.easyarmorstands.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.test.TestArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.test.TestPlatform;
 import gg.bundlegroup.easyarmorstands.platform.test.TestPlayer;

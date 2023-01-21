@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.util;
 
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;

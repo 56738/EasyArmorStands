@@ -1,5 +1,9 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.session;
 
+import gg.bundlegroup.easyarmorstands.handle.BoneHandle;
+import gg.bundlegroup.easyarmorstands.handle.Handle;
+import gg.bundlegroup.easyarmorstands.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
@@ -203,7 +207,7 @@ public class Session {
     }
 
     public void openMenu() {
-        EquipmentInventory inventory = new EquipmentInventory(entity, player.platform(),
+        SessionInventory inventory = new SessionInventory(entity, player.platform(),
                 Component.text("Equipment"));
         player.openInventory(inventory.getInventory());
     }

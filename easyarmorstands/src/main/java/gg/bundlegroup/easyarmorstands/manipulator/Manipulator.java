@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands;
+package gg.bundlegroup.easyarmorstands.manipulator;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
