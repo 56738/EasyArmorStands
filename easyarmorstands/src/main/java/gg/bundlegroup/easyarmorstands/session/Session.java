@@ -29,7 +29,7 @@ public class Session {
     private final PositionHandle positionHandle;
     private final List<Handle> handles = new ArrayList<>();
 
-    private int rightClickTicks = 5;
+    private int clickTicks = 5;
     private Handle handle;
     private int manipulatorIndex = -1;
 
@@ -93,7 +93,18 @@ public class Session {
         }
     }
 
+    private boolean handleClick() {
+        if (clickTicks > 0) {
+            return false;
+        }
+        clickTicks = 5;
+        return true;
+    }
+
     public void handleLeftClick() {
+        if (!handleClick()) {
+            return;
+        }
         if (manipulatorIndex == -1 && player.isSneaking()) {
             openMenu();
         }
@@ -101,10 +112,9 @@ public class Session {
     }
 
     public void handleRightClick() {
-        if (rightClickTicks > 0) {
+        if (!handleClick()) {
             return;
         }
-        rightClickTicks = 5;
         update();
         if (handle == null) {
             return;
@@ -134,8 +144,8 @@ public class Session {
             skeleton.teleport(entity.getPosition(), entity.getYaw(), 0);
         }
 
-        if (rightClickTicks > 0) {
-            rightClickTicks--;
+        if (clickTicks > 0) {
+            clickTicks--;
         }
 
         player.update();
