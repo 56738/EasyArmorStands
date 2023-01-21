@@ -1,14 +1,18 @@
 package gg.bundlegroup.easyarmorstands.platform.bukkit;
 
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ArmorStandCanTickAccessor;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements EasArmorStand {
+    private final ArmorStandCanTickAccessor armorStandCanTickAccessor;
+
     public BukkitArmorStand(BukkitPlatform platform, ArmorStand armorStand) {
         super(platform, armorStand);
+        this.armorStandCanTickAccessor = platform.armorStandCanTickAccessor();
     }
 
     @Override
@@ -59,6 +63,22 @@ public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements E
     @Override
     public void setSmall(boolean small) {
         get().setSmall(small);
+    }
+
+    @Override
+    public boolean canTick() {
+        if (armorStandCanTickAccessor == null) {
+            return true;
+        }
+        return armorStandCanTickAccessor.canTick(get());
+    }
+
+    @Override
+    public void setCanTick(boolean canTick) {
+        if (armorStandCanTickAccessor == null) {
+            return;
+        }
+        armorStandCanTickAccessor.setCanTick(get(), canTick);
     }
 
     @Override

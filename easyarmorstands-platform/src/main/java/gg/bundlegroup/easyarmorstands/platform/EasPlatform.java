@@ -8,13 +8,7 @@ import java.util.Collection;
 public interface EasPlatform {
     CommandManager<EasCommandSender> commandManager();
 
-    boolean canHideEntities();
-
-    boolean canSetEntityPersistence();
-
-    boolean canSetEntityGlowing();
-
-    boolean canSpawnParticles();
+    boolean hasFeature(EasFeature feature);
 
     boolean hasSlot(EasArmorEntity.Slot slot);
 

@@ -81,6 +81,15 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     }
 
     @Override
+    public boolean canTick() {
+        return true;
+    }
+
+    @Override
+    public void setCanTick(boolean canTick) {
+    }
+
+    @Override
     public float getYaw() {
         return yaw;
     }

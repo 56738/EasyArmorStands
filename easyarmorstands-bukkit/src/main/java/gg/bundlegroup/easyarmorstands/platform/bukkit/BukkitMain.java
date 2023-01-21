@@ -5,8 +5,8 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import gg.bundlegroup.easyarmorstands.Main;
-import gg.bundlegroup.easyarmorstands.session.SessionManager;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityNameAccessor;
@@ -18,6 +18,7 @@ import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.FeatureProvider.Pr
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ToolChecker;
+import gg.bundlegroup.easyarmorstands.session.SessionManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,6 +61,7 @@ public class BukkitMain extends JavaPlugin {
                 loadFeature(ParticleSpawner.Provider.class),
                 loadFeature(EquipmentAccessor.Provider.class),
                 loadFeature(EntityNameAccessor.Provider.class),
+                loadFeature(ArmorStandCanTickAccessor.Provider.class),
                 Objects.requireNonNull(loadFeature(ItemProvider.Provider.class), "Item provider not found"));
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {

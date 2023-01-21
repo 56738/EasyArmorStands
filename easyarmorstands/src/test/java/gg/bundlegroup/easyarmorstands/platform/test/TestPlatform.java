@@ -3,6 +3,7 @@ package gg.bundlegroup.easyarmorstands.platform.test;
 import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
@@ -32,22 +33,7 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
-    public boolean canHideEntities() {
-        return true;
-    }
-
-    @Override
-    public boolean canSetEntityPersistence() {
-        return true;
-    }
-
-    @Override
-    public boolean canSetEntityGlowing() {
-        return true;
-    }
-
-    @Override
-    public boolean canSpawnParticles() {
+    public boolean hasFeature(EasFeature feature) {
         return false;
     }
 

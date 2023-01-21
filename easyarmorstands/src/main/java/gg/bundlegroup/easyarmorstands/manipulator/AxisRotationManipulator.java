@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.manipulator;
 
-import gg.bundlegroup.easyarmorstands.util.Cursor2D;
 import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.util.Cursor2D;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3d;
@@ -54,9 +54,7 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     public void update() {
         cursor.update();
         super.update();
-        if (getSession().getPlayer().platform().canSpawnParticles()) {
-            getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
-        }
+        getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
 
         Vector3dc axisDirection = getAxisDirection();
         updateDirection(currentDirection);

@@ -6,6 +6,7 @@ import gg.bundlegroup.easyarmorstands.handle.PositionHandle;
 import gg.bundlegroup.easyarmorstands.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import net.kyori.adventure.text.Component;
@@ -67,14 +68,15 @@ public class Session {
                 new Vector3d(-1.9, 12, 0),
                 new Vector3d(0, -11, 0)));
         this.handles.add(positionHandle);
-        if (player.platform().canSetEntityGlowing()) {
+        if (player.platform().hasFeature(EasFeature.ENTITY_GLOW)) {
             this.skeleton = entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
                 e.setVisible(false);
                 e.setBasePlate(false);
                 e.setArms(true);
                 e.setPersistent(false);
-                e.setGravity(entity.hasGravity());
                 e.setSmall(entity.isSmall());
+                e.setGravity(false);
+                e.setCanTick(false);
                 Vector3d pose = new Vector3d();
                 for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
                     e.setPose(part, entity.getPose(part, pose));
@@ -128,6 +130,10 @@ public class Session {
     }
 
     public boolean update() {
+        if (skeleton != null) {
+            skeleton.teleport(entity.getPosition(), entity.getYaw(), 0);
+        }
+
         if (rightClickTicks > 0) {
             rightClickTicks--;
         }

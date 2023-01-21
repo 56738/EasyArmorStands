@@ -36,22 +36,19 @@ public abstract class AxisManipulator extends Manipulator {
     @Override
     public void update() {
         updateAxisPoint(getCursor());
-        if (session.getPlayer().platform().canSpawnParticles()) {
-            double axisMin = -2;
-            double axisMax = 2;
-
-            if (axisPos < axisMin) {
-                axisMin = axisPos;
-            }
-            if (axisPos > axisMax) {
-                axisMax = axisPos;
-            }
-
-            origin.fma(axisMin, axisDirection, axisStart);
-            origin.fma(axisMax, axisDirection, axisEnd);
-
-            session.getPlayer().showLine(axisStart, axisEnd, getColor(), true);
+        double axisMin = -2;
+        double axisMax = 2;
+        if (axisPos < axisMin) {
+            axisMin = axisPos;
         }
+        if (axisPos > axisMax) {
+            axisMax = axisPos;
+        }
+        session.getPlayer().showLine(
+                origin.fma(axisMin, axisDirection, axisStart),
+                origin.fma(axisMax, axisDirection, axisEnd),
+                getColor(),
+                true);
     }
 
     public Session getSession() {

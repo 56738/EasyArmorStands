@@ -3,6 +3,7 @@ package gg.bundlegroup.easyarmorstands.platform.bukkit;
 import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.platform.EasItem;
@@ -10,6 +11,7 @@ import gg.bundlegroup.easyarmorstands.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.platform.EasWorld;
+import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.platform.bukkit.feature.EntityNameAccessor;
@@ -53,6 +55,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final ParticleSpawner particleSpawner;
     private final EquipmentAccessor equipmentAccessor;
     private final EntityNameAccessor entityNameAccessor;
+    private final ArmorStandCanTickAccessor armorStandCanTickAccessor;
     private final EasItem placeholderItem;
 
     public BukkitPlatform(Plugin plugin,
@@ -65,7 +68,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
                           ParticleSpawner particleSpawner,
                           EquipmentAccessor equipmentAccessor,
                           EntityNameAccessor entityNameAccessor,
-                          ItemProvider itemProvider) {
+                          ArmorStandCanTickAccessor armorStandCanTickAccessor, ItemProvider itemProvider) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -77,6 +80,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.particleSpawner = particleSpawner;
         this.equipmentAccessor = equipmentAccessor;
         this.entityNameAccessor = entityNameAccessor;
+        this.armorStandCanTickAccessor = armorStandCanTickAccessor;
         this.placeholderItem = getItem(itemProvider.createPlaceholder());
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -126,23 +130,15 @@ public class BukkitPlatform implements EasPlatform, Listener {
     }
 
     @Override
-    public boolean canHideEntities() {
-        return entityHider != null;
-    }
-
-    @Override
-    public boolean canSetEntityPersistence() {
-        return entityPersistenceSetter != null;
-    }
-
-    @Override
-    public boolean canSetEntityGlowing() {
-        return entityGlowSetter != null;
-    }
-
-    @Override
-    public boolean canSpawnParticles() {
-        return particleSpawner != null;
+    public boolean hasFeature(EasFeature feature) {
+        switch (feature) {
+            case ENTITY_GLOW:
+                return entityGlowSetter != null;
+            case ARMOR_STAND_CAN_TICK:
+                return armorStandCanTickAccessor != null;
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -229,5 +225,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EntityNameAccessor entityNameAccessor() {
         return entityNameAccessor;
+    }
+
+    public ArmorStandCanTickAccessor armorStandCanTickAccessor() {
+        return armorStandCanTickAccessor;
     }
 }

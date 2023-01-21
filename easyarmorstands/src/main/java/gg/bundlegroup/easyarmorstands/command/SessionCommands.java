@@ -5,10 +5,11 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
-import gg.bundlegroup.easyarmorstands.session.Session;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.platform.EasFeature;
+import gg.bundlegroup.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -85,6 +86,18 @@ public class SessionCommands {
         sender.sendMessage(Component.text("Name tag changed", NamedTextColor.GREEN));
     }
 
+    @CommandMethod("cantick <value>")
+    @CommandPermission("easyarmorstands.edit.cantick")
+    @RequiresFeature(EasFeature.ARMOR_STAND_CAN_TICK)
+    public void setCanTick(EasCommandSender sender, Session session, @Argument("value") boolean canTick) {
+        session.getEntity().setCanTick(canTick);
+        if (canTick) {
+            sender.sendMessage(Component.text("Armor stand ticking enabled", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Armor stand ticking disabled", NamedTextColor.GREEN));
+        }
+    }
+
     @CommandMethod("copy")
     @CommandPermission("easyarmorstands.copy")
     public void copy(EasCommandSender sender, Session session) {
@@ -97,6 +110,7 @@ public class SessionCommands {
             e.setSmall(entity.isSmall());
             e.setCustomName(entity.getCustomName());
             e.setCustomNameVisible(entity.isCustomNameVisible());
+            e.setCanTick(entity.canTick());
             Vector3d pose = new Vector3d();
             for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
                 e.setPose(part, entity.getPose(part, pose));
