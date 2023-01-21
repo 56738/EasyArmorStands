@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     implementation(project(":easyarmorstands-bukkit"))
-    compileOnly("org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT") {
-        isTransitive = false
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    implementation(libs.adventure.text.serializer.gson) {
+        exclude("com.google.code.gson")
     }
-    implementation(libs.adventure.text.serializer.gson)
 }
