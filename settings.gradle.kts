@@ -2,6 +2,7 @@ rootProject.name = "EasyArmorStands"
 
 include(":easyarmorstands-common")
 include(":easyarmorstands-bukkit")
+include(":easyarmorstands-bukkit-headdatabase")
 include(":easyarmorstands-bukkit-paper")
 include(":easyarmorstands-bukkit-v1_8")
 include(":easyarmorstands-bukkit-v1_9")

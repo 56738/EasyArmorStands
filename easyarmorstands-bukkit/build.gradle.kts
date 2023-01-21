@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.commodore) {
         isTransitive = false
     }
-    compileOnly("com.arcaniax:HeadDatabase-API:1.3.1")
+    runtimeOnly(project(":easyarmorstands-bukkit-headdatabase"))
     runtimeOnly(project(":easyarmorstands-bukkit-paper"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_8"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_9"))

@@ -4,6 +4,7 @@ import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
+import gg.bundlegroup.easyarmorstands.bukkit.addon.Addon;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
@@ -16,7 +17,6 @@ import gg.bundlegroup.easyarmorstands.bukkit.feature.FeatureProvider.Priority;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ToolChecker;
-import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitHeadDatabaseListener;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlatform;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitWrapper;
 import gg.bundlegroup.easyarmorstands.common.Main;
@@ -79,8 +79,15 @@ public class EasyArmorStands extends JavaPlugin {
 
         main = new Main(platform);
 
-        if (getServer().getPluginManager().isPluginEnabled("HeadDatabase")) {
-            getServer().getPluginManager().registerEvents(new BukkitHeadDatabaseListener(this), this);
+        for (Addon addon : ServiceLoader.load(Addon.class, getClassLoader())) {
+            if (addon.isSupported()) {
+                getLogger().info("Enabling " + addon.getName() + " support");
+                try {
+                    addon.enable(this);
+                } catch (Throwable t) {
+                    getLogger().log(Level.SEVERE, "Failed to enable " + addon.getName() + " support", t);
+                }
+            }
         }
     }
 
