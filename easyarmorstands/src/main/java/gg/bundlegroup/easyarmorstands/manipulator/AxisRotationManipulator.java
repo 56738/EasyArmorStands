@@ -54,12 +54,14 @@ public abstract class AxisRotationManipulator extends AxisManipulator {
     public void update(boolean freeLook) {
         cursor.update(freeLook);
         super.update(freeLook);
-        getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
 
         Vector3dc axisDirection = getAxisDirection();
         updateDirection(currentDirection);
         double angle = lastDirection.angleSigned(currentDirection, axisDirection);
         lastDirection.set(currentDirection);
+
+        getSession().getPlayer().showLine(getAxisPoint(), getCursor(), NamedTextColor.WHITE, false);
+        getSession().getPlayer().showCircle(getAxisPoint(), axisDirection, getColor(), 1);
 
         if (!valid || !Double.isFinite(angle)) {
             if (currentDirection.lengthSquared() > 0.05) {

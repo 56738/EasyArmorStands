@@ -23,5 +23,7 @@ public interface EasPlayer extends EasArmorEntity, EasCommandSender {
 
     void showLine(Vector3dc from, Vector3dc to, RGBLike color, boolean includeEnds);
 
+    void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius);
+
     void openInventory(EasInventory inventory);
 }

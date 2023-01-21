@@ -1,11 +1,11 @@
 package gg.bundlegroup.easyarmorstands.handle;
 
-import gg.bundlegroup.easyarmorstands.util.Util;
 import gg.bundlegroup.easyarmorstands.manipulator.BoneAimManipulator;
 import gg.bundlegroup.easyarmorstands.manipulator.BoneAxisManipulator;
 import gg.bundlegroup.easyarmorstands.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Math;
@@ -113,8 +113,5 @@ public class BoneHandle implements Handle {
         this.rotation.set(rotation);
         Util.toEuler(poseMatrix.setTransposed(yaw).mul(rotation), pose);
         session.getEntity().setPose(part, pose);
-        if (session.getSkeleton() != null) {
-            session.getSkeleton().setPose(part, pose);
-        }
     }
 }

@@ -1,8 +1,8 @@
 package gg.bundlegroup.easyarmorstands.manipulator;
 
-import gg.bundlegroup.easyarmorstands.util.Cursor3D;
 import gg.bundlegroup.easyarmorstands.handle.PositionHandle;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.util.Cursor3D;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -35,13 +35,9 @@ public class PositionAxisManipulator extends AxisManipulator {
         super.update(freeLook);
 
         EasArmorStand entity = handle.getSession().getEntity();
-        EasArmorStand skeleton = handle.getSession().getSkeleton();
         float yaw = entity.getYaw();
         getAxisPoint().add(offset, position);
         entity.teleport(position, yaw, 0);
-        if (skeleton != null) {
-            skeleton.teleport(position, yaw, 0);
-        }
     }
 
     @Override

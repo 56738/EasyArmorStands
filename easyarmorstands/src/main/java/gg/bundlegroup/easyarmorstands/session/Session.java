@@ -13,7 +13,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -74,13 +73,9 @@ public class Session {
                 e.setBasePlate(false);
                 e.setArms(true);
                 e.setPersistent(false);
-                e.setSmall(entity.isSmall());
                 e.setGravity(false);
                 e.setCanTick(false);
-                Vector3d pose = new Vector3d();
-                for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
-                    e.setPose(part, entity.getPose(part, pose));
-                }
+                updateSkeleton(e);
                 for (EasPlayer other : player.platform().getPlayers()) {
                     if (!player.equals(other)) {
                         other.hideEntity(e);
@@ -140,10 +135,6 @@ public class Session {
     }
 
     public boolean update() {
-        if (skeleton != null) {
-            skeleton.teleport(entity.getPosition(), entity.getYaw(), 0);
-        }
-
         if (clickTicks > 0) {
             clickTicks--;
         }
@@ -162,10 +153,13 @@ public class Session {
             title = Component.empty();
         }
 
-        if (handle != null) {
+        if (skeleton != null) {
+            updateSkeleton(skeleton);
+        }
 
-            Title.Times times = Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO);
-            player.showTitle(Title.title(title, handle.getComponent(), times));
+        if (handle != null) {
+            player.showTitle(Title.title(title, handle.getComponent(),
+                    Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO)));
         } else {
             player.clearTitle();
         }
@@ -201,12 +195,17 @@ public class Session {
         player.clearTitle();
     }
 
-    public EasArmorStand getEntity() {
-        return entity;
+    private void updateSkeleton(EasArmorStand skeleton) {
+        skeleton.teleport(entity.getPosition(), entity.getYaw(), 0);
+        skeleton.setSmall(entity.isSmall());
+        Vector3d pose = new Vector3d();
+        for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
+            skeleton.setPose(part, entity.getPose(part, pose));
+        }
     }
 
-    public @Nullable EasArmorStand getSkeleton() {
-        return skeleton;
+    public EasArmorStand getEntity() {
+        return entity;
     }
 
     public EasPlayer getPlayer() {
@@ -223,7 +222,7 @@ public class Session {
     }
 
     public void openMenu() {
-        SessionInventory inventory = new SessionInventory(entity, player.platform(),
+        SessionInventory inventory = new SessionInventory(this, player.platform(),
                 Component.text("Equipment"));
         player.openInventory(inventory.getInventory());
     }
@@ -234,5 +233,11 @@ public class Session {
             return false;
         }
         return item.isTool();
+    }
+
+    public void hideSkeleton(EasPlayer player) {
+        if (skeleton != null) {
+            player.hideEntity(skeleton);
+        }
     }
 }

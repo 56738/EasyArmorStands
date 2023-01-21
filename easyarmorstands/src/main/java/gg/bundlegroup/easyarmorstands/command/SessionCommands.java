@@ -5,15 +5,14 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
-import gg.bundlegroup.easyarmorstands.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.session.Session;
+import gg.bundlegroup.easyarmorstands.util.ArmorStandSnapshot;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.joml.Vector3d;
 
 import java.util.Locale;
 
@@ -57,9 +56,6 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.gravity")
     public void setGravity(EasCommandSender sender, Session session, @Argument("enabled") boolean enabled) {
         session.getEntity().setGravity(enabled);
-        if (session.getSkeleton() != null) {
-            session.getSkeleton().setGravity(enabled);
-        }
         if (enabled) {
             sender.sendMessage(Component.text("Gravity enabled", NamedTextColor.GREEN));
         } else {
@@ -71,10 +67,8 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.size")
     public void setSize(EasCommandSender sender, Session session, @Argument("size") ArmorStandSize size) {
         session.getEntity().setSmall(size == ArmorStandSize.SMALL);
-        if (session.getSkeleton() != null) {
-            session.getSkeleton().setSmall(size == ArmorStandSize.SMALL);
-        }
-        sender.sendMessage(Component.text("Size changed to " + size.name().toLowerCase(Locale.ROOT), NamedTextColor.GREEN));
+        sender.sendMessage(Component.text("Size changed to " +
+                size.name().toLowerCase(Locale.ROOT), NamedTextColor.GREEN));
     }
 
     @CommandMethod("name [name]")
@@ -114,24 +108,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.copy")
     public void copy(EasCommandSender sender, Session session) {
         EasArmorStand entity = session.getEntity();
-        entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
-            e.setVisible(entity.isVisible());
-            e.setBasePlate(entity.hasBasePlate());
-            e.setArms(entity.hasArms());
-            e.setGravity(entity.hasGravity());
-            e.setSmall(entity.isSmall());
-            e.setCustomName(entity.getCustomName());
-            e.setCustomNameVisible(entity.isCustomNameVisible());
-            e.setCanTick(entity.canTick());
-            Vector3d pose = new Vector3d();
-            for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
-                e.setPose(part, entity.getPose(part, pose));
-            }
-            for (EasArmorEntity.Slot slot : EasArmorEntity.Slot.values()) {
-                e.setItem(slot, entity.getItem(slot));
-            }
-            e.setGlowing(entity.isGlowing());
-        });
+        new ArmorStandSnapshot(entity).spawn(entity.getWorld());
         sender.sendMessage(Component.text("Duplicated the armor stand", NamedTextColor.GREEN));
         session.startMoving();
     }

@@ -36,10 +36,7 @@ public class SessionManager {
 
     public void hideSkeletons(EasPlayer player) {
         for (Session session : sessions.values()) {
-            EasArmorStand skeleton = session.getSkeleton();
-            if (skeleton != null) {
-                player.hideEntity(skeleton);
-            }
+            session.hideSkeleton(player);
         }
     }
 

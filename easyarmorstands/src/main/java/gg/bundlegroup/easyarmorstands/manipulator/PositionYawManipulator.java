@@ -28,12 +28,8 @@ public class PositionYawManipulator extends AxisRotationManipulator {
     @Override
     protected void onRotate(double angle) {
         EasArmorStand entity = handle.getSession().getEntity();
-        EasArmorStand skeleton = handle.getSession().getSkeleton();
         Vector3dc position = entity.getPosition();
         float yaw = entity.getYaw() + (float) Math.toDegrees(-angle);
         entity.teleport(position, yaw, 0);
-        if (skeleton != null) {
-            skeleton.teleport(position, yaw, 0);
-        }
     }
 }

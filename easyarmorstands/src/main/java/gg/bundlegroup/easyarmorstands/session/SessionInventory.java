@@ -9,12 +9,12 @@ import gg.bundlegroup.easyarmorstands.platform.EasPlatform;
 import net.kyori.adventure.text.Component;
 
 public class SessionInventory implements EasInventoryListener {
-    private final EasArmorStand armorStand;
+    private final Session session;
     private final EasInventory inventory;
     private final EasArmorEntity.Slot[] slots;
 
-    public SessionInventory(EasArmorStand armorStand, EasPlatform platform, Component title) {
-        this.armorStand = armorStand;
+    public SessionInventory(Session session, EasPlatform platform, Component title) {
+        this.session = session;
         this.inventory = platform.createInventory(title, 9, 6, this);
         this.slots = new EasArmorEntity.Slot[9 * 6];
         this.slots[13] = EasArmorEntity.Slot.HEAD;
@@ -26,6 +26,7 @@ public class SessionInventory implements EasInventoryListener {
         this.slots[31] = EasArmorEntity.Slot.LEGS;
         this.slots[40] = EasArmorEntity.Slot.FEET;
         EasItem placeholder = platform.createPlaceholderItem();
+        EasArmorStand armorStand = session.getEntity();
         for (int i = 0; i < slots.length; i++) {
             EasArmorEntity.Slot slot = slots[i];
             if (slot != null) {
@@ -43,6 +44,7 @@ public class SessionInventory implements EasInventoryListener {
 
     @Override
     public void update() {
+        EasArmorStand armorStand = session.getEntity();
         for (int i = 0; i < slots.length; i++) {
             EasArmorEntity.Slot slot = slots[i];
             if (slot != null) {

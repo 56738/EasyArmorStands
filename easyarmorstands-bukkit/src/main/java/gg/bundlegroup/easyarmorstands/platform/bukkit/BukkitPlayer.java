@@ -85,6 +85,10 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
         update();
     }
 
+    private int getParticleCount(double length) {
+        return (int) Math.round(length * 5);
+    }
+
     @Override
     public void showPoint(Vector3dc point, RGBLike color) {
         if (particleSpawner == null) {
@@ -99,19 +103,45 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
             return;
         }
         Object options = particleSpawner.getData(color);
-        double distance = from.distance(to);
-        int parts = (int) Math.round(distance * 5);
-        if (parts > 100) {
-            parts = 100;
+        double length = from.distance(to);
+        int count = getParticleCount(length);
+        if (count > 100) {
+            count = 100;
         }
         int min = includeEnds ? 0 : 1;
-        int max = includeEnds ? parts : parts - 1;
+        int max = includeEnds ? count : count - 1;
         for (int i = min; i <= max; i++) {
-            double t = i / (double) parts;
+            double t = i / (double) count;
             particleSpawner.spawnParticle(get(),
                     from.x() + t * (to.x() - from.x()),
                     from.y() + t * (to.y() - from.y()),
                     from.z() + t * (to.z() - from.z()),
+                    options);
+        }
+    }
+
+    @Override
+    public void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius) {
+        if (particleSpawner == null) {
+            return;
+        }
+        Object options = particleSpawner.getData(color);
+        double circumference = 2 * Math.PI * radius;
+        int count = getParticleCount(circumference);
+        if (count > 100) {
+            count = 100;
+        }
+        Vector3d offset = center.cross(axis, new Vector3d()).normalize(radius);
+        double axisX = axis.x();
+        double axisY = axis.y();
+        double axisZ = axis.z();
+        double angle = 2 * Math.PI / count;
+        for (int i = 0; i < count; i++) {
+            offset.rotateAxis(angle, axisX, axisY, axisZ);
+            particleSpawner.spawnParticle(get(),
+                    center.x() + offset.x,
+                    center.y() + offset.y,
+                    center.z() + offset.z,
                     options);
         }
     }

@@ -94,6 +94,10 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
+    public void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius) {
+    }
+
+    @Override
     public void openInventory(EasInventory inventory) {
     }
 
