@@ -14,12 +14,11 @@ public interface Manipulator {
      */
     void start(Vector3dc cursor);
 
-    /**
-     * Called every tick while the manipulator is selected.
-     *
-     * @param freeLook Whether the editor is in free-look mode, i.e., player movement should not affect the cursor.
-     */
-    void update(boolean freeLook);
+    void update(boolean active);
+
+    Vector3dc getTarget();
+
+    Vector3dc getLookTarget();
 
     /**
      * The position of the cursor, as of the last call to {@link #update}.
@@ -34,5 +33,5 @@ public interface Manipulator {
      *
      * @return The name.
      */
-    Component getComponent();
+    Component component();
 }

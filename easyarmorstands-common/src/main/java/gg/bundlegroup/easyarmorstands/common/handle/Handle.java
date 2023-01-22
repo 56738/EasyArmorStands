@@ -1,27 +1,32 @@
 package gg.bundlegroup.easyarmorstands.common.handle;
 
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
+import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Something that can be selected by the user and edited using its manipulators.
  */
 public interface Handle {
+    @NotNull Session session();
+
+    void addManipulator(String name, Manipulator manipulator);
+
+    Map<String, Manipulator> getManipulators();
+
     /**
      * Refresh properties of the handle, such as its {@link #getPosition() position}.
      * Called before starting or updating a manipulator.
      */
-    void update();
+    void update(boolean active);
 
-    /**
-     * The manipulators which can be used to edit this handle.
-     *
-     * @return The list of manipulators.
-     */
-    List<Manipulator> getManipulators();
+    void click();
+
+    void select(Manipulator manipulator);
 
     /**
      * The position of the handle.
@@ -31,10 +36,7 @@ public interface Handle {
      */
     Vector3dc getPosition();
 
-    /**
-     * The name of the handle.
-     *
-     * @return The name.
-     */
-    Component getComponent();
+    Component title();
+
+    Component subtitle();
 }

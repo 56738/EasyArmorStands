@@ -5,6 +5,8 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
+import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
@@ -117,5 +119,36 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.open")
     public void openEquipmentMenu(Session session) {
         session.openMenu();
+    }
+
+    @CommandMethod("edit <handle>")
+    @CommandPermission("easyarmorstands.edit.select")
+    public void selectHandle(
+            EasCommandSender sender,
+            Session session,
+            @Argument("handle") Handle handle
+    ) {
+        session.setHandle(handle);
+        sender.sendMessage(Component.text()
+                .content("Selected handle: ")
+                .append(handle.subtitle())
+                .color(NamedTextColor.GREEN));
+    }
+
+    @CommandMethod("edit <handle> <tool>")
+    @CommandPermission("easyarmorstands.edit.select")
+    public void selectTool(
+            EasCommandSender sender,
+            Session session,
+            @Argument("handle") Handle handle,
+            @Argument("tool") Manipulator manipulator
+    ) {
+        session.setHandle(handle, manipulator);
+        sender.sendMessage(Component.text()
+                .content("Selected tool: ")
+                .append(handle.subtitle())
+                .append(Component.text(": "))
+                .append(manipulator.component())
+                .color(NamedTextColor.GREEN));
     }
 }

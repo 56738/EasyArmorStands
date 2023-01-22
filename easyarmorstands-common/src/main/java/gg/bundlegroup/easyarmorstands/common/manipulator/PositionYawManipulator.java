@@ -10,7 +10,7 @@ public class PositionYawManipulator extends AxisRotationManipulator {
     private final PositionHandle handle;
 
     public PositionYawManipulator(PositionHandle handle, String name, RGBLike color) {
-        super(handle.getSession(), name, color);
+        super(handle, name, color, null);
         this.handle = handle;
         getAxis().set(0, 1, 0);
     }
@@ -23,10 +23,17 @@ public class PositionYawManipulator extends AxisRotationManipulator {
     }
 
     @Override
+    public void update(boolean active) {
+        getOrigin().set(handle.getPosition());
+        super.update(active);
+    }
+
+    @Override
     protected void onRotate(double angle) {
         EasArmorStand entity = handle.getSession().getEntity();
         Vector3dc position = entity.getPosition();
         float yaw = entity.getYaw() + (float) Math.toDegrees(-angle);
         entity.teleport(position, yaw, 0);
     }
+
 }

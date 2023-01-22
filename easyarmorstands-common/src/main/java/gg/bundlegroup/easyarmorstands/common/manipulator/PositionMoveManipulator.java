@@ -14,7 +14,7 @@ public class PositionMoveManipulator extends AbstractManipulator {
     private final Vector3d position = new Vector3d();
 
     public PositionMoveManipulator(PositionHandle handle, String name, RGBLike color) {
-        super(handle.getSession(), name, color);
+        super(name, color);
         this.handle = handle;
         this.cursor = new Cursor3D(handle.getSession().getPlayer());
     }
@@ -26,12 +26,24 @@ public class PositionMoveManipulator extends AbstractManipulator {
     }
 
     @Override
-    public void update(boolean freeLook) {
-        cursor.update(freeLook);
-        getCursor().add(offset, position);
-        EasArmorStand entity = handle.getSession().getEntity();
-        float yaw = entity.getYaw();
-        entity.teleport(position, yaw, 0);
+    public void update(boolean active) {
+        if (active) {
+            cursor.update(false);
+            getCursor().add(offset, position);
+            EasArmorStand entity = handle.getSession().getEntity();
+            float yaw = entity.getYaw();
+            entity.teleport(position, yaw, 0);
+        }
+    }
+
+    @Override
+    public Vector3dc getTarget() {
+        return handle.getPosition();
+    }
+
+    @Override
+    public Vector3dc getLookTarget() {
+        return null;
     }
 
     @Override

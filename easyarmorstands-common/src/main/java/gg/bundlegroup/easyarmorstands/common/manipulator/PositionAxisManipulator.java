@@ -14,7 +14,7 @@ public class PositionAxisManipulator extends AxisManipulator {
     private final Vector3d position = new Vector3d();
 
     public PositionAxisManipulator(PositionHandle handle, String name, RGBLike color, Vector3dc axis) {
-        super(handle.getSession(), name, color);
+        super(handle, name, color, color);
         this.handle = handle;
         this.cursor = new Cursor3D(handle.getSession().getPlayer());
         getAxis().set(axis);
@@ -29,15 +29,18 @@ public class PositionAxisManipulator extends AxisManipulator {
     }
 
     @Override
-    public void update(boolean freeLook) {
-        cursor.update(freeLook);
+    public void update(boolean active) {
+        if (active) {
+            cursor.update(false);
+        }
         getOrigin().set(handle.getPosition());
-        super.update(freeLook);
-
-        EasArmorStand entity = handle.getSession().getEntity();
-        float yaw = entity.getYaw();
-        getAxisPoint().add(offset, position);
-        entity.teleport(position, yaw, 0);
+        super.update(active);
+        if (active) {
+            EasArmorStand entity = handle.getSession().getEntity();
+            float yaw = entity.getYaw();
+            getAxisPoint().add(offset, position);
+            entity.teleport(position, yaw, 0);
+        }
     }
 
     @Override

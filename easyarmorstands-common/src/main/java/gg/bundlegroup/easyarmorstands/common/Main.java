@@ -5,16 +5,22 @@ import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.meta.SimpleCommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.services.types.ConsumerService;
+import gg.bundlegroup.easyarmorstands.common.command.HandleArgumentParser;
+import gg.bundlegroup.easyarmorstands.common.command.ManipulatorArgumentParser;
 import gg.bundlegroup.easyarmorstands.common.command.NoSessionException;
 import gg.bundlegroup.easyarmorstands.common.command.PipelineExceptionHandler;
 import gg.bundlegroup.easyarmorstands.common.command.RequiresFeature;
 import gg.bundlegroup.easyarmorstands.common.command.SessionInjector;
+import gg.bundlegroup.easyarmorstands.common.command.SessionPreprocessor;
+import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.session.SessionListener;
 import gg.bundlegroup.easyarmorstands.common.session.SessionManager;
+import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -58,10 +64,20 @@ public class Main implements Closeable {
             }
         });
 
+        commandManager.registerCommandPreProcessor(new SessionPreprocessor(sessionManager));
+
         PipelineExceptionHandler.register(commandManager);
 
-        commandManager.parameterInjectorRegistry().registerInjector(Session.class,
-                new SessionInjector<>(sessionManager));
+        commandManager.parameterInjectorRegistry().registerInjector(
+                Session.class, new SessionInjector<>());
+
+        commandManager.parserRegistry().registerParserSupplier(
+                TypeToken.get(Handle.class),
+                p -> new HandleArgumentParser());
+
+        commandManager.parserRegistry().registerParserSupplier(
+                TypeToken.get(Manipulator.class),
+                p -> new ManipulatorArgumentParser());
 
         AnnotationParser<EasCommandSender> parser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> SimpleCommandMeta.empty());

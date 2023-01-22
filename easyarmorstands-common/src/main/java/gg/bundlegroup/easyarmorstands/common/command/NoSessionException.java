@@ -16,4 +16,8 @@ public class NoSessionException extends RuntimeException {
             )
             .color(NamedTextColor.RED)
             .build();
+
+    public NoSessionException() {
+        super("No session");
+    }
 }
