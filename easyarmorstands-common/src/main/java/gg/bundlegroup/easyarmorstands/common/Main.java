@@ -29,6 +29,8 @@ import java.util.Optional;
 
 public class Main implements Closeable {
     private final SessionManager sessionManager;
+    private final CommandManager<EasCommandSender> commandManager;
+    private final AnnotationParser<EasCommandSender> annotationParser;
 
     public Main(EasPlatform platform) {
         sessionManager = new SessionManager(platform);
@@ -36,7 +38,7 @@ public class Main implements Closeable {
         platform.registerListener(new SessionListener(platform, sessionManager));
         platform.registerTickTask(sessionManager::update);
 
-        CommandManager<EasCommandSender> commandManager = platform.commandManager();
+        commandManager = platform.commandManager();
 
         new MinecraftExceptionHandler<EasCommandSender>()
                 .withArgumentParsingHandler()
@@ -79,14 +81,14 @@ public class Main implements Closeable {
                 TypeToken.get(Manipulator.class),
                 p -> new ManipulatorArgumentParser());
 
-        AnnotationParser<EasCommandSender> parser = new AnnotationParser<>(commandManager, EasCommandSender.class,
+        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> SimpleCommandMeta.empty());
 
-        parser.registerBuilderModifier(RequiresFeature.class,
+        annotationParser.registerBuilderModifier(RequiresFeature.class,
                 (requiresFeature, builder) -> builder.meta(RequiresFeature.KEY, requiresFeature.value()));
 
         try {
-            parser.parseContainers();
+            annotationParser.parseContainers();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -94,6 +96,14 @@ public class Main implements Closeable {
 
     public SessionManager getSessionManager() {
         return sessionManager;
+    }
+
+    public CommandManager<EasCommandSender> getCommandManager() {
+        return commandManager;
+    }
+
+    public AnnotationParser<EasCommandSender> getAnnotationParser() {
+        return annotationParser;
     }
 
     @Override

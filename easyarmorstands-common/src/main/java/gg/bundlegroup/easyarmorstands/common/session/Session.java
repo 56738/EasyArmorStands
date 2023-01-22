@@ -8,7 +8,6 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
@@ -228,8 +227,7 @@ public class Session {
     }
 
     public void openMenu() {
-        SessionInventory inventory = new SessionInventory(this, player.platform(),
-                Component.text("Equipment"));
+        SessionInventory inventory = new SessionInventory(this, player.platform());
         player.openInventory(inventory.getInventory());
     }
 

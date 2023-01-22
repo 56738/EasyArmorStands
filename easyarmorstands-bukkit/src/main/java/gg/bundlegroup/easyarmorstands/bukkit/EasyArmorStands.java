@@ -1,5 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit;
 
+import cloud.commandframework.CommandManager;
+import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
@@ -104,6 +106,14 @@ public class EasyArmorStands extends JavaPlugin {
 
     public SessionManager getSessionManager() {
         return main.getSessionManager();
+    }
+
+    public CommandManager<EasCommandSender> getCommandManager() {
+        return main.getCommandManager();
+    }
+
+    public AnnotationParser<EasCommandSender> getAnnotationParser() {
+        return main.getAnnotationParser();
     }
 
     private <T extends FeatureProvider<F>, F> F loadFeature(Class<T> type) {

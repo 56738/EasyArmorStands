@@ -1,18 +1,21 @@
 [versions]
 adventure-api = "4.12.0"
 adventure-platform = "4.2.0"
+bkcommonlib = "1.19.3-v1"
 bukkit = "1.8.8-R0.1-SNAPSHOT"
 cloud = "1.8.0"
 commodore = "2.2"
 headdatabase-api = "1.3.1"
 joml = "1.10.5"
 junit = "5.9.2"
+traincarts = "1.19.3-v2-SNAPSHOT"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
 adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-platform" }
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-platform" }
+bkcommonlib = { module = "com.bergerkiller.bukkit:BKCommonLib", version.ref = "bkcommonlib" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
@@ -23,3 +26,4 @@ headdatabase-api = { module = "com.arcaniax:HeadDatabase-API", version.ref = "he
 joml = { module = "org.joml:joml", version.ref = "joml" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }

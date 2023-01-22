@@ -13,9 +13,10 @@ public class SessionInventory implements EasInventoryListener {
     private final EasInventory inventory;
     private final EasArmorEntity.Slot[] slots;
 
-    public SessionInventory(Session session, EasPlatform platform, Component title) {
+    public SessionInventory(Session session, EasPlatform platform) {
         this.session = session;
-        this.inventory = platform.createInventory(title, 9, 6, this);
+        this.inventory = platform.createInventory(
+                Component.text("EasyArmorStands"), 9, 6, this);
         this.slots = new EasArmorEntity.Slot[9 * 6];
         this.slots[13] = EasArmorEntity.Slot.HEAD;
         if (platform.hasSlot(EasArmorEntity.Slot.OFF_HAND)) {
