@@ -37,20 +37,23 @@ public abstract class AbstractHandle implements Handle {
     }
 
     @Override
-    public void update(boolean active) {
-        if (!active) {
-            this.active = false;
-            this.manipulator = null;
-            return;
-        }
+    public void start() {
+        this.active = false;
+        this.manipulator = null;
+    }
 
+    @Override
+    public void update() {
         if (this.active) {
-            manipulator.update(true);
+            Component component = manipulator.update();
+            manipulator.show();
+            session.getPlayer().sendActionBar(component);
         } else {
             Manipulator bestManipulator = null;
             double bestDistance = Double.POSITIVE_INFINITY;
             for (Manipulator manipulator : manipulators.values()) {
-                manipulator.update(false);
+                manipulator.refresh();
+                manipulator.showHandles();
                 Vector3dc target = manipulator.getLookTarget();
                 if (target != null) {
                     double distance = target.distanceSquared(session.getPlayer().getEyePosition());
@@ -65,19 +68,35 @@ public abstract class AbstractHandle implements Handle {
     }
 
     @Override
-    public void click() {
+    public void onRightClick() {
         if (active) {
             active = false;
         } else if (manipulator != null) {
-            active = true;
-            manipulator.start(manipulator.getLookTarget());
+            Vector3dc target = manipulator.getLookTarget();
+            if (target != null) {
+                active = true;
+                manipulator.refresh();
+                manipulator.start(target);
+            }
         }
+    }
+
+    @Override
+    public boolean onLeftClick() {
+        if (active) {
+            manipulator.abort();
+            session.getPlayer().sendActionBar(Component.empty());
+            active = false;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void select(Manipulator manipulator) {
         this.active = true;
         this.manipulator = manipulator;
+        manipulator.refresh();
         manipulator.start(manipulator.getTarget());
     }
 

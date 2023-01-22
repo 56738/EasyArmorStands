@@ -4,7 +4,6 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.util.Util;
 import net.kyori.adventure.text.Component;
-import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
@@ -23,7 +22,6 @@ public class BoneHandle extends AbstractHandle {
     private final Vector3d smallOffset;
     private final Vector3d smallLength;
 
-    private final Matrix3d yaw = new Matrix3d();
     private final Vector3d start = new Vector3d();
     private final Vector3d end = new Vector3d();
     private final Matrix3d rotation = new Matrix3d();
@@ -56,13 +54,12 @@ public class BoneHandle extends AbstractHandle {
     }
 
     @Override
-    public void update(boolean active) {
+    public void refresh() {
         EasArmorStand entity = session.getEntity();
-        yaw.rotationY(-Math.toRadians(entity.getYaw()));
+        Matrix3dc yaw = session.getArmorStandYaw();
         yaw.transform(getOffset(entity), start).add(entity.getPosition());
         yaw.mul(Util.fromEuler(entity.getPose(part, pose), poseMatrix), rotation);
         rotation.transform(getLength(entity), end).add(start);
-        super.update(active);
     }
 
     @Override
@@ -73,10 +70,6 @@ public class BoneHandle extends AbstractHandle {
     @Override
     public Component subtitle() {
         return component;
-    }
-
-    public Session getSession() {
-        return session;
     }
 
     public EasArmorStand.Part getPart() {
@@ -93,7 +86,7 @@ public class BoneHandle extends AbstractHandle {
 
     public void setRotation(Matrix3dc rotation) {
         this.rotation.set(rotation);
-        Util.toEuler(poseMatrix.setTransposed(yaw).mul(rotation), pose);
+        Util.toEuler(poseMatrix.setTransposed(session.getArmorStandYaw()).mul(rotation), pose);
         session.getEntity().setPose(part, pose);
     }
 }

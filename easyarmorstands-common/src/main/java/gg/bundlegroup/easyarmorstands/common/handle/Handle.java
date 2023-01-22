@@ -20,11 +20,16 @@ public interface Handle {
 
     /**
      * Refresh properties of the handle, such as its {@link #getPosition() position}.
-     * Called before starting or updating a manipulator.
      */
-    void update(boolean active);
+    void refresh();
 
-    void click();
+    void start();
+
+    void update();
+
+    void onRightClick();
+
+    boolean onLeftClick();
 
     void select(Manipulator manipulator);
 

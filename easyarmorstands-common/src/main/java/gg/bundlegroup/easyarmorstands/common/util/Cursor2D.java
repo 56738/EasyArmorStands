@@ -2,7 +2,6 @@ package gg.bundlegroup.easyarmorstands.common.util;
 
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -40,13 +39,9 @@ public class Cursor2D {
         } else {
             player.getEyeRotation().transform(cursor.x, cursor.y, 0, currentOrigin).add(player.getEyePosition());
             player.getEyeRotation().transform(0, 0, 1, currentDirection);
-            double t = Intersectiond.intersectRayPlane(currentOrigin, currentDirection, origin, normal, 0.01);
+            double t = Util.intersectRayDoubleSidedPlane(currentOrigin, currentDirection, origin, normal);
             if (t < 0) {
-                normal.negate();
-                t = Intersectiond.intersectRayPlane(currentOrigin, currentDirection, origin, normal, 0.01);
-                if (t < 0) {
-                    return;
-                }
+                return;
             }
             currentOrigin.fma(t, currentDirection, current);
         }

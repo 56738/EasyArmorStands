@@ -1,5 +1,6 @@
 package gg.bundlegroup.easyarmorstands.common.util;
 
+import org.joml.Intersectiond;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
@@ -16,5 +17,24 @@ public class Util {
         dest.y *= -1;
         dest.z *= -1;
         return dest;
+    }
+
+    public static double intersectRayDoubleSidedPlane(
+            Vector3dc origin, Vector3dc direction, Vector3dc point, Vector3dc normal) {
+        double ox = origin.x(), oy = origin.y(), oz = origin.z();
+        double dx = direction.x(), dy = direction.y(), dz = direction.z();
+        double px = point.x(), py = point.y(), pz = point.z();
+        double nx = normal.x(), ny = normal.y(), nz = normal.z();
+        double t = Intersectiond.intersectRayPlane(
+                ox, oy, oz, dx, dy, dz,
+                px, py, pz, nx, ny, nz,
+                0.1);
+        if (t < 0) {
+            t = Intersectiond.intersectRayPlane(
+                    ox, oy, oz, dx, dy, dz,
+                    px, py, pz, -nx, -ny, -nz,
+                    0.1);
+        }
+        return t;
     }
 }

@@ -16,14 +16,13 @@ public class PositionHandle extends AbstractHandle {
     }
 
     @Override
-    public void update(boolean active) {
+    public void refresh() {
         EasArmorStand entity = session.getEntity();
         double y = 1.25;
         if (entity.isSmall()) {
             y /= 2;
         }
         entity.getPosition().add(0, y, 0, position);
-        super.update(active);
     }
 
     @Override

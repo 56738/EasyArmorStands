@@ -5,6 +5,7 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
+import cloud.commandframework.annotations.specifier.Range;
 import gg.bundlegroup.easyarmorstands.common.handle.Handle;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
@@ -119,6 +120,24 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.open")
     public void openEquipmentMenu(Session session) {
         session.openMenu();
+    }
+
+    @CommandMethod("snap angle [value]")
+    @CommandPermission("easyarmorstands.snap")
+    public void setAngleSnapIncrement(
+            EasCommandSender sender, Session session,
+            @Argument(value = "value", defaultValue = "0") @Range(min = "0", max = "90") double value) {
+        session.setAngleSnapIncrement(value);
+        sender.sendMessage(Component.text("Set angle snapping increment to " + value, NamedTextColor.GREEN));
+    }
+
+    @CommandMethod("snap move [value]")
+    @CommandPermission("easyarmorstands.snap")
+    public void setSnapIncrement(
+            EasCommandSender sender, Session session,
+            @Argument(value = "value", defaultValue = "0") @Range(min = "0", max = "10") double value) {
+        session.setSnapIncrement(value);
+        sender.sendMessage(Component.text("Set movement snapping increment to " + value, NamedTextColor.GREEN));
     }
 
     @CommandMethod("edit <handle>")

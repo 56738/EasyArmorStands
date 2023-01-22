@@ -2,12 +2,10 @@ package gg.bundlegroup.easyarmorstands.common.session;
 
 import gg.bundlegroup.easyarmorstands.common.handle.BoneHandle;
 import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
-import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAimManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisManipulator;
 import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisMoveManipulator;
+import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisRotateManipulator;
 import gg.bundlegroup.easyarmorstands.common.manipulator.PositionAxisManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.PositionMoveManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.PositionYawManipulator;
+import gg.bundlegroup.easyarmorstands.common.manipulator.PositionRotateManipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
@@ -73,9 +71,7 @@ public class SessionListener implements EasListener {
 
     private PositionHandle createPositionHandle(Session session) {
         PositionHandle handle = new PositionHandle(session);
-        handle.addManipulator("move", new PositionMoveManipulator(handle,
-                "Move", NamedTextColor.YELLOW));
-        handle.addManipulator("rotate", new PositionYawManipulator(handle,
+        handle.addManipulator("rotate", new PositionRotateManipulator(handle,
                 "Rotate", NamedTextColor.GOLD));
         handle.addManipulator("x", new PositionAxisManipulator(handle,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
@@ -88,13 +84,11 @@ public class SessionListener implements EasListener {
 
     private BoneHandle createBoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
         BoneHandle handle = new BoneHandle(session, part, component, offset, length);
-        handle.addManipulator("aim", new BoneAimManipulator(handle,
-                "Aim", NamedTextColor.YELLOW));
-        handle.addManipulator("x", new BoneAxisManipulator(handle,
+        handle.addManipulator("x", new BoneAxisRotateManipulator(handle,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        handle.addManipulator("y", new BoneAxisManipulator(handle,
+        handle.addManipulator("y", new BoneAxisRotateManipulator(handle,
                 "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        handle.addManipulator("z", new BoneAxisManipulator(handle,
+        handle.addManipulator("z", new BoneAxisRotateManipulator(handle,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         handle.addManipulator("mx", new BoneAxisMoveManipulator(handle,
                 "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
@@ -112,12 +106,10 @@ public class SessionListener implements EasListener {
 
         Session oldSession = manager.getSession(armorStand);
         if (oldSession != null) {
-            Component who = oldSession.getPlayer().get(Identity.DISPLAY_NAME)
-                    .orElseGet(() -> Component.text("Someone else"));
+            String who = oldSession.getPlayer().get(Identity.NAME).orElse("Someone else");
             player.sendMessage(Component.text()
                     .color(NamedTextColor.RED)
-                    .append(who)
-                    .append(Component.text(" is editing this armor stand")));
+                    .append(Component.text(who + " is editing this armor stand")));
             return true;
         }
 

@@ -12,6 +12,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
+import org.joml.Math;
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 
 import java.time.Duration;
@@ -25,10 +28,13 @@ public class Session {
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
     private final Map<String, Handle> handles = new HashMap<>();
+    private final Matrix3d armorStandYaw = new Matrix3d();
 
     private int clickTicks = 5;
     private Handle handle;
     private boolean active;
+    private double snapIncrement;
+    private double angleSnapIncrement;
 
     public Session(EasPlayer player, EasArmorStand entity) {
         this.player = player;
@@ -70,7 +76,13 @@ public class Session {
         if (!handleClick()) {
             return;
         }
-        setHandle(null);
+        if (!active) {
+            return;
+        }
+        if (handle.onLeftClick()) {
+            return;
+        }
+        active = false;
     }
 
     public void handleRightClick() {
@@ -80,10 +92,27 @@ public class Session {
         update();
         if (handle != null) {
             if (active) {
-                handle.click();
+                handle.onRightClick();
+            } else {
+                active = true;
+                handle.start();
             }
-            active = true;
         }
+    }
+
+    private double snap(double value, double increment) {
+        if (increment < 0.001) {
+            return value;
+        }
+        return Math.round(value / increment) * increment;
+    }
+
+    public double snap(double value) {
+        return snap(value, snapIncrement);
+    }
+
+    public double snapAngle(double value) {
+        return snap(value, angleSnapIncrement);
     }
 
     public boolean update() {
@@ -94,8 +123,11 @@ public class Session {
         player.update();
         entity.update();
 
+        armorStandYaw.rotationY(-Math.toRadians(entity.getYaw()));
+
         if (active) {
-            handle.update(true);
+            handle.refresh();
+            handle.update();
         } else {
             updateTargetHandle();
         }
@@ -120,7 +152,7 @@ public class Session {
         double bestDistance = Double.POSITIVE_INFINITY;
         Vector3d temp = new Vector3d();
         for (Handle candidate : handles.values()) {
-            candidate.update(false);
+            candidate.refresh();
             player.showPoint(candidate.getPosition(), NamedTextColor.WHITE);
             candidate.getPosition().sub(player.getEyePosition(), temp).mulTranspose(player.getEyeRotation());
             double distance = temp.z;
@@ -156,6 +188,8 @@ public class Session {
         if (handle != null) {
             this.handle = handle;
             this.active = true;
+            handle.refresh();
+            handle.start();
         } else {
             this.active = false;
         }
@@ -163,7 +197,6 @@ public class Session {
 
     public void setHandle(Handle handle, Manipulator manipulator) {
         setHandle(handle);
-        handle.update(false);
         handle.select(manipulator);
     }
 
@@ -173,6 +206,14 @@ public class Session {
 
     public EasPlayer getPlayer() {
         return player;
+    }
+
+    public double getRange() {
+        return 5;
+    }
+
+    public double getLookThreshold() {
+        return 0.1;
     }
 
     public void startMoving() {
@@ -208,5 +249,25 @@ public class Session {
 
     public Map<String, Handle> getHandles() {
         return Collections.unmodifiableMap(handles);
+    }
+
+    public Matrix3dc getArmorStandYaw() {
+        return armorStandYaw;
+    }
+
+    public double getSnapIncrement() {
+        return snapIncrement;
+    }
+
+    public void setSnapIncrement(double snapIncrement) {
+        this.snapIncrement = snapIncrement;
+    }
+
+    public double getAngleSnapIncrement() {
+        return angleSnapIncrement;
+    }
+
+    public void setAngleSnapIncrement(double angleSnapIncrement) {
+        this.angleSnapIncrement = angleSnapIncrement;
     }
 }
