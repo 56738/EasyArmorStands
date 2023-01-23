@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionInitializeEvent;
+import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMenuInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
@@ -13,6 +14,7 @@ import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ItemProvider;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ToolChecker;
+import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
@@ -21,6 +23,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasMaterial;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.platform.EasWorld;
@@ -29,6 +32,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
@@ -40,10 +44,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BukkitPlatform implements EasPlatform, Listener {
@@ -60,7 +67,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final EquipmentAccessor equipmentAccessor;
     private final EntityNameAccessor entityNameAccessor;
     private final ArmorStandCanTickAccessor armorStandCanTickAccessor;
-    private final EasItem placeholderItem;
+    private final ItemProvider itemProvider;
 
     public BukkitPlatform(Plugin plugin,
                           CommandManager<EasCommandSender> commandManager,
@@ -72,7 +79,8 @@ public class BukkitPlatform implements EasPlatform, Listener {
                           ParticleSpawner particleSpawner,
                           EquipmentAccessor equipmentAccessor,
                           EntityNameAccessor entityNameAccessor,
-                          ArmorStandCanTickAccessor armorStandCanTickAccessor, ItemProvider itemProvider) {
+                          ArmorStandCanTickAccessor armorStandCanTickAccessor,
+                          ItemProvider itemProvider) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
         this.commandManager = commandManager;
@@ -85,7 +93,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.equipmentAccessor = equipmentAccessor;
         this.entityNameAccessor = entityNameAccessor;
         this.armorStandCanTickAccessor = armorStandCanTickAccessor;
-        this.placeholderItem = getItem(itemProvider.createPlaceholder());
+        this.itemProvider = itemProvider;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             players.put(player, getPlayer(player));
@@ -170,8 +178,22 @@ public class BukkitPlatform implements EasPlatform, Listener {
     }
 
     @Override
-    public EasItem createPlaceholderItem() {
-        return placeholderItem;
+    public EasItem createItem(EasMaterial material, Component name, List<Component> lore) {
+        ItemStack item = itemProvider.createItem(material);
+        ItemMeta meta = item.getItemMeta();
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.legacySection();
+        List<String> legacyLore = new ArrayList<>(lore.size());
+        for (Component component : lore) {
+            legacyLore.add(serializer.serialize(component));
+        }
+        meta.setLore(legacyLore);
+        if (name == Component.empty()) {
+            meta.setDisplayName(ChatColor.RESET.toString());
+        } else {
+            meta.setDisplayName(serializer.serialize(name));
+        }
+        item.setItemMeta(meta);
+        return getItem(item);
     }
 
     @Override
@@ -198,6 +220,12 @@ public class BukkitPlatform implements EasPlatform, Listener {
         SessionInitializeEvent event = new SessionInitializeEvent(
                 ((BukkitPlayer) session.getPlayer()).get(),
                 session);
+        plugin.getServer().getPluginManager().callEvent(event);
+    }
+
+    @Override
+    public void onInventoryInitialize(SessionMenu menu) {
+        SessionMenuInitializeEvent event = new SessionMenuInitializeEvent(menu);
         plugin.getServer().getPluginManager().callEvent(event);
     }
 

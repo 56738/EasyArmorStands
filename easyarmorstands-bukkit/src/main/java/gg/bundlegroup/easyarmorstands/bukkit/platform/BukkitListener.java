@@ -1,9 +1,10 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
+import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
-import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -146,9 +147,10 @@ public class BukkitListener implements Listener {
         }
     }
 
-    private boolean onInventoryClick(EasInventoryListener inventoryListener, int slot) {
+    private boolean onInventoryClick(EasInventoryListener inventoryListener,
+                                     int slot, boolean click, boolean put, boolean take, EasItem cursor) {
         Bukkit.getScheduler().runTask(platform.plugin(), inventoryListener::update);
-        return inventoryListener.onClick(slot);
+        return !inventoryListener.onClick(slot, click, put, take, cursor);
     }
 
     @EventHandler
@@ -158,15 +160,60 @@ public class BukkitListener implements Listener {
             return;
         }
         InventoryAction action = event.getAction();
-        if (action != InventoryAction.PICKUP_ALL && action != InventoryAction.PLACE_ALL && action != InventoryAction.SWAP_WITH_CURSOR) {
+        if (action == InventoryAction.COLLECT_TO_CURSOR) {
             event.setCancelled(true);
             return;
         }
-        int slot = event.getRawSlot();
-        if (slot != event.getView().convertSlot(slot)) {
+        int slot = event.getSlot();
+        if (slot != event.getRawSlot()) {
+            // Not the upper inventory
+            if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                event.setCancelled(true);
+            }
             return;
         }
-        if (onInventoryClick(inventoryListener, slot)) {
+        boolean click = false;
+        boolean put = false;
+        boolean take = false;
+        switch (action) {
+            case NOTHING:
+            case CLONE_STACK:
+                click = true;
+                break;
+            case PICKUP_ALL:
+            case PICKUP_SOME:
+            case PICKUP_HALF:
+            case PICKUP_ONE:
+            case MOVE_TO_OTHER_INVENTORY:
+                click = true;
+                take = true;
+                break;
+            case PLACE_ALL:
+            case PLACE_SOME:
+            case PLACE_ONE:
+                click = true;
+                put = true;
+                break;
+            case SWAP_WITH_CURSOR:
+                click = true;
+                put = true;
+                take = true;
+                break;
+            case DROP_ALL_SLOT:
+            case DROP_ONE_SLOT:
+            case HOTBAR_MOVE_AND_READD:
+            case HOTBAR_SWAP:
+                take = true;
+                break;
+            case DROP_ALL_CURSOR:
+            case DROP_ONE_CURSOR:
+                return;
+            default:
+                event.setCancelled(true);
+                return;
+        }
+        EasItem cursor = platform.getItem(event.getCursor());
+        if (onInventoryClick(inventoryListener, slot, click, put, take, cursor)) {
             event.setCancelled(true);
         }
     }
@@ -185,7 +232,8 @@ public class BukkitListener implements Listener {
         if (slot != event.getView().convertSlot(slot)) {
             return;
         }
-        if (onInventoryClick(inventoryListener, slot)) {
+        EasItem cursor = platform.getItem(event.getOldCursor());
+        if (onInventoryClick(inventoryListener, slot, true, true, false, cursor)) {
             event.setCancelled(true);
         }
     }

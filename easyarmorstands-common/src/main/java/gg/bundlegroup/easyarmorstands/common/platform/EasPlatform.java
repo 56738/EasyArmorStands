@@ -1,10 +1,12 @@
 package gg.bundlegroup.easyarmorstands.common.platform;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface EasPlatform {
     CommandManager<EasCommandSender> commandManager();
@@ -17,7 +19,7 @@ public interface EasPlatform {
 
     EasInventory createInventory(Component title, int width, int height, EasInventoryListener listener);
 
-    EasItem createPlaceholderItem();
+    EasItem createItem(EasMaterial material, Component name, List<Component> lore);
 
     void registerListener(EasListener listener);
 
@@ -26,4 +28,6 @@ public interface EasPlatform {
     boolean canStartSession(EasPlayer player, EasArmorStand armorStand);
 
     void onSessionStarted(Session session);
+
+    void onInventoryInitialize(SessionMenu inventory);
 }

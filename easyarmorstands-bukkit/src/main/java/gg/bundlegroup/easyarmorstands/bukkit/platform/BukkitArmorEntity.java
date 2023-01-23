@@ -1,8 +1,8 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
+import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
-import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,6 +25,7 @@ public class BukkitArmorEntity<T extends LivingEntity> extends BukkitEntity<T> i
 
     @Override
     public void setItem(EasArmorEntity.Slot slot, EasItem item) {
-        equipmentAccessor.setItem(get().getEquipment(), slot, ((BukkitItem) item).get());
+        BukkitItem bukkitItem = (BukkitItem) item;
+        equipmentAccessor.setItem(get().getEquipment(), slot, bukkitItem != null ? bukkitItem.get() : null);
     }
 }

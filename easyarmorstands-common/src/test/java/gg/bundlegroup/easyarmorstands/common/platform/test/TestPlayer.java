@@ -102,6 +102,14 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
+    public void closeInventory(EasInventory inventory) {
+    }
+
+    @Override
+    public void setCursor(EasItem item) {
+    }
+
+    @Override
     public boolean hasPermission(String permission) {
         return true;
     }

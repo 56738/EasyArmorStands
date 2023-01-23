@@ -15,6 +15,5 @@ dependencies {
     compileOnly(libs.bukkit) {
         isTransitive = false
     }
-    compileOnly(libs.bkcommonlib)
     compileOnly(libs.traincarts)
 }

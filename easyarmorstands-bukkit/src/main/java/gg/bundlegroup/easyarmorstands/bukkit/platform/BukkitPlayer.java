@@ -1,15 +1,17 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasEntity;
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
-import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
+import gg.bundlegroup.easyarmorstands.common.platform.EasEntity;
+import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
@@ -149,6 +151,24 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
     @Override
     public void openInventory(EasInventory inventory) {
         get().openInventory(((BukkitInventory) inventory).get());
+    }
+
+    @Override
+    public void closeInventory(EasInventory inventory) {
+        Inventory topInventory = get().getOpenInventory().getTopInventory();
+        Inventory inventory1 = ((BukkitInventory) inventory).get();
+        if (inventory1.equals(topInventory)) {
+            get().closeInventory();
+        } else {
+            System.out.println(topInventory);
+            System.out.println(inventory1);
+        }
+    }
+
+    @Override
+    public void setCursor(EasItem item) {
+        BukkitItem bukkitItem = (BukkitItem) item;
+        get().setItemOnCursor(bukkitItem != null ? bukkitItem.get() : null);
     }
 
     @Override

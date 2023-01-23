@@ -26,6 +26,28 @@ public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements E
     }
 
     @Override
+    public boolean isLocked() {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public void setLocked(boolean locked) {
+        // TODO
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public void setInvulnerable(boolean invulnerable) {
+        // TODO
+    }
+
+    @Override
     public boolean hasBasePlate() {
         return get().hasBasePlate();
     }

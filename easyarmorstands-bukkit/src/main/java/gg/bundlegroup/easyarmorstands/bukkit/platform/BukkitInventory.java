@@ -16,6 +16,7 @@ public class BukkitInventory extends BukkitWrapper<Inventory> implements EasInve
 
     @Override
     public void setItem(int slot, EasItem item) {
-        get().setItem(slot, ((BukkitItem) item).get());
+        BukkitItem bukkitItem = (BukkitItem) item;
+        get().setItem(slot, bukkitItem != null ? bukkitItem.get() : null);
     }
 }

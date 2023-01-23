@@ -6,10 +6,10 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import com.bergerkiller.bukkit.tc.TrainCarts;
 import gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands;
+import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlatform;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlayer;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
-import gg.bundlegroup.easyarmorstands.common.session.SessionInventory;
 import org.bukkit.entity.Player;
 
 public class TrainCartsIntegration {
@@ -29,10 +29,13 @@ public class TrainCartsIntegration {
         TrainCarts.plugin.getModelListing().buildDialog(p, plugin)
                 .query(query != null ? query : "")
                 .whenSelected(listedItemModel -> {
-                    SessionInventory inventory = new SessionInventory(session, plugin.getPlatform());
-                    player.openInventory(inventory.getInventory());
+                    session.openMenu();
                     p.setItemOnCursor(listedItemModel.item());
                 })
                 .show();
+    }
+
+    public BukkitPlatform getPlatform() {
+        return plugin.getPlatform();
     }
 }

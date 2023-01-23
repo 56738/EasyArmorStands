@@ -8,6 +8,14 @@ public interface EasArmorStand extends EasArmorEntity {
 
     void setVisible(boolean visible);
 
+    boolean isLocked();
+
+    void setLocked(boolean locked);
+
+    boolean isInvulnerable();
+
+    void setInvulnerable(boolean invulnerable);
+
     boolean hasBasePlate();
 
     void setBasePlate(boolean basePlate);

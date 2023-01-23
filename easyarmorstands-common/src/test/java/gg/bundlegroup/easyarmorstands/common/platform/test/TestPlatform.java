@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.platform.test;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
@@ -9,6 +10,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
 import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
+import gg.bundlegroup.easyarmorstands.common.platform.EasMaterial;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -16,6 +18,7 @@ import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TestPlatform implements EasPlatform {
@@ -56,7 +59,7 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
-    public EasItem createPlaceholderItem() {
+    public EasItem createItem(EasMaterial material, Component name, List<Component> lore) {
         return createItem(false);
     }
 
@@ -75,5 +78,9 @@ public class TestPlatform implements EasPlatform {
 
     @Override
     public void onSessionStarted(Session session) {
+    }
+
+    @Override
+    public void onInventoryInitialize(SessionMenu inventory) {
     }
 }

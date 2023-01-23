@@ -1,18 +1,19 @@
 package gg.bundlegroup.easyarmorstands.bukkit.addon.headdatabase;
 
 import gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands;
-import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitItem;
+import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMenuInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlatform;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlayer;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.session.SessionManager;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class HeadDatabaseListener implements Listener {
     private final EasyArmorStands plugin;
+    private final HeadDatabaseAPI api = new HeadDatabaseAPI();
 
     public HeadDatabaseListener(EasyArmorStands plugin) {
         this.plugin = plugin;
@@ -30,8 +31,15 @@ public class HeadDatabaseListener implements Listener {
         if (session == null) {
             return;
         }
-        BukkitItem item = platform.getItem(event.getHead());
         event.setCancelled(true);
-        session.getEntity().setItem(EasArmorEntity.Slot.HEAD, item);
+        session.openMenu();
+        event.getPlayer().setItemOnCursor(event.getHead());
+    }
+
+    @EventHandler
+    public void onMenuInitialize(SessionMenuInitializeEvent event) {
+        if (event.getPlayer().hasPermission("headdb.open")) {
+            event.getMenu().addEquipmentButton(new HeadDatabaseSlot(plugin.getPlatform(), event.getMenu(), api));
+        }
     }
 }

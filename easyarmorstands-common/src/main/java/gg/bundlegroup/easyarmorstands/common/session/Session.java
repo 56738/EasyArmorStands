@@ -2,6 +2,7 @@ package gg.bundlegroup.easyarmorstands.common.session;
 
 import gg.bundlegroup.easyarmorstands.common.handle.Handle;
 import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
@@ -76,6 +77,7 @@ public class Session {
             return;
         }
         if (!active) {
+            openMenu();
             return;
         }
         if (handle.onLeftClick()) {
@@ -227,7 +229,7 @@ public class Session {
     }
 
     public void openMenu() {
-        SessionInventory inventory = new SessionInventory(this, player.platform());
+        SessionMenu inventory = new SessionMenu(this, player.platform());
         player.openInventory(inventory.getInventory());
     }
 
