@@ -99,8 +99,12 @@ public class SessionListener implements EasListener {
         return handle;
     }
 
+    private boolean isTool(EasPlayer player, EasItem item) {
+        return item.isTool() && player.hasPermission("easyarmorstands.edit");
+    }
+
     private boolean startEditing(EasPlayer player, EasArmorStand armorStand, EasItem item, boolean cancelled) {
-        if (cancelled || !item.isTool() || !player.hasPermission("easyarmorstands.edit")) {
+        if (cancelled || !isTool(player, item)) {
             return false;
         }
 
@@ -127,15 +131,16 @@ public class SessionListener implements EasListener {
             session.handleLeftClick();
             return true;
         }
-        return false;
+        return isTool(player, item);
     }
 
     @Override
     public boolean onLeftClickArmorStand(EasPlayer player, EasArmorStand armorStand, EasItem item, boolean cancelled) {
-        if (onLeftClick(player, item)) {
+        Session session = manager.getSession(player);
+        if (session != null) {
+            session.handleLeftClick();
             return true;
         }
-
         return startEditing(player, armorStand, item, cancelled);
     }
 
@@ -146,15 +151,16 @@ public class SessionListener implements EasListener {
             session.handleRightClick();
             return true;
         }
-        return false;
+        return isTool(player, item);
     }
 
     @Override
     public boolean onRightClickArmorStand(EasPlayer player, EasArmorStand armorStand, EasItem item, boolean cancelled) {
-        if (onRightClick(player, item)) {
+        Session session = manager.getSession(player);
+        if (session != null) {
+            session.handleRightClick();
             return true;
         }
-
         return startEditing(player, armorStand, item, cancelled);
     }
 

@@ -65,14 +65,22 @@ public class BukkitListener implements Listener {
             return;
         }
         Player player = (Player) attacker;
+        BukkitPlayer bukkitPlayer = platform.getPlayer(player);
 
         Entity entity = event.getEntity();
         if (!(entity instanceof ArmorStand)) {
+            EntityEquipment equipment = player.getEquipment();
+            for (EasArmorEntity.Slot hand : hands) {
+                ItemStack item = equipmentAccessor.getItem(equipment, hand);
+                BukkitItem bukkitItem = platform.getItem(item);
+                if (listener.onLeftClick(bukkitPlayer, bukkitItem)) {
+                    event.setCancelled(true);
+                }
+            }
             return;
         }
         ArmorStand armorStand = (ArmorStand) entity;
 
-        BukkitPlayer bukkitPlayer = platform.getPlayer(player);
         BukkitArmorStand bukkitArmorStand = platform.getArmorStand(armorStand);
         EntityEquipment equipment = player.getEquipment();
         for (EasArmorEntity.Slot hand : hands) {
