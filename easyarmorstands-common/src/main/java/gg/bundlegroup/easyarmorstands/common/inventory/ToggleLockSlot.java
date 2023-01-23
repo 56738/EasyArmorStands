@@ -28,7 +28,7 @@ public class ToggleLockSlot extends ToggleSlot {
     protected Component getValue() {
         return menu.getSession().getEntity().isLocked()
                 ? Component.text("locked", NamedTextColor.GREEN)
-                : Component.text("unlocked", NamedTextColor.YELLOW);
+                : Component.text("unlocked", NamedTextColor.RED);
     }
 
     @Override

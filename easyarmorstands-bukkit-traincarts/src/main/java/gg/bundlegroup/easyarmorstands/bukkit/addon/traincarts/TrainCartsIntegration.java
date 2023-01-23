@@ -28,11 +28,16 @@ public class TrainCartsIntegration {
         Player p = ((BukkitPlayer) player).get();
         TrainCarts.plugin.getModelListing().buildDialog(p, plugin)
                 .query(query != null ? query : "")
-                .whenSelected(listedItemModel -> {
-                    session.openMenu();
-                    p.setItemOnCursor(listedItemModel.item());
-                })
-                .show();
+                .cancelOnRootRightClick()
+                .show()
+                .thenAccept(result -> {
+                    if (result.cancelledWithRootRightClick()) {
+                        session.openMenu();
+                    } else if (result.success()) {
+                        session.openMenu();
+                        p.setItemOnCursor(result.selectedItem());
+                    }
+                });
     }
 
     public BukkitPlatform getPlatform() {
