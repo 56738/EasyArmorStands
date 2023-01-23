@@ -154,14 +154,14 @@ public class Session {
         Vector3d temp = new Vector3d();
         for (Handle candidate : handles.values()) {
             candidate.refresh();
-            player.showPoint(candidate.getPosition(), NamedTextColor.WHITE);
             candidate.getPosition().sub(player.getEyePosition(), temp).mulTranspose(player.getEyeRotation());
             double distance = temp.z;
             // Eliminate forward part
             temp.z = 0;
             // Distance from straight line
             double deviationSquared = temp.lengthSquared();
-            if (deviationSquared < 0.025) {
+            double threshold = getLookThreshold();
+            if (deviationSquared < threshold * threshold) {
                 if (distance > 0 && distance < bestDistance && distance < RANGE) {
                     bestHandle = candidate;
                     bestDistance = distance;
@@ -169,6 +169,10 @@ public class Session {
             }
         }
         handle = bestHandle;
+        for (Handle candidate : handles.values()) {
+            player.showPoint(candidate.getPosition(),
+                    candidate == bestHandle ? NamedTextColor.YELLOW : NamedTextColor.WHITE);
+        }
     }
 
     public void stop() {
@@ -214,7 +218,7 @@ public class Session {
     }
 
     public double getLookThreshold() {
-        return 0.1;
+        return 0.15;
     }
 
     public void startMoving() {
