@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.bone;
 
-import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
+import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
@@ -9,14 +9,14 @@ import org.joml.Vector3dc;
 import java.util.Map;
 
 /**
- * Something that can be selected by the user and edited using its manipulators.
+ * Something that can be selected by the user and edited using its tools.
  */
 public interface Bone {
     @NotNull Session session();
 
-    void addManipulator(String name, Manipulator manipulator);
+    void addTool(String name, Tool tool);
 
-    Map<String, Manipulator> getManipulators();
+    Map<String, Tool> getTools();
 
     /**
      * Refresh properties of the bone, such as its {@link #getPosition() position}.
@@ -31,7 +31,7 @@ public interface Bone {
 
     boolean onLeftClick();
 
-    void select(Manipulator manipulator);
+    void select(Tool tool);
 
     /**
      * The position of the bone.

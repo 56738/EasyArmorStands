@@ -3,7 +3,7 @@ package gg.bundlegroup.easyarmorstands.common.session;
 import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
-import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
+import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
@@ -201,9 +201,9 @@ public class Session {
         }
     }
 
-    public void setBone(Bone bone, Manipulator manipulator) {
+    public void setBone(Bone bone, Tool tool) {
         setBone(bone);
-        bone.select(manipulator);
+        bone.select(tool);
     }
 
     public EasArmorStand getEntity() {

@@ -1,6 +1,6 @@
-package gg.bundlegroup.easyarmorstands.common.manipulator;
+package gg.bundlegroup.easyarmorstands.common.tool;
 
-import gg.bundlegroup.easyarmorstands.common.bone.PartBone;
+import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -13,20 +13,19 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoneAxisMoveManipulator implements Manipulator {
-    private final PartBone bone;
+public class PositionAxisTool implements Tool {
+    private final PositionBone bone;
     private final Session session;
     private final EasPlayer player;
     private final Component name;
     private final TextColor color;
     private final Vector3dc axis;
 
-    private final Vector3d direction = new Vector3d();
     private final Vector3d negativeHandle = new Vector3d();
     private final Vector3d positiveHandle = new Vector3d();
     private final Vector3d lookRayEnd = new Vector3d();
-    private final Vector3d negativeLookRayPoint = new Vector3d();
-    private final Vector3d positiveLookRayPoint = new Vector3d();
+    private final Vector3d lookRayPoint = new Vector3d();
+    private final Vector3d handlePoint = new Vector3d();
     private final Vector3d start = new Vector3d();
     private final Vector3d currentHandle = new Vector3d();
     private final Vector3d origin = new Vector3d();
@@ -34,7 +33,7 @@ public class BoneAxisMoveManipulator implements Manipulator {
     private final Cursor3D cursor;
     private Vector3dc lookTarget;
 
-    public BoneAxisMoveManipulator(PartBone bone, String name, RGBLike color, Vector3dc axis) {
+    public PositionAxisTool(PositionBone bone, String name, RGBLike color, Vector3dc axis) {
         this.bone = bone;
         this.session = bone.session();
         this.player = bone.session().getPlayer();
@@ -46,26 +45,21 @@ public class BoneAxisMoveManipulator implements Manipulator {
 
     @Override
     public void refresh() {
-        bone.getRotation().transform(axis, direction);
-        bone.getAnchor().fma(-2, direction, negativeHandle);
-        bone.getAnchor().fma(2, direction, positiveHandle);
+        bone.getPosition().fma(-2, axis, negativeHandle);
+        bone.getPosition().fma(2, axis, positiveHandle);
         Vector3dc eyePosition = player.getEyePosition();
         player.getEyeRotation().transform(0, 0, session.getRange(), lookRayEnd).add(eyePosition);
-        updateLookRayPoint(negativeHandle, negativeLookRayPoint);
-        updateLookRayPoint(positiveHandle, positiveLookRayPoint);
+        double d = Intersectiond.findClosestPointsLineSegments(
+                eyePosition.x(), eyePosition.y(), eyePosition.z(),
+                lookRayEnd.x(), lookRayEnd.y(), lookRayEnd.z(),
+                negativeHandle.x, negativeHandle.y, negativeHandle.z,
+                positiveHandle.x, positiveHandle.y, positiveHandle.z,
+                lookRayPoint,
+                handlePoint
+        );
         double threshold = session.getLookThreshold();
-        boolean lookingAtNegative = negativeLookRayPoint.distanceSquared(negativeHandle) < threshold * threshold;
-        boolean lookingAtPositive = positiveLookRayPoint.distanceSquared(positiveHandle) < threshold * threshold;
-        if (lookingAtNegative && lookingAtPositive) {
-            if (negativeLookRayPoint.distanceSquared(eyePosition) < positiveLookRayPoint.distanceSquared(eyePosition)) {
-                lookTarget = negativeLookRayPoint;
-            } else {
-                lookTarget = positiveLookRayPoint;
-            }
-        } else if (lookingAtNegative) {
-            lookTarget = negativeLookRayPoint;
-        } else if (lookingAtPositive) {
-            lookTarget = positiveLookRayPoint;
+        if (d < threshold * threshold) {
+            lookTarget = lookRayPoint;
         } else {
             lookTarget = null;
         }
@@ -81,19 +75,19 @@ public class BoneAxisMoveManipulator implements Manipulator {
     @Override
     public Component update() {
         cursor.update(false);
-        double t = session.snap(cursor.get().sub(start, temp).dot(direction));
+        double t = session.snap(cursor.get().sub(start, temp).dot(axis));
         EasArmorStand entity = session.getEntity();
-        origin.fma(t, direction, temp);
+        origin.fma(t, axis, temp);
         if (!session.canMove(temp)) {
             return null;
         }
         if (!entity.teleport(temp, entity.getYaw(), 0)) {
             return null;
         }
-        start.fma(t, direction, currentHandle);
+        start.fma(t, axis, currentHandle);
         bone.refresh();
-        bone.getAnchor().fma(-2, direction, negativeHandle);
-        bone.getAnchor().fma(2, direction, positiveHandle);
+        bone.getPosition().fma(-2, axis, negativeHandle);
+        bone.getPosition().fma(2, axis, positiveHandle);
         return Component.text(t, color);
     }
 
@@ -105,8 +99,7 @@ public class BoneAxisMoveManipulator implements Manipulator {
 
     @Override
     public void showHandles() {
-        player.showPoint(negativeHandle, color);
-        player.showPoint(positiveHandle, color);
+        player.showLine(negativeHandle, positiveHandle, color, true);
     }
 
     @Override
@@ -117,16 +110,7 @@ public class BoneAxisMoveManipulator implements Manipulator {
 
     @Override
     public Vector3dc getTarget() {
-        return bone.getAnchor();
-    }
-
-    private void updateLookRayPoint(Vector3dc handle, Vector3d dest) {
-        Vector3dc eye = player.getEyePosition();
-        Intersectiond.findClosestPointOnLineSegment(
-                eye.x(), eye.y(), eye.z(),
-                lookRayEnd.x(), lookRayEnd.y(), lookRayEnd.z(),
-                handle.x(), handle.y(), handle.z(),
-                dest);
+        return bone.getPosition();
     }
 
     @Override

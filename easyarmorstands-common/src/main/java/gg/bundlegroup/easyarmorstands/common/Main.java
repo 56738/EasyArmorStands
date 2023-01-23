@@ -5,21 +5,21 @@ import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.meta.SimpleCommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.services.types.ConsumerService;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.command.BoneArgumentParser;
-import gg.bundlegroup.easyarmorstands.common.command.ManipulatorArgumentParser;
 import gg.bundlegroup.easyarmorstands.common.command.NoSessionException;
 import gg.bundlegroup.easyarmorstands.common.command.PipelineExceptionHandler;
 import gg.bundlegroup.easyarmorstands.common.command.RequiresFeature;
 import gg.bundlegroup.easyarmorstands.common.command.SessionInjector;
 import gg.bundlegroup.easyarmorstands.common.command.SessionPreprocessor;
-import gg.bundlegroup.easyarmorstands.common.bone.Bone;
-import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
+import gg.bundlegroup.easyarmorstands.common.command.ToolArgumentParser;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.session.SessionListener;
 import gg.bundlegroup.easyarmorstands.common.session.SessionManager;
+import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -78,8 +78,8 @@ public class Main implements Closeable {
                 p -> new BoneArgumentParser());
 
         commandManager.parserRegistry().registerParserSupplier(
-                TypeToken.get(Manipulator.class),
-                p -> new ManipulatorArgumentParser());
+                TypeToken.get(Tool.class),
+                p -> new ToolArgumentParser());
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> SimpleCommandMeta.empty());

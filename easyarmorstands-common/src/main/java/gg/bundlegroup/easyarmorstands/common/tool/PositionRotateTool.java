@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.manipulator;
+package gg.bundlegroup.easyarmorstands.common.tool;
 
 import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
@@ -8,12 +8,12 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class PositionRotateManipulator extends AxisRotateManipulator {
+public class PositionRotateTool extends AxisRotateTool {
     private final PositionBone bone;
     private final Session session;
     private float initialYaw;
 
-    public PositionRotateManipulator(PositionBone bone, String name, RGBLike color) {
+    public PositionRotateTool(PositionBone bone, String name, RGBLike color) {
         super(bone, name, color, new Vector3d(0, 1, 0), LineMode.NONE);
         this.bone = bone;
         this.session = bone.getSession();

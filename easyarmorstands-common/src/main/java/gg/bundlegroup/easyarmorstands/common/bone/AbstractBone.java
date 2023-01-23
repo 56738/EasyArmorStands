@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.bone;
 
-import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
+import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -13,8 +13,8 @@ import java.util.Map;
 public abstract class AbstractBone implements Bone {
     protected final Session session;
     protected final Vector3d position = new Vector3d();
-    private final Map<String, Manipulator> manipulators = new HashMap<>();
-    private Manipulator manipulator;
+    private final Map<String, Tool> tools = new HashMap<>();
+    private Tool tool;
     private boolean active;
 
     public AbstractBone(Session session) {
@@ -22,13 +22,13 @@ public abstract class AbstractBone implements Bone {
     }
 
     @Override
-    public void addManipulator(String name, Manipulator manipulator) {
-        manipulators.put(name, manipulator);
+    public void addTool(String name, Tool tool) {
+        tools.put(name, tool);
     }
 
     @Override
-    public Map<String, Manipulator> getManipulators() {
-        return manipulators;
+    public Map<String, Tool> getTools() {
+        return tools;
     }
 
     @Override
@@ -39,33 +39,33 @@ public abstract class AbstractBone implements Bone {
     @Override
     public void start() {
         this.active = false;
-        this.manipulator = null;
+        this.tool = null;
     }
 
     @Override
     public void update() {
         if (this.active) {
-            Component component = manipulator.update();
-            manipulator.show();
+            Component component = tool.update();
+            tool.show();
             if (component != null) {
                 session.getPlayer().sendActionBar(component);
             }
         } else {
-            Manipulator bestManipulator = null;
+            Tool bestTool = null;
             double bestDistance = Double.POSITIVE_INFINITY;
-            for (Manipulator manipulator : manipulators.values()) {
-                manipulator.refresh();
-                manipulator.showHandles();
-                Vector3dc target = manipulator.getLookTarget();
+            for (Tool tool : tools.values()) {
+                tool.refresh();
+                tool.showHandles();
+                Vector3dc target = tool.getLookTarget();
                 if (target != null) {
                     double distance = target.distanceSquared(session.getPlayer().getEyePosition());
                     if (distance < bestDistance) {
-                        bestManipulator = manipulator;
+                        bestTool = tool;
                         bestDistance = distance;
                     }
                 }
             }
-            this.manipulator = bestManipulator;
+            this.tool = bestTool;
         }
     }
 
@@ -73,12 +73,12 @@ public abstract class AbstractBone implements Bone {
     public void onRightClick() {
         if (active) {
             active = false;
-        } else if (manipulator != null) {
-            Vector3dc target = manipulator.getLookTarget();
+        } else if (tool != null) {
+            Vector3dc target = tool.getLookTarget();
             if (target != null) {
                 active = true;
-                manipulator.refresh();
-                manipulator.start(target);
+                tool.refresh();
+                tool.start(target);
             }
         }
     }
@@ -86,7 +86,7 @@ public abstract class AbstractBone implements Bone {
     @Override
     public boolean onLeftClick() {
         if (active) {
-            manipulator.abort();
+            tool.abort();
             session.getPlayer().sendActionBar(Component.empty());
             active = false;
             return true;
@@ -95,11 +95,11 @@ public abstract class AbstractBone implements Bone {
     }
 
     @Override
-    public void select(Manipulator manipulator) {
+    public void select(Tool tool) {
         this.active = true;
-        this.manipulator = manipulator;
-        manipulator.refresh();
-        manipulator.start(manipulator.getTarget());
+        this.tool = tool;
+        tool.refresh();
+        tool.start(tool.getTarget());
     }
 
     @Override
@@ -109,10 +109,10 @@ public abstract class AbstractBone implements Bone {
 
     @Override
     public Component title() {
-        if (manipulator == null) {
+        if (tool == null) {
             return Component.empty();
         }
-        return manipulator.component();
+        return tool.component();
     }
 
     @Override

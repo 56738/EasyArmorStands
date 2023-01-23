@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.manipulator;
+package gg.bundlegroup.easyarmorstands.common.tool;
 
 import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
@@ -14,7 +14,7 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public abstract class AxisRotateManipulator implements Manipulator {
+public abstract class AxisRotateTool implements Tool {
     private final Session session;
     private final EasPlayer player;
     private final Component name;
@@ -36,7 +36,7 @@ public abstract class AxisRotateManipulator implements Manipulator {
     private boolean valid;
     private Vector3dc lookTarget;
 
-    public AxisRotateManipulator(Bone bone, String name, RGBLike color, Vector3dc axis, LineMode lineMode) {
+    public AxisRotateTool(Bone bone, String name, RGBLike color, Vector3dc axis, LineMode lineMode) {
         this.session = bone.session();
         this.player = bone.session().getPlayer();
         this.lineMode = lineMode;

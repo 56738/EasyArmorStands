@@ -7,7 +7,7 @@ import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import gg.bundlegroup.easyarmorstands.common.bone.Bone;
-import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
+import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
@@ -184,14 +184,14 @@ public class SessionCommands {
             EasCommandSender sender,
             Session session,
             @Argument("bone") Bone bone,
-            @Argument("tool") Manipulator manipulator
+            @Argument("tool") Tool tool
     ) {
-        session.setBone(bone, manipulator);
+        session.setBone(bone, tool);
         sender.sendMessage(Component.text()
                 .content("Selected bone: ")
                 .append(bone.subtitle())
                 .append(Component.text(": "))
-                .append(manipulator.component())
+                .append(tool.component())
                 .color(NamedTextColor.GREEN));
     }
 }

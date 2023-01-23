@@ -2,15 +2,15 @@ package gg.bundlegroup.easyarmorstands.common.session;
 
 import gg.bundlegroup.easyarmorstands.common.bone.PartBone;
 import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
-import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisMoveManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisRotateManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.PositionAxisManipulator;
-import gg.bundlegroup.easyarmorstands.common.manipulator.PositionRotateManipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
+import gg.bundlegroup.easyarmorstands.common.tool.BoneAxisMoveTool;
+import gg.bundlegroup.easyarmorstands.common.tool.BoneAxisRotateTool;
+import gg.bundlegroup.easyarmorstands.common.tool.PositionAxisTool;
+import gg.bundlegroup.easyarmorstands.common.tool.PositionRotateTool;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -71,30 +71,30 @@ public class SessionListener implements EasListener {
 
     private PositionBone createPositionBone(Session session) {
         PositionBone bone = new PositionBone(session);
-        bone.addManipulator("rotate", new PositionRotateManipulator(bone,
+        bone.addTool("rotate", new PositionRotateTool(bone,
                 "Rotate", NamedTextColor.GOLD));
-        bone.addManipulator("x", new PositionAxisManipulator(bone,
+        bone.addTool("x", new PositionAxisTool(bone,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addManipulator("y", new PositionAxisManipulator(bone,
+        bone.addTool("y", new PositionAxisTool(bone,
                 "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addManipulator("z", new PositionAxisManipulator(bone,
+        bone.addTool("z", new PositionAxisTool(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         return bone;
     }
 
     private PartBone createPartBone(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
         PartBone bone = new PartBone(session, part, component, offset, length);
-        bone.addManipulator("x", new BoneAxisRotateManipulator(bone,
+        bone.addTool("x", new BoneAxisRotateTool(bone,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addManipulator("y", new BoneAxisRotateManipulator(bone,
+        bone.addTool("y", new BoneAxisRotateTool(bone,
                 "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addManipulator("z", new BoneAxisRotateManipulator(bone,
+        bone.addTool("z", new BoneAxisRotateTool(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        bone.addManipulator("mx", new BoneAxisMoveManipulator(bone,
+        bone.addTool("mx", new BoneAxisMoveTool(bone,
                 "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addManipulator("my", new BoneAxisMoveManipulator(bone,
+        bone.addTool("my", new BoneAxisMoveTool(bone,
                 "Move Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addManipulator("mz", new BoneAxisMoveManipulator(bone,
+        bone.addTool("mz", new BoneAxisMoveTool(bone,
                 "Move Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         return bone;
     }
