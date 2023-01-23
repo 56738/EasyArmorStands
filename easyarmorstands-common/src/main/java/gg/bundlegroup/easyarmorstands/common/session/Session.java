@@ -33,8 +33,8 @@ public class Session {
     private int clickTicks = 5;
     private Bone bone;
     private boolean active;
-    private double snapIncrement;
-    private double angleSnapIncrement;
+    private double snapIncrement = 1.0 / 16;
+    private double angleSnapIncrement = 360.0 / 256;
 
     public Session(EasPlayer player, EasArmorStand entity) {
         this.player = player;
