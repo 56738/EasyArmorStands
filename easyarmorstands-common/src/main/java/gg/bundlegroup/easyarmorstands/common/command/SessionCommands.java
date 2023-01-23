@@ -154,7 +154,13 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.snap")
     public void setAngleSnapIncrement(
             EasCommandSender sender, Session session,
-            @Argument(value = "value", defaultValue = "1.40625") @Range(min = "0", max = "90") double value) {
+            @Argument(value = "value") @Range(min = "0", max = "90") Double value) {
+        if (value == null) {
+            value = Session.DEFAULT_ANGLE_SNAP_INCREMENT;
+            if (value == session.getAngleSnapIncrement()) {
+                value = 0.0;
+            }
+        }
         session.setAngleSnapIncrement(value);
         sender.sendMessage(Component.text("Set angle snapping increment to " + value + "°", NamedTextColor.GREEN));
     }
@@ -163,7 +169,13 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.snap")
     public void setSnapIncrement(
             EasCommandSender sender, Session session,
-            @Argument(value = "value", defaultValue = "0.0625") @Range(min = "0", max = "10") double value) {
+            @Argument(value = "value") @Range(min = "0", max = "10") Double value) {
+        if (value == null) {
+            value = Session.DEFAULT_SNAP_INCREMENT;
+            if (value == session.getSnapIncrement()) {
+                value = 0.0;
+            }
+        }
         session.setSnapIncrement(value);
         sender.sendMessage(Component.text("Set movement snapping increment to " + value, NamedTextColor.GREEN));
     }

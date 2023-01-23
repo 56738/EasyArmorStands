@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Session {
+    public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
+    public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private final EasPlayer player;
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
@@ -34,8 +36,8 @@ public class Session {
     private int clickTicks = 5;
     private Bone bone;
     private boolean active;
-    private double snapIncrement = 1.0 / 16;
-    private double angleSnapIncrement = 360.0 / 256;
+    private double snapIncrement = DEFAULT_SNAP_INCREMENT;
+    private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
 
     public Session(EasPlayer player, EasArmorStand entity) {
         this.player = player;
