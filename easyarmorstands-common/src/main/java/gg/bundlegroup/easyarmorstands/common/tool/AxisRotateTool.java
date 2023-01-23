@@ -14,6 +14,9 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public abstract class AxisRotateTool implements Tool {
     private final Session session;
     private final EasPlayer player;
@@ -22,6 +25,7 @@ public abstract class AxisRotateTool implements Tool {
     private final Vector3dc axis;
     private final LineMode lineMode;
     private final double radius = 1;
+    private final NumberFormat format = new DecimalFormat("+0.00°;-0.00°");
 
     private final Vector3d axisDirection = new Vector3d();
     private final Vector3d negativeEnd = new Vector3d();
@@ -74,7 +78,7 @@ public abstract class AxisRotateTool implements Tool {
     @Override
     public void start(Vector3dc cursor) {
         this.cursor.start(anchor, cursor, axisDirection, false);
-        this.cursor.get().sub(anchor, initialOffset);
+        cursor.sub(anchor, initialOffset);
         valid = initialOffset.lengthSquared() >= 0.2 * 0.2;
     }
 
@@ -89,6 +93,7 @@ public abstract class AxisRotateTool implements Tool {
             degrees = 0;
             if (currentOffset.lengthSquared() >= 0.2 * 0.2) {
                 initialOffset.set(currentOffset);
+                valid = true;
             }
         }
         double angle = Math.toRadians(degrees);
@@ -96,7 +101,7 @@ public abstract class AxisRotateTool implements Tool {
                 .normalize(currentOffset.length())
                 .add(anchor);
         apply(angle, degrees);
-        return Component.text(degrees, color);
+        return Component.text(format.format(degrees), color);
     }
 
     @Override

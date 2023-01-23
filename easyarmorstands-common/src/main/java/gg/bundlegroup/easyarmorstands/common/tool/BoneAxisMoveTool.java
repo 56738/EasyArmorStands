@@ -13,6 +13,9 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class BoneAxisMoveTool implements Tool {
     private final PartBone bone;
     private final Session session;
@@ -20,6 +23,7 @@ public class BoneAxisMoveTool implements Tool {
     private final Component name;
     private final TextColor color;
     private final Vector3dc axis;
+    private final NumberFormat format = new DecimalFormat("+0.0000;-0.0000");
 
     private final Vector3d direction = new Vector3d();
     private final Vector3d negativeHandle = new Vector3d();
@@ -94,7 +98,7 @@ public class BoneAxisMoveTool implements Tool {
         bone.refresh();
         bone.getAnchor().fma(-2, direction, negativeHandle);
         bone.getAnchor().fma(2, direction, positiveHandle);
-        return Component.text(t, color);
+        return Component.text(format.format(t), color);
     }
 
     @Override

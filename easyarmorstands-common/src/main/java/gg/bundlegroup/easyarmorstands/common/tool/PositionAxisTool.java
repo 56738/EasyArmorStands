@@ -13,6 +13,9 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class PositionAxisTool implements Tool {
     private final PositionBone bone;
     private final Session session;
@@ -20,6 +23,7 @@ public class PositionAxisTool implements Tool {
     private final Component name;
     private final TextColor color;
     private final Vector3dc axis;
+    private final NumberFormat format = new DecimalFormat("+0.0000;-0.0000");
 
     private final Vector3d negativeHandle = new Vector3d();
     private final Vector3d positiveHandle = new Vector3d();
@@ -88,7 +92,7 @@ public class PositionAxisTool implements Tool {
         bone.refresh();
         bone.getPosition().fma(-2, axis, negativeHandle);
         bone.getPosition().fma(2, axis, positiveHandle);
-        return Component.text(t, color);
+        return Component.text(format.format(t), color);
     }
 
     @Override
