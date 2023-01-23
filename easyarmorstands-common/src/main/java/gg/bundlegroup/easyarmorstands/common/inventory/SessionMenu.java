@@ -7,6 +7,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasMaterial;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
+import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
 
@@ -35,22 +36,33 @@ public class SessionMenu implements EasInventoryListener {
     }
 
     private void initialize() {
+        EasPlayer player = session.getPlayer();
         EasPlatform platform = inventory.platform();
         Arrays.fill(slots, new DisabledSlot(inventory, platform.createItem(
                 EasMaterial.LIGHT_BLUE_STAINED_GLASS_PANE,
                 Component.empty(), Collections.emptyList())));
-        setSlot(2, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.HEAD));
-        if (platform.hasSlot(EasArmorEntity.Slot.OFF_HAND)) {
-            setSlot(3, 0, new EquipmentItemSlot(this, EasArmorEntity.Slot.OFF_HAND));
+        if (player.hasPermission("easyarmorstands.edit.equipment")) {
+            setSlot(2, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.HEAD));
+            if (platform.hasSlot(EasArmorEntity.Slot.OFF_HAND)) {
+                setSlot(3, 0, new EquipmentItemSlot(this, EasArmorEntity.Slot.OFF_HAND));
+            }
+            setSlot(3, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.BODY));
+            setSlot(3, 2, new EquipmentItemSlot(this, EasArmorEntity.Slot.MAIN_HAND));
+            setSlot(4, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.LEGS));
+            setSlot(5, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.FEET));
         }
-        setSlot(3, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.BODY));
-        setSlot(3, 2, new EquipmentItemSlot(this, EasArmorEntity.Slot.MAIN_HAND));
-        setSlot(4, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.LEGS));
-        setSlot(5, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.FEET));
-        setSlot(3, 4, new ToggleArmsSlot(this));
-        setSlot(4, 4, new ToggleSizeSlot(this));
-        setSlot(5, 4, new ToggleBasePlateSlot(this));
-        setSlot(5, 3, new ToggleGravitySlot(this));
+        if (player.hasPermission("easyarmorstands.edit.arms")) {
+            setSlot(3, 4, new ToggleArmsSlot(this));
+        }
+        if (player.hasPermission("easyarmorstands.edit.size")) {
+            setSlot(4, 4, new ToggleSizeSlot(this));
+        }
+        if (player.hasPermission("easyarmorstands.edit.baseplate")) {
+            setSlot(5, 4, new ToggleBasePlateSlot(this));
+        }
+        if (player.hasPermission("easyarmorstands.edit.gravity")) {
+            setSlot(5, 3, new ToggleGravitySlot(this));
+        }
         setSlot(3, 7, new SelectHandleSlot(this,
                 session.getHandles().get("head"),
                 EasMaterial.PLAYER_HEAD,
@@ -79,14 +91,17 @@ public class SessionMenu implements EasInventoryListener {
                 session.getHandles().get("rightleg"),
                 EasMaterial.LEVER,
                 Component.text("right leg")));
-        addButton(new ToggleVisibilitySlot(this));
-        if (platform.hasFeature(EasFeature.ARMOR_STAND_LOCK)) {
+        if (player.hasPermission("easyarmorstands.edit.visible")) {
+            addButton(new ToggleVisibilitySlot(this));
+        }
+        if (platform.hasFeature(EasFeature.ARMOR_STAND_LOCK) && player.hasPermission("easyarmorstands.edit.lock")) {
             addButton(new ToggleLockSlot(this));
         }
-        if (platform.hasFeature(EasFeature.ENTITY_GLOW)) {
+        if (platform.hasFeature(EasFeature.ENTITY_GLOW) && player.hasPermission("easyarmorstands.edit.glow")) {
             addButton(new ToggleGlowingSlot(this));
         }
-        if (platform.hasFeature(EasFeature.ENTITY_INVULNERABLE)) {
+        if (platform.hasFeature(EasFeature.ENTITY_INVULNERABLE) &&
+                player.hasPermission("easyarmorstands.edit.invulnerable")) {
             addButton(new ToggleInvulnerabilitySlot(this));
         }
         platform.onInventoryInitialize(this);

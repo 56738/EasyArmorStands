@@ -20,7 +20,7 @@ public class TrainCartsIntegration {
     }
 
     @CommandMethod("eas model [query]")
-    @CommandPermission("easyarmorstands.traincarts")
+    @CommandPermission("easyarmorstands.traincarts.model")
     public void openModelMenu(EasPlayer player, Session session, @Argument("query") @Greedy String query) {
         if (session == null) {
             return;

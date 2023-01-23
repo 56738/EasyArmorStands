@@ -54,7 +54,8 @@ public class ToggleGravitySlot extends ToggleSlot {
         EasArmorStand entity = menu.getSession().getEntity();
         boolean gravity = !entity.hasGravity();
         entity.setGravity(gravity);
-        if (gravity) {
+        if (gravity && !entity.canTick() &&
+                menu.getSession().getPlayer().hasPermission("easyarmorstands.edit.cantick")) {
             entity.setCanTick(true);
         }
     }

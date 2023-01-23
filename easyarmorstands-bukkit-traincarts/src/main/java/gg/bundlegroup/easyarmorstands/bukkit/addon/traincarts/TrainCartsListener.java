@@ -13,6 +13,8 @@ public class TrainCartsListener implements Listener {
 
     @EventHandler
     public void onMenuInitialize(SessionMenuInitializeEvent event) {
-        event.getMenu().addEquipmentButton(new TrainCartsModelListingSlot(integration, event.getMenu()));
+        if (event.getPlayer().hasPermission("easyarmorstands.traincarts.model")) {
+            event.getMenu().addEquipmentButton(new TrainCartsModelListingSlot(integration, event.getMenu()));
+        }
     }
 }
