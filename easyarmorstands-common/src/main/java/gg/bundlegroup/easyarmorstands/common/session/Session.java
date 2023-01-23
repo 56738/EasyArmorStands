@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Session {
-    private static final double RANGE = 5;
     private final EasPlayer player;
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
@@ -163,7 +162,7 @@ public class Session {
             double deviationSquared = temp.lengthSquared();
             double threshold = getLookThreshold();
             if (deviationSquared < threshold * threshold) {
-                if (distance > 0 && distance < bestDistance && distance < RANGE) {
+                if (distance > 0 && distance < bestDistance && distance < getRange()) {
                     bestBone = candidate;
                     bestDistance = distance;
                 }
@@ -215,7 +214,7 @@ public class Session {
     }
 
     public double getRange() {
-        return 5;
+        return 10;
     }
 
     public double getLookThreshold() {
