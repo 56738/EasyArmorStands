@@ -47,7 +47,9 @@ public abstract class AbstractHandle implements Handle {
         if (this.active) {
             Component component = manipulator.update();
             manipulator.show();
-            session.getPlayer().sendActionBar(component);
+            if (component != null) {
+                session.getPlayer().sendActionBar(component);
+            }
         } else {
             Manipulator bestManipulator = null;
             double bestDistance = Double.POSITIVE_INFINITY;

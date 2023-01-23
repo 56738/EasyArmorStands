@@ -40,7 +40,8 @@ public class TestEntity extends TestWrapper implements EasEntity {
     }
 
     @Override
-    public void teleport(Vector3dc position, float yaw, float pitch) {
+    public boolean teleport(Vector3dc position, float yaw, float pitch) {
+        return true;
     }
 
     public boolean isPersistent() {

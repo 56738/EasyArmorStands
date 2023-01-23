@@ -76,9 +76,16 @@ public class PositionAxisManipulator implements Manipulator {
     public Component update() {
         cursor.update(false);
         double t = session.snap(cursor.get().sub(start, temp).dot(axis));
-        start.fma(t, axis, currentHandle);
         EasArmorStand entity = session.getEntity();
-        entity.teleport(origin.fma(t, axis, temp), entity.getYaw(), 0);
+        origin.fma(t, axis, temp);
+        if (!session.canMove(temp)) {
+            return null;
+        }
+        if (!entity.teleport(temp, entity.getYaw(), 0)) {
+            return null;
+        }
+        start.fma(t, axis, currentHandle);
+        handle.refresh();
         handle.getPosition().fma(-2, axis, negativeHandle);
         handle.getPosition().fma(2, axis, positiveHandle);
         return Component.text(t, color);

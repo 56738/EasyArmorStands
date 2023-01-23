@@ -15,6 +15,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasPlatform;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
+import org.joml.Vector3dc;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -73,6 +74,11 @@ public class TestPlatform implements EasPlatform {
 
     @Override
     public boolean canStartSession(EasPlayer player, EasArmorStand armorStand) {
+        return true;
+    }
+
+    @Override
+    public boolean canMoveSession(Session session, Vector3dc position) {
         return true;
     }
 

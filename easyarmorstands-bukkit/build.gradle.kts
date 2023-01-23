@@ -9,7 +9,7 @@ bukkit {
     main = "gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands"
     apiVersion = "1.13"
     author = "56738"
-    softDepend = listOf("HeadDatabase", "Train_Carts")
+    softDepend = listOf("HeadDatabase", "PlotSquared", "Train_Carts")
 }
 
 dependencies {
@@ -24,6 +24,7 @@ dependencies {
     }
     runtimeOnly(project(":easyarmorstands-bukkit-headdatabase"))
     runtimeOnly(project(":easyarmorstands-bukkit-paper"))
+    runtimeOnly(project(":easyarmorstands-bukkit-plotsquared"))
     runtimeOnly(project(":easyarmorstands-bukkit-traincarts"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_8"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_9"))

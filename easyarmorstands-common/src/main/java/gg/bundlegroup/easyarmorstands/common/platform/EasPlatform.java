@@ -4,6 +4,7 @@ import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.text.Component;
+import org.joml.Vector3dc;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +27,8 @@ public interface EasPlatform {
     void registerTickTask(Runnable task);
 
     boolean canStartSession(EasPlayer player, EasArmorStand armorStand);
+
+    boolean canMoveSession(Session session, Vector3dc position);
 
     void onSessionStarted(Session session);
 

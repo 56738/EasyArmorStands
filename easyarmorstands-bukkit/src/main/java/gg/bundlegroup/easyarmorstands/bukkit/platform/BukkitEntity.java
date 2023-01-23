@@ -34,9 +34,12 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
     }
 
     @Override
-    public void teleport(Vector3dc position, float yaw, float pitch) {
-        get().teleport(new Location(get().getWorld(), position.x(), position.y(), position.z(), yaw, pitch));
+    public boolean teleport(Vector3dc position, float yaw, float pitch) {
+        if (!get().teleport(new Location(get().getWorld(), position.x(), position.y(), position.z(), yaw, pitch))) {
+            return false;
+        }
         update();
+        return true;
     }
 
     @Override

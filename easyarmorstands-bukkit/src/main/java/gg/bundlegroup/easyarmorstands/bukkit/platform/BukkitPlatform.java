@@ -3,6 +3,7 @@ package gg.bundlegroup.easyarmorstands.bukkit.platform;
 import cloud.commandframework.CommandManager;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMenuInitializeEvent;
+import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMoveEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandLockAccessor;
@@ -48,6 +49,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -227,6 +229,13 @@ public class BukkitPlatform implements EasPlatform, Listener {
         SessionStartEvent event = new SessionStartEvent(
                 ((BukkitPlayer) player).get(),
                 ((BukkitArmorStand) armorStand).get());
+        plugin.getServer().getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    @Override
+    public boolean canMoveSession(Session session, Vector3dc position) {
+        SessionMoveEvent event = new SessionMoveEvent(session, position);
         plugin.getServer().getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

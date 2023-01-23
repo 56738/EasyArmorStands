@@ -16,6 +16,7 @@ import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -219,6 +220,10 @@ public class Session {
 
     public double getLookThreshold() {
         return 0.15;
+    }
+
+    public boolean canMove(Vector3dc position) {
+        return player.platform().canMoveSession(this, position);
     }
 
     public void startMoving() {

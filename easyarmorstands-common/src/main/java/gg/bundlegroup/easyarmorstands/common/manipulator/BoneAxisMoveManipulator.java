@@ -82,9 +82,16 @@ public class BoneAxisMoveManipulator implements Manipulator {
     public Component update() {
         cursor.update(false);
         double t = session.snap(cursor.get().sub(start, temp).dot(direction));
-        start.fma(t, direction, currentHandle);
         EasArmorStand entity = session.getEntity();
-        entity.teleport(origin.fma(t, direction, temp), entity.getYaw(), 0);
+        origin.fma(t, direction, temp);
+        if (!session.canMove(temp)) {
+            return null;
+        }
+        if (!entity.teleport(temp, entity.getYaw(), 0)) {
+            return null;
+        }
+        start.fma(t, direction, currentHandle);
+        handle.refresh();
         handle.getAnchor().fma(-2, direction, negativeHandle);
         handle.getAnchor().fma(2, direction, positiveHandle);
         return Component.text(t, color);
