@@ -42,6 +42,10 @@ public class BukkitListener implements Listener {
         this.equipmentAccessor = platform.equipmentAccessor();
     }
 
+    public boolean onLeftClick(Player player, ItemStack item) {
+        return listener.onLeftClick(platform.getPlayer(player), platform.getItem(item));
+    }
+
     @EventHandler
     public void onLeftClick(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -49,7 +53,7 @@ public class BukkitListener implements Listener {
             return;
         }
 
-        if (listener.onLeftClick(platform.getPlayer(event.getPlayer()), platform.getItem(event.getItem()))) {
+        if (onLeftClick(event.getPlayer(), event.getItem())) {
             event.setCancelled(true);
         }
     }
@@ -94,14 +98,22 @@ public class BukkitListener implements Listener {
 
     @EventHandler
     public void onRightClickEntity(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+        BukkitPlayer bukkitPlayer = platform.getPlayer(player);
         Entity entity = event.getRightClicked();
         if (!(entity instanceof ArmorStand)) {
+            EntityEquipment equipment = player.getEquipment();
+            for (EasArmorEntity.Slot hand : hands) {
+                ItemStack item = equipmentAccessor.getItem(equipment, hand);
+                BukkitItem bukkitItem = platform.getItem(item);
+                if (listener.onRightClick(bukkitPlayer, bukkitItem)) {
+                    event.setCancelled(true);
+                }
+            }
             return;
         }
         ArmorStand armorStand = (ArmorStand) entity;
 
-        Player player = event.getPlayer();
-        BukkitPlayer bukkitPlayer = platform.getPlayer(player);
         BukkitArmorStand bukkitArmorStand = platform.getArmorStand(armorStand);
         EntityEquipment equipment = player.getEquipment();
         for (EasArmorEntity.Slot hand : hands) {

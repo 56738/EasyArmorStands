@@ -49,6 +49,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final BukkitAudiences adventure;
     private final CommandManager<EasCommandSender> commandManager;
     private final Map<Player, BukkitPlayer> players = new HashMap<>();
+    private final List<BukkitListener> listeners = new ArrayList<>();
     private final EntityGlowSetter entityGlowSetter;
     private final EntityHider entityHider;
     private final EntityPersistenceSetter entityPersistenceSetter;
@@ -198,7 +200,9 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     @Override
     public void registerListener(EasListener listener) {
-        plugin.getServer().getPluginManager().registerEvents(new BukkitListener(this, listener), plugin);
+        BukkitListener bukkitListener = new BukkitListener(this, listener);
+        listeners.add(bukkitListener);
+        plugin.getServer().getPluginManager().registerEvents(bukkitListener, plugin);
     }
 
     @Override
@@ -242,6 +246,10 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public Plugin plugin() {
         return plugin;
+    }
+
+    public List<BukkitListener> listeners() {
+        return Collections.unmodifiableList(listeners);
     }
 
     public EntityGlowSetter entityGlowSetter() {

@@ -7,6 +7,7 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import gg.bundlegroup.easyarmorstands.bukkit.addon.Addon;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmSwingListener;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
@@ -78,6 +79,11 @@ public class EasyArmorStands extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(platform, this);
+
+        ArmSwingListener armSwingListener = loadFeature(ArmSwingListener.Provider.class);
+        if (armSwingListener != null) {
+            getServer().getPluginManager().registerEvents(armSwingListener, this);
+        }
 
         main = new Main(platform);
 
