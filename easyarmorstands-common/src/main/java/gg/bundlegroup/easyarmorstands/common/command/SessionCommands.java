@@ -107,6 +107,30 @@ public class SessionCommands {
         }
     }
 
+    @CommandMethod("lock <locked>")
+    @CommandPermission("easyarmorstands.edit.lock")
+    @RequiresFeature(EasFeature.ARMOR_STAND_LOCK)
+    public void setLocked(EasCommandSender sender, Session session, @Argument("locked") boolean locked) {
+        session.getEntity().setLocked(locked);
+        if (locked) {
+            sender.sendMessage(Component.text("Armor stand items locked", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Armor stand items unlocked", NamedTextColor.GREEN));
+        }
+    }
+
+    @CommandMethod("invulnerable <invulnerable>")
+    @CommandPermission("easyarmorstands.edit.invulnerable")
+    @RequiresFeature(EasFeature.ENTITY_INVULNERABLE)
+    public void setInvulnerable(EasCommandSender sender, Session session, @Argument("invulnerable") boolean invulnerable) {
+        session.getEntity().setInvulnerable(invulnerable);
+        if (invulnerable) {
+            sender.sendMessage(Component.text("Armor stand is invulnerable", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Armor stand is vulnerable", NamedTextColor.GREEN));
+        }
+    }
+
     @CommandMethod("copy")
     @CommandPermission("easyarmorstands.copy")
     public void copy(EasCommandSender sender, Session session) {
