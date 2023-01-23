@@ -12,10 +12,6 @@ public interface EasArmorStand extends EasArmorEntity {
 
     void setLocked(boolean locked);
 
-    boolean isInvulnerable();
-
-    void setInvulnerable(boolean invulnerable);
-
     boolean hasBasePlate();
 
     void setBasePlate(boolean basePlate);

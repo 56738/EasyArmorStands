@@ -1,7 +1,8 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandLockAccessor;
+import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Vector3d;
@@ -9,10 +10,12 @@ import org.joml.Vector3dc;
 
 public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements EasArmorStand {
     private final ArmorStandCanTickAccessor armorStandCanTickAccessor;
+    private final ArmorStandLockAccessor armorStandLockAccessor;
 
     public BukkitArmorStand(BukkitPlatform platform, ArmorStand armorStand) {
         super(platform, armorStand);
         this.armorStandCanTickAccessor = platform.armorStandCanTickAccessor();
+        this.armorStandLockAccessor = platform.armorStandLockAccessor();
     }
 
     @Override
@@ -27,24 +30,18 @@ public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements E
 
     @Override
     public boolean isLocked() {
-        // TODO
-        return false;
+        if (armorStandLockAccessor == null) {
+            return false;
+        }
+        return armorStandLockAccessor.isLocked(get());
     }
 
     @Override
     public void setLocked(boolean locked) {
-        // TODO
-    }
-
-    @Override
-    public boolean isInvulnerable() {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void setInvulnerable(boolean invulnerable) {
-        // TODO
+        if (armorStandLockAccessor == null) {
+            return;
+        }
+        armorStandLockAccessor.setLocked(get(), locked);
     }
 
     @Override

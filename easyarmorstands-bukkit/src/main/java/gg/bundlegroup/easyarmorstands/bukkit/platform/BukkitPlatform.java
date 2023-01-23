@@ -5,8 +5,10 @@ import gg.bundlegroup.easyarmorstands.bukkit.event.SessionInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMenuInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandLockAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityInvulnerableAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityNameAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntitySpawner;
@@ -69,6 +71,8 @@ public class BukkitPlatform implements EasPlatform, Listener {
     private final EquipmentAccessor equipmentAccessor;
     private final EntityNameAccessor entityNameAccessor;
     private final ArmorStandCanTickAccessor armorStandCanTickAccessor;
+    private final ArmorStandLockAccessor armorStandLockAccessor;
+    private final EntityInvulnerableAccessor entityInvulnerableAccessor;
     private final ItemProvider itemProvider;
 
     public BukkitPlatform(Plugin plugin,
@@ -82,6 +86,8 @@ public class BukkitPlatform implements EasPlatform, Listener {
                           EquipmentAccessor equipmentAccessor,
                           EntityNameAccessor entityNameAccessor,
                           ArmorStandCanTickAccessor armorStandCanTickAccessor,
+                          ArmorStandLockAccessor armorStandLockAccessor,
+                          EntityInvulnerableAccessor entityInvulnerableAccessor,
                           ItemProvider itemProvider) {
         this.plugin = plugin;
         this.adventure = BukkitAudiences.create(plugin);
@@ -95,6 +101,8 @@ public class BukkitPlatform implements EasPlatform, Listener {
         this.equipmentAccessor = equipmentAccessor;
         this.entityNameAccessor = entityNameAccessor;
         this.armorStandCanTickAccessor = armorStandCanTickAccessor;
+        this.armorStandLockAccessor = armorStandLockAccessor;
+        this.entityInvulnerableAccessor = entityInvulnerableAccessor;
         this.itemProvider = itemProvider;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -148,8 +156,12 @@ public class BukkitPlatform implements EasPlatform, Listener {
         switch (feature) {
             case ENTITY_GLOW:
                 return entityGlowSetter != null;
+            case ENTITY_INVULNERABLE:
+                return entityInvulnerableAccessor != null;
             case ARMOR_STAND_CAN_TICK:
                 return armorStandCanTickAccessor != null;
+            case ARMOR_STAND_LOCK:
+                return armorStandLockAccessor != null;
             default:
                 return false;
         }
@@ -286,5 +298,13 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public ArmorStandCanTickAccessor armorStandCanTickAccessor() {
         return armorStandCanTickAccessor;
+    }
+
+    public ArmorStandLockAccessor armorStandLockAccessor() {
+        return armorStandLockAccessor;
+    }
+
+    public EntityInvulnerableAccessor entityInvulnerableAccessor() {
+        return entityInvulnerableAccessor;
     }
 }

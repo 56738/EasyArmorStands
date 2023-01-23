@@ -9,8 +9,10 @@ import cloud.commandframework.paper.PaperCommandManager;
 import gg.bundlegroup.easyarmorstands.bukkit.addon.Addon;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmSwingListener;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandLockAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityGlowSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
+import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityInvulnerableAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityNameAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityPersistenceSetter;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntitySpawner;
@@ -68,6 +70,8 @@ public class EasyArmorStands extends JavaPlugin {
                 loadFeature(EquipmentAccessor.Provider.class),
                 loadFeature(EntityNameAccessor.Provider.class),
                 loadFeature(ArmorStandCanTickAccessor.Provider.class),
+                loadFeature(ArmorStandLockAccessor.Provider.class),
+                loadFeature(EntityInvulnerableAccessor.Provider.class),
                 Objects.requireNonNull(loadFeature(ItemProvider.Provider.class), "Item provider not found"));
 
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {

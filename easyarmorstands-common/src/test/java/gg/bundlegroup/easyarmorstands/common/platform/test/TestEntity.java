@@ -12,6 +12,7 @@ public class TestEntity extends TestWrapper implements EasEntity {
     private boolean moved = true;
     private boolean persistent = true;
     private boolean glowing;
+    private boolean invulnerable;
     private Component customName = Component.empty();
     private boolean customNameVisible;
     private boolean removed;
@@ -59,6 +60,16 @@ public class TestEntity extends TestWrapper implements EasEntity {
     @Override
     public void setGlowing(boolean glowing) {
         this.glowing = glowing;
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        return invulnerable;
+    }
+
+    @Override
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
     }
 
     @Override

@@ -14,6 +14,10 @@ public interface EasEntity extends EasWrapper {
 
     void setGlowing(boolean glowing);
 
+    boolean isInvulnerable();
+
+    void setInvulnerable(boolean invulnerable);
+
     Component getCustomName();
 
     void setCustomName(Component customName);

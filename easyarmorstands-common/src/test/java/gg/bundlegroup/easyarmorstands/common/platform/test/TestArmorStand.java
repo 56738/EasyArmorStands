@@ -16,7 +16,6 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     private boolean gravity = true;
     private boolean small;
     private boolean locked;
-    private boolean invulnerable;
     private float yaw;
 
     public TestArmorStand(TestPlatform platform, TestWorld world) {
@@ -50,16 +49,6 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
-    }
-
-    @Override
-    public boolean isInvulnerable() {
-        return invulnerable;
-    }
-
-    @Override
-    public void setInvulnerable(boolean invulnerable) {
-        this.invulnerable = invulnerable;
     }
 
     @Override

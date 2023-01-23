@@ -80,11 +80,15 @@ public class SessionMenu implements EasInventoryListener {
                 EasMaterial.LEVER,
                 Component.text("right leg")));
         addButton(new ToggleVisibilitySlot(this));
-        addButton(new ToggleLockSlot(this));
+        if (platform.hasFeature(EasFeature.ARMOR_STAND_LOCK)) {
+            addButton(new ToggleLockSlot(this));
+        }
         if (platform.hasFeature(EasFeature.ENTITY_GLOW)) {
             addButton(new ToggleGlowingSlot(this));
         }
-        addButton(new ToggleInvulnerabilitySlot(this));
+        if (platform.hasFeature(EasFeature.ENTITY_INVULNERABLE)) {
+            addButton(new ToggleInvulnerabilitySlot(this));
+        }
         platform.onInventoryInitialize(this);
         initialized = true;
         for (int i = 0; i < slots.length; i++) {
