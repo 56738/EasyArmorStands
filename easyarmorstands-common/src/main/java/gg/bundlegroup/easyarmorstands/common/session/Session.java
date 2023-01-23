@@ -9,6 +9,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.tool.Tool;
+import gg.bundlegroup.easyarmorstands.common.util.Util;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
@@ -101,19 +102,12 @@ public class Session {
         }
     }
 
-    private double snap(double value, double increment) {
-        if (increment < 0.001) {
-            return value;
-        }
-        return Math.round(value / increment) * increment;
-    }
-
     public double snap(double value) {
-        return snap(value, snapIncrement);
+        return Util.snap(value, snapIncrement);
     }
 
     public double snapAngle(double value) {
-        return snap(value, angleSnapIncrement);
+        return Util.snap(value, angleSnapIncrement);
     }
 
     public boolean update() {
@@ -223,6 +217,14 @@ public class Session {
 
     public boolean canMove(Vector3dc position) {
         return player.platform().canMoveSession(this, position);
+    }
+
+    public boolean move(Vector3dc position) {
+        return move(position, entity.getYaw());
+    }
+
+    public boolean move(Vector3dc position, float yaw) {
+        return player.platform().canMoveSession(this, position) && entity.teleport(position, yaw, 0);
     }
 
     public void startMoving() {

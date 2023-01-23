@@ -1,12 +1,20 @@
 package gg.bundlegroup.easyarmorstands.common.util;
 
 import org.joml.Intersectiond;
+import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Util {
+    public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.####");
+    public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
+    public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
+
     public static Matrix3d fromEuler(Vector3dc angle, Matrix3d dest) {
         dest.rotationZYX(-angle.z(), -angle.y(), angle.x());
         return dest;
@@ -36,5 +44,12 @@ public class Util {
                     0.1);
         }
         return t;
+    }
+
+    public static double snap(double value, double increment) {
+        if (increment < 0.001) {
+            return value;
+        }
+        return Math.round(value / increment) * increment;
     }
 }

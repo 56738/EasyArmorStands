@@ -5,6 +5,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.util.Cursor3D;
+import gg.bundlegroup.easyarmorstands.common.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -13,9 +14,6 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 public class BoneAxisMoveTool implements Tool {
     private final PartBone bone;
     private final Session session;
@@ -23,7 +21,6 @@ public class BoneAxisMoveTool implements Tool {
     private final Component name;
     private final TextColor color;
     private final Vector3dc axis;
-    private final NumberFormat format = new DecimalFormat("+0.0000;-0.0000");
 
     private final Vector3d direction = new Vector3d();
     private final Vector3d negativeHandle = new Vector3d();
@@ -86,19 +83,15 @@ public class BoneAxisMoveTool implements Tool {
     public Component update() {
         cursor.update(false);
         double t = session.snap(cursor.get().sub(start, temp).dot(direction));
-        EasArmorStand entity = session.getEntity();
         origin.fma(t, direction, temp);
-        if (!session.canMove(temp)) {
-            return null;
-        }
-        if (!entity.teleport(temp, entity.getYaw(), 0)) {
+        if (!session.move(temp)) {
             return null;
         }
         start.fma(t, direction, currentHandle);
         bone.refresh();
         bone.getAnchor().fma(-2, direction, negativeHandle);
         bone.getAnchor().fma(2, direction, positiveHandle);
-        return Component.text(format.format(t), color);
+        return Component.text(Util.OFFSET_FORMAT.format(t), color);
     }
 
     @Override

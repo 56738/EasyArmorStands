@@ -13,9 +13,13 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import gg.bundlegroup.easyarmorstands.common.util.ArmorStandSnapshot;
+import gg.bundlegroup.easyarmorstands.common.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Locale;
 
@@ -162,6 +166,38 @@ public class SessionCommands {
             @Argument(value = "value", defaultValue = "0.0625") @Range(min = "0", max = "10") double value) {
         session.setSnapIncrement(value);
         sender.sendMessage(Component.text("Set movement snapping increment to " + value, NamedTextColor.GREEN));
+    }
+
+    @CommandMethod("align [axis] [value] [offset]")
+    @CommandPermission("easyarmorstands.align")
+    public void align(
+            EasCommandSender sender,
+            Session session,
+            @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
+            @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
+            @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
+    ) {
+        Vector3d offsetVector = new Vector3d();
+        if (value == null) {
+            // None specified: Snap to the middle of the bottom of a block
+            value = 1.0;
+            offsetVector.set(0.5, 0.0, 0.5);
+        } else if (offset != null) {
+            offsetVector.set(offset, offset, offset);
+        }
+        Vector3dc position = axis.snap(session.getEntity().getPosition(), value, offsetVector, new Vector3d());
+        if (!session.move(position)) {
+            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            return;
+        }
+        sender.sendMessage(Component.text()
+                .content("Moved to ")
+                .append(Component.text(Util.POSITION_FORMAT.format(position.x()), TextColor.color(0xFF7777)))
+                .append(Component.text(", "))
+                .append(Component.text(Util.POSITION_FORMAT.format(position.y()), TextColor.color(0x77FF77)))
+                .append(Component.text(", "))
+                .append(Component.text(Util.POSITION_FORMAT.format(position.z()), TextColor.color(0x7777FF)))
+                .color(NamedTextColor.GREEN));
     }
 
     @CommandMethod("edit <bone>")
