@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.session;
 
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
-import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
+import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
@@ -28,11 +28,11 @@ public class Session {
     private final EasPlayer player;
     private final EasArmorStand entity;
     private final EasArmorStand skeleton;
-    private final Map<String, Handle> handles = new HashMap<>();
+    private final Map<String, Bone> bones = new HashMap<>();
     private final Matrix3d armorStandYaw = new Matrix3d();
 
     private int clickTicks = 5;
-    private Handle handle;
+    private Bone bone;
     private boolean active;
     private double snapIncrement;
     private double angleSnapIncrement;
@@ -61,8 +61,8 @@ public class Session {
         }
     }
 
-    public void addHandle(String name, Handle handle) {
-        handles.put(name, handle);
+    public void addBone(String name, Bone bone) {
+        bones.put(name, bone);
     }
 
     private boolean handleClick() {
@@ -81,7 +81,7 @@ public class Session {
             openMenu();
             return;
         }
-        if (handle.onLeftClick()) {
+        if (bone.onLeftClick()) {
             return;
         }
         active = false;
@@ -92,12 +92,12 @@ public class Session {
             return;
         }
         update();
-        if (handle != null) {
+        if (bone != null) {
             if (active) {
-                handle.onRightClick();
+                bone.onRightClick();
             } else {
                 active = true;
-                handle.start();
+                bone.start();
             }
         }
     }
@@ -128,18 +128,18 @@ public class Session {
         armorStandYaw.rotationY(-Math.toRadians(entity.getYaw()));
 
         if (active) {
-            handle.refresh();
-            handle.update();
+            bone.refresh();
+            bone.update();
         } else {
-            updateTargetHandle();
+            updateTargetBone();
         }
 
         if (skeleton != null) {
             updateSkeleton(skeleton);
         }
 
-        if (handle != null) {
-            player.showTitle(Title.title(handle.title(), handle.subtitle(),
+        if (bone != null) {
+            player.showTitle(Title.title(bone.title(), bone.subtitle(),
                     Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO)));
         } else {
             player.clearTitle();
@@ -149,11 +149,11 @@ public class Session {
                 player.getEyePosition().distanceSquared(entity.getPosition()) < 100 * 100;
     }
 
-    private void updateTargetHandle() {
-        Handle bestHandle = null;
+    private void updateTargetBone() {
+        Bone bestBone = null;
         double bestDistance = Double.POSITIVE_INFINITY;
         Vector3d temp = new Vector3d();
-        for (Handle candidate : handles.values()) {
+        for (Bone candidate : bones.values()) {
             candidate.refresh();
             candidate.getPosition().sub(player.getEyePosition(), temp).mulTranspose(player.getEyeRotation());
             double distance = temp.z;
@@ -164,15 +164,15 @@ public class Session {
             double threshold = getLookThreshold();
             if (deviationSquared < threshold * threshold) {
                 if (distance > 0 && distance < bestDistance && distance < RANGE) {
-                    bestHandle = candidate;
+                    bestBone = candidate;
                     bestDistance = distance;
                 }
             }
         }
-        handle = bestHandle;
-        for (Handle candidate : handles.values()) {
+        bone = bestBone;
+        for (Bone candidate : bones.values()) {
             player.showPoint(candidate.getPosition(),
-                    candidate == bestHandle ? NamedTextColor.YELLOW : NamedTextColor.WHITE);
+                    candidate == bestBone ? NamedTextColor.YELLOW : NamedTextColor.WHITE);
         }
     }
 
@@ -190,20 +190,20 @@ public class Session {
         }
     }
 
-    public void setHandle(Handle handle) {
-        if (handle != null) {
-            this.handle = handle;
+    public void setBone(Bone bone) {
+        if (bone != null) {
+            this.bone = bone;
             this.active = true;
-            handle.refresh();
-            handle.start();
+            bone.refresh();
+            bone.start();
         } else {
             this.active = false;
         }
     }
 
-    public void setHandle(Handle handle, Manipulator manipulator) {
-        setHandle(handle);
-        handle.select(manipulator);
+    public void setBone(Bone bone, Manipulator manipulator) {
+        setBone(bone);
+        bone.select(manipulator);
     }
 
     public EasArmorStand getEntity() {
@@ -229,9 +229,9 @@ public class Session {
     public void startMoving() {
         player.update();
         entity.update();
-        for (Handle value : handles.values()) {
-            if (value instanceof PositionHandle) {
-                setHandle(value);
+        for (Bone value : bones.values()) {
+            if (value instanceof PositionBone) {
+                setBone(value);
                 return;
             }
         }
@@ -256,8 +256,8 @@ public class Session {
         }
     }
 
-    public Map<String, Handle> getHandles() {
-        return Collections.unmodifiableMap(handles);
+    public Map<String, Bone> getBones() {
+        return Collections.unmodifiableMap(bones);
     }
 
     public Matrix3dc getArmorStandYaw() {

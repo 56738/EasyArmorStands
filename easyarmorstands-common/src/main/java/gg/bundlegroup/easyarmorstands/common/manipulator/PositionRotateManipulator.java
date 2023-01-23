@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.common.manipulator;
 
-import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import net.kyori.adventure.util.RGBLike;
@@ -9,19 +9,19 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class PositionRotateManipulator extends AxisRotateManipulator {
-    private final PositionHandle handle;
+    private final PositionBone bone;
     private final Session session;
     private float initialYaw;
 
-    public PositionRotateManipulator(PositionHandle handle, String name, RGBLike color) {
-        super(handle, name, color, new Vector3d(0, 1, 0), LineMode.NONE);
-        this.handle = handle;
-        this.session = handle.getSession();
+    public PositionRotateManipulator(PositionBone bone, String name, RGBLike color) {
+        super(bone, name, color, new Vector3d(0, 1, 0), LineMode.NONE);
+        this.bone = bone;
+        this.session = bone.getSession();
     }
 
     @Override
     protected Vector3dc getAnchor() {
-        return handle.getPosition();
+        return bone.getPosition();
     }
 
     @Override

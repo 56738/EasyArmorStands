@@ -6,7 +6,7 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.processing.CommandContainer;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
@@ -164,32 +164,32 @@ public class SessionCommands {
         sender.sendMessage(Component.text("Set movement snapping increment to " + value, NamedTextColor.GREEN));
     }
 
-    @CommandMethod("edit <handle>")
+    @CommandMethod("edit <bone>")
     @CommandPermission("easyarmorstands.edit.select")
-    public void selectHandle(
+    public void selectBone(
             EasCommandSender sender,
             Session session,
-            @Argument("handle") Handle handle
+            @Argument("bone") Bone bone
     ) {
-        session.setHandle(handle);
+        session.setBone(bone);
         sender.sendMessage(Component.text()
-                .content("Selected handle: ")
-                .append(handle.subtitle())
+                .content("Selected bone: ")
+                .append(bone.subtitle())
                 .color(NamedTextColor.GREEN));
     }
 
-    @CommandMethod("edit <handle> <tool>")
+    @CommandMethod("edit <bone> <tool>")
     @CommandPermission("easyarmorstands.edit.select")
     public void selectTool(
             EasCommandSender sender,
             Session session,
-            @Argument("handle") Handle handle,
+            @Argument("bone") Bone bone,
             @Argument("tool") Manipulator manipulator
     ) {
-        session.setHandle(handle, manipulator);
+        session.setBone(bone, manipulator);
         sender.sendMessage(Component.text()
-                .content("Selected tool: ")
-                .append(handle.subtitle())
+                .content("Selected bone: ")
+                .append(bone.subtitle())
                 .append(Component.text(": "))
                 .append(manipulator.component())
                 .color(NamedTextColor.GREEN));

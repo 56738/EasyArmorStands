@@ -4,7 +4,7 @@ import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -25,8 +25,8 @@ public class ManipulatorArgumentParser implements ArgumentParser<EasCommandSende
                     new NoInputProvidedException(ManipulatorArgumentParser.class, context));
         }
 
-        Handle handle = context.get("handle");
-        Manipulator manipulator = handle.getManipulators().get(input);
+        Bone bone = context.get("bone");
+        Manipulator manipulator = bone.getManipulators().get(input);
         if (manipulator == null) {
             return ArgumentParseResult.failure(new IllegalArgumentException("Tool not found: " + input));
         }
@@ -39,7 +39,7 @@ public class ManipulatorArgumentParser implements ArgumentParser<EasCommandSende
             @NonNull CommandContext<EasCommandSender> context,
             @NonNull String input
     ) {
-        Handle handle = context.get("handle");
-        return new ArrayList<>(handle.getManipulators().keySet());
+        Bone bone = context.get("bone");
+        return new ArrayList<>(bone.getManipulators().keySet());
     }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a session is created.
  * <p>
- * Can be used to modify the created session, for example to add handles or manipulators.
+ * Can be used to modify the created session, for example to add bones or manipulators.
  *
  * @see SessionStartEvent Preventing session creation
  */

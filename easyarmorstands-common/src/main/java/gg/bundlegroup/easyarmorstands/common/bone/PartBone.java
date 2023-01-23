@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.handle;
+package gg.bundlegroup.easyarmorstands.common.bone;
 
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -9,7 +9,7 @@ import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoneHandle extends AbstractHandle {
+public class PartBone extends AbstractBone {
     private static final double NORMAL_SCALE = 1.0 / 16;
     private static final double SMALL_SCALE = NORMAL_SCALE / 2;
     private static final Vector3d pose = new Vector3d();
@@ -26,7 +26,7 @@ public class BoneHandle extends AbstractHandle {
     private final Vector3d end = new Vector3d();
     private final Matrix3d rotation = new Matrix3d();
 
-    public BoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
+    public PartBone(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
         super(session);
         this.session = session;
         this.part = part;

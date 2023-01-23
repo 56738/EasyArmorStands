@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.handle;
+package gg.bundlegroup.easyarmorstands.common.bone;
 
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -6,11 +6,11 @@ import net.kyori.adventure.text.Component;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class PositionHandle extends AbstractHandle {
+public class PositionBone extends AbstractBone {
     private final Session session;
     private final Vector3d position = new Vector3d();
 
-    public PositionHandle(Session session) {
+    public PositionBone(Session session) {
         super(session);
         this.session = session;
     }

@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.session;
 
-import gg.bundlegroup.easyarmorstands.common.handle.BoneHandle;
-import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.common.bone.PartBone;
+import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisMoveManipulator;
 import gg.bundlegroup.easyarmorstands.common.manipulator.BoneAxisRotateManipulator;
 import gg.bundlegroup.easyarmorstands.common.manipulator.PositionAxisManipulator;
@@ -28,38 +28,38 @@ public class SessionListener implements EasListener {
 
     private Session createSession(EasPlayer player, EasArmorStand armorStand) {
         Session session = new Session(player, armorStand);
-        session.addHandle("position", createPositionHandle(session));
-        session.addHandle("head", createBoneHandle(
+        session.addBone("position", createPositionBone(session));
+        session.addBone("head", createPartBone(
                 session,
                 EasArmorStand.Part.HEAD,
                 Component.text("Head"),
                 new Vector3d(0, 23, 0),
                 new Vector3d(0, 7, 0)));
-        session.addHandle("body", createBoneHandle(
+        session.addBone("body", createPartBone(
                 session,
                 EasArmorStand.Part.BODY,
                 Component.text("Body"),
                 new Vector3d(0, 24, 0),
                 new Vector3d(0, -12, 0)));
-        session.addHandle("leftarm", createBoneHandle(
+        session.addBone("leftarm", createPartBone(
                 session,
                 EasArmorStand.Part.LEFT_ARM,
                 Component.text("Left arm"),
                 new Vector3d(5, 22, 0),
                 new Vector3d(0, -10, 0)));
-        session.addHandle("rightarm", createBoneHandle(
+        session.addBone("rightarm", createPartBone(
                 session,
                 EasArmorStand.Part.RIGHT_ARM,
                 Component.text("Right arm"),
                 new Vector3d(-5, 22, 0),
                 new Vector3d(0, -10, 0)));
-        session.addHandle("leftleg", createBoneHandle(
+        session.addBone("leftleg", createPartBone(
                 session,
                 EasArmorStand.Part.LEFT_LEG,
                 Component.text("Left leg"),
                 new Vector3d(1.9, 12, 0),
                 new Vector3d(0, -11, 0)));
-        session.addHandle("rightleg", createBoneHandle(
+        session.addBone("rightleg", createPartBone(
                 session,
                 EasArmorStand.Part.RIGHT_LEG,
                 Component.text("Right leg"),
@@ -69,34 +69,34 @@ public class SessionListener implements EasListener {
         return session;
     }
 
-    private PositionHandle createPositionHandle(Session session) {
-        PositionHandle handle = new PositionHandle(session);
-        handle.addManipulator("rotate", new PositionRotateManipulator(handle,
+    private PositionBone createPositionBone(Session session) {
+        PositionBone bone = new PositionBone(session);
+        bone.addManipulator("rotate", new PositionRotateManipulator(bone,
                 "Rotate", NamedTextColor.GOLD));
-        handle.addManipulator("x", new PositionAxisManipulator(handle,
+        bone.addManipulator("x", new PositionAxisManipulator(bone,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        handle.addManipulator("y", new PositionAxisManipulator(handle,
+        bone.addManipulator("y", new PositionAxisManipulator(bone,
                 "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        handle.addManipulator("z", new PositionAxisManipulator(handle,
+        bone.addManipulator("z", new PositionAxisManipulator(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        return handle;
+        return bone;
     }
 
-    private BoneHandle createBoneHandle(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
-        BoneHandle handle = new BoneHandle(session, part, component, offset, length);
-        handle.addManipulator("x", new BoneAxisRotateManipulator(handle,
+    private PartBone createPartBone(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
+        PartBone bone = new PartBone(session, part, component, offset, length);
+        bone.addManipulator("x", new BoneAxisRotateManipulator(bone,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        handle.addManipulator("y", new BoneAxisRotateManipulator(handle,
+        bone.addManipulator("y", new BoneAxisRotateManipulator(bone,
                 "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        handle.addManipulator("z", new BoneAxisRotateManipulator(handle,
+        bone.addManipulator("z", new BoneAxisRotateManipulator(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        handle.addManipulator("mx", new BoneAxisMoveManipulator(handle,
+        bone.addManipulator("mx", new BoneAxisMoveManipulator(bone,
                 "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        handle.addManipulator("my", new BoneAxisMoveManipulator(handle,
+        bone.addManipulator("my", new BoneAxisMoveManipulator(bone,
                 "Move Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        handle.addManipulator("mz", new BoneAxisMoveManipulator(handle,
+        bone.addManipulator("mz", new BoneAxisMoveManipulator(bone,
                 "Move Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        return handle;
+        return bone;
     }
 
     private boolean isTool(EasPlayer player, EasItem item) {

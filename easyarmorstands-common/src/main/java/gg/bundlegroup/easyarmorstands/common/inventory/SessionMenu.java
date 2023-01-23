@@ -63,32 +63,32 @@ public class SessionMenu implements EasInventoryListener {
         if (player.hasPermission("easyarmorstands.edit.gravity")) {
             setSlot(5, 3, new ToggleGravitySlot(this));
         }
-        setSlot(3, 7, new SelectHandleSlot(this,
-                session.getHandles().get("head"),
+        setSlot(3, 7, new SelectBoneSlot(this,
+                session.getBones().get("head"),
                 EasMaterial.PLAYER_HEAD,
                 Component.text("head")));
-        setSlot(4, 6, new SelectHandleSlot(this,
-                session.getHandles().get("leftarm"),
+        setSlot(4, 6, new SelectBoneSlot(this,
+                session.getBones().get("leftarm"),
                 EasMaterial.LEVER,
                 Component.text("left arm")));
-        setSlot(4, 7, new SelectHandleSlot(this,
-                session.getHandles().get("body"),
+        setSlot(4, 7, new SelectBoneSlot(this,
+                session.getBones().get("body"),
                 EasMaterial.LEATHER_CHESTPLATE,
                 Component.text("body")));
-        setSlot(4, 8, new SelectHandleSlot(this,
-                session.getHandles().get("rightarm"),
+        setSlot(4, 8, new SelectBoneSlot(this,
+                session.getBones().get("rightarm"),
                 EasMaterial.LEVER,
                 Component.text("right arm")));
-        setSlot(5, 6, new SelectHandleSlot(this,
-                session.getHandles().get("leftleg"),
+        setSlot(5, 6, new SelectBoneSlot(this,
+                session.getBones().get("leftleg"),
                 EasMaterial.LEVER,
                 Component.text("left leg")));
-        setSlot(5, 7, new SelectHandleSlot(this,
-                session.getHandles().get("position"),
+        setSlot(5, 7, new SelectBoneSlot(this,
+                session.getBones().get("position"),
                 EasMaterial.BUCKET,
                 Component.text("position")));
-        setSlot(5, 8, new SelectHandleSlot(this,
-                session.getHandles().get("rightleg"),
+        setSlot(5, 8, new SelectBoneSlot(this,
+                session.getBones().get("rightleg"),
                 EasMaterial.LEVER,
                 Component.text("right leg")));
         if (player.hasPermission("easyarmorstands.edit.visible")) {

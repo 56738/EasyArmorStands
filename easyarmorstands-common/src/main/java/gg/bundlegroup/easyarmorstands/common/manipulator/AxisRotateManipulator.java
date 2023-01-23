@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.common.manipulator;
 
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import gg.bundlegroup.easyarmorstands.common.util.Cursor2D;
@@ -36,9 +36,9 @@ public abstract class AxisRotateManipulator implements Manipulator {
     private boolean valid;
     private Vector3dc lookTarget;
 
-    public AxisRotateManipulator(Handle handle, String name, RGBLike color, Vector3dc axis, LineMode lineMode) {
-        this.session = handle.session();
-        this.player = handle.session().getPlayer();
+    public AxisRotateManipulator(Bone bone, String name, RGBLike color, Vector3dc axis, LineMode lineMode) {
+        this.session = bone.session();
+        this.player = bone.session().getPlayer();
         this.lineMode = lineMode;
         this.name = Component.text(name, TextColor.color(color));
         this.color = TextColor.color(color);

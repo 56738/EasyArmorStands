@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.common.manipulator;
 
-import gg.bundlegroup.easyarmorstands.common.handle.BoneHandle;
+import gg.bundlegroup.easyarmorstands.common.bone.PartBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -14,7 +14,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class BoneAxisMoveManipulator implements Manipulator {
-    private final BoneHandle handle;
+    private final PartBone bone;
     private final Session session;
     private final EasPlayer player;
     private final Component name;
@@ -34,10 +34,10 @@ public class BoneAxisMoveManipulator implements Manipulator {
     private final Cursor3D cursor;
     private Vector3dc lookTarget;
 
-    public BoneAxisMoveManipulator(BoneHandle handle, String name, RGBLike color, Vector3dc axis) {
-        this.handle = handle;
-        this.session = handle.session();
-        this.player = handle.session().getPlayer();
+    public BoneAxisMoveManipulator(PartBone bone, String name, RGBLike color, Vector3dc axis) {
+        this.bone = bone;
+        this.session = bone.session();
+        this.player = bone.session().getPlayer();
         this.name = Component.text(name, TextColor.color(color));
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
@@ -46,9 +46,9 @@ public class BoneAxisMoveManipulator implements Manipulator {
 
     @Override
     public void refresh() {
-        handle.getRotation().transform(axis, direction);
-        handle.getAnchor().fma(-2, direction, negativeHandle);
-        handle.getAnchor().fma(2, direction, positiveHandle);
+        bone.getRotation().transform(axis, direction);
+        bone.getAnchor().fma(-2, direction, negativeHandle);
+        bone.getAnchor().fma(2, direction, positiveHandle);
         Vector3dc eyePosition = player.getEyePosition();
         player.getEyeRotation().transform(0, 0, session.getRange(), lookRayEnd).add(eyePosition);
         updateLookRayPoint(negativeHandle, negativeLookRayPoint);
@@ -91,9 +91,9 @@ public class BoneAxisMoveManipulator implements Manipulator {
             return null;
         }
         start.fma(t, direction, currentHandle);
-        handle.refresh();
-        handle.getAnchor().fma(-2, direction, negativeHandle);
-        handle.getAnchor().fma(2, direction, positiveHandle);
+        bone.refresh();
+        bone.getAnchor().fma(-2, direction, negativeHandle);
+        bone.getAnchor().fma(2, direction, positiveHandle);
         return Component.text(t, color);
     }
 
@@ -117,7 +117,7 @@ public class BoneAxisMoveManipulator implements Manipulator {
 
     @Override
     public Vector3dc getTarget() {
-        return handle.getAnchor();
+        return bone.getAnchor();
     }
 
     private void updateLookRayPoint(Vector3dc handle, Vector3d dest) {

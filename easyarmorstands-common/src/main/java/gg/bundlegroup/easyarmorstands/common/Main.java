@@ -5,14 +5,14 @@ import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.meta.SimpleCommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.services.types.ConsumerService;
-import gg.bundlegroup.easyarmorstands.common.command.HandleArgumentParser;
+import gg.bundlegroup.easyarmorstands.common.command.BoneArgumentParser;
 import gg.bundlegroup.easyarmorstands.common.command.ManipulatorArgumentParser;
 import gg.bundlegroup.easyarmorstands.common.command.NoSessionException;
 import gg.bundlegroup.easyarmorstands.common.command.PipelineExceptionHandler;
 import gg.bundlegroup.easyarmorstands.common.command.RequiresFeature;
 import gg.bundlegroup.easyarmorstands.common.command.SessionInjector;
 import gg.bundlegroup.easyarmorstands.common.command.SessionPreprocessor;
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.platform.EasFeature;
@@ -74,8 +74,8 @@ public class Main implements Closeable {
                 Session.class, new SessionInjector<>());
 
         commandManager.parserRegistry().registerParserSupplier(
-                TypeToken.get(Handle.class),
-                p -> new HandleArgumentParser());
+                TypeToken.get(Bone.class),
+                p -> new BoneArgumentParser());
 
         commandManager.parserRegistry().registerParserSupplier(
                 TypeToken.get(Manipulator.class),

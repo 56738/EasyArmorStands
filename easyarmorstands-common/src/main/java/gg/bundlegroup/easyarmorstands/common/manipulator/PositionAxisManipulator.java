@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.common.manipulator;
 
-import gg.bundlegroup.easyarmorstands.common.handle.PositionHandle;
+import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -14,7 +14,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class PositionAxisManipulator implements Manipulator {
-    private final PositionHandle handle;
+    private final PositionBone bone;
     private final Session session;
     private final EasPlayer player;
     private final Component name;
@@ -33,10 +33,10 @@ public class PositionAxisManipulator implements Manipulator {
     private final Cursor3D cursor;
     private Vector3dc lookTarget;
 
-    public PositionAxisManipulator(PositionHandle handle, String name, RGBLike color, Vector3dc axis) {
-        this.handle = handle;
-        this.session = handle.session();
-        this.player = handle.session().getPlayer();
+    public PositionAxisManipulator(PositionBone bone, String name, RGBLike color, Vector3dc axis) {
+        this.bone = bone;
+        this.session = bone.session();
+        this.player = bone.session().getPlayer();
         this.name = Component.text(name, TextColor.color(color));
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
@@ -45,8 +45,8 @@ public class PositionAxisManipulator implements Manipulator {
 
     @Override
     public void refresh() {
-        handle.getPosition().fma(-2, axis, negativeHandle);
-        handle.getPosition().fma(2, axis, positiveHandle);
+        bone.getPosition().fma(-2, axis, negativeHandle);
+        bone.getPosition().fma(2, axis, positiveHandle);
         Vector3dc eyePosition = player.getEyePosition();
         player.getEyeRotation().transform(0, 0, session.getRange(), lookRayEnd).add(eyePosition);
         double d = Intersectiond.findClosestPointsLineSegments(
@@ -85,9 +85,9 @@ public class PositionAxisManipulator implements Manipulator {
             return null;
         }
         start.fma(t, axis, currentHandle);
-        handle.refresh();
-        handle.getPosition().fma(-2, axis, negativeHandle);
-        handle.getPosition().fma(2, axis, positiveHandle);
+        bone.refresh();
+        bone.getPosition().fma(-2, axis, negativeHandle);
+        bone.getPosition().fma(2, axis, positiveHandle);
         return Component.text(t, color);
     }
 
@@ -110,7 +110,7 @@ public class PositionAxisManipulator implements Manipulator {
 
     @Override
     public Vector3dc getTarget() {
-        return handle.getPosition();
+        return bone.getPosition();
     }
 
     @Override

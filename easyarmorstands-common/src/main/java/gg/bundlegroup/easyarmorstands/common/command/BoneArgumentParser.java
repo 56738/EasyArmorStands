@@ -4,7 +4,7 @@ import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
-import gg.bundlegroup.easyarmorstands.common.handle.Handle;
+import gg.bundlegroup.easyarmorstands.common.bone.Bone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -14,16 +14,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
-public class HandleArgumentParser implements ArgumentParser<EasCommandSender, Handle> {
+public class BoneArgumentParser implements ArgumentParser<EasCommandSender, Bone> {
     @Override
-    public @NonNull ArgumentParseResult<@NonNull Handle> parse(
+    public @NonNull ArgumentParseResult<@NonNull Bone> parse(
             @NonNull CommandContext<@NonNull EasCommandSender> context,
             @NonNull Queue<@NonNull String> inputQueue
     ) {
         String input = inputQueue.peek();
         if (input == null) {
             return ArgumentParseResult.failure(
-                    new NoInputProvidedException(HandleArgumentParser.class, context));
+                    new NoInputProvidedException(BoneArgumentParser.class, context));
         }
 
         Session session;
@@ -32,12 +32,12 @@ public class HandleArgumentParser implements ArgumentParser<EasCommandSender, Ha
         } catch (NoSessionException e) {
             return ArgumentParseResult.failure(e);
         }
-        Handle handle = session.getHandles().get(input);
-        if (handle == null) {
-            return ArgumentParseResult.failure(new IllegalArgumentException("Handle not found: " + input));
+        Bone bone = session.getBones().get(input);
+        if (bone == null) {
+            return ArgumentParseResult.failure(new IllegalArgumentException("Bone not found: " + input));
         }
         inputQueue.remove();
-        return ArgumentParseResult.success(handle);
+        return ArgumentParseResult.success(bone);
     }
 
     @Override
@@ -49,6 +49,6 @@ public class HandleArgumentParser implements ArgumentParser<EasCommandSender, Ha
         if (session == null) {
             return Collections.emptyList();
         }
-        return new ArrayList<>(session.getHandles().keySet());
+        return new ArrayList<>(session.getBones().keySet());
     }
 }

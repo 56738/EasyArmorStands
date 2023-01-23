@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
 
 /**
- * A tool which can be used to manipulate a handle.
+ * A tool which can be used to manipulate a bone.
  */
 public interface Manipulator {
     /**
@@ -17,7 +17,7 @@ public interface Manipulator {
      * Called when the manipulator is selected.
      *
      * @param cursor The initial position of the cursor.
-     *               Usually the {@link #getLookTarget() position of the clicked handle}.
+     *               Usually the {@link #getLookTarget() position where the handle was clicked}.
      */
     void start(Vector3dc cursor);
 

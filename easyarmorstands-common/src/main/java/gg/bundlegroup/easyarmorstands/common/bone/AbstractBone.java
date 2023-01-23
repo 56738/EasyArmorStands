@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.handle;
+package gg.bundlegroup.easyarmorstands.common.bone;
 
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -10,14 +10,14 @@ import org.joml.Vector3dc;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractHandle implements Handle {
+public abstract class AbstractBone implements Bone {
     protected final Session session;
     protected final Vector3d position = new Vector3d();
     private final Map<String, Manipulator> manipulators = new HashMap<>();
     private Manipulator manipulator;
     private boolean active;
 
-    public AbstractHandle(Session session) {
+    public AbstractBone(Session session) {
         this.session = session;
     }
 

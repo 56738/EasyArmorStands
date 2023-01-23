@@ -1,4 +1,4 @@
-package gg.bundlegroup.easyarmorstands.common.handle;
+package gg.bundlegroup.easyarmorstands.common.bone;
 
 import gg.bundlegroup.easyarmorstands.common.manipulator.Manipulator;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Something that can be selected by the user and edited using its manipulators.
  */
-public interface Handle {
+public interface Bone {
     @NotNull Session session();
 
     void addManipulator(String name, Manipulator manipulator);
@@ -19,7 +19,7 @@ public interface Handle {
     Map<String, Manipulator> getManipulators();
 
     /**
-     * Refresh properties of the handle, such as its {@link #getPosition() position}.
+     * Refresh properties of the bone, such as its {@link #getPosition() position}.
      */
     void refresh();
 
@@ -34,7 +34,7 @@ public interface Handle {
     void select(Manipulator manipulator);
 
     /**
-     * The position of the handle.
+     * The position of the bone.
      * May be outdated if {@link #update} was not just called.
      *
      * @return The position.
