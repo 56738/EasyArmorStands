@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.core.platform.EasInventoryListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;

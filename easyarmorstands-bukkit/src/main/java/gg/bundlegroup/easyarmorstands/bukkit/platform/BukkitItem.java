@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
 import org.bukkit.inventory.ItemStack;
 
 public class BukkitItem extends BukkitWrapper<ItemStack> implements EasItem {

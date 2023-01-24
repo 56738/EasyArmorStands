@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
 import org.bukkit.inventory.Inventory;
 
 public class BukkitInventory extends BukkitWrapper<Inventory> implements EasInventory {

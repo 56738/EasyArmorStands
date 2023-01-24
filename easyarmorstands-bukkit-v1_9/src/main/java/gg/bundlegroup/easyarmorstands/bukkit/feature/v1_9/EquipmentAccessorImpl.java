@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit.feature.v1_9;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.core.platform.EasArmorEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;

@@ -24,9 +24,9 @@ import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ToolChecker;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlatform;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitWrapper;
-import gg.bundlegroup.easyarmorstands.common.Main;
-import gg.bundlegroup.easyarmorstands.common.platform.EasCommandSender;
-import gg.bundlegroup.easyarmorstands.common.session.SessionManager;
+import gg.bundlegroup.easyarmorstands.core.Main;
+import gg.bundlegroup.easyarmorstands.core.platform.EasCommandSender;
+import gg.bundlegroup.easyarmorstands.core.session.SessionManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 

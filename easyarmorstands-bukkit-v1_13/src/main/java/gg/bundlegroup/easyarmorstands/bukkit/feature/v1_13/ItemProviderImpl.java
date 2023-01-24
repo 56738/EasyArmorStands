@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit.feature.v1_13;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ItemProvider;
-import gg.bundlegroup.easyarmorstands.common.platform.EasMaterial;
+import gg.bundlegroup.easyarmorstands.core.platform.EasMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;

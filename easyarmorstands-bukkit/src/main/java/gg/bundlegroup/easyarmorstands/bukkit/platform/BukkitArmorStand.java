@@ -2,7 +2,7 @@ package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandCanTickAccessor;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ArmorStandLockAccessor;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
+import gg.bundlegroup.easyarmorstands.core.platform.EasArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Vector3d;

@@ -2,7 +2,7 @@ package gg.bundlegroup.easyarmorstands.bukkit.event;
 
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitArmorStand;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlayer;
-import gg.bundlegroup.easyarmorstands.common.session.Session;
+import gg.bundlegroup.easyarmorstands.core.session.Session;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

@@ -7,7 +7,7 @@ import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMoveEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
-import gg.bundlegroup.easyarmorstands.common.session.Session;
+import gg.bundlegroup.easyarmorstands.core.session.Session;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

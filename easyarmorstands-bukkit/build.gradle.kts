@@ -13,7 +13,7 @@ bukkit {
 }
 
 dependencies {
-    api(project(":easyarmorstands-common"))
+    api(project(":easyarmorstands-core"))
     compileOnly(libs.bukkit) {
         isTransitive = false
     }

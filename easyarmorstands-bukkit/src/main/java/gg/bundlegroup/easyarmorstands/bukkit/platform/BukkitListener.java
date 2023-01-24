@@ -1,10 +1,10 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventoryListener;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
-import gg.bundlegroup.easyarmorstands.common.platform.EasListener;
+import gg.bundlegroup.easyarmorstands.core.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.core.platform.EasInventoryListener;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.platform.EasListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;

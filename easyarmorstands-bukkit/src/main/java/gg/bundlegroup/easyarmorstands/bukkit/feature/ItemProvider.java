@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.feature;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasMaterial;
+import gg.bundlegroup.easyarmorstands.core.platform.EasMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

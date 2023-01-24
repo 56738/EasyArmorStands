@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasWrapper;
+import gg.bundlegroup.easyarmorstands.core.platform.EasWrapper;
 
 public class BukkitWrapper<T> implements EasWrapper {
     private final BukkitPlatform platform;

@@ -2,9 +2,9 @@ package gg.bundlegroup.easyarmorstands.bukkit.addon.headdatabase;
 
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlatform;
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlayer;
-import gg.bundlegroup.easyarmorstands.common.inventory.InventorySlot;
-import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.inventory.InventorySlot;
+import gg.bundlegroup.easyarmorstands.core.inventory.SessionMenu;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

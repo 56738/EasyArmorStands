@@ -1,7 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit.event;
 
 import gg.bundlegroup.easyarmorstands.bukkit.platform.BukkitPlayer;
-import gg.bundlegroup.easyarmorstands.common.inventory.SessionMenu;
+import gg.bundlegroup.easyarmorstands.core.inventory.SessionMenu;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.event;
 
-import gg.bundlegroup.easyarmorstands.common.session.Session;
+import gg.bundlegroup.easyarmorstands.core.session.Session;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;

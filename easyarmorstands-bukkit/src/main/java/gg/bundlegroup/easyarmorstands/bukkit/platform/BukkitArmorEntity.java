@@ -1,8 +1,8 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EquipmentAccessor;
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 

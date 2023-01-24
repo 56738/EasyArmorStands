@@ -1,6 +1,6 @@
 package gg.bundlegroup.easyarmorstands.bukkit.feature;
 
-import gg.bundlegroup.easyarmorstands.common.platform.EasArmorEntity;
+import gg.bundlegroup.easyarmorstands.core.platform.EasArmorEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 

@@ -2,10 +2,10 @@ package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import gg.bundlegroup.easyarmorstands.bukkit.feature.EntityHider;
 import gg.bundlegroup.easyarmorstands.bukkit.feature.ParticleSpawner;
-import gg.bundlegroup.easyarmorstands.common.platform.EasEntity;
-import gg.bundlegroup.easyarmorstands.common.platform.EasInventory;
-import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
-import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
+import gg.bundlegroup.easyarmorstands.core.platform.EasEntity;
+import gg.bundlegroup.easyarmorstands.core.platform.EasInventory;
+import gg.bundlegroup.easyarmorstands.core.platform.EasItem;
+import gg.bundlegroup.easyarmorstands.core.platform.EasPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.util.RGBLike;
