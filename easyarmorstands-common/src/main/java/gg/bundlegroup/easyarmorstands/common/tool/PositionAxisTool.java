@@ -19,6 +19,7 @@ public class PositionAxisTool implements Tool {
     private final Session session;
     private final EasPlayer player;
     private final Component name;
+    private final Component description;
     private final TextColor color;
     private final Vector3dc axis;
 
@@ -39,6 +40,7 @@ public class PositionAxisTool implements Tool {
         this.session = bone.session();
         this.player = bone.session().getPlayer();
         this.name = Component.text(name, TextColor.color(color));
+        this.description = Component.text("Move");
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
         this.cursor = new Cursor3D(player);
@@ -116,7 +118,12 @@ public class PositionAxisTool implements Tool {
     }
 
     @Override
-    public Component component() {
+    public Component getName() {
         return name;
+    }
+
+    @Override
+    public Component getDescription() {
+        return description;
     }
 }

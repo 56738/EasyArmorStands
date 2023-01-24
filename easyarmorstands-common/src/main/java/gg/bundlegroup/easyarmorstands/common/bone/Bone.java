@@ -43,5 +43,5 @@ public interface Bone {
 
     Component title();
 
-    Component subtitle();
+    Component getName();
 }

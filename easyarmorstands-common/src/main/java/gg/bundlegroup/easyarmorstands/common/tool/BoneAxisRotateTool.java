@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.common.tool;
 
 import gg.bundlegroup.easyarmorstands.common.bone.PartBone;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
@@ -12,7 +13,7 @@ public class BoneAxisRotateTool extends AxisRotateTool {
     private final Matrix3d currentRotation = new Matrix3d();
 
     public BoneAxisRotateTool(PartBone bone, String name, RGBLike color, Vector3dc axis) {
-        super(bone, name, color, axis, LineMode.WITHOUT_ENDS);
+        super(bone, name, Component.text("Rotate"), color, axis, LineMode.WITHOUT_ENDS);
         this.bone = bone;
     }
 

@@ -3,6 +3,7 @@ package gg.bundlegroup.easyarmorstands.common.tool;
 import gg.bundlegroup.easyarmorstands.common.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.common.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.common.session.Session;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
@@ -14,7 +15,7 @@ public class PositionRotateTool extends AxisRotateTool {
     private float initialYaw;
 
     public PositionRotateTool(PositionBone bone, String name, RGBLike color) {
-        super(bone, name, color, new Vector3d(0, 1, 0), LineMode.NONE);
+        super(bone, name, Component.text("Rotate"), color, new Vector3d(0, 1, 0), LineMode.NONE);
         this.bone = bone;
         this.session = bone.getSession();
     }

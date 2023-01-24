@@ -18,6 +18,7 @@ public abstract class AxisRotateTool implements Tool {
     private final Session session;
     private final EasPlayer player;
     private final Component name;
+    private final Component description;
     private final TextColor color;
     private final Vector3dc axis;
     private final LineMode lineMode;
@@ -36,11 +37,12 @@ public abstract class AxisRotateTool implements Tool {
     private boolean valid;
     private Vector3dc lookTarget;
 
-    public AxisRotateTool(Bone bone, String name, RGBLike color, Vector3dc axis, LineMode lineMode) {
+    public AxisRotateTool(Bone bone, String name, Component description, RGBLike color, Vector3dc axis, LineMode lineMode) {
         this.session = bone.session();
         this.player = bone.session().getPlayer();
         this.lineMode = lineMode;
         this.name = Component.text(name, TextColor.color(color));
+        this.description = description;
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
         this.cursor = new Cursor2D(player);
@@ -131,8 +133,13 @@ public abstract class AxisRotateTool implements Tool {
     }
 
     @Override
-    public Component component() {
+    public Component getName() {
         return name;
+    }
+
+    @Override
+    public Component getDescription() {
+        return description;
     }
 
     protected Vector3dc getAxisDirection() {

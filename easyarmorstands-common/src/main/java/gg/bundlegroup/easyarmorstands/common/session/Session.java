@@ -10,6 +10,7 @@ import gg.bundlegroup.easyarmorstands.common.platform.EasItem;
 import gg.bundlegroup.easyarmorstands.common.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.common.tool.Tool;
 import gg.bundlegroup.easyarmorstands.common.util.Util;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
@@ -133,11 +134,14 @@ public class Session {
             updateSkeleton(skeleton);
         }
 
-        if (bone != null) {
-            player.showTitle(Title.title(bone.title(), bone.subtitle(),
-                    Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO)));
-        } else {
-            player.clearTitle();
+        if (!active) {
+            // No bone is active, display the name of the bone the player is looking at
+            if (bone != null) {
+                player.showTitle(Title.title(Component.empty(), bone.getName(),
+                        Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO)));
+            } else {
+                player.clearTitle();
+            }
         }
 
         return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid()) &&

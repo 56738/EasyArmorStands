@@ -68,7 +68,7 @@ public class PartBone extends AbstractBone {
     }
 
     @Override
-    public Component subtitle() {
+    public Component getName() {
         return component;
     }
 

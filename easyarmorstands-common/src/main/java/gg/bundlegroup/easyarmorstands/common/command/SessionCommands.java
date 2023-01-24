@@ -222,7 +222,7 @@ public class SessionCommands {
         session.setBone(bone);
         sender.sendMessage(Component.text()
                 .content("Selected bone: ")
-                .append(bone.subtitle())
+                .append(bone.getName())
                 .color(NamedTextColor.GREEN));
     }
 
@@ -237,9 +237,9 @@ public class SessionCommands {
         session.setBone(bone, tool);
         sender.sendMessage(Component.text()
                 .content("Selected bone: ")
-                .append(bone.subtitle())
+                .append(bone.getName())
                 .append(Component.text(": "))
-                .append(tool.component())
+                .append(tool.getName())
                 .color(NamedTextColor.GREEN));
     }
 }

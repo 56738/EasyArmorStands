@@ -91,11 +91,11 @@ public class SessionListener implements EasListener {
         bone.addTool("z", new BoneAxisRotateTool(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         bone.addTool("mx", new BoneAxisMoveTool(bone,
-                "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
+                "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
         bone.addTool("my", new BoneAxisMoveTool(bone,
-                "Move Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
+                "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
         bone.addTool("mz", new BoneAxisMoveTool(bone,
-                "Move Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
+                "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         return bone;
     }
 

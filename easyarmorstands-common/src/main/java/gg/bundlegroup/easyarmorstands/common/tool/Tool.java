@@ -67,5 +67,13 @@ public interface Tool {
      *
      * @return The name.
      */
-    Component component();
+    Component getName();
+
+    /**
+     * The description of this tool.
+     * Can be longer, for example "Move body along X".
+     *
+     * @return The description.
+     */
+    Component getDescription();
 }

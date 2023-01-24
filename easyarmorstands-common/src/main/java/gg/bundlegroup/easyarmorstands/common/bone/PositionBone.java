@@ -31,7 +31,7 @@ public class PositionBone extends AbstractBone {
     }
 
     @Override
-    public Component subtitle() {
+    public Component getName() {
         return Component.text("Position");
     }
 
