@@ -37,7 +37,7 @@ public class ParticleSpawnerImpl implements ParticleSpawner {
                 playerSpigot.getDeclaredMethod("playEffect", Location.class, Effect.class, int.class, int.class,
                         float.class, float.class, float.class, float.class, int.class, int.class);
                 return true;
-            } catch (ClassNotFoundException | NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

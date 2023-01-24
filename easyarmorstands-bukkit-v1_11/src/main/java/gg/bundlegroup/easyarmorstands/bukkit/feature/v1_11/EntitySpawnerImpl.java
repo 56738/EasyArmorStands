@@ -18,7 +18,7 @@ public class EntitySpawnerImpl implements EntitySpawner {
             try {
                 Class.forName("org.bukkit.util.Consumer");
                 return true;
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

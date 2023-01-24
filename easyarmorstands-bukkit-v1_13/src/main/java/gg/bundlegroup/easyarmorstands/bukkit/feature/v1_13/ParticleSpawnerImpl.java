@@ -23,7 +23,7 @@ public class ParticleSpawnerImpl implements ParticleSpawner {
             try {
                 Class.forName("org.bukkit.Particle$DustOptions");
                 return true;
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("UnstableApiUsage")
 public class EntityHiderImpl implements EntityHider {
     @Override
     public void hideEntity(Plugin plugin, Player player, Entity entity) {
@@ -24,7 +24,7 @@ public class EntityHiderImpl implements EntityHider {
                 Player.class.getDeclaredMethod("hideEntity", Plugin.class, Entity.class);
                 Player.class.getDeclaredMethod("showEntity", Plugin.class, Entity.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

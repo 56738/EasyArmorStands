@@ -16,7 +16,7 @@ public class EntityPersistenceSetterImpl implements EntityPersistenceSetter {
             try {
                 Entity.class.getDeclaredMethod("setPersistent", boolean.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

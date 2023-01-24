@@ -20,7 +20,7 @@ public class EntityGlowSetterImpl implements EntityGlowSetter {
             try {
                 Entity.class.getDeclaredMethod("setGlowing", boolean.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

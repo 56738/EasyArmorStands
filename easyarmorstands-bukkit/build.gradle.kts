@@ -31,6 +31,7 @@ dependencies {
     runtimeOnly(project(":easyarmorstands-bukkit-v1_11"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_13"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_14"))
+    runtimeOnly(project(":easyarmorstands-bukkit-v1_16"))
     runtimeOnly(project(":easyarmorstands-bukkit-v1_18"))
 }
 

@@ -30,7 +30,7 @@ public class ParticleSpawnerImpl implements ParticleSpawner {
                         double.class, double.class, double.class, int.class,
                         double.class, double.class, double.class, double.class);
                 return true;
-            } catch (ClassNotFoundException | NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

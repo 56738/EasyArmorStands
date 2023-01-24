@@ -21,7 +21,7 @@ public class ArmorStandCanTickAccessorImpl implements ArmorStandCanTickAccessor 
                 ArmorStand.class.getDeclaredMethod("canTick");
                 ArmorStand.class.getDeclaredMethod("setCanTick", boolean.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

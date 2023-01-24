@@ -63,7 +63,7 @@ public class ItemProviderImpl implements ItemProvider {
             try {
                 Material.class.getDeclaredMethod("getMaterial", String.class, boolean.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

@@ -79,7 +79,7 @@ public interface ArmorStandLockAccessor {
             public boolean isLocked(ArmorStand armorStand) {
                 try {
                     int slots = lockedSlotsField.getInt(getHandle.invoke(armorStand));
-                    return (slots & 0x1F) == 0x1F;
+                    return slots != 0;
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
@@ -88,7 +88,7 @@ public interface ArmorStandLockAccessor {
             @Override
             public void setLocked(ArmorStand armorStand, boolean locked) {
                 try {
-                    lockedSlotsField.setInt(getHandle.invoke(armorStand), locked ? 0x1F : 0);
+                    lockedSlotsField.setInt(getHandle.invoke(armorStand), locked ? 0x3F3F3F : 0);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }

@@ -21,7 +21,7 @@ public class EntityInvulnerableAccessorImpl implements EntityInvulnerableAccesso
                 Entity.class.getDeclaredMethod("isInvulnerable");
                 Entity.class.getDeclaredMethod("setInvulnerable", boolean.class);
                 return true;
-            } catch (NoSuchMethodException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

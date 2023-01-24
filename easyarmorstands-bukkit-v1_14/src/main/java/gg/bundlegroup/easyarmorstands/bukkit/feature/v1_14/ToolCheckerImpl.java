@@ -44,7 +44,7 @@ public class ToolCheckerImpl implements ToolChecker {
             try {
                 Class.forName("org.bukkit.persistence.PersistentDataContainer");
                 return true;
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }

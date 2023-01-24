@@ -25,7 +25,7 @@ public class ArmSwingListenerImpl implements ArmSwingListener {
             try {
                 Class.forName("io.papermc.paper.event.player.PlayerArmSwingEvent");
                 return true;
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 return false;
             }
         }
