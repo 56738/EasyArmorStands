@@ -19,6 +19,7 @@ public class PositionMoveTool extends AbstractTool {
     private final EasPlayer player;
     private final Cursor3D cursor;
     private final Vector3d original = new Vector3d();
+    private final Vector3d originalCursor = new Vector3d();
     private final Vector3d offset = new Vector3d();
     private final Vector3d current = new Vector3d();
     private final Vector3d lookRayEnd = new Vector3d();
@@ -57,6 +58,7 @@ public class PositionMoveTool extends AbstractTool {
         original.set(entity.getPosition());
         originalYaw = entity.getYaw();
         original.sub(cursor, offset);
+        originalCursor.set(cursor);
         yOffset = original.y - player.getPosition().y();
         yawOffset = originalYaw - player.getYaw();
     }
@@ -69,11 +71,14 @@ public class PositionMoveTool extends AbstractTool {
             current.set(player.getPosition());
             yaw = player.getYaw();
         } else {
-            cursor.get().add(offset, current);
+            Vector3dc cursor = this.cursor.get();
+            current.x = session.snap(cursor.x() - originalCursor.x) + originalCursor.x + offset.x;
+            current.y = session.snap(cursor.y() - originalCursor.y) + originalCursor.y + offset.y;
+            current.z = session.snap(cursor.z() - originalCursor.z) + originalCursor.z + offset.z;
             if (!player.isFlying()) {
                 current.y = player.getPosition().y() + yOffset;
             }
-            yaw = player.getYaw() + yawOffset;
+            yaw = (float) session.snapAngle(player.getYaw() + yawOffset - originalYaw) + originalYaw;
         }
         session.move(current, yaw);
         return null;
