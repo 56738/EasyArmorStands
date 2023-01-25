@@ -1,7 +1,6 @@
 package gg.bundlegroup.easyarmorstands.core.session;
 
 import gg.bundlegroup.easyarmorstands.core.bone.Bone;
-import gg.bundlegroup.easyarmorstands.core.bone.PositionBone;
 import gg.bundlegroup.easyarmorstands.core.inventory.SessionMenu;
 import gg.bundlegroup.easyarmorstands.core.platform.EasArmorEntity;
 import gg.bundlegroup.easyarmorstands.core.platform.EasArmorStand;
@@ -236,10 +235,14 @@ public class Session {
     public void startMoving() {
         player.update();
         entity.update();
-        for (Bone value : bones.values()) {
-            if (value instanceof PositionBone) {
-                setBone(value);
-                return;
+
+        Bone bone = bones.get("position");
+        if (bone != null) {
+            Tool tool = bone.getTools().get("move");
+            if (tool != null) {
+                setBone(bone, tool);
+            } else {
+                setBone(bone);
             }
         }
     }

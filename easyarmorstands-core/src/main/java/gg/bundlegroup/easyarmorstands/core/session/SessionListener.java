@@ -10,6 +10,7 @@ import gg.bundlegroup.easyarmorstands.core.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.core.tool.BoneAxisMoveTool;
 import gg.bundlegroup.easyarmorstands.core.tool.BoneAxisRotateTool;
 import gg.bundlegroup.easyarmorstands.core.tool.PositionAxisTool;
+import gg.bundlegroup.easyarmorstands.core.tool.PositionMoveTool;
 import gg.bundlegroup.easyarmorstands.core.tool.PositionRotateTool;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
@@ -71,6 +72,8 @@ public class SessionListener implements EasListener {
 
     private PositionBone createPositionBone(Session session) {
         PositionBone bone = new PositionBone(session);
+        bone.addTool("move", new PositionMoveTool(bone,
+                "Move", NamedTextColor.YELLOW));
         bone.addTool("rotate", new PositionRotateTool(bone,
                 "Rotate", NamedTextColor.GOLD));
         bone.addTool("x", new PositionAxisTool(bone,
@@ -91,11 +94,11 @@ public class SessionListener implements EasListener {
         bone.addTool("z", new BoneAxisRotateTool(bone,
                 "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         bone.addTool("mx", new BoneAxisMoveTool(bone,
-                "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
+                "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
         bone.addTool("my", new BoneAxisMoveTool(bone,
-                "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
+                "Move Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
         bone.addTool("mz", new BoneAxisMoveTool(bone,
-                "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
+                "Move Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
         return bone;
     }
 

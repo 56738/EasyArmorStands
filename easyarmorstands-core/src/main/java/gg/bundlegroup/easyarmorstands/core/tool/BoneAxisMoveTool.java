@@ -14,12 +14,10 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoneAxisMoveTool implements Tool {
+public class BoneAxisMoveTool extends AbstractTool {
     private final PartBone bone;
     private final Session session;
     private final EasPlayer player;
-    private final Component name;
-    private final Component description;
     private final TextColor color;
     private final Vector3dc axis;
 
@@ -37,11 +35,10 @@ public class BoneAxisMoveTool implements Tool {
     private Vector3dc lookTarget;
 
     public BoneAxisMoveTool(PartBone bone, String name, RGBLike color, Vector3dc axis) {
+        super(Component.text(name, TextColor.color(color)), Component.text("Move along bone axis"));
         this.bone = bone;
         this.session = bone.session();
         this.player = bone.session().getPlayer();
-        this.name = Component.text(name, TextColor.color(color));
-        this.description = Component.text("Move along bone axis");
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
         this.cursor = new Cursor3D(player);
@@ -131,15 +128,5 @@ public class BoneAxisMoveTool implements Tool {
     @Override
     public Vector3dc getLookTarget() {
         return lookTarget;
-    }
-
-    @Override
-    public Component getName() {
-        return name;
-    }
-
-    @Override
-    public Component getDescription() {
-        return description;
     }
 }

@@ -135,12 +135,12 @@ public class SessionCommands {
         }
     }
 
-    @CommandMethod("copy")
-    @CommandPermission("easyarmorstands.copy")
-    public void copy(EasCommandSender sender, Session session) {
+    @CommandMethod("clone")
+    @CommandPermission("easyarmorstands.clone")
+    public void clone(EasCommandSender sender, Session session) {
         EasArmorStand entity = session.getEntity();
         new ArmorStandSnapshot(entity).spawn(entity.getWorld());
-        sender.sendMessage(Component.text("Duplicated the armor stand", NamedTextColor.GREEN));
+        sender.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
         session.startMoving();
     }
 

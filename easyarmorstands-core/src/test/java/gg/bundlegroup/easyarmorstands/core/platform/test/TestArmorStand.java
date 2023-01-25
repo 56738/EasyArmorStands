@@ -16,19 +16,12 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
     private boolean gravity = true;
     private boolean small;
     private boolean locked;
-    private float yaw;
 
     public TestArmorStand(TestPlatform platform, TestWorld world) {
         super(platform, world);
         for (Part part : Part.values()) {
             poses.put(part, new Vector3d());
         }
-    }
-
-    @Override
-    public void move(Vector3dc position, float yaw, float pitch) {
-        super.move(position, yaw, pitch);
-        this.yaw = yaw;
     }
 
     @Override
@@ -98,11 +91,6 @@ public class TestArmorStand extends TestEntity implements EasArmorStand {
 
     @Override
     public void setCanTick(boolean canTick) {
-    }
-
-    @Override
-    public float getYaw() {
-        return yaw;
     }
 
     @Override

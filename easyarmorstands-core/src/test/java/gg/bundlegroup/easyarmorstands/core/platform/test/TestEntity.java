@@ -6,10 +6,9 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class TestEntity extends TestWrapper implements EasEntity {
-    protected final Vector3d nextPosition = new Vector3d();
     private final TestWorld world;
     private final Vector3d position = new Vector3d();
-    private boolean moved = true;
+    private float yaw;
     private boolean persistent = true;
     private boolean glowing;
     private boolean invulnerable;
@@ -22,25 +21,23 @@ public class TestEntity extends TestWrapper implements EasEntity {
         this.world = world;
     }
 
-    protected void assertUpToDate() {
-        if (moved) {
-            throw new IllegalArgumentException("Attempted to access an outdated property");
-        }
+    public void move(Vector3dc position, float yaw, float pitch) {
+        this.position.set(position);
+        this.yaw = yaw;
     }
 
-    public void move(Vector3dc position, float yaw, float pitch) {
-        moved = true;
-        nextPosition.set(position);
+    @Override
+    public float getYaw() {
+        return yaw;
     }
 
     @Override
     public void update() {
-        moved = false;
-        position.set(nextPosition);
     }
 
     @Override
     public boolean teleport(Vector3dc position, float yaw, float pitch) {
+        move(position, yaw, pitch);
         return true;
     }
 
@@ -95,7 +92,6 @@ public class TestEntity extends TestWrapper implements EasEntity {
 
     @Override
     public Vector3dc getPosition() {
-        assertUpToDate();
         return position;
     }
 

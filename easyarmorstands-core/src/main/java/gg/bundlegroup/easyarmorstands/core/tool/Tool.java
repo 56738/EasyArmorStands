@@ -62,6 +62,14 @@ public interface Tool {
     Vector3dc getLookTarget();
 
     /**
+     * Returns the priority of this tool.
+     * This tool will be the look target even if another tool with a lower priority is in front of it.
+     *
+     * @return The priority.
+     */
+    int getPriority();
+
+    /**
      * The name of this tool.
      * Should be very short, for example "Move" or "Y".
      *

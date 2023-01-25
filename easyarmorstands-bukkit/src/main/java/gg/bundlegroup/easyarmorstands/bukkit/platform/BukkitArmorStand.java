@@ -100,11 +100,6 @@ public class BukkitArmorStand extends BukkitArmorEntity<ArmorStand> implements E
         armorStandCanTickAccessor.setCanTick(get(), canTick);
     }
 
-    @Override
-    public float getYaw() {
-        return get().getLocation().getYaw();
-    }
-
     private EulerAngle getAngle(Part part) {
         switch (part) {
             case HEAD:

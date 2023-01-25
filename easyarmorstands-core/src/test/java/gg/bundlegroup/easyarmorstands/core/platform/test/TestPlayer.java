@@ -18,8 +18,6 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     public static final double EYE_HEIGHT = 1.53;
     private final Vector3d eyePosition = new Vector3d();
     private final Matrix3d eyeRotation = new Matrix3d();
-    private final Vector3d nextEyePosition = new Vector3d();
-    private final Matrix3d nextEyeRotation = new Matrix3d();
     private final Set<EasEntity> hiddenEntities = new HashSet<>();
 
     public TestPlayer(TestPlatform platform, TestWorld world) {
@@ -29,8 +27,8 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     @Override
     public void move(Vector3dc position, float yaw, float pitch) {
         super.move(position, yaw, pitch);
-        nextPosition.add(0.0, EYE_HEIGHT, 0.0, nextEyePosition);
-        nextEyeRotation.rotationZYX(0, -Math.toRadians(yaw), Math.toRadians(pitch));
+        position.add(0.0, EYE_HEIGHT, 0.0, eyePosition);
+        eyeRotation.rotationZYX(0, -Math.toRadians(yaw), Math.toRadians(pitch));
     }
 
     public void move(Vector3dc position, Vector3dc direction) {
@@ -44,21 +42,12 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
-    public void update() {
-        super.update();
-        eyePosition.set(nextEyePosition);
-        eyeRotation.set(nextEyeRotation);
-    }
-
-    @Override
     public Vector3dc getEyePosition() {
-        assertUpToDate();
         return eyePosition;
     }
 
     @Override
     public Matrix3dc getEyeRotation() {
-        assertUpToDate();
         return eyeRotation;
     }
 

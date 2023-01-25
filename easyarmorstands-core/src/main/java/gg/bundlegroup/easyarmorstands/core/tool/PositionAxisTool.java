@@ -14,12 +14,10 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class PositionAxisTool implements Tool {
+public class PositionAxisTool extends AbstractTool {
     private final PositionBone bone;
     private final Session session;
     private final EasPlayer player;
-    private final Component name;
-    private final Component description;
     private final TextColor color;
     private final Vector3dc axis;
 
@@ -36,11 +34,10 @@ public class PositionAxisTool implements Tool {
     private Vector3dc lookTarget;
 
     public PositionAxisTool(PositionBone bone, String name, RGBLike color, Vector3dc axis) {
+        super(Component.text(name, TextColor.color(color)), Component.text("Move"));
         this.bone = bone;
         this.session = bone.session();
         this.player = bone.session().getPlayer();
-        this.name = Component.text(name, TextColor.color(color));
-        this.description = Component.text("Move");
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
         this.cursor = new Cursor3D(player);
@@ -98,7 +95,10 @@ public class PositionAxisTool implements Tool {
 
     @Override
     public void showHandles() {
-        player.showLine(negativeHandle, positiveHandle, color, true);
+        player.showPoint(negativeHandle, color);
+        player.showLine(negativeHandle, bone.getPosition(), color, false);
+        player.showLine(bone.getPosition(), positiveHandle, color, false);
+        player.showPoint(positiveHandle, color);
     }
 
     @Override
@@ -115,15 +115,5 @@ public class PositionAxisTool implements Tool {
     @Override
     public Vector3dc getLookTarget() {
         return lookTarget;
-    }
-
-    @Override
-    public Component getName() {
-        return name;
-    }
-
-    @Override
-    public Component getDescription() {
-        return description;
     }
 }

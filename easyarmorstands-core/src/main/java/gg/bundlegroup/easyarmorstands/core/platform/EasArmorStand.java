@@ -32,8 +32,6 @@ public interface EasArmorStand extends EasArmorEntity {
 
     void setCanTick(boolean canTick);
 
-    float getYaw();
-
     Vector3d getPose(Part part, Vector3d dest);
 
     void setPose(Part part, Vector3dc pose);

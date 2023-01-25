@@ -64,15 +64,21 @@ public abstract class AbstractBone implements Bone {
         } else {
             Tool bestTool = null;
             double bestDistance = Double.POSITIVE_INFINITY;
+            int bestPriority = Integer.MIN_VALUE;
             for (Tool tool : tools.values()) {
                 tool.refresh();
                 tool.showHandles();
+                int priority = tool.getPriority();
+                if (priority < bestPriority) {
+                    continue;
+                }
                 Vector3dc target = tool.getLookTarget();
                 if (target != null) {
                     double distance = target.distanceSquared(session.getPlayer().getEyePosition());
-                    if (distance < bestDistance) {
+                    if (distance < bestDistance || priority > bestPriority) {
                         bestTool = tool;
                         bestDistance = distance;
+                        bestPriority = priority;
                     }
                 }
             }

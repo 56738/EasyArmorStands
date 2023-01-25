@@ -28,6 +28,11 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
     }
 
     @Override
+    public float getYaw() {
+        return get().getLocation().getYaw();
+    }
+
+    @Override
     public void update() {
         Location location = get().getLocation();
         position.set(location.getX(), location.getY(), location.getZ());
