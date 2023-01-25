@@ -31,7 +31,7 @@ public interface Bone {
 
     boolean onLeftClick();
 
-    void select(Tool tool);
+    void select(Tool tool, Vector3dc cursor);
 
     /**
      * The position of the bone.

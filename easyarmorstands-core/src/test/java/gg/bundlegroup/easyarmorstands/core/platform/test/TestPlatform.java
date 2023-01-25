@@ -78,6 +78,11 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
+    public boolean canSpawnArmorStand(EasPlayer player, Vector3dc position) {
+        return true;
+    }
+
+    @Override
     public boolean canMoveSession(Session session, Vector3dc position) {
         return true;
     }

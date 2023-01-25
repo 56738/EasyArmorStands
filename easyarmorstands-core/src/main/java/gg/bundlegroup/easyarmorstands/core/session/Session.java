@@ -199,9 +199,9 @@ public class Session {
         }
     }
 
-    public void setBone(Bone bone, Tool tool) {
+    public void setBone(Bone bone, Tool tool, Vector3dc cursor) {
         setBone(bone);
-        bone.select(tool);
+        bone.select(tool, cursor);
     }
 
     public EasArmorStand getEntity() {
@@ -232,7 +232,7 @@ public class Session {
         return player.platform().canMoveSession(this, position) && entity.teleport(position, yaw, 0);
     }
 
-    public void startMoving() {
+    public void startMoving(Vector3dc cursor) {
         player.update();
         entity.update();
 
@@ -240,7 +240,7 @@ public class Session {
         if (bone != null) {
             Tool tool = bone.getTools().get("move");
             if (tool != null) {
-                setBone(bone, tool);
+                setBone(bone, tool, cursor != null ? cursor : tool.getTarget());
             } else {
                 setBone(bone);
             }

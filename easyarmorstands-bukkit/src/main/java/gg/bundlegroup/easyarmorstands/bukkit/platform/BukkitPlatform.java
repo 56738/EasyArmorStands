@@ -1,6 +1,7 @@
 package gg.bundlegroup.easyarmorstands.bukkit.platform;
 
 import cloud.commandframework.CommandManager;
+import gg.bundlegroup.easyarmorstands.bukkit.event.ArmorStandPreSpawnEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMenuInitializeEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMoveEvent;
@@ -36,6 +37,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
@@ -230,6 +232,15 @@ public class BukkitPlatform implements EasPlatform, Listener, Closeable {
         SessionStartEvent event = new SessionStartEvent(
                 ((BukkitPlayer) player).get(),
                 ((BukkitArmorStand) armorStand).get());
+        plugin.getServer().getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    @Override
+    public boolean canSpawnArmorStand(EasPlayer player, Vector3dc position) {
+        Player p = ((BukkitPlayer) player).get();
+        ArmorStandPreSpawnEvent event = new ArmorStandPreSpawnEvent(
+                p, new Location(p.getWorld(), position.x(), position.y(), position.z()));
         plugin.getServer().getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

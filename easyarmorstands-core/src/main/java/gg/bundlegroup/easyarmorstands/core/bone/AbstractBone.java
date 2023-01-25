@@ -115,12 +115,12 @@ public abstract class AbstractBone implements Bone {
     }
 
     @Override
-    public void select(Tool tool) {
+    public void select(Tool tool, Vector3dc cursor) {
         player.clearTitle();
         this.active = true;
         this.tool = tool;
         tool.refresh();
-        tool.start(tool.getTarget());
+        tool.start(cursor);
     }
 
     @Override

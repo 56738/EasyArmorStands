@@ -73,6 +73,9 @@ public class Main implements Closeable {
         commandManager.parameterInjectorRegistry().registerInjector(
                 Session.class, new SessionInjector<>());
 
+        commandManager.parameterInjectorRegistry().registerInjector(
+                SessionManager.class, (context, annotationAccessor) -> sessionManager);
+
         commandManager.parserRegistry().registerParserSupplier(
                 TypeToken.get(Bone.class),
                 p -> new BoneArgumentParser());

@@ -41,4 +41,9 @@ public class Cursor3D {
     public Vector3dc get() {
         return current;
     }
+
+    public void reset() {
+        cursor.set(0, 0, 2);
+        player.getEyeRotation().transform(cursor, current).add(player.getEyePosition());
+    }
 }

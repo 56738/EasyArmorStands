@@ -10,7 +10,9 @@ import gg.bundlegroup.easyarmorstands.core.bone.Bone;
 import gg.bundlegroup.easyarmorstands.core.platform.EasArmorStand;
 import gg.bundlegroup.easyarmorstands.core.platform.EasCommandSender;
 import gg.bundlegroup.easyarmorstands.core.platform.EasFeature;
+import gg.bundlegroup.easyarmorstands.core.platform.EasPlayer;
 import gg.bundlegroup.easyarmorstands.core.session.Session;
+import gg.bundlegroup.easyarmorstands.core.session.SessionManager;
 import gg.bundlegroup.easyarmorstands.core.tool.Tool;
 import gg.bundlegroup.easyarmorstands.core.util.ArmorStandSnapshot;
 import gg.bundlegroup.easyarmorstands.core.util.Util;
@@ -141,7 +143,13 @@ public class SessionCommands {
         EasArmorStand entity = session.getEntity();
         new ArmorStandSnapshot(entity).spawn(entity.getWorld());
         sender.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
-        session.startMoving();
+        session.startMoving(null);
+    }
+
+    @CommandMethod("spawn")
+    @CommandPermission("easyarmorstands.spawn")
+    public void spawn(EasPlayer player, SessionManager sessionManager) {
+        sessionManager.spawnAndStart(player);
     }
 
     @CommandMethod("open")
@@ -234,7 +242,7 @@ public class SessionCommands {
             @Argument("bone") Bone bone,
             @Argument("tool") Tool tool
     ) {
-        session.setBone(bone, tool);
+        session.setBone(bone, tool, tool.getTarget());
         sender.sendMessage(Component.text()
                 .content("Selected bone: ")
                 .append(bone.getName())

@@ -5,6 +5,7 @@ import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.location.Location;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
+import gg.bundlegroup.easyarmorstands.bukkit.event.ArmorStandPreSpawnEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionMoveEvent;
 import gg.bundlegroup.easyarmorstands.bukkit.event.SessionStartEvent;
 import gg.bundlegroup.easyarmorstands.core.session.Session;
@@ -42,6 +43,18 @@ public class PlotSquaredListener implements Listener {
     public void onStartSession(SessionStartEvent event) {
         ArmorStand armorStand = event.getArmorStand();
         Location location = BukkitUtil.adapt(armorStand.getLocation());
+        if (isAllowed(event.getPlayer(), location)) {
+            return;
+        }
+        if (event.getPlayer().hasPermission(bypassPermission)) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onSpawn(ArmorStandPreSpawnEvent event) {
+        Location location = BukkitUtil.adapt(event.getLocation());
         if (isAllowed(event.getPlayer(), location)) {
             return;
         }
