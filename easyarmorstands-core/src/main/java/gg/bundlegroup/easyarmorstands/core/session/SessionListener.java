@@ -87,16 +87,6 @@ public class SessionListener implements EasListener {
     }
 
     @Override
-    public void onScroll(EasPlayer player, int from, int to) {
-        Session session = manager.getSession(player);
-        if (session != null) {
-            if (!session.isToolInOffHand()) {
-                manager.stop(player);
-            }
-        }
-    }
-
-    @Override
     public void onLogin(EasPlayer player) {
         manager.hideSkeletons(player);
     }

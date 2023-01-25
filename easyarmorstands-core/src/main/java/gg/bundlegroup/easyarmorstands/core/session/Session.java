@@ -144,7 +144,17 @@ public class Session {
         }
 
         return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid()) &&
-                player.getEyePosition().distanceSquared(entity.getPosition()) < 100 * 100;
+                player.getEyePosition().distanceSquared(entity.getPosition()) < 100 * 100 &&
+                isHoldingTool();
+    }
+
+    private boolean isHoldingTool() {
+        EasItem mainHand = player.getItem(EasArmorEntity.Slot.MAIN_HAND);
+        if (mainHand != null && mainHand.isTool()) {
+            return true;
+        }
+        EasItem offHand = player.getItem(EasArmorEntity.Slot.OFF_HAND);
+        return offHand != null && offHand.isTool();
     }
 
     private void updateTargetBone() {

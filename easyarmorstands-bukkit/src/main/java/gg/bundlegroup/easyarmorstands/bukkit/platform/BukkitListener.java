@@ -20,7 +20,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -136,11 +135,6 @@ public class BukkitListener implements Listener {
     @EventHandler
     public void onRightClickAtEntity(PlayerInteractAtEntityEvent event) {
         onRightClickEntity(event);
-    }
-
-    @EventHandler
-    public void onScroll(PlayerItemHeldEvent event) {
-        listener.onScroll(platform.getPlayer(event.getPlayer()), event.getPreviousSlot(), event.getNewSlot());
     }
 
     @EventHandler
