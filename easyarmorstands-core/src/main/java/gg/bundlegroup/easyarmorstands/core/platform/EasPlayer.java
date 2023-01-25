@@ -15,6 +15,8 @@ public interface EasPlayer extends EasArmorEntity, EasCommandSender {
 
     boolean isSneaking();
 
+    boolean isFlying();
+
     void giveTool();
 
     void lookAt(Vector3dc target);

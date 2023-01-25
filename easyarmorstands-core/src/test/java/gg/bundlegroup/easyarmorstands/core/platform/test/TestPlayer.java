@@ -67,6 +67,11 @@ public class TestPlayer extends TestEntity implements EasPlayer {
     }
 
     @Override
+    public boolean isFlying() {
+        return false;
+    }
+
+    @Override
     public void giveTool() {
     }
 

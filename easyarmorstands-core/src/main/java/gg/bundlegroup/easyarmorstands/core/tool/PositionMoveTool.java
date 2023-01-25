@@ -70,7 +70,9 @@ public class PositionMoveTool extends AbstractTool {
             yaw = player.getYaw();
         } else {
             cursor.get().add(offset, current);
-            current.y = player.getPosition().y() + yOffset;
+            if (!player.isFlying()) {
+                current.y = player.getPosition().y() + yOffset;
+            }
             yaw = player.getYaw() + yawOffset;
         }
         session.move(current, yaw);

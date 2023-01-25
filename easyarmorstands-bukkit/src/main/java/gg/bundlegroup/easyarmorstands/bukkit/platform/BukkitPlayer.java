@@ -75,6 +75,11 @@ public class BukkitPlayer extends BukkitArmorEntity<Player> implements EasPlayer
     }
 
     @Override
+    public boolean isFlying() {
+        return get().isFlying();
+    }
+
+    @Override
     public void giveTool() {
         get().getInventory().addItem(platform().toolChecker().createTool());
     }
