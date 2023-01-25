@@ -52,16 +52,16 @@ public class SessionMenu implements EasInventoryListener {
             setSlot(5, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.FEET));
         }
         if (player.hasPermission("easyarmorstands.edit.arms")) {
-            setSlot(3, 4, new ToggleArmsSlot(this));
+            addButton(new ToggleArmsSlot(this));
         }
         if (player.hasPermission("easyarmorstands.edit.size")) {
-            setSlot(4, 4, new ToggleSizeSlot(this));
+            addButton(new ToggleSizeSlot(this));
         }
         if (player.hasPermission("easyarmorstands.edit.baseplate")) {
-            setSlot(5, 4, new ToggleBasePlateSlot(this));
+            addButton(new ToggleBasePlateSlot(this));
         }
         if (player.hasPermission("easyarmorstands.edit.gravity")) {
-            setSlot(5, 3, new ToggleGravitySlot(this));
+            addButton(new ToggleGravitySlot(this));
         }
         setSlot(3, 7, new SelectBoneSlot(this,
                 session.getBones().get("head"),
@@ -148,12 +148,24 @@ public class SessionMenu implements EasInventoryListener {
     }
 
     public void addButton(InventorySlot slot) {
-        for (int row = 0; row < 6; row++) {
-            for (int column = 4; column < 9; column++) {
+        for (int row = 0; row <= 1; row++) {
+            for (int column = 8; column >= 3; column--) {
                 if (slots[index(row, column)] instanceof DisabledSlot) {
                     setSlot(row, column, slot);
                     return;
                 }
+            }
+        }
+        for (int column = 4; column <= 5; column++) {
+            if (slots[index(2, column)] instanceof DisabledSlot) {
+                setSlot(2, column, slot);
+                return;
+            }
+        }
+        for (int row = 3; row <= 5; row++) {
+            if (slots[index(row, 4)] instanceof DisabledSlot) {
+                setSlot(row, 4, slot);
+                return;
             }
         }
         throw new IllegalStateException("No space left in the menu");
