@@ -87,6 +87,11 @@ public class SessionListener implements EasListener {
     }
 
     @Override
+    public boolean onDrop(EasPlayer player, EasItem item) {
+        return manager.stop(player);
+    }
+
+    @Override
     public void onLogin(EasPlayer player) {
         manager.hideSkeletons(player);
     }

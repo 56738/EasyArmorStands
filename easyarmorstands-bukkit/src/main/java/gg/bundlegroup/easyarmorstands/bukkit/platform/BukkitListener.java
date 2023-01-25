@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -135,6 +136,15 @@ public class BukkitListener implements Listener {
     @EventHandler
     public void onRightClickAtEntity(PlayerInteractAtEntityEvent event) {
         onRightClickEntity(event);
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        BukkitPlayer player = platform.getPlayer(event.getPlayer());
+        BukkitItem item = platform.getItem(event.getItemDrop().getItemStack());
+        if (listener.onDrop(player, item)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

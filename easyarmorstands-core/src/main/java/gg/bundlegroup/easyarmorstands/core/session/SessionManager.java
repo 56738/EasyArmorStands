@@ -44,11 +44,13 @@ public class SessionManager {
         return session;
     }
 
-    public void stop(EasPlayer player) {
+    public boolean stop(EasPlayer player) {
         Session session = sessions.remove(player);
         if (session != null) {
             session.stop();
+            return true;
         }
+        return false;
     }
 
     public void update() {

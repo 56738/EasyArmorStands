@@ -9,6 +9,8 @@ public interface EasListener {
 
     boolean onRightClickArmorStand(EasPlayer player, EasArmorStand armorStand, EasItem item, boolean cancelled);
 
+    boolean onDrop(EasPlayer player, EasItem item);
+
     void onLogin(EasPlayer player);
 
     void onJoin(EasPlayer player);
