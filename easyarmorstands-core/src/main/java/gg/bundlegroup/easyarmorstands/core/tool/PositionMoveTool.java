@@ -24,6 +24,7 @@ public class PositionMoveTool extends AbstractTool {
     private final Vector3d lookRayEnd = new Vector3d();
     private final Vector3d lookRayPoint = new Vector3d();
     private float originalYaw;
+    private double yOffset;
     private float yawOffset;
     private boolean looking;
 
@@ -56,14 +57,23 @@ public class PositionMoveTool extends AbstractTool {
         original.set(entity.getPosition());
         originalYaw = entity.getYaw();
         original.sub(cursor, offset);
+        yOffset = original.y - player.getPosition().y();
         yawOffset = originalYaw - player.getYaw();
     }
 
     @Override
     public Component update() {
         cursor.update(false);
-        cursor.get().add(offset, current);
-        session.move(current, player.getYaw() + yawOffset);
+        float yaw;
+        if (player.getPitch() > 80) {
+            current.set(player.getPosition());
+            yaw = player.getYaw();
+        } else {
+            cursor.get().add(offset, current);
+            current.y = player.getPosition().y() + yOffset;
+            yaw = player.getYaw() + yawOffset;
+        }
+        session.move(current, yaw);
         return null;
     }
 

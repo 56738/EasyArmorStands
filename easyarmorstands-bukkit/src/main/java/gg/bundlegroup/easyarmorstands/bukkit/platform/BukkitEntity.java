@@ -33,6 +33,11 @@ public class BukkitEntity<T extends Entity> extends BukkitWrapper<T> implements 
     }
 
     @Override
+    public float getPitch() {
+        return get().getLocation().getPitch();
+    }
+
+    @Override
     public void update() {
         Location location = get().getLocation();
         position.set(location.getX(), location.getY(), location.getZ());

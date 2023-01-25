@@ -9,6 +9,7 @@ public class TestEntity extends TestWrapper implements EasEntity {
     private final TestWorld world;
     private final Vector3d position = new Vector3d();
     private float yaw;
+    private float pitch;
     private boolean persistent = true;
     private boolean glowing;
     private boolean invulnerable;
@@ -24,11 +25,17 @@ public class TestEntity extends TestWrapper implements EasEntity {
     public void move(Vector3dc position, float yaw, float pitch) {
         this.position.set(position);
         this.yaw = yaw;
+        this.pitch = pitch;
     }
 
     @Override
     public float getYaw() {
         return yaw;
+    }
+
+    @Override
+    public float getPitch() {
+        return pitch;
     }
 
     @Override

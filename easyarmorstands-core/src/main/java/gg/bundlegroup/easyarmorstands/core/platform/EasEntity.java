@@ -6,6 +6,8 @@ import org.joml.Vector3dc;
 public interface EasEntity extends EasWrapper {
     float getYaw();
 
+    float getPitch();
+
     void update();
 
     boolean teleport(Vector3dc position, float yaw, float pitch);

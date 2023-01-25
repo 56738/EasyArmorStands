@@ -51,6 +51,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.joml.Vector3dc;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,7 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BukkitPlatform implements EasPlatform, Listener {
+public class BukkitPlatform implements EasPlatform, Listener, Closeable {
     private final Plugin plugin;
     private final BukkitAudiences adventure;
     private final CommandManager<EasCommandSender> commandManager;
@@ -315,5 +316,10 @@ public class BukkitPlatform implements EasPlatform, Listener {
 
     public EntityInvulnerableAccessor entityInvulnerableAccessor() {
         return entityInvulnerableAccessor;
+    }
+
+    @Override
+    public void close() {
+        adventure.close();
     }
 }

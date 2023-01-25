@@ -108,6 +108,10 @@ public class EasyArmorStands extends JavaPlugin {
         if (main != null) {
             main.close();
         }
+
+        if (platform != null) {
+            platform.close();
+        }
     }
 
     public BukkitPlatform getPlatform() {
