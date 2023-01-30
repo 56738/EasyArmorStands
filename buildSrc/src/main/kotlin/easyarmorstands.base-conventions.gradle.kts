@@ -2,7 +2,7 @@ plugins {
     id("java-library")
 }
 
-group = "gg.bundlegroup"
+group = "me.m56738"
 version = "1.0-SNAPSHOT"
 
 repositories {

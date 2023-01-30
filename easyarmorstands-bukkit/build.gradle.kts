@@ -6,7 +6,7 @@ plugins {
 
 bukkit {
     name = "EasyArmorStands"
-    main = "gg.bundlegroup.easyarmorstands.bukkit.EasyArmorStands"
+    main = "me.m56738.easyarmorstands.bukkit.EasyArmorStands"
     apiVersion = "1.13"
     author = "56738"
     softDepend = listOf("HeadDatabase", "PlotSquared", "Train_Carts")
@@ -41,7 +41,7 @@ tasks {
     }
 
     shadowJar {
-        val prefix = "gg.bundlegroup.easyarmorstands.lib"
+        val prefix = "me.m56738.easyarmorstands.lib"
         relocate("org.joml", "$prefix.joml")
         relocate("net.kyori", "$prefix.kyori")
         relocate("cloud.commandframework", "$prefix.cloud")
