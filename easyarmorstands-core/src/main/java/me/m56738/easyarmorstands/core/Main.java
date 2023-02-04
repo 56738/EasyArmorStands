@@ -2,14 +2,18 @@ package me.m56738.easyarmorstands.core;
 
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.meta.SimpleCommandMeta;
+import cloud.commandframework.arguments.parser.StandardParameters;
+import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.services.types.ConsumerService;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.core.bone.Bone;
 import me.m56738.easyarmorstands.core.command.BoneArgumentParser;
+import me.m56738.easyarmorstands.core.command.GlobalCommands;
 import me.m56738.easyarmorstands.core.command.NoSessionException;
 import me.m56738.easyarmorstands.core.command.PipelineExceptionHandler;
 import me.m56738.easyarmorstands.core.command.RequiresFeature;
+import me.m56738.easyarmorstands.core.command.SessionCommands;
 import me.m56738.easyarmorstands.core.command.SessionInjector;
 import me.m56738.easyarmorstands.core.command.SessionPreprocessor;
 import me.m56738.easyarmorstands.core.command.ToolArgumentParser;
@@ -20,7 +24,6 @@ import me.m56738.easyarmorstands.core.session.Session;
 import me.m56738.easyarmorstands.core.session.SessionListener;
 import me.m56738.easyarmorstands.core.session.SessionManager;
 import me.m56738.easyarmorstands.core.tool.Tool;
-import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -73,9 +76,6 @@ public class Main implements Closeable {
         commandManager.parameterInjectorRegistry().registerInjector(
                 Session.class, new SessionInjector<>());
 
-        commandManager.parameterInjectorRegistry().registerInjector(
-                SessionManager.class, (context, annotationAccessor) -> sessionManager);
-
         commandManager.parserRegistry().registerParserSupplier(
                 TypeToken.get(Bone.class),
                 p -> new BoneArgumentParser());
@@ -85,16 +85,15 @@ public class Main implements Closeable {
                 p -> new ToolArgumentParser());
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
-                p -> SimpleCommandMeta.empty());
+                p -> CommandMeta.simple()
+                        .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
+                        .build());
 
         annotationParser.registerBuilderModifier(RequiresFeature.class,
                 (requiresFeature, builder) -> builder.meta(RequiresFeature.KEY, requiresFeature.value()));
 
-        try {
-            annotationParser.parseContainers();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        annotationParser.parse(new GlobalCommands(commandManager));
+        annotationParser.parse(new SessionCommands(sessionManager));
     }
 
     public SessionManager getSessionManager() {

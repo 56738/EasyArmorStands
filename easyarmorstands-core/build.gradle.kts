@@ -9,7 +9,6 @@ dependencies {
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
     api(libs.adventure.text.minimessage)
-    annotationProcessor(libs.cloud.annotations)
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
 }
