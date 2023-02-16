@@ -48,9 +48,14 @@ public class GlobalCommands {
     @CommandDescription("Gives you the editor tool")
     public void give(EasPlayer sender) {
         sender.giveTool();
-        sender.sendMessage(Component.text("Tool added to your inventory", NamedTextColor.GREEN));
-        sender.sendMessage(Component.text("Click an armor stand to start editing", NamedTextColor.GRAY));
-        sender.sendMessage(Component.text("Shift + right click to spawn an armor stand", NamedTextColor.GRAY));
-        sender.sendMessage(Component.text("Drop to stop editing", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text(
+                "Tool added to your inventory\n",
+                NamedTextColor.GREEN
+        ).append(Component.text(
+                "Right click an armor stand to start editing.\n" +
+                        "Sneak + right click to spawn an armor stand.\n" +
+                        "Drop to stop editing.",
+                NamedTextColor.GRAY
+        )));
     }
 }

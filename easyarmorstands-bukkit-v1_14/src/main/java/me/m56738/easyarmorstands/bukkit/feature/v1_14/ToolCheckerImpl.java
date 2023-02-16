@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ToolCheckerImpl implements ToolChecker {
@@ -32,8 +33,13 @@ public class ToolCheckerImpl implements ToolChecker {
     public ItemStack createTool() {
         ItemStack item = new ItemStack(Material.BLAZE_ROD);
         ItemMeta meta = Objects.requireNonNull(item.getItemMeta());
-        meta.setDisplayName(ChatColor.RESET + "EasyArmorStands");
+        meta.setDisplayName(ChatColor.GOLD + "EasyArmorStands");
         meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        meta.setLore(Arrays.asList(
+                ChatColor.GRAY + "Right click an armor stand to start editing.",
+                ChatColor.GRAY + "Sneak + right click to spawn an armor stand.",
+                ChatColor.GRAY + "Drop to stop editing."
+        ));
         item.setItemMeta(meta);
         return item;
     }
