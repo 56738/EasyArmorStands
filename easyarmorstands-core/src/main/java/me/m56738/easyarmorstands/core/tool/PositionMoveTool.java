@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.core.tool;
 import me.m56738.easyarmorstands.core.bone.PositionBone;
 import me.m56738.easyarmorstands.core.platform.EasArmorStand;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import me.m56738.easyarmorstands.core.util.Cursor3D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -15,7 +15,7 @@ import org.joml.Vector3dc;
 
 public class PositionMoveTool extends AbstractTool {
     private final PositionBone bone;
-    private final Session session;
+    private final ArmorStandSession session;
     private final EasPlayer player;
     private final Cursor3D cursor;
     private final Vector3d original = new Vector3d();

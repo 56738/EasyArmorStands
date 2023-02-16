@@ -1,9 +1,8 @@
 package me.m56738.easyarmorstands.bukkit.event;
 
-import me.m56738.easyarmorstands.bukkit.platform.BukkitArmorStand;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlayer;
 import me.m56738.easyarmorstands.core.session.Session;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.World;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
@@ -15,14 +14,14 @@ public class SessionMoveEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
 
     private final Session session;
-    private final ArmorStand armorStand;
+    private final World world;
     private final Vector3dc position;
     private boolean cancelled;
 
-    public SessionMoveEvent(@NotNull Session session, Vector3dc position) {
+    public SessionMoveEvent(@NotNull Session session, World world, Vector3dc position) {
         super(((BukkitPlayer) session.getPlayer()).get());
         this.session = session;
-        this.armorStand = ((BukkitArmorStand) session.getEntity()).get();
+        this.world = world;
         this.position = new Vector3d(position);
     }
 
@@ -39,12 +38,12 @@ public class SessionMoveEvent extends PlayerEvent implements Cancellable {
         return session;
     }
 
-    public @NotNull Vector3dc getPosition() {
-        return position;
+    public @NotNull World getWorld() {
+        return world;
     }
 
-    public @NotNull ArmorStand getArmorStand() {
-        return armorStand;
+    public @NotNull Vector3dc getPosition() {
+        return position;
     }
 
     @Override

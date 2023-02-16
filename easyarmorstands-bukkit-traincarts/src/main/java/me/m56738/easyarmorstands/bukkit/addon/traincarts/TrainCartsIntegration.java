@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.bukkit.EasyArmorStands;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlatform;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlayer;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import org.bukkit.entity.Player;
 
 public class TrainCartsIntegration {
@@ -21,7 +21,7 @@ public class TrainCartsIntegration {
 
     @CommandMethod("eas model [query]")
     @CommandPermission("easyarmorstands.traincarts.model")
-    public void openModelMenu(EasPlayer player, Session session, @Argument("query") @Greedy String query) {
+    public void openModelMenu(EasPlayer player, ArmorStandSession session, @Argument("query") @Greedy String query) {
         if (session == null) {
             return;
         }

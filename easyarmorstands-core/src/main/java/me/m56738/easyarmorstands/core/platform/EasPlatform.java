@@ -30,7 +30,7 @@ public interface EasPlatform {
 
     boolean canSpawnArmorStand(EasPlayer player, Vector3dc position);
 
-    boolean canMoveSession(Session session, Vector3dc position);
+    boolean canMoveSession(Session session, EasWorld world, Vector3dc position);
 
     void onSessionStarted(Session session);
 

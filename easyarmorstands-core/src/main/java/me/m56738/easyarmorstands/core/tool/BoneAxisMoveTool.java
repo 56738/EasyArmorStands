@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.core.tool;
 import me.m56738.easyarmorstands.core.bone.PartBone;
 import me.m56738.easyarmorstands.core.platform.EasArmorStand;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import me.m56738.easyarmorstands.core.util.Cursor3D;
 import me.m56738.easyarmorstands.core.util.Util;
 import net.kyori.adventure.text.Component;
@@ -16,7 +16,7 @@ import org.joml.Vector3dc;
 
 public class BoneAxisMoveTool extends AbstractTool {
     private final PartBone bone;
-    private final Session session;
+    private final ArmorStandSession session;
     private final EasPlayer player;
     private final TextColor color;
     private final Vector3dc axis;
@@ -37,8 +37,8 @@ public class BoneAxisMoveTool extends AbstractTool {
     public BoneAxisMoveTool(PartBone bone, String name, RGBLike color, Vector3dc axis) {
         super(Component.text(name, TextColor.color(color)), Component.text("Move along bone axis"));
         this.bone = bone;
-        this.session = bone.session();
-        this.player = bone.session().getPlayer();
+        this.session = bone.getSession();
+        this.player = session.getPlayer();
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);
         this.cursor = new Cursor3D(player);

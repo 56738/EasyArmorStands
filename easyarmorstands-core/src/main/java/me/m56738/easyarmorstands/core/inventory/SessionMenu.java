@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.core.platform.EasItem;
 import me.m56738.easyarmorstands.core.platform.EasMaterial;
 import me.m56738.easyarmorstands.core.platform.EasPlatform;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -17,13 +17,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class SessionMenu implements EasInventoryListener {
-    private final Session session;
+    private final ArmorStandSession session;
     private final EasInventory inventory;
     private final InventorySlot[] slots;
     private final List<Runnable> queue = new ArrayList<>();
     private boolean initialized;
 
-    public SessionMenu(Session session, EasPlatform platform) {
+    public SessionMenu(ArmorStandSession session, EasPlatform platform) {
         this.session = session;
         this.inventory = platform.createInventory(
                 Component.text("EasyArmorStands"), 9, 6, this);
@@ -179,7 +179,7 @@ public class SessionMenu implements EasInventoryListener {
         return inventory;
     }
 
-    public Session getSession() {
+    public ArmorStandSession getSession() {
         return session;
     }
 }

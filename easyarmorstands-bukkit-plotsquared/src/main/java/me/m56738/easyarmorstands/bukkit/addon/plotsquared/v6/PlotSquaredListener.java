@@ -68,7 +68,7 @@ public class PlotSquaredListener implements Listener {
     public void onMoveSession(SessionMoveEvent event) {
         Vector3dc pos = event.getPosition();
         Location location = BukkitUtil.adapt(new org.bukkit.Location(
-                event.getArmorStand().getWorld(), pos.x(), pos.y(), pos.z()));
+                event.getWorld(), pos.x(), pos.y(), pos.z()));
         if (isAllowed(event.getPlayer(), location)) {
             return;
         }

@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.bukkit.feature.v1_18;
 
+import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import me.m56738.easyarmorstands.bukkit.EasyArmorStands;
 import me.m56738.easyarmorstands.bukkit.feature.ArmSwingListener;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitListener;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlatform;
-import io.papermc.paper.event.player.PlayerArmSwingEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
 

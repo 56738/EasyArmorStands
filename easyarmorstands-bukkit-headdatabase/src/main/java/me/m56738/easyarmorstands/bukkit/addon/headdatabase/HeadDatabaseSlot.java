@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.bukkit.addon.headdatabase;
 
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlatform;
 import me.m56738.easyarmorstands.bukkit.platform.BukkitPlayer;
 import me.m56738.easyarmorstands.core.inventory.InventorySlot;
 import me.m56738.easyarmorstands.core.inventory.SessionMenu;
 import me.m56738.easyarmorstands.core.platform.EasItem;
-import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

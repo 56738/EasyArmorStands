@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.core.inventory;
 import me.m56738.easyarmorstands.core.platform.EasArmorEntity;
 import me.m56738.easyarmorstands.core.platform.EasInventory;
 import me.m56738.easyarmorstands.core.platform.EasItem;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 
 public class EquipmentItemSlot implements InventorySlot {
     private final SessionMenu menu;
-    private final Session session;
+    private final ArmorStandSession session;
     private final EasInventory inventory;
     private final EasArmorEntity.Slot slot;
 

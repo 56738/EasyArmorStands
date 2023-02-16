@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.core.platform.EasArmorStand;
 import me.m56738.easyarmorstands.core.platform.EasCommandSender;
 import me.m56738.easyarmorstands.core.platform.EasFeature;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import me.m56738.easyarmorstands.core.session.Session;
 import me.m56738.easyarmorstands.core.session.SessionManager;
 import me.m56738.easyarmorstands.core.tool.Tool;
@@ -36,7 +37,7 @@ public class SessionCommands {
     @CommandMethod("visible <visible>")
     @CommandPermission("easyarmorstands.edit.visible")
     @CommandDescription("Change the visibility of an armor stand")
-    public void setVisible(EasCommandSender sender, Session session, @Argument("visible") boolean visible) {
+    public void setVisible(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setVisible(visible);
         if (visible) {
             sender.sendMessage(Component.text("Armor stand set to visible", NamedTextColor.GREEN));
@@ -48,7 +49,7 @@ public class SessionCommands {
     @CommandMethod("baseplate <visible>")
     @CommandPermission("easyarmorstands.edit.baseplate")
     @CommandDescription("Change the visibility of the base plate")
-    public void setBasePlate(EasCommandSender sender, Session session, @Argument("visible") boolean visible) {
+    public void setBasePlate(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setBasePlate(visible);
         if (visible) {
             sender.sendMessage(Component.text("Base plate enabled", NamedTextColor.GREEN));
@@ -60,7 +61,7 @@ public class SessionCommands {
     @CommandMethod("arms <visible>")
     @CommandPermission("easyarmorstands.edit.arms")
     @CommandDescription("Change the visibility of the arms")
-    public void setArms(EasCommandSender sender, Session session, @Argument("visible") boolean visible) {
+    public void setArms(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setArms(visible);
         if (visible) {
             sender.sendMessage(Component.text("Arms enabled", NamedTextColor.GREEN));
@@ -72,7 +73,7 @@ public class SessionCommands {
     @CommandMethod("gravity <enabled>")
     @CommandPermission("easyarmorstands.edit.gravity")
     @CommandDescription("Toggle gravity for an armor stand")
-    public void setGravity(EasCommandSender sender, Session session, @Argument("enabled") boolean enabled) {
+    public void setGravity(EasCommandSender sender, ArmorStandSession session, @Argument("enabled") boolean enabled) {
         session.getEntity().setGravity(enabled);
         if (enabled) {
             sender.sendMessage(Component.text("Gravity enabled", NamedTextColor.GREEN));
@@ -84,7 +85,7 @@ public class SessionCommands {
     @CommandMethod("size <size>")
     @CommandPermission("easyarmorstands.edit.size")
     @CommandDescription("Change the size of an armor stand")
-    public void setSize(EasCommandSender sender, Session session, @Argument("size") ArmorStandSize size) {
+    public void setSize(EasCommandSender sender, ArmorStandSession session, @Argument("size") ArmorStandSize size) {
         session.getEntity().setSmall(size == ArmorStandSize.SMALL);
         sender.sendMessage(Component.text("Size changed to " +
                 size.name().toLowerCase(Locale.ROOT), NamedTextColor.GREEN));
@@ -93,7 +94,7 @@ public class SessionCommands {
     @CommandMethod("name [name]")
     @CommandPermission("easyarmorstands.edit.name")
     @CommandDescription("Change the name of an armor stand")
-    public void setName(EasCommandSender sender, Session session,
+    public void setName(EasCommandSender sender, ArmorStandSession session,
                         @Argument(value = "name", description = "MiniMessage text") @Greedy String input) {
         Component name = MiniMessage.miniMessage().deserializeOrNull(input);
         session.getEntity().setCustomName(name);
@@ -105,7 +106,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.cantick")
     @CommandDescription("Change whether ticking is enabled for an armor stand")
     @RequiresFeature(EasFeature.ARMOR_STAND_CAN_TICK)
-    public void setCanTick(EasCommandSender sender, Session session, @Argument("value") boolean canTick) {
+    public void setCanTick(EasCommandSender sender, ArmorStandSession session, @Argument("value") boolean canTick) {
         session.getEntity().setCanTick(canTick);
         if (canTick) {
             sender.sendMessage(Component.text("Armor stand ticking enabled", NamedTextColor.GREEN));
@@ -118,7 +119,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.glow")
     @CommandDescription("Change whether an armor stand is glowing (outline is visible)")
     @RequiresFeature(EasFeature.ENTITY_GLOW)
-    public void setGlow(EasCommandSender sender, Session session, @Argument("glowing") boolean glowing) {
+    public void setGlow(EasCommandSender sender, ArmorStandSession session, @Argument("glowing") boolean glowing) {
         session.getEntity().setGlowing(glowing);
         if (glowing) {
             sender.sendMessage(Component.text("Armor stand glowing enabled", NamedTextColor.GREEN));
@@ -131,7 +132,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.lock")
     @CommandDescription("Change whether the equipment of an armor stand is locked")
     @RequiresFeature(EasFeature.ARMOR_STAND_LOCK)
-    public void setLocked(EasCommandSender sender, Session session, @Argument("locked") boolean locked) {
+    public void setLocked(EasCommandSender sender, ArmorStandSession session, @Argument("locked") boolean locked) {
         session.getEntity().setLocked(locked);
         if (locked) {
             sender.sendMessage(Component.text("Armor stand items locked", NamedTextColor.GREEN));
@@ -144,7 +145,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.edit.invulnerable")
     @CommandDescription("Change whether an armor stand is invulnerable")
     @RequiresFeature(EasFeature.ENTITY_INVULNERABLE)
-    public void setInvulnerable(EasCommandSender sender, Session session, @Argument("invulnerable") boolean invulnerable) {
+    public void setInvulnerable(EasCommandSender sender, ArmorStandSession session, @Argument("invulnerable") boolean invulnerable) {
         session.getEntity().setInvulnerable(invulnerable);
         if (invulnerable) {
             sender.sendMessage(Component.text("Armor stand is invulnerable", NamedTextColor.GREEN));
@@ -156,7 +157,7 @@ public class SessionCommands {
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Place a copy of the armor stand")
-    public void clone(EasCommandSender sender, Session session) {
+    public void clone(EasCommandSender sender, ArmorStandSession session) {
         EasArmorStand entity = session.getEntity();
         new ArmorStandSnapshot(entity).spawn(entity.getWorld());
         sender.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
@@ -173,7 +174,7 @@ public class SessionCommands {
     @CommandMethod("open")
     @CommandPermission("easyarmorstands.open")
     @CommandDescription("Open the menu")
-    public void openMenu(Session session) {
+    public void openMenu(ArmorStandSession session) {
         session.openMenu();
     }
 
@@ -214,7 +215,7 @@ public class SessionCommands {
     @CommandDescription("Move an armor stand to the middle of the block")
     public void align(
             EasCommandSender sender,
-            Session session,
+            ArmorStandSession session,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset

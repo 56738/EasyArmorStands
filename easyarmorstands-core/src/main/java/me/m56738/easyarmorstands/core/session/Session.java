@@ -1,10 +1,7 @@
 package me.m56738.easyarmorstands.core.session;
 
 import me.m56738.easyarmorstands.core.bone.Bone;
-import me.m56738.easyarmorstands.core.inventory.SessionMenu;
 import me.m56738.easyarmorstands.core.platform.EasArmorEntity;
-import me.m56738.easyarmorstands.core.platform.EasArmorStand;
-import me.m56738.easyarmorstands.core.platform.EasFeature;
 import me.m56738.easyarmorstands.core.platform.EasItem;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
 import me.m56738.easyarmorstands.core.tool.Tool;
@@ -13,9 +10,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
-import org.joml.Math;
-import org.joml.Matrix3d;
-import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -28,10 +22,7 @@ public class Session {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private final EasPlayer player;
-    private final EasArmorStand entity;
-    private final EasArmorStand skeleton;
     private final Map<String, Bone> bones = new HashMap<>();
-    private final Matrix3d armorStandYaw = new Matrix3d();
 
     private int clickTicks = 5;
     private Bone bone;
@@ -39,28 +30,8 @@ public class Session {
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
 
-    public Session(EasPlayer player, EasArmorStand entity) {
+    public Session(EasPlayer player) {
         this.player = player;
-        this.entity = entity;
-        if (player.platform().hasFeature(EasFeature.ENTITY_GLOW)) {
-            this.skeleton = entity.getWorld().spawnArmorStand(entity.getPosition(), entity.getYaw(), e -> {
-                e.setVisible(false);
-                e.setBasePlate(false);
-                e.setArms(true);
-                e.setPersistent(false);
-                e.setGravity(false);
-                e.setCanTick(false);
-                updateSkeleton(e);
-                for (EasPlayer other : player.platform().getPlayers()) {
-                    if (!player.equals(other)) {
-                        other.hideEntity(e);
-                    }
-                }
-                e.setGlowing(true);
-            });
-        } else {
-            this.skeleton = null;
-        }
     }
 
     public void addBone(String name, Bone bone) {
@@ -80,13 +51,16 @@ public class Session {
             return;
         }
         if (!active) {
-            openMenu();
+            onLeftClick();
             return;
         }
         if (bone.onLeftClick()) {
             return;
         }
         active = false;
+    }
+
+    protected void onLeftClick() {
     }
 
     public void handleRightClick() {
@@ -113,24 +87,17 @@ public class Session {
     }
 
     public boolean update() {
+        player.update();
+
         if (clickTicks > 0) {
             clickTicks--;
         }
-
-        player.update();
-        entity.update();
-
-        armorStandYaw.rotationY(-Math.toRadians(entity.getYaw()));
 
         if (active) {
             bone.refresh();
             bone.update();
         } else {
             updateTargetBone();
-        }
-
-        if (skeleton != null) {
-            updateSkeleton(skeleton);
         }
 
         if (!active) {
@@ -143,9 +110,7 @@ public class Session {
             }
         }
 
-        return player.isValid() && entity.isValid() && (skeleton == null || skeleton.isValid()) &&
-                player.getEyePosition().distanceSquared(entity.getPosition()) < 100 * 100 &&
-                isHoldingTool();
+        return player.isValid() && isHoldingTool();
     }
 
     private boolean isHoldingTool() {
@@ -185,17 +150,7 @@ public class Session {
     }
 
     public void stop() {
-        if (skeleton != null) skeleton.remove();
         player.clearTitle();
-    }
-
-    private void updateSkeleton(EasArmorStand skeleton) {
-        skeleton.teleport(entity.getPosition(), entity.getYaw(), 0);
-        skeleton.setSmall(entity.isSmall());
-        Vector3d pose = new Vector3d();
-        for (EasArmorStand.Part part : EasArmorStand.Part.values()) {
-            skeleton.setPose(part, entity.getPose(part, pose));
-        }
     }
 
     public void setBone(Bone bone) {
@@ -214,10 +169,6 @@ public class Session {
         bone.select(tool, cursor);
     }
 
-    public EasArmorStand getEntity() {
-        return entity;
-    }
-
     public EasPlayer getPlayer() {
         return player;
     }
@@ -230,21 +181,8 @@ public class Session {
         return 0.15;
     }
 
-    public boolean canMove(Vector3dc position) {
-        return player.platform().canMoveSession(this, position);
-    }
-
-    public boolean move(Vector3dc position) {
-        return move(position, entity.getYaw());
-    }
-
-    public boolean move(Vector3dc position, float yaw) {
-        return player.platform().canMoveSession(this, position) && entity.teleport(position, yaw, 0);
-    }
-
     public void startMoving(Vector3dc cursor) {
         player.update();
-        entity.update();
 
         Bone bone = bones.get("position");
         if (bone != null) {
@@ -257,31 +195,8 @@ public class Session {
         }
     }
 
-    public void openMenu() {
-        SessionMenu inventory = new SessionMenu(this, player.platform());
-        player.openInventory(inventory.getInventory());
-    }
-
-    public boolean isToolInOffHand() {
-        EasItem item = player.getItem(EasArmorEntity.Slot.OFF_HAND);
-        if (item == null) {
-            return false;
-        }
-        return item.isTool();
-    }
-
-    public void hideSkeleton(EasPlayer player) {
-        if (skeleton != null) {
-            player.hideEntity(skeleton);
-        }
-    }
-
     public Map<String, Bone> getBones() {
         return Collections.unmodifiableMap(bones);
-    }
-
-    public Matrix3dc getArmorStandYaw() {
-        return armorStandYaw;
     }
 
     public double getSnapIncrement() {

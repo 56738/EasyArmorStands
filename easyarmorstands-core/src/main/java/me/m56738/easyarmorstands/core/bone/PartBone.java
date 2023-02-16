@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.core.bone;
 
 import me.m56738.easyarmorstands.core.platform.EasArmorStand;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import me.m56738.easyarmorstands.core.util.Util;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3d;
@@ -14,7 +15,7 @@ public class PartBone extends AbstractBone {
     private static final double SMALL_SCALE = NORMAL_SCALE / 2;
     private static final Vector3d pose = new Vector3d();
     private static final Matrix3d poseMatrix = new Matrix3d();
-    private final Session session;
+    private final ArmorStandSession session;
     private final EasArmorStand.Part part;
     private final Component component;
     private final Vector3d normalOffset;
@@ -26,7 +27,7 @@ public class PartBone extends AbstractBone {
     private final Vector3d end = new Vector3d();
     private final Matrix3d rotation = new Matrix3d();
 
-    public PartBone(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
+    public PartBone(ArmorStandSession session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
         super(session);
         this.session = session;
         this.part = part;
@@ -65,6 +66,11 @@ public class PartBone extends AbstractBone {
     @Override
     public Vector3dc getPosition() {
         return end;
+    }
+
+    @Override
+    public @NotNull ArmorStandSession getSession() {
+        return session;
     }
 
     @Override

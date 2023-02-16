@@ -12,7 +12,7 @@ import java.util.Map;
  * Something that can be selected by the user and edited using its tools.
  */
 public interface Bone {
-    @NotNull Session session();
+    @NotNull Session getSession();
 
     void addTool(String name, Tool tool);
 

@@ -5,11 +5,11 @@ import cloud.commandframework.execution.preprocessor.CommandPreprocessingContext
 import cloud.commandframework.execution.preprocessor.CommandPreprocessor;
 import cloud.commandframework.keys.CloudKey;
 import cloud.commandframework.keys.SimpleCloudKey;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.core.platform.EasCommandSender;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
 import me.m56738.easyarmorstands.core.session.Session;
 import me.m56738.easyarmorstands.core.session.SessionManager;
-import io.leangen.geantyref.TypeToken;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class SessionPreprocessor implements CommandPreprocessor<EasCommandSender> {

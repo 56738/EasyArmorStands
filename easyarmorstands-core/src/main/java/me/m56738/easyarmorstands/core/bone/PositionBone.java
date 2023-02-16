@@ -1,16 +1,17 @@
 package me.m56738.easyarmorstands.core.bone;
 
 import me.m56738.easyarmorstands.core.platform.EasArmorStand;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class PositionBone extends AbstractBone {
-    private final Session session;
+    private final ArmorStandSession session;
     private final Vector3d position = new Vector3d();
 
-    public PositionBone(Session session) {
+    public PositionBone(ArmorStandSession session) {
         super(session);
         this.session = session;
     }
@@ -35,7 +36,8 @@ public class PositionBone extends AbstractBone {
         return Component.text("Position");
     }
 
-    public Session getSession() {
+    @Override
+    public @NotNull ArmorStandSession getSession() {
         return session;
     }
 }

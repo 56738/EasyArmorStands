@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.core.platform.EasListener;
 import me.m56738.easyarmorstands.core.platform.EasMaterial;
 import me.m56738.easyarmorstands.core.platform.EasPlatform;
 import me.m56738.easyarmorstands.core.platform.EasPlayer;
+import me.m56738.easyarmorstands.core.platform.EasWorld;
 import me.m56738.easyarmorstands.core.session.Session;
 import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
@@ -83,7 +84,7 @@ public class TestPlatform implements EasPlatform {
     }
 
     @Override
-    public boolean canMoveSession(Session session, Vector3dc position) {
+    public boolean canMoveSession(Session session, EasWorld world, Vector3dc position) {
         return true;
     }
 

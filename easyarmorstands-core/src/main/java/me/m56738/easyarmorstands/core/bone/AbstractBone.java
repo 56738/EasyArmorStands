@@ -39,7 +39,7 @@ public abstract class AbstractBone implements Bone {
     }
 
     @Override
-    public @NotNull Session session() {
+    public @NotNull Session getSession() {
         return session;
     }
 

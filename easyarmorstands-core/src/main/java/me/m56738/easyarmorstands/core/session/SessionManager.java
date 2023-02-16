@@ -66,7 +66,9 @@ public class SessionManager {
 
     public void hideSkeletons(EasPlayer player) {
         for (Session session : sessions.values()) {
-            session.hideSkeleton(player);
+            if (session instanceof ArmorStandSession) {
+                ((ArmorStandSession) session).hideSkeleton(player);
+            }
         }
     }
 
@@ -81,10 +83,13 @@ public class SessionManager {
         return sessions.get(player);
     }
 
-    public Session getSession(EasArmorStand armorStand) {
+    public ArmorStandSession getSession(EasArmorStand armorStand) {
         for (Session session : sessions.values()) {
-            if (session.getEntity().equals(armorStand)) {
-                return session;
+            if (session instanceof ArmorStandSession) {
+                ArmorStandSession armorStandSession = (ArmorStandSession) session;
+                if (armorStandSession.getEntity().equals(armorStand)) {
+                    return armorStandSession;
+                }
             }
         }
         return null;
@@ -122,7 +127,7 @@ public class SessionManager {
     }
 
     private Session createSession(EasPlayer player, EasArmorStand armorStand) {
-        Session session = new Session(player, armorStand);
+        ArmorStandSession session = new ArmorStandSession(player, armorStand);
         session.addBone("position", createPositionBone(session));
         session.addBone("head", createPartBone(
                 session,
@@ -164,7 +169,7 @@ public class SessionManager {
         return session;
     }
 
-    private PositionBone createPositionBone(Session session) {
+    private PositionBone createPositionBone(ArmorStandSession session) {
         PositionBone bone = new PositionBone(session);
         bone.addTool("move", new PositionMoveTool(bone,
                 "Move", NamedTextColor.YELLOW));
@@ -179,7 +184,7 @@ public class SessionManager {
         return bone;
     }
 
-    private PartBone createPartBone(Session session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
+    private PartBone createPartBone(ArmorStandSession session, EasArmorStand.Part part, Component component, Vector3dc offset, Vector3dc length) {
         PartBone bone = new PartBone(session, part, component, offset, length);
         bone.addTool("x", new BoneAxisRotateTool(bone,
                 "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));

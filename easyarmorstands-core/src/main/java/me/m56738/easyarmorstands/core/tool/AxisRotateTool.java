@@ -37,8 +37,8 @@ public abstract class AxisRotateTool extends AbstractTool {
 
     public AxisRotateTool(Bone bone, String name, Component description, RGBLike color, Vector3dc axis, LineMode lineMode) {
         super(Component.text(name, TextColor.color(color)), description);
-        this.session = bone.session();
-        this.player = bone.session().getPlayer();
+        this.session = bone.getSession();
+        this.player = session.getPlayer();
         this.lineMode = lineMode;
         this.color = TextColor.color(color);
         this.axis = new Vector3d(axis);

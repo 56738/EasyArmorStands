@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.core.command.ToolArgumentParser;
 import me.m56738.easyarmorstands.core.platform.EasCommandSender;
 import me.m56738.easyarmorstands.core.platform.EasFeature;
 import me.m56738.easyarmorstands.core.platform.EasPlatform;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import me.m56738.easyarmorstands.core.session.Session;
 import me.m56738.easyarmorstands.core.session.SessionListener;
 import me.m56738.easyarmorstands.core.session.SessionManager;
@@ -74,7 +75,10 @@ public class Main implements Closeable {
         PipelineExceptionHandler.register(commandManager);
 
         commandManager.parameterInjectorRegistry().registerInjector(
-                Session.class, new SessionInjector<>());
+                Session.class, new SessionInjector<>(Session.class));
+
+        commandManager.parameterInjectorRegistry().registerInjector(
+                ArmorStandSession.class, new SessionInjector<>(ArmorStandSession.class));
 
         commandManager.parserRegistry().registerParserSupplier(
                 TypeToken.get(Bone.class),

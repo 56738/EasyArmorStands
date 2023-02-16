@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.core.tool;
 
 import me.m56738.easyarmorstands.core.bone.PositionBone;
 import me.m56738.easyarmorstands.core.platform.EasArmorStand;
-import me.m56738.easyarmorstands.core.session.Session;
+import me.m56738.easyarmorstands.core.session.ArmorStandSession;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import org.joml.Matrix3dc;
@@ -11,7 +11,7 @@ import org.joml.Vector3dc;
 
 public class PositionRotateTool extends AxisRotateTool {
     private final PositionBone bone;
-    private final Session session;
+    private final ArmorStandSession session;
     private float initialYaw;
 
     public PositionRotateTool(PositionBone bone, String name, RGBLike color) {

@@ -246,8 +246,8 @@ public class BukkitPlatform implements EasPlatform, Listener, Closeable {
     }
 
     @Override
-    public boolean canMoveSession(Session session, Vector3dc position) {
-        SessionMoveEvent event = new SessionMoveEvent(session, position);
+    public boolean canMoveSession(Session session, EasWorld world, Vector3dc position) {
+        SessionMoveEvent event = new SessionMoveEvent(session, ((BukkitWorld) world).get(), position);
         plugin.getServer().getPluginManager().callEvent(event);
         return !event.isCancelled();
     }
