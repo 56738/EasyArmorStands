@@ -22,7 +22,7 @@ public class HeadDatabaseListener implements Listener {
 
     @EventHandler
     public void onClickHead(PlayerClickHeadEvent event) {
-        if (event.isEconomy()) {
+        if (event.isEconomy() || !event.getPlayer().hasPermission("easyarmorstands.open")) {
             return;
         }
         BukkitPlatform platform = plugin.getPlatform();

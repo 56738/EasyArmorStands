@@ -41,7 +41,7 @@ public class SessionMenu implements EasInventoryListener {
         Arrays.fill(slots, new DisabledSlot(inventory, platform.createItem(
                 EasMaterial.LIGHT_BLUE_STAINED_GLASS_PANE,
                 Component.empty(), Collections.emptyList())));
-        if (player.hasPermission("easyarmorstands.edit.equipment")) {
+        if (player.hasPermission("easyarmorstands.property.equipment")) {
             setSlot(2, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.HEAD));
             if (platform.hasSlot(EasArmorEntity.Slot.OFF_HAND)) {
                 setSlot(3, 0, new EquipmentItemSlot(this, EasArmorEntity.Slot.OFF_HAND));
@@ -51,16 +51,16 @@ public class SessionMenu implements EasInventoryListener {
             setSlot(4, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.LEGS));
             setSlot(5, 1, new EquipmentItemSlot(this, EasArmorEntity.Slot.FEET));
         }
-        if (player.hasPermission("easyarmorstands.edit.arms")) {
+        if (player.hasPermission("easyarmorstands.property.arms")) {
             addButton(new ToggleArmsSlot(this));
         }
-        if (player.hasPermission("easyarmorstands.edit.size")) {
+        if (player.hasPermission("easyarmorstands.property.size")) {
             addButton(new ToggleSizeSlot(this));
         }
-        if (player.hasPermission("easyarmorstands.edit.baseplate")) {
+        if (player.hasPermission("easyarmorstands.property.baseplate")) {
             addButton(new ToggleBasePlateSlot(this));
         }
-        if (player.hasPermission("easyarmorstands.edit.gravity")) {
+        if (player.hasPermission("easyarmorstands.property.gravity")) {
             addButton(new ToggleGravitySlot(this));
         }
         setSlot(3, 7, new SelectBoneSlot(this,
@@ -91,17 +91,17 @@ public class SessionMenu implements EasInventoryListener {
                 session.getBones().get("rightleg"),
                 EasMaterial.LEVER,
                 Component.text("right leg")));
-        if (player.hasPermission("easyarmorstands.edit.visible")) {
+        if (player.hasPermission("easyarmorstands.property.visible")) {
             addButton(new ToggleVisibilitySlot(this));
         }
-        if (platform.hasFeature(EasFeature.ARMOR_STAND_LOCK) && player.hasPermission("easyarmorstands.edit.lock")) {
+        if (platform.hasFeature(EasFeature.ARMOR_STAND_LOCK) && player.hasPermission("easyarmorstands.property.lock")) {
             addButton(new ToggleLockSlot(this));
         }
-        if (platform.hasFeature(EasFeature.ENTITY_GLOW) && player.hasPermission("easyarmorstands.edit.glow")) {
+        if (platform.hasFeature(EasFeature.ENTITY_GLOW) && player.hasPermission("easyarmorstands.property.glow")) {
             addButton(new ToggleGlowingSlot(this));
         }
         if (platform.hasFeature(EasFeature.ENTITY_INVULNERABLE) &&
-                player.hasPermission("easyarmorstands.edit.invulnerable")) {
+                player.hasPermission("easyarmorstands.property.invulnerable")) {
             addButton(new ToggleInvulnerabilitySlot(this));
         }
         platform.onInventoryInitialize(this);

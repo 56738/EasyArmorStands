@@ -39,7 +39,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("visible <visible>")
-    @CommandPermission("easyarmorstands.edit.visible")
+    @CommandPermission("easyarmorstands.property.visible")
     @CommandDescription("Change the visibility of an armor stand")
     public void setVisible(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setVisible(visible);
@@ -51,7 +51,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("baseplate <visible>")
-    @CommandPermission("easyarmorstands.edit.baseplate")
+    @CommandPermission("easyarmorstands.property.baseplate")
     @CommandDescription("Change the visibility of the base plate")
     public void setBasePlate(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setBasePlate(visible);
@@ -63,7 +63,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("arms <visible>")
-    @CommandPermission("easyarmorstands.edit.arms")
+    @CommandPermission("easyarmorstands.property.arms")
     @CommandDescription("Change the visibility of the arms")
     public void setArms(EasCommandSender sender, ArmorStandSession session, @Argument("visible") boolean visible) {
         session.getEntity().setArms(visible);
@@ -75,7 +75,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("gravity <enabled>")
-    @CommandPermission("easyarmorstands.edit.gravity")
+    @CommandPermission("easyarmorstands.property.gravity")
     @CommandDescription("Toggle gravity for an armor stand")
     public void setGravity(EasCommandSender sender, ArmorStandSession session, @Argument("enabled") boolean enabled) {
         session.getEntity().setGravity(enabled);
@@ -87,7 +87,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("size <size>")
-    @CommandPermission("easyarmorstands.edit.size")
+    @CommandPermission("easyarmorstands.property.size")
     @CommandDescription("Change the size of an armor stand")
     public void setSize(EasCommandSender sender, ArmorStandSession session, @Argument("size") ArmorStandSize size) {
         session.getEntity().setSmall(size == ArmorStandSize.SMALL);
@@ -96,7 +96,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("name [name]")
-    @CommandPermission("easyarmorstands.edit.name")
+    @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Change the name of an armor stand")
     public void setName(EasCommandSender sender, ArmorStandSession session,
                         @Argument(value = "name", description = "MiniMessage text") @Greedy String input) {
@@ -124,7 +124,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("lname [name]")
-    @CommandPermission("easyarmorstands.edit.name")
+    @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Change the name of an armor stand")
     public void setLegacyName(EasCommandSender sender, ArmorStandSession session,
                               @Argument(value = "name", description = "Legacy text (&c)") @Greedy String input) {
@@ -147,7 +147,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("cantick <value>")
-    @CommandPermission("easyarmorstands.edit.cantick")
+    @CommandPermission("easyarmorstands.property.cantick")
     @CommandDescription("Change whether ticking is enabled for an armor stand")
     @RequiresFeature(EasFeature.ARMOR_STAND_CAN_TICK)
     public void setCanTick(EasCommandSender sender, ArmorStandSession session, @Argument("value") boolean canTick) {
@@ -160,7 +160,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("glow <glowing>")
-    @CommandPermission("easyarmorstands.edit.glow")
+    @CommandPermission("easyarmorstands.property.glow")
     @CommandDescription("Change whether an armor stand is glowing (outline is visible)")
     @RequiresFeature(EasFeature.ENTITY_GLOW)
     public void setGlow(EasCommandSender sender, ArmorStandSession session, @Argument("glowing") boolean glowing) {
@@ -173,7 +173,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("lock <locked>")
-    @CommandPermission("easyarmorstands.edit.lock")
+    @CommandPermission("easyarmorstands.property.lock")
     @CommandDescription("Change whether the equipment of an armor stand is locked")
     @RequiresFeature(EasFeature.ARMOR_STAND_LOCK)
     public void setLocked(EasCommandSender sender, ArmorStandSession session, @Argument("locked") boolean locked) {
@@ -186,7 +186,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("invulnerable <invulnerable>")
-    @CommandPermission("easyarmorstands.edit.invulnerable")
+    @CommandPermission("easyarmorstands.property.invulnerable")
     @CommandDescription("Change whether an armor stand is invulnerable")
     @RequiresFeature(EasFeature.ENTITY_INVULNERABLE)
     public void setInvulnerable(EasCommandSender sender, ArmorStandSession session, @Argument("invulnerable") boolean invulnerable) {
@@ -288,7 +288,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("edit <bone>")
-    @CommandPermission("easyarmorstands.edit.select")
+    @CommandPermission("easyarmorstands.edit")
     @CommandDescription("Select a bone of an armor stand")
     public void selectBone(
             EasCommandSender sender,
@@ -303,7 +303,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("edit <bone> <tool>")
-    @CommandPermission("easyarmorstands.edit.select")
+    @CommandPermission("easyarmorstands.edit")
     @CommandDescription("Select a bone of an armor stand and start editing it using a tool")
     public void selectTool(
             EasCommandSender sender,

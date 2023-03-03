@@ -70,7 +70,7 @@ public class SessionListener implements EasListener {
         if (!isTool(player, item)) {
             return false;
         }
-        if (player.isSneaking()) {
+        if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
             manager.spawnAndStart(player);
         }
         return true;

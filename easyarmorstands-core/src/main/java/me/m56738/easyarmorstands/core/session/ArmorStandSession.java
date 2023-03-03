@@ -85,7 +85,9 @@ public class ArmorStandSession extends Session {
 
     @Override
     protected void onLeftClick() {
-        openMenu();
+        if (getPlayer().hasPermission("easyarmorstands.open")) {
+            openMenu();
+        }
     }
 
     public void openMenu() {
