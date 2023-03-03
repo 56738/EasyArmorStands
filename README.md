@@ -2,6 +2,8 @@
 
 Easy but advanced armor stand editor for Bukkit.
 
+![Screenshot](https://cdn.56738.me/easyarmorstands/banner.png)
+
 **Supported Minecraft versions:** 1.8.8 to 1.19.3
 
 Using [Paper](https://papermc.io/) is highly recommended. Some features like RGB name tags only work on Paper.
@@ -14,10 +16,14 @@ Right-click an armor stand to start editing it.
 
 ## Bones
 
+<img alt="Bones" src="https://cdn.56738.me/easyarmorstands/bones.png" width="25%" align="right"/>
+
 Right-click one of the particles to start editing a bone.
 The particles are located at the end of each bone.
 For example, the arms can be edited by right-clicking the hands.
 You can always left-click to deselect the current bone.
+
+The position bone is a special bone which can be used to move the whole armor stand.
 
 ## Tools
 
@@ -25,7 +31,11 @@ Once a bone was selected, it can be modified using one of many tools.
 For example, the "rotate" tool can be activated by right-clicking one of the colored circles.
 Move the cursor to edit the bone and right-click again to confirm (or left-click to abort).
 
+![Rotation tool](https://cdn.56738.me/easyarmorstands/tool.png)
+
 ## Menu
+
+<img alt="Menu" src="https://cdn.56738.me/easyarmorstands/menu.png" width="50%" align="right" />
 
 The menu can be accessed by left-clicking while no bone is selected (or `/eas open`).
 
