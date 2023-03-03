@@ -15,7 +15,9 @@ public class ArmSwingListenerImpl implements ArmSwingListener {
     public void onArmSwing(PlayerArmSwingEvent event) {
         EntityEquipment equipment = event.getPlayer().getEquipment();
         for (BukkitListener listener : platform.listeners()) {
-            listener.onLeftClick(event.getPlayer(), equipment.getItem(event.getHand()));
+            if (listener.onLeftClick(event.getPlayer(), equipment.getItem(event.getHand()))) {
+                event.setCancelled(true);
+            }
         }
     }
 
