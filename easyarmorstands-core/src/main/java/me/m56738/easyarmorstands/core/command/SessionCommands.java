@@ -18,9 +18,13 @@ import me.m56738.easyarmorstands.core.tool.Tool;
 import me.m56738.easyarmorstands.core.util.ArmorStandSnapshot;
 import me.m56738.easyarmorstands.core.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.ComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -96,10 +100,50 @@ public class SessionCommands {
     @CommandDescription("Change the name of an armor stand")
     public void setName(EasCommandSender sender, ArmorStandSession session,
                         @Argument(value = "name", description = "MiniMessage text") @Greedy String input) {
-        Component name = MiniMessage.miniMessage().deserializeOrNull(input);
+        setName(sender, session, input, MiniMessage.miniMessage());
+        if (input != null && (input.contains("&") || input.contains("§"))) {
+            sender.sendMessage(Component.text()
+                    .content("This command uses the ")
+                    .append(Component.text()
+                            .content("MiniMessage")
+                            .hoverEvent(Component.text("Open documentation"))
+                            .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))
+                            .decorate(TextDecoration.UNDERLINED)
+                    )
+                    .append(Component.text(" format. Use "))
+                    .append(Component.text()
+                            .content("/eas lname")
+                            .hoverEvent(Component.text("/eas lname " + input))
+                            .clickEvent(ClickEvent.runCommand("/eas lname " + input))
+                            .decorate(TextDecoration.UNDERLINED)
+                    )
+                    .append(Component.text(" with legacy (&c) color codes."))
+                    .color(NamedTextColor.GRAY)
+            );
+        }
+    }
+
+    @CommandMethod("lname [name]")
+    @CommandPermission("easyarmorstands.edit.name")
+    @CommandDescription("Change the name of an armor stand")
+    public void setLegacyName(EasCommandSender sender, ArmorStandSession session,
+                              @Argument(value = "name", description = "Legacy text (&c)") @Greedy String input) {
+        setName(sender, session, input, LegacyComponentSerializer.legacyAmpersand());
+    }
+
+    private void setName(EasCommandSender sender, ArmorStandSession session,
+                         String input, ComponentSerializer<?, ? extends Component, String> serializer) {
+        Component name = serializer.deserializeOrNull(input);
         session.getEntity().setCustomName(name);
         session.getEntity().setCustomNameVisible(name != null);
-        sender.sendMessage(Component.text("Name tag changed", NamedTextColor.GREEN));
+        if (name != null) {
+            sender.sendMessage(Component.text()
+                    .append(Component.text("Name tag changed to ", NamedTextColor.GREEN))
+                    .append(name)
+                    .hoverEvent(Component.text(input)));
+        } else {
+            sender.sendMessage(Component.text("Name tag cleared", NamedTextColor.GREEN));
+        }
     }
 
     @CommandMethod("cantick <value>")

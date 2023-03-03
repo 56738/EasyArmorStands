@@ -7,6 +7,7 @@ public class TrainCartsAddon implements Addon {
     @Override
     public boolean isSupported() {
         try {
+            Class.forName("com.bergerkiller.bukkit.common.PluginBase");
             Class.forName("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult");
             return true;
         } catch (Throwable e) {

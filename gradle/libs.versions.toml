@@ -12,8 +12,9 @@ traincarts = "1.19.3-v2-SNAPSHOT"
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
 adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
-adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-platform" }
-adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-platform" }
+adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
+adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-api" }
+adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
