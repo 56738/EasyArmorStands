@@ -20,3 +20,7 @@ tasks {
         isReproducibleFileOrder = true
     }
 }
+
+java {
+    disableAutoTargetJvm()
+}

@@ -2,14 +2,6 @@ plugins {
     id("easyarmorstands.base-conventions")
 }
 
-configurations {
-    compileClasspath {
-        attributes {
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
-        }
-    }
-}
-
 dependencies {
     implementation(project(":easyarmorstands-bukkit"))
     compileOnly(libs.bukkit) {
