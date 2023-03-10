@@ -1,0 +1,9 @@
+name: EasyArmorStands
+main: me.m56738.easyarmorstands.EasyArmorStands
+version: "1.1.0-SNAPSHOT"
+api-version: "1.13"
+author: "56738"
+softdepend:
+  - HeadDatabase
+  - PlotSquared
+  - Train_Carts
