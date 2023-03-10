@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 @Capability(name = "Entity equipment")
 public interface EquipmentCapability {
-    EquipmentSlot getMainHand();
-
     EquipmentSlot getOffHand();
 
     EquipmentSlot[] getHands();

@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.inventory.InventoryListener;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -38,18 +38,16 @@ public class SessionListener implements Listener {
     private final SessionManager manager;
     private final BukkitAudiences adventure;
     private final EquipmentCapability equipmentCapability;
-    private final ToolCapability toolCapability;
 
     public SessionListener(Plugin plugin, SessionManager manager, BukkitAudiences adventure) {
         this.plugin = plugin;
         this.manager = manager;
         this.adventure = adventure;
         this.equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
-        this.toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
     }
 
     private boolean isTool(Player player, ItemStack item) {
-        return toolCapability.isTool(item) && player.hasPermission("easyarmorstands.edit");
+        return Util.isTool(item) && player.hasPermission("easyarmorstands.edit");
     }
 
     private boolean startEditing(Player player, ArmorStand armorStand, ItemStack item, boolean cancelled) {

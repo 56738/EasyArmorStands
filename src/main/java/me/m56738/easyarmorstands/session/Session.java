@@ -1,10 +1,9 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.Bone;
+import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.tool.Tool;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -131,11 +130,10 @@ public class Session implements ForwardingAudience.Single {
     private boolean isHoldingTool() {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
-        ToolCapability toolCapability = plugin.getCapability(ToolCapability.class);
         EntityEquipment equipment = player.getEquipment();
         for (EquipmentSlot hand : equipmentCapability.getHands()) {
             ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (toolCapability.isTool(item)) {
+            if (Util.isTool(item)) {
                 return true;
             }
         }

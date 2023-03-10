@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.capability.item;
 
 public enum ItemType {
+    BLAZE_ROD,
     BONE_MEAL,
     BOOK,
     BUCKET,

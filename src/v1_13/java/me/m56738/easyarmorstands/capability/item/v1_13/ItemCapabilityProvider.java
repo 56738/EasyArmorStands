@@ -38,6 +38,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
         @Override
         public ItemStack createItem(ItemType type) {
             switch (type) {
+                case BLAZE_ROD:
+                    return new ItemStack(Material.BLAZE_ROD);
                 case BONE_MEAL:
                     return new ItemStack(Material.BONE_MEAL);
                 case BOOK:

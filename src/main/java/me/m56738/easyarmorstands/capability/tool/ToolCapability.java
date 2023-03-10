@@ -2,10 +2,11 @@ package me.m56738.easyarmorstands.capability.tool;
 
 import me.m56738.easyarmorstands.capability.Capability;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-@Capability(name = "Tool")
+@Capability(name = "Tool detection", optional = true)
 public interface ToolCapability {
     boolean isTool(ItemStack item);
 
-    ItemStack createTool();
+    void configureTool(ItemMeta meta);
 }

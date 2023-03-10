@@ -1,11 +1,14 @@
 package me.m56738.easyarmorstands.util;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +24,7 @@ import org.joml.Vector3dc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.List;
 
 public class Util {
@@ -56,6 +60,43 @@ public class Util {
 
     public static Color toColor(RGBLike color) {
         return Color.fromRGB(color.red(), color.green(), color.blue());
+    }
+
+    public static ItemStack createTool() {
+        ItemStack item = createItem(
+                ItemType.BLAZE_ROD,
+                Component.text("EasyArmorStands", NamedTextColor.GOLD),
+                Arrays.asList(
+                        Component.text("Right click an armor stand to start editing.", NamedTextColor.GRAY),
+                        Component.text("Sneak + right click to spawn an armor stand.", NamedTextColor.GRAY),
+                        Component.text("Drop to stop editing.", NamedTextColor.GRAY)
+                )
+        );
+        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
+        if (toolCapability != null) {
+            ItemMeta meta = item.getItemMeta();
+            toolCapability.configureTool(meta);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    public static boolean isTool(ItemStack item) {
+        if (item == null) {
+            return false;
+        }
+        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
+        if (toolCapability != null) {
+            return toolCapability.isTool(item);
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+        if (!meta.hasDisplayName()) {
+            return false;
+        }
+        return meta.getDisplayName().equals(ChatColor.GOLD + "EasyArmorStands");
     }
 
     public static ItemStack createItem(ItemType type, Component title, List<Component> lore) {

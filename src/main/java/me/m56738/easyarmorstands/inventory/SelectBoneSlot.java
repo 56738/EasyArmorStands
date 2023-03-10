@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.inventory;
 
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.bone.Bone;
+import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -46,7 +46,7 @@ public class SelectBoneSlot implements InventorySlot {
             menu.getSession().setBone(bone);
             menu.queueTask(() -> {
                 Player player = menu.getSession().getPlayer();
-                if (player.getOpenInventory().getTopInventory() == menu.getInventory()) {
+                if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
                     player.closeInventory();
                 }
             });

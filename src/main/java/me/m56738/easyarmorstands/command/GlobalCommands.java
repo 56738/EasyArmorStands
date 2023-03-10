@@ -10,11 +10,15 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
-import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,8 +53,8 @@ public class GlobalCommands {
     @CommandMethod("give")
     @CommandPermission("easyarmorstands.give")
     @CommandDescription("Gives you the editor tool")
-    public void give(Player sender, Audience audience, ToolCapability toolCapability) {
-        sender.getInventory().addItem(toolCapability.createTool());
+    public void give(Player sender, Audience audience) {
+        sender.getInventory().addItem(Util.createTool());
         audience.sendMessage(Component.text(
                 "Tool added to your inventory\n",
                 NamedTextColor.GREEN
@@ -60,5 +64,55 @@ public class GlobalCommands {
                         "Drop to stop editing.",
                 NamedTextColor.GRAY
         )));
+    }
+
+    @CommandMethod("version")
+    @CommandPermission("easyarmorstands.version")
+    @CommandDescription("Displays the plugin version")
+    public void version(Audience audience) {
+        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        String version = plugin.getDescription().getVersion();
+        String url = "https://github.com/56738/EasyArmorStands";
+        audience.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        audience.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
+    }
+
+    @CommandMethod("debug")
+    @CommandPermission("easyarmorstands.debug")
+    @CommandDescription("Displays debug information")
+    public void debug(Audience audience) {
+        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        CapabilityLoader loader = plugin.getCapabilityLoader();
+        String version = plugin.getDescription().getVersion();
+        audience.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        audience.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
+        audience.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
+        for (CapabilityLoader.Entry capability : loader.getCapabilities()) {
+            Object instance = capability.getInstance();
+            Component value;
+            if (instance != null) {
+                String packageName = capability.getType().getPackage().getName();
+                String providerName = capability.getProvider().getClass().getName();
+                if (providerName.startsWith(packageName)) {
+                    providerName = providerName.substring(packageName.length());
+                }
+                value = Component.text(providerName, NamedTextColor.GREEN)
+                        .hoverEvent(Component.text(instance.getClass().getName()));
+            } else {
+                value = Component.text("Not supported", NamedTextColor.RED);
+            }
+            audience.sendMessage(debugLine(
+                    Component.text(capability.getName()).hoverEvent(Component.text(capability.getType().getName())),
+                    value
+            ));
+        }
+    }
+
+    private Component debugLine(Component key, Component value) {
+        return Component.text()
+                .append(key.applyFallbackStyle(NamedTextColor.GOLD))
+                .append(Component.text(": ", NamedTextColor.GRAY))
+                .append(value.applyFallbackStyle(NamedTextColor.GRAY))
+                .build();
     }
 }

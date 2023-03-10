@@ -40,6 +40,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
         @SuppressWarnings("deprecation")
         public ItemStack createItem(ItemType type) {
             switch (type) {
+                case BLAZE_ROD:
+                    return new ItemStack(Material.BLAZE_ROD);
                 case BONE_MEAL:
                     return new ItemStack(Material.INK_SACK, 1, (short) 15);
                 case BOOK:

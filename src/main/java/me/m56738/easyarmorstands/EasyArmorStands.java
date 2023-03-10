@@ -138,6 +138,10 @@ public class EasyArmorStands extends JavaPlugin {
         return loader.get(type);
     }
 
+    public CapabilityLoader getCapabilityLoader() {
+        return loader;
+    }
+
     public SessionManager getSessionManager() {
         return sessionManager;
     }

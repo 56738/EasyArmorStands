@@ -31,10 +31,6 @@ public class VisibilityCapabilityProvider implements CapabilityProvider<Visibili
 
     @SuppressWarnings("deprecation")
     private static class VisibilityCapabilityImpl implements VisibilityCapability {
-        @Override
-        public void showEntity(Player player, Plugin plugin, Entity entity) {
-            player.showEntity(plugin, entity);
-        }
 
         @Override
         public void hideEntity(Player player, Plugin plugin, Entity entity) {

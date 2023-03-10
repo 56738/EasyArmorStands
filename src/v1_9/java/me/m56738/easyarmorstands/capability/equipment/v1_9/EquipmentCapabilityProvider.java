@@ -30,10 +30,6 @@ public class EquipmentCapabilityProvider implements CapabilityProvider<Equipment
     }
 
     private static class EquipmentCapabilityImpl implements EquipmentCapability {
-        @Override
-        public EquipmentSlot getMainHand() {
-            return EquipmentSlot.HAND;
-        }
 
         @Override
         public EquipmentSlot getOffHand() {

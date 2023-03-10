@@ -30,10 +30,6 @@ public class PersistenceCapabilityProvider implements CapabilityProvider<Persist
 
     @SuppressWarnings("deprecation")
     private static class PersistenceCapabilityImpl implements PersistenceCapability {
-        @Override
-        public boolean isPersistent(Entity entity) {
-            return entity.isPersistent();
-        }
 
         @Override
         public void setPersistent(Entity entity, boolean persistent) {

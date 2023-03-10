@@ -4,6 +4,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +44,19 @@ public class CapabilityLoader {
         for (Map.Entry<Class<?>, Entry> entry : capabilities.entrySet()) {
             entry.getValue().load(plugin);
         }
+        for (Entry entry : capabilities.values()) {
+            if (entry.instance == null && !entry.capability.optional()) {
+                throw new IllegalStateException("Required capability not supported: " + entry.capability.name());
+            }
+        }
     }
 
     public boolean isCapability(Class<?> type) {
         return capabilities.containsKey(type);
+    }
+
+    public Collection<Entry> getCapabilities() {
+        return Collections.unmodifiableCollection(capabilities.values());
     }
 
     @SuppressWarnings("unchecked")
@@ -58,14 +69,41 @@ public class CapabilityLoader {
     }
 
     public <T> void register(Class<T> capability, CapabilityProvider<T> provider) {
-        Entry entry = capabilities.computeIfAbsent(capability, c -> new Entry());
+        Entry entry = capabilities.computeIfAbsent(capability, Entry::new);
         entry.add(provider);
     }
 
-    private class Entry {
+    public static class Entry {
+        private final Class<?> type;
+        private final Capability capability;
         private final TreeSet<CapabilityProvider<?>> providers =
                 new TreeSet<>(Comparator.comparing(CapabilityProvider::getPriority));
+        private CapabilityProvider<?> provider;
         private Object instance;
+
+        private Entry(Class<?> type) {
+            this.type = type;
+            this.capability = type.getAnnotation(Capability.class);
+            if (this.capability == null) {
+                throw new RuntimeException("Capability is not annotated: " + type.getName());
+            }
+        }
+
+        public Class<?> getType() {
+            return type;
+        }
+
+        public String getName() {
+            return capability.name();
+        }
+
+        public CapabilityProvider<?> getProvider() {
+            return provider;
+        }
+
+        public Object getInstance() {
+            return instance;
+        }
 
         public synchronized void add(CapabilityProvider<?> provider) {
             providers.add(provider);
@@ -76,9 +114,9 @@ public class CapabilityLoader {
             for (CapabilityProvider<?> provider : providers) {
                 try {
                     if (provider.isSupported()) {
-                        plugin.getLogger().info("Using " + provider.getClass().getName());
-                        instance = provider.create(plugin);
-                        break;
+                        this.provider = provider;
+                        this.instance = provider.create(plugin);
+                        return;
                     }
                 } catch (Throwable e) {
                     plugin.getLogger().log(Level.SEVERE, "Failed to process " + provider.getClass().getName(), e);
