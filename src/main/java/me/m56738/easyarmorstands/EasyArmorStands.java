@@ -32,6 +32,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,6 +58,8 @@ public class EasyArmorStands extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new Metrics(this, 17911);
+
         loader.load();
 
         sessionManager = new SessionManager();

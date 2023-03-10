@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.adventure.text.minimessage)
     implementation(libs.adventure.text.serializer.gson)
     implementation(libs.adventure.text.serializer.legacy)
+    implementation(libs.bstats)
     implementation(libs.cloud.annotations)
     implementation(libs.cloud.minecraft.extras)
     implementation(libs.cloud.paper)
@@ -51,6 +52,7 @@ tasks {
         relocate("cloud.commandframework", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
+        relocate("org.bstats", "$prefix.bstats")
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }
