@@ -100,13 +100,13 @@ public class EasyArmorStands extends JavaPlugin {
         PipelineExceptionHandler.register(commandManager);
 
         commandManager.parameterInjectorRegistry().registerInjector(
+                Audience.class, new AudienceInjector(adventure));
+
+        commandManager.parameterInjectorRegistry().registerInjector(
                 Session.class, new SessionInjector<>(Session.class));
 
         commandManager.parameterInjectorRegistry().registerInjector(
                 ArmorStandSession.class, new SessionInjector<>(ArmorStandSession.class));
-
-        commandManager.parameterInjectorRegistry().registerInjector(
-                Audience.class, new AudienceInjector(adventure));
 
         commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader, adventure));
 
