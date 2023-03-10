@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.inventory.SessionMenu;
+import me.m56738.easyarmorstands.menu.SessionMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

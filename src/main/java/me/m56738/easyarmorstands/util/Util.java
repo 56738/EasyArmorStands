@@ -136,4 +136,11 @@ public class Util {
         }
         return Math.round(value / increment) * increment;
     }
+
+    public static String capitalize(String value) {
+        if (value.length() < 1) {
+            return value;
+        }
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
+    }
 }

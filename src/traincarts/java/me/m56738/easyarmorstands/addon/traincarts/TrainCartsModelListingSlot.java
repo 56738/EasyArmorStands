@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.addon.traincarts;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.inventory.SessionMenu;
+import me.m56738.easyarmorstands.menu.SessionMenu;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

@@ -18,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -336,5 +337,14 @@ public class SessionListener implements Listener {
         if (onInventoryClick(inventoryListener, slot, true, true, false, cursor)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        InventoryListener inventoryListener = getInventoryListener(event);
+        if (inventoryListener == null) {
+            return;
+        }
+        inventoryListener.onClose();
     }
 }

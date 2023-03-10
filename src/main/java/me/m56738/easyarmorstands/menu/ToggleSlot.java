@@ -1,6 +1,7 @@
-package me.m56738.easyarmorstands.inventory;
+package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

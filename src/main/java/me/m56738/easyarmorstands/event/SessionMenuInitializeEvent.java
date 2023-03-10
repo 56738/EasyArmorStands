@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.inventory.SessionMenu;
+import me.m56738.easyarmorstands.menu.SessionMenu;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;

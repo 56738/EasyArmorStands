@@ -24,4 +24,5 @@ joml = { module = "org.joml:joml", version.ref = "joml" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
 
 [plugins]
+plugin-yml = { id = "net.minecrell.plugin-yml.bukkit", version = "0.5.3" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.0" }

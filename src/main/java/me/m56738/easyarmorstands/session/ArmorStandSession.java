@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.event.SessionMoveEvent;
-import me.m56738.easyarmorstands.inventory.SessionMenu;
+import me.m56738.easyarmorstands.menu.SessionMenu;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

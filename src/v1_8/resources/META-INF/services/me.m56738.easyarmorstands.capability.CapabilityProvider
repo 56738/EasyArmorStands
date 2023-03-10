@@ -1,5 +1,6 @@
 me.m56738.easyarmorstands.capability.component.v1_8.ComponentCapabilityProvider
 me.m56738.easyarmorstands.capability.equipment.v1_8.EquipmentCapabilityProvider
 me.m56738.easyarmorstands.capability.item.v1_8.ItemCapabilityProvider
+me.m56738.easyarmorstands.capability.itemcolor.v1_8.ItemColorCapabilityProvider
 me.m56738.easyarmorstands.capability.lock.v1_8.LockCapabilityProvider
 me.m56738.easyarmorstands.capability.spawn.v1_8.SpawnCapabilityProvider

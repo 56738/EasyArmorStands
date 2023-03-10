@@ -1,20 +1,19 @@
 package me.m56738.easyarmorstands.inventory;
 
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class DisabledSlot implements InventorySlot {
-    private final Inventory inventory;
+    private final InventoryMenu menu;
     private final ItemStack item;
 
-    public DisabledSlot(Inventory inventory, ItemStack item) {
-        this.inventory = inventory;
+    public DisabledSlot(InventoryMenu menu, ItemStack item) {
+        this.menu = menu;
         this.item = item;
     }
 
     @Override
     public void initialize(int slot) {
-        inventory.setItem(slot, item);
+        menu.getInventory().setItem(slot, item);
     }
 
     @Override

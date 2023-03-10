@@ -114,9 +114,12 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.property.size`         | Allows toggling the size of an armor stand.                                  | Survival |
 | `easyarmorstands.property.visible`      | Allows toggling armor stand visibility.                                      | Survival |
 | `easyarmorstands.snap`                  | Allows toggling position and angle snapping and configuring the increment.   | Survival |
+| `easyarmorstands.version`               | Allows viewing version information.                                          | Survival |
 | `easyarmorstands.clone`                 | Allows cloning armor stands.                                                 | Creative |
+| `easyarmorstands.color`                 | Allows using the color picker.                                               | Creative |
 | `easyarmorstands.give`                  | Allows giving yourself the EasyArmorStand tool.                              | Creative |
 | `easyarmorstands.spawn`                 | Allows spawning armor stands.                                                | Creative |
+| `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 | Creative |
+| `easyarmorstands.debug`                 | Allows viewing debug information.                                            |          |
 | `easyarmorstands.plotsquared.bypass`    | Allows bypassing PlotSquared restrictions.                                   |          |
-| `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 |          |
 | `headdb.open`                           | Allows opening the Head Database menu.                                       |          |

@@ -12,6 +12,7 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -64,6 +65,13 @@ public class GlobalCommands {
                         "Drop to stop editing.",
                 NamedTextColor.GRAY
         )));
+    }
+
+    @CommandMethod("color")
+    @CommandPermission("easyarmorstands.color")
+    @CommandDescription("Displays the color picker")
+    public void color(Player player) {
+        player.openInventory(new ColorPicker(null, player).getInventory());
     }
 
     @CommandMethod("version")

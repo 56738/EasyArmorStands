@@ -1,7 +1,8 @@
-package me.m56738.easyarmorstands.inventory;
+package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;

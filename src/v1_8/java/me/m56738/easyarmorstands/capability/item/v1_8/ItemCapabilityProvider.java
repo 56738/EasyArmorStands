@@ -86,5 +86,11 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     throw new IllegalArgumentException();
             }
         }
+
+        @Override
+        @SuppressWarnings("deprecation")
+        public ItemStack createColor(DyeColor color) {
+            return new ItemStack(Material.WOOL, 1, color.getWoolData());
+        }
     }
 }

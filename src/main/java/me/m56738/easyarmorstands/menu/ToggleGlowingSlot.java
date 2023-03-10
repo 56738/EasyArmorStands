@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.inventory;
+package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;

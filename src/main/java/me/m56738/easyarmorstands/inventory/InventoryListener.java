@@ -6,5 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public interface InventoryListener extends InventoryHolder {
     boolean onClick(int slot, boolean click, boolean put, boolean take, ItemStack cursor);
 
+    void onClose();
+
     void update();
 }
