@@ -51,7 +51,7 @@ tasks {
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
         dependencies {
-            exclude("com.google.code.gson:gson")
+            exclude(dependency("com.google.code.gson:gson"))
         }
         mergeServiceFiles()
     }
