@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -30,7 +31,7 @@ public class EquipmentItemSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         EntityEquipment equipment = session.getEntity().getEquipment();
         menu.queueTask(() -> equipmentCapability.setItem(equipment, this.slot, inventory.getItem(slot)));
         return true;

@@ -16,6 +16,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -249,9 +251,9 @@ public class SessionListener implements Listener {
     }
 
     private boolean onInventoryClick(InventoryListener inventoryListener,
-                                     int slot, boolean click, boolean put, boolean take) {
+                                     int slot, boolean click, boolean put, boolean take, ClickType type) {
         Bukkit.getScheduler().runTask(plugin, inventoryListener::update);
-        return !inventoryListener.onClick(slot, click, put, take);
+        return !inventoryListener.onClick(slot, click, put, take, type);
     }
 
     @EventHandler
@@ -277,7 +279,6 @@ public class SessionListener implements Listener {
         boolean put = false;
         boolean take = false;
         switch (action) {
-            case NOTHING:
             case CLONE_STACK:
                 click = true;
                 break;
@@ -313,7 +314,7 @@ public class SessionListener implements Listener {
                 event.setCancelled(true);
                 return;
         }
-        if (onInventoryClick(inventoryListener, slot, click, put, take)) {
+        if (onInventoryClick(inventoryListener, slot, click, put, take, event.getClick())) {
             event.setCancelled(true);
         }
     }
@@ -332,7 +333,8 @@ public class SessionListener implements Listener {
         if (slot != event.getView().convertSlot(slot)) {
             return;
         }
-        if (onInventoryClick(inventoryListener, slot, true, true, false)) {
+        ClickType type = event.getType() == DragType.EVEN ? ClickType.LEFT : ClickType.RIGHT;
+        if (onInventoryClick(inventoryListener, slot, true, true, false, type)) {
             event.setCancelled(true);
         }
     }

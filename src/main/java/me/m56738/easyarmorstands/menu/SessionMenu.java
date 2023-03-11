@@ -12,13 +12,10 @@ import me.m56738.easyarmorstands.inventory.DisabledSlot;
 import me.m56738.easyarmorstands.inventory.InventoryMenu;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
-
-import java.util.Collections;
 
 public class SessionMenu extends InventoryMenu {
     private final ArmorStandSession session;
@@ -107,8 +104,7 @@ public class SessionMenu extends InventoryMenu {
             addEquipmentButton(new ColorPickerSlot(this));
         }
         Bukkit.getPluginManager().callEvent(new SessionMenuInitializeEvent(this));
-        setEmptySlots(new DisabledSlot(this, Util.createItem(ItemType.LIGHT_BLUE_STAINED_GLASS_PANE,
-                Component.empty(), Collections.emptyList())));
+        setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
     }
 
     public void addEquipmentButton(InventorySlot slot) {

@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import org.bukkit.Color;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,7 +23,7 @@ public class ColorItemSlot implements InventorySlot, ColorListener {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (take) {
             return menu.onTake(slot);
         }

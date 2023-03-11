@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.inventory;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class InventoryMenu implements InventoryListener {
     }
 
     @Override
-    public boolean onClick(int slot, boolean click, boolean put, boolean take) {
+    public boolean onClick(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (slot < 0 || slot >= slots.length) {
             return true;
         }
@@ -42,7 +43,7 @@ public class InventoryMenu implements InventoryListener {
         if (inventorySlot == null) {
             return false;
         }
-        return inventorySlot.onInteract(slot, click, put, take);
+        return inventorySlot.onInteract(slot, click, put, take, type);
     }
 
     @Override

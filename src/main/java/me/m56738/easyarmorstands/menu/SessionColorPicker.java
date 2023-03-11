@@ -16,7 +16,7 @@ public class SessionColorPicker extends ColorPicker {
 
     @Override
     public boolean onTake(int slot) {
-        menu.queueTask(() -> {
+        queueTask(() -> {
             ItemStack item = getInventory().getItem(slot);
             getInventory().setItem(slot, null);
             player.openInventory(menu.getInventory());

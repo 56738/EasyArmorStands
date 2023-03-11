@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.menu.SessionMenu;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class TrainCartsModelListingSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (put) {
             // Delete items placed into this slot
             menu.queueTask(() -> menu.getSession().getPlayer().setItemOnCursor(null));
