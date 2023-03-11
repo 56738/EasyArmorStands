@@ -238,7 +238,7 @@ public class Session implements ForwardingAudience.Single {
     }
 
     private int getParticleCount(double length) {
-        return (int) Math.round(length * 5);
+        return (int) Math.round(length * particleCapability.getDensity());
     }
 
     public void showPoint(Vector3dc position, Color color) {

@@ -41,5 +41,10 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
                     color.getBlue() / 255.0,
                     1);
         }
+
+        @Override
+        public double getDensity() {
+            return 3;
+        }
     }
 }

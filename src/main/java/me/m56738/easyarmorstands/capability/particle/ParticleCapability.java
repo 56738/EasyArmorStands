@@ -7,4 +7,6 @@ import org.bukkit.entity.Player;
 @Capability(name = "Particles")
 public interface ParticleCapability {
     void spawnParticle(Player player, double x, double y, double z, Color color);
+
+    double getDensity();
 }

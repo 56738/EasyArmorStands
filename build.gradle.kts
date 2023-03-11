@@ -80,7 +80,7 @@ fun registerVersion(name: String, api: String) {
     registerSourceSet(name)
     dependencies {
         "${name}CompileOnly"(api) {
-            isTransitive = false
+            exclude("net.kyori", "adventure-api")
         }
     }
 }
@@ -112,7 +112,9 @@ dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
     "traincartsCompileOnly"(libs.traincarts)
     "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.22"))
-    "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core")
+    "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core") {
+        exclude("net.kyori", "adventure-api")
+    }
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Bukkit") {
         isTransitive = false
     }

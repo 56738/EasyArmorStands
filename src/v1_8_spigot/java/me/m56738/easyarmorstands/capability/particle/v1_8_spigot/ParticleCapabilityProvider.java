@@ -40,13 +40,18 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
                     Effect.COLOURED_DUST,
                     0,
                     1,
-                    Math.max(color.getRed() / 255f, 0.01f),
+                    Math.max(color.getRed() / 255f, Float.MIN_VALUE),
                     color.getGreen() / 255f,
                     color.getBlue() / 255f,
                     1,
                     0,
                     64
             );
+        }
+
+        @Override
+        public double getDensity() {
+            return 3;
         }
     }
 }

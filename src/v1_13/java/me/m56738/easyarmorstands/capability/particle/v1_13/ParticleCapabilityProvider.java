@@ -34,5 +34,10 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
         public void spawnParticle(Player player, double x, double y, double z, Color color) {
             player.spawnParticle(Particle.REDSTONE, x, y, z, 1, new Particle.DustOptions(color, 0.5f));
         }
+
+        @Override
+        public double getDensity() {
+            return 5;
+        }
     }
 }
