@@ -1,8 +1,6 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.color.ColorPicker;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,18 +16,12 @@ public class SessionColorPicker extends ColorPicker {
 
     @Override
     public boolean onTake(int slot) {
-        ItemStack item = getInventory().getItem(slot);
-        if (item != null) {
-            finish(item);
+        menu.queueTask(() -> {
+            ItemStack item = getInventory().getItem(slot);
             getInventory().setItem(slot, null);
-        }
-        return false;
-    }
-
-    private void finish(ItemStack item) {
-        Bukkit.getScheduler().runTask(EasyArmorStands.getInstance(), () -> {
             player.openInventory(menu.getInventory());
             player.setItemOnCursor(item);
         });
+        return false;
     }
 }

@@ -22,7 +22,7 @@ public class ColorItemSlot implements InventorySlot, ColorListener {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         if (take) {
             return menu.onTake(slot);
         }

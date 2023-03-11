@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.color;
 
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
-import org.bukkit.inventory.ItemStack;
 
 public class ColorAxisChangeSlot extends ColorAxisSlot {
     private final ColorPicker menu;
@@ -33,7 +32,7 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         if (click) {
             Color color = menu.getColor();
             int value = axis.get(color);

@@ -249,9 +249,9 @@ public class SessionListener implements Listener {
     }
 
     private boolean onInventoryClick(InventoryListener inventoryListener,
-                                     int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+                                     int slot, boolean click, boolean put, boolean take) {
         Bukkit.getScheduler().runTask(plugin, inventoryListener::update);
-        return !inventoryListener.onClick(slot, click, put, take, cursor);
+        return !inventoryListener.onClick(slot, click, put, take);
     }
 
     @EventHandler
@@ -313,8 +313,7 @@ public class SessionListener implements Listener {
                 event.setCancelled(true);
                 return;
         }
-        ItemStack cursor = event.getCursor();
-        if (onInventoryClick(inventoryListener, slot, click, put, take, cursor)) {
+        if (onInventoryClick(inventoryListener, slot, click, put, take)) {
             event.setCancelled(true);
         }
     }
@@ -333,8 +332,7 @@ public class SessionListener implements Listener {
         if (slot != event.getView().convertSlot(slot)) {
             return;
         }
-        ItemStack cursor = event.getOldCursor();
-        if (onInventoryClick(inventoryListener, slot, true, true, false, cursor)) {
+        if (onInventoryClick(inventoryListener, slot, true, true, false)) {
             event.setCancelled(true);
         }
     }

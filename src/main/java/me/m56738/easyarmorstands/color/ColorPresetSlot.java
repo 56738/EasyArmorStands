@@ -37,7 +37,7 @@ public class ColorPresetSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         if (click) {
             menu.setColor(color.getColor());
         }

@@ -17,8 +17,7 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
     public ParticleCapabilityProvider() {
         try {
             instance = new ParticleCapabilityImpl();
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 

@@ -17,7 +17,7 @@ public class DisabledSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         return false;
     }
 }

@@ -38,13 +38,13 @@ public class HeadDatabaseSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         if (put) {
             // Delete items placed into this slot
-            menu.queueTask(() -> menu.getSession().getPlayer().getOpenInventory().setCursor(null));
+            menu.queueTask(() -> menu.getSession().getPlayer().setItemOnCursor(null));
             return false;
         }
-        player.performCommand("headdb");
+        menu.queueTask(() -> player.performCommand("headdb"));
         return false;
     }
 }

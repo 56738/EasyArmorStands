@@ -34,24 +34,26 @@ public class ColorPickerSlot implements InventorySlot {
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ItemStack cursor) {
+    public boolean onInteract(int slot, boolean click, boolean put, boolean take) {
         if (!put) {
             return false;
         }
-        if (cursor == null) {
-            return false;
-        }
-        ItemStack item = cursor.clone();
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-        if (!EasyArmorStands.getInstance().getCapability(ItemColorCapability.class).hasColor(meta)) {
-            return false;
-        }
-        cursor.setAmount(0);
-        Player player = menu.getSession().getPlayer();
-        player.openInventory(new SessionColorPicker(item, player, menu).getInventory());
+        menu.queueTask(() -> {
+            Player player = menu.getSession().getPlayer();
+            ItemStack item = player.getItemOnCursor();
+            if (item == null) {
+                return;
+            }
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) {
+                return;
+            }
+            if (!EasyArmorStands.getInstance().getCapability(ItemColorCapability.class).hasColor(meta)) {
+                return;
+            }
+            player.setItemOnCursor(null);
+            player.openInventory(new SessionColorPicker(item, player, menu).getInventory());
+        });
         return false;
     }
 }
