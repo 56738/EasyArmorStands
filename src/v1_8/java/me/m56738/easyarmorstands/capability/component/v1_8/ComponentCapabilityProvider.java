@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -42,6 +43,10 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
 
         @Override
         public void setDisplayName(ItemMeta meta, Component displayName) {
+            if (displayName == Component.empty()) {
+                meta.setDisplayName(ChatColor.RESET.toString());
+                return;
+            }
             meta.setDisplayName(LegacyComponentSerializer.legacySection().serialize(
                     displayName.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
         }
