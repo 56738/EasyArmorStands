@@ -8,6 +8,8 @@ commodore = "2.2"
 headdatabase-api = "1.3.1"
 joml = "1.10.5"
 traincarts = "1.19.3-v2"
+worldguard-v6 = "6.2"
+worldguard-v7 = "7.0.7"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
@@ -24,6 +26,8 @@ commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
 headdatabase-api = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabase-api" }
 joml = { module = "org.joml:joml", version.ref = "joml" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
+worldguard-v6 = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "worldguard-v6" }
+worldguard-v7 = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard-v7" }
 
 [plugins]
 plugin-yml = { id = "net.minecrell.plugin-yml.bukkit", version = "0.5.3" }

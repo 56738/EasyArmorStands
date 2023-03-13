@@ -10,6 +10,7 @@ version = "1.1.0-SNAPSHOT"
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://maven.enginehub.org/repo/")
     maven("https://ci.mg-dev.eu/plugin/repository/everything/") {
         content {
             includeGroupByRegex("com\\.bergerkiller(\\..*)?")
@@ -85,10 +86,10 @@ fun registerVersion(name: String, api: String) {
     }
 }
 
-fun registerAddon(name: String) {
+fun registerAddon(name: String, api: Any = libs.bukkit) {
     registerSourceSet(name)
     dependencies {
-        "${name}CompileOnly"(libs.bukkit)
+        "${name}CompileOnly"(api)
     }
 }
 
@@ -107,12 +108,13 @@ registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 
 registerAddon("headdatabase")
-registerAddon("traincarts")
 registerAddon("plotsquared")
+registerAddon("traincarts")
+registerAddon("worldguard_v6")
+registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
-    "traincartsCompileOnly"(libs.traincarts)
     "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.22"))
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core") {
         exclude("net.kyori", "adventure-api")
@@ -120,6 +122,9 @@ dependencies {
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Bukkit") {
         isTransitive = false
     }
+    "traincartsCompileOnly"(libs.traincarts)
+    "worldguard_v6CompileOnly"(libs.worldguard.v6)
+    "worldguard_v7CompileOnly"(libs.worldguard.v7)
 }
 
 bukkit {
@@ -127,7 +132,7 @@ bukkit {
     main = "me.m56738.easyarmorstands.EasyArmorStands"
     apiVersion = "1.13"
     author = "56738"
-    softDepend = listOf("HeadDatabase", "PlotSquared", "Train_Carts")
+    softDepend = listOf("HeadDatabase", "PlotSquared", "Train_Carts", "WorldGuard")
     permissions {
         create("easyarmorstands.creative") {
             description = "Allows using EasyArmorStands features which are safe for creative mode players."
@@ -238,6 +243,9 @@ bukkit {
         }
         create("easyarmorstands.version") {
             description = "Allows viewing version information."
+        }
+        create("easyarmorstands.worldguard.bypass") {
+            description = "Allows bypassing WorldGuard restrictions."
         }
     }
 }

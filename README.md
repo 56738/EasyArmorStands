@@ -123,4 +123,5 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 | Creative |
 | `easyarmorstands.debug`                 | Allows viewing debug information.                                            |          |
 | `easyarmorstands.plotsquared.bypass`    | Allows bypassing PlotSquared restrictions.                                   |          |
+| `easyarmorstands.worldguard.bypass`     | Allows bypassing WorldGuard restrictions.                                    |          |
 | `headdb.open`                           | Allows opening the Head Database menu.                                       |          |

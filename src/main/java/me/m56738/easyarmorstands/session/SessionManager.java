@@ -111,6 +111,9 @@ public class SessionManager {
         }
         position.add(Util.toVector3d(player.getLocation()));
         ArmorStand armorStand = spawn(player, position, eyeLocation.getYaw() + 180);
+        if (armorStand == null) {
+            return;
+        }
         Session session = start(player, armorStand);
         if (session == null) {
             armorStand.remove();
