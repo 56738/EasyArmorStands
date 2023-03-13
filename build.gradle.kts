@@ -96,8 +96,10 @@ registerVersion("v1_8", "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_8_spigot", "org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_9", "org.bukkit:bukkit:1.9-R0.1-SNAPSHOT")
 registerVersion("v1_11", "org.bukkit:bukkit:1.11-R0.1-SNAPSHOT")
+registerVersion("v1_12", "org.bukkit:bukkit:1.12-R0.1-SNAPSHOT")
 registerVersion("v1_12_paper", "com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
 registerVersion("v1_13", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
+registerVersion("v1_13_2", "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT")
 registerVersion("v1_14", "org.bukkit:bukkit:1.14-R0.1-SNAPSHOT")
 registerVersion("v1_16", "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 registerVersion("v1_16_paper", "com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
@@ -133,6 +135,7 @@ bukkit {
                 "easyarmorstands.clone",
                 "easyarmorstands.color",
                 "easyarmorstands.give",
+                "easyarmorstands.history",
                 "easyarmorstands.spawn",
                 "easyarmorstands.survival",
                 "easyarmorstands.traincarts.model"
@@ -173,6 +176,21 @@ bukkit {
         create("easyarmorstands.debug") {
             description = "Allows viewing debug information."
         }
+        create("easyarmorstands.edit") {
+            description = "Allows editing armor stands. Required to use this plugin."
+        }
+        create("easyarmorstands.give") {
+            description = "Allows giving yourself the EasyArmorStand tool."
+        }
+        create("easyarmorstands.help") {
+            description = "Allows viewing the help menu."
+        }
+        create("easyarmorstands.history") {
+            description = "Allows undoing and redoing changes."
+        }
+        create("easyarmorstands.open") {
+            description = "Allows opening the EasyArmorStands menu."
+        }
         create("easyarmorstands.plotsquared.bypass") {
             description = "Allows bypassing PlotSquared restrictions."
         }
@@ -208,18 +226,6 @@ bukkit {
         }
         create("easyarmorstands.property.visible") {
             description = "Allows toggling armor stand visibility."
-        }
-        create("easyarmorstands.edit") {
-            description = "Allows editing armor stands. Required to use this plugin."
-        }
-        create("easyarmorstands.give") {
-            description = "Allows giving yourself the EasyArmorStand tool."
-        }
-        create("easyarmorstands.help") {
-            description = "Allows viewing the help menu."
-        }
-        create("easyarmorstands.open") {
-            description = "Allows opening the EasyArmorStands menu."
         }
         create("easyarmorstands.snap") {
             description = "Allows toggling position and angle snapping and configuring the increment."

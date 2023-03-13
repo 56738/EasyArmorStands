@@ -89,6 +89,7 @@ public abstract class AbstractBone implements Bone {
     @Override
     public void onRightClick() {
         if (active) {
+            session.commit();
             active = false;
         } else if (tool != null) {
             Vector3dc target = tool.getLookTarget();

@@ -7,12 +7,15 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
+import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
+import me.m56738.easyarmorstands.history.History;
+import me.m56738.easyarmorstands.history.HistoryAction;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -72,6 +75,56 @@ public class GlobalCommands {
     @CommandDescription("Displays the color picker")
     public void color(Player player) {
         player.openInventory(new ColorPicker(null, player).getInventory());
+    }
+
+    @CommandMethod("undo [count]")
+    @CommandPermission("easyarmorstands.undo")
+    @CommandDescription("Undo a change")
+    public void undo(Player player, Audience audience,
+                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+        History history = EasyArmorStands.getInstance().getHistory(player);
+        for (int i = 0; i < count; i++) {
+            HistoryAction action;
+            try {
+                action = history.undo();
+            } catch (IllegalStateException e) {
+                audience.sendMessage(Component.text("Unable to undo", NamedTextColor.RED));
+                return;
+            }
+            if (action != null) {
+                audience.sendMessage(Component.text()
+                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
+                        .append(action.describe()));
+            } else {
+                audience.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
+                break;
+            }
+        }
+    }
+
+    @CommandMethod("redo [count]")
+    @CommandPermission("easyarmorstands.redo")
+    @CommandDescription("Redo a change")
+    public void redo(Player player, Audience audience,
+                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+        History history = EasyArmorStands.getInstance().getHistory(player);
+        for (int i = 0; i < count; i++) {
+            HistoryAction action;
+            try {
+                action = history.redo();
+            } catch (IllegalStateException e) {
+                audience.sendMessage(Component.text("Unable to redo", NamedTextColor.RED));
+                return;
+            }
+            if (action != null) {
+                audience.sendMessage(Component.text()
+                        .append(Component.text("Redone change: ", NamedTextColor.GREEN))
+                        .append(action.describe()));
+            } else {
+                audience.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
+                break;
+            }
+        }
     }
 
     @CommandMethod("version")

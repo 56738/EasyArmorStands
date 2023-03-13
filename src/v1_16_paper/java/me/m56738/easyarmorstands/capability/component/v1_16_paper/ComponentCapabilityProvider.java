@@ -94,7 +94,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         public void setDisplayName(ItemMeta meta, Component displayName) {
             try {
                 setDisplayName.invoke(meta, mapper.convertToNative(
-                        displayName.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
+                        displayName.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -105,7 +105,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             List<Object> nativeLore = new ArrayList<>(lore.size());
             for (Component component : lore) {
                 nativeLore.add(mapper.convertToNative(
-                        component.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
+                        component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
             }
             try {
                 setLore.invoke(meta, nativeLore);

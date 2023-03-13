@@ -169,6 +169,7 @@ public class Session implements ForwardingAudience.Single {
     }
 
     public void stop() {
+        commit();
         audience.clearTitle();
     }
 
@@ -294,5 +295,8 @@ public class Session implements ForwardingAudience.Single {
 
     public void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius) {
         showCircle(center, axis, Util.toColor(color), radius);
+    }
+
+    public void commit() {
     }
 }

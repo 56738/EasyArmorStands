@@ -118,6 +118,7 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.clone`                 | Allows cloning armor stands.                                                 | Creative |
 | `easyarmorstands.color`                 | Allows using the color picker.                                               | Creative |
 | `easyarmorstands.give`                  | Allows giving yourself the EasyArmorStand tool.                              | Creative |
+| `easyarmorstands.history`               | Allows undoing and redoing changes.                                          | Creative |
 | `easyarmorstands.spawn`                 | Allows spawning armor stands.                                                | Creative |
 | `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 | Creative |
 | `easyarmorstands.debug`                 | Allows viewing debug information.                                            |          |

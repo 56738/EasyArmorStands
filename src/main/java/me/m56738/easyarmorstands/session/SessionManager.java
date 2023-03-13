@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
 import me.m56738.easyarmorstands.tool.BoneAxisMoveTool;
 import me.m56738.easyarmorstands.tool.BoneAxisRotateTool;
 import me.m56738.easyarmorstands.tool.PositionAxisTool;
@@ -128,12 +129,14 @@ public class SessionManager {
         }
 
         SpawnCapability spawnCapability = EasyArmorStands.getInstance().getCapability(SpawnCapability.class);
-        return spawnCapability.spawnEntity(location, ArmorStand.class, e -> {
+        ArmorStand armorStand = spawnCapability.spawnEntity(location, ArmorStand.class, e -> {
             e.setGravity(false);
             for (ArmorStandPart part : ArmorStandPart.values()) {
                 part.setPose(e, EulerAngle.ZERO);
             }
         });
+        EasyArmorStands.getInstance().getHistory(player).push(new SpawnArmorStandAction(armorStand));
+        return armorStand;
     }
 
     private Session createSession(Player player, ArmorStand armorStand) {

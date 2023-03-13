@@ -23,6 +23,8 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.SessionInjector;
 import me.m56738.easyarmorstands.command.SessionPreprocessor;
 import me.m56738.easyarmorstands.command.ToolArgumentParser;
+import me.m56738.easyarmorstands.history.History;
+import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -34,6 +36,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Function;
@@ -43,6 +46,7 @@ public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private SessionManager sessionManager;
+    private HistoryManager historyManager;
     private BukkitAudiences adventure;
     private PaperCommandManager<CommandSender> commandManager;
     private AnnotationParser<CommandSender> annotationParser;
@@ -63,9 +67,11 @@ public class EasyArmorStands extends JavaPlugin {
         loader.load();
 
         sessionManager = new SessionManager();
+        historyManager = new HistoryManager();
         adventure = BukkitAudiences.create(this);
 
         getServer().getPluginManager().registerEvents(new SessionListener(this, sessionManager, adventure), this);
+        getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
 
         try {
@@ -137,6 +143,10 @@ public class EasyArmorStands extends JavaPlugin {
         sessionManager.stopAllSessions();
     }
 
+    public History getHistory(Player player) {
+        return historyManager.getHistory(player);
+    }
+
     public <T> T getCapability(Class<T> type) {
         return loader.get(type);
     }
@@ -147,6 +157,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public SessionManager getSessionManager() {
         return sessionManager;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
     public BukkitAudiences getAdventure() {

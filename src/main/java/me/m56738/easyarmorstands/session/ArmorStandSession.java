@@ -7,8 +7,10 @@ import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.event.SessionMoveEvent;
+import me.m56738.easyarmorstands.history.EditArmorStandAction;
 import me.m56738.easyarmorstands.menu.SessionMenu;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandSnapshot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -18,14 +20,18 @@ import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Vector3dc;
 
+import java.util.Objects;
+
 public class ArmorStandSession extends Session {
     private final ArmorStand entity;
     private final ArmorStand skeleton;
     private final Matrix3d armorStandYaw = new Matrix3d();
+    private ArmorStandSnapshot lastSnapshot;
 
     public ArmorStandSession(Player player, ArmorStand entity) {
         super(player);
         this.entity = entity;
+        this.lastSnapshot = new ArmorStandSnapshot(entity);
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
         if (glowCapability != null) {
@@ -57,6 +63,19 @@ public class ArmorStandSession extends Session {
         } else {
             this.skeleton = null;
         }
+    }
+
+    @Override
+    public void commit() {
+        ArmorStandSnapshot snapshot = new ArmorStandSnapshot(entity);
+        if (Objects.equals(lastSnapshot, snapshot)) {
+            return;
+        }
+        EasyArmorStands.getInstance().getHistory(getPlayer()).push(new EditArmorStandAction(
+                lastSnapshot,
+                snapshot,
+                entity.getUniqueId()));
+        lastSnapshot = snapshot;
     }
 
     @Override

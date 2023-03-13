@@ -32,6 +32,32 @@ public class Util {
     public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
     public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
 
+    private static Component format3D(Vector3dc vector, NumberFormat format) {
+        return Component.text()
+                .append(Component.text(format.format(vector.x()), NamedTextColor.RED))
+                .append(Component.text(", "))
+                .append(Component.text(format.format(vector.y()), NamedTextColor.GREEN))
+                .append(Component.text(", "))
+                .append(Component.text(format.format(vector.z()), NamedTextColor.BLUE))
+                .build();
+    }
+
+    public static Component formatPosition(Vector3dc position) {
+        return format3D(position, POSITION_FORMAT);
+    }
+
+    public static Component formatLocation(Location location) {
+        return formatPosition(Util.toVector3d(location));
+    }
+
+    public static Component formatOffset(Vector3dc offset) {
+        return format3D(offset, OFFSET_FORMAT);
+    }
+
+    public static Component formatAngle(Vector3dc angle) {
+        return format3D(angle, ANGLE_FORMAT);
+    }
+
     public static Matrix3d fromEuler(EulerAngle angle, Matrix3d dest) {
         dest.rotationZYX(-angle.getZ(), -angle.getY(), angle.getX());
         return dest;
