@@ -84,14 +84,15 @@ public class GlobalCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
         History history = EasyArmorStands.getInstance().getHistory(player);
         for (int i = 0; i < count; i++) {
-            HistoryAction action;
-            try {
-                action = history.undo();
-            } catch (IllegalStateException e) {
-                audience.sendMessage(Component.text("Unable to undo", NamedTextColor.RED));
-                return;
-            }
+            HistoryAction action = history.takeUndoAction();
             if (action != null) {
+                try {
+                    action.undo();
+                } catch (IllegalStateException e) {
+                    audience.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
+                            .append(action.describe()));
+                    break;
+                }
                 audience.sendMessage(Component.text()
                         .append(Component.text("Undone change: ", NamedTextColor.GREEN))
                         .append(action.describe()));
@@ -109,14 +110,15 @@ public class GlobalCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
         History history = EasyArmorStands.getInstance().getHistory(player);
         for (int i = 0; i < count; i++) {
-            HistoryAction action;
-            try {
-                action = history.redo();
-            } catch (IllegalStateException e) {
-                audience.sendMessage(Component.text("Unable to redo", NamedTextColor.RED));
-                return;
-            }
+            HistoryAction action = history.takeRedoAction();
             if (action != null) {
+                try {
+                    action.redo();
+                } catch (IllegalStateException e) {
+                    audience.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
+                            .append(action.describe()));
+                    break;
+                }
                 audience.sendMessage(Component.text()
                         .append(Component.text("Redone change: ", NamedTextColor.GREEN))
                         .append(action.describe()));

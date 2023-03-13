@@ -51,6 +51,7 @@ public abstract class ToggleSlot implements InventorySlot {
         if (click) {
             onClick();
             initialize(slot);
+            menu.getSession().commit();
         }
         return false;
     }

@@ -4,12 +4,13 @@ import me.m56738.easyarmorstands.util.ArmorStandSnapshot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.entity.ArmorStand;
 
 import java.util.UUID;
 
 public class EditArmorStandAction implements HistoryAction {
-    private final ArmorStandSnapshot oldSnapshot;
-    private final ArmorStandSnapshot newSnapshot;
+    private ArmorStandSnapshot oldSnapshot;
+    private ArmorStandSnapshot newSnapshot;
     private UUID uuid;
 
     public EditArmorStandAction(ArmorStandSnapshot oldSnapshot, ArmorStandSnapshot newSnapshot, UUID uuid) {
@@ -18,18 +19,24 @@ public class EditArmorStandAction implements HistoryAction {
         this.uuid = uuid;
     }
 
-    private void apply(ArmorStandSnapshot from, ArmorStandSnapshot to) {
-        to.apply(from.getArmorStand(uuid));
+    private ArmorStandSnapshot apply(ArmorStandSnapshot snapshot) {
+        ArmorStand armorStand = Util.getArmorStand(uuid);
+        if (armorStand == null) {
+            throw new IllegalStateException();
+        }
+        ArmorStandSnapshot result = new ArmorStandSnapshot(armorStand);
+        snapshot.apply(armorStand);
+        return result;
     }
 
     @Override
     public void undo() {
-        apply(newSnapshot, oldSnapshot);
+        newSnapshot = apply(oldSnapshot);
     }
 
     @Override
     public void redo() {
-        apply(oldSnapshot, newSnapshot);
+        oldSnapshot = apply(newSnapshot);
     }
 
     @Override

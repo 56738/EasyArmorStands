@@ -53,6 +53,7 @@ public class SessionCommands {
                            ArmorStandSession session,
                            @Argument("visible") boolean visible) {
         session.getEntity().setVisible(visible);
+        session.commit();
         if (visible) {
             audience.sendMessage(Component.text("Armor stand set to visible", NamedTextColor.GREEN));
         } else {
@@ -68,6 +69,7 @@ public class SessionCommands {
                              ArmorStandSession session,
                              @Argument("visible") boolean visible) {
         session.getEntity().setBasePlate(visible);
+        session.commit();
         if (visible) {
             audience.sendMessage(Component.text("Base plate enabled", NamedTextColor.GREEN));
         } else {
@@ -83,6 +85,7 @@ public class SessionCommands {
                         ArmorStandSession session,
                         @Argument("visible") boolean visible) {
         session.getEntity().setArms(visible);
+        session.commit();
         if (visible) {
             audience.sendMessage(Component.text("Arms enabled", NamedTextColor.GREEN));
         } else {
@@ -98,6 +101,7 @@ public class SessionCommands {
                            ArmorStandSession session,
                            @Argument("enabled") boolean enabled) {
         session.getEntity().setGravity(enabled);
+        session.commit();
         if (enabled) {
             audience.sendMessage(Component.text("Gravity enabled", NamedTextColor.GREEN));
         } else {
@@ -113,6 +117,7 @@ public class SessionCommands {
                         ArmorStandSession session,
                         @Argument("size") ArmorStandSize size) {
         session.getEntity().setSmall(size == ArmorStandSize.SMALL);
+        session.commit();
         audience.sendMessage(Component.text("Size changed to " +
                 size.name().toLowerCase(Locale.ROOT), NamedTextColor.GREEN));
     }
@@ -166,6 +171,7 @@ public class SessionCommands {
         Component name = serializer.deserializeOrNull(input);
         capability.setCustomName(session.getEntity(), name);
         session.getEntity().setCustomNameVisible(name != null);
+        session.commit();
         if (name != null) {
             audience.sendMessage(Component.text()
                     .append(Component.text("Name tag changed to ", NamedTextColor.GREEN))
@@ -185,6 +191,7 @@ public class SessionCommands {
                            TickCapability tickCapability,
                            @Argument("value") boolean canTick) {
         tickCapability.setCanTick(session.getEntity(), canTick);
+        session.commit();
         if (canTick) {
             audience.sendMessage(Component.text("Armor stand ticking enabled", NamedTextColor.GREEN));
         } else {
@@ -201,6 +208,7 @@ public class SessionCommands {
                         GlowCapability glowCapability,
                         @Argument("glowing") boolean glowing) {
         glowCapability.setGlowing(session.getEntity(), glowing);
+        session.commit();
         if (glowing) {
             audience.sendMessage(Component.text("Armor stand glowing enabled", NamedTextColor.GREEN));
         } else {
@@ -217,6 +225,7 @@ public class SessionCommands {
                           LockCapability lockCapability,
                           @Argument("locked") boolean locked) {
         lockCapability.setLocked(session.getEntity(), locked);
+        session.commit();
         if (locked) {
             audience.sendMessage(Component.text("Armor stand items locked", NamedTextColor.GREEN));
         } else {
@@ -233,6 +242,7 @@ public class SessionCommands {
                                 InvulnerabilityCapability invulnerabilityCapability,
                                 @Argument("invulnerable") boolean invulnerable) {
         invulnerabilityCapability.setInvulnerable(session.getEntity(), invulnerable);
+        session.commit();
         if (invulnerable) {
             audience.sendMessage(Component.text("Armor stand is invulnerable", NamedTextColor.GREEN));
         } else {
@@ -338,6 +348,7 @@ public class SessionCommands {
             audience.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
+        session.commit();
         audience.sendMessage(Component.text()
                 .content("Moved to ")
                 .append(Component.text(Util.POSITION_FORMAT.format(position.x()), TextColor.color(0xFF7777)))

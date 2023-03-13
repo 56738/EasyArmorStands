@@ -10,8 +10,8 @@ import org.bukkit.entity.ArmorStand;
 import java.util.UUID;
 
 public class SpawnArmorStandAction implements HistoryAction {
-    private final ArmorStandSnapshot snapshot;
     private UUID uuid;
+    private ArmorStandSnapshot snapshot;
 
     private SpawnArmorStandAction(UUID uuid, ArmorStandSnapshot snapshot) {
         this.uuid = uuid;
@@ -28,7 +28,12 @@ public class SpawnArmorStandAction implements HistoryAction {
 
     @Override
     public void undo() {
-        snapshot.getArmorStand(uuid).remove();
+        ArmorStand armorStand = Util.getArmorStand(uuid);
+        if (armorStand == null) {
+            throw new IllegalStateException();
+        }
+        snapshot = new ArmorStandSnapshot(armorStand);
+        armorStand.remove();
     }
 
     @Override

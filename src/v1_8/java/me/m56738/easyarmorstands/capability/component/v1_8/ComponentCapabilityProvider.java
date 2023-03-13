@@ -38,7 +38,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
 
         @Override
         public void setCustomName(Entity entity, Component name) {
-            entity.setCustomName(LegacyComponentSerializer.legacySection().serialize(name));
+            entity.setCustomName(LegacyComponentSerializer.legacySection().serializeOrNull(name));
         }
 
         @Override

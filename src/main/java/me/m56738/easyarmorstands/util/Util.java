@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -11,10 +12,13 @@ import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Intersectiond;
 import org.joml.Math;
 import org.joml.Matrix3d;
@@ -26,6 +30,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Util {
     public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.####");
@@ -86,6 +91,14 @@ public class Util {
 
     public static Color toColor(RGBLike color) {
         return Color.fromRGB(color.red(), color.green(), color.blue());
+    }
+
+    public static @Nullable ArmorStand getArmorStand(UUID uuid) {
+        Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
+        if (!(entity instanceof ArmorStand)) {
+            return null;
+        }
+        return (ArmorStand) entity;
     }
 
     public static ItemStack createTool() {

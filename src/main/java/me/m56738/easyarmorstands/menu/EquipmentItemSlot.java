@@ -33,7 +33,10 @@ public class EquipmentItemSlot implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         EntityEquipment equipment = session.getEntity().getEquipment();
-        menu.queueTask(() -> equipmentCapability.setItem(equipment, this.slot, inventory.getItem(slot)));
+        menu.queueTask(() -> {
+            equipmentCapability.setItem(equipment, this.slot, inventory.getItem(slot));
+            session.commit();
+        });
         return true;
     }
 }

@@ -4,13 +4,11 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +16,6 @@ import org.bukkit.util.EulerAngle;
 
 import java.util.EnumMap;
 import java.util.Objects;
-import java.util.UUID;
 
 public class ArmorStandSnapshot {
     private final Location location;
@@ -63,18 +60,6 @@ public class ArmorStandSnapshot {
 
     public Location getLocation() {
         return location;
-    }
-
-    public ArmorStand getArmorStand(UUID uuid) {
-        Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
-        if (!(entity instanceof ArmorStand)) {
-            throw new IllegalStateException();
-        }
-        ArmorStand armorStand = (ArmorStand) entity;
-        if (!equals(new ArmorStandSnapshot(armorStand))) {
-            throw new IllegalStateException();
-        }
-        return armorStand;
     }
 
     public void apply(ArmorStand entity) {

@@ -15,20 +15,18 @@ public class History {
         }
     }
 
-    public HistoryAction undo() {
+    public HistoryAction takeUndoAction() {
         HistoryAction action = past.poll();
         if (action != null) {
             future.push(action);
-            action.undo();
         }
         return action;
     }
 
-    public HistoryAction redo() {
+    public HistoryAction takeRedoAction() {
         HistoryAction action = future.poll();
         if (action != null) {
             past.push(action);
-            action.redo();
         }
         return action;
     }
