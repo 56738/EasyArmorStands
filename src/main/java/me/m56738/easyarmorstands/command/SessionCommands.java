@@ -6,12 +6,14 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.Bone;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
+import me.m56738.easyarmorstands.history.DestroyArmorStandAction;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -255,6 +257,18 @@ public class SessionCommands {
     @CommandDescription("Spawn an armor stand and start editing it")
     public void spawn(Player player) {
         sessionManager.spawnAndStart(player);
+    }
+
+    @CommandMethod("destroy")
+    @CommandPermission("easyarmorstands.destroy")
+    @CommandDescription("Destroy the selected armor stand")
+    public void destroy(ArmorStandSession session, Audience audience) {
+        ArmorStand entity = session.getEntity();
+        Player player = session.getPlayer();
+        sessionManager.stop(player);
+        EasyArmorStands.getInstance().getHistory(player).push(new DestroyArmorStandAction(entity));
+        entity.remove();
+        audience.sendMessage(Component.text("Armor stand destroyed", NamedTextColor.GREEN));
     }
 
     @CommandMethod("open")

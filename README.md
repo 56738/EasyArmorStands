@@ -117,6 +117,7 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.version`               | Allows viewing version information.                                          | Survival |
 | `easyarmorstands.clone`                 | Allows cloning armor stands.                                                 | Creative |
 | `easyarmorstands.color`                 | Allows using the color picker.                                               | Creative |
+| `easyarmorstands.destroy`               | Allows destroying selected armor stands.                                     | Creative |
 | `easyarmorstands.give`                  | Allows giving yourself the EasyArmorStand tool.                              | Creative |
 | `easyarmorstands.history`               | Allows undoing and redoing changes.                                          | Creative |
 | `easyarmorstands.spawn`                 | Allows spawning armor stands.                                                | Creative |

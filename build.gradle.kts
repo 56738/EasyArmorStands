@@ -139,6 +139,7 @@ bukkit {
             children = listOf(
                 "easyarmorstands.clone",
                 "easyarmorstands.color",
+                "easyarmorstands.destroy",
                 "easyarmorstands.give",
                 "easyarmorstands.history",
                 "easyarmorstands.spawn",
@@ -180,6 +181,9 @@ bukkit {
         }
         create("easyarmorstands.debug") {
             description = "Allows viewing debug information."
+        }
+        create("easyarmorstands.destroy") {
+            description = "Allows destroying selected armor stands."
         }
         create("easyarmorstands.edit") {
             description = "Allows editing armor stands. Required to use this plugin."
