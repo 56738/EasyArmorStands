@@ -92,6 +92,11 @@ the `easyarmorstands.creative` permission.
 If [PlotSquared v6](https://www.spigotmc.org/resources/plotsquared-v6.77506/) is installed, players can only edit armor
 stands on plots where they are allowed to build.
 
+## WorldGuard integration
+
+If [WorldGuard](https://enginehub.org/worldguard) is installed, players can only edit armor stands if they are allowed
+to build.
+
 ## All permissions
 
 To fine-tune access, you can grant or deny individual permissions.
