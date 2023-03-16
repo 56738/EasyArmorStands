@@ -7,17 +7,16 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.Bone;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.history.DestroyArmorStandAction;
+import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
-import me.m56738.easyarmorstands.tool.Tool;
 import me.m56738.easyarmorstands.util.ArmorStandSnapshot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -259,7 +258,7 @@ public class SessionCommands {
         ArmorStand entity = session.getEntity();
         new ArmorStandSnapshot(entity).spawn();
         audience.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
-        session.startMoving(null);
+//        session.startMoving(null);
     }
 
     @CommandMethod("spawn")
@@ -359,38 +358,22 @@ public class SessionCommands {
                 .color(NamedTextColor.GREEN));
     }
 
-    @CommandMethod("edit <bone>")
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @CommandMethod("set <value>")
     @CommandPermission("easyarmorstands.edit")
-    @CommandDescription("Select a bone of an armor stand")
-    public void selectBone(
+    public void set(
             CommandSender sender,
             Audience audience,
             Session session,
-            @Argument("bone") Bone bone
+            ValueNode node,
+            @Argument(value = "value", parserName = "node_value") Object value
     ) {
-        session.setBone(bone);
+        node.setValue(value);
         audience.sendMessage(Component.text()
-                .content("Selected bone: ")
-                .append(bone.getName())
-                .color(NamedTextColor.GREEN));
-    }
-
-    @CommandMethod("edit <bone> <tool>")
-    @CommandPermission("easyarmorstands.edit")
-    @CommandDescription("Select a bone of an armor stand and start editing it using a tool")
-    public void selectTool(
-            CommandSender sender,
-            Audience audience,
-            Session session,
-            @Argument("bone") Bone bone,
-            @Argument("tool") Tool tool
-    ) {
-        session.setBone(bone, tool, tool.getTarget());
-        audience.sendMessage(Component.text()
-                .content("Selected bone: ")
-                .append(bone.getName())
-                .append(Component.text(": "))
-                .append(tool.getName())
+                .content("Set ")
+                .append(node.getName())
+                .append(Component.text(" to "))
+                .append(node.getValueComponent(value))
                 .color(NamedTextColor.GREEN));
     }
 }

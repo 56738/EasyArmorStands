@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.history.EditArmorStandAction;
 import me.m56738.easyarmorstands.menu.SessionMenu;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSnapshot;
+import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -140,6 +141,14 @@ public class ArmorStandSession extends Session {
         SessionMoveEvent event = new SessionMoveEvent(this, entity.getWorld(), position);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
+    }
+
+    public Vector3dc getPosition() {
+        return Util.toVector3d(entity.getLocation());
+    }
+
+    public Matrix3dc getRotation() {
+        return armorStandYaw;
     }
 
     public boolean move(Vector3dc position) {

@@ -1,18 +1,14 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.Bone;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.tool.Tool;
+import me.m56738.easyarmorstands.node.ClickType;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.RGBLike;
-import net.kyori.adventure.util.Ticks;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,15 +16,12 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Matrix3d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 public class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -36,11 +29,8 @@ public class Session implements ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final ParticleCapability particleCapability;
-    private final Map<String, Bone> bones = new HashMap<>();
-
+    private final LinkedList<Node> nodeStack = new LinkedList<>();
     private int clickTicks = 5;
-    private Bone bone;
-    private boolean active;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
 
@@ -50,8 +40,29 @@ public class Session implements ForwardingAudience.Single {
         this.particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
     }
 
-    public void addBone(String name, Bone bone) {
-        bones.put(name, bone);
+    public Node getNode() {
+        return nodeStack.peek();
+    }
+
+    public void pushNode(Node node) {
+        if (!nodeStack.isEmpty()) {
+            nodeStack.peek().onExit();
+        }
+        nodeStack.push(node);
+        node.onEnter();
+    }
+
+    public void replaceNode(Node node) {
+        nodeStack.pop().onExit();
+        nodeStack.push(node);
+        node.onEnter();
+    }
+
+    public void popNode() {
+        nodeStack.pop().onExit();
+        if (!nodeStack.isEmpty()) {
+            nodeStack.peek().onEnter();
+        }
     }
 
     private boolean handleClick() {
@@ -62,18 +73,31 @@ public class Session implements ForwardingAudience.Single {
         return true;
     }
 
+    private boolean handleClick(ClickType type) {
+        Node node = nodeStack.peek();
+        if (node == null) {
+            return false;
+        }
+        Location eyeLocation = player.getEyeLocation();
+        Vector3dc eyes = Util.toVector3d(eyeLocation);
+        Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
+        if (node.onClick(eyes, target, type)) {
+            return true;
+        }
+        if (nodeStack.size() > 1) {
+            popNode();
+            return true;
+        }
+        return false;
+    }
+
     public void handleLeftClick() {
         if (!handleClick()) {
             return;
         }
-        if (!active) {
+        if (!handleClick(ClickType.LEFT_CLICK)) {
             onLeftClick();
-            return;
         }
-        if (bone.onLeftClick()) {
-            return;
-        }
-        active = false;
     }
 
     protected void onLeftClick() {
@@ -83,15 +107,7 @@ public class Session implements ForwardingAudience.Single {
         if (!handleClick()) {
             return;
         }
-        update();
-        if (bone != null) {
-            if (active) {
-                bone.onRightClick();
-            } else {
-                active = true;
-                bone.start();
-            }
-        }
+        handleClick(ClickType.RIGHT_CLICK);
     }
 
     public double snap(double value) {
@@ -107,21 +123,12 @@ public class Session implements ForwardingAudience.Single {
             clickTicks--;
         }
 
-        if (active) {
-            bone.refresh();
-            bone.update();
-        } else {
-            updateTargetBone();
-        }
-
-        if (!active) {
-            // No bone is active, display the name of the bone the player is looking at
-            if (bone != null) {
-                audience.showTitle(Title.title(Component.empty(), bone.getName(),
-                        Title.Times.times(Duration.ZERO, Ticks.duration(20), Duration.ZERO)));
-            } else {
-                audience.clearTitle();
-            }
+        Node node = nodeStack.peek();
+        if (node != null) {
+            Location eyeLocation = player.getEyeLocation();
+            Vector3dc eyes = Util.toVector3d(eyeLocation);
+            Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
+            node.onUpdate(eyes, target);
         }
 
         return player.isValid() && isHoldingTool();
@@ -140,57 +147,21 @@ public class Session implements ForwardingAudience.Single {
         return false;
     }
 
-    private void updateTargetBone() {
-        Bone bestBone = null;
-        double bestDistance = Double.POSITIVE_INFINITY;
-        Vector3d temp = new Vector3d();
-        for (Bone candidate : bones.values()) {
-            candidate.refresh();
-            Location eyeLocation = player.getEyeLocation();
-            candidate.getPosition().sub(Util.toVector3d(eyeLocation), temp).mulTranspose(Util.getRotation(eyeLocation, new Matrix3d()));
-            double distance = temp.z;
-            // Eliminate forward part
-            temp.z = 0;
-            // Distance from straight line
-            double deviationSquared = temp.lengthSquared();
-            double threshold = getLookThreshold();
-            if (deviationSquared < threshold * threshold) {
-                if (distance > 0 && distance < bestDistance && distance < getRange()) {
-                    bestBone = candidate;
-                    bestDistance = distance;
-                }
-            }
-        }
-        bone = bestBone;
-        for (Bone candidate : bones.values()) {
-            showPoint(candidate.getPosition(),
-                    candidate == bestBone ? NamedTextColor.YELLOW : NamedTextColor.WHITE);
-        }
-    }
-
     public void stop() {
         commit();
-        audience.clearTitle();
-    }
-
-    public void setBone(Bone bone) {
-        if (bone != null) {
-            this.bone = bone;
-            this.active = true;
-            bone.refresh();
-            bone.start();
-        } else {
-            this.active = false;
+        Node node = nodeStack.peek();
+        if (node != null) {
+            node.onExit();
         }
-    }
-
-    public void setBone(Bone bone, Tool tool, Vector3dc cursor) {
-        setBone(bone);
-        bone.select(tool, cursor);
+        audience.clearTitle();
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public double getScale() {
+        return 1;
     }
 
     public double getRange() {
@@ -199,22 +170,6 @@ public class Session implements ForwardingAudience.Single {
 
     public double getLookThreshold() {
         return 0.15;
-    }
-
-    public void startMoving(Vector3dc cursor) {
-        Bone bone = bones.get("position");
-        if (bone != null) {
-            Tool tool = bone.getTools().get("move");
-            if (tool != null) {
-                setBone(bone, tool, cursor != null ? cursor : tool.getTarget());
-            } else {
-                setBone(bone);
-            }
-        }
-    }
-
-    public Map<String, Bone> getBones() {
-        return Collections.unmodifiableMap(bones);
     }
 
     public double getSnapIncrement() {
@@ -298,5 +253,15 @@ public class Session implements ForwardingAudience.Single {
     }
 
     public void commit() {
+    }
+
+    public boolean isLookingAtPoint(Vector3dc eyes, Vector3dc target, Vector3dc position) {
+        Vector3d closestOnEyeRay = Intersectiond.findClosestPointOnLineSegment(
+                eyes.x(), eyes.y(), eyes.z(),
+                target.x(), target.y(), target.z(),
+                position.x(), position.y(), position.z(),
+                new Vector3d());
+        double threshold = getLookThreshold();
+        return position.distanceSquared(closestOnEyeRay) < threshold * threshold;
     }
 }

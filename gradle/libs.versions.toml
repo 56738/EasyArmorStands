@@ -1,6 +1,6 @@
 [versions]
-adventure-api = "4.12.0"
-adventure-platform = "4.2.0"
+adventure-api = "4.13.0"
+adventure-platform = "4.3.0"
 bstats = "3.0.1"
 bukkit = "1.8.8-R0.1-SNAPSHOT"
 cloud = "1.8.2"

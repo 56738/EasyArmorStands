@@ -1,18 +1,17 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.PartBone;
-import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.ArmorStandPartBone;
+import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
-import me.m56738.easyarmorstands.tool.BoneAxisMoveTool;
-import me.m56738.easyarmorstands.tool.BoneAxisRotateTool;
-import me.m56738.easyarmorstands.tool.PositionAxisTool;
-import me.m56738.easyarmorstands.tool.PositionMoveTool;
-import me.m56738.easyarmorstands.tool.PositionRotateTool;
+import me.m56738.easyarmorstands.node.ArmorStandPartNode;
+import me.m56738.easyarmorstands.node.BoneNode;
+import me.m56738.easyarmorstands.node.ParentNode;
+import me.m56738.easyarmorstands.node.YawBoneNode;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -46,7 +45,36 @@ public class SessionManager {
         if (event.isCancelled()) {
             return null;
         }
-        Session session = createSession(player, armorStand);
+
+        Session session = new ArmorStandSession(player, armorStand);
+
+        ParentNode root = new ParentNode(session, Component.text("Select a bone"));
+        for (ArmorStandPart part : ArmorStandPart.values()) {
+            ArmorStandPartBone bone = new ArmorStandPartBone(armorStand, part);
+
+            ParentNode localNode = new ParentNode(session, part.getName().append(Component.text(" (local)")));
+            localNode.addMoveNodes(session, bone, 3, true);
+            localNode.addRotationNodes(session, bone, 1, true);
+
+            ParentNode globalNode = new ParentNode(session, part.getName().append(Component.text(" (global)")));
+            globalNode.addPositionNodes(session, bone, 3, true);
+            globalNode.addRotationNodes(session, bone, 1, false);
+
+            localNode.setNextNode(globalNode);
+            globalNode.setNextNode(localNode);
+
+            root.addNode(new ArmorStandPartNode(session, localNode, bone));
+        }
+
+        ArmorStandPositionBone positionBone = new ArmorStandPositionBone(armorStand);
+        ParentNode positionNode = new ParentNode(session, Component.text("Position"));
+        positionNode.addNode(new YawBoneNode(session, Component.text("Rotate"), NamedTextColor.GOLD, 1, positionBone));
+        positionNode.addPositionNodes(session, positionBone, 3, true);
+        BoneNode boneNode = new BoneNode(session, positionNode, positionBone, Component.text("Position"));
+        root.addNode(boneNode);
+
+        session.pushNode(root);
+
         start(session);
         return session;
     }
@@ -120,7 +148,7 @@ public class SessionManager {
             return;
         }
         cursor.add(Util.toVector3d(eyeLocation));
-        session.startMoving(cursor);
+//        session.startMoving(cursor);
     }
 
     public ArmorStand spawn(Player player, Vector3dc position, float yaw) {
@@ -140,80 +168,5 @@ public class SessionManager {
         });
         EasyArmorStands.getInstance().getHistory(player).push(new SpawnArmorStandAction(armorStand));
         return armorStand;
-    }
-
-    private Session createSession(Player player, ArmorStand armorStand) {
-        ArmorStandSession session = new ArmorStandSession(player, armorStand);
-        session.addBone("position", createPositionBone(session));
-        session.addBone("head", createPartBone(
-                session,
-                ArmorStandPart.HEAD,
-                Component.text("Head"),
-                new Vector3d(0, 23, 0),
-                new Vector3d(0, 7, 0)));
-        session.addBone("body", createPartBone(
-                session,
-                ArmorStandPart.BODY,
-                Component.text("Body"),
-                new Vector3d(0, 24, 0),
-                new Vector3d(0, -12, 0)));
-        session.addBone("leftarm", createPartBone(
-                session,
-                ArmorStandPart.LEFT_ARM,
-                Component.text("Left arm"),
-                new Vector3d(5, 22, 0),
-                new Vector3d(0, -10, 0)));
-        session.addBone("rightarm", createPartBone(
-                session,
-                ArmorStandPart.RIGHT_ARM,
-                Component.text("Right arm"),
-                new Vector3d(-5, 22, 0),
-                new Vector3d(0, -10, 0)));
-        session.addBone("leftleg", createPartBone(
-                session,
-                ArmorStandPart.LEFT_LEG,
-                Component.text("Left leg"),
-                new Vector3d(1.9, 12, 0),
-                new Vector3d(0, -11, 0)));
-        session.addBone("rightleg", createPartBone(
-                session,
-                ArmorStandPart.RIGHT_LEG,
-                Component.text("Right leg"),
-                new Vector3d(-1.9, 12, 0),
-                new Vector3d(0, -11, 0)
-        ));
-        return session;
-    }
-
-    private PositionBone createPositionBone(ArmorStandSession session) {
-        PositionBone bone = new PositionBone(session);
-        bone.addTool("move", new PositionMoveTool(bone,
-                "Move", NamedTextColor.YELLOW));
-        bone.addTool("rotate", new PositionRotateTool(bone,
-                "Rotate", NamedTextColor.GOLD));
-        bone.addTool("x", new PositionAxisTool(bone,
-                "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addTool("y", new PositionAxisTool(bone,
-                "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addTool("z", new PositionAxisTool(bone,
-                "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        return bone;
-    }
-
-    private PartBone createPartBone(ArmorStandSession session, ArmorStandPart part, Component component, Vector3dc offset, Vector3dc length) {
-        PartBone bone = new PartBone(session, part, component, offset, length);
-        bone.addTool("x", new BoneAxisRotateTool(bone,
-                "X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addTool("y", new BoneAxisRotateTool(bone,
-                "Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addTool("z", new BoneAxisRotateTool(bone,
-                "Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        bone.addTool("mx", new BoneAxisMoveTool(bone,
-                "Move X", NamedTextColor.RED, new Vector3d(1, 0, 0)));
-        bone.addTool("my", new BoneAxisMoveTool(bone,
-                "Move Y", NamedTextColor.GREEN, new Vector3d(0, 1, 0)));
-        bone.addTool("mz", new BoneAxisMoveTool(bone,
-                "Move Z", NamedTextColor.BLUE, new Vector3d(0, 0, 1)));
-        return bone;
     }
 }

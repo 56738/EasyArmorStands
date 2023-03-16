@@ -36,6 +36,15 @@ public class Util {
     public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.####");
     public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
     public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
+    public static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");
+
+    public static final Vector3dc X = new Vector3d(1, 0, 0);
+    public static final Vector3dc Y = new Vector3d(0, 1, 0);
+    public static final Vector3dc Z = new Vector3d(0, 0, 1);
+
+    public static final Vector3dc YZ = new Vector3d(0, 1, 1);
+    public static final Vector3dc XZ = new Vector3d(1, 0, 1);
+    public static final Vector3dc XY = new Vector3d(1, 1, 0);
 
     private static Component format3D(Vector3dc vector, NumberFormat format) {
         return Component.text()

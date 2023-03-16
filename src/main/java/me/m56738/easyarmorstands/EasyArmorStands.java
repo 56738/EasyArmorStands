@@ -9,27 +9,25 @@ import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.paper.PaperCommandManager;
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.AddonLoader;
-import me.m56738.easyarmorstands.bone.Bone;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.AudienceInjector;
-import me.m56738.easyarmorstands.command.BoneArgumentParser;
 import me.m56738.easyarmorstands.command.CapabilityInjectionService;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.NoSessionException;
+import me.m56738.easyarmorstands.command.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.PipelineExceptionHandler;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.SessionInjector;
 import me.m56738.easyarmorstands.command.SessionPreprocessor;
-import me.m56738.easyarmorstands.command.ToolArgumentParser;
+import me.m56738.easyarmorstands.command.ValueNodeInjector;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
+import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
-import me.m56738.easyarmorstands.tool.Tool;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -88,7 +86,7 @@ public class EasyArmorStands extends JavaPlugin {
             try {
                 commandManager.registerBrigadier();
             } catch (BukkitCommandManager.BrigadierFailureException e) {
-                getLogger().log(Level.WARNING, "Failed to register Brigadier mappings", e);
+                getLogger().log(Level.WARNING, "Failed to register Brigadier mappings");
             }
         }
 
@@ -117,15 +115,13 @@ public class EasyArmorStands extends JavaPlugin {
         commandManager.parameterInjectorRegistry().registerInjector(
                 ArmorStandSession.class, new SessionInjector<>(ArmorStandSession.class));
 
+        commandManager.parameterInjectorRegistry().registerInjector(
+                ValueNode.class, new ValueNodeInjector());
+
         commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader, adventure));
 
-        commandManager.parserRegistry().registerParserSupplier(
-                TypeToken.get(Bone.class),
-                p -> new BoneArgumentParser());
-
-        commandManager.parserRegistry().registerParserSupplier(
-                TypeToken.get(Tool.class),
-                p -> new ToolArgumentParser());
+        commandManager.parserRegistry().registerNamedParserSupplier("node_value",
+                p -> new NodeValueArgumentParser());
 
         annotationParser = new AnnotationParser<>(commandManager, CommandSender.class,
                 p -> CommandMeta.simple()

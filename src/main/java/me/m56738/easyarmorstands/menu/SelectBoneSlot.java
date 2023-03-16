@@ -45,7 +45,7 @@ public class SelectBoneSlot implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-            menu.getSession().setBone(bone);
+//            menu.getSession().setBone(bone);
             menu.queueTask(() -> {
                 Player player = menu.getSession().getPlayer();
                 if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
