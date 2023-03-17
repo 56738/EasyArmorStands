@@ -81,14 +81,7 @@ public class Session implements ForwardingAudience.Single {
         Location eyeLocation = player.getEyeLocation();
         Vector3dc eyes = Util.toVector3d(eyeLocation);
         Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
-        if (node.onClick(eyes, target, type)) {
-            return true;
-        }
-        if (nodeStack.size() > 1) {
-            popNode();
-            return true;
-        }
-        return false;
+        return node.onClick(eyes, target, type);
     }
 
     public void handleLeftClick() {
@@ -158,10 +151,6 @@ public class Session implements ForwardingAudience.Single {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public double getScale() {
-        return 1;
     }
 
     public double getRange() {

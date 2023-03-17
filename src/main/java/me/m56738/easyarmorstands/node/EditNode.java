@@ -22,6 +22,7 @@ public abstract class EditNode implements Node {
         if (type == ClickType.LEFT_CLICK) {
             abort();
         }
-        return false;
+        session.popNode();
+        return true;
     }
 }

@@ -93,8 +93,8 @@ public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Doub
         bone.setMatrix(matrix);
 
         initialPosition.fma(t, direction, currentPosition);
-        initialPosition.fma(Math.min(-length * session.getScale(), t), direction, negativeEnd);
-        initialPosition.fma(Math.max(length * session.getScale(), t), direction, positiveEnd);
+        initialPosition.fma(Math.min(-length, t), direction, negativeEnd);
+        initialPosition.fma(Math.max(length, t), direction, positiveEnd);
         session.showLine(negativeEnd, positiveEnd, color, true);
         session.showLine(currentPosition, cursor.get(), NamedTextColor.WHITE, false);
         session.sendActionBar(Component.text().append(name).append(Component.text(": "))
@@ -131,8 +131,8 @@ public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Doub
         Matrix4dc matrix = bone.getMatrix();
         matrix.transformDirection(axis, direction).normalize();
         Vector3dc position = matrix.getTranslation(new Vector3d());
-        position.fma(-length * session.getScale(), direction, negativeEnd);
-        position.fma(length * session.getScale(), direction, positiveEnd);
+        position.fma(-length, direction, negativeEnd);
+        position.fma(length, direction, positiveEnd);
         boolean positive = session.isLookingAtPoint(eyes, target, positiveEnd);
         boolean negative = session.isLookingAtPoint(eyes, target, negativeEnd);
         if (positive && negative) {

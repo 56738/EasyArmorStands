@@ -58,9 +58,6 @@ tasks {
             exclude(dependency("com.google.code.gson:gson"))
         }
         mergeServiceFiles()
-        manifest {
-            attributes.set("Multi-Release", true)
-        }
     }
 }
 
@@ -70,9 +67,14 @@ java {
 
 fun registerSourceSet(name: String) {
     val sourceSet = sourceSets.register(name) {
-        val main = sourceSets.main.get()
-        compileClasspath += main.output + main.runtimeClasspath
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
     }
+
+    configurations.named("${name}Implementation") {
+        extendsFrom(configurations.implementation.get())
+    }
+
     tasks {
         shadowJar {
             from(sourceSet.map { it.output })

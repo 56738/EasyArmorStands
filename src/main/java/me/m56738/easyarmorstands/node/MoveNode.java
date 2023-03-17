@@ -52,7 +52,7 @@ public class MoveNode extends EditNode implements ClickableNode, ValueNode<Doubl
     }
 
     public double getLength() {
-        return length * session.getScale();
+        return length;
     }
 
     @Override

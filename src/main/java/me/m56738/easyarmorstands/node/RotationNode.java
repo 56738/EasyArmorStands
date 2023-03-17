@@ -58,6 +58,10 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
         return axis;
     }
 
+    protected double getScale() {
+        return 1;
+    }
+
     @Override
     public void onEnter() {
         manualValue = null;
@@ -90,10 +94,10 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
                 .add(anchor);
         apply(angle, degrees);
 
-        anchor.fma(-length * session.getScale(), axis, negativeEnd);
-        anchor.fma(length * session.getScale(), axis, positiveEnd);
+        anchor.fma(-length * getScale(), axis, negativeEnd);
+        anchor.fma(length * getScale(), axis, positiveEnd);
 
-        session.showCircle(anchor, axis, color, radius * session.getScale());
+        session.showCircle(anchor, axis, color, radius * getScale());
         session.showLine(negativeEnd, positiveEnd, color, true);
         session.showLine(anchor, snappedCursor, NamedTextColor.WHITE, false);
         session.sendActionBar(Component.text().append(getName()).append(Component.text(": "))
@@ -114,8 +118,8 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
             // Looking at the plane
             Vector3d lookTarget = eyes.fma(t, direction, new Vector3d());
             double d = lookTarget.distanceSquared(anchor);
-            double min = radius * session.getScale() - threshold;
-            double max = radius * session.getScale() + threshold;
+            double min = radius * getScale() - threshold;
+            double max = radius * getScale() + threshold;
             if (d >= min * min && d <= max * max) {
                 // Looking at the circle
                 this.lookTarget = lookTarget;
@@ -128,7 +132,7 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
 
     @Override
     public void showPreview(boolean focused) {
-        session.showCircle(anchor, axis, focused ? NamedTextColor.YELLOW : color, radius * session.getScale());
+        session.showCircle(anchor, axis, focused ? NamedTextColor.YELLOW : color, radius * getScale());
     }
 
     @Override

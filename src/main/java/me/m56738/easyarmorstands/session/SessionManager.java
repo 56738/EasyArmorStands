@@ -1,21 +1,14 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.ArmorStandPartBone;
-import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
-import me.m56738.easyarmorstands.node.ArmorStandPartNode;
-import me.m56738.easyarmorstands.node.BoneNode;
-import me.m56738.easyarmorstands.node.ParentNode;
-import me.m56738.easyarmorstands.node.YawBoneNode;
+import me.m56738.easyarmorstands.node.ArmorStandNodeFactory;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -39,6 +32,13 @@ public class SessionManager {
         Bukkit.getPluginManager().callEvent(new SessionInitializeEvent(session));
     }
 
+    public WorldSession start(Player player) {
+        WorldSession session = new WorldSession(player);
+        session.addProvider(new ArmorStandNodeProvider());
+        start(session);
+        return session;
+    }
+
     public Session start(Player player, ArmorStand armorStand) {
         SessionStartEvent event = new SessionStartEvent(player, armorStand);
         Bukkit.getPluginManager().callEvent(event);
@@ -47,33 +47,7 @@ public class SessionManager {
         }
 
         Session session = new ArmorStandSession(player, armorStand);
-
-        ParentNode root = new ParentNode(session, Component.text("Select a bone"));
-        for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartBone bone = new ArmorStandPartBone(armorStand, part);
-
-            ParentNode localNode = new ParentNode(session, part.getName().append(Component.text(" (local)")));
-            localNode.addMoveNodes(session, bone, 3, true);
-            localNode.addRotationNodes(session, bone, 1, true);
-
-            ParentNode globalNode = new ParentNode(session, part.getName().append(Component.text(" (global)")));
-            globalNode.addPositionNodes(session, bone, 3, true);
-            globalNode.addRotationNodes(session, bone, 1, false);
-
-            localNode.setNextNode(globalNode);
-            globalNode.setNextNode(localNode);
-
-            root.addNode(new ArmorStandPartNode(session, localNode, bone));
-        }
-
-        ArmorStandPositionBone positionBone = new ArmorStandPositionBone(armorStand);
-        ParentNode positionNode = new ParentNode(session, Component.text("Position"));
-        positionNode.addNode(new YawBoneNode(session, Component.text("Rotate"), NamedTextColor.GOLD, 1, positionBone));
-        positionNode.addPositionNodes(session, positionBone, 3, true);
-        BoneNode boneNode = new BoneNode(session, positionNode, positionBone, Component.text("Position"));
-        root.addNode(boneNode);
-
-        session.pushNode(root);
+        session.pushNode(new ArmorStandNodeFactory(session, armorStand).get());
 
         start(session);
         return session;

@@ -17,6 +17,7 @@ public class ParentNode implements Node {
     private final Session session;
     private final Component name;
     private final List<ClickableNode> children = new ArrayList<>();
+    private boolean root;
     private Node targetNode;
     private Node nextNode;
 
@@ -25,12 +26,24 @@ public class ParentNode implements Node {
         this.name = name;
     }
 
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
+    }
+
     public void setNextNode(Node nextNode) {
         this.nextNode = nextNode;
     }
 
     public void addNode(ClickableNode node) {
         children.add(node);
+    }
+
+    public void removeNode(ClickableNode node) {
+        children.remove(node);
     }
 
     public void addMoveNodes(Session session, PositionBone bone, double length, boolean includeEnds) {
@@ -112,6 +125,11 @@ public class ParentNode implements Node {
             }
             if (nextNode != null) {
                 session.replaceNode(nextNode);
+                return true;
+            }
+        } else if (type == ClickType.LEFT_CLICK) {
+            if (!root) {
+                session.popNode();
                 return true;
             }
         }

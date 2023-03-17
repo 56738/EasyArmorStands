@@ -7,6 +7,7 @@ import org.joml.Vector3dc;
 public abstract class ButtonNode implements ClickableNode {
     private final Session session;
     private final Node node;
+    private int priority = 0;
 
     public ButtonNode(Session session, Node node) {
         this.session = session;
@@ -14,6 +15,15 @@ public abstract class ButtonNode implements ClickableNode {
     }
 
     protected abstract Vector3dc getPosition();
+
+    @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 
     @Override
     public Vector3dc updatePreview(Vector3dc eyes, Vector3dc target) {

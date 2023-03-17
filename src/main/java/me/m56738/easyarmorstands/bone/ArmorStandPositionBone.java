@@ -14,7 +14,7 @@ public class ArmorStandPositionBone extends EntityLocationBone {
         this.entity = entity;
     }
 
-    private double getOffset() {
+    public double getOffset() {
         double offset = 1.25;
         if (entity.isSmall()) {
             offset /= 2;
