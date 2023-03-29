@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.node.ClickableNode;
+import me.m56738.easyarmorstands.node.EntityNode;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.node.ParentNode;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -24,6 +26,16 @@ public class WorldSession extends Session {
         pushNode(rootNode);
     }
 
+    @Override
+    public Entity getEntity() {
+        for (Node node : nodeStack) {
+            if (node instanceof EntityNode) {
+                return ((EntityNode) node).getEntity();
+            }
+        }
+        return super.getEntity();
+    }
+
     public void addProvider(EntityNodeProvider provider) {
         providers.add(provider);
     }
@@ -40,7 +52,7 @@ public class WorldSession extends Session {
 
             // entity is new, create a node for it
             for (EntityNodeProvider provider : providers) {
-                ClickableNode node = provider.createNode(this, entity);
+                EntityNode node = provider.createNode(this, entity);
                 if (node != null) {
                     nodes.put(entity, node);
                     rootNode.addNode(node);

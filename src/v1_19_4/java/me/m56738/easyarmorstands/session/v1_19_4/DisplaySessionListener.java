@@ -17,8 +17,8 @@ public class DisplaySessionListener implements Listener {
 
     @EventHandler
     public void onInitialize(SessionInitializeEvent event) {
-        if (event.getSession() instanceof WorldSession session) {
-            session.addProvider(new DisplayNodeProvider(mapper));
+        if (event.getSession() instanceof WorldSession) {
+            ((WorldSession) event.getSession()).addProvider(new DisplayNodeProvider(mapper));
         }
     }
 }

@@ -5,7 +5,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
-public class NoSessionException extends RuntimeException {
+public class NoSessionException extends ComponentException {
     public static final Component MESSAGE = Component.text()
             .content("Not editing an armor stand, right click one using ")
             .append(Component.text()
@@ -18,6 +18,6 @@ public class NoSessionException extends RuntimeException {
             .build();
 
     public NoSessionException() {
-        super("No session");
+        super(MESSAGE);
     }
 }

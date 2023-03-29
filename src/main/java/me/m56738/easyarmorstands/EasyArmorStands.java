@@ -11,9 +11,13 @@ import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.paper.PaperCommandManager;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.command.AudienceInjector;
 import me.m56738.easyarmorstands.command.CapabilityInjectionService;
+import me.m56738.easyarmorstands.command.CommandSenderWrapper;
+import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.EntityInjectionService;
+import me.m56738.easyarmorstands.command.EntityPreprocessor;
 import me.m56738.easyarmorstands.command.GlobalCommands;
+import me.m56738.easyarmorstands.command.NoEntityException;
 import me.m56738.easyarmorstands.command.NoSessionException;
 import me.m56738.easyarmorstands.command.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.PipelineExceptionHandler;
@@ -28,16 +32,13 @@ import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.function.Function;
 import java.util.logging.Level;
 
 public class EasyArmorStands extends JavaPlugin {
@@ -46,8 +47,8 @@ public class EasyArmorStands extends JavaPlugin {
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private BukkitAudiences adventure;
-    private PaperCommandManager<CommandSender> commandManager;
-    private AnnotationParser<CommandSender> annotationParser;
+    private PaperCommandManager<EasCommandSender> commandManager;
+    private AnnotationParser<EasCommandSender> annotationParser;
 
     public static EasyArmorStands getInstance() {
         return instance;
@@ -72,12 +73,14 @@ public class EasyArmorStands extends JavaPlugin {
         getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
 
+        CommandSenderWrapper senderWrapper = new CommandSenderWrapper(adventure);
+
         try {
             commandManager = new PaperCommandManager<>(
                     this,
                     CommandExecutionCoordinator.simpleCoordinator(),
-                    Function.identity(),
-                    Function.identity());
+                    senderWrapper::wrap,
+                    EasCommandSender::get);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -90,24 +93,24 @@ public class EasyArmorStands extends JavaPlugin {
             }
         }
 
-        new MinecraftExceptionHandler<CommandSender>()
+        new MinecraftExceptionHandler<EasCommandSender>()
                 .withArgumentParsingHandler()
                 .withInvalidSyntaxHandler()
                 .withNoPermissionHandler()
                 .withCommandExecutionHandler()
                 .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER,
                         (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
-                .apply(commandManager, adventure::sender);
+                .apply(commandManager, s -> s);
 
         commandManager.registerExceptionHandler(NoSessionException.class,
-                (sender, e) -> adventure.sender(sender).sendMessage(NoSessionException.MESSAGE));
+                (sender, e) -> sender.sendMessage(e.getComponent()));
+        commandManager.registerExceptionHandler(NoEntityException.class,
+                (sender, e) -> sender.sendMessage(e.getComponent()));
 
-        commandManager.registerCommandPreProcessor(new SessionPreprocessor(sessionManager));
+        commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
+        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
 
         PipelineExceptionHandler.register(commandManager);
-
-        commandManager.parameterInjectorRegistry().registerInjector(
-                Audience.class, new AudienceInjector(adventure));
 
         commandManager.parameterInjectorRegistry().registerInjector(
                 Session.class, new SessionInjector<>(Session.class));
@@ -116,19 +119,21 @@ public class EasyArmorStands extends JavaPlugin {
                 ArmorStandSession.class, new SessionInjector<>(ArmorStandSession.class));
 
         commandManager.parameterInjectorRegistry().registerInjector(
-                ValueNode.class, new ValueNodeInjector());
+                ValueNode.class, new ValueNodeInjector<>());
 
-        commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader, adventure));
+        commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
+
+        commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader));
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
-                p -> new NodeValueArgumentParser());
+                p -> new NodeValueArgumentParser<>());
 
-        annotationParser = new AnnotationParser<>(commandManager, CommandSender.class,
+        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> CommandMeta.simple()
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
-        annotationParser.parse(new GlobalCommands(commandManager, adventure));
+        annotationParser.parse(new GlobalCommands(commandManager));
         annotationParser.parse(new SessionCommands(sessionManager));
 
         new AddonLoader(this, getClassLoader()).load();
@@ -163,11 +168,11 @@ public class EasyArmorStands extends JavaPlugin {
         return adventure;
     }
 
-    public CommandManager<CommandSender> getCommandManager() {
+    public CommandManager<EasCommandSender> getCommandManager() {
         return commandManager;
     }
 
-    public AnnotationParser<CommandSender> getAnnotationParser() {
+    public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
     }
 }

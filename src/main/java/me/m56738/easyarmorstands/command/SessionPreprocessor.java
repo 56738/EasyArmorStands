@@ -12,12 +12,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class SessionPreprocessor implements CommandPreprocessor<CommandSender> {
+import java.util.function.Function;
+
+public class SessionPreprocessor<C> implements CommandPreprocessor<C> {
     private static final CloudKey<Session> SESSION_KEY = SimpleCloudKey.of("session", TypeToken.get(Session.class));
     private final SessionManager sessionManager;
+    private final Function<C, CommandSender> senderGetter;
 
-    public SessionPreprocessor(SessionManager sessionManager) {
+    public SessionPreprocessor(SessionManager sessionManager, Function<C, CommandSender> senderGetter) {
         this.sessionManager = sessionManager;
+        this.senderGetter = senderGetter;
     }
 
     public static Session getSessionOrNull(CommandContext<?> context) {
@@ -33,8 +37,8 @@ public class SessionPreprocessor implements CommandPreprocessor<CommandSender> {
     }
 
     @Override
-    public void accept(@NonNull CommandPreprocessingContext<CommandSender> context) {
-        CommandSender sender = context.getCommandContext().getSender();
+    public void accept(@NonNull CommandPreprocessingContext<C> context) {
+        CommandSender sender = senderGetter.apply(context.getCommandContext().getSender());
         if (!(sender instanceof Player)) {
             return;
         }

@@ -4,7 +4,6 @@ import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import me.m56738.easyarmorstands.node.ValueNode;
-import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collections;
@@ -12,10 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
-public class NodeValueArgumentParser implements ArgumentParser<CommandSender, Object> {
+public class NodeValueArgumentParser<C> implements ArgumentParser<C, Object> {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public @NonNull ArgumentParseResult<@NonNull Object> parse(@NonNull CommandContext<@NonNull CommandSender> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
+    public @NonNull ArgumentParseResult<@NonNull Object> parse(@NonNull CommandContext<@NonNull C> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
         Optional<ValueNode> optionalNode = commandContext.inject(ValueNode.class);
         if (!optionalNode.isPresent()) {
             return ArgumentParseResult.failure(new IllegalStateException("No supported tool is selected"));
@@ -26,7 +25,7 @@ public class NodeValueArgumentParser implements ArgumentParser<CommandSender, Ob
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public @NonNull List<@NonNull String> suggestions(@NonNull CommandContext<CommandSender> commandContext, @NonNull String input) {
+    public @NonNull List<@NonNull String> suggestions(@NonNull CommandContext<C> commandContext, @NonNull String input) {
         Optional<ValueNode> optionalNode = commandContext.inject(ValueNode.class);
         if (!optionalNode.isPresent()) {
             return Collections.emptyList();

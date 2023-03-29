@@ -7,12 +7,17 @@ import org.bukkit.entity.ArmorStand;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class ArmorStandNode extends ButtonNode {
+public class ArmorStandNode extends ButtonNode implements EntityNode {
     private final ArmorStand entity;
 
     public ArmorStandNode(Session session, Node node, ArmorStand entity) {
         super(session, node);
         this.entity = entity;
+    }
+
+    @Override
+    public ArmorStand getEntity() {
+        return entity;
     }
 
     @Override

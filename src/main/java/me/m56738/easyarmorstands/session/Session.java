@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -29,7 +30,7 @@ public class Session implements ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final ParticleCapability particleCapability;
-    private final LinkedList<Node> nodeStack = new LinkedList<>();
+    protected final LinkedList<Node> nodeStack = new LinkedList<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -147,6 +148,10 @@ public class Session implements ForwardingAudience.Single {
             node.onExit();
         }
         audience.clearTitle();
+    }
+
+    public Entity getEntity() {
+        return null;
     }
 
     public Player getPlayer() {

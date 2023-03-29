@@ -6,32 +6,27 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.services.types.ConsumerService;
 import cloud.commandframework.types.tuples.Triplet;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class CapabilityInjectionService implements InjectionService<CommandSender> {
+public class CapabilityInjectionService implements InjectionService<EasCommandSender> {
     private final CapabilityLoader loader;
-    private final BukkitAudiences adventure;
 
-    public CapabilityInjectionService(CapabilityLoader loader, BukkitAudiences adventure) {
+    public CapabilityInjectionService(CapabilityLoader loader) {
         this.loader = loader;
-        this.adventure = adventure;
     }
 
     @Override
-    public @Nullable Object handle(@NonNull Triplet<CommandContext<CommandSender>, Class<?>, AnnotationAccessor> triplet) {
+    public @Nullable Object handle(@NonNull Triplet<CommandContext<EasCommandSender>, Class<?>, AnnotationAccessor> triplet) {
         Class<?> type = triplet.getSecond();
         if (!loader.isCapability(type)) {
             return null;
         }
         Object instance = loader.get(type);
         if (instance == null) {
-            CommandSender sender = triplet.getFirst().getSender();
-            adventure.sender(sender).sendMessage(
+            triplet.getFirst().getSender().sendMessage(
                     Component.text("This feature is not supported on this server", NamedTextColor.RED));
             ConsumerService.interrupt();
         }

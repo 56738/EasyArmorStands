@@ -17,38 +17,34 @@ import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryAction;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CommandMethod("eas")
 public class GlobalCommands {
-    private final CommandManager<CommandSender> commandManager;
-    private final MinecraftHelp<CommandSender> help;
+    private final CommandManager<EasCommandSender> commandManager;
+    private final MinecraftHelp<EasCommandSender> help;
 
-    public GlobalCommands(CommandManager<CommandSender> commandManager, BukkitAudiences adventure) {
+    public GlobalCommands(CommandManager<EasCommandSender> commandManager) {
         this.commandManager = commandManager;
-        this.help = new MinecraftHelp<>("/eas help", adventure::sender, commandManager);
+        this.help = new MinecraftHelp<>("/eas help", s -> s, commandManager);
     }
 
     @CommandMethod("help [query]")
     @CommandPermission("easyarmorstands.help")
     @CommandDescription("Shows the command help")
-    public void help(CommandSender sender,
+    public void help(EasCommandSender sender,
                      @Argument(value = "query", suggestions = "help_queries") @Greedy String query) {
         help.queryCommands(query != null ? query : "", sender);
     }
 
     @Suggestions("help_queries")
-    public List<String> suggestHelpQueries(CommandContext<CommandSender> ctx, String input) {
+    public List<String> suggestHelpQueries(CommandContext<EasCommandSender> ctx, String input) {
         return commandManager.createCommandHelpHandler().queryRootIndex(ctx.getSender()).getEntries().stream()
                 .map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString)
                 .collect(Collectors.toList());
@@ -57,9 +53,9 @@ public class GlobalCommands {
     @CommandMethod("give")
     @CommandPermission("easyarmorstands.give")
     @CommandDescription("Gives you the editor tool")
-    public void give(Player sender, Audience audience) {
-        sender.getInventory().addItem(Util.createTool());
-        audience.sendMessage(Component.text(
+    public void give(EasPlayer sender) {
+        sender.get().getInventory().addItem(Util.createTool());
+        sender.sendMessage(Component.text(
                 "Tool added to your inventory\n",
                 NamedTextColor.GREEN
         ).append(Component.text(
@@ -73,57 +69,57 @@ public class GlobalCommands {
     @CommandMethod("color")
     @CommandPermission("easyarmorstands.color")
     @CommandDescription("Displays the color picker")
-    public void color(Player player) {
-        player.openInventory(new ColorPicker(null, player).getInventory());
-    }
-
-    @CommandMethod("undo [count]")
-    @CommandPermission("easyarmorstands.undo")
-    @CommandDescription("Undo a change")
-    public void undo(Player player, Audience audience,
-                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(player);
-        for (int i = 0; i < count; i++) {
-            HistoryAction action = history.takeUndoAction();
-            if (action != null) {
-                try {
-                    action.undo();
-                } catch (IllegalStateException e) {
-                    audience.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
-                    break;
-                }
-                audience.sendMessage(Component.text()
-                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
-                        .append(action.describe()));
-            } else {
-                audience.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
-                break;
-            }
-        }
+    public void color(EasPlayer player) {
+        player.get().openInventory(new ColorPicker(null, player.get()).getInventory());
     }
 
     @CommandMethod("redo [count]")
     @CommandPermission("easyarmorstands.redo")
     @CommandDescription("Redo a change")
-    public void redo(Player player, Audience audience,
+    public void redo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(player);
+        History history = EasyArmorStands.getInstance().getHistory(sender.get());
         for (int i = 0; i < count; i++) {
             HistoryAction action = history.takeRedoAction();
             if (action != null) {
                 try {
                     action.redo();
                 } catch (IllegalStateException e) {
-                    audience.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
+                    sender.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
                             .append(action.describe()));
                     break;
                 }
-                audience.sendMessage(Component.text()
+                sender.sendMessage(Component.text()
                         .append(Component.text("Redone change: ", NamedTextColor.GREEN))
                         .append(action.describe()));
             } else {
-                audience.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
+                sender.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
+                break;
+            }
+        }
+    }
+
+    @CommandMethod("undo [count]")
+    @CommandPermission("easyarmorstands.undo")
+    @CommandDescription("Undo a change")
+    public void undo(EasPlayer sender,
+                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+        for (int i = 0; i < count; i++) {
+            HistoryAction action = history.takeUndoAction();
+            if (action != null) {
+                try {
+                    action.undo();
+                } catch (IllegalStateException e) {
+                    sender.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
+                            .append(action.describe()));
+                    break;
+                }
+                sender.sendMessage(Component.text()
+                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
+                        .append(action.describe()));
+            } else {
+                sender.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
                 break;
             }
         }
@@ -132,24 +128,24 @@ public class GlobalCommands {
     @CommandMethod("version")
     @CommandPermission("easyarmorstands.version")
     @CommandDescription("Displays the plugin version")
-    public void version(Audience audience) {
+    public void version(EasCommandSender sender) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         String version = plugin.getDescription().getVersion();
         String url = "https://github.com/56738/EasyArmorStands";
-        audience.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
-        audience.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
+        sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
     }
 
     @CommandMethod("debug")
     @CommandPermission("easyarmorstands.debug")
     @CommandDescription("Displays debug information")
-    public void debug(Audience audience) {
+    public void debug(EasCommandSender sender) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         CapabilityLoader loader = plugin.getCapabilityLoader();
         String version = plugin.getDescription().getVersion();
-        audience.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
-        audience.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
-        audience.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
+        sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
+        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
         for (CapabilityLoader.Entry capability : loader.getCapabilities()) {
             Object instance = capability.getInstance();
             Component value;
@@ -164,7 +160,7 @@ public class GlobalCommands {
             } else {
                 value = Component.text("Not supported", NamedTextColor.RED);
             }
-            audience.sendMessage(debugLine(
+            sender.sendMessage(debugLine(
                     Component.text(capability.getName()).hoverEvent(Component.text(capability.getType().getName())),
                     value
             ));

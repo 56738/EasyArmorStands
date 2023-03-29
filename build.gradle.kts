@@ -133,12 +133,6 @@ dependencies {
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
 }
 
-tasks {
-    "compileV1_19_4Java" {
-        (this as JavaCompile).options.release.set(17)
-    }
-}
-
 bukkit {
     name = "EasyArmorStands"
     main = "me.m56738.easyarmorstands.EasyArmorStands"

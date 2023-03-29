@@ -16,9 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.joml.Math;
-import org.joml.Matrix3d;
-import org.joml.Matrix3dc;
 import org.joml.Vector3dc;
 
 import java.util.Objects;
@@ -26,7 +23,6 @@ import java.util.Objects;
 public class ArmorStandSession extends Session {
     private final ArmorStand entity;
     private final ArmorStand skeleton;
-    private final Matrix3d armorStandYaw = new Matrix3d();
     private ArmorStandSnapshot lastSnapshot;
 
     public ArmorStandSession(Player player, ArmorStand entity) {
@@ -81,8 +77,6 @@ public class ArmorStandSession extends Session {
 
     @Override
     public boolean update() {
-        armorStandYaw.rotationY(-Math.toRadians(entity.getLocation().getYaw()));
-
         boolean result = super.update();
 
         if (skeleton != null) {
@@ -129,12 +123,9 @@ public class ArmorStandSession extends Session {
         getPlayer().openInventory(inventory.getInventory());
     }
 
+    @Override
     public ArmorStand getEntity() {
         return entity;
-    }
-
-    public Matrix3dc getArmorStandYaw() {
-        return armorStandYaw;
     }
 
     public boolean canMove(Vector3dc position) {
@@ -145,10 +136,6 @@ public class ArmorStandSession extends Session {
 
     public Vector3dc getPosition() {
         return Util.toVector3d(entity.getLocation());
-    }
-
-    public Matrix3dc getRotation() {
-        return armorStandYaw;
     }
 
     public boolean move(Vector3dc position) {
