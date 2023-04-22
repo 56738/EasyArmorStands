@@ -2,9 +2,11 @@
 
 Easy but advanced armor stand editor for Bukkit.
 
+[Demo video](https://youtu.be/dQZkB3mez-0)
+
 ![Screenshot](https://cdn.56738.me/easyarmorstands/banner.png)
 
-**Supported Minecraft versions:** 1.8.8 to 1.19.3
+**Supported Minecraft versions:** 1.8.8 to 1.19.4
 
 Using [Paper](https://papermc.io/) is highly recommended. Some features like RGB name tags only work on Paper.
 
