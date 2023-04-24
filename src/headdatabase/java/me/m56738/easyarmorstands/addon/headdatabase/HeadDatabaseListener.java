@@ -4,9 +4,11 @@ import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
-import me.m56738.easyarmorstands.session.ArmorStandSession;
+import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,11 +29,13 @@ public class HeadDatabaseListener implements Listener {
         }
         SessionManager sessionManager = plugin.getSessionManager();
         Session session = sessionManager.getSession(player);
-        if (!(session instanceof ArmorStandSession)) {
+        Entity entity = session.getEntity();
+        if (!(entity instanceof ArmorStand)) {
             return;
         }
+        ArmorStand armorStand = (ArmorStand) entity;
         event.setCancelled(true);
-        ((ArmorStandSession) session).openMenu();
+        player.openInventory(new ArmorStandMenu(session, armorStand).getInventory());
         player.setItemOnCursor(event.getHead());
     }
 

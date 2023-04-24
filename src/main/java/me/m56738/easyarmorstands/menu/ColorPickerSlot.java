@@ -15,9 +15,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 
 public class ColorPickerSlot implements InventorySlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public ColorPickerSlot(SessionMenu menu) {
+    public ColorPickerSlot(ArmorStandMenu menu) {
         this.menu = menu;
     }
 

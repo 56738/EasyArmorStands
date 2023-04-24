@@ -8,9 +8,9 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleBasePlateSlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public ToggleBasePlateSlot(SessionMenu menu) {
+    public ToggleBasePlateSlot(ArmorStandMenu menu) {
         super(
                 menu,
                 ItemType.STONE_SLAB,
@@ -26,14 +26,14 @@ public class ToggleBasePlateSlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return menu.getSession().getEntity().hasBasePlate()
+        return menu.getEntity().hasBasePlate()
                 ? Component.text("has a base plate", NamedTextColor.GREEN)
                 : Component.text("has no base plate", NamedTextColor.RED);
     }
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         entity.setBasePlate(!entity.hasBasePlate());
     }
 }

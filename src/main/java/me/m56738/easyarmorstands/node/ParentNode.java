@@ -117,8 +117,8 @@ public class ParentNode implements Node {
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickType type) {
-        if (type == ClickType.RIGHT_CLICK) {
+    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
+        if (context.getType() == ClickType.RIGHT_CLICK) {
             if (targetNode != null) {
                 session.pushNode(targetNode);
                 return true;
@@ -127,7 +127,7 @@ public class ParentNode implements Node {
                 session.replaceNode(nextNode);
                 return true;
             }
-        } else if (type == ClickType.LEFT_CLICK) {
+        } else if (context.getType() == ClickType.LEFT_CLICK) {
             if (!root) {
                 session.popNode();
                 return true;

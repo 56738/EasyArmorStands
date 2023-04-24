@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.menu.SessionMenu;
+import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -12,11 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 
 public class HeadDatabaseSlot implements InventorySlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
     private final HeadDatabaseAPI api;
     private final Player player;
 
-    public HeadDatabaseSlot(SessionMenu menu, HeadDatabaseAPI api) {
+    public HeadDatabaseSlot(ArmorStandMenu menu, HeadDatabaseAPI api) {
         this.menu = menu;
         this.api = api;
         this.player = menu.getSession().getPlayer();

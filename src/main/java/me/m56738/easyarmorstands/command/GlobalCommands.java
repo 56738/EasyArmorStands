@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryAction;
+import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -29,10 +30,12 @@ import java.util.stream.Collectors;
 public class GlobalCommands {
     private final CommandManager<EasCommandSender> commandManager;
     private final MinecraftHelp<EasCommandSender> help;
+    private final SessionListener sessionListener;
 
-    public GlobalCommands(CommandManager<EasCommandSender> commandManager) {
+    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionListener sessionListener) {
         this.commandManager = commandManager;
         this.help = new MinecraftHelp<>("/eas help", s -> s, commandManager);
+        this.sessionListener = sessionListener;
     }
 
     @CommandMethod("help [query]")
@@ -64,6 +67,7 @@ public class GlobalCommands {
                         "Drop to stop editing.",
                 NamedTextColor.GRAY
         )));
+        sessionListener.updateHeldItem(sender.get());
     }
 
     @CommandMethod("color")

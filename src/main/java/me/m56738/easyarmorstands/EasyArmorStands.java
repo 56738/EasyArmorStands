@@ -28,7 +28,6 @@ import me.m56738.easyarmorstands.command.ValueNodeInjector;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -69,7 +68,8 @@ public class EasyArmorStands extends JavaPlugin {
         historyManager = new HistoryManager();
         adventure = BukkitAudiences.create(this);
 
-        getServer().getPluginManager().registerEvents(new SessionListener(this, sessionManager, adventure), this);
+        SessionListener sessionListener = new SessionListener(this, sessionManager);
+        getServer().getPluginManager().registerEvents(sessionListener, this);
         getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
 
@@ -113,10 +113,7 @@ public class EasyArmorStands extends JavaPlugin {
         PipelineExceptionHandler.register(commandManager);
 
         commandManager.parameterInjectorRegistry().registerInjector(
-                Session.class, new SessionInjector<>(Session.class));
-
-        commandManager.parameterInjectorRegistry().registerInjector(
-                ArmorStandSession.class, new SessionInjector<>(ArmorStandSession.class));
+                Session.class, new SessionInjector<>());
 
         commandManager.parameterInjectorRegistry().registerInjector(
                 ValueNode.class, new ValueNodeInjector<>());
@@ -133,7 +130,7 @@ public class EasyArmorStands extends JavaPlugin {
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
-        annotationParser.parse(new GlobalCommands(commandManager));
+        annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands(sessionManager));
 
         new AddonLoader(this, getClassLoader()).load();

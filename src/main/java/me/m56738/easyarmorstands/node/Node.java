@@ -9,5 +9,5 @@ public interface Node {
 
     void onUpdate(Vector3dc eyes, Vector3dc target);
 
-    boolean onClick(Vector3dc eyes, Vector3dc target, ClickType type);
+    boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context);
 }

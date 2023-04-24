@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.addon.traincarts;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.command.EasPlayer;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.menu.SessionMenu;
+import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,9 +14,9 @@ import java.util.Arrays;
 
 public class TrainCartsModelListingSlot implements InventorySlot {
     private final TrainCartsIntegration integration;
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public TrainCartsModelListingSlot(TrainCartsIntegration integration, SessionMenu menu) {
+    public TrainCartsModelListingSlot(TrainCartsIntegration integration, ArmorStandMenu menu) {
         this.integration = integration;
         this.menu = menu;
     }
@@ -40,7 +41,8 @@ public class TrainCartsModelListingSlot implements InventorySlot {
             menu.queueTask(() -> menu.getSession().getPlayer().setItemOnCursor(null));
             return false;
         }
-        menu.queueTask(() -> integration.openModelMenu(menu.getSession().getPlayer(), menu.getSession(), ""));
+        EasPlayer player = new EasPlayer(menu.getSession().getPlayer(), menu.getSession().audience());
+        menu.queueTask(() -> integration.openModelMenu(player, menu.getSession(), menu.getEntity(), ""));
         return false;
     }
 }

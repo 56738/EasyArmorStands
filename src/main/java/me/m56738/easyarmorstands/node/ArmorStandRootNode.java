@@ -2,27 +2,29 @@ package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.ArmorStandPartBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
+import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
+import org.joml.Vector3dc;
 
-import java.util.function.Supplier;
+import java.util.EnumMap;
 
-public class ArmorStandNodeFactory implements Supplier<Node> {
+public class ArmorStandRootNode extends ParentNode {
     private final Session session;
     private final ArmorStand entity;
+    private final BoneNode positionNode;
+    private final EnumMap<ArmorStandPart, ArmorStandPartNode> partNodes = new EnumMap<>(ArmorStandPart.class);
 
-    public ArmorStandNodeFactory(Session session, ArmorStand entity) {
+    public ArmorStandRootNode(Session session, ArmorStand entity) {
+        super(session, Component.text("Select a bone"));
         this.session = session;
         this.entity = entity;
-    }
 
-    @Override
-    public Node get() {
-        ParentNode root = new ParentNode(session, Component.text("Select a bone"));
-        root.setRoot(true);
+        setRoot(true);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
             ArmorStandPartBone bone = new ArmorStandPartBone(entity, part);
@@ -38,7 +40,9 @@ public class ArmorStandNodeFactory implements Supplier<Node> {
             localNode.setNextNode(globalNode);
             globalNode.setNextNode(localNode);
 
-            root.addNode(new ArmorStandPartNode(session, localNode, bone));
+            ArmorStandPartNode partNode = new ArmorStandPartNode(session, localNode, bone);
+            addNode(partNode);
+            partNodes.put(part, partNode);
         }
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(entity);
@@ -52,7 +56,25 @@ public class ArmorStandNodeFactory implements Supplier<Node> {
         carryBoneNode.setPriority(1);
         positionNode.addNode(carryBoneNode);
 
-        root.addNode(new BoneNode(session, positionNode, positionBone, Component.text("Position")));
-        return root;
+        this.positionNode = new BoneNode(session, positionNode, positionBone, Component.text("Position"));
+        addNode(this.positionNode);
+    }
+
+    public BoneNode getPositionNode() {
+        return positionNode;
+    }
+
+    public ArmorStandPartNode getPartNode(ArmorStandPart part) {
+        return partNodes.get(part);
+    }
+
+    @Override
+    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
+        Player player = session.getPlayer();
+        if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
+            player.openInventory(new ArmorStandMenu(session, entity).getInventory());
+            return true;
+        }
+        return super.onClick(eyes, target, context);
     }
 }

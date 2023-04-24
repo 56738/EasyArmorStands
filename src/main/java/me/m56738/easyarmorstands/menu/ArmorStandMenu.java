@@ -11,17 +11,20 @@ import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
 import me.m56738.easyarmorstands.inventory.DisabledSlot;
 import me.m56738.easyarmorstands.inventory.InventoryMenu;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.session.ArmorStandSession;
+import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class SessionMenu extends InventoryMenu {
-    private final ArmorStandSession session;
+public class ArmorStandMenu extends InventoryMenu {
+    private final Session session;
+    private final ArmorStand entity;
 
-    public SessionMenu(ArmorStandSession session) {
+    public ArmorStandMenu(Session session, ArmorStand entity) {
         super(6, "EasyArmorStands");
         this.session = session;
+        this.entity = entity;
         initialize();
     }
 
@@ -142,7 +145,11 @@ public class SessionMenu extends InventoryMenu {
         throw new IllegalStateException("No space left in the menu");
     }
 
-    public ArmorStandSession getSession() {
+    public Session getSession() {
         return session;
+    }
+
+    public ArmorStand getEntity() {
+        return entity;
     }
 }

@@ -8,9 +8,9 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleVisibilitySlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public ToggleVisibilitySlot(SessionMenu menu) {
+    public ToggleVisibilitySlot(ArmorStandMenu menu) {
         super(
                 menu,
                 ItemType.INVISIBILITY_POTION,
@@ -26,14 +26,14 @@ public class ToggleVisibilitySlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return menu.getSession().getEntity().isVisible()
+        return menu.getEntity().isVisible()
                 ? Component.text("visible", NamedTextColor.GREEN)
                 : Component.text("invisible", NamedTextColor.RED);
     }
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         entity.setVisible(!entity.isVisible());
     }
 }

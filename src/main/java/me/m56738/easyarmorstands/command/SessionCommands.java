@@ -13,8 +13,8 @@ import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapab
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.history.DestroyArmorStandAction;
+import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.session.ArmorStandSession;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.util.ArmorStandSnapshot;
@@ -27,6 +27,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.ComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -273,7 +274,7 @@ public class SessionCommands {
                       ArmorStand entity) {
         new ArmorStandSnapshot(entity).spawn();
         sender.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
-//        session.startMoving(null);
+//        session.startMoving(null); TODO
     }
 
     @CommandMethod("spawn")
@@ -291,10 +292,10 @@ public class SessionCommands {
             Session session,
             Entity entity) {
         Player player = session.getPlayer();
-        sessionManager.stop(player);
         if (entity instanceof ArmorStand) {
             EasyArmorStands.getInstance().getHistory(player).push(new DestroyArmorStandAction((ArmorStand) entity));
         }
+        session.clearNode();
         entity.remove();
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
@@ -302,8 +303,8 @@ public class SessionCommands {
     @CommandMethod("open")
     @CommandPermission("easyarmorstands.open")
     @CommandDescription("Open the menu")
-    public void openMenu(ArmorStandSession session) {
-        session.openMenu();
+    public void openMenu(EasPlayer player, Session session, ArmorStand entity) {
+        player.get().openInventory(new ArmorStandMenu(session, entity).getInventory());
     }
 
     @CommandMethod("snap angle [value]")
@@ -345,7 +346,8 @@ public class SessionCommands {
     @CommandDescription("Move an armor stand to the middle of the block")
     public void align(
             EasCommandSender sender,
-            ArmorStandSession session,
+            Session session,
+            ArmorStand entity,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
@@ -359,7 +361,11 @@ public class SessionCommands {
             offsetVector.set(offset, offset, offset);
         }
         Vector3dc position = axis.snap(Util.toVector3d(session.getEntity().getLocation()), value, offsetVector, new Vector3d());
-        if (!session.move(position)) {
+        Location location = entity.getLocation();
+        location.setX(position.x());
+        location.setY(position.y());
+        location.setZ(position.z());
+        if (!session.teleport(entity, location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }

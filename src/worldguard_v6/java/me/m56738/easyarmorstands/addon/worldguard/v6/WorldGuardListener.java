@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.joml.Vector3dc;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -52,9 +51,7 @@ public class WorldGuardListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMoveSession(SessionMoveEvent event) {
-        Vector3dc pos = event.getPosition();
-        Location location = new Location(event.getWorld(), pos.x(), pos.y(), pos.z());
-        if (isAllowed(event.getPlayer(), location)) {
+        if (isAllowed(event.getPlayer(), event.getLocation())) {
             return;
         }
         if (bypassCache.computeIfAbsent(event.getSession(), this::canBypass)) {

@@ -5,10 +5,10 @@ import org.joml.Vector3dc;
 import java.util.function.Supplier;
 
 public class LazyNode implements Node {
-    private final Supplier<Node> nodeSupplier;
+    private final Supplier<? extends Node> nodeSupplier;
     private Node node;
 
-    public LazyNode(Supplier<Node> nodeSupplier) {
+    public LazyNode(Supplier<? extends Node> nodeSupplier) {
         this.nodeSupplier = nodeSupplier;
     }
 
@@ -30,7 +30,7 @@ public class LazyNode implements Node {
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickType type) {
-        return node.onClick(eyes, target, type);
+    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
+        return node.onClick(eyes, target, context);
     }
 }

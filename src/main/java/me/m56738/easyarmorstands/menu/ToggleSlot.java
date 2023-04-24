@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ToggleSlot implements InventorySlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
     private final ItemType type;
     private final Component title;
     private final List<Component> description;
 
-    public ToggleSlot(SessionMenu menu, ItemType type, Component title, List<Component> description) {
+    public ToggleSlot(ArmorStandMenu menu, ItemType type, Component title, List<Component> description) {
         this.menu = menu;
         this.type = type;
         this.title = title;

@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ToggleGravitySlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
     private final TickCapability tickCapability;
 
-    public ToggleGravitySlot(SessionMenu menu, TickCapability tickCapability) {
+    public ToggleGravitySlot(ArmorStandMenu menu, TickCapability tickCapability) {
         super(
                 menu,
                 ItemType.FEATHER,
@@ -31,7 +31,7 @@ public class ToggleGravitySlot extends ToggleSlot {
     @Override
     protected List<Component> getLore() {
         List<Component> lore = super.getLore();
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         if (tickCapability != null && entity.hasGravity() && !tickCapability.canTick(entity)) {
             lore.add(Component.text("Gravity is enabled but", NamedTextColor.GOLD));
             lore.add(Component.text("armor stand ticking is", NamedTextColor.GOLD));
@@ -43,7 +43,7 @@ public class ToggleGravitySlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         if (tickCapability != null && !tickCapability.canTick(entity)) {
             return Component.text("frozen", NamedTextColor.GOLD);
         }
@@ -54,7 +54,7 @@ public class ToggleGravitySlot extends ToggleSlot {
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         boolean gravity = !entity.hasGravity();
         entity.setGravity(gravity);
         if (gravity && tickCapability != null && !tickCapability.canTick(entity) &&

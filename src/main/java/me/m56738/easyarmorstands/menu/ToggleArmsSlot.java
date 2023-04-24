@@ -8,9 +8,9 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleArmsSlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public ToggleArmsSlot(SessionMenu menu) {
+    public ToggleArmsSlot(ArmorStandMenu menu) {
         super(
                 menu,
                 ItemType.STICK,
@@ -25,14 +25,14 @@ public class ToggleArmsSlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return menu.getSession().getEntity().hasArms()
+        return menu.getEntity().hasArms()
                 ? Component.text("has arms", NamedTextColor.GREEN)
                 : Component.text("has no arms", NamedTextColor.RED);
     }
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         entity.setArms(!entity.hasArms());
     }
 }

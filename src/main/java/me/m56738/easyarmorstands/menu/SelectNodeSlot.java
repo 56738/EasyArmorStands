@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.bone.Bone;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,15 +12,15 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public class SelectBoneSlot implements InventorySlot {
-    private final SessionMenu menu;
-    private final Bone bone;
+public class SelectNodeSlot implements InventorySlot {
+    private final ArmorStandMenu menu;
+    private final Node node;
     private final ItemType type;
     private final Component name;
 
-    public SelectBoneSlot(SessionMenu menu, Bone bone, ItemType type, Component name) {
+    public SelectNodeSlot(ArmorStandMenu menu, Node node, ItemType type, Component name) {
         this.menu = menu;
-        this.bone = bone;
+        this.node = node;
         this.type = type;
         this.name = name;
     }
@@ -45,7 +45,7 @@ public class SelectBoneSlot implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-//            menu.getSession().setBone(bone);
+            menu.getSession().pushNode(node);
             menu.queueTask(() -> {
                 Player player = menu.getSession().getPlayer();
                 if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {

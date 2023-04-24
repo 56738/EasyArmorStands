@@ -6,12 +6,13 @@ import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
-import me.m56738.easyarmorstands.node.ArmorStandNodeFactory;
+import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.joml.Matrix3d;
@@ -32,8 +33,8 @@ public class SessionManager {
         Bukkit.getPluginManager().callEvent(new SessionInitializeEvent(session));
     }
 
-    public WorldSession start(Player player) {
-        WorldSession session = new WorldSession(player);
+    public Session start(Player player) {
+        Session session = new Session(player);
         session.addProvider(new ArmorStandNodeProvider());
         start(session);
         return session;
@@ -46,9 +47,9 @@ public class SessionManager {
             return null;
         }
 
-        Session session = new ArmorStandSession(player, armorStand);
-        session.pushNode(new ArmorStandNodeFactory(session, armorStand).get());
-
+        Session session = start(player);
+        session.addProvider(new ArmorStandNodeProvider());
+        session.pushNode(new ArmorStandRootNode(session, armorStand));
         start(session);
         return session;
     }
@@ -74,11 +75,7 @@ public class SessionManager {
     }
 
     public void hideSkeletons(Player player) {
-        for (Session session : sessions.values()) {
-            if (session instanceof ArmorStandSession) {
-                ((ArmorStandSession) session).hideSkeleton(player);
-            }
-        }
+        // TODO
     }
 
     public void stopAllSessions() {
@@ -92,13 +89,10 @@ public class SessionManager {
         return sessions.get(player);
     }
 
-    public ArmorStandSession getSession(ArmorStand armorStand) {
+    public Session getSession(Entity entity) {
         for (Session session : sessions.values()) {
-            if (session instanceof ArmorStandSession) {
-                ArmorStandSession armorStandSession = (ArmorStandSession) session;
-                if (armorStandSession.getEntity().equals(armorStand)) {
-                    return armorStandSession;
-                }
+            if (session.getEntity() == entity) {
+                return session;
             }
         }
         return null;

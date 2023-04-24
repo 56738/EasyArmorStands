@@ -55,7 +55,7 @@ public abstract class ButtonNode implements ClickableNode {
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickType type) {
-        return node.onClick(eyes, target, type);
+    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
+        return node.onClick(eyes, target, context);
     }
 }

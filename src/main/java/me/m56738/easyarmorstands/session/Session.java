@@ -3,12 +3,17 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.node.ClickType;
+import me.m56738.easyarmorstands.event.SessionMoveEvent;
+import me.m56738.easyarmorstands.node.ClickContext;
+import me.m56738.easyarmorstands.node.EntityNode;
+import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -24,13 +29,14 @@ import org.joml.Vector3dc;
 
 import java.util.LinkedList;
 
-public class Session implements ForwardingAudience.Single {
+public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
+    private final LinkedList<Node> nodeStack = new LinkedList<>();
+    private final EntitySelectionNode rootNode = new EntitySelectionNode(this, Component.text("Select an entity"));
     private final Player player;
     private final Audience audience;
     private final ParticleCapability particleCapability;
-    protected final LinkedList<Node> nodeStack = new LinkedList<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -39,6 +45,8 @@ public class Session implements ForwardingAudience.Single {
         this.player = player;
         this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
         this.particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
+        this.rootNode.setRoot(true);
+        pushNode(this.rootNode);
     }
 
     public Node getNode() {
@@ -66,42 +74,25 @@ public class Session implements ForwardingAudience.Single {
         }
     }
 
-    private boolean handleClick() {
-        if (clickTicks > 0) {
+    public void clearNode() {
+        if (!nodeStack.isEmpty()) {
+            nodeStack.peek().onExit();
+        }
+        nodeStack.clear();
+        nodeStack.push(rootNode);
+        rootNode.onEnter();
+    }
+
+    public boolean handleClick(ClickContext context) {
+        Node node = nodeStack.peek();
+        if (node == null || clickTicks > 0) {
             return false;
         }
         clickTicks = 5;
-        return true;
-    }
-
-    private boolean handleClick(ClickType type) {
-        Node node = nodeStack.peek();
-        if (node == null) {
-            return false;
-        }
         Location eyeLocation = player.getEyeLocation();
         Vector3dc eyes = Util.toVector3d(eyeLocation);
         Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
-        return node.onClick(eyes, target, type);
-    }
-
-    public void handleLeftClick() {
-        if (!handleClick()) {
-            return;
-        }
-        if (!handleClick(ClickType.LEFT_CLICK)) {
-            onLeftClick();
-        }
-    }
-
-    protected void onLeftClick() {
-    }
-
-    public void handleRightClick() {
-        if (!handleClick()) {
-            return;
-        }
-        handleClick(ClickType.RIGHT_CLICK);
+        return node.onClick(eyes, target, context);
     }
 
     public double snap(double value) {
@@ -110,6 +101,19 @@ public class Session implements ForwardingAudience.Single {
 
     public double snapAngle(double value) {
         return Util.snap(value, angleSnapIncrement);
+    }
+
+    public Entity getEntity() {
+        for (Node node : nodeStack) {
+            if (node instanceof EntityNode) {
+                return ((EntityNode) node).getEntity();
+            }
+        }
+        return null;
+    }
+
+    public void addProvider(EntityNodeProvider provider) {
+        rootNode.addProvider(provider);
     }
 
     public boolean update() {
@@ -148,10 +152,7 @@ public class Session implements ForwardingAudience.Single {
             node.onExit();
         }
         audience.clearTitle();
-    }
-
-    public Entity getEntity() {
-        return null;
+        audience.sendActionBar(Component.empty());
     }
 
     public Player getPlayer() {
@@ -247,6 +248,16 @@ public class Session implements ForwardingAudience.Single {
     }
 
     public void commit() {
+    }
+
+    public boolean canTeleport(Entity entity, Location location) {
+        SessionMoveEvent event = new SessionMoveEvent(this, entity, location);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    public boolean teleport(Entity entity, Location location) {
+        return canTeleport(entity, location) && entity.teleport(location);
     }
 
     public boolean isLookingAtPoint(Vector3dc eyes, Vector3dc target, Vector3dc position) {

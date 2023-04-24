@@ -9,10 +9,10 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleGlowingSlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
     private final GlowCapability glowCapability;
 
-    public ToggleGlowingSlot(SessionMenu menu, GlowCapability glowCapability) {
+    public ToggleGlowingSlot(ArmorStandMenu menu, GlowCapability glowCapability) {
         super(
                 menu,
                 ItemType.GLOWSTONE_DUST,
@@ -35,7 +35,7 @@ public class ToggleGlowingSlot extends ToggleSlot {
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         glowCapability.setGlowing(entity, !glowCapability.isGlowing(entity));
     }
 }

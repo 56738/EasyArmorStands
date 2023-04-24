@@ -6,9 +6,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class SessionColorPicker extends ColorPicker {
     private final Player player;
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public SessionColorPicker(ItemStack item, Player player, SessionMenu menu) {
+    public SessionColorPicker(ItemStack item, Player player, ArmorStandMenu menu) {
         super(item, player);
         this.player = player;
         this.menu = menu;

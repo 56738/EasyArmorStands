@@ -18,8 +18,8 @@ public abstract class EditNode implements Node {
     protected abstract void abort();
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickType type) {
-        if (type == ClickType.LEFT_CLICK) {
+    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
+        if (context.getType() == ClickType.LEFT_CLICK) {
             abort();
         }
         session.popNode();

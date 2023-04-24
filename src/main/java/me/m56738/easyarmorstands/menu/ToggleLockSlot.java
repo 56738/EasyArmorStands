@@ -9,10 +9,10 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleLockSlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
     private final LockCapability lockCapability;
 
-    public ToggleLockSlot(SessionMenu menu, LockCapability lockCapability) {
+    public ToggleLockSlot(ArmorStandMenu menu, LockCapability lockCapability) {
         super(
                 menu,
                 ItemType.IRON_BARS,
@@ -29,14 +29,14 @@ public class ToggleLockSlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return lockCapability.isLocked(menu.getSession().getEntity())
+        return lockCapability.isLocked(menu.getEntity())
                 ? Component.text("locked", NamedTextColor.GREEN)
                 : Component.text("unlocked", NamedTextColor.RED);
     }
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         lockCapability.setLocked(entity, !lockCapability.isLocked(entity));
     }
 }

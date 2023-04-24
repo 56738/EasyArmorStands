@@ -8,9 +8,9 @@ import org.bukkit.entity.ArmorStand;
 import java.util.Arrays;
 
 public class ToggleSizeSlot extends ToggleSlot {
-    private final SessionMenu menu;
+    private final ArmorStandMenu menu;
 
-    public ToggleSizeSlot(SessionMenu menu) {
+    public ToggleSizeSlot(ArmorStandMenu menu) {
         super(
                 menu,
                 ItemType.BONE_MEAL,
@@ -24,14 +24,14 @@ public class ToggleSizeSlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return menu.getSession().getEntity().isSmall()
+        return menu.getEntity().isSmall()
                 ? Component.text("small", NamedTextColor.RED)
                 : Component.text("large", NamedTextColor.GREEN);
     }
 
     @Override
     protected void onClick() {
-        ArmorStand entity = menu.getSession().getEntity();
+        ArmorStand entity = menu.getEntity();
         entity.setSmall(!entity.isSmall());
     }
 }
