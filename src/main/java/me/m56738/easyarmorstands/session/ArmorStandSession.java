@@ -20,6 +20,7 @@ import org.joml.Vector3dc;
 
 import java.util.Objects;
 
+@Deprecated
 public class ArmorStandSession extends Session {
     private final ArmorStand entity;
     private final ArmorStand skeleton;

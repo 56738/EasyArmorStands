@@ -120,6 +120,22 @@ public class SessionCommands {
                 size.name().toLowerCase(Locale.ROOT), NamedTextColor.GREEN));
     }
 
+    @CommandMethod("marker <marker>")
+    @CommandPermission("easyarmorstands.property.marker")
+    @CommandDescription("Change whether an armor stand is a marker without a hitbox")
+    public void setMarker(EasCommandSender sender,
+                          Session session,
+                          ArmorStand entity,
+                          @Argument("marker") boolean marker) {
+        entity.setMarker(marker);
+        session.commit();
+        if (marker) {
+            sender.sendMessage(Component.text("Armor stand is now a marker", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Armor stand is no longer a marker", NamedTextColor.GREEN));
+        }
+    }
+
     @CommandMethod("name [name]")
     @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Change the name of an armor stand")
