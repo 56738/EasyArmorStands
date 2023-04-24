@@ -25,13 +25,13 @@ public class DisplayNodeFactory implements Supplier<Node> {
     public Node get() {
         DisplayBone bone = new DisplayBone(entity, mapper);
 
-        ParentNode localNode = new ParentNode(session, Component.text("Local"));
+        ParentNode localNode = new DisplayRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);
         localNode.addMoveNodes(session, bone, 2, false);
         localNode.addRotationNodes(session, bone, 1, true);
         localNode.addScaleNodes(session, bone, 2);
 
-        ParentNode globalNode = new ParentNode(session, Component.text("Global"));
+        ParentNode globalNode = new DisplayRootNode(session, Component.text("Global"), entity);
         globalNode.setRoot(true);
         globalNode.addPositionNodes(session, bone, 3, true);
         globalNode.addRotationNodes(session, bone, 1, false);
