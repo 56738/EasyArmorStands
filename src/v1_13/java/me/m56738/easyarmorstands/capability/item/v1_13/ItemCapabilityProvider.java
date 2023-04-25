@@ -80,6 +80,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.STICK);
                 case STONE_SLAB:
                     return new ItemStack(Material.STONE_SLAB);
+                case SUNFLOWER:
+                    return new ItemStack(Material.SUNFLOWER);
                 default:
                     throw new IllegalArgumentException();
             }

@@ -108,6 +108,9 @@ public class ArmorStandMenu extends InventoryMenu {
         if (invulnerabilityCapability != null && player.hasPermission("easyarmorstands.property.invulnerable")) {
             addButton(new ToggleInvulnerabilitySlot(this, invulnerabilityCapability));
         }
+        if (player.hasPermission("easyarmorstands.property.marker")) {
+            addButton(new ToggleMarkerSlot(this));
+        }
         if (player.hasPermission("easyarmorstands.color")) {
             addEquipmentButton(new ColorPickerSlot(this));
         }

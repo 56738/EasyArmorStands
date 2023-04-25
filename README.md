@@ -117,7 +117,8 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.property.gravity`      | Allows toggling gravity for an armor stand.                                  | Survival |
 | `easyarmorstands.property.invulnerable` | Allows toggling armor stand invulnerability.                                 | Survival |
 | `easyarmorstands.property.lock`         | Allows toggling armor stand equipment lock.                                  | Survival |
-| `easyarmorstands.property.name`         | Allows editing armor stan name tags.                                         | Survival |
+| `easyarmorstands.property.name`         | Allows editing armor stand name tags.                                        | Survival |
+| `easyarmorstands.property.marker`       | Allows toggling whether an armor stand is a marker.                          | Survival |
 | `easyarmorstands.property.size`         | Allows toggling the size of an armor stand.                                  | Survival |
 | `easyarmorstands.property.visible`      | Allows toggling armor stand visibility.                                      | Survival |
 | `easyarmorstands.snap`                  | Allows toggling position and angle snapping and configuring the increment.   | Survival |

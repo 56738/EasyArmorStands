@@ -143,36 +143,37 @@ bukkit {
         create("easyarmorstands.creative") {
             description = "Allows using EasyArmorStands features which are safe for creative mode players."
             children = listOf(
-                "easyarmorstands.clone",
-                "easyarmorstands.color",
-                "easyarmorstands.destroy",
-                "easyarmorstands.give",
-                "easyarmorstands.history",
-                "easyarmorstands.spawn",
-                "easyarmorstands.survival",
-                "easyarmorstands.traincarts.model"
+                    "easyarmorstands.clone",
+                    "easyarmorstands.color",
+                    "easyarmorstands.destroy",
+                    "easyarmorstands.give",
+                    "easyarmorstands.history",
+                    "easyarmorstands.spawn",
+                    "easyarmorstands.survival",
+                    "easyarmorstands.traincarts.model"
             )
         }
         create("easyarmorstands.survival") {
             description = "Allows using EasyArmorStands features which are safe for survival mode players."
             children = listOf(
-                "easyarmorstands.align",
-                "easyarmorstands.edit",
-                "easyarmorstands.help",
-                "easyarmorstands.open",
-                "easyarmorstands.property.arms",
-                "easyarmorstands.property.baseplate",
-                "easyarmorstands.property.cantick",
-                "easyarmorstands.property.equipment",
-                "easyarmorstands.property.glow",
-                "easyarmorstands.property.gravity",
-                "easyarmorstands.property.invulnerable",
-                "easyarmorstands.property.lock",
-                "easyarmorstands.property.name",
-                "easyarmorstands.property.size",
-                "easyarmorstands.property.visible",
-                "easyarmorstands.snap",
-                "easyarmorstands.version",
+                    "easyarmorstands.align",
+                    "easyarmorstands.edit",
+                    "easyarmorstands.help",
+                    "easyarmorstands.open",
+                    "easyarmorstands.property.arms",
+                    "easyarmorstands.property.baseplate",
+                    "easyarmorstands.property.cantick",
+                    "easyarmorstands.property.equipment",
+                    "easyarmorstands.property.glow",
+                    "easyarmorstands.property.gravity",
+                    "easyarmorstands.property.invulnerable",
+                    "easyarmorstands.property.lock",
+                    "easyarmorstands.property.marker",
+                    "easyarmorstands.property.name",
+                    "easyarmorstands.property.size",
+                    "easyarmorstands.property.visible",
+                    "easyarmorstands.snap",
+                    "easyarmorstands.version",
             )
 
         }
@@ -232,6 +233,9 @@ bukkit {
         }
         create("easyarmorstands.property.lock") {
             description = "Allows toggling armor stand equipment lock."
+        }
+        create("easyarmorstands.property.marker") {
+            description = "Allows toggling whether an armor stand is a marker."
         }
         create("easyarmorstands.property.name") {
             description = "Allows editing armor stan name tags."

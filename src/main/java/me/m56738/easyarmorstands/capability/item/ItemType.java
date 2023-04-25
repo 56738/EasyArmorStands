@@ -15,5 +15,6 @@ public enum ItemType {
     LIGHT_BLUE_STAINED_GLASS_PANE,
     PLAYER_HEAD,
     STICK,
-    STONE_SLAB
+    STONE_SLAB,
+    SUNFLOWER
 }

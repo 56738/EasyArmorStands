@@ -28,7 +28,7 @@ public class ToggleGlowingSlot extends ToggleSlot {
 
     @Override
     protected Component getValue() {
-        return glowCapability.isGlowing(menu.getSession().getEntity())
+        return glowCapability.isGlowing(menu.getEntity())
                 ? Component.text("glowing", NamedTextColor.GREEN)
                 : Component.text("not glowing", NamedTextColor.RED);
     }
