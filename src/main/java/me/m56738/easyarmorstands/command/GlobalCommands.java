@@ -83,57 +83,57 @@ public class GlobalCommands {
         player.get().openInventory(new ColorPicker(null, player.get()).getInventory());
     }
 
-    @CommandMethod("redo [count]")
-    @CommandPermission("easyarmorstands.redo")
-    @CommandDescription("Redo a change")
-    public void redo(EasPlayer sender,
-                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(sender.get());
-        for (int i = 0; i < count; i++) {
-            HistoryAction action = history.takeRedoAction();
-            if (action != null) {
-                try {
-                    action.redo();
-                } catch (IllegalStateException e) {
-                    sender.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
-                    break;
-                }
-                sender.sendMessage(Component.text()
-                        .append(Component.text("Redone change: ", NamedTextColor.GREEN))
-                        .append(action.describe()));
-            } else {
-                sender.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
-                break;
-            }
-        }
-    }
-
-    @CommandMethod("undo [count]")
-    @CommandPermission("easyarmorstands.undo")
-    @CommandDescription("Undo a change")
-    public void undo(EasPlayer sender,
-                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(sender.get());
-        for (int i = 0; i < count; i++) {
-            HistoryAction action = history.takeUndoAction();
-            if (action != null) {
-                try {
-                    action.undo();
-                } catch (IllegalStateException e) {
-                    sender.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
-                    break;
-                }
-                sender.sendMessage(Component.text()
-                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
-                        .append(action.describe()));
-            } else {
-                sender.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
-                break;
-            }
-        }
-    }
+//    @CommandMethod("redo [count]")
+//    @CommandPermission("easyarmorstands.redo")
+//    @CommandDescription("Redo a change")
+//    public void redo(EasPlayer sender,
+//                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+//        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+//        for (int i = 0; i < count; i++) {
+//            HistoryAction action = history.takeRedoAction();
+//            if (action != null) {
+//                try {
+//                    action.redo();
+//                } catch (IllegalStateException e) {
+//                    sender.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
+//                            .append(action.describe()));
+//                    break;
+//                }
+//                sender.sendMessage(Component.text()
+//                        .append(Component.text("Redone change: ", NamedTextColor.GREEN))
+//                        .append(action.describe()));
+//            } else {
+//                sender.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
+//                break;
+//            }
+//        }
+//    }
+//
+//    @CommandMethod("undo [count]")
+//    @CommandPermission("easyarmorstands.undo")
+//    @CommandDescription("Undo a change")
+//    public void undo(EasPlayer sender,
+//                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+//        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+//        for (int i = 0; i < count; i++) {
+//            HistoryAction action = history.takeUndoAction();
+//            if (action != null) {
+//                try {
+//                    action.undo();
+//                } catch (IllegalStateException e) {
+//                    sender.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
+//                            .append(action.describe()));
+//                    break;
+//                }
+//                sender.sendMessage(Component.text()
+//                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
+//                        .append(action.describe()));
+//            } else {
+//                sender.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
+//                break;
+//            }
+//        }
+//    }
 
     @CommandMethod("version")
     @CommandPermission("easyarmorstands.version")

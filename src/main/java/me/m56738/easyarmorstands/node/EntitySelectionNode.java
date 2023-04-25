@@ -46,18 +46,18 @@ public class EntitySelectionNode extends MenuNode {
                 continue;
             }
 
-            // entity is new, create a node for it
+            // entity is new, create a button for it
             for (EntityButtonProvider provider : providers) {
-                Button node = provider.createButton(session, entity);
-                if (node != null) {
-                    buttons.put(entity, node);
-                    addButton(node);
+                Button button = provider.createButton(session, entity);
+                if (button != null) {
+                    buttons.put(entity, button);
+                    addButton(button);
                     break;
                 }
             }
         }
 
-        // remove nodes of entities which no longer exist
+        // remove buttons of entities which no longer exist
         for (Entity entity : removed) {
             removeButton(buttons.remove(entity));
         }

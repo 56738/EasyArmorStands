@@ -5,11 +5,7 @@ import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.joml.Math;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
-import org.joml.Matrix4f;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class DisplayBone implements MatrixBone {
     private final Display entity;
@@ -60,6 +56,11 @@ public class DisplayBone implements MatrixBone {
                 -location.getY(),
                 -location.getZ(),
                 new Matrix4d()));
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     public Matrix4d getTransformation() {

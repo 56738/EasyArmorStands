@@ -162,4 +162,9 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         session.showPoint(negativeEnd, focused ? NamedTextColor.YELLOW : color);
         session.showPoint(positiveEnd, focused ? NamedTextColor.YELLOW : color);
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && bone.isValid();
+    }
 }

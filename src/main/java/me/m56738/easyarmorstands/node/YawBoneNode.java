@@ -42,4 +42,9 @@ public class YawBoneNode extends RotationNode {
     public Component getName() {
         return name;
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && bone.isValid();
+    }
 }

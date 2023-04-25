@@ -6,11 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Math;
-import org.joml.Matrix3d;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class ArmorStandPartBone implements MatrixBone {
     private final ArmorStand armorStand;
@@ -54,6 +50,11 @@ public class ArmorStandPartBone implements MatrixBone {
 
         Matrix3d rotation = matrix.get3x3(new Matrix3d()).rotateLocalY(-rotY);
         part.setPose(armorStand, Util.toEuler(rotation));
+    }
+
+    @Override
+    public boolean isValid() {
+        return armorStand.isValid();
     }
 
     @Override

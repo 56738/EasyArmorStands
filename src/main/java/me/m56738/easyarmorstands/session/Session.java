@@ -76,17 +76,23 @@ public final class Session implements ForwardingAudience.Single {
             nodeStack.peek().onExit();
         }
         nodeStack.push(node);
+        node.onAdd();
         node.onEnter();
     }
 
     public void replaceNode(Node node) {
-        nodeStack.pop().onExit();
+        Node removed = nodeStack.pop();
+        removed.onExit();
+        removed.onRemove();
         nodeStack.push(node);
+        node.onAdd();
         node.onEnter();
     }
 
     public void popNode() {
-        nodeStack.pop().onExit();
+        Node removed = nodeStack.pop();
+        removed.onExit();
+        removed.onRemove();
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onEnter();
         }
@@ -95,6 +101,11 @@ public final class Session implements ForwardingAudience.Single {
     public void clearNode() {
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
+        }
+        for (Node node : nodeStack) {
+            if (node != rootNode) {
+                node.onRemove();
+            }
         }
         nodeStack.clear();
         nodeStack.push(rootNode);
@@ -139,12 +150,21 @@ public final class Session implements ForwardingAudience.Single {
             clickTicks--;
         }
 
-        Node node = nodeStack.peek();
-        if (node != null) {
+        while (!nodeStack.isEmpty() && !nodeStack.peek().isValid()) {
+            popNode();
+        }
+
+        Node currentNode = nodeStack.peek();
+        if (currentNode != null) {
             Location eyeLocation = player.getEyeLocation();
             Vector3dc eyes = Util.toVector3d(eyeLocation);
             Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
-            node.onUpdate(eyes, target);
+            currentNode.onUpdate(eyes, target);
+        }
+        for (Node node : nodeStack) {
+            if (node != currentNode) {
+                node.onInactiveUpdate();
+            }
         }
 
         return player.isValid() && isHoldingTool();
@@ -165,10 +185,14 @@ public final class Session implements ForwardingAudience.Single {
 
     public void stop() {
         commit();
-        Node node = nodeStack.peek();
-        if (node != null) {
-            node.onExit();
+        Node currentNode = nodeStack.peek();
+        if (currentNode != null) {
+            currentNode.onExit();
         }
+        for (Node node : nodeStack) {
+            node.onRemove();
+        }
+        nodeStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
     }

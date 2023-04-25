@@ -62,4 +62,9 @@ public class CarryNode extends EditNode {
         }
         bone.setPositionAndYaw(currentPosition, yaw);
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && bone.isValid();
+    }
 }

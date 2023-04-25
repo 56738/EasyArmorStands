@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
@@ -77,7 +78,13 @@ public class SessionManager {
     }
 
     public void hideSkeletons(Player player) {
-        // TODO
+        for (Session session : sessions.values()) {
+            for (Node node : session.getNodeStack()) {
+                if (node instanceof ArmorStandRootNode) {
+                    ((ArmorStandRootNode) node).hideSkeleton(player);
+                }
+            }
+        }
     }
 
     public void stopAllSessions() {

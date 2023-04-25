@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.history.DestroyArmorStandAction;
 import me.m56738.easyarmorstands.menu.ArmorStandMenu;
+import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -272,9 +273,13 @@ public class SessionCommands {
     public void clone(EasCommandSender sender,
                       Session session,
                       ArmorStand entity) {
-        new ArmorStandSnapshot(entity).spawn();
+        ArmorStand clone = new ArmorStandSnapshot(entity).spawn();
         sender.sendMessage(Component.text("Cloned the armor stand", NamedTextColor.GREEN));
-//        session.startMoving(null); TODO
+        ArmorStandRootNode root = new ArmorStandRootNode(session, clone);
+
+        session.clearNode();
+        session.pushNode(root);
+        session.pushNode(root.getCarryButton().createNode());
     }
 
     @CommandMethod("spawn")
@@ -360,7 +365,7 @@ public class SessionCommands {
         } else if (offset != null) {
             offsetVector.set(offset, offset, offset);
         }
-        Vector3dc position = axis.snap(Util.toVector3d(session.getEntity().getLocation()), value, offsetVector, new Vector3d());
+        Vector3dc position = axis.snap(Util.toVector3d(entity.getLocation()), value, offsetVector, new Vector3d());
         Location location = entity.getLocation();
         location.setX(position.x());
         location.setY(position.y());

@@ -4,11 +4,7 @@ import me.m56738.easyarmorstands.bone.MatrixBone;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.joml.Matrix3d;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class BoneRotationNode extends RotationNode {
     private final MatrixBone bone;
@@ -61,5 +57,10 @@ public class BoneRotationNode extends RotationNode {
     @Override
     public Component getName() {
         return name;
+    }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && bone.isValid();
     }
 }

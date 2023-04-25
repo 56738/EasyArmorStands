@@ -179,4 +179,9 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     public void setValue(Double value) {
         manualValue = value;
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && bone.isValid();
+    }
 }

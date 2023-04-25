@@ -67,4 +67,9 @@ public class EntityLocationBone implements YawBone {
                 location.getZ() + offset.z()
         ).rotateY(-Math.toRadians(location.getYaw()));
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

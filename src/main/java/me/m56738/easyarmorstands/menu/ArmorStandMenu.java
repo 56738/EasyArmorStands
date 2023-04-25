@@ -65,31 +65,31 @@ public class ArmorStandMenu extends InventoryMenu {
         ArmorStandRootNode root = session.findNode(ArmorStandRootNode.class);
         if (root != null) {
             setSlot(3, 7, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.HEAD),
+                    root.getPartButton(ArmorStandPart.HEAD),
                     ItemType.PLAYER_HEAD,
                     Component.text("head")));
             setSlot(4, 6, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.LEFT_ARM),
+                    root.getPartButton(ArmorStandPart.LEFT_ARM),
                     ItemType.LEVER,
                     Component.text("left arm")));
             setSlot(4, 7, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.BODY),
+                    root.getPartButton(ArmorStandPart.BODY),
                     ItemType.LEATHER_CHESTPLATE,
                     Component.text("body")));
             setSlot(4, 8, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.RIGHT_ARM),
+                    root.getPartButton(ArmorStandPart.RIGHT_ARM),
                     ItemType.LEVER,
                     Component.text("right arm")));
             setSlot(5, 6, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.LEFT_LEG),
+                    root.getPartButton(ArmorStandPart.LEFT_LEG),
                     ItemType.LEVER,
                     Component.text("left leg")));
             setSlot(5, 7, new SelectNodeSlot(this,
-                    root.getPositionNode(),
+                    root.getPositionButton(),
                     ItemType.BUCKET,
                     Component.text("position")));
             setSlot(5, 8, new SelectNodeSlot(this,
-                    root.getPartNode(ArmorStandPart.RIGHT_LEG),
+                    root.getPartButton(ArmorStandPart.RIGHT_LEG),
                     ItemType.LEVER,
                     Component.text("right leg")));
         }

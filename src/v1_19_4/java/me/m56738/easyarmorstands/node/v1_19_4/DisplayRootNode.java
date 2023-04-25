@@ -38,4 +38,9 @@ public class DisplayRootNode extends MenuNode implements EntityNode {
     public Entity getEntity() {
         return entity;
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && entity.isValid();
+    }
 }
