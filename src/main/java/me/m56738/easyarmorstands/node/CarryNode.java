@@ -48,7 +48,7 @@ public class CarryNode extends EditNode {
         Location location = player.getLocation();
         float yaw;
         if (location.getPitch() > 80) {
-            currentPosition.set(location.getX(), location.getY() + bone.getOffset(), location.getZ());
+            currentPosition.set(location.getX(), location.getY(), location.getZ()).add(bone.getOffset());
             yaw = location.getYaw();
         } else {
             Vector3dc cursor = this.cursor.get();

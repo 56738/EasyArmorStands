@@ -3,14 +3,16 @@ package me.m56738.easyarmorstands.node.v1_19_4;
 import me.m56738.easyarmorstands.menu.v1_19_4.ItemDisplayMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.ClickType;
-import me.m56738.easyarmorstands.node.ParentNode;
+import me.m56738.easyarmorstands.node.EntityNode;
+import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.joml.Vector3dc;
 
-public class DisplayRootNode extends ParentNode {
+public class DisplayRootNode extends MenuNode implements EntityNode {
     private final Session session;
     private final Display entity;
 
@@ -30,5 +32,10 @@ public class DisplayRootNode extends ParentNode {
         }
 
         return super.onClick(eyes, target, context);
+    }
+
+    @Override
+    public Entity getEntity() {
+        return entity;
     }
 }

@@ -1,25 +1,24 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.node.LazyNode;
-import me.m56738.easyarmorstands.session.EntityNodeProvider;
+import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 
-public class DisplayNodeProvider implements EntityNodeProvider {
+public class DisplayButtonProvider implements EntityButtonProvider {
     private final JOMLMapper mapper;
 
-    public DisplayNodeProvider(JOMLMapper mapper) {
+    public DisplayButtonProvider(JOMLMapper mapper) {
         this.mapper = mapper;
     }
 
     @Override
-    public DisplayNode createNode(Session session, Entity entity) {
+    public DisplayButton createButton(Session session, Entity entity) {
         if (!(entity instanceof Display)) {
             return null;
         }
         Display display = (Display) entity;
-        return new DisplayNode(session, new LazyNode(new DisplayNodeFactory(session, display, mapper)), display);
+        return new DisplayButton(session, display, mapper);
     }
 }

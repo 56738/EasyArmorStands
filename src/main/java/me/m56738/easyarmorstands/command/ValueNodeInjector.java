@@ -13,7 +13,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class ValueNodeInjector<C> implements ParameterInjector<C, ValueNode> {
     @Override
     public @Nullable ValueNode create(@NonNull CommandContext<C> context, @NonNull AnnotationAccessor annotationAccessor) {
-        Session session = SessionPreprocessor.getSession(context);
+        Session session = SessionPreprocessor.getSessionOrNull(context);
+        if (session == null) {
+            return null;
+        }
         Node node = session.getNode();
         if (!(node instanceof ValueNode)) {
             return null;

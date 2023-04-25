@@ -8,16 +8,17 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends ParentNode {
+public class ArmorStandRootNode extends MenuNode implements EntityNode {
     private final Session session;
     private final ArmorStand entity;
-    private final BoneNode positionNode;
-    private final EnumMap<ArmorStandPart, ArmorStandPartNode> partNodes = new EnumMap<>(ArmorStandPart.class);
+    private final BoneButton positionNode;
+    private final EnumMap<ArmorStandPart, ArmorStandPartButton> partNodes = new EnumMap<>(ArmorStandPart.class);
 
     public ArmorStandRootNode(Session session, ArmorStand entity) {
         super(session, Component.text("Select a bone"));
@@ -29,42 +30,42 @@ public class ArmorStandRootNode extends ParentNode {
         for (ArmorStandPart part : ArmorStandPart.values()) {
             ArmorStandPartBone bone = new ArmorStandPartBone(entity, part);
 
-            ParentNode localNode = new ParentNode(session, part.getName().append(Component.text(" (local)")));
-            localNode.addMoveNodes(session, bone, 3, true);
-            localNode.addRotationNodes(session, bone, 1, true);
+            MenuNode localNode = new MenuNode(session, part.getName().append(Component.text(" (local)")));
+            localNode.addMoveButtons(session, bone, 3, true);
+            localNode.addRotationButtons(session, bone, 1, true);
 
-            ParentNode globalNode = new ParentNode(session, part.getName().append(Component.text(" (global)")));
-            globalNode.addPositionNodes(session, bone, 3, true);
-            globalNode.addRotationNodes(session, bone, 1, false);
+            MenuNode globalNode = new MenuNode(session, part.getName().append(Component.text(" (global)")));
+            globalNode.addPositionButtons(session, bone, 3, true);
+            globalNode.addRotationButtons(session, bone, 1, false);
 
             localNode.setNextNode(globalNode);
             globalNode.setNextNode(localNode);
 
-            ArmorStandPartNode partNode = new ArmorStandPartNode(session, localNode, bone);
-            addNode(partNode);
+            ArmorStandPartButton partNode = new ArmorStandPartButton(session, bone, localNode);
+            addButton(partNode);
             partNodes.put(part, partNode);
         }
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(entity);
 
-        ParentNode positionNode = new ParentNode(session, Component.text("Position"));
-        positionNode.addNode(new YawBoneNode(session, Component.text("Rotate"), NamedTextColor.GOLD, 1, positionBone));
-        positionNode.addPositionNodes(session, positionBone, 3, true);
+        MenuNode positionNode = new MenuNode(session, Component.text("Position"));
+        positionNode.addButton(new YawBoneNode(session, Component.text("Rotate"), NamedTextColor.GOLD, 1, positionBone));
+        positionNode.addPositionButtons(session, positionBone, 3, true);
 
         CarryNode carryNode = new CarryNode(session, positionBone);
-        BoneNode carryBoneNode = new BoneNode(session, carryNode, positionBone, Component.text("Pick up"));
+        BoneButton carryBoneNode = new BoneButton(session, positionBone, carryNode, Component.text("Pick up"));
         carryBoneNode.setPriority(1);
-        positionNode.addNode(carryBoneNode);
+        positionNode.addButton(carryBoneNode);
 
-        this.positionNode = new BoneNode(session, positionNode, positionBone, Component.text("Position"));
-        addNode(this.positionNode);
+        this.positionNode = new BoneButton(session, positionBone, positionNode, Component.text("Position"));
+        addButton(this.positionNode);
     }
 
-    public BoneNode getPositionNode() {
+    public BoneButton getPositionNode() {
         return positionNode;
     }
 
-    public ArmorStandPartNode getPartNode(ArmorStandPart part) {
+    public ArmorStandPartButton getPartNode(ArmorStandPart part) {
         return partNodes.get(part);
     }
 
@@ -76,5 +77,10 @@ public class ArmorStandRootNode extends ParentNode {
             return true;
         }
         return super.onClick(eyes, target, context);
+    }
+
+    @Override
+    public Entity getEntity() {
+        return entity;
     }
 }

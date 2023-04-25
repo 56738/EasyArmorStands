@@ -19,12 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Matrix3d;
-import org.joml.Matrix3dc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -37,6 +33,8 @@ public class Util {
     public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
     public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
     public static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");
+
+    public static final Vector3dc ZERO = new Vector3d();
 
     public static final Vector3dc X = new Vector3d(1, 0, 0);
     public static final Vector3dc Y = new Vector3d(0, 1, 0);

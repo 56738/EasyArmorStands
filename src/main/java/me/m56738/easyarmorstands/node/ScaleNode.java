@@ -11,14 +11,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import org.joml.Matrix3d;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
-public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Double> {
+public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
     private final MatrixBone bone;
     private final Component name;
@@ -107,6 +104,11 @@ public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Doub
     }
 
     @Override
+    public Node createNode() {
+        return this;
+    }
+
+    @Override
     public Component getValueComponent(Double value) {
         return Component.text(Util.SCALE_FORMAT.format(value), TextColor.color(color));
     }
@@ -127,7 +129,7 @@ public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Doub
     }
 
     @Override
-    public Vector3dc updatePreview(Vector3dc eyes, Vector3dc target) {
+    public void update(Vector3dc eyes, Vector3dc target) {
         Matrix4dc matrix = bone.getMatrix();
         matrix.transformDirection(axis, direction).normalize();
         Vector3dc position = matrix.getTranslation(new Vector3d());
@@ -148,6 +150,10 @@ public class ScaleNode extends EditNode implements ClickableNode, ValueNode<Doub
         } else {
             lookTarget = null;
         }
+    }
+
+    @Override
+    public @Nullable Vector3dc getLookTarget() {
         return lookTarget;
     }
 

@@ -1,37 +1,38 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.session.EntityNodeProvider;
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.session.SessionManager;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.joml.Matrix3d;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class EntitySelectionNode extends ParentNode {
+public class EntitySelectionNode extends MenuNode {
     private final Session session;
-    private final Map<Entity, ClickableNode> nodes = new HashMap<>();
-    private final List<EntityNodeProvider> providers = new ArrayList<>();
+    private final Map<Entity, Button> buttons = new HashMap<>();
+    private final List<EntityButtonProvider> providers = new ArrayList<>();
 
     public EntitySelectionNode(Session session, Component name) {
         super(session, name);
         this.session = session;
     }
 
-    public void addProvider(EntityNodeProvider provider) {
+    public void addProvider(EntityButtonProvider provider) {
         providers.add(provider);
     }
 
     @Override
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
-        Set<Entity> removed = new HashSet<>(nodes.keySet());
+        Set<Entity> removed = new HashSet<>(buttons.keySet());
         double range = session.getRange();
         Player player = session.getPlayer();
         Location location = player.getLocation();
@@ -46,11 +47,11 @@ public class EntitySelectionNode extends ParentNode {
             }
 
             // entity is new, create a node for it
-            for (EntityNodeProvider provider : providers) {
-                EntityNode node = provider.createNode(session, entity);
+            for (EntityButtonProvider provider : providers) {
+                Button node = provider.createButton(session, entity);
                 if (node != null) {
-                    nodes.put(entity, node);
-                    addNode(node);
+                    buttons.put(entity, node);
+                    addButton(node);
                     break;
                 }
             }
@@ -58,7 +59,7 @@ public class EntitySelectionNode extends ParentNode {
 
         // remove nodes of entities which no longer exist
         for (Entity entity : removed) {
-            removeNode(nodes.remove(entity));
+            removeButton(buttons.remove(entity));
         }
 
         super.onUpdate(eyes, target);
@@ -73,11 +74,36 @@ public class EntitySelectionNode extends ParentNode {
         if (context.getType() == ClickType.RIGHT_CLICK) {
             Entity entity = context.getEntity();
             if (entity != null) {
-                ClickableNode node = nodes.get(entity);
-                if (node != null) {
-                    session.pushNode(node);
+                Button button = buttons.get(entity);
+                if (button != null) {
+                    session.pushNode(button.createNode());
                     return true;
                 }
+            }
+
+            if (session.getPlayer().isSneaking()) {
+                Player player = session.getPlayer();
+                Location eyeLocation = player.getEyeLocation();
+                Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
+                Vector3d position = new Vector3d(cursor);
+                if (!player.isFlying()) {
+                    position.y = 0;
+                }
+                position.add(Util.toVector3d(player.getLocation()));
+                SessionManager sessionManager = EasyArmorStands.getInstance().getSessionManager();
+                ArmorStand armorStand = sessionManager.spawn(player, position, eyeLocation.getYaw() + 180);
+                if (armorStand == null) {
+                    return false;
+                }
+                for (EntityButtonProvider provider : providers) {
+                    Button button = provider.createButton(session, armorStand);
+                    if (button != null) {
+                        session.pushNode(button.createNode());
+                        return true;
+                    }
+                }
+                armorStand.remove();
+                return false;
             }
         }
 

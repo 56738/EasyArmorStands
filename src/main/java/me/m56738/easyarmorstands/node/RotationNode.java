@@ -9,11 +9,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public abstract class RotationNode extends EditNode implements ClickableNode, ValueNode<Double> {
+public abstract class RotationNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
     private final TextColor color;
     private final Vector3d anchor;
@@ -109,11 +110,12 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
     protected abstract void apply(double angle, double degrees);
 
     @Override
-    public Vector3dc updatePreview(Vector3dc eyes, Vector3dc target) {
+    public void update(Vector3dc eyes, Vector3dc target) {
         refresh();
         Vector3dc direction = target.sub(eyes, new Vector3d());
         double threshold = session.getLookThreshold();
         double t = Util.intersectRayDoubleSidedPlane(eyes, direction, anchor, axis);
+        this.lookTarget = null;
         if (t >= 0 && t < session.getRange()) {
             // Looking at the plane
             Vector3d lookTarget = eyes.fma(t, direction, new Vector3d());
@@ -123,11 +125,18 @@ public abstract class RotationNode extends EditNode implements ClickableNode, Va
             if (d >= min * min && d <= max * max) {
                 // Looking at the circle
                 this.lookTarget = lookTarget;
-                return lookTarget;
             }
         }
-        this.lookTarget = null;
-        return null;
+    }
+
+    @Override
+    public @Nullable Vector3dc getLookTarget() {
+        return lookTarget;
+    }
+
+    @Override
+    public Node createNode() {
+        return this;
     }
 
     @Override

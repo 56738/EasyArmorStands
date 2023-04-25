@@ -7,17 +7,14 @@ import org.bukkit.entity.ArmorStand;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class ArmorStandNode extends ButtonNode implements EntityNode {
+public class ArmorStandButton extends SimpleButton {
+    private final Session session;
     private final ArmorStand entity;
 
-    public ArmorStandNode(Session session, Node node, ArmorStand entity) {
-        super(session, node);
+    public ArmorStandButton(Session session, ArmorStand entity) {
+        super(session);
+        this.session = session;
         this.entity = entity;
-    }
-
-    @Override
-    public ArmorStand getEntity() {
-        return entity;
     }
 
     @Override
@@ -36,5 +33,10 @@ public class ArmorStandNode extends ButtonNode implements EntityNode {
     @Override
     public Component getName() {
         return Component.text(entity.getUniqueId().toString());
+    }
+
+    @Override
+    public Node createNode() {
+        return new ArmorStandRootNode(session, entity);
     }
 }

@@ -16,12 +16,16 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryAction;
+import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
+import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +34,13 @@ import java.util.stream.Collectors;
 public class GlobalCommands {
     private final CommandManager<EasCommandSender> commandManager;
     private final MinecraftHelp<EasCommandSender> help;
+    private final SessionManager sessionManager;
     private final SessionListener sessionListener;
 
-    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionListener sessionListener) {
+    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionManager sessionManager, SessionListener sessionListener) {
         this.commandManager = commandManager;
         this.help = new MinecraftHelp<>("/eas help", s -> s, commandManager);
+        this.sessionManager = sessionManager;
         this.sessionListener = sessionListener;
     }
 
@@ -168,6 +174,21 @@ public class GlobalCommands {
                     Component.text(capability.getName()).hoverEvent(Component.text(capability.getType().getName())),
                     value
             ));
+        }
+
+        if (sender.get() instanceof Player) {
+            Session session = sessionManager.getSession(((Player) sender.get()));
+            sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
+            boolean first = true;
+            for (Node node : session.getNodeStack()) {
+                sender.sendMessage(
+                        Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
+                                .append(
+                                        Component.text(node.getClass().getSimpleName())
+                                                .hoverEvent(Component.text(node.getClass().getName()))
+                                ));
+                first = false;
+            }
         }
     }
 

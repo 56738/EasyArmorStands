@@ -12,11 +12,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class MoveNode extends EditNode implements ClickableNode, ValueNode<Double> {
+public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
     private final PositionBone bone;
     private final Component name;
@@ -117,7 +118,12 @@ public class MoveNode extends EditNode implements ClickableNode, ValueNode<Doubl
     }
 
     @Override
-    public Vector3dc updatePreview(Vector3dc eyes, Vector3dc target) {
+    public Node createNode() {
+        return this;
+    }
+
+    @Override
+    public void update(Vector3dc eyes, Vector3dc target) {
         if (local) {
             bone.getMatrix().transformDirection(axis, direction).normalize();
         }
@@ -141,6 +147,10 @@ public class MoveNode extends EditNode implements ClickableNode, ValueNode<Doubl
         } else {
             lookTarget = null;
         }
+    }
+
+    @Override
+    public @Nullable Vector3d getLookTarget() {
         return lookTarget;
     }
 

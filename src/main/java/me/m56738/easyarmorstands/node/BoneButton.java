@@ -6,13 +6,15 @@ import net.kyori.adventure.text.Component;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoneNode extends ButtonNode {
+public class BoneButton extends SimpleButton {
     private final Bone bone;
+    private final Node node;
     private final Component name;
 
-    public BoneNode(Session session, Node node, Bone bone, Component name) {
-        super(session, node);
+    public BoneButton(Session session, Bone bone, Node node, Component name) {
+        super(session);
         this.bone = bone;
+        this.node = node;
         this.name = name;
     }
 
@@ -24,5 +26,10 @@ public class BoneNode extends ButtonNode {
     @Override
     public Component getName() {
         return name;
+    }
+
+    @Override
+    public Node createNode() {
+        return node;
     }
 }

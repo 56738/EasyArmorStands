@@ -35,8 +35,9 @@ public class SessionManager {
 
     public Session start(Player player) {
         Session session = new Session(player);
-        session.addProvider(new ArmorStandNodeProvider());
+        session.addProvider(new ArmorStandButtonProvider());
         start(session);
+        session.addProvider(new DefaultEntityButtonProvider());
         return session;
     }
 
@@ -48,9 +49,10 @@ public class SessionManager {
         }
 
         Session session = start(player);
-        session.addProvider(new ArmorStandNodeProvider());
+        session.addProvider(new ArmorStandButtonProvider());
         session.pushNode(new ArmorStandRootNode(session, armorStand));
         start(session);
+        session.addProvider(new DefaultEntityButtonProvider());
         return session;
     }
 

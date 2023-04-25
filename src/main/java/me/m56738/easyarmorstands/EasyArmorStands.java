@@ -130,7 +130,7 @@ public class EasyArmorStands extends JavaPlugin {
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
-        annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
+        annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
         annotationParser.parse(new SessionCommands(sessionManager));
 
         new AddonLoader(this, getClassLoader()).load();

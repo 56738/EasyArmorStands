@@ -22,12 +22,15 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Intersectiond;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -51,6 +54,10 @@ public final class Session implements ForwardingAudience.Single {
 
     public Node getNode() {
         return nodeStack.peek();
+    }
+
+    public @UnmodifiableView List<Node> getNodeStack() {
+        return Collections.unmodifiableList(nodeStack);
     }
 
     public void pushNode(Node node) {
@@ -112,7 +119,7 @@ public final class Session implements ForwardingAudience.Single {
         return null;
     }
 
-    public void addProvider(EntityNodeProvider provider) {
+    public void addProvider(EntityButtonProvider provider) {
         rootNode.addProvider(provider);
     }
 
