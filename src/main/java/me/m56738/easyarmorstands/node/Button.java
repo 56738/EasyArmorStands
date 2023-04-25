@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public interface Button {
+public interface Button extends NodeFactory {
     void update(Vector3dc eyes, Vector3dc target);
 
     void showPreview(boolean focused);
@@ -27,5 +27,6 @@ public interface Button {
      *
      * @return The node which can be entered using this button.
      */
+    @Override
     Node createNode();
 }

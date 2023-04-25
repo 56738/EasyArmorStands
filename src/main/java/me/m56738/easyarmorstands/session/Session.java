@@ -22,6 +22,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Intersectiond;
 import org.joml.Math;
@@ -58,6 +59,16 @@ public final class Session implements ForwardingAudience.Single {
 
     public @UnmodifiableView List<Node> getNodeStack() {
         return Collections.unmodifiableList(nodeStack);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Node> @Nullable T findNode(Class<T> type) {
+        for (Node node : nodeStack) {
+            if (type.isAssignableFrom(node.getClass())) {
+                return (T) node;
+            }
+        }
+        return null;
     }
 
     public void pushNode(Node node) {

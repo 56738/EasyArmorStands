@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.node.NodeFactory;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,13 +14,13 @@ import java.util.Arrays;
 
 public class SelectNodeSlot implements InventorySlot {
     private final ArmorStandMenu menu;
-    private final Node node;
+    private final NodeFactory nodeFactory;
     private final ItemType type;
     private final Component name;
 
-    public SelectNodeSlot(ArmorStandMenu menu, Node node, ItemType type, Component name) {
+    public SelectNodeSlot(ArmorStandMenu menu, NodeFactory nodeFactory, ItemType type, Component name) {
         this.menu = menu;
-        this.node = node;
+        this.nodeFactory = nodeFactory;
         this.type = type;
         this.name = name;
     }
@@ -45,7 +45,7 @@ public class SelectNodeSlot implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-            menu.getSession().pushNode(node);
+            menu.getSession().pushNode(nodeFactory.createNode());
             menu.queueTask(() -> {
                 Player player = menu.getSession().getPlayer();
                 if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {

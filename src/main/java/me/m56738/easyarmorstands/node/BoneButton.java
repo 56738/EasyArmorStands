@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoneButton extends SimpleButton {
+public class BoneButton extends SimpleButton implements NodeFactory {
     private final Bone bone;
     private final Node node;
     private final Component name;

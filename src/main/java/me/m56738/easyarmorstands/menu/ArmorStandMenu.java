@@ -11,7 +11,10 @@ import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
 import me.m56738.easyarmorstands.inventory.DisabledSlot;
 import me.m56738.easyarmorstands.inventory.InventoryMenu;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
+import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.ArmorStandPart;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -59,34 +62,37 @@ public class ArmorStandMenu extends InventoryMenu {
         if (player.hasPermission("easyarmorstands.property.gravity")) {
             addButton(new ToggleGravitySlot(this, tickCapability));
         }
-//        setSlot(3, 7, new SelectBoneSlot(this,
-//                session.getBones().get("head"),
-//                ItemType.PLAYER_HEAD,
-//                Component.text("head")));
-//        setSlot(4, 6, new SelectBoneSlot(this,
-//                session.getBones().get("leftarm"),
-//                ItemType.LEVER,
-//                Component.text("left arm")));
-//        setSlot(4, 7, new SelectBoneSlot(this,
-//                session.getBones().get("body"),
-//                ItemType.LEATHER_CHESTPLATE,
-//                Component.text("body")));
-//        setSlot(4, 8, new SelectBoneSlot(this,
-//                session.getBones().get("rightarm"),
-//                ItemType.LEVER,
-//                Component.text("right arm")));
-//        setSlot(5, 6, new SelectBoneSlot(this,
-//                session.getBones().get("leftleg"),
-//                ItemType.LEVER,
-//                Component.text("left leg")));
-//        setSlot(5, 7, new SelectBoneSlot(this,
-//                session.getBones().get("position"),
-//                ItemType.BUCKET,
-//                Component.text("position")));
-//        setSlot(5, 8, new SelectBoneSlot(this,
-//                session.getBones().get("rightleg"),
-//                ItemType.LEVER,
-//                Component.text("right leg")));
+        ArmorStandRootNode root = session.findNode(ArmorStandRootNode.class);
+        if (root != null) {
+            setSlot(3, 7, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.HEAD),
+                    ItemType.PLAYER_HEAD,
+                    Component.text("head")));
+            setSlot(4, 6, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.LEFT_ARM),
+                    ItemType.LEVER,
+                    Component.text("left arm")));
+            setSlot(4, 7, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.BODY),
+                    ItemType.LEATHER_CHESTPLATE,
+                    Component.text("body")));
+            setSlot(4, 8, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.RIGHT_ARM),
+                    ItemType.LEVER,
+                    Component.text("right arm")));
+            setSlot(5, 6, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.LEFT_LEG),
+                    ItemType.LEVER,
+                    Component.text("left leg")));
+            setSlot(5, 7, new SelectNodeSlot(this,
+                    root.getPositionNode(),
+                    ItemType.BUCKET,
+                    Component.text("position")));
+            setSlot(5, 8, new SelectNodeSlot(this,
+                    root.getPartNode(ArmorStandPart.RIGHT_LEG),
+                    ItemType.LEVER,
+                    Component.text("right leg")));
+        }
         if (player.hasPermission("easyarmorstands.property.visible")) {
             addButton(new ToggleVisibilitySlot(this));
         }
