@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("java-library")
     alias(libs.plugins.plugin.yml)
@@ -121,7 +120,7 @@ registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
-    "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.22"))
+    "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.27"))
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core") {
         exclude("net.kyori", "adventure-api")
     }
