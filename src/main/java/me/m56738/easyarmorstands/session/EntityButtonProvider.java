@@ -6,4 +6,8 @@ import org.bukkit.entity.Entity;
 @FunctionalInterface
 public interface EntityButtonProvider {
     Button createButton(Session session, Entity entity);
+
+    default EntityButtonPriority getPriority() {
+        return EntityButtonPriority.NORMAL;
+    }
 }

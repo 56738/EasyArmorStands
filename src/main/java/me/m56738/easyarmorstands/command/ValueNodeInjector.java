@@ -21,6 +21,11 @@ public class ValueNodeInjector<C> implements ParameterInjector<C, ValueNode> {
         if (!(node instanceof ValueNode)) {
             return null;
         }
-        return (ValueNode) node;
+        ValueNode valueNode = (ValueNode) node;
+        String permission = valueNode.getValuePermission();
+        if (permission != null && !context.hasPermission(permission)) {
+            return null;
+        }
+        return valueNode;
     }
 }

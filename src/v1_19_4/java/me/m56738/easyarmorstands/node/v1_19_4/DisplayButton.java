@@ -11,16 +11,18 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
 import org.joml.Vector3dc;
 
-public class DisplayButton extends SimpleButton {
+public class DisplayButton<T extends Display> extends SimpleButton {
     private final Session session;
-    private final Display entity;
+    private final T entity;
     private final JOMLMapper mapper;
+    private final DisplayRootNodeFactory<T> factory;
 
-    public DisplayButton(Session session, Display entity, JOMLMapper mapper) {
+    public DisplayButton(Session session, T entity, JOMLMapper mapper, DisplayRootNodeFactory<T> factory) {
         super(session);
         this.session = session;
         this.entity = entity;
         this.mapper = mapper;
+        this.factory = factory;
     }
 
     @Override
@@ -37,13 +39,13 @@ public class DisplayButton extends SimpleButton {
     public Node createNode() {
         DisplayBone bone = new DisplayBone(entity, mapper);
 
-        MenuNode localNode = new DisplayRootNode(session, Component.text("Local"), entity);
+        MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);
         localNode.addMoveButtons(session, bone, 2, false);
         localNode.addRotationButtons(session, bone, 1, true);
         localNode.addScaleNodes(session, bone, 2);
 
-        MenuNode globalNode = new DisplayRootNode(session, Component.text("Global"), entity);
+        MenuNode globalNode = factory.createRootNode(session, Component.text("Global"), entity);
         globalNode.setRoot(true);
         globalNode.addPositionButtons(session, bone, 3, true);
         globalNode.addRotationButtons(session, bone, 1, false);

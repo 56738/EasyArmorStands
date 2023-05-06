@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.session.EntityButtonPriority;
 import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -10,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -19,15 +21,30 @@ import java.util.*;
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
     private final Map<Entity, Button> buttons = new HashMap<>();
-    private final List<EntityButtonProvider> providers = new ArrayList<>();
+    private final EnumMap<EntityButtonPriority, List<EntityButtonProvider>> providers = new EnumMap<>(EntityButtonPriority.class);
 
     public EntitySelectionNode(Session session, Component name) {
         super(session, name);
         this.session = session;
+        for (EntityButtonPriority priority : EntityButtonPriority.values()) {
+            this.providers.put(priority, new ArrayList<>());
+        }
     }
 
     public void addProvider(EntityButtonProvider provider) {
-        providers.add(provider);
+        providers.get(provider.getPriority()).add(provider);
+    }
+
+    private @Nullable Button createButton(Entity entity) {
+        for (EntityButtonPriority priority : EntityButtonPriority.values()) {
+            for (EntityButtonProvider provider : providers.get(priority)) {
+                Button button = provider.createButton(session, entity);
+                if (button != null) {
+                    return button;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -47,13 +64,11 @@ public class EntitySelectionNode extends MenuNode {
             }
 
             // entity is new, create a button for it
-            for (EntityButtonProvider provider : providers) {
-                Button button = provider.createButton(session, entity);
-                if (button != null) {
-                    buttons.put(entity, button);
-                    addButton(button);
-                    break;
-                }
+            Button button = createButton(entity);
+            if (button != null) {
+                buttons.put(entity, button);
+                addButton(button);
+                break;
             }
         }
 
@@ -95,12 +110,10 @@ public class EntitySelectionNode extends MenuNode {
                 if (armorStand == null) {
                     return false;
                 }
-                for (EntityButtonProvider provider : providers) {
-                    Button button = provider.createButton(session, armorStand);
-                    if (button != null) {
-                        session.pushNode(button.createNode());
-                        return true;
-                    }
+                Button button = createButton(armorStand);
+                if (button != null) {
+                    session.pushNode(button.createNode());
+                    return true;
                 }
                 armorStand.remove();
                 return false;

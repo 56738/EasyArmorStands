@@ -128,6 +128,8 @@ To fine-tune access, you can grant or deny individual permissions.
 | `easyarmorstands.destroy`               | Allows destroying selected armor stands.                                     | Creative |
 | `easyarmorstands.give`                  | Allows giving yourself the EasyArmorStand tool.                              | Creative |
 | `easyarmorstands.history`               | Allows undoing and redoing changes.                                          | Creative |
+| `easyarmorstands.set.display.block`     | Allows setting the block on a display entity using a command.                | Creative |
+| `easyarmorstands.set.display.item`      | Allows setting the item on a display entity using a command.                 | Creative |
 | `easyarmorstands.spawn`                 | Allows spawning armor stands.                                                | Creative |
 | `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 | Creative |
 | `easyarmorstands.debug`                 | Allows viewing debug information.                                            |          |

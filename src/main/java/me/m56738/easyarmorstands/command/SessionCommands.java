@@ -352,7 +352,7 @@ public class SessionCommands {
     public void align(
             EasCommandSender sender,
             Session session,
-            ArmorStand entity,
+            Entity entity,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset

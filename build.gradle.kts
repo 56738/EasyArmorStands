@@ -147,6 +147,8 @@ bukkit {
                     "easyarmorstands.destroy",
                     "easyarmorstands.give",
                     "easyarmorstands.history",
+                    "easyarmorstands.set.display.block",
+                    "easyarmorstands.set.display.item",
                     "easyarmorstands.spawn",
                     "easyarmorstands.survival",
                     "easyarmorstands.traincarts.model"
@@ -244,6 +246,12 @@ bukkit {
         }
         create("easyarmorstands.property.visible") {
             description = "Allows toggling armor stand visibility."
+        }
+        create("easyarmorstands.set.display.block") {
+            description = "Allows setting the block on a display entity using a command."
+        }
+        create("easyarmorstands.set.display.item") {
+            description = "Allows setting the item on a display entity using a command."
         }
         create("easyarmorstands.snap") {
             description = "Allows toggling position and angle snapping and configuring the increment."
