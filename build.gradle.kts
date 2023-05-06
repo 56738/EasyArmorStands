@@ -1,5 +1,8 @@
+import org.gradle.api.credentials.PasswordCredentials
+
 plugins {
     id("java-library")
+    id("maven-publish")
     alias(libs.plugins.plugin.yml)
     alias(libs.plugins.shadow)
 }
@@ -267,6 +270,23 @@ bukkit {
         }
         create("easyarmorstands.worldguard.bypass") {
             description = "Allows bypassing WorldGuard restrictions."
+        }
+    }
+}
+
+publishing {
+    repositories {
+        val snapshotUrl = "https://repo.bundlegroup.gg/repository/maven-snapshots/"
+        val releaseUrl = "https://repo.bundlegroup.gg/repository/maven-releases/"
+        maven(if (version.toString().endsWith("-SNAPSHOT")) snapshotUrl else releaseUrl) {
+            name = "bundlegroup"
+            credentials(PasswordCredentials::class)
+        }
+    }
+
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
         }
     }
 }
