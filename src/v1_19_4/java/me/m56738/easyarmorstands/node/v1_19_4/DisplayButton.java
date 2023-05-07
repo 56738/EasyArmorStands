@@ -43,7 +43,7 @@ public class DisplayButton<T extends Display> extends SimpleButton {
         localNode.setRoot(true);
         localNode.addMoveButtons(session, bone, 2, false);
         localNode.addRotationButtons(session, bone, 1, true);
-        localNode.addScaleNodes(session, bone, 2);
+        localNode.addScaleButtons(session, bone, 2);
 
         MenuNode globalNode = factory.createRootNode(session, Component.text("Global"), entity);
         globalNode.setRoot(true);

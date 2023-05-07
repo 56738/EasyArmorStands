@@ -95,7 +95,7 @@ public class MenuNode implements Node {
         }
     }
 
-    public void addScaleNodes(Session session, MatrixBone bone, double length) {
+    public void addScaleButtons(Session session, MatrixBone bone, double length) {
         for (Axis axis : Axis.values()) {
             addButton(new ScaleNode(
                     session,

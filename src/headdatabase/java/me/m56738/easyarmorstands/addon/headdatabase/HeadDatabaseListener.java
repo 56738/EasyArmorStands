@@ -29,6 +29,9 @@ public class HeadDatabaseListener implements Listener {
         }
         SessionManager sessionManager = plugin.getSessionManager();
         Session session = sessionManager.getSession(player);
+        if (session == null) {
+            return;
+        }
         Entity entity = session.getEntity();
         if (!(entity instanceof ArmorStand)) {
             return;

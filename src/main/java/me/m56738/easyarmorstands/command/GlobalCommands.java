@@ -7,15 +7,12 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
-import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
-import me.m56738.easyarmorstands.history.History;
-import me.m56738.easyarmorstands.history.HistoryAction;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -178,16 +175,18 @@ public class GlobalCommands {
 
         if (sender.get() instanceof Player) {
             Session session = sessionManager.getSession(((Player) sender.get()));
-            sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
-            boolean first = true;
-            for (Node node : session.getNodeStack()) {
-                sender.sendMessage(
-                        Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
-                                .append(
-                                        Component.text(node.getClass().getSimpleName())
-                                                .hoverEvent(Component.text(node.getClass().getName()))
-                                ));
-                first = false;
+            if (session != null) {
+                sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
+                boolean first = true;
+                for (Node node : session.getNodeStack()) {
+                    sender.sendMessage(
+                            Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
+                                    .append(
+                                            Component.text(node.getClass().getSimpleName())
+                                                    .hoverEvent(Component.text(node.getClass().getName()))
+                                    ));
+                    first = false;
+                }
             }
         }
     }

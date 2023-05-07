@@ -16,6 +16,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -94,11 +95,11 @@ public class SessionManager {
         sessions.clear();
     }
 
-    public Session getSession(Player player) {
+    public @Nullable Session getSession(Player player) {
         return sessions.get(player);
     }
 
-    public Session getSession(Entity entity) {
+    public @Nullable Session getSession(Entity entity) {
         for (Session session : sessions.values()) {
             if (session.getEntity() == entity) {
                 return session;

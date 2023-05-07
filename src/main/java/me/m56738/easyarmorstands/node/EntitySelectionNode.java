@@ -68,7 +68,6 @@ public class EntitySelectionNode extends MenuNode {
             if (button != null) {
                 buttons.put(entity, button);
                 addButton(button);
-                break;
             }
         }
 
