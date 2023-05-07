@@ -25,13 +25,19 @@ public class InventoryMenu implements InventoryListener {
         }
     }
 
+    public void setSlot(int index, InventorySlot slot) {
+        if (index < 0 || index >= slots.length) {
+            throw new IllegalArgumentException();
+        }
+        slots[index] = slot;
+        slot.initialize(index);
+    }
+
     public void setSlot(int row, int column, InventorySlot slot) {
         if (column < 0 || column >= 9 || row < 0 || row >= slots.length / 9) {
             throw new IllegalArgumentException();
         }
-        int index = row * 9 + column;
-        slots[index] = slot;
-        slot.initialize(index);
+        setSlot(row * 9 + column, slot);
     }
 
     @Override

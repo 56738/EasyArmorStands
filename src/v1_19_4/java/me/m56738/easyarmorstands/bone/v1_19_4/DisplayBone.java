@@ -1,6 +1,9 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.MatrixBone;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTransformationProperty;
+import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -8,12 +11,16 @@ import org.joml.Math;
 import org.joml.*;
 
 public class DisplayBone implements MatrixBone {
+    private final Session session;
     private final Display entity;
     private final JOMLMapper mapper;
+    private final DisplayTransformationProperty transformationProperty;
 
-    public DisplayBone(Display entity, JOMLMapper mapper) {
+    public DisplayBone(Session session, Display entity, JOMLMapper mapper, DisplayTransformationProperty transformationProperty) {
+        this.session = session;
         this.entity = entity;
         this.mapper = mapper;
+        this.transformationProperty = transformationProperty;
     }
 
     @Override
@@ -29,7 +36,7 @@ public class DisplayBone implements MatrixBone {
                 position.x() - oldPosition.x(),
                 position.y() - oldPosition.y(),
                 position.z() - oldPosition.z());
-        entity.teleport(location);
+        session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
     }
 
     @Override
@@ -50,7 +57,7 @@ public class DisplayBone implements MatrixBone {
                 position.x() - oldPosition.x(),
                 position.y() - oldPosition.y(),
                 position.z() - oldPosition.z());
-        entity.teleport(location);
+        session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
         setTransformation(matrix.translateLocal(
                 -location.getX(),
                 -location.getY(),
@@ -68,6 +75,6 @@ public class DisplayBone implements MatrixBone {
     }
 
     public void setTransformation(Matrix4dc transformation) {
-        entity.setTransformation(mapper.getTransformation(new Matrix4f(transformation)));
+        session.setProperty(entity, transformationProperty, mapper.getTransformation(new Matrix4f(transformation)));
     }
 }

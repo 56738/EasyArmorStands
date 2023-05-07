@@ -12,7 +12,7 @@ public class DefaultEntityNode extends MenuNode implements EntityNode {
     public DefaultEntityNode(Session session, Entity entity) {
         super(session, Component.text("Position"));
         this.entity = entity;
-        PositionBone positionBone = new EntityLocationBone(entity);
+        PositionBone positionBone = new EntityLocationBone(session, entity);
         addPositionButtons(session, positionBone, 3, true);
         setRoot(true);
     }

@@ -1,7 +1,8 @@
 package me.m56738.easyarmorstands.bone;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
@@ -9,10 +10,12 @@ import org.joml.Math;
 import org.joml.*;
 
 public class ArmorStandPartBone implements MatrixBone {
+    private final Session session;
     private final ArmorStand armorStand;
     private final ArmorStandPart part;
 
-    public ArmorStandPartBone(ArmorStand armorStand, ArmorStandPart part) {
+    public ArmorStandPartBone(Session session, ArmorStand armorStand, ArmorStandPart part) {
+        this.session = session;
         this.armorStand = armorStand;
         this.part = part;
     }
@@ -46,10 +49,10 @@ public class ArmorStandPartBone implements MatrixBone {
         location.setX(translation.x);
         location.setY(translation.y);
         location.setZ(translation.z);
-        armorStand.teleport(location);
+        session.setProperty(armorStand, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
 
         Matrix3d rotation = matrix.get3x3(new Matrix3d()).rotateLocalY(-rotY);
-        part.setPose(armorStand, Util.toEuler(rotation));
+        session.setProperty(armorStand, EasyArmorStands.getInstance().getArmorStandPoseProperty(part), rotation);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class ArmorStandPartBone implements MatrixBone {
         location.setX(position.x() - rotatedOffset.x);
         location.setY(position.y() - rotatedOffset.y);
         location.setZ(position.z() - rotatedOffset.z);
-        armorStand.teleport(location);
+        session.setProperty(armorStand, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
     }
 
     public Vector3dc getEnd() {

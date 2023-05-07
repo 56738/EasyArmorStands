@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.session.v1_19_4;
 
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.node.v1_19_4.*;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTransformationProperty;
 import me.m56738.easyarmorstands.session.EntityButtonPriority;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
@@ -14,9 +15,11 @@ import org.bukkit.event.Listener;
 
 public class DisplaySessionListener implements Listener {
     private final JOMLMapper mapper;
+    private final DisplayTransformationProperty transformationProperty;
 
-    public DisplaySessionListener(JOMLMapper mapper) {
+    public DisplaySessionListener(JOMLMapper mapper, DisplayTransformationProperty transformationProperty) {
         this.mapper = mapper;
+        this.transformationProperty = transformationProperty;
     }
 
     @EventHandler
@@ -27,6 +30,6 @@ public class DisplaySessionListener implements Listener {
     }
 
     private <T extends Display> void register(Session session, Class<T> type, DisplayRootNodeFactory<T> factory, EntityButtonPriority priority) {
-        session.addProvider(new DisplayButtonProvider<>(type, mapper, factory, priority));
+        session.addProvider(new DisplayButtonProvider<>(type, mapper, transformationProperty, factory, priority));
     }
 }

@@ -5,11 +5,12 @@ import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.location.Location;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
-import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
-import me.m56738.easyarmorstands.event.SessionMoveEvent;
-import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
+import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
+import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,9 +40,9 @@ public class PlotSquaredListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onStartSession(SessionStartEvent event) {
-        ArmorStand armorStand = event.getArmorStand();
-        Location location = BukkitUtil.adapt(armorStand.getLocation());
+    public void onStartSession(SessionSelectEntityEvent event) {
+        Entity entity = event.getEntity();
+        Location location = BukkitUtil.adapt(entity.getLocation());
         if (isAllowed(event.getPlayer(), location)) {
             return;
         }
@@ -52,7 +53,7 @@ public class PlotSquaredListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSpawn(ArmorStandPreSpawnEvent event) {
+    public void onSpawn(SessionPreSpawnEvent event) {
         Location location = BukkitUtil.adapt(event.getLocation());
         if (isAllowed(event.getPlayer(), location)) {
             return;
@@ -64,8 +65,11 @@ public class PlotSquaredListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onMoveSession(SessionMoveEvent event) {
-        Location location = BukkitUtil.adapt(event.getLocation());
+    public void onMoveSession(SessionEditEntityEvent<?, ?> event) {
+        if (!(event.getProperty() instanceof EntityLocationProperty)) {
+            return;
+        }
+        Location location = BukkitUtil.adapt((org.bukkit.Location) event.getNewValue());
         if (isAllowed(event.getPlayer(), location)) {
             return;
         }

@@ -1,13 +1,23 @@
 package me.m56738.easyarmorstands.history;
 
+import me.m56738.easyarmorstands.history.action.Action;
+
 import java.util.ArrayDeque;
 import java.util.UUID;
 
 public class History {
-    private final ArrayDeque<HistoryAction> past = new ArrayDeque<>();
-    private final ArrayDeque<HistoryAction> future = new ArrayDeque<>();
+    private final ArrayDeque<Action> past = new ArrayDeque<>();
+    private final ArrayDeque<Action> future = new ArrayDeque<>();
 
-    public void push(HistoryAction action) {
+    public ArrayDeque<Action> getPast() {
+        return past;
+    }
+
+    public ArrayDeque<Action> getFuture() {
+        return future;
+    }
+
+    public void push(Action action) {
         past.push(action);
         future.clear();
         while (past.size() > 100) {
@@ -15,16 +25,16 @@ public class History {
         }
     }
 
-    public HistoryAction takeUndoAction() {
-        HistoryAction action = past.poll();
+    public Action takeUndoAction() {
+        Action action = past.poll();
         if (action != null) {
             future.push(action);
         }
         return action;
     }
 
-    public HistoryAction takeRedoAction() {
-        HistoryAction action = future.poll();
+    public Action takeRedoAction() {
+        Action action = future.poll();
         if (action != null) {
             past.push(action);
         }
@@ -32,10 +42,10 @@ public class History {
     }
 
     public void onEntityReplaced(UUID oldId, UUID newId) {
-        for (HistoryAction action : past) {
+        for (Action action : past) {
             action.onEntityReplaced(oldId, newId);
         }
-        for (HistoryAction action : future) {
+        for (Action action : future) {
             action.onEntityReplaced(oldId, newId);
         }
     }

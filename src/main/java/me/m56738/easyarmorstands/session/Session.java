@@ -3,11 +3,15 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.event.SessionMoveEvent;
+import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
+import me.m56738.easyarmorstands.history.History;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.history.action.GroupAction;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -29,9 +33,7 @@ import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -41,6 +43,10 @@ public final class Session implements ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final ParticleCapability particleCapability;
+    @SuppressWarnings("rawtypes")
+    private final Map<ChangeKey, Object> originalValues = new HashMap<>();
+    @SuppressWarnings("rawtypes")
+    private final Map<ChangeKey, Object> pendingValues = new HashMap<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -124,6 +130,46 @@ public final class Session implements ForwardingAudience.Single {
         return node.onClick(eyes, target, context);
     }
 
+    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value) {
+        T oldValue = property.getValue(entity);
+        if (Objects.equals(oldValue, value)) {
+            return true;
+        }
+
+        SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        property.setValue(entity, value);
+        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
+        originalValues.putIfAbsent(key, oldValue);
+        pendingValues.put(key, value);
+        return true;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void commit() {
+        List<EntityPropertyAction> actions = new ArrayList<>();
+        for (Map.Entry<ChangeKey, Object> entry : pendingValues.entrySet()) {
+            ChangeKey key = entry.getKey();
+            Object oldValue = originalValues.get(key);
+            Object value = entry.getValue();
+            if (!Objects.equals(oldValue, value)) {
+                actions.add(new EntityPropertyAction(key.entity, key.property, oldValue, value));
+            }
+        }
+        History history = EasyArmorStands.getInstance().getHistory(player);
+        if (actions.size() > 1) {
+            history.push(new GroupAction(actions));
+        } else if (actions.size() == 1) {
+            history.push(actions.get(0));
+        }
+        originalValues.clear();
+        pendingValues.clear();
+    }
+
     public double snap(double value) {
         return Util.snap(value, snapIncrement);
     }
@@ -184,7 +230,6 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     public void stop() {
-        commit();
         Node currentNode = nodeStack.peek();
         if (currentNode != null) {
             currentNode.onExit();
@@ -195,6 +240,7 @@ public final class Session implements ForwardingAudience.Single {
         nodeStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
+        commit();
     }
 
     public Player getPlayer() {
@@ -289,19 +335,6 @@ public final class Session implements ForwardingAudience.Single {
         showCircle(center, axis, Util.toColor(color), radius);
     }
 
-    public void commit() {
-    }
-
-    public boolean canTeleport(Entity entity, Location location) {
-        SessionMoveEvent event = new SessionMoveEvent(this, entity, location);
-        Bukkit.getPluginManager().callEvent(event);
-        return !event.isCancelled();
-    }
-
-    public boolean teleport(Entity entity, Location location) {
-        return canTeleport(entity, location) && entity.teleport(location);
-    }
-
     public boolean isLookingAtPoint(Vector3dc eyes, Vector3dc target, Vector3dc position) {
         Vector3d closestOnEyeRay = Intersectiond.findClosestPointOnLineSegment(
                 eyes.x(), eyes.y(), eyes.z(),
@@ -310,5 +343,33 @@ public final class Session implements ForwardingAudience.Single {
                 new Vector3d());
         double threshold = getLookThreshold();
         return position.distanceSquared(closestOnEyeRay) < threshold * threshold;
+    }
+
+    public void selectEntity(Entity entity) {
+        clearNode();
+        rootNode.selectEntity(entity);
+    }
+
+    private static class ChangeKey<E extends Entity, T> {
+        private final E entity;
+        private final EntityProperty<E, T> property;
+
+        public ChangeKey(E entity, EntityProperty<E, T> property) {
+            this.entity = entity;
+            this.property = property;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChangeKey<?, ?> changeKey = (ChangeKey<?, ?>) o;
+            return Objects.equals(entity, changeKey.entity) && Objects.equals(property, changeKey.property);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(entity, property);
+        }
     }
 }

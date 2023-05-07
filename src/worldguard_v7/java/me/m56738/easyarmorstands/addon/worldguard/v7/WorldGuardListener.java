@@ -9,12 +9,13 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.sk89q.worldguard.session.SessionManager;
-import me.m56738.easyarmorstands.event.ArmorStandPreSpawnEvent;
-import me.m56738.easyarmorstands.event.SessionMoveEvent;
-import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
+import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
+import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,9 +46,9 @@ public class WorldGuardListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onStartSession(SessionStartEvent event) {
-        ArmorStand armorStand = event.getArmorStand();
-        if (isAllowed(event.getPlayer(), armorStand.getLocation())) {
+    public void onStartSession(SessionSelectEntityEvent event) {
+        Entity entity = event.getEntity();
+        if (isAllowed(event.getPlayer(), entity.getLocation())) {
             return;
         }
         if (event.getPlayer().hasPermission(bypassPermission)) {
@@ -57,7 +58,7 @@ public class WorldGuardListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSpawn(ArmorStandPreSpawnEvent event) {
+    public void onSpawn(SessionPreSpawnEvent event) {
         if (isAllowed(event.getPlayer(), event.getLocation())) {
             return;
         }
@@ -68,8 +69,11 @@ public class WorldGuardListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onMoveSession(SessionMoveEvent event) {
-        if (isAllowed(event.getPlayer(), event.getLocation())) {
+    public void onMoveSession(SessionEditEntityEvent<?, ?> event) {
+        if (!(event.getProperty() instanceof EntityLocationProperty)) {
+            return;
+        }
+        if (isAllowed(event.getPlayer(), (Location) event.getNewValue())) {
             return;
         }
         if (bypassCache.computeIfAbsent(event.getSession(), this::canBypass)) {

@@ -4,13 +4,12 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
 import me.m56738.easyarmorstands.capability.entityplace.EntityPlaceEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.history.DestroyArmorStandAction;
-import me.m56738.easyarmorstands.history.SpawnArmorStandAction;
+import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
+import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.inventory.InventoryListener;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,21 +17,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.DragType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
@@ -82,7 +68,7 @@ public class SessionListener implements Listener {
             return false;
         }
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            manager.spawnAndStart(player);
+//            manager.spawnAndStart(player);
             return true;
         }
         manager.start(player);
@@ -194,31 +180,23 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
-    public void onPlaceArmorStand(EntityPlaceEvent event) {
+    public void onPlaceEntity(EntityPlaceEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof ArmorStand)) {
-            return;
-        }
-        ArmorStand armorStand = (ArmorStand) entity;
         Player player = event.getPlayer();
-        EasyArmorStands.getInstance().getHistory(player).push(new SpawnArmorStandAction(armorStand));
+        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onDestroyArmorStand(EntityDamageByEntityEvent event) {
+    public void onDestroyEntity(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
         if (!(damager instanceof Player)) {
             return;
         }
         Player player = (Player) damager;
         Entity entity = event.getEntity();
-        if (!(entity instanceof ArmorStand)) {
-            return;
-        }
-        ArmorStand armorStand = (ArmorStand) entity;
         Bukkit.getScheduler().runTask(plugin, () -> {
-            if (armorStand.isDead()) {
-                EasyArmorStands.getInstance().getHistory(player).push(new DestroyArmorStandAction(armorStand));
+            if (entity.isDead()) {
+                EasyArmorStands.getInstance().getHistory(player).push(new EntityDestroyAction<>(entity));
             }
         });
     }

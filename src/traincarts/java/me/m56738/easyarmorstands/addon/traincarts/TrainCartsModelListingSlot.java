@@ -1,9 +1,11 @@
 package me.m56738.easyarmorstands.addon.traincarts;
 
+import com.bergerkiller.bukkit.tc.TrainCarts;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.command.EasPlayer;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.menu.ArmorStandMenu;
+import me.m56738.easyarmorstands.menu.EntityMenu;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -13,11 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 public class TrainCartsModelListingSlot implements InventorySlot {
-    private final TrainCartsIntegration integration;
-    private final ArmorStandMenu menu;
+    private final EntityMenu<?> menu;
 
-    public TrainCartsModelListingSlot(TrainCartsIntegration integration, ArmorStandMenu menu) {
-        this.integration = integration;
+    public TrainCartsModelListingSlot(EntityMenu<?> menu) {
         this.menu = menu;
     }
 
@@ -42,7 +42,19 @@ public class TrainCartsModelListingSlot implements InventorySlot {
             return false;
         }
         EasPlayer player = new EasPlayer(menu.getSession().getPlayer(), menu.getSession().audience());
-        menu.queueTask(() -> integration.openModelMenu(player, menu.getSession(), menu.getEntity(), ""));
+        menu.queueTask(() -> {
+            TrainCarts.plugin.getModelListing().buildDialog(player.get(), EasyArmorStands.getInstance())
+                    .cancelOnRootRightClick()
+                    .show()
+                    .thenAccept(result -> {
+                        if (result.cancelledWithRootRightClick()) {
+                            player.get().openInventory(menu.getInventory());
+                        } else if (result.success()) {
+                            player.get().openInventory(menu.getInventory());
+                            player.get().setItemOnCursor(result.selectedItem());
+                        }
+                    });
+        });
         return false;
     }
 }

@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.node.SimpleButton;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTransformationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
@@ -15,13 +16,15 @@ public class DisplayButton<T extends Display> extends SimpleButton {
     private final Session session;
     private final T entity;
     private final JOMLMapper mapper;
+    private final DisplayTransformationProperty transformationProperty;
     private final DisplayRootNodeFactory<T> factory;
 
-    public DisplayButton(Session session, T entity, JOMLMapper mapper, DisplayRootNodeFactory<T> factory) {
+    public DisplayButton(Session session, T entity, JOMLMapper mapper, DisplayTransformationProperty transformationProperty, DisplayRootNodeFactory<T> factory) {
         super(session);
         this.session = session;
         this.entity = entity;
         this.mapper = mapper;
+        this.transformationProperty = transformationProperty;
         this.factory = factory;
     }
 
@@ -37,7 +40,7 @@ public class DisplayButton<T extends Display> extends SimpleButton {
 
     @Override
     public Node createNode() {
-        DisplayBone bone = new DisplayBone(entity, mapper);
+        DisplayBone bone = new DisplayBone(session, entity, mapper, transformationProperty);
 
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);

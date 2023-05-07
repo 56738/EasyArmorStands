@@ -1,19 +1,13 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.session.EntityButtonPriority;
 import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.session.SessionManager;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3d;
-import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.*;
@@ -96,29 +90,33 @@ public class EntitySelectionNode extends MenuNode {
             }
 
             if (session.getPlayer().isSneaking()) {
-                Player player = session.getPlayer();
-                Location eyeLocation = player.getEyeLocation();
-                Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
-                Vector3d position = new Vector3d(cursor);
-                if (!player.isFlying()) {
-                    position.y = 0;
-                }
-                position.add(Util.toVector3d(player.getLocation()));
-                SessionManager sessionManager = EasyArmorStands.getInstance().getSessionManager();
-                ArmorStand armorStand = sessionManager.spawn(player, position, eyeLocation.getYaw() + 180);
-                if (armorStand == null) {
-                    return false;
-                }
-                Button button = createButton(armorStand);
-                if (button != null) {
-                    session.pushNode(button.createNode());
-                    return true;
-                }
-                armorStand.remove();
-                return false;
+//                Player player = session.getPlayer();
+//                Location eyeLocation = player.getEyeLocation();
+//                Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
+//                Vector3d position = new Vector3d(cursor);
+//                if (!player.isFlying()) {
+//                    position.y = 0;
+//                }
+//                position.add(Util.toVector3d(player.getLocation()));
+//                SessionManager sessionManager = EasyArmorStands.getInstance().getSessionManager();
+//                ArmorStand armorStand = sessionManager.spawn(player, position, eyeLocation.getYaw() + 180);
+//                if (armorStand == null) {
+//                    return false;
+//                }
+//                ArmorStandRootNode rootNode = new ArmorStandRootNode(session, armorStand);
+//                session.pushNode(rootNode);
+//                session.pushNode(rootNode.getCarryButton().createNode());
+//                return true;
             }
         }
 
         return false;
+    }
+
+    public void selectEntity(Entity entity) {
+        Button button = createButton(entity);
+        if (button != null) {
+            session.pushNode(button.createNode());
+        }
     }
 }

@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.node.v1_19_4;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.bukkit.data.ProtoItemStack;
 import cloud.commandframework.bukkit.parsers.ItemStackArgument;
-import me.m56738.easyarmorstands.menu.v1_19_4.ItemDisplayMenu;
+import me.m56738.easyarmorstands.menu.EntityMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.ClickType;
 import me.m56738.easyarmorstands.node.ValueNode;
@@ -27,7 +27,7 @@ public class ItemDisplayRootNode extends DisplayRootNode implements ValueNode<Pr
     @Override
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         if (context.getType() == ClickType.LEFT_CLICK) {
-            session.getPlayer().openInventory(new ItemDisplayMenu(session, entity).getInventory());
+            session.getPlayer().openInventory(new EntityMenu<>(6, "EasyArmorStands: Item display", session, entity).getInventory());
             return true;
         }
 

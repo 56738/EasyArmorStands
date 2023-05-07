@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands;
 
+import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.StandardParameters;
@@ -11,43 +12,46 @@ import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.paper.PaperCommandManager;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.command.CapabilityInjectionService;
-import me.m56738.easyarmorstands.command.CommandSenderWrapper;
-import me.m56738.easyarmorstands.command.EasCommandSender;
-import me.m56738.easyarmorstands.command.EntityInjectionService;
-import me.m56738.easyarmorstands.command.EntityPreprocessor;
-import me.m56738.easyarmorstands.command.GlobalCommands;
-import me.m56738.easyarmorstands.command.NoEntityException;
-import me.m56738.easyarmorstands.command.NoSessionException;
-import me.m56738.easyarmorstands.command.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.PipelineExceptionHandler;
-import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.command.SessionInjector;
-import me.m56738.easyarmorstands.command.SessionPreprocessor;
-import me.m56738.easyarmorstands.command.ValueNodeInjector;
+import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.capability.glow.GlowCapability;
+import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
+import me.m56738.easyarmorstands.capability.lock.LockCapability;
+import me.m56738.easyarmorstands.capability.tick.TickCapability;
+import me.m56738.easyarmorstands.command.*;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
+import me.m56738.easyarmorstands.property.armorstand.*;
+import me.m56738.easyarmorstands.property.entity.*;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
+import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.EnumMap;
 import java.util.logging.Level;
 
 public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
+    private final EnumMap<ArmorStandPart, ArmorStandPoseProperty> armorStandPoseProperties =
+            new EnumMap<>(ArmorStandPart.class);
+    private EntityPropertyRegistry entityPropertyRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private BukkitAudiences adventure;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
+    private EntityLocationProperty entityLocationProperty;
 
     public static EasyArmorStands getInstance() {
         return instance;
@@ -109,6 +113,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
         commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
+        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
 
         PipelineExceptionHandler.register(commandManager);
 
@@ -125,13 +130,69 @@ public class EasyArmorStands extends JavaPlugin {
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
 
+        Command.Builder<EasCommandSender> rootBuilder = commandManager.commandBuilder("eas", "easyarmorstands");
+
+        entityPropertyRegistry = new EntityPropertyRegistry(commandManager, rootBuilder);
+
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> CommandMeta.simple()
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
-        annotationParser.parse(new SessionCommands(sessionManager));
+        SessionCommands sessionCommands = new SessionCommands(sessionManager);
+        annotationParser.parse(sessionCommands);
+        annotationParser.parse(new HistoryCommands());
+
+        EquipmentCapability equipmentCapability = this.getCapability(EquipmentCapability.class);
+        entityPropertyRegistry.register(new EntityEquipmentProperty(
+                equipmentCapability, EquipmentSlot.HEAD, "helmet", Component.text("helmet"), 2, 1));
+        EquipmentSlot offHand = this.getCapability(EquipmentCapability.class).getOffHand();
+        if (offHand != null) {
+            entityPropertyRegistry.register(new EntityEquipmentProperty(
+                    equipmentCapability, offHand, "offhand", Component.text("off hand"), 3, 0));
+        }
+        entityPropertyRegistry.register(new EntityEquipmentProperty(
+                equipmentCapability, EquipmentSlot.CHEST, "chestplate", Component.text("chestplate"), 3, 1));
+        entityPropertyRegistry.register(new EntityEquipmentProperty(
+                equipmentCapability, EquipmentSlot.HAND, "mainhand", Component.text("main hand"), 3, 2));
+        entityPropertyRegistry.register(new EntityEquipmentProperty(
+                equipmentCapability, EquipmentSlot.LEGS, "leggings", Component.text("leggings"), 4, 1));
+        entityPropertyRegistry.register(new EntityEquipmentProperty(
+                equipmentCapability, EquipmentSlot.FEET, "boots", Component.text("boots"), 5, 1));
+        entityPropertyRegistry.register(new ArmorStandArmsProperty());
+        entityPropertyRegistry.register(new ArmorStandSizeProperty());
+        entityPropertyRegistry.register(new ArmorStandBasePlateProperty());
+        TickCapability tickCapability = this.getCapability(TickCapability.class);
+        ArmorStandCanTickProperty canTickProperty = null;
+        if (tickCapability != null) {
+            canTickProperty = new ArmorStandCanTickProperty(tickCapability);
+            entityPropertyRegistry.register(canTickProperty);
+        }
+        entityPropertyRegistry.register(new ArmorStandGravityProperty(canTickProperty));
+        entityPropertyRegistry.register(new ArmorStandVisibilityProperty());
+        LockCapability lockCapability = this.getCapability(LockCapability.class);
+        if (lockCapability != null) {
+            entityPropertyRegistry.register(new ArmorStandLockProperty(lockCapability));
+        }
+        GlowCapability glowCapability = this.getCapability(GlowCapability.class);
+        if (glowCapability != null) {
+            entityPropertyRegistry.register(new EntityGlowingProperty(glowCapability));
+        }
+        InvulnerabilityCapability invulnerabilityCapability = this.getCapability(InvulnerabilityCapability.class);
+        if (invulnerabilityCapability != null) {
+            entityPropertyRegistry.register(new ArmorStandInvulnerabilityProperty(invulnerabilityCapability));
+        }
+        entityPropertyRegistry.register(new ArmorStandMarkerProperty());
+        for (ArmorStandPart part : ArmorStandPart.values()) {
+            ArmorStandPoseProperty property = new ArmorStandPoseProperty(part);
+            entityPropertyRegistry.register(property);
+            armorStandPoseProperties.put(part, property);
+        }
+        entityPropertyRegistry.register(new EntityCustomNameProperty(getCapability(ComponentCapability.class)));
+        entityPropertyRegistry.register(new EntityCustomNameVisibleProperty());
+        entityLocationProperty = new EntityLocationProperty();
+        entityPropertyRegistry.register(entityLocationProperty);
 
         new AddonLoader(this, getClassLoader()).load();
     }
@@ -153,6 +214,10 @@ public class EasyArmorStands extends JavaPlugin {
         return loader;
     }
 
+    public EntityPropertyRegistry getEntityPropertyRegistry() {
+        return entityPropertyRegistry;
+    }
+
     public SessionManager getSessionManager() {
         return sessionManager;
     }
@@ -171,5 +236,13 @@ public class EasyArmorStands extends JavaPlugin {
 
     public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
+    }
+
+    public EntityLocationProperty getEntityLocationProperty() {
+        return entityLocationProperty;
+    }
+
+    public ArmorStandPoseProperty getArmorStandPoseProperty(ArmorStandPart part) {
+        return armorStandPoseProperties.get(part);
     }
 }

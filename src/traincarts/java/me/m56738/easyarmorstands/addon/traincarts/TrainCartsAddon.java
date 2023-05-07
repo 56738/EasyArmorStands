@@ -22,9 +22,7 @@ public class TrainCartsAddon implements Addon {
 
     @Override
     public void enable(EasyArmorStands plugin) {
-        TrainCartsIntegration integration = new TrainCartsIntegration(plugin);
-        TrainCartsListener listener = new TrainCartsListener(integration);
-        plugin.getAnnotationParser().parse(integration);
+        TrainCartsListener listener = new TrainCartsListener();
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 }

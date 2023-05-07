@@ -8,11 +8,12 @@ import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,6 +25,7 @@ import org.joml.*;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -70,6 +72,21 @@ public class Util {
         return format3D(angle, ANGLE_FORMAT);
     }
 
+    public static Component formatAngle(EulerAngle angle) {
+        return formatAngle(new Vector3d(
+                Math.toDegrees(angle.getX()),
+                Math.toDegrees(angle.getY()),
+                Math.toDegrees(angle.getZ())));
+    }
+
+    public static Component formatYawPitch(float yaw, float pitch) {
+        return Component.text()
+                .append(Component.text(ANGLE_FORMAT.format(yaw)))
+                .append(Component.text(", "))
+                .append(Component.text(ANGLE_FORMAT.format(pitch)))
+                .build();
+    }
+
     public static Matrix3d fromEuler(EulerAngle angle, Matrix3d dest) {
         dest.rotationZYX(-angle.getZ(), -angle.getY(), angle.getX());
         return dest;
@@ -100,12 +117,13 @@ public class Util {
         return Color.fromRGB(color.red(), color.green(), color.blue());
     }
 
-    public static @Nullable ArmorStand getArmorStand(UUID uuid) {
+    @SuppressWarnings("unchecked")
+    public static <T> @Nullable T getEntity(UUID uuid, Class<T> type) {
         Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
-        if (!(entity instanceof ArmorStand)) {
+        if (entity == null || !type.isAssignableFrom(entity.getClass())) {
             return null;
         }
-        return (ArmorStand) entity;
+        return (T) entity;
     }
 
     public static ItemStack createTool() {
@@ -155,6 +173,15 @@ public class Util {
         componentCapability.setLore(meta, lore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static ItemStack createItem(ItemType type, String title, List<String> lore, TagResolver resolver) {
+        Component titleComponent = MiniMessage.miniMessage().deserialize(title, resolver);
+        List<Component> loreComponents = new ArrayList<>(lore.size());
+        for (String line : lore) {
+            loreComponents.add(MiniMessage.miniMessage().deserialize(line, resolver));
+        }
+        return Util.createItem(type, titleComponent, loreComponents);
     }
 
     public static double intersectRayDoubleSidedPlane(

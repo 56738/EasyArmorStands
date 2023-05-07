@@ -22,7 +22,7 @@ public class ArmorStandPartButton extends SimpleButton {
 
     @Override
     public Component getName() {
-        return bone.getPart().getName();
+        return bone.getPart().getDisplayName();
     }
 
     @Override

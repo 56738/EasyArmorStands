@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.event;
 
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,14 +11,11 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see SessionStartEvent Preventing session creation
  */
-public class SessionInitializeEvent extends PlayerEvent {
+public class SessionInitializeEvent extends SessionEvent {
     private static final HandlerList handlerList = new HandlerList();
 
-    private final Session session;
-
     public SessionInitializeEvent(@NotNull Session session) {
-        super(session.getPlayer());
-        this.session = session;
+        super(session);
     }
 
     public static @NotNull HandlerList getHandlerList() {
@@ -29,9 +25,5 @@ public class SessionInitializeEvent extends PlayerEvent {
     @Override
     public @NotNull HandlerList getHandlers() {
         return handlerList;
-    }
-
-    public @NotNull Session getSession() {
-        return session;
     }
 }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.bone;
 
+import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.ArmorStand;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -7,8 +8,8 @@ import org.joml.Vector3dc;
 public class ArmorStandPositionBone extends EntityLocationBone {
     private final ArmorStand entity;
 
-    public ArmorStandPositionBone(ArmorStand entity) {
-        super(entity);
+    public ArmorStandPositionBone(Session session, ArmorStand entity) {
+        super(session, entity);
         this.entity = entity;
     }
 
