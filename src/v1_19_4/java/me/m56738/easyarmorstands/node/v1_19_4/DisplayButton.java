@@ -1,36 +1,45 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
+import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
+import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.node.Node;
-import me.m56738.easyarmorstands.node.SimpleButton;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTransformationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Util;
-import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class DisplayButton<T extends Display> extends SimpleButton {
+public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
     private final Session session;
     private final T entity;
-    private final JOMLMapper mapper;
-    private final DisplayTransformationProperty transformationProperty;
+    private final DisplayAddon addon;
     private final DisplayRootNodeFactory<T> factory;
 
-    public DisplayButton(Session session, T entity, JOMLMapper mapper, DisplayTransformationProperty transformationProperty, DisplayRootNodeFactory<T> factory) {
+    public DisplayButton(Session session, T entity, DisplayAddon addon, DisplayRootNodeFactory<T> factory) {
         super(session);
         this.session = session;
         this.entity = entity;
-        this.mapper = mapper;
-        this.transformationProperty = transformationProperty;
+        this.addon = addon;
         this.factory = factory;
     }
 
     @Override
     protected Vector3dc getPosition() {
-        return Util.toVector3d(entity.getLocation());
+        Location location = entity.getLocation();
+        return new Vector3d(location.getX(), location.getY() + getHeight() / 2, location.getZ());
+    }
+
+    @Override
+    protected double getWidth() {
+        return entity.getDisplayWidth();
+    }
+
+    @Override
+    protected double getHeight() {
+        return entity.getDisplayHeight();
     }
 
     @Override
@@ -40,7 +49,7 @@ public class DisplayButton<T extends Display> extends SimpleButton {
 
     @Override
     public Node createNode() {
-        DisplayBone bone = new DisplayBone(session, entity, mapper, transformationProperty);
+        DisplayBone bone = new DisplayBone(session, entity, addon);
 
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);

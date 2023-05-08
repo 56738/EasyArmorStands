@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
@@ -8,6 +9,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EntitySpawnAction<E extends Entity> implements Action {
+    private final EntityType entityType;
     private final Class<E> type;
     private Location location;
     private Map<EntityProperty<E, ?>, Object> properties;
@@ -22,10 +25,11 @@ public class EntitySpawnAction<E extends Entity> implements Action {
 
     @SuppressWarnings("unchecked")
     public EntitySpawnAction(Entity entity) {
-        this((Class<E>) entity.getType().getEntityClass(), entity.getLocation(), collectProperties((E) entity), entity.getUniqueId());
+        this(entity.getType(), (Class<E>) entity.getType().getEntityClass(), entity.getLocation(), collectProperties((E) entity), entity.getUniqueId());
     }
 
-    public EntitySpawnAction(Class<E> type, Location location, Map<EntityProperty<E, ?>, Object> properties, UUID uuid) {
+    public EntitySpawnAction(EntityType entityType, Class<E> type, Location location, Map<EntityProperty<E, ?>, Object> properties, UUID uuid) {
+        this.entityType = entityType;
         this.type = type;
         this.location = location;
         this.properties = properties;
@@ -77,7 +81,8 @@ public class EntitySpawnAction<E extends Entity> implements Action {
 
     @Override
     public Component describe() {
-        return Component.text("Spawned " + type.getSimpleName());
+        EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
+        return Component.text("Spawned ").append(entityTypeCapability.getName(entityType));
     }
 
     @Override
@@ -85,6 +90,10 @@ public class EntitySpawnAction<E extends Entity> implements Action {
         if (uuid.equals(oldId)) {
             uuid = newId;
         }
+    }
+
+    public EntityType getEntityType() {
+        return entityType;
     }
 
     public Class<E> getType() {

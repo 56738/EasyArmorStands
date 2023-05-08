@@ -1,12 +1,7 @@
 package me.m56738.easyarmorstands.util.v1_19_4;
 
 import org.bukkit.util.Transformation;
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
-import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.*;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -14,6 +9,7 @@ import java.lang.invoke.MethodType;
 
 public class JOMLMapper {
     private final MethodHandle vectorConstructor;
+    private final MethodHandle vectorSetter;
     private final MethodHandle vectorXGetter;
     private final MethodHandle vectorYGetter;
     private final MethodHandle vectorZGetter;
@@ -33,9 +29,11 @@ public class JOMLMapper {
         MethodHandles.Lookup lookup = MethodHandles.publicLookup();
         String joml = String.join(".", "org", "joml");
         Class<?> vectorClass = Class.forName(joml + ".Vector3f");
+        Class<?> vectorConstClass = Class.forName(joml + ".Vector3fc");
         Class<?> quaternionClass = Class.forName(joml + ".Quaternionf");
         this.vectorConstructor = lookup.findConstructor(vectorClass,
                 MethodType.methodType(void.class, float.class, float.class, float.class));
+        this.vectorSetter = lookup.findVirtual(vectorClass, "set", MethodType.methodType(vectorClass, vectorConstClass));
         this.vectorXGetter = lookup.findGetter(vectorClass, "x", float.class);
         this.vectorYGetter = lookup.findGetter(vectorClass, "y", float.class);
         this.vectorZGetter = lookup.findGetter(vectorClass, "z", float.class);
@@ -102,6 +100,14 @@ public class JOMLMapper {
     public Vector3f getTranslation(Transformation transformation) {
         try {
             return convertFromNativeVector(transformationTranslationGetter.invoke(transformation));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setTranslation(Transformation transformation, Vector3fc translation) {
+        try {
+            vectorSetter.invoke(transformationTranslationGetter.invoke(transformation), convertToNative(translation));
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

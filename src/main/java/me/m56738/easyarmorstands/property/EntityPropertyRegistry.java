@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.property;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.command.EntityPreprocessor;
@@ -55,14 +56,16 @@ public class EntityPropertyRegistry {
             throw new IllegalStateException("Duplicate property: " + name);
         }
 
-        CommandArgument argument = property.getArgument();
-        if (argument != null) {
-            registerCommand(property, argument);
-        }
+        registerCommand(property);
     }
 
     @SuppressWarnings("unchecked")
-    private void registerCommand(EntityProperty property, CommandArgument argument) {
+    private void registerCommand(EntityProperty property) {
+        ArgumentParser parser = property.getArgumentParser();
+        if (parser == null) {
+            return;
+        }
+
         Command.Builder<EasCommandSender> builder = rootBuilder
                 .literal(property.getName())
                 .meta(Keys.SESSION_REQUIRED, true);
@@ -87,6 +90,16 @@ public class EntityPropertyRegistry {
                             .color(NamedTextColor.GREEN));
                 }));
 
+        CommandArgument.Builder argumentBuilder = CommandArgument.ofType(property.getValueType(), "value")
+                .manager(commandManager)
+                .withParser(parser);
+
+        if (property.hasDefaultValue()) {
+            argumentBuilder.asOptional();
+        }
+
+        CommandArgument argument = argumentBuilder.build();
+
         builder = builder.argument(argument);
 
         commandManager.command(builder
@@ -97,15 +110,16 @@ public class EntityPropertyRegistry {
                         return;
                     }
 
-                    Object value = ctx.get(argument);
-                    session.setProperty(entity, property, value);
+                    Object value = ctx.getOrSupplyDefault(argument.getKey(), () -> property.getDefaultValue(ctx));
+                    if (property.performChange(session, entity, value)) {
+                        ctx.getSender().sendMessage(Component.text()
+                                .content("Changed ")
+                                .append(property.getDisplayName())
+                                .append(Component.text(" to "))
+                                .append(property.getValueName(value))
+                                .color(NamedTextColor.GREEN));
+                    }
                     session.commit();
-                    ctx.getSender().sendMessage(Component.text()
-                            .content("Changed ")
-                            .append(property.getDisplayName())
-                            .append(Component.text(" to "))
-                            .append(property.getValueName(value))
-                            .color(NamedTextColor.GREEN));
                 }));
     }
 
@@ -128,7 +142,7 @@ public class EntityPropertyRegistry {
     @SuppressWarnings("unchecked")
     public <E extends Entity> EntityProperty<E, ?> getProperty(E entity, String name) {
         EntityProperty<?, ?> property = properties.get(name);
-        if (property.getEntityType().isAssignableFrom(entity.getClass())) {
+        if (property != null && property.getEntityType().isAssignableFrom(entity.getClass())) {
             return (EntityProperty<E, ?>) property;
         } else {
             return null;

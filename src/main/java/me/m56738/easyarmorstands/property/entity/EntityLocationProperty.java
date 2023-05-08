@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import cloud.commandframework.bukkit.parsers.location.LocationArgument;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.util.Util;
@@ -14,6 +16,11 @@ public class EntityLocationProperty implements EntityProperty<Entity, Location> 
     @Override
     public Location getValue(Entity entity) {
         return entity.getLocation();
+    }
+
+    @Override
+    public TypeToken<Location> getValueType() {
+        return TypeToken.get(Location.class);
     }
 
     @Override
@@ -32,8 +39,8 @@ public class EntityLocationProperty implements EntityProperty<Entity, Location> 
     }
 
     @Override
-    public @Nullable CommandArgument<EasCommandSender, Location> getArgument() {
-        return null;
+    public ArgumentParser<EasCommandSender, Location> getArgumentParser() {
+        return new LocationArgument.LocationParser<>();
     }
 
     @Override

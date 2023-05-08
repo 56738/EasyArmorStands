@@ -17,29 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ColorPicker extends InventoryMenu {
+    private final ItemStack item;
     private final Player player;
     private Color color;
 
     public ColorPicker(ItemStack item, Player player) {
         super(4, "EasyArmorStands color picker");
+        this.item = item;
         this.player = player;
-        initialize();
-        if (item != null) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                ItemColorCapability itemColorCapability = EasyArmorStands.getInstance().getCapability(ItemColorCapability.class);
-                color = itemColorCapability.getColor(meta);
-            }
-        }
-        if (color == null) {
-            color = Color.WHITE;
-        }
-        getInventory().setItem(2, item);
-        setColor(color);
     }
 
+    @Override
     @SuppressWarnings("deprecation")
-    private void initialize() {
+    public void initialize() {
         setSlot(0, 2, new ColorItemSlot(this));
 
         ColorAxis[] axes = ColorAxis.values();
@@ -68,6 +58,19 @@ public class ColorPicker extends InventoryMenu {
         }
 
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
+
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                ItemColorCapability itemColorCapability = EasyArmorStands.getInstance().getCapability(ItemColorCapability.class);
+                color = itemColorCapability.getColor(meta);
+            }
+        }
+        if (color == null) {
+            color = Color.WHITE;
+        }
+        getInventory().setItem(2, item);
+        setColor(color);
     }
 
     public Color getColor() {

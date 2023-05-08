@@ -17,7 +17,7 @@ public abstract class SimpleButton implements Button {
     protected abstract Vector3dc getPosition();
 
     @Override
-    public int getPriority() {
+    public int getLookPriority() {
         return priority;
     }
 

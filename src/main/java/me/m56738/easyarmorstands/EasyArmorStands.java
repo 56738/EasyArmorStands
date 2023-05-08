@@ -10,6 +10,8 @@ import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.paper.PaperCommandManager;
+import io.leangen.geantyref.TypeToken;
+import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
@@ -19,9 +21,12 @@ import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapab
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.command.*;
+import me.m56738.easyarmorstands.command.annotation.RequireEntity;
+import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
 import me.m56738.easyarmorstands.property.armorstand.*;
 import me.m56738.easyarmorstands.property.entity.*;
@@ -36,6 +41,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.logging.Level;
@@ -43,6 +49,7 @@ import java.util.logging.Level;
 public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
+    private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
     private final EnumMap<ArmorStandPart, ArmorStandPoseProperty> armorStandPoseProperties =
             new EnumMap<>(ArmorStandPart.class);
     private EntityPropertyRegistry entityPropertyRegistry;
@@ -112,6 +119,7 @@ public class EasyArmorStands extends JavaPlugin {
                 (sender, e) -> sender.sendMessage(e.getComponent()));
 
         commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
+        commandManager.registerCommandPostProcessor(new EntityPostprocessor());
         commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
         commandManager.registerCommandPostProcessor(new SessionPostprocessor());
 
@@ -124,11 +132,14 @@ public class EasyArmorStands extends JavaPlugin {
                 ValueNode.class, new ValueNodeInjector<>());
 
         commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
-
+        commandManager.parameterInjectorRegistry().registerInjectionService(new EntityPropertyInjectionService<>());
         commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader));
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
+
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(EntityProperty.class),
+                p -> new EntityPropertyArgumentParser());
 
         Command.Builder<EasCommandSender> rootBuilder = commandManager.commandBuilder("eas", "easyarmorstands");
 
@@ -139,10 +150,14 @@ public class EasyArmorStands extends JavaPlugin {
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
+        annotationParser.registerBuilderModifier(RequireSession.class, (a, b) -> b.meta(Keys.SESSION_REQUIRED, true));
+        annotationParser.registerBuilderModifier(RequireEntity.class, (a, b) -> b.meta(Keys.ENTITY_REQUIRED,
+                entity -> a.type().isAssignableFrom(entity.getClass())));
+
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
-        SessionCommands sessionCommands = new SessionCommands(sessionManager);
-        annotationParser.parse(sessionCommands);
+        annotationParser.parse(new SessionCommands(sessionManager));
         annotationParser.parse(new HistoryCommands());
+        annotationParser.parse(new EntityCommands());
 
         EquipmentCapability equipmentCapability = this.getCapability(EquipmentCapability.class);
         entityPropertyRegistry.register(new EntityEquipmentProperty(
@@ -194,7 +209,7 @@ public class EasyArmorStands extends JavaPlugin {
         entityLocationProperty = new EntityLocationProperty();
         entityPropertyRegistry.register(entityLocationProperty);
 
-        new AddonLoader(this, getClassLoader()).load();
+        addonLoader.load();
     }
 
     @Override
@@ -208,6 +223,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public <T> T getCapability(Class<T> type) {
         return loader.get(type);
+    }
+
+    public <T extends Addon> @Nullable T getAddon(Class<T> type) {
+        return addonLoader.get(type);
     }
 
     public CapabilityLoader getCapabilityLoader() {

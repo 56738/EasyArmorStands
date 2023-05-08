@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.property;
 
-import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.bukkit.parsers.ItemStackArgument;
@@ -16,12 +15,9 @@ import org.jetbrains.annotations.NotNull;
 public abstract class ItemEntityProperty<E extends Entity> implements ButtonEntityProperty<E, ItemStack> {
 
     @Override
-    public @NotNull CommandArgument<EasCommandSender, ItemStack> getArgument() {
-        ArgumentParser<EasCommandSender, ItemStack> parser = new ItemStackArgument.Parser<EasCommandSender>()
-                .map((ctx, value) -> ArgumentParseResult.success(value.createItemStack(1, true)));
-        return CommandArgument.<EasCommandSender, ItemStack>ofType(ItemStack.class, getName())
-                .withParser(parser)
-                .build();
+    public ArgumentParser<EasCommandSender, ItemStack> getArgumentParser() {
+        return new ItemStackArgument.Parser<EasCommandSender>().map((ctx, value) ->
+                ArgumentParseResult.success(value.createItemStack(1, true)));
     }
 
     @Override

@@ -1,7 +1,8 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.BooleanArgument;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
@@ -23,6 +24,11 @@ public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boo
     }
 
     @Override
+    public TypeToken<Boolean> getValueType() {
+        return TypeToken.get(Boolean.class);
+    }
+
+    @Override
     public void setValue(ArmorStand entity, Boolean value) {
         tickCapability.setCanTick(entity, value);
     }
@@ -38,8 +44,8 @@ public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boo
     }
 
     @Override
-    public @NotNull CommandArgument<EasCommandSender, Boolean> getArgument() {
-        return BooleanArgument.of("tick");
+    public ArgumentParser<EasCommandSender, Boolean> getArgumentParser() {
+        return new BooleanArgument.BooleanParser<>(true);
     }
 
     @Override

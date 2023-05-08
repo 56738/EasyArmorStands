@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.node.v1_19_4.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.property.EntityProperty;
@@ -14,6 +15,11 @@ public class BlockDisplayBlockProperty implements EntityProperty<BlockDisplay, B
     @Override
     public BlockData getValue(BlockDisplay entity) {
         return entity.getBlock();
+    }
+
+    @Override
+    public TypeToken<BlockData> getValueType() {
+        return TypeToken.get(BlockData.class);
     }
 
     @Override
@@ -32,10 +38,8 @@ public class BlockDisplayBlockProperty implements EntityProperty<BlockDisplay, B
     }
 
     @Override
-    public @Nullable CommandArgument<EasCommandSender, BlockData> getArgument() {
-        return CommandArgument.<EasCommandSender, BlockData>ofType(BlockData.class, getName())
-                .withParser(new BlockDataArgumentParser<>())
-                .build();
+    public ArgumentParser<EasCommandSender, BlockData> getArgumentParser() {
+        return new BlockDataArgumentParser<>();
     }
 
     @Override
@@ -50,6 +54,6 @@ public class BlockDisplayBlockProperty implements EntityProperty<BlockDisplay, B
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.block";
+        return "easyarmorstands.property.display.block";
     }
 }

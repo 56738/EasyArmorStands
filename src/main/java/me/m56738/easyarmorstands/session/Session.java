@@ -6,7 +6,9 @@ import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.history.action.GroupAction;
+import me.m56738.easyarmorstands.menu.SpawnMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
@@ -28,10 +30,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 import java.util.*;
 
@@ -118,6 +118,22 @@ public final class Session implements ForwardingAudience.Single {
         rootNode.onEnter();
     }
 
+    public <T extends Entity> T spawn(EntitySpawner<T> spawner) {
+        Location eyeLocation = player.getEyeLocation();
+        Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
+        Vector3d position = new Vector3d(cursor);
+        if (!player.isFlying()) {
+            position.y = 0;
+        }
+        Location location = player.getLocation().add(position.x, position.y, position.z);
+        T entity = spawner.spawn(location);
+        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
+        Node node = spawner.createNode(entity);
+        clearNode();
+        pushNode(node);
+        return entity;
+    }
+
     public boolean handleClick(ClickContext context) {
         Node node = nodeStack.peek();
         if (node == null || clickTicks > 0) {
@@ -130,16 +146,22 @@ public final class Session implements ForwardingAudience.Single {
         return node.onClick(eyes, target, context);
     }
 
-    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value) {
+    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value, boolean force) {
         T oldValue = property.getValue(entity);
         if (Objects.equals(oldValue, value)) {
             return true;
         }
 
-        SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
+        if (!force) {
+            if (!player.hasPermission(property.getName())) {
+                return false;
+            }
+
+            SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
         }
 
         property.setValue(entity, value);
@@ -147,6 +169,10 @@ public final class Session implements ForwardingAudience.Single {
         originalValues.putIfAbsent(key, oldValue);
         pendingValues.put(key, value);
         return true;
+    }
+
+    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value) {
+        return setProperty(entity, property, value, false);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -277,7 +303,7 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     private int getParticleCount(double length) {
-        return (int) Math.round(length * particleCapability.getDensity());
+        return Math.min((int) Math.round(length * particleCapability.getDensity()), 100);
     }
 
     public void showPoint(Vector3dc position, Color color) {
@@ -288,22 +314,33 @@ public final class Session implements ForwardingAudience.Single {
         showPoint(position, Util.toColor(color));
     }
 
-    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
-        double length = from.distance(to);
-        int count = getParticleCount(length);
-        if (count > 100) {
-            count = 100;
+    private void showLine(double x, double y, double z,
+                          double dx, double dy, double dz,
+                          Color color, boolean includeEnds, int count) {
+        if (count < 1) {
+            return;
         }
         int min = includeEnds ? 0 : 1;
         int max = includeEnds ? count : count - 1;
         for (int i = min; i <= max; i++) {
             double t = i / (double) count;
             particleCapability.spawnParticle(player,
-                    from.x() + t * (to.x() - from.x()),
-                    from.y() + t * (to.y() - from.y()),
-                    from.z() + t * (to.z() - from.z()),
+                    x + t * dx,
+                    y + t * dy,
+                    z + t * dz,
                     color);
         }
+    }
+
+    public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
+        double length = from.distance(to);
+        double x = from.x();
+        double y = from.y();
+        double z = from.z();
+        double dx = to.x() - from.x();
+        double dy = to.y() - from.y();
+        double dz = to.z() - from.z();
+        showLine(x, y, z, dx, dy, dz, color, includeEnds, getParticleCount(length));
     }
 
     public void showLine(Vector3dc start, Vector3dc end, RGBLike color, boolean includeEnds) {
@@ -313,9 +350,6 @@ public final class Session implements ForwardingAudience.Single {
     public void showCircle(Vector3dc center, Vector3dc axis, Color color, double radius) {
         double circumference = 2 * Math.PI * radius;
         int count = getParticleCount(circumference);
-        if (count > 100) {
-            count = 100;
-        }
         Vector3d offset = center.cross(axis, new Vector3d()).normalize(radius);
         double axisX = axis.x();
         double axisY = axis.y();
@@ -335,6 +369,37 @@ public final class Session implements ForwardingAudience.Single {
         showCircle(center, axis, Util.toColor(color), radius);
     }
 
+    public void showAxisAlignedBox(Vector3dc center, Vector3dc size, Color color) {
+        double x = center.x();
+        double y = center.y();
+        double z = center.z();
+        double sx = size.x();
+        double sy = size.y();
+        double sz = size.z();
+        double dx = sx / 2;
+        double dy = sy / 2;
+        double dz = sz / 2;
+        int cx = getParticleCount(sx);
+        int cy = getParticleCount(sy);
+        int cz = getParticleCount(sz);
+        showLine(x - dx, y - dy, z - dz, sx, 0, 0, color, false, cx);
+        showLine(x - dx, y - dy, z + dz, sx, 0, 0, color, false, cx);
+        showLine(x - dx, y + dy, z - dz, sx, 0, 0, color, false, cx);
+        showLine(x - dx, y + dy, z + dz, sx, 0, 0, color, false, cx);
+        showLine(x - dx, y - dy, z - dz, 0, sy, 0, color, true, cy);
+        showLine(x - dx, y - dy, z + dz, 0, sy, 0, color, true, cy);
+        showLine(x + dx, y - dy, z - dz, 0, sy, 0, color, true, cy);
+        showLine(x + dx, y - dy, z + dz, 0, sy, 0, color, true, cy);
+        showLine(x - dx, y - dy, z - dz, 0, 0, sz, color, false, cz);
+        showLine(x + dx, y - dy, z - dz, 0, 0, sz, color, false, cz);
+        showLine(x - dx, y + dy, z - dz, 0, 0, sz, color, false, cz);
+        showLine(x + dx, y + dy, z - dz, 0, 0, sz, color, false, cz);
+    }
+
+    public void showAxisAlignedBox(Vector3dc center, Vector3dc size, RGBLike color) {
+        showAxisAlignedBox(center, size, Util.toColor(color));
+    }
+
     public boolean isLookingAtPoint(Vector3dc eyes, Vector3dc target, Vector3dc position) {
         Vector3d closestOnEyeRay = Intersectiond.findClosestPointOnLineSegment(
                 eyes.x(), eyes.y(), eyes.z(),
@@ -348,6 +413,10 @@ public final class Session implements ForwardingAudience.Single {
     public void selectEntity(Entity entity) {
         clearNode();
         rootNode.selectEntity(entity);
+    }
+
+    public void openSpawnMenu() {
+        player.openInventory(new SpawnMenu(this).getInventory());
     }
 
     private static class ChangeKey<E extends Entity, T> {

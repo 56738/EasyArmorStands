@@ -1,26 +1,24 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.MatrixBone;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTransformationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.bukkit.util.Transformation;
 import org.joml.Math;
 import org.joml.*;
 
 public class DisplayBone implements MatrixBone {
     private final Session session;
     private final Display entity;
-    private final JOMLMapper mapper;
-    private final DisplayTransformationProperty transformationProperty;
+    private final DisplayAddon addon;
 
-    public DisplayBone(Session session, Display entity, JOMLMapper mapper, DisplayTransformationProperty transformationProperty) {
+    public DisplayBone(Session session, Display entity, DisplayAddon addon) {
         this.session = session;
         this.entity = entity;
-        this.mapper = mapper;
-        this.transformationProperty = transformationProperty;
+        this.addon = addon;
     }
 
     @Override
@@ -71,10 +69,11 @@ public class DisplayBone implements MatrixBone {
     }
 
     public Matrix4d getTransformation() {
-        return new Matrix4d(mapper.getMatrix(entity.getTransformation()));
+        return new Matrix4d(addon.getMapper().getMatrix(entity.getTransformation()));
     }
 
     public void setTransformation(Matrix4dc transformation) {
-        session.setProperty(entity, transformationProperty, mapper.getTransformation(new Matrix4f(transformation)));
+        Transformation value = addon.getMapper().getTransformation(new Matrix4f(transformation));
+        session.setProperty(entity, addon.getDisplayTransformationProperty(), value);
     }
 }

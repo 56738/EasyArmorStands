@@ -6,9 +6,10 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.command.annotation.RequireEntity;
+import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
-import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
@@ -18,7 +19,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
@@ -32,69 +32,11 @@ public class SessionCommands {
         this.sessionManager = sessionManager;
     }
 
-//    @CommandMethod("name [name]")
-//    @CommandPermission("easyarmorstands.property.name")
-//    @CommandDescription("Change the name of an armor stand")
-//    public void setName(EasCommandSender sender,
-//                        Session session,
-//                        Entity entity,
-//                        ComponentCapability capability,
-//                        @Argument(value = "name", description = "MiniMessage text") @Greedy String input) {
-//        setName(sender, session, entity, capability, input, MiniMessage.miniMessage());
-//        if (input != null && (input.contains("&") || input.contains("§"))) {
-//            sender.sendMessage(Component.text()
-//                    .content("This command uses the ")
-//                    .append(Component.text()
-//                            .content("MiniMessage")
-//                            .hoverEvent(Component.text("Open documentation"))
-//                            .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))
-//                            .decorate(TextDecoration.UNDERLINED)
-//                    )
-//                    .append(Component.text(" format. Use "))
-//                    .append(Component.text()
-//                            .content("/eas lname")
-//                            .hoverEvent(Component.text("/eas lname " + input))
-//                            .clickEvent(ClickEvent.runCommand("/eas lname " + input))
-//                            .decorate(TextDecoration.UNDERLINED)
-//                    )
-//                    .append(Component.text(" with legacy (&c) color codes."))
-//                    .color(NamedTextColor.GRAY)
-//            );
-//        }
-//    }
-//
-//    @CommandMethod("lname [name]")
-//    @CommandPermission("easyarmorstands.property.name")
-//    @CommandDescription("Change the name of an armor stand")
-//    public void setLegacyName(EasCommandSender sender,
-//                              Session session,
-//                              Entity entity,
-//                              ComponentCapability capability,
-//                              @Argument(value = "name", description = "Legacy text (&c)") @Greedy String input) {
-//        setName(sender, session, entity, capability, input, LegacyComponentSerializer.legacyAmpersand());
-//    }
-//
-//    private void setName(EasCommandSender sender,
-//                         Session session,
-//                         Entity entity,
-//                         ComponentCapability capability,
-//                         String input, ComponentSerializer<?, ? extends Component, String> serializer) {
-//        Component name = serializer.deserializeOrNull(input);
-//        capability.setCustomName(entity, name);
-//        entity.setCustomNameVisible(name != null);
-//        if (name != null) {
-//            sender.sendMessage(Component.text()
-//                    .append(Component.text("Name tag changed to ", NamedTextColor.GREEN))
-//                    .append(name)
-//                    .hoverEvent(Component.text(input)));
-//        } else {
-//            sender.sendMessage(Component.text("Name tag cleared", NamedTextColor.GREEN));
-//        }
-//    }
-
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Duplicate an entity")
+    @RequireSession
+    @RequireEntity
     public void clone(EasCommandSender sender,
                       Session session,
                       Entity entity) {
@@ -109,16 +51,19 @@ public class SessionCommands {
         }
     }
 
-//    @CommandMethod("spawn")
-//    @CommandPermission("easyarmorstands.spawn")
-//    @CommandDescription("Spawn an armor stand and start editing it")
-//    public void spawn(EasPlayer player) {
-//        sessionManager.spawnAndStart(player.get());
-//    }
+    @CommandMethod("spawn")
+    @CommandPermission("easyarmorstands.spawn")
+    @CommandDescription("Spawn an armor stand and start editing it")
+    @RequireSession
+    public void spawn(Session session) {
+        session.openSpawnMenu();
+    }
 
     @CommandMethod("destroy")
     @CommandPermission("easyarmorstands.destroy")
     @CommandDescription("Destroy the selected armor stand")
+    @RequireSession
+    @RequireEntity
     public void destroy(
             EasCommandSender sender,
             Session session,
@@ -129,16 +74,10 @@ public class SessionCommands {
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
 
-    @CommandMethod("open")
-    @CommandPermission("easyarmorstands.open")
-    @CommandDescription("Open the menu")
-    public void openMenu(EasPlayer player, Session session, ArmorStand entity) {
-        player.get().openInventory(new ArmorStandMenu(session, entity).getInventory());
-    }
-
     @CommandMethod("snap angle [value]")
     @CommandPermission("easyarmorstands.snap")
     @CommandDescription("Change the angle snapping increment")
+    @RequireSession
     public void setAngleSnapIncrement(
             EasCommandSender sender,
             Session session,
@@ -156,6 +95,7 @@ public class SessionCommands {
     @CommandMethod("snap move [value]")
     @CommandPermission("easyarmorstands.snap")
     @CommandDescription("Change the movement snapping increment")
+    @RequireSession
     public void setSnapIncrement(
             EasCommandSender sender,
             Session session,
@@ -173,6 +113,8 @@ public class SessionCommands {
     @CommandMethod("align [axis] [value] [offset]")
     @CommandPermission("easyarmorstands.align")
     @CommandDescription("Move an armor stand to the middle of the block")
+    @RequireSession
+    @RequireEntity
     public void align(
             EasCommandSender sender,
             Session session,

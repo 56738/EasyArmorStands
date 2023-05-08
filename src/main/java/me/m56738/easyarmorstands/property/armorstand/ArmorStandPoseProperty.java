@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.compound.ArgumentTriplet;
+import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.types.tuples.Triplet;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
@@ -29,6 +30,11 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
     }
 
     @Override
+    public TypeToken<Matrix3dc> getValueType() {
+        return TypeToken.get(Matrix3dc.class);
+    }
+
+    @Override
     public void setValue(ArmorStand entity, Matrix3dc value) {
         part.setPose(entity, Util.toEuler(value));
     }
@@ -44,7 +50,7 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
     }
 
     @Override
-    public @Nullable CommandArgument<EasCommandSender, Matrix3dc> getArgument() {
+    public ArgumentParser<EasCommandSender, Matrix3dc> getArgumentParser() {
         return ArgumentTriplet.of(EasyArmorStands.getInstance().getCommandManager(),
                 getName(),
                 Triplet.of("x", "y", "z"),
@@ -54,7 +60,7 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
                         Math.toRadians(triplet.getFirst()),
                         Math.toRadians(triplet.getSecond()),
                         Math.toRadians(triplet.getThird())),
-                new Matrix3d()));
+                new Matrix3d())).getParser();
     }
 
     @Override

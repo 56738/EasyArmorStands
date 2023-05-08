@@ -127,7 +127,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     }
 
     @Override
-    public int getPriority() {
+    public int getLookPriority() {
         return 1;
     }
 

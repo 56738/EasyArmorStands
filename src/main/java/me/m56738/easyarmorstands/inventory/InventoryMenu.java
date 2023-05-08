@@ -10,10 +10,14 @@ public class InventoryMenu implements InventoryListener {
     protected final InventorySlot[] slots;
     private final Inventory inventory;
     private final LinkedList<Runnable> queue = new LinkedList<>();
+    private boolean initialized;
 
     public InventoryMenu(int height, String title) {
         this.inventory = Bukkit.createInventory(this, 9 * height, title);
         this.slots = new InventorySlot[9 * height];
+    }
+
+    public void initialize() {
     }
 
     public void setEmptySlots(InventorySlot slot) {
@@ -69,6 +73,10 @@ public class InventoryMenu implements InventoryListener {
 
     @Override
     public Inventory getInventory() {
+        if (!initialized) {
+            initialized = true;
+            initialize();
+        }
         return inventory;
     }
 }

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class ArmorStandMenu extends EntityMenu<ArmorStand> {
     public ArmorStandMenu(Session session, ArmorStand entity) {
-        super(6, "EasyArmorStands", session, entity);
+        super(session, entity);
     }
 
     private static int index(int row, int column) {

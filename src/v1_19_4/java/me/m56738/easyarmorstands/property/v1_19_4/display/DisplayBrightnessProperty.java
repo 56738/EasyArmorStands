@@ -1,14 +1,19 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.compound.ArgumentPair;
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.types.tuples.Pair;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.text.Component;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +23,12 @@ public class DisplayBrightnessProperty implements EntityProperty<Display, Option
     @Override
     public Optional<Display.Brightness> getValue(Display entity) {
         return Optional.ofNullable(entity.getBrightness());
+    }
+
+    @Override
+    public TypeToken<Optional<Display.Brightness>> getValueType() {
+        return new TypeToken<Optional<Display.Brightness>>() {
+        };
     }
 
     @Override
@@ -36,7 +47,7 @@ public class DisplayBrightnessProperty implements EntityProperty<Display, Option
     }
 
     @Override
-    public @Nullable CommandArgument<EasCommandSender, Optional<Display.Brightness>> getArgument() {
+    public ArgumentParser<EasCommandSender, Optional<Display.Brightness>> getArgumentParser() {
         return ArgumentPair.of(EasyArmorStands.getInstance().getCommandManager(),
                 getName(),
                 Pair.of("block", "sky"),
@@ -50,7 +61,22 @@ public class DisplayBrightnessProperty implements EntityProperty<Display, Option
             } else {
                 return Optional.empty();
             }
-        });
+        }).getParser();
+    }
+
+    @Override
+    public boolean hasDefaultValue() {
+        return true;
+    }
+
+    @Override
+    public @Nullable Optional<Display.Brightness> getDefaultValue(@NonNull CommandContext<EasCommandSender> ctx) {
+        CommandSender sender = ctx.getSender().get();
+        if (sender instanceof Player) {
+            Block block = ((Player) sender).getLocation().getBlock();
+            return Optional.of(new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky()));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -76,6 +102,6 @@ public class DisplayBrightnessProperty implements EntityProperty<Display, Option
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.brightness";
+        return "easyarmorstands.property.display.brightness";
     }
 }

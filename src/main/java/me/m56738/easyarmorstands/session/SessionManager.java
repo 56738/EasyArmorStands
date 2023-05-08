@@ -30,21 +30,6 @@ public class SessionManager {
         return session;
     }
 
-//    public Session start(Player player, ArmorStand armorStand) {
-//        SessionStartEvent event = new SessionStartEvent(player, armorStand);
-//        Bukkit.getPluginManager().callEvent(event);
-//        if (event.isCancelled()) {
-//            return null;
-//        }
-//
-//        Session session = start(player);
-//        session.addProvider(new ArmorStandButtonProvider());
-//        session.pushNode(new ArmorStandRootNode(session, armorStand));
-//        start(session);
-//        session.addProvider(new DefaultEntityButtonProvider());
-//        return session;
-//    }
-
     public boolean stop(Player player) {
         Session session = sessions.remove(player);
         if (session != null) {
@@ -94,44 +79,4 @@ public class SessionManager {
         }
         return null;
     }
-
-//    public void spawnAndStart(Player player) {
-//        Location eyeLocation = player.getEyeLocation();
-//        Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
-//        Vector3d position = new Vector3d(cursor);
-//        if (!player.isFlying()) {
-//            position.y = 0;
-//        }
-//        position.add(Util.toVector3d(player.getLocation()));
-//        ArmorStand armorStand = spawn(player, position, eyeLocation.getYaw() + 180);
-//        if (armorStand == null) {
-//            return;
-//        }
-//        Session session = start(player, armorStand);
-//        if (session == null) {
-//            armorStand.remove();
-//            return;
-//        }
-//        cursor.add(Util.toVector3d(eyeLocation));
-////        session.startMoving(cursor);
-//    }
-
-//    public ArmorStand spawn(Player player, Vector3dc position, float yaw) {
-//        Location location = new Location(player.getWorld(), position.x(), position.y(), position.z(), yaw, 0);
-//        ArmorStandPreSpawnEvent event = new ArmorStandPreSpawnEvent(player, location);
-//        Bukkit.getPluginManager().callEvent(event);
-//        if (event.isCancelled()) {
-//            return null;
-//        }
-//
-//        SpawnCapability spawnCapability = EasyArmorStands.getInstance().getCapability(SpawnCapability.class);
-//        ArmorStand armorStand = spawnCapability.spawnEntity(location, ArmorStand.class, e -> {
-//            e.setGravity(false);
-//            for (ArmorStandPart part : ArmorStandPart.values()) {
-//                part.setPose(e, EulerAngle.ZERO);
-//            }
-//        });
-//        EasyArmorStands.getInstance().getHistory(player).push(new SpawnArmorStandAction(armorStand));
-//        return armorStand;
-//    }
 }

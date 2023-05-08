@@ -13,4 +13,9 @@ public class DefaultEntityButtonProvider implements EntityButtonProvider {
 
         return new DefaultEntityButton(session, entity);
     }
+
+    @Override
+    public EntityButtonPriority getPriority() {
+        return EntityButtonPriority.LOWEST;
+    }
 }

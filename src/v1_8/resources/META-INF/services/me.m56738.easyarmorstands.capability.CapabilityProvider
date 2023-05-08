@@ -1,4 +1,5 @@
 me.m56738.easyarmorstands.capability.component.v1_8.ComponentCapabilityProvider
+me.m56738.easyarmorstands.capability.entitytype.v1_8.EntityTypeCapabilityProvider
 me.m56738.easyarmorstands.capability.equipment.v1_8.EquipmentCapabilityProvider
 me.m56738.easyarmorstands.capability.invulnerability.v1_8.InvulnerabilityCapabilityProvider
 me.m56738.easyarmorstands.capability.item.v1_8.ItemCapabilityProvider

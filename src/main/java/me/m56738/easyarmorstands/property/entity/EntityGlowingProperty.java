@@ -7,16 +7,24 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EntityGlowingProperty extends BooleanEntityProperty<Entity> {
+    private static final Set<EntityType> blacklist = new HashSet<>();
     private final GlowCapability glowCapability;
 
     public EntityGlowingProperty(GlowCapability glowCapability) {
         this.glowCapability = glowCapability;
+    }
+
+    public static void addToBlacklist(EntityType type) {
+        blacklist.add(type);
     }
 
     @Override
@@ -70,5 +78,10 @@ public class EntityGlowingProperty extends BooleanEntityProperty<Entity> {
                         Component.text("is shown.", NamedTextColor.GRAY)
                 )
         );
+    }
+
+    @Override
+    public boolean isSupported(Entity entity) {
+        return !blacklist.contains(entity.getType());
     }
 }

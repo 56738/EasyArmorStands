@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
+import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.StringArgument;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
@@ -23,7 +24,16 @@ public class EntityCustomNameProperty implements EntityProperty<Entity, Componen
 
     @Override
     public Component getValue(Entity entity) {
-        return componentCapability.getCustomName(entity);
+        Component name = componentCapability.getCustomName(entity);
+        if (name == null) {
+            name = Component.empty();
+        }
+        return name;
+    }
+
+    @Override
+    public TypeToken<Component> getValueType() {
+        return TypeToken.get(Component.class);
     }
 
     @Override
@@ -42,16 +52,12 @@ public class EntityCustomNameProperty implements EntityProperty<Entity, Componen
     }
 
     @Override
-    public @NotNull CommandArgument<EasCommandSender, Component> getArgument() {
-        return CommandArgument.<EasCommandSender, Component>ofType(Component.class, getName())
-                .withParser(
-                        new StringArgument.StringParser<EasCommandSender>(
-                                StringArgument.StringMode.GREEDY,
-                                (v1, v2) -> Collections.emptyList()
-                        ).map((ctx, input) ->
-                                ArgumentParseResult.success(MiniMessage.miniMessage().deserialize(input)))
-                )
-                .build();
+    public ArgumentParser<EasCommandSender, Component> getArgumentParser() {
+        return new StringArgument.StringParser<EasCommandSender>(
+                StringArgument.StringMode.GREEDY,
+                (v1, v2) -> Collections.emptyList()
+        ).map((ctx, input) ->
+                ArgumentParseResult.success(MiniMessage.miniMessage().deserialize(input)));
     }
 
     @Override

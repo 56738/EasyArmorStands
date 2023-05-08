@@ -130,7 +130,7 @@ public class MenuNode implements Node {
             if (position == null) {
                 continue;
             }
-            int priority = button.getPriority();
+            int priority = button.getLookPriority();
             if (priority < bestPriority) {
                 continue;
             }

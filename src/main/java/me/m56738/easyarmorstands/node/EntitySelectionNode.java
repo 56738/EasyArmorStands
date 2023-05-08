@@ -89,24 +89,9 @@ public class EntitySelectionNode extends MenuNode {
                 }
             }
 
-            if (session.getPlayer().isSneaking()) {
-//                Player player = session.getPlayer();
-//                Location eyeLocation = player.getEyeLocation();
-//                Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
-//                Vector3d position = new Vector3d(cursor);
-//                if (!player.isFlying()) {
-//                    position.y = 0;
-//                }
-//                position.add(Util.toVector3d(player.getLocation()));
-//                SessionManager sessionManager = EasyArmorStands.getInstance().getSessionManager();
-//                ArmorStand armorStand = sessionManager.spawn(player, position, eyeLocation.getYaw() + 180);
-//                if (armorStand == null) {
-//                    return false;
-//                }
-//                ArmorStandRootNode rootNode = new ArmorStandRootNode(session, armorStand);
-//                session.pushNode(rootNode);
-//                session.pushNode(rootNode.getCarryButton().createNode());
-//                return true;
+            if (session.getPlayer().isSneaking() && session.getPlayer().hasPermission("easyarmorstands.spawn")) {
+                session.openSpawnMenu();
+                return true;
             }
         }
 

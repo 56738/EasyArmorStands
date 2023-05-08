@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
 import me.m56738.easyarmorstands.inventory.DisabledSlot;
@@ -9,9 +10,9 @@ import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.property.ButtonEntityProperty;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.session.Session;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,14 +21,17 @@ import java.util.List;
 public class EntityMenu<T extends Entity> extends InventoryMenu {
     private final Session session;
     private final T entity;
-    private boolean initialized;
 
-    public EntityMenu(int height, String title, Session session, T entity) {
-        super(height, title);
+    public EntityMenu(Session session, T entity) {
+        super(6, PlainTextComponentSerializer.builder()
+                .flattener(EasyArmorStands.getInstance().getAdventure().flattener())
+                .build()
+                .serialize(EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType())));
         this.session = session;
         this.entity = entity;
     }
 
+    @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void initialize() {
         List<InventorySlot> pending = new ArrayList<>();
@@ -70,14 +74,5 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
 
     public @NotNull T getEntity() {
         return entity;
-    }
-
-    @Override
-    public Inventory getInventory() {
-        if (!initialized) {
-            initialized = true;
-            initialize();
-        }
-        return super.getInventory();
     }
 }

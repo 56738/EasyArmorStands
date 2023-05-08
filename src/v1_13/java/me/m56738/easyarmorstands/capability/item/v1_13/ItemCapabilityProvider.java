@@ -39,6 +39,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
         @Override
         public ItemStack createItem(ItemType type) {
             switch (type) {
+                case ARMOR_STAND:
+                    return new ItemStack(Material.ARMOR_STAND);
                 case BLAZE_ROD:
                     return new ItemStack(Material.BLAZE_ROD);
                 case BONE_MEAL:
@@ -74,10 +76,14 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.LEVER);
                 case LIGHT_BLUE_STAINED_GLASS_PANE:
                     return new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+                case NAME_TAG:
+                    return new ItemStack(Material.NAME_TAG);
                 case PLAYER_HEAD:
                     return new ItemStack(Material.PLAYER_HEAD);
                 case STICK:
                     return new ItemStack(Material.STICK);
+                case STONE:
+                    return new ItemStack(Material.STONE);
                 case STONE_SLAB:
                     return new ItemStack(Material.STONE_SLAB);
                 case SUNFLOWER:

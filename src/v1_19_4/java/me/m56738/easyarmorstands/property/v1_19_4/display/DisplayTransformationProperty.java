@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.util.Util;
@@ -26,6 +27,11 @@ public class DisplayTransformationProperty implements EntityProperty<Display, Tr
     }
 
     @Override
+    public TypeToken<Transformation> getValueType() {
+        return TypeToken.get(Transformation.class);
+    }
+
+    @Override
     public void setValue(Display entity, Transformation value) {
         entity.setTransformation(value);
     }
@@ -41,7 +47,7 @@ public class DisplayTransformationProperty implements EntityProperty<Display, Tr
     }
 
     @Override
-    public @Nullable CommandArgument<EasCommandSender, Transformation> getArgument() {
+    public ArgumentParser<EasCommandSender, Transformation> getArgumentParser() {
         return null;
     }
 
@@ -69,6 +75,6 @@ public class DisplayTransformationProperty implements EntityProperty<Display, Tr
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.transformation";
+        return "easyarmorstands.property.display.transformation";
     }
 }

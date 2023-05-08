@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.entity;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.property.ItemEntityProperty;
 import net.kyori.adventure.text.Component;
@@ -31,6 +32,11 @@ public class EntityEquipmentProperty extends ItemEntityProperty<LivingEntity> {
             item = new ItemStack(Material.AIR);
         }
         return item;
+    }
+
+    @Override
+    public TypeToken<ItemStack> getValueType() {
+        return TypeToken.get(ItemStack.class);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.property.ItemEntityProperty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -16,6 +17,11 @@ public class ItemDisplayItemProperty extends ItemEntityProperty<ItemDisplay> {
             item = new ItemStack(Material.AIR);
         }
         return item;
+    }
+
+    @Override
+    public TypeToken<ItemStack> getValueType() {
+        return TypeToken.get(ItemStack.class);
     }
 
     @Override
@@ -40,7 +46,7 @@ public class ItemDisplayItemProperty extends ItemEntityProperty<ItemDisplay> {
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.item";
+        return "easyarmorstands.property.display.item";
     }
 
     @Override

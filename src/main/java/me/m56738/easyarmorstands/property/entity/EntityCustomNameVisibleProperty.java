@@ -1,7 +1,8 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.BooleanArgument;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.text.Component;
@@ -13,6 +14,11 @@ public class EntityCustomNameVisibleProperty implements EntityProperty<Entity, B
     @Override
     public Boolean getValue(Entity entity) {
         return entity.isCustomNameVisible();
+    }
+
+    @Override
+    public TypeToken<Boolean> getValueType() {
+        return TypeToken.get(Boolean.class);
     }
 
     @Override
@@ -31,8 +37,8 @@ public class EntityCustomNameVisibleProperty implements EntityProperty<Entity, B
     }
 
     @Override
-    public @NotNull CommandArgument<EasCommandSender, Boolean> getArgument() {
-        return BooleanArgument.of(getName());
+    public ArgumentParser<EasCommandSender, Boolean> getArgumentParser() {
+        return new BooleanArgument.BooleanParser<>(true);
     }
 
     @Override

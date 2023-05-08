@@ -16,7 +16,7 @@ public interface Button extends NodeFactory {
      */
     @Nullable Vector3dc getLookTarget();
 
-    default int getPriority() {
+    default int getLookPriority() {
         return 0;
     }
 
