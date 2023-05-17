@@ -51,7 +51,7 @@ public class EntitySpawnAction<E extends Entity> implements Action {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public boolean execute() {
+    public void execute() {
         SpawnCapability spawnCapability = EasyArmorStands.getInstance().getCapability(SpawnCapability.class);
         E entity = spawnCapability.spawnEntity(location, type, e -> {
             for (Map.Entry entry : properties.entrySet()) {
@@ -64,11 +64,10 @@ public class EntitySpawnAction<E extends Entity> implements Action {
         } else {
             uuid = entity.getUniqueId();
         }
-        return true;
     }
 
     @Override
-    public boolean undo() {
+    public void undo() {
         E entity = Util.getEntity(uuid, type);
         if (entity == null) {
             throw new IllegalStateException();
@@ -76,7 +75,6 @@ public class EntitySpawnAction<E extends Entity> implements Action {
         location = entity.getLocation();
         properties = collectProperties(entity);
         entity.remove();
-        return true;
     }
 
     @Override

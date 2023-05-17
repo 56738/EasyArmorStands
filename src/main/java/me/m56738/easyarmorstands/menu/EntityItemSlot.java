@@ -23,6 +23,10 @@ public class EntityItemSlot<T extends Entity> implements InventorySlot {
 
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
+        String permission = property.getPermission();
+        if (permission != null && !menu.getSession().getPlayer().hasPermission(permission)) {
+            return false;
+        }
         menu.queueTask(() -> {
             ItemStack item = menu.getInventory().getItem(slot);
             if (item == null) {

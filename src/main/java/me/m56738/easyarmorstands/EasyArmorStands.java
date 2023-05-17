@@ -121,13 +121,13 @@ public class EasyArmorStands extends JavaPlugin {
                         (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
                 .apply(commandManager, s -> s);
 
-        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
-        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
-        commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
-
         commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
         commandManager.registerCommandPostProcessor(new EntityPostprocessor());
         commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
+
+        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
+        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
+        commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
 
         commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector<>());
 

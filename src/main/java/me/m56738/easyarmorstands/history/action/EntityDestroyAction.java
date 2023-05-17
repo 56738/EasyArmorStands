@@ -11,13 +11,13 @@ public class EntityDestroyAction<E extends Entity> extends EntitySpawnAction<E> 
     }
 
     @Override
-    public boolean execute() {
-        return super.undo();
+    public void execute() {
+        super.undo();
     }
 
     @Override
-    public boolean undo() {
-        return super.execute();
+    public void undo() {
+        super.execute();
     }
 
     @Override

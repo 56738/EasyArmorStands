@@ -5,9 +5,9 @@ import net.kyori.adventure.text.Component;
 import java.util.UUID;
 
 public interface Action {
-    boolean execute();
+    void execute();
 
-    boolean undo();
+    void undo();
 
     Component describe();
 

@@ -8,20 +8,28 @@ import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.EntityType;
 
 import java.util.Objects;
 
 public class DisplaySpawner<T extends Display> implements EntitySpawner<T> {
     private final Class<T> type;
+    private final EntityType entityType;
     private final Session session;
     private final DisplayAddon addon;
     private final DisplayRootNodeFactory<T> factory;
 
-    public DisplaySpawner(Class<T> type, Session session, DisplayAddon addon, DisplayRootNodeFactory<T> factory) {
+    public DisplaySpawner(Class<T> type, EntityType entityType, Session session, DisplayAddon addon, DisplayRootNodeFactory<T> factory) {
         this.type = type;
+        this.entityType = entityType;
         this.session = session;
         this.addon = addon;
         this.factory = factory;
+    }
+
+    @Override
+    public EntityType getEntityType() {
+        return entityType;
     }
 
     @Override

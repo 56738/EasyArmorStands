@@ -26,13 +26,14 @@ public class SpawnSlot<T extends Entity> implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-            menu.getSession().spawn(spawner);
-            menu.queueTask(() -> {
-                Player player = menu.getSession().getPlayer();
-                if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                    player.closeInventory();
-                }
-            });
+            if (menu.getSession().spawn(spawner) != null) {
+                menu.queueTask(() -> {
+                    Player player = menu.getSession().getPlayer();
+                    if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
+                        player.closeInventory();
+                    }
+                });
+            }
         }
         return false;
     }

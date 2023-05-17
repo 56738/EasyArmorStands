@@ -18,19 +18,18 @@ public class EntityPropertyAction<E extends Entity, T> extends EntityAction<E> {
     }
 
     @Override
-    public boolean execute() {
-        return setValue(newValue);
+    public void execute() {
+        setValue(newValue);
     }
 
     @Override
-    public boolean undo() {
-        return setValue(oldValue);
+    public void undo() {
+        setValue(oldValue);
     }
 
-    private boolean setValue(T value) {
+    private void setValue(T value) {
         E entity = findEntity();
         property.setValue(entity, value);
-        return true;
     }
 
     @Override

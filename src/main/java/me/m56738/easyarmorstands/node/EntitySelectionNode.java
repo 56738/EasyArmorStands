@@ -60,9 +60,10 @@ public class EntitySelectionNode extends MenuNode {
             // entity is new, create a button for it
             Button button = createButton(entity);
             if (button != null) {
-                buttons.put(entity, button);
                 addButton(button);
             }
+
+            buttons.put(entity, button);
         }
 
         // remove buttons of entities which no longer exist

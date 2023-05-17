@@ -39,10 +39,12 @@ public class SpawnMenu extends InventoryMenu {
 
     @Override
     public void initialize() {
-        addButton(new SpawnSlot<>(this, new ArmorStandSpawner(session), Util.createItem(
-                ItemType.ARMOR_STAND,
-                EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND),
-                Collections.emptyList())));
+        if (session.getPlayer().hasPermission("easyarmorstands.spawn.armorstand")) {
+            addButton(new SpawnSlot<>(this, new ArmorStandSpawner(session), Util.createItem(
+                    ItemType.ARMOR_STAND,
+                    EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND),
+                    Collections.emptyList())));
+        }
         Bukkit.getPluginManager().callEvent(new SessionSpawnMenuInitializeEvent(this));
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
     }

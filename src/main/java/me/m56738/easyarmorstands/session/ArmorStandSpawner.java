@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.util.EulerAngle;
 
 public class ArmorStandSpawner implements EntitySpawner<ArmorStand> {
@@ -14,6 +15,11 @@ public class ArmorStandSpawner implements EntitySpawner<ArmorStand> {
 
     public ArmorStandSpawner(Session session) {
         this.session = session;
+    }
+
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.ARMOR_STAND;
     }
 
     @Override

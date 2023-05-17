@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
+import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.menu.SpawnMenu;
@@ -118,7 +119,7 @@ public final class Session implements ForwardingAudience.Single {
         rootNode.onEnter();
     }
 
-    public <T extends Entity> T spawn(EntitySpawner<T> spawner) {
+    public <T extends Entity> @Nullable T spawn(EntitySpawner<T> spawner) {
         Location eyeLocation = player.getEyeLocation();
         Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
         Vector3d position = new Vector3d(cursor);
@@ -126,7 +127,16 @@ public final class Session implements ForwardingAudience.Single {
             position.y = 0;
         }
         Location location = player.getLocation().add(position.x, position.y, position.z);
+        SessionPreSpawnEvent preSpawnEvent = new SessionPreSpawnEvent(this, location, spawner.getEntityType());
+        Bukkit.getPluginManager().callEvent(preSpawnEvent);
+        if (preSpawnEvent.isCancelled()) {
+            return null;
+        }
         T entity = spawner.spawn(location);
+        if (entity.getType() != spawner.getEntityType()) {
+            entity.remove();
+            throw new IllegalArgumentException("Entity type mismatch");
+        }
         EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
         Node node = spawner.createNode(entity);
         clearNode();
@@ -163,7 +173,7 @@ public final class Session implements ForwardingAudience.Single {
             return true;
         }
 
-        if (!player.hasPermission(property.getName())) {
+        if (!player.hasPermission(property.getPermission())) {
             return false;
         }
 

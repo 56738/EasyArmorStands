@@ -15,21 +15,17 @@ public class GroupAction implements Action {
     }
 
     @Override
-    public boolean execute() {
-        boolean success = true;
+    public void execute() {
         for (Action action : actions) {
-            success &= action.execute();
+            action.execute();
         }
-        return success;
     }
 
     @Override
-    public boolean undo() {
-        boolean success = true;
+    public void undo() {
         for (int i = actions.length - 1; i >= 0; i--) {
-            success &= actions[i].undo();
+            actions[i].undo();
         }
-        return success;
     }
 
     @Override

@@ -9,6 +9,8 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
@@ -18,6 +20,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -31,15 +34,23 @@ public class SessionCommands {
     @CommandDescription("Duplicate an entity")
     @RequireSession
     @RequireEntity
-    public void clone(EasCommandSender sender,
+    public void clone(EasPlayer sender,
                       Session session,
                       Entity entity) {
+        SessionPreSpawnEvent preSpawnEvent = new SessionPreSpawnEvent(session, entity.getLocation(), entity.getType());
+        Bukkit.getPluginManager().callEvent(preSpawnEvent);
+        if (preSpawnEvent.isCancelled()) {
+            sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
+            return;
+        }
+
         EntitySpawnAction<Entity> action = new EntitySpawnAction<>(entity);
         action.execute();
-        Entity clone = action.findEntity();
+        EasyArmorStands.getInstance().getHistory(sender.get()).push(action);
 
         sender.sendMessage(Component.text("Entity cloned", NamedTextColor.GREEN));
 
+        Entity clone = action.findEntity();
         if (clone != null) {
             session.selectEntity(clone);
         }

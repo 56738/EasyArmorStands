@@ -10,6 +10,9 @@ public class ArmorStandButtonProvider implements EntityButtonProvider {
         if (!(entity instanceof ArmorStand)) {
             return null;
         }
+        if (!session.getPlayer().hasPermission("easyarmorstands.edit.armorstand")) {
+            return null;
+        }
         ArmorStand armorStand = (ArmorStand) entity;
         return new ArmorStandButton(session, armorStand);
     }

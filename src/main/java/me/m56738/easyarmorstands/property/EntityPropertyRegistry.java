@@ -4,15 +4,12 @@ import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.context.CommandContext;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
 import me.m56738.easyarmorstands.command.processor.Keys;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -27,26 +24,6 @@ public class EntityPropertyRegistry {
     public EntityPropertyRegistry(CommandManager<EasCommandSender> commandManager, Command.Builder<EasCommandSender> rootBuilder) {
         this.commandManager = commandManager;
         this.rootBuilder = rootBuilder;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static @Nullable Entity getEntity(EntityProperty property, CommandContext<EasCommandSender> ctx) {
-        Entity entity = EntityPreprocessor.getEntityOrNull(ctx);
-        if (entity == null) {
-            ctx.getSender().sendMessage(Component.text("You are not editing an entity.", NamedTextColor.RED));
-            return null;
-        }
-
-        if (!property.getEntityType().isAssignableFrom(entity.getClass())) {
-            ctx.getSender().sendMessage(Component.text("This property doesn't support this entity type.", NamedTextColor.RED));
-            return null;
-        }
-
-        if (!property.isSupported(entity)) {
-            ctx.getSender().sendMessage(Component.text("This property doesn't support this entity.", NamedTextColor.RED));
-            return null;
-        }
-        return entity;
     }
 
     public void register(EntityProperty<?, ?> property) {
@@ -68,7 +45,9 @@ public class EntityPropertyRegistry {
 
         Command.Builder<EasCommandSender> builder = rootBuilder
                 .literal(property.getName())
-                .meta(Keys.SESSION_REQUIRED, true);
+                .meta(Keys.SESSION_REQUIRED, true)
+                .meta(Keys.ENTITY_REQUIRED,
+                        e -> property.getEntityType().isAssignableFrom(e.getClass()) && property.isSupported(e));
 
         String permission = property.getPermission();
         if (permission != null) {
@@ -77,11 +56,7 @@ public class EntityPropertyRegistry {
 
         commandManager.command(builder
                 .handler(ctx -> {
-                    Entity entity = getEntity(property, ctx);
-                    if (entity == null) {
-                        return;
-                    }
-
+                    Entity entity = ctx.get(Keys.ENTITY);
                     ctx.getSender().sendMessage(Component.text()
                             .content("Current value of ")
                             .append(property.getDisplayName())
@@ -105,11 +80,7 @@ public class EntityPropertyRegistry {
         commandManager.command(builder
                 .handler(ctx -> {
                     Session session = ctx.get(Keys.SESSION);
-                    Entity entity = getEntity(property, ctx);
-                    if (entity == null) {
-                        return;
-                    }
-
+                    Entity entity = ctx.get(Keys.ENTITY);
                     Object value = ctx.getOrSupplyDefault(argument.getKey(), () -> property.getDefaultValue(ctx));
                     if (property.performChange(session, entity, value)) {
                         ctx.getSender().sendMessage(Component.text()
@@ -118,6 +89,8 @@ public class EntityPropertyRegistry {
                                 .append(Component.text(" to "))
                                 .append(property.getValueName(value))
                                 .color(NamedTextColor.GREEN));
+                    } else {
+                        ctx.getSender().sendMessage(Component.text("Unable to change property", NamedTextColor.RED));
                     }
                     session.commit();
                 }));
