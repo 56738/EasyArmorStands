@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.keys.CloudKey;
 import cloud.commandframework.keys.SimpleCloudKey;

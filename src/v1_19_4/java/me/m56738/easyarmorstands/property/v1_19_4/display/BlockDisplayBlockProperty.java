@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.property.v1_19_4.display;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.node.v1_19_4.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.text.Component;

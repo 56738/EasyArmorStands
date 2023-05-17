@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.annotations.AnnotationAccessor;
 import cloud.commandframework.annotations.injection.ParameterInjector;
@@ -21,11 +21,6 @@ public class ValueNodeInjector<C> implements ParameterInjector<C, ValueNode> {
         if (!(node instanceof ValueNode)) {
             return null;
         }
-        ValueNode valueNode = (ValueNode) node;
-        String permission = valueNode.getValuePermission();
-        if (permission != null && !context.hasPermission(permission)) {
-            return null;
-        }
-        return valueNode;
+        return (ValueNode) node;
     }
 }

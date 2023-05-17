@@ -1,10 +1,12 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.parser;
 
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import org.bukkit.entity.Entity;
 import org.checkerframework.checker.nullness.qual.NonNull;

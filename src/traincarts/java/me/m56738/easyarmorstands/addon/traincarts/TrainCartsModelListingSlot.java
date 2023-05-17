@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.addon.traincarts;
 import com.bergerkiller.bukkit.tc.TrainCarts;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.command.EasPlayer;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.menu.EntityMenu;
 import me.m56738.easyarmorstands.util.Util;

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.command.ArmorStandSize;
+import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;

@@ -20,9 +20,17 @@ import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.command.*;
+import me.m56738.easyarmorstands.command.EntityCommands;
+import me.m56738.easyarmorstands.command.GlobalCommands;
+import me.m56738.easyarmorstands.command.HistoryCommands;
+import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
+import me.m56738.easyarmorstands.command.parser.EntityPropertyArgumentParser;
+import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
+import me.m56738.easyarmorstands.command.processor.*;
+import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.node.ValueNode;
@@ -113,27 +121,15 @@ public class EasyArmorStands extends JavaPlugin {
                         (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
                 .apply(commandManager, s -> s);
 
-        commandManager.registerExceptionHandler(NoSessionException.class,
-                (sender, e) -> sender.sendMessage(e.getComponent()));
-        commandManager.registerExceptionHandler(NoEntityException.class,
-                (sender, e) -> sender.sendMessage(e.getComponent()));
+        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
+        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
+        commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
 
         commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
         commandManager.registerCommandPostProcessor(new EntityPostprocessor());
-        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
-        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
-
-        PipelineExceptionHandler.register(commandManager);
-
-        commandManager.parameterInjectorRegistry().registerInjector(
-                Session.class, new SessionInjector<>());
-
-        commandManager.parameterInjectorRegistry().registerInjector(
-                ValueNode.class, new ValueNodeInjector<>());
-
         commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
-        commandManager.parameterInjectorRegistry().registerInjectionService(new EntityPropertyInjectionService<>());
-        commandManager.parameterInjectorRegistry().registerInjectionService(new CapabilityInjectionService(loader));
+
+        commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector<>());
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
@@ -155,7 +151,7 @@ public class EasyArmorStands extends JavaPlugin {
                 entity -> a.value().isAssignableFrom(entity.getClass())));
 
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
-        annotationParser.parse(new SessionCommands(sessionManager));
+        annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new EntityCommands());
 

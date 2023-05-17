@@ -6,7 +6,7 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.types.tuples.Pair;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;

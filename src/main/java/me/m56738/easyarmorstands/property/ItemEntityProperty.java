@@ -5,7 +5,7 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.bukkit.parsers.ItemStackArgument;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.menu.EntityItemSlot;
 import me.m56738.easyarmorstands.menu.EntityMenu;

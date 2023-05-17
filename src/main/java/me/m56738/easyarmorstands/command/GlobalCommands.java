@@ -13,6 +13,8 @@ import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -21,6 +23,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -98,7 +101,7 @@ public class GlobalCommands {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         CapabilityLoader loader = plugin.getCapabilityLoader();
         String version = plugin.getDescription().getVersion();
-        sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
         sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
         sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
         for (CapabilityLoader.Entry capability : loader.getCapabilities()) {

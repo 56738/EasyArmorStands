@@ -1,8 +1,9 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.execution.postprocessor.CommandPostprocessingContext;
 import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.services.types.ConsumerService;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;

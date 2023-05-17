@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import org.bukkit.entity.Entity;
 
 public abstract class BooleanEntityProperty<E extends Entity> extends ToggleEntityProperty<E, Boolean> {

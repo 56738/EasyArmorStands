@@ -1,8 +1,9 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.execution.postprocessor.CommandPostprocessingContext;
 import cloud.commandframework.execution.postprocessor.CommandPostprocessor;
 import cloud.commandframework.services.types.ConsumerService;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
@@ -24,7 +25,7 @@ public class EntityPostprocessor implements CommandPostprocessor<EasCommandSende
             }
 
             if (!predicate.test(entity)) {
-                ctx.getCommandContext().getSender().sendMessage(Component.text("You are editing an unsupported entity.", NamedTextColor.RED));
+                ctx.getCommandContext().getSender().sendMessage(Component.text("Cannot use this command with this entity.", NamedTextColor.RED));
                 ConsumerService.interrupt();
             }
         }

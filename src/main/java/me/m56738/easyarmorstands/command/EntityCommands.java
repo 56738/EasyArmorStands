@@ -5,6 +5,7 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;

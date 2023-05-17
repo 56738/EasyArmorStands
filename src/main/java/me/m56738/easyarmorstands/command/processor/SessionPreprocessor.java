@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.execution.preprocessor.CommandPreprocessingContext;

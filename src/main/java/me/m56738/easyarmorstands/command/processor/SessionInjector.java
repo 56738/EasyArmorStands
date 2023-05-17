@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.processor;
 
 import cloud.commandframework.annotations.AnnotationAccessor;
 import cloud.commandframework.annotations.injection.ParameterInjector;

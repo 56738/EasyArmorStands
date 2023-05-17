@@ -1,6 +1,5 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.util.Util;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 

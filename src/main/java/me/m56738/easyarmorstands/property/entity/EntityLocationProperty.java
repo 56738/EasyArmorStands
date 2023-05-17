@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.entity;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.bukkit.parsers.location.LocationArgument;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;

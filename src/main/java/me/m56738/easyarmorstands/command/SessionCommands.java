@@ -8,12 +8,12 @@ import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.session.SessionManager;
+import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -26,12 +26,6 @@ import org.joml.Vector3dc;
 
 @CommandMethod("eas")
 public class SessionCommands {
-    private final SessionManager sessionManager;
-
-    public SessionCommands(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Duplicate an entity")
@@ -112,14 +106,13 @@ public class SessionCommands {
 
     @CommandMethod("align [axis] [value] [offset]")
     @CommandPermission("easyarmorstands.align")
-    @CommandDescription("Move an armor stand to the middle of the block")
+    @CommandDescription("Move an entity to the middle of the block")
     @RequireSession
     @RequireEntity
     public void align(
             EasCommandSender sender,
             Session session,
             Entity entity,
-            EntityLocationProperty property,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
@@ -137,7 +130,7 @@ public class SessionCommands {
         location.setX(position.x());
         location.setY(position.y());
         location.setZ(position.z());
-        if (!session.setProperty(entity, property, location)) {
+        if (!session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }

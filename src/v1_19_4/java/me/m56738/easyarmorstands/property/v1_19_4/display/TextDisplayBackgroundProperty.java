@@ -6,7 +6,7 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.command.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
