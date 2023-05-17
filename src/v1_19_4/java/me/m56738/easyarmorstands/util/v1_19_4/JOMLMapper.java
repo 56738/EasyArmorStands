@@ -6,6 +6,11 @@ import org.joml.*;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class JOMLMapper {
     private final MethodHandle vectorConstructor;
@@ -13,17 +18,21 @@ public class JOMLMapper {
     private final MethodHandle vectorXGetter;
     private final MethodHandle vectorYGetter;
     private final MethodHandle vectorZGetter;
-    private final MethodHandle quaternionConstructor;
     private final MethodHandle quaternionXGetter;
     private final MethodHandle quaternionYGetter;
     private final MethodHandle quaternionZGetter;
     private final MethodHandle quaternionWGetter;
+    private final MethodHandle matrixConstructor;
     private final MethodHandle transformationConstructor;
     private final MethodHandle transformationTranslationGetter;
     private final MethodHandle transformationLeftRotationGetter;
     private final MethodHandle transformationScaleGetter;
     private final MethodHandle transformationRightRotationGetter;
-    private final Object identityQuaternion;
+    private final MethodHandle bukkitTransformationConstructor;
+    private final MethodHandle bukkitTransformationTranslationGetter;
+    private final MethodHandle bukkitTransformationLeftRotationGetter;
+    private final MethodHandle bukkitTransformationScaleGetter;
+    private final MethodHandle bukkitTransformationRightRotationGetter;
 
     public JOMLMapper() throws Throwable {
         MethodHandles.Lookup lookup = MethodHandles.publicLookup();
@@ -31,18 +40,24 @@ public class JOMLMapper {
         Class<?> vectorClass = Class.forName(joml + ".Vector3f");
         Class<?> vectorConstClass = Class.forName(joml + ".Vector3fc");
         Class<?> quaternionClass = Class.forName(joml + ".Quaternionf");
+        Class<?> matrixClass = Class.forName(joml + ".Matrix4f");
+        Class<?> bukkitTransformationClass = Class.forName("com.mojang.math.Transformation");
         this.vectorConstructor = lookup.findConstructor(vectorClass,
                 MethodType.methodType(void.class, float.class, float.class, float.class));
         this.vectorSetter = lookup.findVirtual(vectorClass, "set", MethodType.methodType(vectorClass, vectorConstClass));
         this.vectorXGetter = lookup.findGetter(vectorClass, "x", float.class);
         this.vectorYGetter = lookup.findGetter(vectorClass, "y", float.class);
         this.vectorZGetter = lookup.findGetter(vectorClass, "z", float.class);
-        this.quaternionConstructor = lookup.findConstructor(quaternionClass,
-                MethodType.methodType(void.class, float.class, float.class, float.class, float.class));
         this.quaternionXGetter = lookup.findGetter(quaternionClass, "x", float.class);
         this.quaternionYGetter = lookup.findGetter(quaternionClass, "y", float.class);
         this.quaternionZGetter = lookup.findGetter(quaternionClass, "z", float.class);
         this.quaternionWGetter = lookup.findGetter(quaternionClass, "w", float.class);
+        this.matrixConstructor = lookup.findConstructor(matrixClass,
+                MethodType.methodType(void.class,
+                        float.class, float.class, float.class, float.class,
+                        float.class, float.class, float.class, float.class,
+                        float.class, float.class, float.class, float.class,
+                        float.class, float.class, float.class, float.class));
         this.transformationConstructor = lookup.findConstructor(Transformation.class,
                 MethodType.methodType(void.class, vectorClass, quaternionClass, vectorClass, quaternionClass));
         this.transformationTranslationGetter = lookup.findVirtual(Transformation.class, "getTranslation",
@@ -53,7 +68,35 @@ public class JOMLMapper {
                 MethodType.methodType(vectorClass));
         this.transformationRightRotationGetter = lookup.findVirtual(Transformation.class, "getRightRotation",
                 MethodType.methodType(quaternionClass));
-        this.identityQuaternion = quaternionClass.getDeclaredConstructor().newInstance();
+        this.bukkitTransformationConstructor = lookup.findConstructor(bukkitTransformationClass,
+                MethodType.methodType(void.class, matrixClass));
+        this.bukkitTransformationTranslationGetter = lookup.unreflect(
+                findGetter(bukkitTransformationClass, vectorClass, 0));
+        this.bukkitTransformationLeftRotationGetter = lookup.unreflect(
+                findGetter(bukkitTransformationClass, quaternionClass, 0));
+        this.bukkitTransformationScaleGetter = lookup.unreflect(
+                findGetter(bukkitTransformationClass, vectorClass, 1));
+        this.bukkitTransformationRightRotationGetter = lookup.unreflect(
+                findGetter(bukkitTransformationClass, quaternionClass, 1));
+    }
+
+    private static Method findGetter(Class<?> owner, Class<?> type, int index) throws NoSuchMethodException {
+        List<Method> methods = new ArrayList<>();
+        for (Method method : owner.getDeclaredMethods()) {
+            if (method.getReturnType() != type || method.getParameterCount() != 0) {
+                continue;
+            }
+            int modifiers = method.getModifiers();
+            if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
+                continue;
+            }
+            methods.add(method);
+        }
+        methods.sort(Comparator.comparing(Method::getName));
+        if (index >= methods.size()) {
+            throw new NoSuchMethodException();
+        }
+        return methods.get(index);
     }
 
     public Object convertToNative(Vector3fc vector) {
@@ -76,9 +119,13 @@ public class JOMLMapper {
         }
     }
 
-    public Object convertToNative(Quaternionfc quaternion) {
+    public Object convertToNative(Matrix4fc m) {
         try {
-            return quaternionConstructor.invoke(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w());
+            return matrixConstructor.invoke(
+                    m.m00(), m.m01(), m.m02(), m.m03(),
+                    m.m10(), m.m11(), m.m12(), m.m13(),
+                    m.m20(), m.m21(), m.m22(), m.m23(),
+                    m.m30(), m.m31(), m.m32(), m.m33());
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -147,20 +194,13 @@ public class JOMLMapper {
     }
 
     public Transformation getTransformation(Matrix4fc m) {
-        Vector3f translation = m.getTranslation(new Vector3f());
-        Quaternionf rotation = m.getUnnormalizedRotation(new Quaternionf());
-        Vector3f scale = m.getScale(new Vector3f());
-
-        Object nativeTranslation = convertToNative(translation);
-        Object nativeRotation = convertToNative(rotation);
-        Object nativeScale = convertToNative(scale);
-
         try {
+            Object bukkitTransformation = bukkitTransformationConstructor.invoke(convertToNative(m));
             return (Transformation) transformationConstructor.invoke(
-                    nativeTranslation,
-                    nativeRotation,
-                    nativeScale,
-                    identityQuaternion);
+                    bukkitTransformationTranslationGetter.invoke(bukkitTransformation),
+                    bukkitTransformationLeftRotationGetter.invoke(bukkitTransformation),
+                    bukkitTransformationScaleGetter.invoke(bukkitTransformation),
+                    bukkitTransformationRightRotationGetter.invoke(bukkitTransformation));
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

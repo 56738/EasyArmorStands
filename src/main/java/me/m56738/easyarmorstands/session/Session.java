@@ -3,17 +3,17 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
-import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
-import me.m56738.easyarmorstands.history.action.GroupAction;
 import me.m56738.easyarmorstands.menu.SpawnMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.EntityPropertyChange;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -146,37 +146,56 @@ public final class Session implements ForwardingAudience.Single {
         return node.onClick(eyes, target, context);
     }
 
-    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value, boolean force) {
+    public <E extends Entity, T> void applyProperty(E entity, EntityProperty<E, T> property, T value) {
+        T oldValue = property.getValue(entity);
+        if (Objects.equals(oldValue, value)) {
+            return;
+        }
+        property.setValue(entity, value);
+        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
+        originalValues.putIfAbsent(key, oldValue);
+        pendingValues.put(key, value);
+    }
+
+    public <E extends Entity, T> boolean canSetProperty(E entity, EntityProperty<E, T> property, T value) {
         T oldValue = property.getValue(entity);
         if (Objects.equals(oldValue, value)) {
             return true;
         }
 
-        if (!force) {
-            if (!player.hasPermission(property.getName())) {
-                return false;
-            }
-
-            SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
-            Bukkit.getPluginManager().callEvent(event);
-            if (event.isCancelled()) {
-                return false;
-            }
+        if (!player.hasPermission(property.getName())) {
+            return false;
         }
 
-        property.setValue(entity, value);
-        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
-        originalValues.putIfAbsent(key, oldValue);
-        pendingValues.put(key, value);
-        return true;
+        SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
     }
 
     public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value) {
-        return setProperty(entity, property, value, false);
+        if (canSetProperty(entity, property, value)) {
+            applyProperty(entity, property, value);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean setProperties(Collection<EntityPropertyChange<?, ?>> changes) {
+        for (EntityPropertyChange<?, ?> change : changes) {
+            if (!change.canChange(this)) {
+                return false;
+            }
+        }
+        for (EntityPropertyChange<?, ?> change : changes) {
+            change.applyChange(this);
+        }
+        return true;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void commit() {
+        Bukkit.getPluginManager().callEvent(new SessionCommitEvent(this));
         List<EntityPropertyAction> actions = new ArrayList<>();
         for (Map.Entry<ChangeKey, Object> entry : pendingValues.entrySet()) {
             ChangeKey key = entry.getKey();
@@ -186,12 +205,7 @@ public final class Session implements ForwardingAudience.Single {
                 actions.add(new EntityPropertyAction(key.entity, key.property, oldValue, value));
             }
         }
-        History history = EasyArmorStands.getInstance().getHistory(player);
-        if (actions.size() > 1) {
-            history.push(new GroupAction(actions));
-        } else if (actions.size() == 1) {
-            history.push(actions.get(0));
-        }
+        EasyArmorStands.getInstance().getHistory(player).push(actions);
         originalValues.clear();
         pendingValues.clear();
     }
@@ -295,6 +309,10 @@ public final class Session implements ForwardingAudience.Single {
 
     public void setAngleSnapIncrement(double angleSnapIncrement) {
         this.angleSnapIncrement = angleSnapIncrement;
+    }
+
+    public EntitySelectionNode getRootNode() {
+        return rootNode;
     }
 
     @Override

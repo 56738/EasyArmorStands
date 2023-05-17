@@ -152,7 +152,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         annotationParser.registerBuilderModifier(RequireSession.class, (a, b) -> b.meta(Keys.SESSION_REQUIRED, true));
         annotationParser.registerBuilderModifier(RequireEntity.class, (a, b) -> b.meta(Keys.ENTITY_REQUIRED,
-                entity -> a.type().isAssignableFrom(entity.getClass())));
+                entity -> a.value().isAssignableFrom(entity.getClass())));
 
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
         annotationParser.parse(new SessionCommands(sessionManager));

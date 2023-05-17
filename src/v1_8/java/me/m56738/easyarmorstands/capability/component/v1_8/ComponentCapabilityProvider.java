@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -59,6 +60,11 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
                         component.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
             }
             meta.setLore(legacyLore);
+        }
+
+        @Override
+        public Component getItemDisplayName(ItemStack item) {
+            return Component.text(item.getType().name());
         }
     }
 }

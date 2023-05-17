@@ -8,8 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * Called when a session is created.
  * <p>
  * Can be used to modify the created session, for example to add bones or tools.
- *
- * @see SessionStartEvent Preventing session creation
  */
 public class SessionInitializeEvent extends SessionEvent {
     private static final HandlerList handlerList = new HandlerList();

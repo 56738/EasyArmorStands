@@ -116,6 +116,12 @@ registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 registerVersion("v1_19_4_paper", "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
+registerAddon("headdatabase")
+registerAddon("plotsquared")
+registerAddon("traincarts")
+registerAddon("worldguard_v6")
+registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
+
 sourceSets {
     named("v1_19_4_paper") {
         compileClasspath += named("v1_19_4").get().output
@@ -124,12 +130,6 @@ sourceSets {
         runtimeClasspath += named("v1_16_paper").get().output
     }
 }
-
-registerAddon("headdatabase")
-registerAddon("plotsquared")
-registerAddon("traincarts")
-registerAddon("worldguard_v6")
-registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
@@ -155,39 +155,39 @@ bukkit {
         create("easyarmorstands.creative") {
             description = "Allows using EasyArmorStands features which are safe for creative mode players."
             children = listOf(
-                    "easyarmorstands.clone",
-                    "easyarmorstands.color",
-                    "easyarmorstands.destroy",
-                    "easyarmorstands.give",
-                    "easyarmorstands.history",
-                    "easyarmorstands.set.display.block",
-                    "easyarmorstands.set.display.item",
-                    "easyarmorstands.spawn",
-                    "easyarmorstands.survival",
-                    "easyarmorstands.traincarts.model"
+                "easyarmorstands.clone",
+                "easyarmorstands.color",
+                "easyarmorstands.destroy",
+                "easyarmorstands.give",
+                "easyarmorstands.history",
+                "easyarmorstands.set.display.block",
+                "easyarmorstands.set.display.item",
+                "easyarmorstands.spawn",
+                "easyarmorstands.survival",
+                "easyarmorstands.traincarts.model"
             )
         }
         create("easyarmorstands.survival") {
             description = "Allows using EasyArmorStands features which are safe for survival mode players."
             children = listOf(
-                    "easyarmorstands.align",
-                    "easyarmorstands.edit",
-                    "easyarmorstands.help",
-                    "easyarmorstands.open",
-                    "easyarmorstands.property.arms",
-                    "easyarmorstands.property.baseplate",
-                    "easyarmorstands.property.cantick",
-                    "easyarmorstands.property.equipment",
-                    "easyarmorstands.property.glow",
-                    "easyarmorstands.property.gravity",
-                    "easyarmorstands.property.invulnerable",
-                    "easyarmorstands.property.lock",
-                    "easyarmorstands.property.marker",
-                    "easyarmorstands.property.name",
-                    "easyarmorstands.property.size",
-                    "easyarmorstands.property.visible",
-                    "easyarmorstands.snap",
-                    "easyarmorstands.version",
+                "easyarmorstands.align",
+                "easyarmorstands.edit",
+                "easyarmorstands.help",
+                "easyarmorstands.open",
+                "easyarmorstands.property.arms",
+                "easyarmorstands.property.baseplate",
+                "easyarmorstands.property.cantick",
+                "easyarmorstands.property.equipment",
+                "easyarmorstands.property.glow",
+                "easyarmorstands.property.gravity",
+                "easyarmorstands.property.invulnerable",
+                "easyarmorstands.property.lock",
+                "easyarmorstands.property.marker",
+                "easyarmorstands.property.name",
+                "easyarmorstands.property.size",
+                "easyarmorstands.property.visible",
+                "easyarmorstands.snap",
+                "easyarmorstands.version",
             )
 
         }

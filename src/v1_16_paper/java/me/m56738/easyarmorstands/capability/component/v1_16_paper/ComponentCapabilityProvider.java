@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -41,17 +42,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
     @Override
     public ComponentCapability create(Plugin plugin) {
         try {
-            NativeComponentMapper mapper = NativeComponentMapper.getInstance();
-            MethodHandles.Lookup lookup = MethodHandles.lookup();
-            MethodHandle getCustomName = lookup.findVirtual(Entity.class, "customName",
-                    MethodType.methodType(mapper.getComponentClass()));
-            MethodHandle setCustomName = lookup.findVirtual(Entity.class, "customName",
-                    MethodType.methodType(void.class, mapper.getComponentClass()));
-            MethodHandle setDisplayName = lookup.findVirtual(ItemMeta.class, "displayName",
-                    MethodType.methodType(void.class, mapper.getComponentClass()));
-            MethodHandle setLore = lookup.findVirtual(ItemMeta.class, "lore",
-                    MethodType.methodType(void.class, List.class));
-            return new ComponentCapabilityImpl(mapper, getCustomName, setCustomName, setDisplayName, setLore);
+            return new ComponentCapabilityImpl();
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
@@ -63,13 +54,21 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         private final MethodHandle setCustomName;
         private final MethodHandle setDisplayName;
         private final MethodHandle setLore;
+        private final MethodHandle getItemDisplayName;
 
-        public ComponentCapabilityImpl(NativeComponentMapper mapper, MethodHandle getCustomName, MethodHandle setCustomName, MethodHandle setDisplayName, MethodHandle setLore) {
-            this.mapper = mapper;
-            this.getCustomName = getCustomName;
-            this.setCustomName = setCustomName;
-            this.setDisplayName = setDisplayName;
-            this.setLore = setLore;
+        public ComponentCapabilityImpl() throws NoSuchMethodException, IllegalAccessException {
+            MethodHandles.Lookup lookup = MethodHandles.lookup();
+            mapper = NativeComponentMapper.getInstance();
+            getCustomName = lookup.findVirtual(Entity.class, "customName",
+                    MethodType.methodType(mapper.getComponentClass()));
+            setCustomName = lookup.findVirtual(Entity.class, "customName",
+                    MethodType.methodType(void.class, mapper.getComponentClass()));
+            setDisplayName = lookup.findVirtual(ItemMeta.class, "displayName",
+                    MethodType.methodType(void.class, mapper.getComponentClass()));
+            setLore = lookup.findVirtual(ItemMeta.class, "lore",
+                    MethodType.methodType(void.class, List.class));
+            getItemDisplayName = lookup.findVirtual(ItemStack.class, "displayName",
+                    MethodType.methodType(mapper.getComponentClass()));
         }
 
         @Override
@@ -109,6 +108,15 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             }
             try {
                 setLore.invoke(meta, nativeLore);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Component getItemDisplayName(ItemStack item) {
+            try {
+                return mapper.convertFromNative(getItemDisplayName.invoke(item));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

@@ -56,6 +56,9 @@ public class NativeComponentMapper {
         if (component == null) {
             return null;
         }
+        if (componentClass.isAssignableFrom(component.getClass())) {
+            return component;
+        }
         try {
             return deserialize.invoke(serializer.serializeToTree(component));
         } catch (Throwable e) {
@@ -66,6 +69,9 @@ public class NativeComponentMapper {
     public Component convertFromNative(Object component) {
         if (component == null) {
             return null;
+        }
+        if (component instanceof Component) {
+            return (Component) component;
         }
         try {
             return serializer.deserializeFromTree((JsonElement) serialize.invoke(component));

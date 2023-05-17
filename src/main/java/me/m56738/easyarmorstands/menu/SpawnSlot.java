@@ -33,7 +33,6 @@ public class SpawnSlot<T extends Entity> implements InventorySlot {
                     player.closeInventory();
                 }
             });
-            return true;
         }
         return false;
     }

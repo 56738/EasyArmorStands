@@ -48,7 +48,6 @@ public class BoneRotationNode extends RotationNode {
     protected void apply(double angle, double degrees) {
         Vector3d axis = getAxis();
         initial.rotateLocal(angle, axis.x, axis.y, axis.z, current);
-
         Matrix4d matrix = new Matrix4d(bone.getMatrix());
         matrix.set3x3(current);
         bone.setMatrix(matrix);

@@ -1,8 +1,10 @@
 package me.m56738.easyarmorstands.history;
 
 import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.GroupAction;
 
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.UUID;
 
 public class History {
@@ -22,6 +24,14 @@ public class History {
         future.clear();
         while (past.size() > 100) {
             past.removeLast();
+        }
+    }
+
+    public void push(List<? extends Action> actions) {
+        if (actions.size() == 1) {
+            push(actions.get(0));
+        } else if (actions.size() > 1) {
+            push(new GroupAction(actions));
         }
     }
 

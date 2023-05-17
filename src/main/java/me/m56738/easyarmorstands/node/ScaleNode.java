@@ -82,9 +82,6 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
             t = currentOffset.dot(direction);
             scale = t / initialOffset.dot(direction);
         }
-        if (scale < 0) {
-            scale = -scale;
-        }
         Matrix4d matrix = new Matrix4d(bone.getMatrix());
         matrix.set3x3(new Matrix3d(initial).scale(
                 scale * axis.x + constant.x,
