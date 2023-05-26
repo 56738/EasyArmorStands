@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
+import me.m56738.easyarmorstands.bone.PositionAndYawBone;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
@@ -11,7 +11,7 @@ import org.joml.Vector3dc;
 
 public class CarryNode extends EditNode {
     private final Session session;
-    private final ArmorStandPositionBone bone;
+    private final PositionAndYawBone bone;
     private final Vector3d initialPosition = new Vector3d();
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentPosition = new Vector3d();
@@ -19,7 +19,7 @@ public class CarryNode extends EditNode {
     private float initialYaw;
     private float yawOffset;
 
-    public CarryNode(Session session, ArmorStandPositionBone bone) {
+    public CarryNode(Session session, PositionAndYawBone bone) {
         super(session);
         this.session = session;
         this.bone = bone;
@@ -48,7 +48,7 @@ public class CarryNode extends EditNode {
         Location location = player.getLocation();
         float yaw;
         if (location.getPitch() > 80) {
-            currentPosition.set(location.getX(), location.getY(), location.getZ()).add(bone.getOffset());
+            currentPosition.set(location.getX(), location.getY(), location.getZ());
             yaw = location.getYaw();
         } else {
             Vector3dc cursor = this.cursor.get();

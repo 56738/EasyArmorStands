@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
-import me.m56738.easyarmorstands.bone.MatrixBone;
+import me.m56738.easyarmorstands.bone.ScaleBone;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
@@ -13,19 +13,18 @@ import net.kyori.adventure.util.RGBLike;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
-    private final MatrixBone bone;
+    private final ScaleBone bone;
     private final Component name;
     private final Vector3d axis;
-    private final Vector3d constant;
     private final Vector3d direction;
     private final RGBLike color;
     private final double length;
     private final Cursor3D cursor;
-    private final Matrix4d initial = new Matrix4d();
     private final Vector3d negativeEnd = new Vector3d();
     private final Vector3d positiveEnd = new Vector3d();
     private final Vector3d currentPosition = new Vector3d();
@@ -37,14 +36,13 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private Vector3d lookTarget;
     private Double manualValue;
 
-    public ScaleNode(Session session, MatrixBone bone, Component name, Vector3dc axis, Vector3dc constant, RGBLike color, double length) {
+    public ScaleNode(Session session, ScaleBone bone, Component name, Vector3dc axis, RGBLike color, double length) {
         super(session);
         this.session = session;
         this.bone = bone;
         this.name = name;
         this.axis = new Vector3d(axis);
         this.direction = new Vector3d(axis);
-        this.constant = new Vector3d(constant);
         this.color = color;
         this.length = length;
         this.cursor = new Cursor3D(session.getPlayer(), session);
@@ -53,17 +51,16 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     @Override
     public void onEnter() {
         manualValue = null;
-        initial.set(bone.getMatrix());
-        initial.transformDirection(axis, direction).normalize();
-        initial.getTranslation(initialPosition);
-        initial.getScale(initialScale);
+        bone.getRotation().transform(axis, direction).normalize();
+        initialPosition.set(bone.getOrigin());
+        initialScale.set(bone.getScale());
         initialCursor.set(lookTarget != null ? lookTarget : initialPosition);
         cursor.start(initialCursor);
     }
 
     @Override
     protected void abort() {
-        bone.setMatrix(initial);
+        bone.setScale(initialScale);
     }
 
     @Override
@@ -76,18 +73,17 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         double scale;
         double originalScale = initialScale.dot(axis);
         if (manualValue != null) {
-            scale = manualValue / originalScale;
-            t = scale * initialOffset.dot(direction);
+            scale = manualValue;
+            t = scale / originalScale * initialOffset.dot(direction);
         } else {
             t = currentOffset.dot(direction);
-            scale = t / initialOffset.dot(direction);
+            scale = t / initialOffset.dot(direction) * originalScale;
         }
-        Matrix4d matrix = new Matrix4d(bone.getMatrix());
-        matrix.set3x3(new Matrix3d(initial).scale(
-                scale * axis.x + constant.x,
-                scale * axis.y + constant.y,
-                scale * axis.z + constant.z));
-        bone.setMatrix(matrix);
+        bone.setScale(new Vector3d(
+                Math.lerp(initialScale.x, scale, axis.x),
+                Math.lerp(initialScale.y, scale, axis.y),
+                Math.lerp(initialScale.z, scale, axis.z)
+        ));
 
         initialPosition.fma(t, direction, currentPosition);
         initialPosition.fma(Math.min(-length, t), direction, negativeEnd);
@@ -95,7 +91,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         session.showLine(negativeEnd, positiveEnd, color, true);
         session.showLine(currentPosition, cursor.get(), NamedTextColor.WHITE, false);
         session.sendActionBar(Component.text().append(name).append(Component.text(": "))
-                .append(Component.text(Util.SCALE_FORMAT.format(scale * originalScale))));
+                .append(Component.text(Util.SCALE_FORMAT.format(scale))));
     }
 
     @Override
@@ -130,9 +126,8 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void update(Vector3dc eyes, Vector3dc target) {
-        Matrix4dc matrix = bone.getMatrix();
-        matrix.transformDirection(axis, direction).normalize();
-        Vector3dc position = matrix.getTranslation(new Vector3d());
+        bone.getRotation().transform(axis, direction).normalize();
+        Vector3dc position = bone.getOrigin();
         position.fma(-length, direction, negativeEnd);
         position.fma(length, direction, positiveEnd);
         boolean positive = session.isLookingAtPoint(eyes, target, positiveEnd);

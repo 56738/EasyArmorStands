@@ -1,13 +1,14 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.MatrixBone;
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
+import me.m56738.easyarmorstands.bone.ScaleBone;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
-import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.time.Duration;
@@ -51,16 +52,16 @@ public class MenuNode implements Node {
         buttons.remove(button);
     }
 
-    public void addMoveButtons(Session session, PositionBone bone, double length, boolean includeEnds) {
+    public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length, boolean includeEnds) {
         for (Axis axis : Axis.values()) {
             addButton(new MoveNode(
                     session,
                     bone,
+                    rotationProvider,
                     Component.text("Move " + axis.getName(), axis.getColor()),
                     axis.getDirection(),
                     axis.getColor(),
                     length,
-                    true,
                     includeEnds
             ));
         }
@@ -71,17 +72,17 @@ public class MenuNode implements Node {
             addButton(new MoveNode(
                     session,
                     bone,
+                    null,
                     Component.text(axis.getName(), axis.getColor()),
                     axis.getDirection(),
                     axis.getColor(),
                     length,
-                    false,
                     includeEnds
             ));
         }
     }
 
-    public void addRotationButtons(Session session, MatrixBone bone, double radius, boolean local) {
+    public void addRotationButtons(Session session, RotationBone bone, double radius, RotationProvider rotationProvider) {
         for (Axis axis : Axis.values()) {
             addButton(new BoneRotationNode(
                     session,
@@ -90,19 +91,18 @@ public class MenuNode implements Node {
                     axis.getDirection(),
                     axis.getColor(),
                     radius,
-                    local
+                    rotationProvider
             ));
         }
     }
 
-    public void addScaleButtons(Session session, MatrixBone bone, double length) {
+    public void addScaleButtons(Session session, ScaleBone bone, double length) {
         for (Axis axis : Axis.values()) {
             addButton(new ScaleNode(
                     session,
                     bone,
                     Component.text("Scale " + axis.getName(), axis.getColor()),
                     axis.getDirection(),
-                    new Vector3d(1, 1, 1).sub(axis.getDirection()),
                     NamedTextColor.AQUA,
                     length
             ));

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.node;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
@@ -20,12 +21,12 @@ import org.joml.Vector3dc;
 public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
     private final PositionBone bone;
+    private final RotationProvider rotationProvider;
     private final Component name;
     private final Vector3d axis;
     private final Vector3d direction;
     private final RGBLike color;
     private final double length;
-    private final boolean local;
     private final boolean includeEnds;
     private final Cursor3D cursor;
     private final Vector3d negativeEnd = new Vector3d();
@@ -38,17 +39,17 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     private Vector3d lookTarget;
     private Double manualValue;
 
-    public MoveNode(Session session, PositionBone bone, Component name, Vector3dc axis, RGBLike color, double length, boolean local, boolean includeEnds) {
+    public MoveNode(Session session, PositionBone bone, RotationProvider rotationProvider, Component name, Vector3dc axis, RGBLike color, double length, boolean includeEnds) {
         super(session);
         this.session = session;
         this.bone = bone;
+        this.rotationProvider = rotationProvider;
         this.name = name;
         this.axis = new Vector3d(axis);
         this.direction = new Vector3d(axis);
         this.color = color;
         this.length = length;
         this.cursor = new Cursor3D(session.getPlayer(), session);
-        this.local = local;
         this.includeEnds = includeEnds;
     }
 
@@ -56,12 +57,16 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         return length;
     }
 
+    private void refreshDirection() {
+        if (rotationProvider != null) {
+            rotationProvider.getRotation().transform(axis, direction);
+        }
+    }
+
     @Override
     public void onEnter() {
         manualValue = null;
-        if (local) {
-            bone.getMatrix().transformDirection(axis, direction);
-        }
+        refreshDirection();
         initial.set(bone.getPosition());
         initialOffset = initial.dot(direction);
         initialCursor.set(lookTarget != null ? lookTarget : initial);
@@ -75,9 +80,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
-        if (local) {
-            bone.getMatrix().transformDirection(axis, direction).normalize();
-        }
+        refreshDirection();
 
         cursor.update(false);
 
@@ -85,7 +88,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         double t;
         if (manualValue != null) {
             t = manualValue;
-            if (!local) {
+            if (rotationProvider == null) {
                 t -= initialOffset;
             }
         } else {
@@ -104,7 +107,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         session.showLine(current, cursor.get(), NamedTextColor.WHITE, false);
 
         TextComponent value;
-        if (local) {
+        if (rotationProvider != null) {
             value = Component.text(Util.OFFSET_FORMAT.format(t));
         } else {
             value = Component.text(Util.POSITION_FORMAT.format(t + initialOffset));
@@ -124,9 +127,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void update(Vector3dc eyes, Vector3dc target) {
-        if (local) {
-            bone.getMatrix().transformDirection(axis, direction).normalize();
-        }
+        refreshDirection();
         Vector3dc position = bone.getPosition();
         double length = getLength();
         position.fma(-length, direction, negativeEnd);
@@ -166,7 +167,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public ArgumentParser<CommandSender, Double> getParser() {
-        if (local) {
+        if (rotationProvider != null) {
             // Offset
             return new DoubleArgument.DoubleParser<>(-100, 100);
         } else {

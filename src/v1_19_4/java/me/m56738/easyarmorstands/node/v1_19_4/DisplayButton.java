@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
-import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayPositionBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayRotationBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayScaleBone;
 import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.node.Node;
@@ -49,18 +51,20 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
 
     @Override
     public Node createNode() {
-        DisplayBone bone = new DisplayBone(session, entity, addon);
+        DisplayPositionBone positionBone = new DisplayPositionBone(session, entity, addon);
+        DisplayRotationBone rotationBone = new DisplayRotationBone(session, entity, addon, addon.getDisplayLeftRotationProperty());
+        DisplayScaleBone scaleBone = new DisplayScaleBone(session, entity, addon);
 
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);
-        localNode.addMoveButtons(session, bone, 2, false);
-        localNode.addRotationButtons(session, bone, 1, true);
-        localNode.addScaleButtons(session, bone, 2);
+        localNode.addMoveButtons(session, positionBone, rotationBone, 2, false);
+        localNode.addRotationButtons(session, rotationBone, 1, rotationBone);
+        localNode.addScaleButtons(session, scaleBone, 2);
 
         MenuNode globalNode = factory.createRootNode(session, Component.text("Global"), entity);
         globalNode.setRoot(true);
-        globalNode.addPositionButtons(session, bone, 3, true);
-        globalNode.addRotationButtons(session, bone, 1, false);
+        globalNode.addPositionButtons(session, positionBone, 3, true);
+        globalNode.addRotationButtons(session, rotationBone, 1, null);
 
         localNode.setNextNode(globalNode);
         globalNode.setNextNode(localNode);

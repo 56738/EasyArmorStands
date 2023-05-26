@@ -5,12 +5,9 @@ import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.joml.Math;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
 import org.joml.Vector3dc;
 
-public class EntityLocationBone implements YawBone {
+public class EntityLocationBone implements PositionAndYawBone {
     private final Session session;
     private final Entity entity;
 
@@ -19,7 +16,7 @@ public class EntityLocationBone implements YawBone {
         this.entity = entity;
     }
 
-    protected Vector3dc getOffset() {
+    public Vector3dc getOffset() {
         return Util.ZERO;
     }
 
@@ -59,17 +56,6 @@ public class EntityLocationBone implements YawBone {
         location.setZ(position.z() - offset.z());
         location.setYaw(yaw);
         session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
-    }
-
-    @Override
-    public Matrix4dc getMatrix() {
-        Vector3dc offset = getOffset();
-        Location location = entity.getLocation();
-        return new Matrix4d().translation(
-                location.getX() + offset.x(),
-                location.getY() + offset.y(),
-                location.getZ() + offset.z()
-        ).rotateY(-Math.toRadians(location.getYaw()));
     }
 
     @Override

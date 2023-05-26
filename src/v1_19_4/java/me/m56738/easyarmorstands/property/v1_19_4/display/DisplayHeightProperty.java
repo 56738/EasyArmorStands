@@ -5,11 +5,9 @@ import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.property.EntityPropertyChange;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
-import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
@@ -45,8 +43,7 @@ public class DisplayHeightProperty extends DisplaySizeProperty {
 
     @Override
     public boolean performChange(Session session, Display entity, Float value) {
-        JOMLMapper mapper = addon.getMapper();
-        DisplayTransformationProperty displayTransformationProperty = addon.getDisplayTransformationProperty();
+        DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
         EntityLocationProperty entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
 
         float oldValue = entity.getDisplayHeight();
@@ -62,11 +59,9 @@ public class DisplayHeightProperty extends DisplaySizeProperty {
         changes.add(new EntityPropertyChange<>(entity, entityLocationProperty, newLocation));
 
         // Move up using offset
-        Transformation transformation = displayTransformationProperty.getValue(entity);
-        Vector3f translation = mapper.getTranslation(transformation);
+        Vector3f translation = new Vector3f(displayTranslationProperty.getValue(entity));
         translation.y += delta;
-        mapper.setTranslation(transformation, translation);
-        changes.add(new EntityPropertyChange<>(entity, displayTransformationProperty, transformation));
+        changes.add(new EntityPropertyChange<>(entity, displayTranslationProperty, translation));
 
         // Ignore the return value, failure is allowed
         session.setProperties(changes);

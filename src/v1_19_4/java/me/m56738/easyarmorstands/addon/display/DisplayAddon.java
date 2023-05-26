@@ -1,10 +1,12 @@
 package me.m56738.easyarmorstands.addon.display;
 
+import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.bone.v1_19_4.DisplayOffsetBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayRotationBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayTranslationBone;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
@@ -20,6 +22,7 @@ import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -39,7 +42,10 @@ import java.util.List;
 
 public class DisplayAddon implements Addon {
     private JOMLMapper mapper;
-    private DisplayTransformationProperty displayTransformationProperty;
+    private DisplayTranslationProperty displayTranslationProperty;
+    private DisplayLeftRotationProperty displayLeftRotationProperty;
+    private DisplayScaleProperty displayScaleProperty;
+    private DisplayRightRotationProperty displayRightRotationProperty;
     private DisplayBrightnessProperty displayBrightnessProperty;
     private DisplayWidthProperty displayWidthProperty;
     private DisplayHeightProperty displayHeightProperty;
@@ -71,7 +77,10 @@ public class DisplayAddon implements Addon {
     public void enable(EasyArmorStands plugin) {
         TextDisplayCapability textDisplayCapability = plugin.getCapability(TextDisplayCapability.class);
 
-        displayTransformationProperty = new DisplayTransformationProperty(mapper);
+        displayTranslationProperty = new DisplayTranslationProperty(mapper);
+        displayLeftRotationProperty = new DisplayLeftRotationProperty(mapper);
+        displayScaleProperty = new DisplayScaleProperty(mapper);
+        displayRightRotationProperty = new DisplayRightRotationProperty(mapper);
         displayBrightnessProperty = new DisplayBrightnessProperty();
         displayWidthProperty = new DisplayWidthProperty();
         displayHeightProperty = new DisplayHeightProperty(this);
@@ -82,7 +91,10 @@ public class DisplayAddon implements Addon {
         textDisplayShadowProperty = new TextDisplayShadowProperty();
         textDisplayTextProperty = new TextDisplayTextProperty(textDisplayCapability);
 
-        plugin.getEntityPropertyRegistry().register(displayTransformationProperty);
+        plugin.getEntityPropertyRegistry().register(displayTranslationProperty);
+        plugin.getEntityPropertyRegistry().register(displayLeftRotationProperty);
+        plugin.getEntityPropertyRegistry().register(displayScaleProperty);
+        plugin.getEntityPropertyRegistry().register(displayRightRotationProperty);
         plugin.getEntityPropertyRegistry().register(displayBrightnessProperty);
         plugin.getEntityPropertyRegistry().register(displayWidthProperty);
         plugin.getEntityPropertyRegistry().register(displayHeightProperty);
@@ -106,10 +118,34 @@ public class DisplayAddon implements Addon {
     @RequireSession
     @RequireEntity(Display.class)
     public void editOffset(Session session, Display entity) {
-        DisplayOffsetBone bone = new DisplayOffsetBone(session, entity, this);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Display offset", NamedTextColor.GOLD), entity);
-        node.addPositionButtons(session, bone, 3, true);
-        node.addRotationButtons(session, bone, 1, false);
+        DisplayTranslationBone translationBone = new DisplayTranslationBone(session, entity, this);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Translation", NamedTextColor.GOLD), entity);
+        node.addPositionButtons(session, translationBone, 3, true);
+        session.pushNode(node);
+    }
+
+    @CommandMethod("eas scale <scale>")
+    @CommandPermission("easyarmorstands.property.display.scale")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void editScale(Audience sender, Session session, Display entity, @Argument("scale") float scale) {
+        Vector3f value = new Vector3f(scale);
+        if (session.setProperty(entity, displayScaleProperty, value)) {
+            sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
+                    .append(displayScaleProperty.getValueName(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change scale", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("eas shear")
+    @CommandPermission("easyarmorstands.property.display.shearing")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void editRightRotation(Session session, Display entity) {
+        DisplayRotationBone rotationBone = new DisplayRotationBone(session, entity, this, displayRightRotationProperty);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Right rotation", NamedTextColor.GOLD), entity);
+        node.addRotationButtons(session, rotationBone, 1, null);
         session.pushNode(node);
     }
 
@@ -170,7 +206,12 @@ public class DisplayAddon implements Addon {
         ItemDisplay display = entity.getWorld().spawn(location, ItemDisplay.class, e -> {
             e.setItemStack(item);
             e.setItemDisplayTransform(itemTransform);
-            e.setTransformation(mapper.getTransformation(new Matrix4f(transform)));
+            e.setTransformation(mapper.getTransformation(
+                    transform.getTranslation(new Vector3d()).get(new Vector3f()),
+                    transform.getUnnormalizedRotation(new Quaternionf()),
+                    transform.getScale(new Vector3d()).get(new Vector3f()),
+                    new Quaternionf()
+            ));
         });
         Bukkit.getPluginManager().callEvent(new SessionSpawnEvent(session, display));
         actions.add(new EntitySpawnAction<>(display));
@@ -180,8 +221,20 @@ public class DisplayAddon implements Addon {
         return mapper;
     }
 
-    public DisplayTransformationProperty getDisplayTransformationProperty() {
-        return displayTransformationProperty;
+    public DisplayTranslationProperty getDisplayTranslationProperty() {
+        return displayTranslationProperty;
+    }
+
+    public DisplayLeftRotationProperty getDisplayLeftRotationProperty() {
+        return displayLeftRotationProperty;
+    }
+
+    public DisplayScaleProperty getDisplayScaleProperty() {
+        return displayScaleProperty;
+    }
+
+    public DisplayRightRotationProperty getDisplayRightRotationProperty() {
+        return displayRightRotationProperty;
     }
 
     public DisplayBrightnessProperty getDisplayBrightnessProperty() {

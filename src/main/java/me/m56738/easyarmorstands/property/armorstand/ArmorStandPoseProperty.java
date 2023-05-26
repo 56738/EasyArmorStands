@@ -14,10 +14,10 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3d;
-import org.joml.Matrix3dc;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
 
-public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix3dc> {
+public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Quaterniondc> {
     private final ArmorStandPart part;
 
     public ArmorStandPoseProperty(ArmorStandPart part) {
@@ -25,17 +25,17 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
     }
 
     @Override
-    public Matrix3dc getValue(ArmorStand entity) {
-        return Util.fromEuler(part.getPose(entity), new Matrix3d());
+    public Quaterniondc getValue(ArmorStand entity) {
+        return Util.fromEuler(part.getPose(entity), new Quaterniond());
     }
 
     @Override
-    public TypeToken<Matrix3dc> getValueType() {
-        return TypeToken.get(Matrix3dc.class);
+    public TypeToken<Quaterniondc> getValueType() {
+        return TypeToken.get(Quaterniondc.class);
     }
 
     @Override
-    public void setValue(ArmorStand entity, Matrix3dc value) {
+    public void setValue(ArmorStand entity, Quaterniondc value) {
         part.setPose(entity, Util.toEuler(value));
     }
 
@@ -50,17 +50,17 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
     }
 
     @Override
-    public ArgumentParser<EasCommandSender, Matrix3dc> getArgumentParser() {
+    public ArgumentParser<EasCommandSender, Quaterniondc> getArgumentParser() {
         return ArgumentTriplet.of(EasyArmorStands.getInstance().getCommandManager(),
                 getName(),
                 Triplet.of("x", "y", "z"),
                 Triplet.of(double.class, double.class, double.class)
-        ).withMapper(Matrix3dc.class, (sender, triplet) -> Util.fromEuler(
+        ).withMapper(Quaterniondc.class, (sender, triplet) -> Util.fromEuler(
                 new EulerAngle(
                         Math.toRadians(triplet.getFirst()),
                         Math.toRadians(triplet.getSecond()),
                         Math.toRadians(triplet.getThird())),
-                new Matrix3d())).getParser();
+                new Quaterniond())).getParser();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Matrix
     }
 
     @Override
-    public @NotNull Component getValueName(Matrix3dc value) {
+    public @NotNull Component getValueName(Quaterniondc value) {
         return Util.formatAngle(Util.toEuler(value));
     }
 

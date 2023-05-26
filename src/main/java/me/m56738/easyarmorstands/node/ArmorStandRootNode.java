@@ -1,7 +1,8 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.ArmorStandPartBone;
+import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
+import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
@@ -24,8 +25,8 @@ import java.util.EnumMap;
 public class ArmorStandRootNode extends MenuNode implements EntityNode {
     private final Session session;
     private final ArmorStand entity;
-    private final BoneButton positionButton;
-    private final BoneButton carryButton;
+    private final PositionBoneButton positionButton;
+    private final PositionBoneButton carryButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
     private ArmorStand skeleton;
 
@@ -37,20 +38,21 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         setRoot(true);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartBone bone = new ArmorStandPartBone(session, entity, part);
+            ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(session, entity, part);
+            ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(session, entity, part);
 
             MenuNode localNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (local)")));
-            localNode.addMoveButtons(session, bone, 3, true);
-            localNode.addRotationButtons(session, bone, 1, true);
+            localNode.addMoveButtons(session, positionBone, poseBone, 3, true);
+            localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
             MenuNode globalNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (global)")));
-            globalNode.addPositionButtons(session, bone, 3, true);
-            globalNode.addRotationButtons(session, bone, 1, false);
+            globalNode.addPositionButtons(session, positionBone, 3, true);
+            globalNode.addRotationButtons(session, poseBone, 1, null);
 
             localNode.setNextNode(globalNode);
             globalNode.setNextNode(localNode);
 
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, bone, localNode);
+            ArmorStandPartButton partButton = new ArmorStandPartButton(session, entity, part, localNode);
             addButton(partButton);
             partButtons.put(part, partButton);
         }
@@ -62,11 +64,11 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         positionNode.addPositionButtons(session, positionBone, 3, true);
 
         CarryNode carryNode = new CarryNode(session, positionBone);
-        carryButton = new BoneButton(session, positionBone, carryNode, Component.text("Pick up"));
+        carryButton = new PositionBoneButton(session, positionBone, carryNode, Component.text("Pick up"));
         carryButton.setPriority(1);
         positionNode.addButton(carryButton);
 
-        this.positionButton = new BoneButton(session, positionBone, positionNode, Component.text("Position"));
+        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"));
         addButton(this.positionButton);
     }
 
@@ -86,11 +88,11 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         }
     }
 
-    public BoneButton getPositionButton() {
+    public PositionBoneButton getPositionButton() {
         return positionButton;
     }
 
-    public BoneButton getCarryButton() {
+    public PositionBoneButton getCarryButton() {
         return carryButton;
     }
 
