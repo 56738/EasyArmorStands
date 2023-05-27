@@ -31,17 +31,14 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
     @Override
     protected Vector3dc getPosition() {
         Location location = entity.getLocation();
-        return new Vector3d(location.getX(), location.getY() + getHeight() / 2, location.getZ());
+        return new Vector3d(location.getX(), location.getY() + entity.getDisplayHeight() / 2, location.getZ());
     }
 
     @Override
-    protected double getWidth() {
-        return entity.getDisplayWidth();
-    }
-
-    @Override
-    protected double getHeight() {
-        return entity.getDisplayHeight();
+    protected Vector3dc getSize() {
+        double width = entity.getDisplayWidth();
+        double height = entity.getDisplayHeight();
+        return new Vector3d(width, height, width);
     }
 
     @Override

@@ -144,7 +144,7 @@ public class DisplayAddon implements Addon {
     @RequireEntity(Display.class)
     public void editRightRotation(Session session, Display entity) {
         DisplayRotationBone rotationBone = new DisplayRotationBone(session, entity, this, displayRightRotationProperty);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Right rotation", NamedTextColor.GOLD), entity);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), entity);
         node.addRotationButtons(session, rotationBone, 1, null);
         session.pushNode(node);
     }

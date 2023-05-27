@@ -26,23 +26,19 @@ public abstract class AxisAlignedBoxButton implements Button {
         return getPosition();
     }
 
-    protected abstract double getWidth();
-
-    protected abstract double getHeight();
+    protected abstract Vector3dc getSize();
 
     @Override
     public void update(Vector3dc eyes, Vector3dc target) {
-        double width = getWidth();
-        double height = getHeight();
         position.set(getPosition());
         center.set(getCenter());
-        size.set(width, height, width);
+        size.set(getSize());
         if (session.isLookingAtPoint(eyes, target, position)) {
             lookTarget = position;
             lookPriority = 0;
             return;
         }
-        if (width != 0 && height != 0) {
+        if (size.x != 0 && size.y != 0 && size.z != 0) {
             Vector3d min = center.fma(-0.5, size, new Vector3d());
             Vector3d max = center.fma(0.5, size, new Vector3d());
             Vector3d direction = target.sub(eyes, new Vector3d());
