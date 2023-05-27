@@ -116,7 +116,7 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         double threshold = session.getLookThreshold();
         double t = Util.intersectRayDoubleSidedPlane(eyes, direction, anchor, axis);
         this.lookTarget = null;
-        if (t >= 0 && t < session.getRange()) {
+        if (t >= 0 && t < 1) {
             // Looking at the plane
             Vector3d lookTarget = eyes.fma(t, direction, new Vector3d());
             double d = lookTarget.distanceSquared(anchor);
