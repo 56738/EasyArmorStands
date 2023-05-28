@@ -286,8 +286,8 @@ bukkit {
 
 publishing {
     repositories {
-        val snapshotUrl = "https://repo.bundlegroup.gg/repository/maven-snapshots/"
-        val releaseUrl = "https://repo.bundlegroup.gg/repository/maven-releases/"
+        val snapshotUrl = "https://repo.bundlegroup.gg/snapshots"
+        val releaseUrl = "https://repo.bundlegroup.gg/releases"
         maven(if (version.toString().endsWith("-SNAPSHOT")) snapshotUrl else releaseUrl) {
             name = "bundlegroup"
             credentials(PasswordCredentials::class)
