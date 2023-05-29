@@ -68,8 +68,8 @@ public class GlobalCommands {
                 "Tool added to your inventory\n",
                 NamedTextColor.GREEN
         ).append(Component.text(
-                "Right click an armor stand to start editing.\n" +
-                        "Sneak + right click to spawn an armor stand.\n" +
+                "Right click an entity to edit it.\n" +
+                        "Sneak + right click to spawn an entity.\n" +
                         "Drop to stop editing.",
                 NamedTextColor.GRAY
         )));

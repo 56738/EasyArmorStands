@@ -20,8 +20,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -147,8 +153,8 @@ public class Util {
                 ItemType.BLAZE_ROD,
                 Component.text("EasyArmorStands", NamedTextColor.GOLD),
                 Arrays.asList(
-                        Component.text("Right click an armor stand to start editing.", NamedTextColor.GRAY),
-                        Component.text("Sneak + right click to spawn an armor stand.", NamedTextColor.GRAY),
+                        Component.text("Right click an entity to edit it.", NamedTextColor.GRAY),
+                        Component.text("Sneak + right click to spawn an entity.", NamedTextColor.GRAY),
                         Component.text("Drop to stop editing.", NamedTextColor.GRAY)
                 )
         );
