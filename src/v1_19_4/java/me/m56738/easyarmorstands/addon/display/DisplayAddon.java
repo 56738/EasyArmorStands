@@ -5,7 +5,7 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.bone.v1_19_4.DisplayRotationBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayTranslationBone;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
@@ -124,11 +124,11 @@ public class DisplayAddon implements Addon {
         EasyArmorStands.getInstance().getAnnotationParser().parse(this);
     }
 
-    @CommandMethod("eas offset")
+    @CommandMethod("eas translation")
     @CommandPermission("easyarmorstands.property.display.transformation")
     @RequireSession
     @RequireEntity(Display.class)
-    public void editOffset(Session session, Display entity) {
+    public void editTranslation(Session session, Display entity) {
         DisplayTranslationBone translationBone = new DisplayTranslationBone(session, entity, this);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Translation", NamedTextColor.GOLD), entity);
         node.addPositionButtons(session, translationBone, 3, true);
@@ -155,7 +155,7 @@ public class DisplayAddon implements Addon {
     @RequireSession
     @RequireEntity(Display.class)
     public void editRightRotation(Session session, Display entity) {
-        DisplayRotationBone rotationBone = new DisplayRotationBone(session, entity, this, displayRightRotationProperty);
+        DisplayBone rotationBone = new DisplayBone(session, entity, this, displayRightRotationProperty);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), entity);
         node.addRotationButtons(session, rotationBone, 1, null);
         session.pushNode(node);

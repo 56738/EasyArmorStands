@@ -97,6 +97,10 @@ public class MenuNode implements Node {
         addButton(button);
     }
 
+    public void addYawButton(Session session, PositionAndYawBone bone, double radius) {
+        addButton(new YawBoneNode(session, Component.text("Yaw", NamedTextColor.GOLD), NamedTextColor.GOLD, radius, bone));
+    }
+
     public void addRotationButtons(Session session, RotationBone bone, double radius, RotationProvider rotationProvider) {
         for (Axis axis : Axis.values()) {
             addButton(new BoneRotationNode(

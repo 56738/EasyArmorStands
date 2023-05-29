@@ -22,6 +22,17 @@ public class DisplayMenuNode extends MenuNode implements EntityNode {
 
     @Override
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
+        showBoundingBox();
+        super.onUpdate(eyes, target);
+    }
+
+    @Override
+    public void onInactiveUpdate() {
+        showBoundingBox();
+        super.onInactiveUpdate();
+    }
+
+    private void showBoundingBox() {
         float width = entity.getDisplayWidth();
         float height = entity.getDisplayHeight();
         Vector3d position = Util.toVector3d(entity.getLocation());
@@ -32,7 +43,6 @@ public class DisplayMenuNode extends MenuNode implements EntityNode {
                     NamedTextColor.GRAY);
         }
         session.showPoint(position, NamedTextColor.YELLOW);
-        super.onUpdate(eyes, target);
     }
 
     @Override
