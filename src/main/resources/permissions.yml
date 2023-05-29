@@ -87,8 +87,12 @@ easyarmorstands.edit.blockdisplay:
     - easyarmorstands.edit
 easyarmorstands.edit.itemdisplay:
   description: "Allow editing item displays"
+  children:
+    - easyarmorstands.edit
 easyarmorstands.edit.textdisplay:
   description: "Allow editing text displays"
+  children:
+    - easyarmorstands.edit
 easyarmorstands.give:
   description: "Allow spawning the tool item"
 easyarmorstands.help:
