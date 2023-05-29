@@ -12,20 +12,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class TextDisplayShadowProperty extends BooleanEntityProperty<TextDisplay> {
+public class TextDisplaySeeThroughProperty extends BooleanEntityProperty<TextDisplay> {
     @Override
     public Boolean getValue(TextDisplay entity) {
-        return entity.isShadowed();
+        return entity.isSeeThrough();
     }
 
     @Override
     public void setValue(TextDisplay entity, Boolean value) {
-        entity.setShadowed(value);
+        entity.setSeeThrough(value);
     }
 
     @Override
     public @NotNull String getName() {
-        return "textshadow";
+        return "seethrough";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TextDisplayShadowProperty extends BooleanEntityProperty<TextDisplay
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.text("text shadow");
+        return Component.text("see through");
     }
 
     @Override
@@ -47,20 +47,20 @@ public class TextDisplayShadowProperty extends BooleanEntityProperty<TextDisplay
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.text.shadow";
+        return "easyarmorstands.property.display.text.seethrough";
     }
 
     @Override
     public ItemStack createToggleButton(TextDisplay entity) {
         return Util.createItem(
-                ItemType.STONE,
-                Component.text("Toggle shadow", NamedTextColor.BLUE),
+                ItemType.GLOWSTONE_DUST,
+                Component.text("Toggle see through", NamedTextColor.BLUE),
                 Arrays.asList(
                         Component.text("Currently ", NamedTextColor.GRAY)
                                 .append(getValueName(getValue(entity)))
                                 .append(Component.text(".")),
                         Component.text("Changes whether the text", NamedTextColor.GRAY),
-                        Component.text("is rendered with a shadow.", NamedTextColor.GRAY)
+                        Component.text("is visible through walls.", NamedTextColor.GRAY)
                 )
         );
     }

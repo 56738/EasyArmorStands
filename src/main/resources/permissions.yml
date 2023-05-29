@@ -40,8 +40,10 @@ easyarmorstands.creative:
     - easyarmorstands.property.display.shearing
     - easyarmorstands.property.display.size
     - easyarmorstands.property.display.text
+    - easyarmorstands.property.display.text.alignment
     - easyarmorstands.property.display.text.background
     - easyarmorstands.property.display.text.linewidth
+    - easyarmorstands.property.display.text.seethrough
     - easyarmorstands.property.display.text.shadow
     - easyarmorstands.property.display.translation
     - easyarmorstands.property.glow
@@ -147,10 +149,14 @@ easyarmorstands.property.display.size:
   description: "Allow editing the bounding box of a display"
 easyarmorstands.property.display.text:
   description: "Allow editing the text of a text display"
+easyarmorstands.property.display.text.alignment:
+  description: "Allow editing the alignment of a text display"
 easyarmorstands.property.display.text.background:
   description: "Allow editing the background of a text display"
 easyarmorstands.property.display.text.linewidth:
   description: "Allow editing the line width of a text display"
+easyarmorstands.property.display.text.seethrough:
+  description: "Allow changing whether a text display is visible through walls"
 easyarmorstands.property.display.text.shadow:
   description: "Allow editing the text shadow of a text display"
 easyarmorstands.property.display.translation:

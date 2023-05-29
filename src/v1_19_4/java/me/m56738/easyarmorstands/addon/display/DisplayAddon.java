@@ -17,12 +17,20 @@ import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.*;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayLeftRotationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayRightRotationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayItemProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayTransformProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayAlignmentProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayBackgroundProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayLineWidthProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplaySeeThroughProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayShadowProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextProperty;
 import me.m56738.easyarmorstands.session.Session;
@@ -42,7 +50,11 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Matrix4d;
+import org.joml.Matrix4dc;
+import org.joml.Quaternionf;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +71,10 @@ public class DisplayAddon implements Addon {
     private ItemDisplayItemProperty itemDisplayItemProperty;
     private ItemDisplayTransformProperty itemDisplayTransformProperty;
     private BlockDisplayBlockProperty blockDisplayBlockProperty;
+    private TextDisplayAlignmentProperty textDisplayAlignmentProperty;
     private TextDisplayBackgroundProperty textDisplayBackgroundProperty;
     private TextDisplayLineWidthProperty textDisplayLineWidthProperty;
+    private TextDisplaySeeThroughProperty textDisplaySeeThroughProperty;
     private TextDisplayShadowProperty textDisplayShadowProperty;
     private TextDisplayTextProperty textDisplayTextProperty;
 
@@ -105,12 +119,16 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(itemDisplayTransformProperty);
         blockDisplayBlockProperty = new BlockDisplayBlockProperty();
         plugin.getEntityPropertyRegistry().register(blockDisplayBlockProperty);
+        textDisplayAlignmentProperty = new TextDisplayAlignmentProperty();
+        plugin.getEntityPropertyRegistry().register(textDisplayAlignmentProperty);
         if (TextDisplayBackgroundProperty.isSupported()) {
             textDisplayBackgroundProperty = new TextDisplayBackgroundProperty();
             plugin.getEntityPropertyRegistry().register(textDisplayBackgroundProperty);
         }
         textDisplayLineWidthProperty = new TextDisplayLineWidthProperty();
         plugin.getEntityPropertyRegistry().register(textDisplayLineWidthProperty);
+        textDisplaySeeThroughProperty = new TextDisplaySeeThroughProperty();
+        plugin.getEntityPropertyRegistry().register(textDisplaySeeThroughProperty);
         textDisplayShadowProperty = new TextDisplayShadowProperty();
         plugin.getEntityPropertyRegistry().register(textDisplayShadowProperty);
         textDisplayTextProperty = new TextDisplayTextProperty(textDisplayCapability);
@@ -273,12 +291,20 @@ public class DisplayAddon implements Addon {
         return blockDisplayBlockProperty;
     }
 
+    public TextDisplayAlignmentProperty getTextDisplayAlignmentProperty() {
+        return textDisplayAlignmentProperty;
+    }
+
     public TextDisplayBackgroundProperty getTextDisplayBackgroundProperty() {
         return textDisplayBackgroundProperty;
     }
 
     public TextDisplayLineWidthProperty getTextDisplayLineWidthProperty() {
         return textDisplayLineWidthProperty;
+    }
+
+    public TextDisplaySeeThroughProperty getTextDisplaySeeThroughProperty() {
+        return textDisplaySeeThroughProperty;
     }
 
     public TextDisplayShadowProperty getTextDisplayShadowProperty() {
