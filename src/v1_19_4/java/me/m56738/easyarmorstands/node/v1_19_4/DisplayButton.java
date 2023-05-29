@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -41,7 +42,7 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
 
     @Override
     public Component getName() {
-        return Component.text(entity.getUniqueId().toString());
+        return Component.text(Util.getId(entity.getUniqueId()));
     }
 
     @Override

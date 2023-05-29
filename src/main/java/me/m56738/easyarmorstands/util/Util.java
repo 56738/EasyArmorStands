@@ -129,6 +129,10 @@ public class Util {
         return Color.fromRGB(color.red(), color.green(), color.blue());
     }
 
+    public static String getId(UUID uniqueId) {
+        return uniqueId.toString().substring(0, 8);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getEntity(UUID uuid, Class<T> type) {
         Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);

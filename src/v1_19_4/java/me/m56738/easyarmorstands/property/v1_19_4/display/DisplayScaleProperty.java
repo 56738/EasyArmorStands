@@ -58,7 +58,7 @@ public class DisplayScaleProperty implements EntityProperty<Display, Vector3fc> 
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.text("Scale");
+        return Component.text("scale");
     }
 
     @Override

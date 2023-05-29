@@ -48,7 +48,7 @@ public class ArmorStandButton extends AxisAlignedBoxButton {
 
     @Override
     public Component getName() {
-        return Component.text(entity.getUniqueId().toString());
+        return Component.text(Util.getId(entity.getUniqueId()));
     }
 
     @Override

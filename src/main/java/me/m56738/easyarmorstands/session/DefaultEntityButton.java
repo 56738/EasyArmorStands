@@ -24,7 +24,7 @@ public class DefaultEntityButton extends SimpleButton {
 
     @Override
     public Component getName() {
-        return Component.text(entity.getUniqueId().toString());
+        return Component.text(Util.getId(entity.getUniqueId()));
     }
 
     @Override

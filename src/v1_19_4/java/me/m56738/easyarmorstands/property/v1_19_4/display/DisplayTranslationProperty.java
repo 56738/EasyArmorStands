@@ -58,7 +58,7 @@ public class DisplayTranslationProperty implements EntityProperty<Display, Vecto
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.text("Translation");
+        return Component.text("translation");
     }
 
     @Override
