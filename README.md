@@ -1,8 +1,6 @@
 # EasyArmorStands
 
-Easy but advanced armor stand editor for Bukkit.
-
-[Demo video](https://youtu.be/dQZkB3mez-0)
+Armor stand and display entity editor.
 
 ![Screenshot](https://cdn.56738.me/easyarmorstands/banner.png)
 
@@ -12,34 +10,42 @@ Using [Paper](https://papermc.io/) is highly recommended. Some features like RGB
 
 # Usage
 
-Use `/eas give` to get the tool.
+Use `/eas give` and follow the instructions.
 
-Right-click an armor stand to start editing it.
+## Demo video
 
-## Bones
+[![Demo video](https://i.ytimg.com/vi/dQZkB3mez-0/0.jpg)](https://youtu.be/dQZkB3mez-0)
 
-<img alt="Bones" src="https://cdn.56738.me/easyarmorstands/bones.png" width="25%" align="right"/>
+## Armor stands
 
-Right-click one of the particles to start editing a bone.
-The particles are located at the end of each bone.
-For example, the arms can be edited by right-clicking the hands.
-You can always left-click to deselect the current bone.
+Select an armor stand by right-clicking it with the tool (`/eas give`).
+Then, right-click one of the bones to edit it.
 
-The position bone is a special bone which can be used to move the whole armor stand.
+* Edit the pose by clicking one of the circles.
+* Move the armor stand by clicking a line.
 
-## Tools
+To move the armor stand, select the *Position* bone (below the head).
+Then, either click one of the lines or pick it up by clicking the middle.
 
-Once a bone was selected, it can be modified using one of many tools.
-For example, the "rotate" tool can be activated by right-clicking one of the colored circles.
-Move the cursor to edit the bone and right-click again to confirm (or left-click to abort).
+Once you have selected an operation, you can move the cursor by looking or walking around.
+Right-click to confirm the change or left-click to revert it.
+Use `/eas set` to set it to a certain value.
 
-![Rotation tool](https://cdn.56738.me/easyarmorstands/tool.png)
+## Display entities
+
+Select an item display, a block display or a text display by right-clicking it with the tool.
+
+* Move the entity by clicking one of the colored lines or pick it up by clicking the middle.
+* Rotate it by clicking one of the circle.
+* Scale it by clicking the aqua point at the end of a colored line.
+* Use `/eas width` and `/eas height` to configure the bounding box.
+* Use `/eas translation` to move the displayed object without moving the bounding box.
 
 ## Menu
 
 <img alt="Menu" src="https://cdn.56738.me/easyarmorstands/menu.png" width="50%" align="right" />
 
-The menu can be accessed by left-clicking while no bone is selected (or `/eas open`).
+The menu can be accessed by left-clicking while no bone is selected.
 
 On the bottom left, you can edit the entity equipment slots (armor, held items).
 
@@ -68,14 +74,15 @@ This list contains important commands for features which cannot be accessed usin
 Use `/eas help` to see the full list of commands and their full usage.
 
 * `/eas give`: Give yourself the editor tool
-* `/eas align`: Move an armor stand to the middle of its block
-* `/eas clone`: Duplicate the armor stand
+* `/eas align`: Move the selected entity to the middle of its block
+* `/eas clone`: Duplicate the selected entity
 * `/eas name`: Modify the name tag
-  ([MiniMessage format](https://docs.advntr.dev/minimessage/format.html): `<red>Hello World`)
-* `/eas lname`: Modify the name tag
-  ([legacy color codes](https://minecraft.fandom.com/wiki/Formatting_codes): `&cHello World`)
+  (Supports [MiniMessage](https://docs.advntr.dev/minimessage/format.html): `<red>Hello World`)
+* `/eas namevisible`: Show the name tag
 * `/eas snap angle`: Toggle angle snapping (or specify an increment)
 * `/eas snap move`: Toggle position snapping (or specify an increment)
+* `/eas scale`: Set the scale of a display entity
+* `/eas text`: Set the text of a text display entity (Supports MiniMessage)
 
 # Permissions
 
