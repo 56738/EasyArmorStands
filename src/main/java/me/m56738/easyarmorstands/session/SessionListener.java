@@ -210,6 +210,16 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
+    public void onPrepareItemCraft(PrepareItemCraftEvent event) {
+        for (ItemStack item : event.getInventory().getMatrix()) {
+            if (Util.isTool(item)) {
+                event.getInventory().setResult(null);
+                break;
+            }
+        }
+    }
+
+    @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         manager.hideSkeletons(event.getPlayer());
     }
