@@ -8,8 +8,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartButton implements Button {
     private final Session session;
@@ -37,6 +40,7 @@ public class ArmorStandPartButton implements Button {
                 .rotate(Util.fromEuler(part.getPose(entity), new Quaterniond()))
                 .rotateY(-Math.toRadians(location.getYaw()))
                 .add(start);
+        start.lerp(end, 0.5);
 
         Vector3d closestOnLookRay = new Vector3d();
         Vector3d closestOnBone = new Vector3d();
