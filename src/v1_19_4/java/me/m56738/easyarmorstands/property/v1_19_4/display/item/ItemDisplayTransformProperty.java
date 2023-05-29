@@ -56,6 +56,6 @@ public class ItemDisplayTransformProperty implements EntityProperty<ItemDisplay,
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.transform";
+        return "easyarmorstands.property.display.item.transform";
     }
 }

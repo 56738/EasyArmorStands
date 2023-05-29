@@ -47,7 +47,7 @@ public class TextDisplayShadowProperty extends BooleanEntityProperty<TextDisplay
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.textshadow";
+        return "easyarmorstands.property.display.text.shadow";
     }
 
     @Override

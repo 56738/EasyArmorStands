@@ -100,7 +100,7 @@ public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisp
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.background";
+        return "easyarmorstands.property.display.text.background";
     }
 
     @Override

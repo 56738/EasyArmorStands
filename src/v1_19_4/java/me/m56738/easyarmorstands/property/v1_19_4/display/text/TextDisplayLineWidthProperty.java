@@ -53,6 +53,6 @@ public class TextDisplayLineWidthProperty implements EntityProperty<TextDisplay,
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.linewidth";
+        return "easyarmorstands.property.display.text.linewidth";
     }
 }
