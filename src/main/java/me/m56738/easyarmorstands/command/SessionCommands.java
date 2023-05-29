@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
@@ -154,6 +155,40 @@ public class SessionCommands {
                 .append(Component.text(", "))
                 .append(Component.text(Util.POSITION_FORMAT.format(position.z()), TextColor.color(0x7777FF)))
                 .color(NamedTextColor.GREEN));
+    }
+
+    @CommandMethod("yaw <yaw>")
+    @CommandPermission("easyarmorstands.property.location")
+    @RequireSession
+    @RequireEntity
+    public void setYaw(EasCommandSender sender, Session session, Entity entity, @Argument("yaw") float yaw) {
+        EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
+        Location location = property.getValue(entity);
+        location.setYaw(yaw);
+        if (!session.setProperty(entity, property, location)) {
+            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Changed yaw to ", NamedTextColor.GREEN)
+                .append(Util.formatAngle(yaw)));
+    }
+
+    @CommandMethod("pitch <pitch>")
+    @CommandPermission("easyarmorstands.property.location")
+    @RequireSession
+    @RequireEntity
+    public void setPitch(EasCommandSender sender, Session session, Entity entity, @Argument("pitch") float pitch) {
+        EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
+        Location location = property.getValue(entity);
+        location.setPitch(pitch);
+        if (!session.setProperty(entity, property, location)) {
+            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
+                .append(Util.formatAngle(pitch)));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

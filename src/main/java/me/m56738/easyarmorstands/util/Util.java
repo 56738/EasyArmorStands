@@ -68,6 +68,10 @@ public class Util {
         return format3D(offset, OFFSET_FORMAT);
     }
 
+    public static Component formatAngle(float angle) {
+        return Component.text(ANGLE_FORMAT.format(angle));
+    }
+
     public static Component formatAngle(Vector3dc angle) {
         return format3D(angle, ANGLE_FORMAT);
     }
