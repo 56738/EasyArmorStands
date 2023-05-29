@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.property.v1_19_4.display;
+package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.property.BooleanEntityProperty;

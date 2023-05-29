@@ -18,6 +18,13 @@ import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.*;
+import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayItemProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayTransformProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayBackgroundProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayLineWidthProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayShadowProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
@@ -53,6 +60,7 @@ public class DisplayAddon implements Addon {
     private ItemDisplayTransformProperty itemDisplayTransformProperty;
     private BlockDisplayBlockProperty blockDisplayBlockProperty;
     private TextDisplayBackgroundProperty textDisplayBackgroundProperty;
+    private TextDisplayLineWidthProperty textDisplayLineWidthProperty;
     private TextDisplayShadowProperty textDisplayShadowProperty;
     private TextDisplayTextProperty textDisplayTextProperty;
 
@@ -88,6 +96,7 @@ public class DisplayAddon implements Addon {
         itemDisplayTransformProperty = new ItemDisplayTransformProperty();
         blockDisplayBlockProperty = new BlockDisplayBlockProperty();
         textDisplayBackgroundProperty = new TextDisplayBackgroundProperty();
+        textDisplayLineWidthProperty = new TextDisplayLineWidthProperty();
         textDisplayShadowProperty = new TextDisplayShadowProperty();
         textDisplayTextProperty = new TextDisplayTextProperty(textDisplayCapability);
 
@@ -102,6 +111,7 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(itemDisplayTransformProperty);
         plugin.getEntityPropertyRegistry().register(blockDisplayBlockProperty);
         plugin.getEntityPropertyRegistry().register(textDisplayBackgroundProperty);
+        plugin.getEntityPropertyRegistry().register(textDisplayLineWidthProperty);
         plugin.getEntityPropertyRegistry().register(textDisplayShadowProperty);
         plugin.getEntityPropertyRegistry().register(textDisplayTextProperty);
 
@@ -263,6 +273,10 @@ public class DisplayAddon implements Addon {
 
     public TextDisplayBackgroundProperty getTextDisplayBackgroundProperty() {
         return textDisplayBackgroundProperty;
+    }
+
+    public TextDisplayLineWidthProperty getTextDisplayLineWidthProperty() {
+        return textDisplayLineWidthProperty;
     }
 
     public TextDisplayShadowProperty getTextDisplayShadowProperty() {

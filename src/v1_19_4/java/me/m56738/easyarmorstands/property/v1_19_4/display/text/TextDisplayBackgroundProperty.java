@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.property.v1_19_4.display;
+package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
