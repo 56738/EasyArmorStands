@@ -26,7 +26,6 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
     private final Session session;
     private final ArmorStand entity;
     private final PositionBoneButton positionButton;
-    private final PositionBoneButton carryButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
     private ArmorStand skeleton;
 
@@ -62,11 +61,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         MenuNode positionNode = new MenuNode(session, Component.text("Position"));
         positionNode.addButton(new YawBoneNode(session, Component.text("Rotate"), NamedTextColor.GOLD, 1, positionBone));
         positionNode.addPositionButtons(session, positionBone, 3, true);
-
-        CarryNode carryNode = new CarryNode(session, positionBone);
-        carryButton = new PositionBoneButton(session, positionBone, carryNode, Component.text("Pick up"));
-        carryButton.setPriority(1);
-        positionNode.addButton(carryButton);
+        positionNode.addCarryButtonWithYaw(session, positionBone);
 
         this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"));
         addButton(this.positionButton);
@@ -90,10 +85,6 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
     public PositionBoneButton getPositionButton() {
         return positionButton;
-    }
-
-    public PositionBoneButton getCarryButton() {
-        return carryButton;
     }
 
     public ArmorStandPartButton getPartButton(ArmorStandPart part) {

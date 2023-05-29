@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.bone.PositionAndYawBone;
 import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.bone.RotationBone;
 import me.m56738.easyarmorstands.bone.RotationProvider;
@@ -80,6 +81,20 @@ public class MenuNode implements Node {
                     includeEnds
             ));
         }
+    }
+
+    public void addCarryButton(Session session, PositionBone bone) {
+        addCarryButton(session, bone, new CarryNode(session, bone));
+    }
+
+    public void addCarryButtonWithYaw(Session session, PositionAndYawBone bone) {
+        addCarryButton(session, bone, new CarryWithYawNode(session, bone));
+    }
+
+    private void addCarryButton(Session session, PositionBone bone, CarryNode node) {
+        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"));
+        button.setPriority(1);
+        addButton(button);
     }
 
     public void addRotationButtons(Session session, RotationBone bone, double radius, RotationProvider rotationProvider) {

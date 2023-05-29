@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
@@ -10,16 +10,14 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class CarryNode extends EditNode {
-    private final Session session;
-    private final PositionAndYawBone bone;
-    private final Vector3d initialPosition = new Vector3d();
-    private final Vector3d initialOffset = new Vector3d();
-    private final Vector3d currentPosition = new Vector3d();
-    private final Cursor3D cursor;
-    private float initialYaw;
-    private float yawOffset;
+    protected final Session session;
+    protected final PositionBone bone;
+    protected final Vector3d initialPosition = new Vector3d();
+    protected final Vector3d initialOffset = new Vector3d();
+    protected final Vector3d currentPosition = new Vector3d();
+    protected final Cursor3D cursor;
 
-    public CarryNode(Session session, PositionAndYawBone bone) {
+    public CarryNode(Session session, PositionBone bone) {
         super(session);
         this.session = session;
         this.bone = bone;
@@ -31,25 +29,20 @@ public class CarryNode extends EditNode {
         Location location = session.getPlayer().getLocation();
         initialPosition.set(bone.getPosition());
         initialPosition.sub(Util.toVector3d(location), initialOffset);
-        initialYaw = bone.getYaw();
-        yawOffset = initialYaw - location.getYaw();
         cursor.start(initialPosition);
     }
 
     @Override
     protected void abort() {
-        bone.setPositionAndYaw(initialPosition, initialYaw);
+        bone.setPosition(initialPosition);
     }
 
-    @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    protected void update() {
         cursor.update(false);
         Player player = session.getPlayer();
         Location location = player.getLocation();
-        float yaw;
         if (location.getPitch() > 80) {
             currentPosition.set(location.getX(), location.getY(), location.getZ());
-            yaw = location.getYaw();
         } else {
             Vector3dc cursor = this.cursor.get();
             currentPosition.x = session.snap(cursor.x() - initialPosition.x) + initialPosition.x;
@@ -58,9 +51,17 @@ public class CarryNode extends EditNode {
             if (!player.isFlying()) {
                 currentPosition.y = location.getY() + initialOffset.y;
             }
-            yaw = (float) session.snapAngle(location.getYaw() + yawOffset - initialYaw) + initialYaw;
         }
-        bone.setPositionAndYaw(currentPosition, yaw);
+    }
+
+    protected void apply() {
+        bone.setPosition(currentPosition);
+    }
+
+    @Override
+    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+        update();
+        apply();
     }
 
     @Override

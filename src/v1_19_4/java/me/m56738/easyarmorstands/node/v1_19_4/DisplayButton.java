@@ -55,12 +55,14 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);
         localNode.addMoveButtons(session, positionBone, rotationBone, 2, false);
+        localNode.addCarryButtonWithYaw(session, positionBone);
         localNode.addRotationButtons(session, rotationBone, 1, rotationBone);
         localNode.addScaleButtons(session, scaleBone, 2);
 
         MenuNode globalNode = factory.createRootNode(session, Component.text("Global"), entity);
         globalNode.setRoot(true);
         globalNode.addPositionButtons(session, positionBone, 3, true);
+        globalNode.addCarryButtonWithYaw(session, positionBone);
         globalNode.addRotationButtons(session, rotationBone, 1, null);
 
         localNode.setNextNode(globalNode);
