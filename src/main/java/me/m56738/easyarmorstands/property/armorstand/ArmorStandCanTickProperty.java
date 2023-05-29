@@ -62,7 +62,7 @@ public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boo
 
     @Override
     public String getPermission() {
-        return "easyarmorstands.property.cantick";
+        return "easyarmorstands.property.armorstand.cantick";
     }
 
 }

@@ -125,7 +125,7 @@ public class DisplayAddon implements Addon {
     }
 
     @CommandMethod("eas translation")
-    @CommandPermission("easyarmorstands.property.display.transformation")
+    @CommandPermission("easyarmorstands.property.display.translation")
     @RequireSession
     @RequireEntity(Display.class)
     public void editTranslation(Session session, Display entity) {

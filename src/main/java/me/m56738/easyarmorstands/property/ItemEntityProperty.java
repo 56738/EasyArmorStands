@@ -31,4 +31,9 @@ public abstract class ItemEntityProperty<E extends Entity> implements ButtonEnti
     public InventorySlot createSlot(EntityMenu<? extends E> menu) {
         return new EntityItemSlot<>(menu, this);
     }
+
+    @Override
+    public boolean isCreativeModeRequired() {
+        return true;
+    }
 }

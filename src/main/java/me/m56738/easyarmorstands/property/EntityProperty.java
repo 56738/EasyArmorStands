@@ -37,6 +37,10 @@ public interface EntityProperty<E extends Entity, T> {
 
     @Nullable String getPermission();
 
+    default boolean isCreativeModeRequired() {
+        return false;
+    }
+
     default boolean isSupported(E entity) {
         return true;
     }

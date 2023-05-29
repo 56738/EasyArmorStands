@@ -46,7 +46,7 @@ public class ArmorStandBasePlateProperty extends BooleanEntityProperty<ArmorStan
 
     @Override
     public String getPermission() {
-        return "easyarmorstands.property.baseplate";
+        return "easyarmorstands.property.armorstand.baseplate";
     }
 
     @Override

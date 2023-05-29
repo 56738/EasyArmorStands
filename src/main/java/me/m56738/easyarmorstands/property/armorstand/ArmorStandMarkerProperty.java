@@ -46,7 +46,7 @@ public class ArmorStandMarkerProperty extends BooleanEntityProperty<ArmorStand> 
 
     @Override
     public String getPermission() {
-        return "easyarmorstands.property.marker";
+        return "easyarmorstands.property.armorstand.marker";
     }
 
     @Override

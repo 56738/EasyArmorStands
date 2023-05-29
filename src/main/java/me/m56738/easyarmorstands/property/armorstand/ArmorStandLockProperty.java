@@ -53,7 +53,7 @@ public class ArmorStandLockProperty extends BooleanEntityProperty<ArmorStand> {
 
     @Override
     public String getPermission() {
-        return "easyarmorstands.property.lock";
+        return "easyarmorstands.property.armorstand.lock";
     }
 
     @Override

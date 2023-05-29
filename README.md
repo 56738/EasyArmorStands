@@ -79,12 +79,14 @@ Use `/eas help` to see the full list of commands and their full usage.
 
 # Permissions
 
-These permissions are provided for convenience to quickly grant all permissions in the corresponding categories.
+The full list of permissions is visible in [permissions.yml](src/main/resources/permissions.yml).
 
-| Permission                 | Description                                                           |
-|----------------------------|-----------------------------------------------------------------------|
-| `easyarmorstands.creative` | Contains all permissions in the "Creative" and "Survival" categories. |
-| `easyarmorstands.survival` | Contains all permissions in the "Survival" category.                  |
+There are two permission packs which contain permissions which are recommended for survival or creative mode servers.
+
+| Permission                 | Description                                                  |
+|----------------------------|--------------------------------------------------------------|
+| `easyarmorstands.survival` | Allow editing armor stands and their basic properties        |
+| `easyarmorstands.creative` | Allow spawning and editing armor stands and display entities |
 
 For example, to allow players to use EasyArmorStands on a creative server, simply give them
 the `easyarmorstands.creative` permission.
@@ -94,45 +96,11 @@ the `easyarmorstands.creative` permission.
 If [PlotSquared v6](https://www.spigotmc.org/resources/plotsquared-v6.77506/) is installed, players can only edit armor
 stands on plots where they are allowed to build.
 
+Players with the `easyarmorstands.plotsquared.bypass` permission bypass this restriction.
+
 ## WorldGuard integration
 
 If [WorldGuard](https://enginehub.org/worldguard) is installed, players can only edit armor stands if they are allowed
 to build.
 
-## All permissions
-
-To fine-tune access, you can grant or deny individual permissions.
-
-| Permission                              | Description                                                                  | Category |
-|-----------------------------------------|------------------------------------------------------------------------------|----------|
-| `easyarmorstands.align`                 | Allows using `/eas align` to move an armor stand to the center of its block. | Survival |
-| `easyarmorstands.edit`                  | Allows editing armor stands. Required to use this plugin.                    | Survival |
-| `easyarmorstands.help`                  | Allows viewing the help menu.                                                | Survival |
-| `easyarmorstands.open`                  | Allows opening the EasyArmorStands menu.                                     | Survival |
-| `easyarmorstands.property.arms`         | Allows toggling armor stand arm visibility.                                  | Survival |
-| `easyarmorstands.property.baseplate`    | Allows toggling armor stand base plate visibility.                           | Survival |
-| `easyarmorstands.property.cantick`      | Allows toggling whether armor stand ticking is disabled (Paper only).        | Survival |
-| `easyarmorstands.property.equipment`    | Allows modifying armor stand equipment.                                      | Survival |
-| `easyarmorstands.property.glow`         | Allows toggling glowing armor stand outlines.                                | Survival |
-| `easyarmorstands.property.gravity`      | Allows toggling gravity for an armor stand.                                  | Survival |
-| `easyarmorstands.property.invulnerable` | Allows toggling armor stand invulnerability.                                 | Survival |
-| `easyarmorstands.property.lock`         | Allows toggling armor stand equipment lock.                                  | Survival |
-| `easyarmorstands.property.name`         | Allows editing armor stand name tags.                                        | Survival |
-| `easyarmorstands.property.marker`       | Allows toggling whether an armor stand is a marker.                          | Survival |
-| `easyarmorstands.property.size`         | Allows toggling the size of an armor stand.                                  | Survival |
-| `easyarmorstands.property.visible`      | Allows toggling armor stand visibility.                                      | Survival |
-| `easyarmorstands.snap`                  | Allows toggling position and angle snapping and configuring the increment.   | Survival |
-| `easyarmorstands.version`               | Allows viewing version information.                                          | Survival |
-| `easyarmorstands.clone`                 | Allows cloning armor stands.                                                 | Creative |
-| `easyarmorstands.color`                 | Allows using the color picker.                                               | Creative |
-| `easyarmorstands.destroy`               | Allows destroying selected armor stands.                                     | Creative |
-| `easyarmorstands.give`                  | Allows giving yourself the EasyArmorStand tool.                              | Creative |
-| `easyarmorstands.history`               | Allows undoing and redoing changes.                                          | Creative |
-| `easyarmorstands.set.display.block`     | Allows setting the block on a display entity using a command.                | Creative |
-| `easyarmorstands.set.display.item`      | Allows setting the item on a display entity using a command.                 | Creative |
-| `easyarmorstands.spawn`                 | Allows spawning armor stands.                                                | Creative |
-| `easyarmorstands.traincarts.model`      | Allows opening the TrainCarts model browser.                                 | Creative |
-| `easyarmorstands.debug`                 | Allows viewing debug information.                                            |          |
-| `easyarmorstands.plotsquared.bypass`    | Allows bypassing PlotSquared restrictions.                                   |          |
-| `easyarmorstands.worldguard.bypass`     | Allows bypassing WorldGuard restrictions.                                    |          |
-| `headdb.open`                           | Allows opening the Head Database menu.                                       |          |
+Players with the `easyarmorstands.worldguard.bypass` permission bypass this restriction.

@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 
 import java.util.Collections;
@@ -82,7 +83,9 @@ public class EntityPropertyRegistry {
                     Session session = ctx.get(Keys.SESSION);
                     Entity entity = ctx.get(Keys.ENTITY);
                     Object value = ctx.getOrSupplyDefault(argument.getKey(), () -> property.getDefaultValue(ctx));
-                    if (property.performChange(session, entity, value)) {
+                    if (property.isCreativeModeRequired() && session.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                        ctx.getSender().sendMessage(Component.text("This property can only be edited in creative mode", NamedTextColor.RED));
+                    } else if (property.performChange(session, entity, value)) {
                         ctx.getSender().sendMessage(Component.text()
                                 .content("Changed ")
                                 .append(property.getDisplayName())

@@ -46,7 +46,7 @@ public class ArmorStandArmsProperty extends BooleanEntityProperty<ArmorStand> {
 
     @Override
     public String getPermission() {
-        return "easyarmorstands.property.arms";
+        return "easyarmorstands.property.armorstand.arms";
     }
 
     @Override

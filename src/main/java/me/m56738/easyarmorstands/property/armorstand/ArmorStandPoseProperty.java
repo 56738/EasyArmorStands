@@ -75,6 +75,6 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Quater
 
     @Override
     public @Nullable String getPermission() {
-        return "easyarmorstands.property." + part.getName();
+        return "easyarmorstands.property.armorstand.pose." + part.getName();
     }
 }

@@ -28,16 +28,37 @@ import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.parser.EntityPropertyArgumentParser;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.processor.*;
+import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
+import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
+import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
+import me.m56738.easyarmorstands.command.processor.Keys;
+import me.m56738.easyarmorstands.command.processor.SessionInjector;
+import me.m56738.easyarmorstands.command.processor.SessionPostprocessor;
+import me.m56738.easyarmorstands.command.processor.SessionPreprocessor;
+import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
-import me.m56738.easyarmorstands.property.armorstand.*;
-import me.m56738.easyarmorstands.property.entity.*;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
+import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
+import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -46,12 +67,16 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.EnumMap;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class EasyArmorStands extends JavaPlugin {
@@ -80,6 +105,12 @@ public class EasyArmorStands extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
+
+        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/permissions.yml")))) {
+            new PermissionLoader(this).load(YamlConfiguration.loadConfiguration(reader));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         loader.load();
 
