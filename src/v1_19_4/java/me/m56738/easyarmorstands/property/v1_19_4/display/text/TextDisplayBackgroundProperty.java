@@ -21,8 +21,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("deprecation") // presence checked in isSupported
 public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisplay, Optional<Color>> {
+    public static boolean isSupported() {
+        try {
+            TextDisplay.class.getMethod("getBackgroundColor");
+            TextDisplay.class.getMethod("setBackgroundColor", Color.class);
+            TextDisplay.class.getMethod("isDefaultBackground");
+            TextDisplay.class.getMethod("setDefaultBackground", boolean.class);
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     @Override
     public Optional<Color> getValue(TextDisplay entity) {
         if (entity.isDefaultBackground()) {

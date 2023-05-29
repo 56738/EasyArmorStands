@@ -86,33 +86,34 @@ public class DisplayAddon implements Addon {
         TextDisplayCapability textDisplayCapability = plugin.getCapability(TextDisplayCapability.class);
 
         displayTranslationProperty = new DisplayTranslationProperty(mapper);
-        displayLeftRotationProperty = new DisplayLeftRotationProperty(mapper);
-        displayScaleProperty = new DisplayScaleProperty(mapper);
-        displayRightRotationProperty = new DisplayRightRotationProperty(mapper);
-        displayBrightnessProperty = new DisplayBrightnessProperty();
-        displayWidthProperty = new DisplayWidthProperty();
-        displayHeightProperty = new DisplayHeightProperty(this);
-        itemDisplayItemProperty = new ItemDisplayItemProperty();
-        itemDisplayTransformProperty = new ItemDisplayTransformProperty();
-        blockDisplayBlockProperty = new BlockDisplayBlockProperty();
-        textDisplayBackgroundProperty = new TextDisplayBackgroundProperty();
-        textDisplayLineWidthProperty = new TextDisplayLineWidthProperty();
-        textDisplayShadowProperty = new TextDisplayShadowProperty();
-        textDisplayTextProperty = new TextDisplayTextProperty(textDisplayCapability);
-
         plugin.getEntityPropertyRegistry().register(displayTranslationProperty);
+        displayLeftRotationProperty = new DisplayLeftRotationProperty(mapper);
         plugin.getEntityPropertyRegistry().register(displayLeftRotationProperty);
+        displayScaleProperty = new DisplayScaleProperty(mapper);
         plugin.getEntityPropertyRegistry().register(displayScaleProperty);
+        displayRightRotationProperty = new DisplayRightRotationProperty(mapper);
         plugin.getEntityPropertyRegistry().register(displayRightRotationProperty);
+        displayBrightnessProperty = new DisplayBrightnessProperty();
         plugin.getEntityPropertyRegistry().register(displayBrightnessProperty);
+        displayWidthProperty = new DisplayWidthProperty();
         plugin.getEntityPropertyRegistry().register(displayWidthProperty);
+        displayHeightProperty = new DisplayHeightProperty(this);
         plugin.getEntityPropertyRegistry().register(displayHeightProperty);
+        itemDisplayItemProperty = new ItemDisplayItemProperty();
         plugin.getEntityPropertyRegistry().register(itemDisplayItemProperty);
+        itemDisplayTransformProperty = new ItemDisplayTransformProperty();
         plugin.getEntityPropertyRegistry().register(itemDisplayTransformProperty);
+        blockDisplayBlockProperty = new BlockDisplayBlockProperty();
         plugin.getEntityPropertyRegistry().register(blockDisplayBlockProperty);
-        plugin.getEntityPropertyRegistry().register(textDisplayBackgroundProperty);
+        if (TextDisplayBackgroundProperty.isSupported()) {
+            textDisplayBackgroundProperty = new TextDisplayBackgroundProperty();
+            plugin.getEntityPropertyRegistry().register(textDisplayBackgroundProperty);
+        }
+        textDisplayLineWidthProperty = new TextDisplayLineWidthProperty();
         plugin.getEntityPropertyRegistry().register(textDisplayLineWidthProperty);
+        textDisplayShadowProperty = new TextDisplayShadowProperty();
         plugin.getEntityPropertyRegistry().register(textDisplayShadowProperty);
+        textDisplayTextProperty = new TextDisplayTextProperty(textDisplayCapability);
         plugin.getEntityPropertyRegistry().register(textDisplayTextProperty);
 
         DisplaySessionListener listener = new DisplaySessionListener(this);
