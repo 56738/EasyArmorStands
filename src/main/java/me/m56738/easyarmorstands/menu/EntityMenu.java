@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
         for (InventorySlot slot : pending) {
             addButton(slot);
         }
+        if (hasEquipment() && session.getPlayer().hasPermission("easyarmorstands.color")) {
+            addShortcut(new ColorPickerSlot(this));
+        }
         Bukkit.getPluginManager().callEvent(new SessionMenuInitializeEvent(this));
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
     }
@@ -74,5 +78,9 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
 
     public @NotNull T getEntity() {
         return entity;
+    }
+
+    public boolean hasEquipment() {
+        return entity instanceof LivingEntity;
     }
 }

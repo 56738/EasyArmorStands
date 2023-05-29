@@ -44,7 +44,7 @@ public class HeadDatabaseListener implements Listener {
 
     @EventHandler
     public void onMenuInitialize(SessionMenuInitializeEvent event) {
-        if (event.getPlayer().hasPermission("headdb.open")) {
+        if (event.getMenu().hasEquipment() && event.getPlayer().hasPermission("headdb.open")) {
             event.getMenu().addShortcut(new HeadDatabaseSlot(event.getMenu(), api));
         }
     }

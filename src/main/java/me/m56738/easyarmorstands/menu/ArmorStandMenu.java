@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
 
 public class ArmorStandMenu extends EntityMenu<ArmorStand> {
     public ArmorStandMenu(Session session, ArmorStand entity) {
@@ -20,7 +19,6 @@ public class ArmorStandMenu extends EntityMenu<ArmorStand> {
 
     @Override
     public void initialize() {
-        Player player = getSession().getPlayer();
         ArmorStandRootNode root = getSession().findNode(ArmorStandRootNode.class);
         if (root != null) {
             setSlot(3, 7, new SelectNodeSlot(this,
@@ -51,9 +49,6 @@ public class ArmorStandMenu extends EntityMenu<ArmorStand> {
                     root.getPartButton(ArmorStandPart.RIGHT_LEG),
                     ItemType.LEVER,
                     Component.text("right leg")));
-        }
-        if (player.hasPermission("easyarmorstands.color")) {
-            addShortcut(new ColorPickerSlot(this));
         }
         super.initialize();
     }

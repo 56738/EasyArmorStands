@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.menu.ArmorStandMenu;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -62,7 +63,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         positionNode.addPositionButtons(session, positionBone, 3, true);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
-        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"));
+        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), NamedTextColor.GOLD);
         addButton(this.positionButton);
     }
 

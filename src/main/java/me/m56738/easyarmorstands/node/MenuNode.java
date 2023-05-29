@@ -92,7 +92,7 @@ public class MenuNode implements Node {
     }
 
     private void addCarryButton(Session session, PositionBone bone, CarryNode node) {
-        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"));
+        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"), NamedTextColor.GOLD);
         button.setPriority(1);
         addButton(button);
     }

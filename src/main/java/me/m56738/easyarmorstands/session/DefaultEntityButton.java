@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.node.DefaultEntityNode;
 import me.m56738.easyarmorstands.node.SimpleButton;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 
@@ -12,7 +13,7 @@ public class DefaultEntityButton extends SimpleButton {
     private final Entity entity;
 
     public DefaultEntityButton(Session session, Entity entity) {
-        super(session);
+        super(session, NamedTextColor.WHITE);
         this.session = session;
         this.entity = entity;
     }

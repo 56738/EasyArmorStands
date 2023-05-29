@@ -18,10 +18,14 @@ public class DisplayRootNode extends DisplayMenuNode {
         this.entity = entity;
     }
 
+    protected EntityMenu<? extends Display> createMenu() {
+        return new EntityMenu<>(session, entity);
+    }
+
     @Override
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         if (context.getType() == ClickType.LEFT_CLICK) {
-            session.getPlayer().openInventory(new EntityMenu<>(session, entity).getInventory());
+            session.getPlayer().openInventory(createMenu().getInventory());
             return true;
         }
         return super.onClick(eyes, target, context);

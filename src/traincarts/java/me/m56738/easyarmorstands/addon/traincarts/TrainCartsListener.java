@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 public class TrainCartsListener implements Listener {
     @EventHandler
     public void onMenuInitialize(SessionMenuInitializeEvent event) {
-        if (event.getPlayer().hasPermission("easyarmorstands.traincarts.model")) {
+        if (event.getMenu().hasEquipment() && event.getPlayer().hasPermission("easyarmorstands.traincarts.model")) {
             event.getMenu().addShortcut(new TrainCartsModelListingSlot(event.getMenu()));
         }
     }
