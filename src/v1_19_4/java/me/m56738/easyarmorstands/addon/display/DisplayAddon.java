@@ -36,6 +36,7 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextPr
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -218,12 +219,12 @@ public class DisplayAddon implements Addon {
         }
 
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(entity).rotateY(-Math.toRadians(location.getYaw()), new Vector3d());
+        Vector3d offset = part.getOffset(entity).rotateY(Util.getEntityYawRotation(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
-                .rotateY(-Math.toRadians(location.getYaw()))
+                .rotateY(Util.getEntityYawRotation(location.getYaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 

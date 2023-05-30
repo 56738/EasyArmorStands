@@ -238,4 +238,12 @@ public class Util {
         }
         return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }
+
+    public static float roundEntityAngle(float angle) {
+        return Math.floor(angle * 256f / 360f) * 360f / 256f;
+    }
+
+    public static float getEntityYawRotation(float degrees) {
+        return -Math.toRadians(roundEntityAngle(degrees));
+    }
 }
