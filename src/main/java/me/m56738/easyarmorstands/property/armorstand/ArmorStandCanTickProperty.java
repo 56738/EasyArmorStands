@@ -61,6 +61,11 @@ public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boo
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(Boolean value) {
+        return Boolean.toString(value);
+    }
+
+    @Override
     public String getPermission() {
         return "easyarmorstands.property.armorstand.cantick";
     }

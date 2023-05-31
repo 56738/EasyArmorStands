@@ -28,6 +28,11 @@ public abstract class ItemEntityProperty<E extends Entity> implements ButtonEnti
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(ItemStack value) {
+        return value.getType().name();
+    }
+
+    @Override
     public InventorySlot createSlot(EntityMenu<? extends E> menu) {
         return new EntityItemSlot<>(menu, this);
     }

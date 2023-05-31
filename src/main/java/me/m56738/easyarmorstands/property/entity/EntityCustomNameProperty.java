@@ -1,21 +1,13 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.StringArgument;
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ComponentEntityProperty;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-
-public class EntityCustomNameProperty implements EntityProperty<Entity, Component> {
+public class EntityCustomNameProperty extends ComponentEntityProperty<Entity> {
     private final ComponentCapability componentCapability;
 
     public EntityCustomNameProperty(ComponentCapability componentCapability) {
@@ -29,11 +21,6 @@ public class EntityCustomNameProperty implements EntityProperty<Entity, Componen
             name = Component.empty();
         }
         return name;
-    }
-
-    @Override
-    public TypeToken<Component> getValueType() {
-        return TypeToken.get(Component.class);
     }
 
     @Override
@@ -52,22 +39,8 @@ public class EntityCustomNameProperty implements EntityProperty<Entity, Componen
     }
 
     @Override
-    public ArgumentParser<EasCommandSender, Component> getArgumentParser() {
-        return new StringArgument.StringParser<EasCommandSender>(
-                StringArgument.StringMode.GREEDY,
-                (v1, v2) -> Collections.emptyList()
-        ).map((ctx, input) ->
-                ArgumentParseResult.success(MiniMessage.miniMessage().deserialize(input)));
-    }
-
-    @Override
     public @NotNull Component getDisplayName() {
         return Component.text("custom name");
-    }
-
-    @Override
-    public @NotNull Component getValueName(Component value) {
-        return value;
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 
@@ -35,7 +36,7 @@ public class EntityCommands {
         ComponentLike id = Component.text()
                 .content("(" + Util.getId(entity.getUniqueId()) + ")")
                 .color(NamedTextColor.GRAY)
-                .hoverEvent(Component.text("Copy " + entity.getUniqueId().toString()))
+                .hoverEvent(getCopyHoverEvent(entity.getUniqueId().toString()))
                 .clickEvent(ClickEvent.copyToClipboard(entity.getUniqueId().toString()));
 
         sender.sendMessage(Component.text()
@@ -51,13 +52,24 @@ public class EntityCommands {
 
     private <E extends Entity, T> void showProperty(Audience audience, E entity, EntityProperty<E, T> property) {
         T value = property.getValue(entity);
+        String clipboardValue = property.getValueClipboardContent(value);
         audience.sendMessage(Component.text()
                 .color(NamedTextColor.YELLOW)
                 .append(property.getDisplayName())
                 .append(Component.text(": "))
                 .append(Objects.requireNonNull(property.getValueName(value),
                                 () -> "value of " + property.getClass())
-                        .colorIfAbsent(NamedTextColor.GRAY)));
+                        .colorIfAbsent(NamedTextColor.GRAY))
+                .hoverEvent(getCopyHoverEvent(clipboardValue))
+                .clickEvent(ClickEvent.copyToClipboard(clipboardValue)));
 
+    }
+
+    private HoverEventSource<?> getCopyHoverEvent(String content) {
+        return Component.text()
+                .content(content)
+                .append(Component.newline())
+                .append(Component.text("Click to copy", NamedTextColor.GRAY))
+                .build();
     }
 }

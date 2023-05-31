@@ -1,22 +1,15 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.context.CommandContext;
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ComponentEntityProperty;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-
-public class TextDisplayTextProperty implements EntityProperty<TextDisplay, Component> {
+public class TextDisplayTextProperty extends ComponentEntityProperty<TextDisplay> {
     private final TextDisplayCapability textDisplayCapability;
 
     public TextDisplayTextProperty(TextDisplayCapability textDisplayCapability) {
@@ -39,11 +32,6 @@ public class TextDisplayTextProperty implements EntityProperty<TextDisplay, Comp
     }
 
     @Override
-    public TypeToken<Component> getValueType() {
-        return TypeToken.get(Component.class);
-    }
-
-    @Override
     public void setValue(TextDisplay entity, Component value) {
         textDisplayCapability.setText(entity, value);
     }
@@ -59,22 +47,8 @@ public class TextDisplayTextProperty implements EntityProperty<TextDisplay, Comp
     }
 
     @Override
-    public ArgumentParser<EasCommandSender, Component> getArgumentParser() {
-        return new StringArgument.StringParser<EasCommandSender>(
-                StringArgument.StringMode.GREEDY,
-                (v1, v2) -> Collections.emptyList()
-        ).map((ctx, input) ->
-                ArgumentParseResult.success(MiniMessage.miniMessage().deserialize(input)));
-    }
-
-    @Override
     public @NotNull Component getDisplayName() {
         return Component.text("text");
-    }
-
-    @Override
-    public @NotNull Component getValueName(Component value) {
-        return value;
     }
 
     @Override

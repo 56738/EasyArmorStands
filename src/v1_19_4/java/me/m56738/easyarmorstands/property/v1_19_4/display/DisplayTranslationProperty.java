@@ -67,6 +67,11 @@ public class DisplayTranslationProperty implements EntityProperty<Display, Vecto
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(Vector3fc value) {
+        return value.x() + " " + value.y() + " " + value.z();
+    }
+
+    @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.translation";
     }

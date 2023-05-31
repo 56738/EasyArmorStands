@@ -52,6 +52,11 @@ public class EntityCustomNameVisibleProperty implements EntityProperty<Entity, B
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(Boolean value) {
+        return Boolean.toString(value);
+    }
+
+    @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.name.visible";
     }

@@ -53,6 +53,11 @@ public class BlockDisplayBlockProperty implements EntityProperty<BlockDisplay, B
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(BlockData value) {
+        return value.getAsString(true);
+    }
+
+    @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.block";
     }

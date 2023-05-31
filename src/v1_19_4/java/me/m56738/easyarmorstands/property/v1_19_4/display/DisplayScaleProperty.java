@@ -67,6 +67,11 @@ public class DisplayScaleProperty implements EntityProperty<Display, Vector3fc> 
     }
 
     @Override
+    public @NotNull String getValueClipboardContent(Vector3fc value) {
+        return value.x() + " " + value.y() + " " + value.z();
+    }
+
+    @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.scale";
     }
