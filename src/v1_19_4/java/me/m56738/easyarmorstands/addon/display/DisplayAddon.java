@@ -17,6 +17,7 @@ import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayLeftRotationProperty;
@@ -66,6 +67,7 @@ public class DisplayAddon implements Addon {
     private DisplayLeftRotationProperty displayLeftRotationProperty;
     private DisplayScaleProperty displayScaleProperty;
     private DisplayRightRotationProperty displayRightRotationProperty;
+    private DisplayBillboardProperty displayBillboardProperty;
     private DisplayBrightnessProperty displayBrightnessProperty;
     private DisplayWidthProperty displayWidthProperty;
     private DisplayHeightProperty displayHeightProperty;
@@ -108,6 +110,8 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(displayScaleProperty);
         displayRightRotationProperty = new DisplayRightRotationProperty(mapper);
         plugin.getEntityPropertyRegistry().register(displayRightRotationProperty);
+        displayBillboardProperty = new DisplayBillboardProperty();
+        plugin.getEntityPropertyRegistry().register(displayBillboardProperty);
         displayBrightnessProperty = new DisplayBrightnessProperty();
         plugin.getEntityPropertyRegistry().register(displayBrightnessProperty);
         displayWidthProperty = new DisplayWidthProperty();
@@ -266,6 +270,10 @@ public class DisplayAddon implements Addon {
 
     public DisplayRightRotationProperty getDisplayRightRotationProperty() {
         return displayRightRotationProperty;
+    }
+
+    public DisplayBillboardProperty getDisplayBillboardProperty() {
+        return displayBillboardProperty;
     }
 
     public DisplayBrightnessProperty getDisplayBrightnessProperty() {

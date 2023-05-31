@@ -31,6 +31,7 @@ easyarmorstands.creative:
     - easyarmorstands.edit.blockdisplay
     - easyarmorstands.edit.itemdisplay
     - easyarmorstands.edit.textdisplay
+    - easyarmorstands.property.display.billboard
     - easyarmorstands.property.display.block
     - easyarmorstands.property.display.brightness
     - easyarmorstands.property.display.item
@@ -131,6 +132,8 @@ easyarmorstands.property.armorstand.pose.rightleg:
   description: "Allow editing armor stand right leg pose"
 easyarmorstands.property.armorstand.size:
   description: "Allow toggling armor stand size"
+easyarmorstands.property.display.billboard:
+  description: "Allow editing the billboard mode of a display"
 easyarmorstands.property.display.block:
   description: "Allow editing the block shown in a block display"
 easyarmorstands.property.display.brightness:
