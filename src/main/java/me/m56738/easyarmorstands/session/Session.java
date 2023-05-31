@@ -31,10 +31,20 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Matrix3d;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -221,10 +231,16 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     public double snap(double value) {
+        if (player.isSneaking()) {
+            return value;
+        }
         return Util.snap(value, snapIncrement);
     }
 
     public double snapAngle(double value) {
+        if (player.isSneaking()) {
+            return value;
+        }
         return Util.snap(value, angleSnapIncrement);
     }
 
