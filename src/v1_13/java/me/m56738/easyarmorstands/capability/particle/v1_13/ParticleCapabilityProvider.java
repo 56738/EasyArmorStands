@@ -13,6 +13,7 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
     public boolean isSupported() {
         try {
             Player.class.getDeclaredMethod("spawnParticle", Particle.class, double.class, double.class, double.class, int.class, Object.class);
+            Particle.DustOptions.class.getDeclaredConstructor(Color.class, float.class);
             return true;
         } catch (Throwable e) {
             return false;
