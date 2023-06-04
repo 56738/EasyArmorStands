@@ -30,6 +30,9 @@ public class EntitySelectionNode extends MenuNode {
     }
 
     private @Nullable Button createButton(Entity entity) {
+        if (!entity.isValid()) {
+            return null;
+        }
         for (EntityButtonPriority priority : EntityButtonPriority.values()) {
             for (EntityButtonProvider provider : providers.get(priority)) {
                 Button button = provider.createButton(session, entity);
