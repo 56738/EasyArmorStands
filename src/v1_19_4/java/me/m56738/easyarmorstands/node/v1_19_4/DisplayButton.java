@@ -47,6 +47,10 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
 
     @Override
     public Node createNode() {
+        if (!session.canSelectEntity(entity)) {
+            return null;
+        }
+
         DisplayBone bone = new DisplayBone(session, entity, addon, addon.getDisplayLeftRotationProperty());
 
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);

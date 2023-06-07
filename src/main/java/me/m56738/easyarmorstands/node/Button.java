@@ -28,5 +28,5 @@ public interface Button extends NodeFactory {
      * @return The node which can be entered using this button.
      */
     @Override
-    Node createNode();
+    @Nullable Node createNode();
 }

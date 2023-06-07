@@ -10,7 +10,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
@@ -88,7 +94,10 @@ public class EntitySelectionNode extends MenuNode {
             if (entity != null) {
                 Button button = buttons.get(entity);
                 if (button != null) {
-                    session.pushNode(button.createNode());
+                    Node node = button.createNode();
+                    if (node != null) {
+                        session.pushNode(node);
+                    }
                     return true;
                 }
             }
@@ -105,7 +114,10 @@ public class EntitySelectionNode extends MenuNode {
     public void selectEntity(Entity entity) {
         Button button = createButton(entity);
         if (button != null) {
-            session.pushNode(button.createNode());
+            Node node = button.createNode();
+            if (node != null) {
+                session.pushNode(node);
+            }
         }
     }
 }

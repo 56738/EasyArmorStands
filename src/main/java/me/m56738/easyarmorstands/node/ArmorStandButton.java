@@ -53,6 +53,9 @@ public class ArmorStandButton extends AxisAlignedBoxButton {
 
     @Override
     public Node createNode() {
+        if (!session.canSelectEntity(entity)) {
+            return null;
+        }
         return new ArmorStandRootNode(session, entity);
     }
 }

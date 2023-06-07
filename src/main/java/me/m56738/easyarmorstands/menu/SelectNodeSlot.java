@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.node.NodeFactory;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -45,13 +46,16 @@ public class SelectNodeSlot implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-            menu.getSession().pushNode(nodeFactory.createNode());
-            menu.queueTask(() -> {
-                Player player = menu.getSession().getPlayer();
-                if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                    player.closeInventory();
-                }
-            });
+            Node node = nodeFactory.createNode();
+            if (node != null) {
+                menu.getSession().pushNode(node);
+                menu.queueTask(() -> {
+                    Player player = menu.getSession().getPlayer();
+                    if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
+                        player.closeInventory();
+                    }
+                });
+            }
         }
         return false;
     }

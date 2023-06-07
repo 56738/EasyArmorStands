@@ -30,6 +30,9 @@ public class DefaultEntityButton extends SimpleButton {
 
     @Override
     public DefaultEntityNode createNode() {
+        if (!session.canSelectEntity(entity)) {
+            return null;
+        }
         return new DefaultEntityNode(session, entity);
     }
 }

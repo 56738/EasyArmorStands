@@ -35,6 +35,9 @@ public class ArmorStandSpawner implements EntitySpawner<ArmorStand> {
 
     @Override
     public Node createNode(ArmorStand entity) {
+        if (!session.canSelectEntity(entity)) {
+            return null;
+        }
         return new ArmorStandRootNode(session, entity);
     }
 }

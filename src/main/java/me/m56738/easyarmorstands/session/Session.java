@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
 import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
+import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.menu.SpawnMenu;
@@ -88,7 +89,7 @@ public final class Session implements ForwardingAudience.Single {
         return null;
     }
 
-    public void pushNode(Node node) {
+    public void pushNode(@NotNull Node node) {
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
         }
@@ -97,7 +98,7 @@ public final class Session implements ForwardingAudience.Single {
         node.onEnter();
     }
 
-    public void replaceNode(Node node) {
+    public void replaceNode(@NotNull Node node) {
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
@@ -147,8 +148,12 @@ public final class Session implements ForwardingAudience.Single {
             entity.remove();
             throw new IllegalArgumentException("Entity type mismatch");
         }
-        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
         Node node = spawner.createNode(entity);
+        if (node == null) {
+            entity.remove();
+            return null;
+        }
+        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
         clearNode();
         pushNode(node);
         return entity;
@@ -461,6 +466,12 @@ public final class Session implements ForwardingAudience.Single {
 
     public void openSpawnMenu() {
         player.openInventory(new SpawnMenu(this).getInventory());
+    }
+
+    public boolean canSelectEntity(Entity entity) {
+        SessionSelectEntityEvent event = new SessionSelectEntityEvent(this, entity);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
     }
 
     private static class ChangeKey<E extends Entity, T> {
