@@ -50,6 +50,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import org.joml.Math;
 import org.joml.Matrix4d;
@@ -204,8 +205,14 @@ public class DisplayAddon implements Addon {
             leftMatrix.scale(0.5);
         }
 
-        headMatrix.translate(0, 0.25, 0);
-        headMatrix.scale(0.625);
+        if (isSkull(equipment.getHelmet())) {
+            headMatrix.scale(1.1875);
+            headMatrix.translate(0, 0.5, 0);
+            headMatrix.rotateY(Math.PI);
+        } else {
+            headMatrix.translate(0, 0.25, 0);
+            headMatrix.scale(0.625);
+        }
 
         rightMatrix.translate(-0.0625, -0.625, 0.125);
         rightMatrix.rotateX(Math.PI / 2);
@@ -227,6 +234,10 @@ public class DisplayAddon implements Addon {
         entity.remove();
 
         EasyArmorStands.getInstance().getHistory(session.getPlayer()).push(actions);
+    }
+
+    private boolean isSkull(ItemStack item) {
+        return item != null && item.getItemMeta() instanceof SkullMeta;
     }
 
     private void convert(Session session, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions) {
