@@ -4,16 +4,14 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
-import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
-import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
-import me.m56738.easyarmorstands.event.SessionSpawnEvent;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.menu.SpawnMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyChange;
 import me.m56738.easyarmorstands.util.Util;
@@ -38,7 +36,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class Session implements ForwardingAudience.Single {
+public final class Session implements ChangeContext, ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private final LinkedList<Node> nodeStack = new LinkedList<>();
@@ -129,24 +126,6 @@ public final class Session implements ForwardingAudience.Single {
         rootNode.onEnter();
     }
 
-    public <T extends Entity> @Nullable T spawn(Location location, EntitySpawner<T> spawner) {
-        SessionPreSpawnEvent preSpawnEvent = new SessionPreSpawnEvent(this, location, spawner.getEntityType());
-        Bukkit.getPluginManager().callEvent(preSpawnEvent);
-        if (preSpawnEvent.isCancelled()) {
-            return null;
-        }
-
-        T entity = spawner.spawn(location);
-        if (entity.getType() != spawner.getEntityType()) {
-            entity.remove();
-            throw new IllegalArgumentException("Entity type mismatch");
-        }
-
-        Bukkit.getPluginManager().callEvent(new SessionSpawnEvent(this, entity));
-
-        return entity;
-    }
-
     public boolean handleClick(ClickContext context) {
         Node node = nodeStack.peek();
         if (node == null || clickTicks > 0) {
@@ -157,53 +136,6 @@ public final class Session implements ForwardingAudience.Single {
         Vector3dc eyes = Util.toVector3d(eyeLocation);
         Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
         return node.onClick(eyes, target, context);
-    }
-
-    public <E extends Entity, T> void applyProperty(E entity, EntityProperty<E, T> property, T value) {
-        T oldValue = property.getValue(entity);
-        if (Objects.equals(oldValue, value)) {
-            return;
-        }
-        property.setValue(entity, value);
-        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
-        originalValues.putIfAbsent(key, oldValue);
-        pendingValues.put(key, value);
-    }
-
-    public <E extends Entity, T> boolean canSetProperty(E entity, EntityProperty<E, T> property, T value) {
-        T oldValue = property.getValue(entity);
-        if (Objects.equals(oldValue, value)) {
-            return true;
-        }
-
-        if (!player.hasPermission(property.getPermission())) {
-            return false;
-        }
-
-        SessionEditEntityEvent<E, T> event = new SessionEditEntityEvent<>(this, entity, property, oldValue, value);
-        Bukkit.getPluginManager().callEvent(event);
-        return !event.isCancelled();
-    }
-
-    public <E extends Entity, T> boolean setProperty(E entity, EntityProperty<E, T> property, T value) {
-        if (canSetProperty(entity, property, value)) {
-            applyProperty(entity, property, value);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean setProperties(Collection<EntityPropertyChange<?, ?>> changes) {
-        for (EntityPropertyChange<?, ?> change : changes) {
-            if (!change.canChange(this)) {
-                return false;
-            }
-        }
-        for (EntityPropertyChange<?, ?> change : changes) {
-            change.applyChange(this);
-        }
-        return true;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -304,6 +236,21 @@ public final class Session implements ForwardingAudience.Single {
 
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public <E extends Entity, T> void applyChange(EntityPropertyChange<E, T> change) {
+        E entity = change.getEntity();
+        EntityProperty<E, T> property = change.getProperty();
+        T value = change.getValue();
+        T oldValue = property.getValue(entity);
+        if (Objects.equals(oldValue, value)) {
+            return;
+        }
+        property.setValue(entity, value);
+        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
+        originalValues.putIfAbsent(key, oldValue);
+        pendingValues.put(key, value);
     }
 
     public double getRange() {

@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
+import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.session.CloneSpawner;
 import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.util.Util;
@@ -29,24 +30,32 @@ public class EntitySpawnAction<E extends Entity> implements Action {
     }
 
     @Override
-    public void execute() {
-        E entity = spawner.spawn(location);
+    public boolean execute(ChangeContext context) {
+        E entity = EntitySpawner.trySpawn(spawner, location, context.getPlayer());
+        if (entity == null) {
+            return false;
+        }
         if (uuid != null) {
             EasyArmorStands.getInstance().getHistoryManager().onEntityReplaced(uuid, entity.getUniqueId());
         } else {
             uuid = entity.getUniqueId();
         }
+        return true;
     }
 
     @Override
-    public void undo() {
+    public boolean undo(ChangeContext context) {
         E entity = findEntity();
         if (entity == null) {
             throw new IllegalStateException();
         }
+        if (!EntitySpawner.canRemove(entity, context.getPlayer())) {
+            return false;
+        }
         location = entity.getLocation();
         spawner = new CloneSpawner<>(entity);
         entity.remove();
+        return true;
     }
 
     @Override

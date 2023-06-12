@@ -43,6 +43,6 @@ public class ArmorStandPartPositionBone implements PositionBone {
         location.setX(position.x() - offset.x);
         location.setY(position.y() - offset.y);
         location.setZ(position.z() - offset.z);
-        session.setProperty(entity, entityLocationProperty, location);
+        session.tryChange(entity, entityLocationProperty, location);
     }
 }

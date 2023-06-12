@@ -32,7 +32,7 @@ public class EntityItemSlot<T extends Entity> implements InventorySlot {
             if (item == null) {
                 item = new ItemStack(Material.AIR);
             }
-            menu.getSession().setProperty(menu.getEntity(), property, item);
+            menu.getSession().tryChange(menu.getEntity(), property, item);
             menu.getSession().commit();
         });
         return true;

@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.property.v1_19_4.display;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
+import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.EntityPropertyChange;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -42,7 +42,7 @@ public class DisplayHeightProperty extends DisplaySizeProperty {
     }
 
     @Override
-    public boolean performChange(Session session, Display entity, Float value) {
+    public boolean performChange(ChangeContext context, Display entity, Float value) {
         DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
         EntityLocationProperty entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
 
@@ -64,8 +64,8 @@ public class DisplayHeightProperty extends DisplaySizeProperty {
         changes.add(new EntityPropertyChange<>(entity, displayTranslationProperty, translation));
 
         // Ignore the return value, failure is allowed
-        session.setProperties(changes);
+        context.tryChange(changes);
 
-        return super.performChange(session, entity, value);
+        return super.performChange(context, entity, value);
     }
 }

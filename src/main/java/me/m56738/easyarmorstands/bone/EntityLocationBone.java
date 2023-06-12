@@ -32,7 +32,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setX(position.x() - offset.x());
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
-        session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class EntityLocationBone implements PositionAndYawBone {
     public void setYaw(float yaw) {
         Location location = entity.getLocation();
         location.setYaw(yaw);
-        session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
         location.setYaw(yaw);
-        session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
     }
 
     @Override

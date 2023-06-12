@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Entity;
 
 public class EntityPropertyChange<E extends Entity, T> {
@@ -24,17 +23,5 @@ public class EntityPropertyChange<E extends Entity, T> {
 
     public T getValue() {
         return value;
-    }
-
-    public boolean canChange(Session session) {
-        return session.canSetProperty(entity, property, value);
-    }
-
-    public void applyChange(Session session) {
-        session.applyProperty(entity, property, value);
-    }
-
-    public void execute() {
-        property.setValue(entity, value);
     }
 }

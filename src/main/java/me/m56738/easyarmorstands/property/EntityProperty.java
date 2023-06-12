@@ -4,7 +4,6 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Entity;
@@ -50,7 +49,7 @@ public interface EntityProperty<E extends Entity, T> {
         return true;
     }
 
-    default boolean performChange(Session session, E entity, T value) {
-        return session.setProperty(entity, this, value);
+    default boolean performChange(ChangeContext context, E entity, T value) {
+        return context.tryChange(new EntityPropertyChange<>(entity, this, value));
     }
 }

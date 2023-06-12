@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
+import me.m56738.easyarmorstands.property.ChangeContext;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 
@@ -11,13 +12,13 @@ public class EntityDestroyAction<E extends Entity> extends EntitySpawnAction<E> 
     }
 
     @Override
-    public void execute() {
-        super.undo();
+    public boolean execute(ChangeContext context) {
+        return super.undo(context);
     }
 
     @Override
-    public void undo() {
-        super.execute();
+    public boolean undo(ChangeContext context) {
+        return super.execute(context);
     }
 
     @Override

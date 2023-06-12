@@ -1,23 +1,24 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before spawning an entity, to test whether an entity may be spawned at that location.
  */
-public class SessionPreSpawnEvent extends SessionEvent implements Cancellable {
+public class PlayerPreSpawnEntityEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final Location location;
     private final EntityType type;
     private boolean cancelled;
 
-    public SessionPreSpawnEvent(Session session, Location location, EntityType type) {
-        super(session);
+    public PlayerPreSpawnEntityEvent(Player player, Location location, EntityType type) {
+        super(player);
         this.location = location;
         this.type = type;
     }

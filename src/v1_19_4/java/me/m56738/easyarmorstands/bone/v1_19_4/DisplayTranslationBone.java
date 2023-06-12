@@ -37,7 +37,7 @@ public class DisplayTranslationBone implements PositionBone {
     @Override
     public void setPosition(Vector3dc position) {
         Vector3d translation = position.sub(Util.toVector3d(entity.getLocation()), new Vector3d());
-        session.setProperty(entity, property, translation.get(new Vector3f())
+        session.tryChange(entity, property, translation.get(new Vector3f())
                 .rotateY(Math.toRadians(entity.getLocation().getYaw())));
     }
 }

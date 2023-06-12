@@ -1,21 +1,22 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called after an entity is spawned.
  * <p>
- * Cannot be cancelled. Use {@link SessionPreSpawnEvent} to prevent spawning an entity.
+ * Cannot be cancelled. Use {@link PlayerPreSpawnEntityEvent} to prevent spawning an entity.
  */
-public class SessionSpawnEvent extends SessionEvent {
+public class PlayerSpawnEntityEvent extends PlayerEvent {
     private static final HandlerList handlerList = new HandlerList();
     private final Entity entity;
 
-    public SessionSpawnEvent(Session session, Entity entity) {
-        super(session);
+    public PlayerSpawnEntityEvent(Player player, Entity entity) {
+        super(player);
         this.entity = entity;
     }
 

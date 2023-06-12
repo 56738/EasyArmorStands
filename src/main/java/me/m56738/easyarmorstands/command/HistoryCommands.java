@@ -9,6 +9,8 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.property.ChangeContext;
+import me.m56738.easyarmorstands.property.DirectChangeContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -40,13 +42,20 @@ public class HistoryCommands {
     @CommandDescription("Redo a change")
     public void redo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+        ChangeContext context = new DirectChangeContext(sender.get());
         History history = EasyArmorStands.getInstance().getHistory(sender.get());
         for (int i = 0; i < count; i++) {
             Action action = history.takeRedoAction();
             if (action != null) {
+                boolean ok;
                 try {
-                    action.execute();
+                    ok = action.execute(context);
                 } catch (IllegalStateException e) {
+                    sender.sendMessage(Component.text("Failed to redo change: ", NamedTextColor.RED)
+                            .append(action.describe()));
+                    break;
+                }
+                if (!ok) {
                     sender.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
                             .append(action.describe()));
                     break;
@@ -66,13 +75,20 @@ public class HistoryCommands {
     @CommandDescription("Undo a change")
     public void undo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+        ChangeContext context = new DirectChangeContext(sender.get());
         History history = EasyArmorStands.getInstance().getHistory(sender.get());
         for (int i = 0; i < count; i++) {
             Action action = history.takeUndoAction();
             if (action != null) {
+                boolean ok;
                 try {
-                    action.undo();
+                    ok = action.undo(context);
                 } catch (IllegalStateException e) {
+                    sender.sendMessage(Component.text("Failed to undo change: ", NamedTextColor.RED)
+                            .append(action.describe()));
+                    break;
+                }
+                if (!ok) {
                     sender.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
                             .append(action.describe()));
                     break;

@@ -15,6 +15,7 @@ import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.CloneSpawner;
+import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
@@ -39,7 +40,7 @@ public class SessionCommands {
                       Entity entity) {
         Location location = entity.getLocation();
         CloneSpawner<Entity> spawner = new CloneSpawner<>(entity);
-        Entity clone = session.spawn(location, spawner);
+        Entity clone = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
         if (clone == null) {
             sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
             return;
@@ -137,7 +138,7 @@ public class SessionCommands {
         location.setX(position.x());
         location.setY(position.y());
         location.setZ(position.z());
-        if (!session.setProperty(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location)) {
+        if (!session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -160,7 +161,7 @@ public class SessionCommands {
         EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
         Location location = property.getValue(entity);
         location.setYaw(yaw);
-        if (!session.setProperty(entity, property, location)) {
+        if (!session.tryChange(entity, property, location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -177,7 +178,7 @@ public class SessionCommands {
         EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
         Location location = property.getValue(entity);
         location.setPitch(pitch);
-        if (!session.setProperty(entity, property, location)) {
+        if (!session.tryChange(entity, property, location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }

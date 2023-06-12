@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.EntityPropertyChange;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
@@ -18,18 +20,18 @@ public class EntityPropertyAction<E extends Entity, T> extends EntityAction<E> {
     }
 
     @Override
-    public void execute() {
-        setValue(newValue);
+    public boolean execute(ChangeContext context) {
+        return tryChange(newValue, context);
     }
 
     @Override
-    public void undo() {
-        setValue(oldValue);
+    public boolean undo(ChangeContext context) {
+        return tryChange(oldValue, context);
     }
 
-    private void setValue(T value) {
+    private boolean tryChange(T value, ChangeContext context) {
         E entity = findEntity();
-        property.setValue(entity, value);
+        return context.tryChange(new EntityPropertyChange<>(entity, property, value));
     }
 
     @Override

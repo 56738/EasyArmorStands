@@ -8,7 +8,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartPoseBone implements RotationBone {
     private final Session session;
@@ -49,6 +52,6 @@ public class ArmorStandPartPoseBone implements RotationBone {
     public void setRotation(Quaterniondc rotation) {
         Location location = entity.getLocation();
         float rotY = -Math.toRadians(location.getYaw());
-        session.setProperty(entity, property, rotation.rotateLocalY(-rotY, new Quaterniond()));
+        session.tryChange(entity, property, rotation.rotateLocalY(-rotY, new Quaterniond()));
     }
 }

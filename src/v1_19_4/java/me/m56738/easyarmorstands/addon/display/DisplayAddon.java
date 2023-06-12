@@ -165,7 +165,7 @@ public class DisplayAddon implements Addon {
     @RequireEntity(Display.class)
     public void editScale(Audience sender, Session session, Display entity, @Argument("scale") float scale) {
         Vector3f value = new Vector3f(scale);
-        if (session.setProperty(entity, displayScaleProperty, value)) {
+        if (session.tryChange(entity, displayScaleProperty, value)) {
             sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
                     .append(displayScaleProperty.getValueName(value)));
         } else {
@@ -269,7 +269,7 @@ public class DisplayAddon implements Addon {
                     new Quaternionf()
             ));
         });
-        ItemDisplay display = session.spawn(location, spawner);
+        ItemDisplay display = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
         if (display == null) {
             return;
         }

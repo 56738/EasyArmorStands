@@ -5,11 +5,12 @@ import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.location.Location;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
-import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
-import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
+import me.m56738.easyarmorstands.event.PlayerDestroyEntityEvent;
+import me.m56738.easyarmorstands.event.PlayerEditEntityPropertyEvent;
+import me.m56738.easyarmorstands.event.PlayerPreSpawnEntityEvent;
+import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,17 +22,18 @@ import java.util.WeakHashMap;
 
 public class PlotSquaredListener implements Listener {
     private final PlotAPI api;
-    private final Map<Session, Boolean> bypassCache = new WeakHashMap<>();
+    private final Map<Player, Boolean> bypassCache = new WeakHashMap<>();
     private final String bypassPermission = "easyarmorstands.plotsquared.bypass";
 
     public PlotSquaredListener(PlotAPI api) {
         this.api = api;
     }
 
-    private boolean isAllowed(Player player, Location location) {
-        PlotArea area = api.getPlotSquared().getPlotAreaManager().getPlotArea(location);
+    private boolean isAllowed(Player player, org.bukkit.Location location) {
+        Location plotLocation = BukkitUtil.adapt(location);
+        PlotArea area = api.getPlotSquared().getPlotAreaManager().getPlotArea(plotLocation);
         if (area != null) {
-            Plot plot = area.getPlot(location);
+            Plot plot = area.getPlot(plotLocation);
             if (plot != null) {
                 return plot.isAdded(BukkitUtil.adapt(player).getUUID());
             }
@@ -39,11 +41,15 @@ public class PlotSquaredListener implements Listener {
         return false;
     }
 
+    @EventHandler
+    public void onInitialize(SessionInitializeEvent event) {
+        bypassCache.remove(event.getPlayer());
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onStartSession(SessionSelectEntityEvent event) {
+    public void onSelect(SessionSelectEntityEvent event) {
         Entity entity = event.getEntity();
-        Location location = BukkitUtil.adapt(entity.getLocation());
-        if (isAllowed(event.getPlayer(), location)) {
+        if (isAllowed(event.getPlayer(), entity.getLocation())) {
             return;
         }
         if (event.getPlayer().hasPermission(bypassPermission)) {
@@ -53,9 +59,8 @@ public class PlotSquaredListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSpawn(SessionPreSpawnEvent event) {
-        Location location = BukkitUtil.adapt(event.getLocation());
-        if (isAllowed(event.getPlayer(), location)) {
+    public void onSpawn(PlayerPreSpawnEntityEvent event) {
+        if (isAllowed(event.getPlayer(), event.getLocation())) {
             return;
         }
         if (event.getPlayer().hasPermission(bypassPermission)) {
@@ -65,21 +70,33 @@ public class PlotSquaredListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onMoveSession(SessionEditEntityEvent<?, ?> event) {
-        if (!(event.getProperty() instanceof EntityLocationProperty)) {
-            return;
+    public void onEdit(PlayerEditEntityPropertyEvent<?, ?> event) {
+        if (isAllowed(event.getPlayer(), event.getEntity().getLocation())) {
+            if (!(event.getProperty() instanceof EntityLocationProperty)) {
+                return;
+            }
+            if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue())) {
+                return;
+            }
         }
-        Location location = BukkitUtil.adapt((org.bukkit.Location) event.getNewValue());
-        if (isAllowed(event.getPlayer(), location)) {
-            return;
-        }
-        if (bypassCache.computeIfAbsent(event.getSession(), this::canBypass)) {
+        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
             return;
         }
         event.setCancelled(true);
     }
 
-    private boolean canBypass(Session session) {
-        return session.getPlayer().hasPermission(bypassPermission);
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDestroy(PlayerDestroyEntityEvent event) {
+        if (isAllowed(event.getPlayer(), event.getEntity().getLocation())) {
+            return;
+        }
+        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+    private boolean canBypass(Player player) {
+        return player.hasPermission(bypassPermission);
     }
 }

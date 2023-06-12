@@ -93,9 +93,9 @@ public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand>
         if (gravity && canTickProperty != null && !canTickProperty.getValue(entity) &&
                 session.getPlayer().hasPermission(canTickProperty.getPermission())) {
             // Attempt to enable ticking when enabling gravity
-            session.setProperty(entity, canTickProperty, true);
+            session.tryChange(entity, canTickProperty, true);
         }
-        session.setProperty(entity, this, gravity);
+        session.tryChange(entity, this, gravity);
         session.commit();
     }
 }
