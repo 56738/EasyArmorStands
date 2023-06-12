@@ -193,39 +193,39 @@ public class DisplayAddon implements Addon {
         if (equipment == null) {
             return;
         }
-        List<Action> actions = new ArrayList<>();
-        Matrix4d headMatrix;
-        Matrix4d rightMatrix;
-        Matrix4d leftMatrix;
-        if (Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT")) {
-            headMatrix = new Matrix4d()
-                    .translation(0, 0.25, 0)
-                    .rotateY(Math.PI)
-                    .scale(0.625);
-            rightMatrix = new Matrix4d()
-                    .translation(-0.0625, -0.625, 0.125)
-                    .rotateY(Math.PI)
-                    .rotateX(-Math.PI / 2);
-            leftMatrix = new Matrix4d()
-                    .translation(0.0625, -0.625, 0.125)
-                    .rotateY(Math.PI)
-                    .rotateX(-Math.PI / 2);
-        } else {
-            headMatrix = new Matrix4d()
-                    .translation(0, 0.25, 0)
-                    .scale(0.625);
-            rightMatrix = new Matrix4d()
-                    .translation(-0.0625, -0.625, 0.125)
-                    .rotateX(Math.PI / 2);
-            leftMatrix = new Matrix4d()
-                    .translation(0.0625, -0.625, 0.125)
-                    .rotateX(Math.PI / 2);
+
+        Matrix4d headMatrix = new Matrix4d();
+        Matrix4d rightMatrix = new Matrix4d();
+        Matrix4d leftMatrix = new Matrix4d();
+
+        if (entity.isSmall()) {
+            headMatrix.scale(0.7);
+            rightMatrix.scale(0.5);
+            leftMatrix.scale(0.5);
         }
+
+        headMatrix.translate(0, 0.25, 0);
+        headMatrix.scale(0.625);
+
+        rightMatrix.translate(-0.0625, -0.625, 0.125);
+        rightMatrix.rotateX(Math.PI / 2);
+
+        leftMatrix.translate(0.0625, -0.625, 0.125);
+        leftMatrix.rotateX(Math.PI / 2);
+
+        if (Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT")) {
+            headMatrix.rotateY(Math.PI);
+            rightMatrix.rotateY(Math.PI);
+            leftMatrix.rotateY(Math.PI);
+        }
+
+        List<Action> actions = new ArrayList<>();
         convert(session, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
         convert(session, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
         convert(session, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
         actions.add(new EntityDestroyAction<>(entity));
         entity.remove();
+
         EasyArmorStands.getInstance().getHistory(session.getPlayer()).push(actions);
     }
 
