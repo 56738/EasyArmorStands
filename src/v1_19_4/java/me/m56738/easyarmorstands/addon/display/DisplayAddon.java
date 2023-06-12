@@ -194,24 +194,36 @@ public class DisplayAddon implements Addon {
             return;
         }
         List<Action> actions = new ArrayList<>();
-        convert(session, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD,
-                new Matrix4d()
-                        .translation(0, 0.25, 0)
-                        .rotateY(Math.PI)
-                        .scale(0.625),
-                actions);
-        convert(session, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND,
-                new Matrix4d()
-                        .translation(-0.0625, -0.625, 0.125)
-                        .rotateY(Math.PI)
-                        .rotateX(-Math.PI / 2),
-                actions);
-        convert(session, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND,
-                new Matrix4d()
-                        .translation(0.0625, -0.625, 0.125)
-                        .rotateY(Math.PI)
-                        .rotateX(-Math.PI / 2),
-                actions);
+        Matrix4d headMatrix;
+        Matrix4d rightMatrix;
+        Matrix4d leftMatrix;
+        if (Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT")) {
+            headMatrix = new Matrix4d()
+                    .translation(0, 0.25, 0)
+                    .rotateY(Math.PI)
+                    .scale(0.625);
+            rightMatrix = new Matrix4d()
+                    .translation(-0.0625, -0.625, 0.125)
+                    .rotateY(Math.PI)
+                    .rotateX(-Math.PI / 2);
+            leftMatrix = new Matrix4d()
+                    .translation(0.0625, -0.625, 0.125)
+                    .rotateY(Math.PI)
+                    .rotateX(-Math.PI / 2);
+        } else {
+            headMatrix = new Matrix4d()
+                    .translation(0, 0.25, 0)
+                    .scale(0.625);
+            rightMatrix = new Matrix4d()
+                    .translation(-0.0625, -0.625, 0.125)
+                    .rotateX(Math.PI / 2);
+            leftMatrix = new Matrix4d()
+                    .translation(0.0625, -0.625, 0.125)
+                    .rotateX(Math.PI / 2);
+        }
+        convert(session, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
+        convert(session, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
+        convert(session, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
         actions.add(new EntityDestroyAction<>(entity));
         entity.remove();
         EasyArmorStands.getInstance().getHistory(session.getPlayer()).push(actions);
