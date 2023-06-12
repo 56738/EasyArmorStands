@@ -38,7 +38,7 @@ public class EntityPlaceCapabilityProvider implements CapabilityProvider<EntityP
 
         @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
         @SuppressWarnings("deprecation")
-        public void onArmSwing(org.bukkit.event.entity.EntityPlaceEvent event) {
+        public void onPlace(org.bukkit.event.entity.EntityPlaceEvent event) {
             Bukkit.getPluginManager().callEvent(new EntityPlaceEvent(event.getEntity(), event.getPlayer()));
         }
     }

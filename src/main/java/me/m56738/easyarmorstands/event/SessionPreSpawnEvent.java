@@ -7,6 +7,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called before spawning an entity, to test whether an entity may be spawned at that location.
+ */
 public class SessionPreSpawnEvent extends SessionEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final Location location;

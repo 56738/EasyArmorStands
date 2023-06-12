@@ -7,6 +7,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when an entity property is modified.
+ */
 public class SessionEditEntityEvent<E extends Entity, T> extends SessionEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final E entity;

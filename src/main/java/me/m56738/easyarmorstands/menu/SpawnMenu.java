@@ -40,7 +40,7 @@ public class SpawnMenu extends InventoryMenu {
     @Override
     public void initialize() {
         if (session.getPlayer().hasPermission("easyarmorstands.spawn.armorstand")) {
-            addButton(new SpawnSlot<>(this, new ArmorStandSpawner(session), Util.createItem(
+            addButton(new SpawnSlot<>(this, new ArmorStandSpawner(), Util.createItem(
                     ItemType.ARMOR_STAND,
                     EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND),
                     Collections.emptyList())));

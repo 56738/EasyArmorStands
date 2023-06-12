@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 
 public class EntityDestroyAction<E extends Entity> extends EntitySpawnAction<E> {
-    public EntityDestroyAction(Entity entity) {
+    public EntityDestroyAction(E entity) {
         super(entity);
     }
 

@@ -1,15 +1,22 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.node.Node;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public interface EntitySpawner<T extends Entity> {
+    static <T extends Entity> EntitySpawner<T> of(EntityType type, Consumer<T> configure) {
+        return new SimpleEntitySpawner<>(type, configure);
+    }
+
     EntityType getEntityType();
 
-    T spawn(Location location);
+    @SuppressWarnings("unchecked")
+    default Class<T> getType() {
+        return (Class<T>) getEntityType().getEntityClass();
+    }
 
-    @Nullable Node createNode(T entity);
+    T spawn(Location location);
 }

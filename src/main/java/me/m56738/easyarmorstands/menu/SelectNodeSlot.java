@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.node.NodeFactory;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -49,12 +48,7 @@ public class SelectNodeSlot implements InventorySlot {
             Node node = nodeFactory.createNode();
             if (node != null) {
                 menu.getSession().pushNode(node);
-                menu.queueTask(() -> {
-                    Player player = menu.getSession().getPlayer();
-                    if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                        player.closeInventory();
-                    }
-                });
+                menu.close(menu.getSession().getPlayer());
             }
         }
         return false;

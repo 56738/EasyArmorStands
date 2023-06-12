@@ -7,8 +7,8 @@ import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionEditEntityEvent;
 import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
+import me.m56738.easyarmorstands.event.SessionSpawnEvent;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.menu.SpawnMenu;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
@@ -34,7 +34,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Matrix3d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -130,32 +129,21 @@ public final class Session implements ForwardingAudience.Single {
         rootNode.onEnter();
     }
 
-    public <T extends Entity> @Nullable T spawn(EntitySpawner<T> spawner) {
-        Location eyeLocation = player.getEyeLocation();
-        Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
-        Vector3d position = new Vector3d(cursor);
-        if (!player.isFlying()) {
-            position.y = 0;
-        }
-        Location location = player.getLocation().add(position.x, position.y, position.z);
+    public <T extends Entity> @Nullable T spawn(Location location, EntitySpawner<T> spawner) {
         SessionPreSpawnEvent preSpawnEvent = new SessionPreSpawnEvent(this, location, spawner.getEntityType());
         Bukkit.getPluginManager().callEvent(preSpawnEvent);
         if (preSpawnEvent.isCancelled()) {
             return null;
         }
+
         T entity = spawner.spawn(location);
         if (entity.getType() != spawner.getEntityType()) {
             entity.remove();
             throw new IllegalArgumentException("Entity type mismatch");
         }
-        Node node = spawner.createNode(entity);
-        if (node == null) {
-            entity.remove();
-            return null;
-        }
-        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
-        clearNode();
-        pushNode(node);
+
+        Bukkit.getPluginManager().callEvent(new SessionSpawnEvent(this, entity));
+
         return entity;
     }
 

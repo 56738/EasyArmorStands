@@ -45,7 +45,7 @@ public class DisplaySessionListener implements Listener {
         Session session = menu.getSession();
         if (session.getPlayer().hasPermission("easyarmorstands.spawn.itemdisplay")) {
             menu.addButton(new SpawnSlot<>(menu,
-                    new ItemDisplaySpawner(session, addon, ItemDisplayRootNode::new),
+                    new ItemDisplaySpawner(),
                     Util.createItem(
                             ItemType.STICK,
                             EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ITEM_DISPLAY),
@@ -53,7 +53,7 @@ public class DisplaySessionListener implements Listener {
         }
         if (session.getPlayer().hasPermission("easyarmorstands.spawn.blockdisplay")) {
             menu.addButton(new SpawnSlot<>(menu,
-                    new DisplaySpawner<>(BlockDisplay.class, EntityType.BLOCK_DISPLAY, session, addon, DisplayRootNode::new),
+                    new DisplaySpawner<>(BlockDisplay.class, EntityType.BLOCK_DISPLAY),
                     Util.createItem(
                             ItemType.STONE,
                             EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.BLOCK_DISPLAY),
@@ -61,7 +61,7 @@ public class DisplaySessionListener implements Listener {
         }
         if (session.getPlayer().hasPermission("easyarmorstands.spawn.textdisplay")) {
             menu.addButton(new SpawnSlot<>(menu,
-                    new DisplaySpawner<>(TextDisplay.class, EntityType.TEXT_DISPLAY, session, addon, DisplayRootNode::new),
+                    new DisplaySpawner<>(TextDisplay.class, EntityType.TEXT_DISPLAY),
                     Util.createItem(
                             ItemType.NAME_TAG,
                             EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.TEXT_DISPLAY),

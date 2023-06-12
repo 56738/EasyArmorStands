@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.inventory;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 
@@ -69,6 +70,14 @@ public class InventoryMenu implements InventoryListener {
 
     public void queueTask(Runnable runnable) {
         queue.add(runnable);
+    }
+
+    public void close(Player player) {
+        queueTask(() -> {
+            if (inventory.equals(player.getOpenInventory().getTopInventory())) {
+                player.closeInventory();
+            }
+        });
     }
 
     @Override

@@ -10,8 +10,6 @@ import me.m56738.easyarmorstands.bone.v1_19_4.DisplayTranslationBone;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
-import me.m56738.easyarmorstands.event.SessionPreSpawnEvent;
-import me.m56738.easyarmorstands.event.SessionSpawnEvent;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
@@ -34,6 +32,7 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayLineWi
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplaySeeThroughProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayShadowProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextProperty;
+import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
@@ -230,6 +229,11 @@ public class DisplayAddon implements Addon {
         convert(session, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
         convert(session, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
         convert(session, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
+        if (actions.isEmpty()) {
+            session.sendMessage(Component.text("Unable to convert", NamedTextColor.RED));
+            return;
+        }
+
         actions.add(new EntityDestroyAction<>(entity));
         entity.remove();
 
@@ -255,13 +259,7 @@ public class DisplayAddon implements Addon {
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 
-        SessionPreSpawnEvent preSpawnEvent = new SessionPreSpawnEvent(session, location, EntityType.ITEM_DISPLAY);
-        Bukkit.getPluginManager().callEvent(preSpawnEvent);
-        if (preSpawnEvent.isCancelled()) {
-            return;
-        }
-
-        ItemDisplay display = entity.getWorld().spawn(location, ItemDisplay.class, e -> {
+        EntitySpawner<ItemDisplay> spawner = EntitySpawner.of(EntityType.ITEM_DISPLAY, e -> {
             e.setItemStack(item);
             e.setItemDisplayTransform(itemTransform);
             e.setTransformation(mapper.getTransformation(
@@ -271,8 +269,12 @@ public class DisplayAddon implements Addon {
                     new Quaternionf()
             ));
         });
-        Bukkit.getPluginManager().callEvent(new SessionSpawnEvent(session, display));
-        actions.add(new EntitySpawnAction<>(display));
+        ItemDisplay display = session.spawn(location, spawner);
+        if (display == null) {
+            return;
+        }
+
+        actions.add(new EntitySpawnAction<>(location, spawner, display.getUniqueId()));
     }
 
     public JOMLMapper getMapper() {

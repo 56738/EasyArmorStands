@@ -4,6 +4,11 @@ import me.m56738.easyarmorstands.menu.SpawnMenu;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when the spawn menu is populated.
+ * <p>
+ * Can be used to add custom spawn buttons.
+ */
 public class SessionSpawnMenuInitializeEvent extends SessionEvent {
     private static final HandlerList handlerList = new HandlerList();
 

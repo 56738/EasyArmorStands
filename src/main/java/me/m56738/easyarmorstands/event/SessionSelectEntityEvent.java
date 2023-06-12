@@ -6,6 +6,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when an entity is selected.
+ * <p>
+ * Can be used to prevent selecting certain entities.
+ */
 public class SessionSelectEntityEvent extends SessionEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final Entity entity;

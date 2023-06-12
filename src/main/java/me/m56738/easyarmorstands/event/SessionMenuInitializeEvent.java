@@ -5,6 +5,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when a session menu is populated.
+ * <p>
+ * Can be used to add buttons.
+ */
 public class SessionMenuInitializeEvent extends PlayerEvent {
     private static final HandlerList handlerList = new HandlerList();
 

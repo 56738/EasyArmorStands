@@ -1,11 +1,18 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.session.EntitySpawner;
+import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.Util;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.joml.Matrix3d;
+import org.joml.Vector3d;
 
 public class SpawnSlot<T extends Entity> implements InventorySlot {
     private final SpawnMenu menu;
@@ -26,14 +33,24 @@ public class SpawnSlot<T extends Entity> implements InventorySlot {
     @Override
     public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
         if (click) {
-            if (menu.getSession().spawn(spawner) != null) {
-                menu.queueTask(() -> {
-                    Player player = menu.getSession().getPlayer();
-                    if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                        player.closeInventory();
-                    }
-                });
+            Session session = menu.getSession();
+            Player player = session.getPlayer();
+            Location eyeLocation = player.getEyeLocation();
+            Vector3d cursor = Util.getRotation(eyeLocation, new Matrix3d()).transform(0, 0, 2, new Vector3d());
+            Vector3d position = new Vector3d(cursor);
+            if (!player.isFlying()) {
+                position.y = 0;
             }
+            Location location = player.getLocation().add(position.x, position.y, position.z);
+            T entity = session.spawn(location, spawner);
+            if (entity == null) {
+                return false;
+            }
+            EntitySpawnAction<T> action = new EntitySpawnAction<>(location, spawner, entity.getUniqueId());
+            EasyArmorStands.getInstance().getHistory(player).push(action);
+
+            session.selectEntity(entity);
+            menu.close(player);
         }
         return false;
     }

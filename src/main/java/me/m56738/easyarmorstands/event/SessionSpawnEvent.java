@@ -5,6 +5,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called after an entity is spawned.
+ * <p>
+ * Cannot be cancelled. Use {@link SessionPreSpawnEvent} to prevent spawning an entity.
+ */
 public class SessionSpawnEvent extends SessionEvent {
     private static final HandlerList handlerList = new HandlerList();
     private final Entity entity;
