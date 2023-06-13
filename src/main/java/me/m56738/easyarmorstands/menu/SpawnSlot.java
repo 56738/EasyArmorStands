@@ -42,7 +42,11 @@ public class SpawnSlot<T extends Entity> implements InventorySlot {
                 position.y = 0;
             }
             Location location = player.getLocation().add(position.x, position.y, position.z);
-            location.setYaw(location.getYaw() + 180);
+            location.setX(session.snap(location.getX()));
+            location.setY(session.snap(location.getY()));
+            location.setZ(session.snap(location.getZ()));
+            location.setYaw((float) session.snapAngle(location.getYaw() + 180));
+            location.setPitch((float) session.snapAngle(location.getPitch()));
             T entity = EntitySpawner.trySpawn(spawner, location, player);
             if (entity == null) {
                 return false;
