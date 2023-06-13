@@ -41,6 +41,7 @@ public class CloneSpawner<T extends Entity> implements EntitySpawner<T> {
         return entityType;
     }
 
+    @Override
     public Class<T> getType() {
         return type;
     }

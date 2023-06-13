@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.v1_19_4.display;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.text.Component;
@@ -12,9 +12,10 @@ import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
+import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
-public class DisplayRightRotationProperty implements EntityProperty<Display, Quaternionfc> {
+public class DisplayRightRotationProperty implements ResettableEntityProperty<Display, Quaternionfc> {
     private final JOMLMapper mapper;
 
     public DisplayRightRotationProperty(JOMLMapper mapper) {
@@ -69,5 +70,10 @@ public class DisplayRightRotationProperty implements EntityProperty<Display, Qua
     @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.shearing";
+    }
+
+    @Override
+    public Quaternionfc getResetValue() {
+        return new Quaternionf();
     }
 }

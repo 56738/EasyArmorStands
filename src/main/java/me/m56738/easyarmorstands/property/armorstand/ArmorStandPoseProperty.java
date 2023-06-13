@@ -6,7 +6,7 @@ import cloud.commandframework.types.tuples.Triplet;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 
-public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Quaterniondc> {
+public class ArmorStandPoseProperty implements ResettableEntityProperty<ArmorStand, Quaterniondc> {
     private final ArmorStandPart part;
 
     public ArmorStandPoseProperty(ArmorStandPart part) {
@@ -76,5 +76,10 @@ public class ArmorStandPoseProperty implements EntityProperty<ArmorStand, Quater
     @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.armorstand.pose." + part.getName();
+    }
+
+    @Override
+    public Quaterniondc getResetValue() {
+        return new Quaterniond();
     }
 }

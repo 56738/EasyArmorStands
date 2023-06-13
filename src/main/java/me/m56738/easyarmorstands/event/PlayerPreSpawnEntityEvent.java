@@ -28,7 +28,7 @@ public class PlayerPreSpawnEntityEvent extends PlayerEvent implements Cancellabl
     }
 
     public @NotNull Location getLocation() {
-        return location;
+        return location.clone();
     }
 
     public @NotNull EntityType getType() {

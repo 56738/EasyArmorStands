@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.v1_19_4.display;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.text.Component;
@@ -12,9 +12,10 @@ import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-public class DisplayTranslationProperty implements EntityProperty<Display, Vector3fc> {
+public class DisplayTranslationProperty implements ResettableEntityProperty<Display, Vector3fc> {
     private final JOMLMapper mapper;
 
     public DisplayTranslationProperty(JOMLMapper mapper) {
@@ -74,5 +75,10 @@ public class DisplayTranslationProperty implements EntityProperty<Display, Vecto
     @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.translation";
+    }
+
+    @Override
+    public Vector3fc getResetValue() {
+        return new Vector3f();
     }
 }

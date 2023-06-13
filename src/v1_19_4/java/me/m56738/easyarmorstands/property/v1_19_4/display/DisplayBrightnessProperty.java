@@ -7,7 +7,7 @@ import cloud.commandframework.types.tuples.Pair;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class DisplayBrightnessProperty implements EntityProperty<Display, Optional<Display.Brightness>> {
+public class DisplayBrightnessProperty implements ResettableEntityProperty<Display, Optional<Display.Brightness>> {
     @Override
     public Optional<Display.Brightness> getValue(Display entity) {
         return Optional.ofNullable(entity.getBrightness());
@@ -103,5 +103,10 @@ public class DisplayBrightnessProperty implements EntityProperty<Display, Option
     @Override
     public @Nullable String getPermission() {
         return "easyarmorstands.property.display.brightness";
+    }
+
+    @Override
+    public Optional<Display.Brightness> getResetValue() {
+        return Optional.empty();
     }
 }
