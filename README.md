@@ -4,7 +4,7 @@ Armor stand and display entity editor.
 
 ![Screenshot](https://cdn.56738.me/easyarmorstands/banner.png)
 
-**Supported Minecraft versions:** 1.8.8 to 1.19.4
+**Supported Minecraft versions:** 1.8.8 to 1.20.1
 
 Using [Paper](https://papermc.io/) is highly recommended. Some features like RGB name tags only work on Paper.
 
