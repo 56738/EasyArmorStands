@@ -27,6 +27,21 @@ public class EntityItemSlot<T extends Entity> implements InventorySlot {
         if (permission != null && !menu.getSession().getPlayer().hasPermission(permission)) {
             return false;
         }
+        if (take) {
+            ItemStack item = menu.getInventory().getItem(slot);
+            if (item == null) {
+                item = new ItemStack(Material.AIR);
+            }
+            if (!item.equals(property.getValue(menu.getEntity()))) {
+                // Prevent taking the item if the inventory view is outdated
+                return false;
+            }
+            if (!menu.getSession().tryChange(menu.getEntity(), property, new ItemStack(Material.AIR))) {
+                // Prevent taking the item if the property change is refused
+                return false;
+            }
+            // Don't commit here, will be committed in the task below
+        }
         menu.queueTask(() -> {
             ItemStack item = menu.getInventory().getItem(slot);
             if (item == null) {
