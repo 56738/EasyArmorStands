@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 public class SelectNodeSlot implements InventorySlot {
-    private final ArmorStandMenu menu;
+    private final LegacyArmorStandMenu menu;
     private final NodeFactory nodeFactory;
     private final ItemType type;
     private final Component name;
 
-    public SelectNodeSlot(ArmorStandMenu menu, NodeFactory nodeFactory, ItemType type, Component name) {
+    public SelectNodeSlot(LegacyArmorStandMenu menu, NodeFactory nodeFactory, ItemType type, Component name) {
         this.menu = menu;
         this.nodeFactory = nodeFactory;
         this.type = type;

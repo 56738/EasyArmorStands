@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.property;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public class DirectChangeContext implements ChangeContext {
@@ -16,7 +15,7 @@ public class DirectChangeContext implements ChangeContext {
     }
 
     @Override
-    public <E extends Entity, T> void applyChange(EntityPropertyChange<E, T> change) {
-        change.getProperty().setValue(change.getEntity(), change.getValue());
+    public <T> void applyChange(PropertyChange<T> change) {
+        change.getProperty().setValue(change.getValue());
     }
 }

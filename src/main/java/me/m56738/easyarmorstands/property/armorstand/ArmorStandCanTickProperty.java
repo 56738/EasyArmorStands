@@ -5,13 +5,13 @@ import cloud.commandframework.arguments.standard.BooleanArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boolean> {
+public class ArmorStandCanTickProperty implements LegacyEntityPropertyType<ArmorStand, Boolean> {
     private final TickCapability tickCapability;
 
     public ArmorStandCanTickProperty(TickCapability tickCapability) {

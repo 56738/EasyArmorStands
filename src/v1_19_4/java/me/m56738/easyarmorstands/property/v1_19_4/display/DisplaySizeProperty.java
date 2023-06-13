@@ -4,13 +4,13 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.FloatArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class DisplaySizeProperty implements EntityProperty<Display, Float> {
+public abstract class DisplaySizeProperty implements LegacyEntityPropertyType<Display, Float> {
     @Override
     public TypeToken<Float> getValueType() {
         return TypeToken.get(Float.class);

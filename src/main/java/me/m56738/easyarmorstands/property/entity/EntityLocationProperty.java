@@ -4,7 +4,7 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.bukkit.parsers.location.LocationArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityLocationProperty implements EntityProperty<Entity, Location> {
+public class EntityLocationProperty implements LegacyEntityPropertyType<Entity, Location> {
     @Override
     public Location getValue(Entity entity) {
         return entity.getLocation();

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-public abstract class ComponentEntityProperty<E extends Entity> implements EntityProperty<E, Component> {
+public abstract class ComponentEntityProperty<E extends Entity> implements LegacyEntityPropertyType<E, Component> {
     @Override
     public ArgumentParser<EasCommandSender, Component> getArgumentParser() {
         return new StringArgument.StringParser<EasCommandSender>(

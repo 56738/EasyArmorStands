@@ -5,9 +5,9 @@ import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
-import me.m56738.easyarmorstands.event.SessionSpawnMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.SpawnMenu;
-import me.m56738.easyarmorstands.menu.SpawnSlot;
+import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
+import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayButtonProvider;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNode;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNodeFactory;
@@ -18,11 +18,10 @@ import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.Collections;
 
 
 public class DisplaySessionListener implements Listener {
@@ -40,32 +39,31 @@ public class DisplaySessionListener implements Listener {
     }
 
     @EventHandler
-    public void onSpawnMenuInitialize(SessionSpawnMenuInitializeEvent event) {
-        SpawnMenu menu = event.getMenu();
-        Session session = menu.getSession();
-        if (session.getPlayer().hasPermission("easyarmorstands.spawn.itemdisplay")) {
-            menu.addButton(new SpawnSlot<>(menu,
+    public void onSpawnMenuBuild(SessionSpawnMenuBuildEvent event) {
+        MenuBuilder builder = event.getBuilder();
+        Session session = event.getSession();
+        Player player = event.getPlayer();
+        EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
+        if (player.hasPermission("easyarmorstands.spawn.itemdisplay")) {
+            builder.addButton(new SpawnSlot(session,
                     new DisplaySpawner<>(ItemDisplay.class, EntityType.ITEM_DISPLAY, addon.getMapper()),
                     Util.createItem(
                             ItemType.STICK,
-                            EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ITEM_DISPLAY),
-                            Collections.emptyList())));
+                            entityTypeCapability.getName(EntityType.ITEM_DISPLAY))));
         }
-        if (session.getPlayer().hasPermission("easyarmorstands.spawn.blockdisplay")) {
-            menu.addButton(new SpawnSlot<>(menu,
+        if (player.hasPermission("easyarmorstands.spawn.blockdisplay")) {
+            builder.addButton(new SpawnSlot(session,
                     new DisplaySpawner<>(BlockDisplay.class, EntityType.BLOCK_DISPLAY, addon.getMapper()),
                     Util.createItem(
                             ItemType.STONE,
-                            EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.BLOCK_DISPLAY),
-                            Collections.emptyList())));
+                            entityTypeCapability.getName(EntityType.BLOCK_DISPLAY))));
         }
-        if (session.getPlayer().hasPermission("easyarmorstands.spawn.textdisplay")) {
-            menu.addButton(new SpawnSlot<>(menu,
+        if (player.hasPermission("easyarmorstands.spawn.textdisplay")) {
+            builder.addButton(new SpawnSlot(session,
                     new TextDisplaySpawner(addon.getMapper()),
                     Util.createItem(
                             ItemType.NAME_TAG,
-                            EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.TEXT_DISPLAY),
-                            Collections.emptyList())));
+                            entityTypeCapability.getName(EntityType.TEXT_DISPLAY))));
         }
     }
 

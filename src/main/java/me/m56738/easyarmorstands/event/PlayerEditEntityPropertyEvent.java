@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerEditEntityPropertyEvent<E extends Entity, T> extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final E entity;
-    private final EntityProperty<E, T> property;
+    private final LegacyEntityPropertyType<E, T> property;
     private final T oldValue;
     private final T newValue;
     private boolean cancelled;
 
-    public PlayerEditEntityPropertyEvent(Player player, E entity, EntityProperty<E, T> property, T oldValue, T newValue) {
+    public PlayerEditEntityPropertyEvent(Player player, E entity, LegacyEntityPropertyType<E, T> property, T oldValue, T newValue) {
         super(player);
         this.entity = entity;
         this.property = property;
@@ -35,7 +35,7 @@ public class PlayerEditEntityPropertyEvent<E extends Entity, T> extends PlayerEv
         return entity;
     }
 
-    public @NotNull EntityProperty<E, T> getProperty() {
+    public @NotNull LegacyEntityPropertyType<E, T> getProperty() {
         return property;
     }
 

@@ -1,19 +1,26 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.menu.SpawnMenu;
+import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.PropertyAction;
+import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.property.ChangeContext;
-import me.m56738.easyarmorstands.property.EntityProperty;
-import me.m56738.easyarmorstands.property.EntityPropertyChange;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyChange;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -23,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -51,10 +59,8 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final ParticleCapability particleCapability;
-    @SuppressWarnings("rawtypes")
-    private final Map<ChangeKey, Object> originalValues = new HashMap<>();
-    @SuppressWarnings("rawtypes")
-    private final Map<ChangeKey, Object> pendingValues = new HashMap<>();
+    private final Map<Property<?>, Object> originalValues = new HashMap<>();
+    private final Map<Property<?>, Object> pendingValues = new HashMap<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -141,13 +147,13 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void commit() {
         Bukkit.getPluginManager().callEvent(new SessionCommitEvent(this));
-        List<EntityPropertyAction> actions = new ArrayList<>();
-        for (Map.Entry<ChangeKey, Object> entry : pendingValues.entrySet()) {
-            ChangeKey key = entry.getKey();
-            Object oldValue = originalValues.get(key);
+        List<Action> actions = new ArrayList<>();
+        for (Map.Entry<Property<?>, Object> entry : pendingValues.entrySet()) {
+            Property property = entry.getKey();
+            Object oldValue = originalValues.get(property);
             Object value = entry.getValue();
             if (!Objects.equals(oldValue, value)) {
-                actions.add(new EntityPropertyAction(key.entity, key.property, oldValue, value));
+                actions.add(new PropertyAction(property, oldValue, value));
             }
         }
         EasyArmorStands.getInstance().getHistory(player).push(actions);
@@ -234,23 +240,22 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         commit();
     }
 
+    @Override
     public Player getPlayer() {
         return player;
     }
 
     @Override
-    public <E extends Entity, T> void applyChange(EntityPropertyChange<E, T> change) {
-        E entity = change.getEntity();
-        EntityProperty<E, T> property = change.getProperty();
+    public <T> void applyChange(PropertyChange<T> change) {
+        Property<T> property = change.getProperty();
         T value = change.getValue();
-        T oldValue = property.getValue(entity);
+        T oldValue = property.getValue();
         if (Objects.equals(oldValue, value)) {
             return;
         }
-        property.setValue(entity, value);
-        ChangeKey<E, T> key = new ChangeKey<>(entity, property);
-        originalValues.putIfAbsent(key, oldValue);
-        pendingValues.put(key, value);
+        property.setValue(value);
+        originalValues.putIfAbsent(property, oldValue);
+        pendingValues.put(property, value);
     }
 
     public double getRange() {
@@ -400,7 +405,24 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     }
 
     public void openSpawnMenu() {
-        player.openInventory(new SpawnMenu(this).getInventory());
+        SimpleMenuBuilder builder = new SimpleMenuBuilder();
+        if (player.hasPermission("easyarmorstands.spawn.armorstand")) {
+            EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
+            builder.addButton(new SpawnSlot(this, new ArmorStandSpawner(), Util.createItem(
+                    ItemType.ARMOR_STAND,
+                    entityTypeCapability.getName(EntityType.ARMOR_STAND))));
+        }
+        Bukkit.getPluginManager().callEvent(new SessionSpawnMenuBuildEvent(this, builder));
+        int size = builder.getSize();
+        if (size == 0) {
+            return;
+        }
+        if (size == 1) {
+            // Only one button, click it immediately
+            builder.getSlot(0).onClick(new MenuClick.FakeLeftClick(0, player));
+        } else {
+            player.openInventory(builder.build(Component.text("Spawn")).getInventory());
+        }
     }
 
     public boolean canSelectEntity(Entity entity) {
@@ -411,9 +433,9 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
 
     private static class ChangeKey<E extends Entity, T> {
         private final E entity;
-        private final EntityProperty<E, T> property;
+        private final LegacyEntityPropertyType<E, T> property;
 
-        public ChangeKey(E entity, EntityProperty<E, T> property) {
+        public ChangeKey(E entity, LegacyEntityPropertyType<E, T> property) {
             this.entity = entity;
             this.property = property;
         }

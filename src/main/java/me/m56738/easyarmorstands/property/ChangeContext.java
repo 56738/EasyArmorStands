@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.event.PlayerEditEntityPropertyEvent;
+import me.m56738.easyarmorstands.event.PlayerChangePropertyEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -11,32 +10,30 @@ import java.util.Objects;
 public interface ChangeContext {
     Player getPlayer();
 
-    <E extends Entity, T> void applyChange(EntityPropertyChange<E, T> change);
+    <T> void applyChange(PropertyChange<T> change);
 
-    default <E extends Entity, T> boolean canChange(EntityPropertyChange<E, T> change) {
-        E entity = change.getEntity();
-        EntityProperty<E, T> property = change.getProperty();
+    default <T> boolean canChange(PropertyChange<T> change) {
         T value = change.getValue();
-        T oldValue = property.getValue(entity);
+        T oldValue = change.getProperty().getValue();
         if (Objects.equals(oldValue, value)) {
             return true;
         }
 
         Player player = getPlayer();
-        if (!player.hasPermission(property.getPermission())) {
+        if (!player.hasPermission(change.getProperty().getType().getPermission())) {
             return false;
         }
 
-        PlayerEditEntityPropertyEvent<E, T> event = new PlayerEditEntityPropertyEvent<>(player, entity, property, oldValue, value);
+        PlayerChangePropertyEvent event = new PlayerChangePropertyEvent(player, change);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }
 
-    default <E extends Entity, T> boolean tryChange(E entity, EntityProperty<E, T> property, T value) {
-        return tryChange(new EntityPropertyChange<>(entity, property, value));
+    default <T> boolean tryChange(Property<T> property, T value) {
+        return tryChange(new PropertyChange<>(property, value));
     }
 
-    default <E extends Entity, T> boolean tryChange(EntityPropertyChange<E, T> change) {
+    default <T> boolean tryChange(PropertyChange<T> change) {
         if (!canChange(change)) {
             return false;
         }
@@ -44,13 +41,13 @@ public interface ChangeContext {
         return true;
     }
 
-    default boolean tryChange(Collection<EntityPropertyChange<?, ?>> changes) {
-        for (EntityPropertyChange<?, ?> change : changes) {
+    default boolean tryChange(Collection<PropertyChange<?>> changes) {
+        for (PropertyChange<?> change : changes) {
             if (!canChange(change)) {
                 return false;
             }
         }
-        for (EntityPropertyChange<?, ?> change : changes) {
+        for (PropertyChange<?> change : changes) {
             applyChange(change);
         }
         return true;

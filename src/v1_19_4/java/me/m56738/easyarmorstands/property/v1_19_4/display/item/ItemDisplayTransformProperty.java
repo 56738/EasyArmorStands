@@ -4,7 +4,7 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.EnumArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-public class ItemDisplayTransformProperty implements EntityProperty<ItemDisplay, ItemDisplayTransform> {
+public class ItemDisplayTransformProperty implements LegacyEntityPropertyType<ItemDisplay, ItemDisplayTransform> {
     @Override
     public ItemDisplayTransform getValue(ItemDisplay entity) {
         return entity.getItemDisplayTransform();

@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ArmorStand;
 
-public class ArmorStandMenu extends EntityMenu<ArmorStand> {
-    public ArmorStandMenu(Session session, ArmorStand entity) {
+public class LegacyArmorStandMenu extends EntityMenu<ArmorStand> {
+    public LegacyArmorStandMenu(Session session, ArmorStand entity) {
         super(session, entity);
     }
 

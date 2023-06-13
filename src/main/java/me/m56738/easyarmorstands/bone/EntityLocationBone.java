@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
@@ -10,10 +11,12 @@ import org.joml.Vector3dc;
 public class EntityLocationBone implements PositionAndYawBone {
     private final Session session;
     private final Entity entity;
+    private final Property<Location> property;
 
     public EntityLocationBone(Session session, Entity entity) {
         this.session = session;
         this.entity = entity;
+        this.property = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
     }
 
     public Vector3dc getOffset() {
@@ -32,7 +35,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setX(position.x() - offset.x());
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
-        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(property, location);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class EntityLocationBone implements PositionAndYawBone {
     public void setYaw(float yaw) {
         Location location = entity.getLocation();
         location.setYaw(yaw);
-        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(property, location);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
         location.setYaw(yaw);
-        session.tryChange(entity, EasyArmorStands.getInstance().getEntityLocationProperty(), location);
+        session.tryChange(property, location);
     }
 
     @Override

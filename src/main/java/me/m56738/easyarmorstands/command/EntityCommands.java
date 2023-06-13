@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -25,7 +25,7 @@ public class EntityCommands {
     @CommandMethod("info [property]")
     @CommandPermission("easyarmorstands.info")
     @RequireEntity
-    public void info(EasCommandSender sender, Entity entity, @Argument("property") EntityProperty selectedProperty) {
+    public void info(EasCommandSender sender, Entity entity, @Argument("property") LegacyEntityPropertyType selectedProperty) {
         if (selectedProperty != null) {
             showProperty(sender, entity, selectedProperty);
             return;
@@ -45,12 +45,12 @@ public class EntityCommands {
                 .append(Component.space())
                 .append(id));
 
-        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
+        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
             showProperty(sender, entity, property);
         }
     }
 
-    private <E extends Entity, T> void showProperty(Audience audience, E entity, EntityProperty<E, T> property) {
+    private <E extends Entity, T> void showProperty(Audience audience, E entity, LegacyEntityPropertyType<E, T> property) {
         T value = property.getValue(entity);
         String clipboardValue = property.getValueClipboardContent(value);
         audience.sendMessage(Component.text()

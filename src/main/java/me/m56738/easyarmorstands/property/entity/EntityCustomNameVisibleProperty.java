@@ -4,13 +4,13 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.BooleanArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityCustomNameVisibleProperty implements EntityProperty<Entity, Boolean> {
+public class EntityCustomNameVisibleProperty implements LegacyEntityPropertyType<Entity, Boolean> {
     @Override
     public Boolean getValue(Entity entity) {
         return entity.isCustomNameVisible();

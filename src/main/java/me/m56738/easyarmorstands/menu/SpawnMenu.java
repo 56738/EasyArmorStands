@@ -13,8 +13,6 @@ import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
-import java.util.Collections;
-
 public class SpawnMenu extends InventoryMenu {
     private final Session session;
 
@@ -40,10 +38,10 @@ public class SpawnMenu extends InventoryMenu {
     @Override
     public void initialize() {
         if (session.getPlayer().hasPermission("easyarmorstands.spawn.armorstand")) {
+            EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
             addButton(new SpawnSlot<>(this, new ArmorStandSpawner(), Util.createItem(
                     ItemType.ARMOR_STAND,
-                    EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND),
-                    Collections.emptyList())));
+                    entityTypeCapability.getName(EntityType.ARMOR_STAND))));
         }
         Bukkit.getPluginManager().callEvent(new SessionSpawnMenuInitializeEvent(this));
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));

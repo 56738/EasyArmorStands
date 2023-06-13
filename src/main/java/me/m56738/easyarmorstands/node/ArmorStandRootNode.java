@@ -9,7 +9,12 @@ import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
-import me.m56738.easyarmorstands.menu.ArmorStandMenu;
+import me.m56738.easyarmorstands.event.SessionEntityMenuBuildEvent;
+import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
+import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlatePropertyType;
+import me.m56738.easyarmorstands.property.entity.EntityEquipmentPropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
@@ -158,7 +163,15 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         Player player = session.getPlayer();
         if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
-            player.openInventory(new ArmorStandMenu(session, entity).getInventory());
+            if (player.isSneaking()) {
+                player.openInventory(new LegacyArmorStandMenu(session, entity).getInventory());
+            } else {
+                SplitMenuBuilder builder = new SplitMenuBuilder();
+                EntityEquipmentPropertyType.populate(builder, entity, session);
+                builder.addButton(new ButtonPropertySlot(ArmorStandBasePlatePropertyType.INSTANCE.bind(entity), session));
+                Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
+                player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
+            }
             return true;
         }
         return super.onClick(eyes, target, context);

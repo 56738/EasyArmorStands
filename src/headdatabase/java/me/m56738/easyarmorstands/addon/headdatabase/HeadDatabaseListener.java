@@ -4,7 +4,7 @@ import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.ArmorStandMenu;
+import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
 import org.bukkit.entity.ArmorStand;
@@ -38,7 +38,7 @@ public class HeadDatabaseListener implements Listener {
         }
         ArmorStand armorStand = (ArmorStand) entity;
         event.setCancelled(true);
-        player.openInventory(new ArmorStandMenu(session, armorStand).getInventory());
+        player.openInventory(new LegacyArmorStandMenu(session, armorStand).getInventory());
         player.setItemOnCursor(event.getHead());
     }
 

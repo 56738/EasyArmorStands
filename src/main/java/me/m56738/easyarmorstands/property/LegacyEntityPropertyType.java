@@ -10,12 +10,23 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface EntityProperty<E extends Entity, T> {
-    T getValue(E entity);
+@Deprecated
+public interface LegacyEntityPropertyType<E extends Entity, T> extends EntityPropertyType<T>, EntityPropertyAccessor<E, T> {
+    @Override
+    default Property<T> bind(Entity entity) {
+        try {
+            return new EntityPropertyBinding<>(this, getEntityType().cast(entity), this);
+        } catch (ClassCastException e) {
+            return null;
+        }
+    }
+
+    @Override
+    default Component getValueComponent(T value) {
+        return getValueName(value);
+    }
 
     TypeToken<T> getValueType();
-
-    void setValue(E entity, T value);
 
     @NotNull String getName();
 
@@ -50,6 +61,6 @@ public interface EntityProperty<E extends Entity, T> {
     }
 
     default boolean performChange(ChangeContext context, E entity, T value) {
-        return context.tryChange(new EntityPropertyChange<>(entity, this, value));
+        return context.tryChange(new PropertyChange<>(bind(entity), value));
     }
 }

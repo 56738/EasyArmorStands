@@ -5,10 +5,9 @@ import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
 import me.m56738.easyarmorstands.inventory.DisabledSlot;
-import me.m56738.easyarmorstands.inventory.InventoryMenu;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.property.ButtonEntityProperty;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -19,15 +18,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityMenu<T extends Entity> extends InventoryMenu {
+public class EntityMenu<T extends Entity> extends SessionMenu {
     private final Session session;
     private final T entity;
 
     public EntityMenu(Session session, T entity) {
         super(6, PlainTextComponentSerializer.builder()
-                .flattener(EasyArmorStands.getInstance().getAdventure().flattener())
-                .build()
-                .serialize(EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType())));
+                        .flattener(EasyArmorStands.getInstance().getAdventure().flattener())
+                        .build()
+                        .serialize(EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType())),
+                session);
         this.session = session;
         this.entity = entity;
     }
@@ -36,7 +36,7 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void initialize() {
         List<InventorySlot> pending = new ArrayList<>();
-        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
+        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
             if (property instanceof ButtonEntityProperty && property.isSupported(entity)) {
                 ButtonEntityProperty buttonProperty = (ButtonEntityProperty) property;
                 InventorySlot slot = buttonProperty.createSlot(this);
@@ -70,10 +70,6 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
             }
         }
         throw new IllegalStateException("No space left in the menu");
-    }
-
-    public @NotNull Session getSession() {
-        return session;
     }
 
     public @NotNull T getEntity() {

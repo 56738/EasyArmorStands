@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Location;
@@ -17,13 +17,13 @@ public class ArmorStandPartPoseBone implements RotationBone {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final ArmorStandPoseProperty property;
+    private final Property<Quaterniondc> property;
 
     public ArmorStandPartPoseBone(Session session, ArmorStand entity, ArmorStandPart part) {
         this.session = session;
         this.entity = entity;
         this.part = part;
-        this.property = EasyArmorStands.getInstance().getArmorStandPoseProperty(part);
+        this.property = EasyArmorStands.getInstance().getArmorStandPoseProperty(part).bind(entity);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class ArmorStandPartPoseBone implements RotationBone {
     public void setRotation(Quaterniondc rotation) {
         Location location = entity.getLocation();
         float rotY = -Math.toRadians(location.getYaw());
-        session.tryChange(entity, property, rotation.rotateLocalY(-rotY, new Quaterniond()));
+        session.tryChange(property, rotation.rotateLocalY(-rotY, new Quaterniond()));
     }
 }

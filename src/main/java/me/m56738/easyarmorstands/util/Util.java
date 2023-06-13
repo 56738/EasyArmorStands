@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -183,6 +184,10 @@ public class Util {
             return false;
         }
         return meta.getDisplayName().equals(ChatColor.GOLD + "EasyArmorStands");
+    }
+
+    public static ItemStack createItem(ItemType type, Component title) {
+        return createItem(type, title, Collections.emptyList());
     }
 
     public static ItemStack createItem(ItemType type, Component title, List<Component> lore) {

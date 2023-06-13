@@ -4,13 +4,13 @@ import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.property.EntityProperty;
+import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TextDisplayLineWidthProperty implements EntityProperty<TextDisplay, Integer> {
+public class TextDisplayLineWidthProperty implements LegacyEntityPropertyType<TextDisplay, Integer> {
     @Override
     public Integer getValue(TextDisplay entity) {
         return entity.getLineWidth();

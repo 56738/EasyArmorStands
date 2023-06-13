@@ -4,10 +4,10 @@ import org.bukkit.entity.Entity;
 
 public class EntityPropertyChange<E extends Entity, T> {
     private final E entity;
-    private final EntityProperty<E, T> property;
+    private final LegacyEntityPropertyType<E, T> property;
     private final T value;
 
-    public EntityPropertyChange(E entity, EntityProperty<E, T> property, T value) {
+    public EntityPropertyChange(E entity, LegacyEntityPropertyType<E, T> property, T value) {
         this.entity = entity;
         this.property = property;
         this.value = value;
@@ -17,7 +17,7 @@ public class EntityPropertyChange<E extends Entity, T> {
         return entity;
     }
 
-    public EntityProperty<E, T> getProperty() {
+    public LegacyEntityPropertyType<E, T> getProperty() {
         return property;
     }
 

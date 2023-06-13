@@ -24,7 +24,6 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayItemProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayTransformProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayAlignmentProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayBackgroundProperty;
@@ -71,7 +70,6 @@ public class DisplayAddon implements Addon {
     private DisplayBrightnessProperty displayBrightnessProperty;
     private DisplayWidthProperty displayWidthProperty;
     private DisplayHeightProperty displayHeightProperty;
-    private ItemDisplayItemProperty itemDisplayItemProperty;
     private ItemDisplayTransformProperty itemDisplayTransformProperty;
     private BlockDisplayBlockProperty blockDisplayBlockProperty;
     private TextDisplayAlignmentProperty textDisplayAlignmentProperty;
@@ -118,8 +116,6 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(displayWidthProperty);
         displayHeightProperty = new DisplayHeightProperty(this);
         plugin.getEntityPropertyRegistry().register(displayHeightProperty);
-        itemDisplayItemProperty = new ItemDisplayItemProperty();
-        plugin.getEntityPropertyRegistry().register(itemDisplayItemProperty);
         itemDisplayTransformProperty = new ItemDisplayTransformProperty();
         plugin.getEntityPropertyRegistry().register(itemDisplayTransformProperty);
         blockDisplayBlockProperty = new BlockDisplayBlockProperty();
@@ -165,7 +161,7 @@ public class DisplayAddon implements Addon {
     @RequireEntity(Display.class)
     public void editScale(Audience sender, Session session, Display entity, @Argument("scale") float scale) {
         Vector3f value = new Vector3f(scale);
-        if (session.tryChange(entity, displayScaleProperty, value)) {
+        if (session.tryChange(displayScaleProperty.bind(entity), value)) {
             sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
                     .append(displayScaleProperty.getValueName(value)));
         } else {
@@ -311,10 +307,6 @@ public class DisplayAddon implements Addon {
 
     public DisplayHeightProperty getDisplayHeightProperty() {
         return displayHeightProperty;
-    }
-
-    public ItemDisplayItemProperty getItemDisplayItemProperty() {
-        return itemDisplayItemProperty;
     }
 
     public ItemDisplayTransformProperty getItemDisplayTransformProperty() {

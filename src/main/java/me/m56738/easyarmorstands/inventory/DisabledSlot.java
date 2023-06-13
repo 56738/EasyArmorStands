@@ -6,8 +6,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-
 public class DisabledSlot implements InventorySlot {
     private final InventoryMenu menu;
     private final ItemStack item;
@@ -18,7 +16,7 @@ public class DisabledSlot implements InventorySlot {
     }
 
     public DisabledSlot(InventoryMenu menu, ItemType type) {
-        this(menu, Util.createItem(type, Component.empty(), Collections.emptyList()));
+        this(menu, Util.createItem(type, Component.empty()));
     }
 
     @Override

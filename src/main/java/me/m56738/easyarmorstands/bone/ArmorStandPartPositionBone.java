@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Location;
@@ -14,13 +14,13 @@ public class ArmorStandPartPositionBone implements PositionBone {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final EntityLocationProperty entityLocationProperty;
+    private final Property<Location> locationProperty;
 
     public ArmorStandPartPositionBone(Session session, ArmorStand entity, ArmorStandPart part) {
         this.session = session;
         this.entity = entity;
         this.part = part;
-        this.entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
+        this.locationProperty = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class ArmorStandPartPositionBone implements PositionBone {
         location.setX(position.x() - offset.x);
         location.setY(position.y() - offset.y);
         location.setZ(position.z() - offset.z);
-        session.tryChange(entity, entityLocationProperty, location);
+        session.tryChange(locationProperty, location);
     }
 }
