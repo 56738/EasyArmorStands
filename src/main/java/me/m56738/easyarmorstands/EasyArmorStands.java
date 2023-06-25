@@ -43,8 +43,10 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
+import me.m56738.easyarmorstands.property.EntityPropertyTypeRegistry;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlatePropertyType;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
@@ -83,6 +85,7 @@ public class EasyArmorStands extends JavaPlugin {
     private final EnumMap<ArmorStandPart, ArmorStandPoseProperty> armorStandPoseProperties =
             new EnumMap<>(ArmorStandPart.class);
     private EntityPropertyRegistry entityPropertyRegistry;
+    private EntityPropertyTypeRegistry entityPropertyTypeRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private BukkitAudiences adventure;
@@ -169,6 +172,7 @@ public class EasyArmorStands extends JavaPlugin {
         Command.Builder<EasCommandSender> rootBuilder = commandManager.commandBuilder("eas", "easyarmorstands");
 
         entityPropertyRegistry = new EntityPropertyRegistry();
+        entityPropertyTypeRegistry = new EntityPropertyTypeRegistry();
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> CommandMeta.simple()
@@ -185,6 +189,7 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new EntityCommands());
 
         entityPropertyRegistry.register(new ArmorStandArmsProperty());
+        entityPropertyTypeRegistry.register(ArmorStandBasePlatePropertyType.INSTANCE);
         entityPropertyRegistry.register(new ArmorStandSizeProperty());
         TickCapability tickCapability = this.getCapability(TickCapability.class);
         ArmorStandCanTickProperty canTickProperty = null;
@@ -243,6 +248,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public EntityPropertyRegistry getEntityPropertyRegistry() {
         return entityPropertyRegistry;
+    }
+
+    public EntityPropertyTypeRegistry getEntityPropertyTypeRegistry() {
+        return entityPropertyTypeRegistry;
     }
 
     public SessionManager getSessionManager() {
