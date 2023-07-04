@@ -32,6 +32,7 @@ public class DisplaySpawner<T extends Display> implements EntitySpawner<T> {
         float yaw = location.getYaw();
         location = location.clone();
         location.setYaw(0);
+        location.setPitch(0);
         return spawnCapability.spawnEntity(location, type, e -> {
             e.setTransformation(mapper.getTransformation(
                     new Vector3f(),
