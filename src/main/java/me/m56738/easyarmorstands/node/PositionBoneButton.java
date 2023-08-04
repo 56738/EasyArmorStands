@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
@@ -16,6 +17,17 @@ public class PositionBoneButton extends SimpleButton implements NodeFactory {
         this.bone = bone;
         this.node = node;
         this.name = name;
+        if (bone instanceof RotationProvider) {
+            particle.setBillboard(false);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (bone instanceof RotationProvider) {
+            particle.setRotation(((RotationProvider) bone).getRotation());
+        }
     }
 
     @Override
