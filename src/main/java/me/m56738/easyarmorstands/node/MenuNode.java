@@ -1,20 +1,18 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.PositionAndYawBone;
-import me.m56738.easyarmorstands.bone.PositionBone;
-import me.m56738.easyarmorstands.bone.RotationBone;
-import me.m56738.easyarmorstands.bone.RotationProvider;
-import me.m56738.easyarmorstands.bone.ScaleBone;
+import me.m56738.easyarmorstands.bone.*;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import org.joml.Vector3dc;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A node which can contain multiple {@link Button buttons}.
@@ -23,10 +21,11 @@ import java.util.List;
 public class MenuNode implements Node {
     private final Session session;
     private final Component name;
-    private final List<Button> buttons = new ArrayList<>();
+    private final Set<Button> buttons = new HashSet<>();
     private boolean root;
     private Button targetButton;
     private Node nextNode;
+    private boolean visible;
 
     public MenuNode(Session session, Component name) {
         this.session = session;
@@ -46,11 +45,17 @@ public class MenuNode implements Node {
     }
 
     public void addButton(Button button) {
-        buttons.add(button);
+        if (buttons.add(button) && visible) {
+            button.update();
+            button.updatePreview(false);
+            button.showPreview();
+        }
     }
 
     public void removeButton(Button button) {
-        buttons.remove(button);
+        if (buttons.remove(button) && visible) {
+            button.hidePreview();
+        }
     }
 
     public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length, boolean includeEnds) {
@@ -59,8 +64,8 @@ public class MenuNode implements Node {
                     session,
                     bone,
                     rotationProvider,
-                    Component.text("Move " + axis.getName(), axis.getColor()),
-                    axis.getDirection(),
+                    Component.text("Move " + axis.getName(), TextColor.color(axis.getColor())),
+                    axis,
                     axis.getColor(),
                     length,
                     includeEnds
@@ -74,8 +79,8 @@ public class MenuNode implements Node {
                     session,
                     bone,
                     null,
-                    Component.text(axis.getName(), axis.getColor()),
-                    axis.getDirection(),
+                    Component.text(axis.getName(), TextColor.color(axis.getColor())),
+                    axis,
                     axis.getColor(),
                     length,
                     includeEnds
@@ -92,13 +97,13 @@ public class MenuNode implements Node {
     }
 
     private void addCarryButton(Session session, PositionBone bone, CarryNode node) {
-        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"), NamedTextColor.GOLD);
+        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"), ParticleColor.YELLOW);
         button.setPriority(1);
         addButton(button);
     }
 
     public void addYawButton(Session session, PositionAndYawBone bone, double radius) {
-        addButton(new YawBoneNode(session, Component.text("Yaw", NamedTextColor.GOLD), NamedTextColor.GOLD, radius, bone));
+        addButton(new YawBoneNode(session, Component.text("Yaw", NamedTextColor.YELLOW), ParticleColor.YELLOW, radius, bone));
     }
 
     public void addRotationButtons(Session session, RotationBone bone, double radius, RotationProvider rotationProvider) {
@@ -106,7 +111,7 @@ public class MenuNode implements Node {
             addButton(new BoneRotationNode(
                     session,
                     bone,
-                    Component.text("Rotate " + axis.getName(), axis.getColor()),
+                    Component.text("Rotate " + axis.getName(), TextColor.color(axis.getColor())),
                     axis.getDirection(),
                     axis.getColor(),
                     radius,
@@ -120,9 +125,9 @@ public class MenuNode implements Node {
             addButton(new ScaleNode(
                     session,
                     bone,
-                    Component.text("Scale " + axis.getName(), axis.getColor()),
+                    Component.text("Scale " + axis.getName(), TextColor.color(axis.getColor())),
                     axis.getDirection(),
-                    NamedTextColor.AQUA,
+                    ParticleColor.AQUA,
                     length
             ));
         }
@@ -131,11 +136,21 @@ public class MenuNode implements Node {
     @Override
     public void onEnter() {
         targetButton = null;
+        visible = true;
+        for (Button button : buttons) {
+            button.update();
+            button.updatePreview(false);
+            button.showPreview();
+        }
     }
 
     @Override
     public void onExit() {
         targetButton = null;
+        visible = false;
+        for (Button button : buttons) {
+            button.hidePreview();
+        }
     }
 
     @Override
@@ -144,7 +159,8 @@ public class MenuNode implements Node {
         int bestPriority = Integer.MIN_VALUE;
         double bestDistance = Double.POSITIVE_INFINITY;
         for (Button button : buttons) {
-            button.update(eyes, target);
+            button.update();
+            button.updateLookTarget(eyes, target);
             Vector3dc position = button.getLookTarget();
             if (position == null) {
                 continue;
@@ -161,7 +177,7 @@ public class MenuNode implements Node {
             }
         }
         for (Button button : buttons) {
-            button.showPreview(button == bestButton);
+            button.updatePreview(button == bestButton);
         }
         Component targetName;
         if (bestButton != null) {

@@ -1,19 +1,18 @@
 package me.m56738.easyarmorstands.util;
 
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import org.joml.Vector3dc;
 
 public enum Axis {
-    X("X", NamedTextColor.RED, Util.X),
-    Y("Y", NamedTextColor.GREEN, Util.Y),
-    Z("Z", NamedTextColor.BLUE, Util.Z);
+    X("X", ParticleColor.RED, Util.X),
+    Y("Y", ParticleColor.GREEN, Util.Y),
+    Z("Z", ParticleColor.BLUE, Util.Z);
 
     private final String name;
-    private final TextColor color;
+    private final ParticleColor color;
     private final Vector3dc direction;
 
-    Axis(String name, TextColor color, Vector3dc direction) {
+    Axis(String name, ParticleColor color, Vector3dc direction) {
         this.name = name;
         this.color = color;
         this.direction = direction;
@@ -23,7 +22,7 @@ public enum Axis {
         return name;
     }
 
-    public TextColor getColor() {
+    public ParticleColor getColor() {
         return color;
     }
 

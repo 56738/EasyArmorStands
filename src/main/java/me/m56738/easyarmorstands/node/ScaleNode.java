@@ -2,14 +2,18 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.ScaleBone;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.particle.LineParticle;
+import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.util.RGBLike;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
@@ -22,7 +26,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Component name;
     private final Vector3d axis;
     private final Vector3d direction;
-    private final RGBLike color;
+    private final ParticleColor color;
     private final double length;
     private final Cursor3D cursor;
     private final Vector3d negativeEnd = new Vector3d();
@@ -33,10 +37,13 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Vector3d initialCursor = new Vector3d();
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentOffset = new Vector3d();
+    private final LineParticle axisParticle;
+    private final PointParticle positiveParticle;
+    private final PointParticle negativeParticle;
     private Vector3d lookTarget;
     private Double manualValue;
 
-    public ScaleNode(Session session, ScaleBone bone, Component name, Vector3dc axis, RGBLike color, double length) {
+    public ScaleNode(Session session, ScaleBone bone, Component name, Vector3dc axis, ParticleColor color, double length) {
         super(session);
         this.session = session;
         this.bone = bone;
@@ -46,6 +53,10 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         this.color = color;
         this.length = length;
         this.cursor = new Cursor3D(session.getPlayer(), session);
+        ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
+        this.axisParticle = particleCapability.createLine();
+        this.positiveParticle = particleCapability.createPoint();
+        this.negativeParticle = particleCapability.createPoint();
     }
 
     @Override
@@ -125,11 +136,15 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     }
 
     @Override
-    public void update(Vector3dc eyes, Vector3dc target) {
+    public void update() {
         bone.getRotation().transform(axis, direction).normalize();
         Vector3dc position = bone.getOrigin();
         position.fma(-length, direction, negativeEnd);
         position.fma(length, direction, positiveEnd);
+    }
+
+    @Override
+    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
         boolean positive = session.isLookingAtPoint(eyes, target, positiveEnd);
         boolean negative = session.isLookingAtPoint(eyes, target, negativeEnd);
         if (positive && negative) {
@@ -153,9 +168,23 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     }
 
     @Override
-    public void showPreview(boolean focused) {
-        session.showPoint(negativeEnd, focused ? NamedTextColor.YELLOW : color);
-        session.showPoint(positiveEnd, focused ? NamedTextColor.YELLOW : color);
+    public void updatePreview(boolean focused) {
+        positiveParticle.setPosition(positiveEnd);
+        negativeParticle.setPosition(negativeEnd);
+        positiveParticle.setColor(focused ? ParticleColor.YELLOW : color);
+        negativeParticle.setColor(focused ? ParticleColor.YELLOW : color);
+    }
+
+    @Override
+    public void showPreview() {
+        session.addParticle(positiveParticle);
+        session.addParticle(negativeParticle);
+    }
+
+    @Override
+    public void hidePreview() {
+        session.removeParticle(positiveParticle);
+        session.removeParticle(negativeParticle);
     }
 
     @Override

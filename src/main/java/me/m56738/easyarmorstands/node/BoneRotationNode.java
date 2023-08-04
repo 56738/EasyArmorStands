@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.RotationBone;
 import me.m56738.easyarmorstands.bone.RotationProvider;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -17,7 +17,7 @@ public class BoneRotationNode extends RotationNode {
     private final Quaterniond initial = new Quaterniond();
     private final Quaterniond current = new Quaterniond();
 
-    public BoneRotationNode(Session session, RotationBone bone, Component name, Vector3dc axis, TextColor color, double radius, RotationProvider rotationProvider) {
+    public BoneRotationNode(Session session, RotationBone bone, Component name, Vector3dc axis, ParticleColor color, double radius, RotationProvider rotationProvider) {
         super(session, color, new Vector3d(), axis, radius);
         this.bone = bone;
         this.name = name;

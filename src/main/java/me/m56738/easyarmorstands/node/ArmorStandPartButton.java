@@ -1,18 +1,18 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.particle.LineParticle;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.Axis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Quaterniond;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class ArmorStandPartButton implements Button {
     private final Session session;
@@ -21,6 +21,9 @@ public class ArmorStandPartButton implements Button {
     private final Node node;
     private final Vector3d start = new Vector3d();
     private final Vector3d end = new Vector3d();
+    private final Vector3d center = new Vector3d();
+    private final Quaterniond rotation = new Quaterniond();
+    private final LineParticle particle;
     private Vector3dc lookTarget;
 
     public ArmorStandPartButton(Session session, ArmorStand entity, ArmorStandPart part, Node node) {
@@ -28,20 +31,30 @@ public class ArmorStandPartButton implements Button {
         this.entity = entity;
         this.part = part;
         this.node = node;
+        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine();
+        this.particle.setAxis(Axis.Y);
     }
 
     @Override
-    public void update(Vector3dc eyes, Vector3dc target) {
+    public void update() {
         Location location = entity.getLocation();
-        start.set(part.getOffset(entity))
-                .rotateY(-Math.toRadians(location.getYaw()))
+        // rotation = combination of yaw and pose
+        Util.fromEuler(part.getPose(entity), rotation)
+                .rotateLocalY(-Math.toRadians(location.getYaw()));
+        // start = where the bone is attached to the armor stand, depends on yaw
+        part.getOffset(entity)
+                .rotateY(-Math.toRadians(location.getYaw()), start)
                 .add(location.getX(), location.getY(), location.getZ());
-        end.set(part.getLength(entity))
-                .rotate(Util.fromEuler(part.getPose(entity), new Quaterniond()))
-                .rotateY(-Math.toRadians(location.getYaw()))
+        // end = where the bone ends, depends on yaw and pose
+        part.getLength(entity)
+                .rotate(rotation, end)
                 .add(start);
-        start.lerp(end, 0.5);
+        // particles on the lower 2/3 of the bone
+        start.lerp(end, 2.0 / 3, center);
+    }
 
+    @Override
+    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
         Vector3d closestOnLookRay = new Vector3d();
         Vector3d closestOnBone = new Vector3d();
         double distanceSquared = Intersectiond.findClosestPointsLineSegments(
@@ -62,8 +75,20 @@ public class ArmorStandPartButton implements Button {
     }
 
     @Override
-    public void showPreview(boolean focused) {
-        session.showLine(start, end, focused ? NamedTextColor.YELLOW : NamedTextColor.WHITE, true);
+    public void updatePreview(boolean focused) {
+        particle.setRotation(rotation);
+        particle.setCenter(center);
+        particle.setLength(center.distance(end) * 2);
+    }
+
+    @Override
+    public void showPreview() {
+        session.addParticle(particle);
+    }
+
+    @Override
+    public void hidePreview() {
+        session.removeParticle(particle);
     }
 
     @Override

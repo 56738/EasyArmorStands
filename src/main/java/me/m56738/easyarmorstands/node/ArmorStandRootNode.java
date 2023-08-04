@@ -5,15 +5,16 @@ import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.menu.ArmorStandMenu;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -63,7 +64,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         positionNode.addPositionButtons(session, positionBone, 3, true);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
-        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), NamedTextColor.GOLD);
+        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);
         addButton(this.positionButton);
     }
 
@@ -99,7 +100,10 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
-        if (glowCapability != null) {
+        ParticleCapability particleCapability = plugin.getCapability(ParticleCapability.class);
+        if (glowCapability != null && !particleCapability.isLineVisibleThroughWall()) {
+            // Entity glowing is supported and particles are not visible through walls
+            // Spawn a glowing skeleton instead
             SpawnCapability spawnCapability = plugin.getCapability(SpawnCapability.class);
             skeleton = spawnCapability.spawnEntity(entity.getLocation(), ArmorStand.class, e -> {
                 e.setVisible(false);

@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyChange;
@@ -38,10 +39,12 @@ import org.joml.Vector3dc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public final class Session implements ChangeContext, ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -55,6 +58,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     private final Map<ChangeKey, Object> originalValues = new HashMap<>();
     @SuppressWarnings("rawtypes")
     private final Map<ChangeKey, Object> pendingValues = new HashMap<>();
+    private final Set<Particle> particles = new HashSet<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -204,6 +208,10 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
             }
         }
 
+        for (Particle particle : particles) {
+            particle.update();
+        }
+
         return player.isValid() && isHoldingTool();
     }
 
@@ -231,6 +239,10 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         nodeStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
+        for (Particle particle : particles) {
+            particle.hide(player);
+        }
+        particles.clear();
         commit();
     }
 
@@ -286,18 +298,34 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return audience;
     }
 
+    public void addParticle(Particle particle) {
+        if (particles.add(particle)) {
+            particle.show(player);
+        }
+    }
+
+    public void removeParticle(Particle particle) {
+        if (particles.remove(particle)) {
+            particle.hide(player);
+        }
+    }
+
+    @Deprecated
     private int getParticleCount(double length) {
         return Math.min((int) Math.round(length * particleCapability.getDensity()), 100);
     }
 
+    @Deprecated
     public void showPoint(Vector3dc position, Color color) {
         particleCapability.spawnParticle(player, position.x(), position.y(), position.z(), color);
     }
 
+    @Deprecated
     public void showPoint(Vector3dc position, RGBLike color) {
         showPoint(position, Util.toColor(color));
     }
 
+    @Deprecated
     private void showLine(double x, double y, double z,
                           double dx, double dy, double dz,
                           Color color, boolean includeEnds, int count) {
@@ -316,6 +344,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         }
     }
 
+    @Deprecated
     public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
         double length = from.distance(to);
         double x = from.x();
@@ -327,10 +356,12 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         showLine(x, y, z, dx, dy, dz, color, includeEnds, getParticleCount(length));
     }
 
+    @Deprecated
     public void showLine(Vector3dc start, Vector3dc end, RGBLike color, boolean includeEnds) {
         showLine(start, end, Util.toColor(color), includeEnds);
     }
 
+    @Deprecated
     public void showCircle(Vector3dc center, Vector3dc axis, Color color, double radius) {
         double circumference = 2 * Math.PI * radius;
         int count = getParticleCount(circumference);
@@ -349,10 +380,12 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         }
     }
 
+    @Deprecated
     public void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius) {
         showCircle(center, axis, Util.toColor(color), radius);
     }
 
+    @Deprecated
     public void showAxisAlignedBox(Vector3dc center, Vector3dc size, Color color) {
         double x = center.x();
         double y = center.y();
@@ -380,6 +413,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         showLine(x + dx, y + dy, z - dz, 0, 0, sz, color, false, cz);
     }
 
+    @Deprecated
     public void showAxisAlignedBox(Vector3dc center, Vector3dc size, RGBLike color) {
         showAxisAlignedBox(center, size, Util.toColor(color));
     }

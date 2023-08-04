@@ -52,6 +52,8 @@ public class Util {
     public static final Vector3dc XZ = new Vector3d(1, 0, 1);
     public static final Vector3dc XY = new Vector3d(1, 1, 0);
 
+    public static final Quaterniondc IDENTITY = new Quaterniond();
+
     private static Component format3D(Vector3dc vector, NumberFormat format) {
         return Component.text()
                 .append(Component.text(format.format(vector.x()), NamedTextColor.RED))

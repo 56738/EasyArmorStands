@@ -10,13 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
@@ -37,6 +31,9 @@ public class EntitySelectionNode extends MenuNode {
 
     private @Nullable Button createButton(Entity entity) {
         if (!entity.isValid()) {
+            return null;
+        }
+        if (entity.hasMetadata("easyarmorstands_ignore")) {
             return null;
         }
         for (EntityButtonPriority priority : EntityButtonPriority.values()) {

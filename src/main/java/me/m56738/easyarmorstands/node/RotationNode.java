@@ -2,6 +2,11 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.particle.CircleParticle;
+import me.m56738.easyarmorstands.particle.LineParticle;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.Util;
@@ -16,7 +21,7 @@ import org.joml.Vector3dc;
 
 public abstract class RotationNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
-    private final TextColor color;
+    private final ParticleColor color;
     private final Vector3d anchor;
     private final Vector3d axis;
     private final double radius;
@@ -27,11 +32,13 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     private final Vector3d snappedCursor = new Vector3d();
     private final Vector3d negativeEnd = new Vector3d();
     private final Vector3d positiveEnd = new Vector3d();
+    private final LineParticle axisParticle;
+    private final CircleParticle circleParticle;
     private Vector3dc lookTarget;
     private boolean valid;
     private Double manualValue;
 
-    public RotationNode(Session session, TextColor color, Vector3dc anchor, Vector3dc axis, double radius) {
+    public RotationNode(Session session, ParticleColor color, Vector3dc anchor, Vector3dc axis, double radius) {
         super(session);
         this.session = session;
         this.color = color;
@@ -39,6 +46,9 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         this.axis = new Vector3d(axis);
         this.radius = radius;
         this.cursor = new Cursor2D(session.getPlayer(), session);
+        ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
+        this.axisParticle = particleCapability.createLine();
+        this.circleParticle = particleCapability.createCircle();
     }
 
     @Override
@@ -110,8 +120,12 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     protected abstract void apply(double angle, double degrees);
 
     @Override
-    public void update(Vector3dc eyes, Vector3dc target) {
+    public void update() {
         refresh();
+    }
+
+    @Override
+    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
         Vector3dc direction = target.sub(eyes, new Vector3d());
         double threshold = session.getLookThreshold();
         double t = Util.intersectRayDoubleSidedPlane(eyes, direction, anchor, axis);
@@ -140,12 +154,25 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     }
 
     @Override
-    public void showPreview(boolean focused) {
-        session.showCircle(anchor, axis, focused ? NamedTextColor.YELLOW : color, radius * getScale());
+    public void updatePreview(boolean focused) {
+        circleParticle.setCenter(anchor);
+        circleParticle.setAxis(axis);
+        circleParticle.setColor(focused ? ParticleColor.YELLOW : color);
+        circleParticle.setRadius(radius * getScale());
+    }
+
+    @Override
+    public void showPreview() {
+        session.addParticle(circleParticle);
+    }
+
+    @Override
+    public void hidePreview() {
+        session.removeParticle(circleParticle);
     }
 
     @Override
     public Component getValueComponent(Double value) {
-        return Component.text(Util.ANGLE_FORMAT.format(value), color);
+        return Component.text(Util.ANGLE_FORMAT.format(value), TextColor.color(color));
     }
 }
