@@ -2,13 +2,13 @@ package me.m56738.easyarmorstands.capability.particle.v1_13;
 
 import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCapability> {
+public class DustParticleCapabilityProvider implements CapabilityProvider<DustParticleCapability> {
     @Override
     public boolean isSupported() {
         try {
@@ -26,11 +26,11 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
     }
 
     @Override
-    public ParticleCapability create(Plugin plugin) {
-        return new ParticleCapabilityImpl();
+    public DustParticleCapability create(Plugin plugin) {
+        return new DustParticleCapabilityImpl();
     }
 
-    private static class ParticleCapabilityImpl implements ParticleCapability {
+    private static class DustParticleCapabilityImpl implements DustParticleCapability {
         @Override
         public void spawnParticle(Player player, double x, double y, double z, Color color) {
             player.spawnParticle(Particle.REDSTONE, x, y, z, 1, new Particle.DustOptions(color, 0.5f));

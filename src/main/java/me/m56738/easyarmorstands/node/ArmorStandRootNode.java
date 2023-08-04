@@ -101,7 +101,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
         ParticleCapability particleCapability = plugin.getCapability(ParticleCapability.class);
-        if (glowCapability != null && !particleCapability.isLineVisibleThroughWall()) {
+        if (glowCapability != null && !particleCapability.isVisibleThroughWalls()) {
             // Entity glowing is supported and particles are not visible through walls
             // Spawn a glowing skeleton instead
             SpawnCapability spawnCapability = plugin.getCapability(SpawnCapability.class);

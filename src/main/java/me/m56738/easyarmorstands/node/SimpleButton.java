@@ -9,9 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
 public abstract class SimpleButton implements Button {
+    protected final PointParticle particle;
     private final Session session;
     private final ParticleColor color;
-    private final PointParticle particle;
     private int priority = 0;
     private Vector3dc lookTarget;
 
