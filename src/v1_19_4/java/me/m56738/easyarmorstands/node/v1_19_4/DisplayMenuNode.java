@@ -24,7 +24,7 @@ public class DisplayMenuNode extends MenuNode implements EntityNode {
         super(session, name);
         this.session = session;
         this.entity = entity;
-        this.boxParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createAxisAlignedBox();
+        this.boxParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createAxisAlignedBox(session.getWorld());
         this.boxParticle.setLineWidth(0.03125);
     }
 

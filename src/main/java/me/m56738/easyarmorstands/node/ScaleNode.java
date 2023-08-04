@@ -9,10 +9,10 @@ import me.m56738.easyarmorstands.particle.LineParticle;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.Axis;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Session session;
     private final ScaleBone bone;
     private final Component name;
-    private final Vector3d axis;
+    private final Axis axis;
     private final Vector3d direction;
     private final ParticleColor color;
     private final double length;
@@ -40,33 +40,41 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final LineParticle axisParticle;
     private final PointParticle positiveParticle;
     private final PointParticle negativeParticle;
+    private double currentLength;
     private Vector3d lookTarget;
     private Double manualValue;
 
-    public ScaleNode(Session session, ScaleBone bone, Component name, Vector3dc axis, ParticleColor color, double length) {
+    public ScaleNode(Session session, ScaleBone bone, Component name, Axis axis, ParticleColor color, double length) {
         super(session);
         this.session = session;
         this.bone = bone;
         this.name = name;
-        this.axis = new Vector3d(axis);
-        this.direction = new Vector3d(axis);
+        this.axis = axis;
+        this.direction = new Vector3d(axis.getDirection());
         this.color = color;
         this.length = length;
         this.cursor = new Cursor3D(session.getPlayer(), session);
         ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
-        this.axisParticle = particleCapability.createLine();
-        this.positiveParticle = particleCapability.createPoint();
-        this.negativeParticle = particleCapability.createPoint();
+        this.axisParticle = particleCapability.createLine(session.getWorld());
+        this.positiveParticle = particleCapability.createPoint(session.getWorld());
+        this.positiveParticle.setBillboard(false);
+        this.positiveParticle.setSize(0.125);
+        this.negativeParticle = particleCapability.createPoint(session.getWorld());
+        this.negativeParticle.setBillboard(false);
+        this.negativeParticle.setSize(0.125);
     }
 
     @Override
     public void onEnter() {
         manualValue = null;
-        bone.getRotation().transform(axis, direction).normalize();
+        bone.getRotation().transform(axis.getDirection(), direction).normalize();
         initialPosition.set(bone.getOrigin());
         initialScale.set(bone.getScale());
         initialCursor.set(lookTarget != null ? lookTarget : initialPosition);
         cursor.start(initialCursor);
+        currentLength = length;
+        updateAxisParticle();
+        session.addParticle(axisParticle);
     }
 
     @Override
@@ -82,7 +90,8 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         cursor.get().sub(initialPosition, currentOffset);
         double t;
         double scale;
-        double originalScale = initialScale.dot(axis);
+        Vector3dc axisDirection = axis.getDirection();
+        double originalScale = initialScale.dot(axisDirection);
         if (manualValue != null) {
             scale = manualValue;
             t = scale / originalScale * initialOffset.dot(direction);
@@ -91,18 +100,31 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
             scale = t / initialOffset.dot(direction) * originalScale;
         }
         bone.setScale(new Vector3d(
-                Math.lerp(initialScale.x, scale, axis.x),
-                Math.lerp(initialScale.y, scale, axis.y),
-                Math.lerp(initialScale.z, scale, axis.z)
+                Math.lerp(initialScale.x, scale, axisDirection.x()),
+                Math.lerp(initialScale.y, scale, axisDirection.y()),
+                Math.lerp(initialScale.z, scale, axisDirection.z())
         ));
 
-        initialPosition.fma(t, direction, currentPosition);
-        initialPosition.fma(Math.min(-length, t), direction, negativeEnd);
-        initialPosition.fma(Math.max(length, t), direction, positiveEnd);
-        session.showLine(negativeEnd, positiveEnd, color, true);
-        session.showLine(currentPosition, cursor.get(), NamedTextColor.WHITE, false);
+        currentLength = Math.max(Math.abs(t), length);
+
+        updateAxisParticle();
+
         session.sendActionBar(Component.text().append(name).append(Component.text(": "))
                 .append(Component.text(Util.SCALE_FORMAT.format(scale))));
+    }
+
+    @Override
+    public void onExit() {
+        super.onExit();
+        session.removeParticle(axisParticle);
+    }
+
+    private void updateAxisParticle() {
+        axisParticle.setAxis(axis);
+        axisParticle.setCenter(initialPosition);
+        axisParticle.setRotation(bone.getRotation());
+        axisParticle.setLength(currentLength * 2);
+        axisParticle.setColor(color);
     }
 
     @Override
@@ -137,7 +159,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void update() {
-        bone.getRotation().transform(axis, direction).normalize();
+        bone.getRotation().transform(axis.getDirection(), direction).normalize();
         Vector3dc position = bone.getOrigin();
         position.fma(-length, direction, negativeEnd);
         position.fma(length, direction, positiveEnd);
@@ -171,6 +193,8 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     public void updatePreview(boolean focused) {
         positiveParticle.setPosition(positiveEnd);
         negativeParticle.setPosition(negativeEnd);
+        positiveParticle.setRotation(bone.getRotation());
+        negativeParticle.setRotation(bone.getRotation());
         positiveParticle.setColor(focused ? ParticleColor.YELLOW : color);
         negativeParticle.setColor(focused ? ParticleColor.YELLOW : color);
     }

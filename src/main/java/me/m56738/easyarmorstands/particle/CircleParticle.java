@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.particle;
 
+import me.m56738.easyarmorstands.util.Axis;
+import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 public interface CircleParticle extends ColoredParticle {
@@ -7,9 +9,17 @@ public interface CircleParticle extends ColoredParticle {
 
     void setCenter(Vector3dc center);
 
-    Vector3dc getAxis();
+    Axis getAxis();
 
-    void setAxis(Vector3dc axis);
+    void setAxis(Axis axis);
+
+    double getWidth();
+
+    void setWidth(double width);
+
+    Quaterniondc getRotation();
+
+    void setRotation(Quaterniondc rotation);
 
     double getRadius();
 

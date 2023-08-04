@@ -11,14 +11,15 @@ import org.joml.Vector3dc;
 public abstract class SimpleButton implements Button {
     private final Session session;
     private final ParticleColor color;
+    private final PointParticle particle;
     private int priority = 0;
     private Vector3dc lookTarget;
-    private PointParticle particle;
 
     public SimpleButton(Session session, ParticleColor color) {
         this.session = session;
         this.color = color;
-        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createPoint();
+        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createPoint(session.getWorld());
+        this.particle.setSize(0.125);
     }
 
     protected abstract Vector3dc getPosition();

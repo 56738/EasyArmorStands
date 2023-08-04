@@ -154,7 +154,7 @@ public class DisplayAddon implements Addon {
     public void editTranslation(Session session, Display entity) {
         DisplayTranslationBone translationBone = new DisplayTranslationBone(session, entity, this);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Translation", NamedTextColor.GOLD), entity);
-        node.addPositionButtons(session, translationBone, 3, true);
+        node.addPositionButtons(session, translationBone, 3);
         node.addCarryButton(session, translationBone);
         session.pushNode(node);
     }

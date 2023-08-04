@@ -23,6 +23,7 @@ import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
@@ -246,8 +247,13 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         commit();
     }
 
+    @Override
     public Player getPlayer() {
         return player;
+    }
+
+    public World getWorld() {
+        return player.getWorld();
     }
 
     @Override

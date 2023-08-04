@@ -42,11 +42,11 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(session, entity, part);
 
             MenuNode localNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (local)")));
-            localNode.addMoveButtons(session, positionBone, poseBone, 3, true);
+            localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
             MenuNode globalNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (global)")));
-            globalNode.addPositionButtons(session, positionBone, 3, true);
+            globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
             localNode.setNextNode(globalNode);
@@ -61,7 +61,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
         MenuNode positionNode = new MenuNode(session, Component.text("Position"));
         positionNode.addYawButton(session, positionBone, 1);
-        positionNode.addPositionButtons(session, positionBone, 3, true);
+        positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
         this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);

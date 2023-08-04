@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.session.Session;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.joml.Matrix3d;
@@ -51,7 +50,6 @@ public class Cursor2D {
             }
             currentOrigin.fma(t, currentDirection, current);
         }
-        session.showPoint(current, NamedTextColor.YELLOW);
     }
 
     public Vector3dc get() {

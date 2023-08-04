@@ -1,6 +1,10 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.*;
+import me.m56738.easyarmorstands.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
+import me.m56738.easyarmorstands.bone.ScaleBone;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Axis;
@@ -58,7 +62,7 @@ public class MenuNode implements Node {
         }
     }
 
-    public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length, boolean includeEnds) {
+    public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length) {
         for (Axis axis : Axis.values()) {
             addButton(new MoveNode(
                     session,
@@ -67,13 +71,17 @@ public class MenuNode implements Node {
                     Component.text("Move " + axis.getName(), TextColor.color(axis.getColor())),
                     axis,
                     axis.getColor(),
-                    length,
-                    includeEnds
+                    length
             ));
         }
     }
 
-    public void addPositionButtons(Session session, PositionBone bone, double length, boolean includeEnds) {
+    @Deprecated
+    public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length, boolean includeEnds) {
+        addMoveButtons(session, bone, rotationProvider, length);
+    }
+
+    public void addPositionButtons(Session session, PositionBone bone, double length) {
         for (Axis axis : Axis.values()) {
             addButton(new MoveNode(
                     session,
@@ -82,10 +90,14 @@ public class MenuNode implements Node {
                     Component.text(axis.getName(), TextColor.color(axis.getColor())),
                     axis,
                     axis.getColor(),
-                    length,
-                    includeEnds
+                    length
             ));
         }
+    }
+
+    @Deprecated
+    public void addPositionButtons(Session session, PositionBone bone, double length, boolean includeEnds) {
+        addPositionButtons(session, bone, length);
     }
 
     public void addCarryButton(Session session, PositionBone bone) {
@@ -112,7 +124,7 @@ public class MenuNode implements Node {
                     session,
                     bone,
                     Component.text("Rotate " + axis.getName(), TextColor.color(axis.getColor())),
-                    axis.getDirection(),
+                    axis,
                     axis.getColor(),
                     radius,
                     rotationProvider
@@ -126,7 +138,7 @@ public class MenuNode implements Node {
                     session,
                     bone,
                     Component.text("Scale " + axis.getName(), TextColor.color(axis.getColor())),
-                    axis.getDirection(),
+                    axis,
                     ParticleColor.AQUA,
                     length
             ));

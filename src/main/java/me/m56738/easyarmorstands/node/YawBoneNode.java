@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.node;
 import me.m56738.easyarmorstands.bone.PositionAndYawBone;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
-import org.joml.Vector3d;
 
 public class YawBoneNode extends RotationNode {
     private final PositionAndYawBone bone;
@@ -12,7 +12,7 @@ public class YawBoneNode extends RotationNode {
     private float initialYaw;
 
     public YawBoneNode(Session session, Component name, ParticleColor color, double radius, PositionAndYawBone bone) {
-        super(session, color, bone.getPosition(), new Vector3d(0, 1, 0), radius);
+        super(session, color, bone.getPosition(), Axis.Y, radius);
         this.name = name;
         this.bone = bone;
     }

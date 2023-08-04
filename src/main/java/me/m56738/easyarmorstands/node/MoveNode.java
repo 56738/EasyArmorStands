@@ -42,7 +42,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     private Vector3d lookTarget;
     private Double manualValue;
 
-    public MoveNode(Session session, PositionBone bone, RotationProvider rotationProvider, Component name, Axis axis, ParticleColor color, double length, boolean includeEnds) {
+    public MoveNode(Session session, PositionBone bone, RotationProvider rotationProvider, Component name, Axis axis, ParticleColor color, double length) {
         super(session);
         this.session = session;
         this.bone = bone;
@@ -53,7 +53,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         this.color = color;
         this.length = length;
         this.cursor = new Cursor3D(session.getPlayer(), session);
-        this.axisParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine();
+        this.axisParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.axisParticle.setColor(color);
     }
 

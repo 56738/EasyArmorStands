@@ -16,7 +16,7 @@ public class DefaultEntityNode extends MenuNode implements EntityNode {
         this.session = session;
         this.entity = entity;
         EntityLocationBone positionBone = new EntityLocationBone(session, entity);
-        addPositionButtons(session, positionBone, 3, true);
+        addPositionButtons(session, positionBone, 3);
         addCarryButtonWithYaw(session, positionBone);
         setRoot(true);
     }

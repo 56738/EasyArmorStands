@@ -27,8 +27,9 @@ public abstract class AxisAlignedBoxButton implements Button {
     public AxisAlignedBoxButton(Session session) {
         this.session = session;
         ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
-        this.pointParticle = particleCapability.createPoint();
-        this.boxParticle = particleCapability.createAxisAlignedBox();
+        this.pointParticle = particleCapability.createPoint(session.getWorld());
+        this.pointParticle.setBillboard(false);
+        this.boxParticle = particleCapability.createAxisAlignedBox(session.getWorld());
         this.boxParticle.setLineWidth(0.03125);
     }
 

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.node;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.particle.LineParticle;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Axis;
@@ -11,8 +12,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartButton implements Button {
     private final Session session;
@@ -31,7 +35,7 @@ public class ArmorStandPartButton implements Button {
         this.entity = entity;
         this.part = part;
         this.node = node;
-        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine();
+        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.particle.setAxis(Axis.Y);
     }
 
@@ -79,6 +83,7 @@ public class ArmorStandPartButton implements Button {
         particle.setRotation(rotation);
         particle.setCenter(center);
         particle.setLength(center.distance(end) * 2);
+        particle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
     }
 
     @Override

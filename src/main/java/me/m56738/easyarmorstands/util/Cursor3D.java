@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.session.Session;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.joml.Matrix3d;
@@ -39,7 +38,6 @@ public class Cursor3D {
             Location eyeLocation = player.getEyeLocation();
             Util.getRotation(eyeLocation, new Matrix3d()).transform(cursor, current).add(Util.toVector3d(eyeLocation));
         }
-        session.showPoint(current, NamedTextColor.YELLOW);
     }
 
     public Vector3dc get() {

@@ -1,32 +1,42 @@
 package me.m56738.easyarmorstands.capability.particle;
 
 import me.m56738.easyarmorstands.capability.Capability;
-import me.m56738.easyarmorstands.particle.*;
+import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.particle.CircleParticle;
+import me.m56738.easyarmorstands.particle.ColoredParticle;
+import me.m56738.easyarmorstands.particle.LineParticle;
+import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Capability(name = "Particles")
 public interface ParticleCapability {
-    default PointParticle createPoint() {
+    default PointParticle createPoint(World world) {
         return new SimplePointParticle(this);
     }
 
-    default LineParticle createLine() {
+    default LineParticle createLine(World world) {
         return new SimpleLineParticle(this);
     }
 
-    default CircleParticle createCircle() {
+    default CircleParticle createCircle(World world) {
         return new SimpleCircleParticle(this);
     }
 
-    default AxisAlignedBoxParticle createAxisAlignedBox() {
-        return new SimpleAxisAlignedBoxParticle(this);
+    default AxisAlignedBoxParticle createAxisAlignedBox(World world) {
+        return new SimpleAxisAlignedBoxParticle(world, this);
     }
 
     default boolean isLineVisibleThroughWall() {
@@ -85,6 +95,15 @@ public interface ParticleCapability {
         }
 
         @Override
+        public double getSize() {
+            return 0;
+        }
+
+        @Override
+        public void setSize(double size) {
+        }
+
+        @Override
         public Vector3dc getPosition() {
             return position;
         }
@@ -92,6 +111,24 @@ public interface ParticleCapability {
         @Override
         public void setPosition(Vector3dc position) {
             this.position.set(position);
+        }
+
+        @Override
+        public Quaterniondc getRotation() {
+            return Util.IDENTITY;
+        }
+
+        @Override
+        public void setRotation(Quaterniondc rotation) {
+        }
+
+        @Override
+        public boolean isBillboard() {
+            return true;
+        }
+
+        @Override
+        public void setBillboard(boolean billboard) {
         }
     }
 
@@ -156,7 +193,7 @@ public interface ParticleCapability {
 
         @Override
         public double getWidth() {
-            return 0.0625;
+            return 0;
         }
 
         @Override
@@ -186,7 +223,8 @@ public interface ParticleCapability {
 
     class SimpleCircleParticle extends SimpleColoredParticle implements CircleParticle {
         private final Vector3d center = new Vector3d();
-        private final Vector3d axis = new Vector3d();
+        private final Quaterniond rotation = new Quaterniond();
+        private Axis axis;
         private double radius;
 
         protected SimpleCircleParticle(ParticleCapability capability) {
@@ -195,13 +233,15 @@ public interface ParticleCapability {
 
         @Override
         public void update() {
+            Axis side = axis == Axis.Y ? Axis.X : Axis.Y;
             Color color = Color.fromRGB(this.color.red(), this.color.green(), this.color.blue());
             double circumference = 2 * Math.PI * radius;
             int count = Math.min((int) Math.round(circumference * capability.getDensity()), 100);
-            Vector3d offset = center.cross(axis, new Vector3d()).normalize(radius);
-            double axisX = axis.x();
-            double axisY = axis.y();
-            double axisZ = axis.z();
+            Vector3d offset = side.getDirection().mul(radius, new Vector3d()).rotate(rotation);
+            Vector3dc axisDirection = axis.getDirection().rotate(rotation, new Vector3d());
+            double axisX = axisDirection.x();
+            double axisY = axisDirection.y();
+            double axisZ = axisDirection.z();
             double angle = 2 * Math.PI / count;
             for (int i = 0; i < count; i++) {
                 offset.rotateAxis(angle, axisX, axisY, axisZ);
@@ -226,13 +266,32 @@ public interface ParticleCapability {
         }
 
         @Override
-        public Vector3dc getAxis() {
+        public Axis getAxis() {
             return axis;
         }
 
         @Override
-        public void setAxis(Vector3dc axis) {
-            this.axis.set(axis);
+        public void setAxis(Axis axis) {
+            this.axis = axis;
+        }
+
+        @Override
+        public double getWidth() {
+            return 0;
+        }
+
+        @Override
+        public void setWidth(double width) {
+        }
+
+        @Override
+        public Quaterniondc getRotation() {
+            return rotation;
+        }
+
+        @Override
+        public void setRotation(Quaterniondc rotation) {
+            this.rotation.set(rotation);
         }
 
         @Override
@@ -252,25 +311,25 @@ public interface ParticleCapability {
         private final Vector3d size = new Vector3d();
         private ParticleColor color = ParticleColor.WHITE;
 
-        public SimpleAxisAlignedBoxParticle(ParticleCapability capability) {
+        public SimpleAxisAlignedBoxParticle(World world, ParticleCapability capability) {
             this.lines = new Line[]{
-                    createLine(capability, 0, -1, -1, Axis.X),
-                    createLine(capability, 0, -1, +1, Axis.X),
-                    createLine(capability, 0, +1, -1, Axis.X),
-                    createLine(capability, 0, +1, +1, Axis.X),
-                    createLine(capability, -1, 0, -1, Axis.Y),
-                    createLine(capability, -1, 0, +1, Axis.Y),
-                    createLine(capability, +1, 0, -1, Axis.Y),
-                    createLine(capability, +1, 0, +1, Axis.Y),
-                    createLine(capability, -1, -1, 0, Axis.Z),
-                    createLine(capability, +1, -1, 0, Axis.Z),
-                    createLine(capability, -1, +1, 0, Axis.Z),
-                    createLine(capability, +1, +1, 0, Axis.Z)
+                    createLine(world, capability, 0, -1, -1, Axis.X),
+                    createLine(world, capability, 0, -1, +1, Axis.X),
+                    createLine(world, capability, 0, +1, -1, Axis.X),
+                    createLine(world, capability, 0, +1, +1, Axis.X),
+                    createLine(world, capability, -1, 0, -1, Axis.Y),
+                    createLine(world, capability, -1, 0, +1, Axis.Y),
+                    createLine(world, capability, +1, 0, -1, Axis.Y),
+                    createLine(world, capability, +1, 0, +1, Axis.Y),
+                    createLine(world, capability, -1, -1, 0, Axis.Z),
+                    createLine(world, capability, +1, -1, 0, Axis.Z),
+                    createLine(world, capability, -1, +1, 0, Axis.Z),
+                    createLine(world, capability, +1, +1, 0, Axis.Z)
             };
         }
 
-        private Line createLine(ParticleCapability capability, int x, int y, int z, Axis axis) {
-            return new Line(axis, new Vector3d(x, y, z), capability);
+        private Line createLine(World world, ParticleCapability capability, int x, int y, int z, Axis axis) {
+            return new Line(world, axis, new Vector3d(x, y, z), capability);
         }
 
         @Override
@@ -353,16 +412,16 @@ public interface ParticleCapability {
             private final LineParticle particle;
             private final Vector3d position = new Vector3d();
 
-            private Line(Axis axis, Vector3dc offset, ParticleCapability capability) {
+            private Line(World world, Axis axis, Vector3dc offset, ParticleCapability capability) {
                 this.axis = axis;
                 this.offset = offset.div(2, new Vector3d());
-                this.particle = capability.createLine();
+                this.particle = capability.createLine(world);
                 this.particle.setAxis(axis);
             }
 
             public void refresh(Vector3dc center, Vector3dc size) {
                 particle.setCenter(center.fma(offset, size, position));
-                particle.setLength(Math.abs(axis.getDirection().dot(size)));
+                particle.setLength(Math.abs(axis.getDirection().dot(size)) + particle.getWidth());
             }
         }
     }
