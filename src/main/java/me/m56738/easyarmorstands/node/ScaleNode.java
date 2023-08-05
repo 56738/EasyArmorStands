@@ -59,13 +59,12 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         this.axisParticle = particleCapability.createLine(session.getWorld());
         this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
-        this.cursorLineParticle.setWidth(0.015625);
         this.positiveParticle = particleCapability.createPoint(session.getWorld());
         this.positiveParticle.setBillboard(false);
-        this.positiveParticle.setSize(0.125);
+        this.positiveParticle.setSize(Util.PIXEL);
         this.negativeParticle = particleCapability.createPoint(session.getWorld());
         this.negativeParticle.setBillboard(false);
-        this.negativeParticle.setSize(0.125);
+        this.negativeParticle.setSize(Util.PIXEL);
     }
 
     @Override

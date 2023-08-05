@@ -65,6 +65,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
         this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);
+        this.positionButton.setPriority(1);
         addButton(this.positionButton);
     }
 

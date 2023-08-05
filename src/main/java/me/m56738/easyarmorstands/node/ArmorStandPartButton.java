@@ -53,8 +53,9 @@ public class ArmorStandPartButton implements Button {
         part.getLength(entity)
                 .rotate(rotation, end)
                 .add(start);
-        // particles on the lower 2/3 of the bone
-        start.lerp(end, 2.0 / 3, center);
+        // move start down, start-end will be the lower 2/3 of the bone
+        start.lerp(end, 1.0 / 3);
+        start.lerp(end, 0.5, center);
     }
 
     @Override

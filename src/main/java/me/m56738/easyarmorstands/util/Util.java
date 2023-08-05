@@ -54,6 +54,9 @@ public class Util {
 
     public static final Quaterniondc IDENTITY = new Quaterniond();
 
+    public static final double PIXEL = 1.0 / 16;
+    public static final double LINE_WIDTH = PIXEL / 4;
+
     private static Component format3D(Vector3dc vector, NumberFormat format) {
         return Component.text()
                 .append(Component.text(format.format(vector.x()), NamedTextColor.RED))
