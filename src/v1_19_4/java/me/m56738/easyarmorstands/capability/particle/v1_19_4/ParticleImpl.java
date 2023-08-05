@@ -28,6 +28,7 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
         entity.setPersistent(false);
         entity.setVisibleByDefault(false);
         entity.setMetadata("easyarmorstands_ignore", new FixedMetadataValue(EasyArmorStands.getInstance(), true));
+        entity.setMetadata("easyarmorstands_force", new FixedMetadataValue(EasyArmorStands.getInstance(), true));
         entity.setGlowing(true);
     }
 
