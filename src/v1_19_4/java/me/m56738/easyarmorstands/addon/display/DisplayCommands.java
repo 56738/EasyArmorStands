@@ -22,8 +22,10 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -217,6 +219,64 @@ public class DisplayCommands {
                     .append(Component.text(value)));
         } else {
             sender.sendMessage(Component.text("Unable to change the line width", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("text background color <value>")
+    @CommandPermission("easyarmorstands.property.display.text.background")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void setTextBackground(Audience sender, Session session, TextDisplay entity, @Argument("value") TextColor color) {
+        Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+        if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), value)) {
+            sender.sendMessage(Component.text("Changed the background color to ", NamedTextColor.GREEN)
+                    .append(addon.getTextDisplayBackgroundProperty().getValueName(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("text background reset")
+    @CommandPermission("easyarmorstands.property.display.text.background")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void resetTextBackground(Audience sender, Session session, TextDisplay entity) {
+        if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), Optional.empty())) {
+            sender.sendMessage(Component.text("Reset the background color", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("text background none")
+    @CommandPermission("easyarmorstands.property.display.text.background")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void hideTextBackground(Audience sender, Session session, TextDisplay entity) {
+        if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), Optional.of(Color.fromARGB(0)))) {
+            sender.sendMessage(Component.text("Made the background invisible", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("text background alpha <value>")
+    @CommandPermission("easyarmorstands.property.display.text.background")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void hideTextBackground(Audience sender, Session session, TextDisplay entity, @Argument("value") @Range(min = "0", max = "255") int alpha) {
+        Optional<Color> oldValue = addon.getTextDisplayBackgroundProperty().getValue(entity);
+        if (!oldValue.isPresent()) {
+            sender.sendMessage(Component.text("No background color configured", NamedTextColor.RED));
+            return;
+        }
+
+        Optional<Color> value = Optional.of(oldValue.get().setAlpha(alpha));
+        if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), value)) {
+            sender.sendMessage(Component.text("Changed the background transparency to ", NamedTextColor.GREEN)
+                    .append(Component.text(alpha)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
         }
     }
 

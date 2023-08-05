@@ -8,6 +8,7 @@ import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
+import cloud.commandframework.minecraft.extras.TextColorArgument;
 import cloud.commandframework.paper.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
@@ -65,6 +66,7 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -168,6 +170,9 @@ public class EasyArmorStands extends JavaPlugin {
 
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(EntityProperty.class),
                 p -> new EntityPropertyArgumentParser());
+
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
+                p -> new TextColorArgument.TextColorParser<>());
 
         Command.Builder<EasCommandSender> rootBuilder = commandManager.commandBuilder("eas", "easyarmorstands");
 

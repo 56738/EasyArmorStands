@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
@@ -19,7 +20,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
 public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisplay, Optional<Color>> {
@@ -92,7 +97,11 @@ public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisp
                 return Component.text("none", NamedTextColor.WHITE);
             }
             TextColor textColor = TextColor.color(color.asRGB());
-            return Component.text(textColor.asHexString(), textColor);
+            TextComponent hex = Component.text(textColor.asHexString(), textColor);
+            if (textColor instanceof NamedTextColor) {
+                return hex.append(Component.text(" (" + textColor + ")"));
+            }
+            return hex;
         } else {
             return Component.text("default", NamedTextColor.DARK_GRAY);
         }
