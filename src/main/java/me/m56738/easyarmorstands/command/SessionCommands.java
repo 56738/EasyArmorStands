@@ -24,7 +24,9 @@ import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -37,6 +39,24 @@ import org.joml.Vector3dc;
 
 @CommandMethod("eas")
 public class SessionCommands {
+    public static void showText(Audience audience, Component type, Component text, String command) {
+        String serialized = MiniMessage.miniMessage().serialize(text);
+        audience.sendMessage(type
+                .append(Component.text(": "))
+                .append(Component.text("[Edit]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to edit"))
+                        .clickEvent(ClickEvent.suggestCommand(command + " " + serialized)))
+                .append(Component.space())
+                .append(Component.text("[Copy]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to copy"))
+                        .clickEvent(ClickEvent.copyToClipboard(serialized)))
+                .append(Component.space())
+                .append(Component.text("[Syntax]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to open the MiniMessage documentation"))
+                        .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))));
+        audience.sendMessage(text);
+    }
+
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Duplicate an entity")
@@ -213,6 +233,16 @@ public class SessionCommands {
         session.commit();
         sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(pitch)));
+    }
+
+    @CommandMethod("name")
+    @CommandPermission("easyarmorstands.property.name")
+    @RequireSession
+    @RequireEntity
+    public void showName(EasCommandSender sender, Session session, Entity entity) {
+        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
+        Component text = property.getValue(entity);
+        showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
     }
 
     @CommandMethod("name set <value>")

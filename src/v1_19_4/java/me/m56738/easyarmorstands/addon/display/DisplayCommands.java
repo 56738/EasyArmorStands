@@ -8,6 +8,7 @@ import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
+import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -193,6 +194,15 @@ public class DisplayCommands {
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
         session.pushNode(node);
+    }
+
+    @CommandMethod("text")
+    @CommandPermission("easyarmorstands.property.display.text")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void showText(Audience sender, Session session, TextDisplay entity) {
+        Component text = addon.getTextDisplayTextProperty().getValue(entity);
+        SessionCommands.showText(sender, Component.text("Text", NamedTextColor.YELLOW), text, "/eas text set");
     }
 
     @CommandMethod("text set <value>")
