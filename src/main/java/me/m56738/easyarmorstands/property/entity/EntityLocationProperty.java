@@ -1,9 +1,6 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.bukkit.parsers.location.LocationArgument;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -36,11 +33,6 @@ public class EntityLocationProperty implements LegacyEntityPropertyType<Entity, 
     @Override
     public @NotNull Class<Entity> getEntityType() {
         return Entity.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Location> getArgumentParser() {
-        return new LocationArgument.LocationParser<>();
     }
 
     @Override

@@ -41,6 +41,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
             switch (type) {
                 case ARMOR_STAND:
                     return new ItemStack(Material.ARMOR_STAND);
+                case BARRIER:
+                    return new ItemStack(Material.BARRIER);
                 case BLAZE_ROD:
                     return new ItemStack(Material.BLAZE_ROD);
                 case BONE_MEAL:

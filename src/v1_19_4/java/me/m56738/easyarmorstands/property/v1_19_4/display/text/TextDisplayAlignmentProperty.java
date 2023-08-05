@@ -1,10 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.EnumArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -54,11 +51,6 @@ public class TextDisplayAlignmentProperty extends ToggleEntityProperty<TextDispl
     }
 
     @Override
-    public ArgumentParser<EasCommandSender, TextDisplay.TextAlignment> getArgumentParser() {
-        return new EnumArgument.EnumParser<>(TextDisplay.TextAlignment.class);
-    }
-
-    @Override
     public @NotNull Component getDisplayName() {
         return Component.text("alignment");
     }
@@ -76,13 +68,7 @@ public class TextDisplayAlignmentProperty extends ToggleEntityProperty<TextDispl
     @Override
     public TextDisplay.TextAlignment getNextValue(TextDisplay entity) {
         TextDisplay.TextAlignment[] values = TextDisplay.TextAlignment.values();
-        int i;
-        for (i = 0; i < values.length; i++) {
-            if (values[i] == entity.getAlignment()) {
-                break;
-            }
-        }
-        return values[(i + 1) % values.length];
+        return values[(entity.getAlignment().ordinal() + 1) % values.length];
     }
 
     @Override

@@ -149,6 +149,7 @@ dependencies {
     "traincartsCompileOnly"(libs.traincarts)
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
+    "v1_19_4CompileOnly"(libs.brigadier)
 }
 
 publishing {

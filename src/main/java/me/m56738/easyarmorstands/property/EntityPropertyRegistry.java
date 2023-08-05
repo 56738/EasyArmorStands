@@ -27,11 +27,12 @@ public class EntityPropertyRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends Entity> Map<String, LegacyEntityPropertyType<? super E, ?>> getProperties(Class<E> type) {
+    public <E extends Entity> Map<String, LegacyEntityPropertyType<? super E, ?>> getProperties(E entity) {
+        Class type = entity.getClass();
         Map<String, LegacyEntityPropertyType<? super E, ?>> result = new TreeMap<>();
         for (Map.Entry<String, LegacyEntityPropertyType<?, ?>> entry : properties.entrySet()) {
-            LegacyEntityPropertyType<?, ?> property = entry.getValue();
-            if (property.getEntityType().isAssignableFrom(type)) {
+            LegacyEntityPropertyType property = entry.getValue();
+            if (property.getEntityType().isAssignableFrom(type) && property.isSupported(entity)) {
                 result.put(entry.getKey(), (LegacyEntityPropertyType<? super E, ?>) property);
             }
         }
@@ -40,8 +41,8 @@ public class EntityPropertyRegistry {
 
     @SuppressWarnings("unchecked")
     public <E extends Entity> LegacyEntityPropertyType<E, ?> getProperty(E entity, String name) {
-        LegacyEntityPropertyType<?, ?> property = properties.get(name);
-        if (property != null && property.getEntityType().isAssignableFrom(entity.getClass())) {
+        LegacyEntityPropertyType property = properties.get(name);
+        if (property != null && property.getEntityType().isAssignableFrom(entity.getClass()) && property.isSupported(entity)) {
             return (LegacyEntityPropertyType<E, ?>) property;
         } else {
             return null;

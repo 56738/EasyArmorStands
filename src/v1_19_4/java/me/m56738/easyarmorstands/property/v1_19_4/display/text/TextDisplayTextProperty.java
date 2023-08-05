@@ -1,8 +1,6 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import cloud.commandframework.context.CommandContext;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ComponentEntityProperty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
@@ -19,16 +17,6 @@ public class TextDisplayTextProperty extends ComponentEntityProperty<TextDisplay
     @Override
     public Component getValue(TextDisplay entity) {
         return textDisplayCapability.getText(entity);
-    }
-
-    @Override
-    public boolean hasDefaultValue() {
-        return true;
-    }
-
-    @Override
-    public @Nullable Component getDefaultValue(@NotNull CommandContext<EasCommandSender> ctx) {
-        return Component.empty();
     }
 
     @Override

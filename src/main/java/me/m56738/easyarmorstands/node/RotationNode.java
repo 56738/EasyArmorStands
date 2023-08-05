@@ -53,7 +53,6 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         this.circleParticle = particleCapability.createCircle(session.getWorld());
         this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
-        this.cursorLineParticle.setWidth(0.015625);
     }
 
     @Override

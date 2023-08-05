@@ -36,8 +36,8 @@ public class EntityMenu<T extends Entity> extends SessionMenu {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void initialize() {
         List<InventorySlot> pending = new ArrayList<>();
-        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
-            if (property instanceof ButtonEntityProperty && property.isSupported(entity)) {
+        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).values()) {
+            if (property instanceof ButtonEntityProperty) {
                 ButtonEntityProperty buttonProperty = (ButtonEntityProperty) property;
                 InventorySlot slot = buttonProperty.createSlot(this);
                 int index = buttonProperty.getSlotIndex();
@@ -53,6 +53,9 @@ public class EntityMenu<T extends Entity> extends SessionMenu {
         }
         if (hasEquipment() && session.getPlayer().hasPermission("easyarmorstands.color")) {
             addShortcut(new ColorPickerSlot(this));
+        }
+        if (session.getPlayer().hasPermission("easyarmorstands.destroy")) {
+            addButton(new DestroySlot(this));
         }
         Bukkit.getPluginManager().callEvent(new SessionMenuInitializeEvent(this));
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));

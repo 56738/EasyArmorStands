@@ -30,7 +30,6 @@ public abstract class AxisAlignedBoxButton implements Button {
         this.pointParticle = particleCapability.createPoint(session.getWorld());
         this.pointParticle.setBillboard(false);
         this.boxParticle = particleCapability.createAxisAlignedBox(session.getWorld());
-        this.boxParticle.setLineWidth(0.03125);
     }
 
     protected abstract Vector3dc getPosition();

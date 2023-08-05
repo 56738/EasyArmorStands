@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
@@ -19,7 +20,7 @@ public abstract class SimpleButton implements Button {
         this.session = session;
         this.color = color;
         this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createPoint(session.getWorld());
-        this.particle.setSize(0.125);
+        this.particle.setSize(Util.PIXEL);
     }
 
     protected abstract Vector3dc getPosition();

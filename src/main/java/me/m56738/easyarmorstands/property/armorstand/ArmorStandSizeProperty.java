@@ -1,10 +1,7 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.EnumArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Util;
@@ -40,11 +37,6 @@ public class ArmorStandSizeProperty extends ToggleEntityProperty<ArmorStand, Arm
     @Override
     public @NotNull Class<ArmorStand> getEntityType() {
         return ArmorStand.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, ArmorStandSize> getArgumentParser() {
-        return new EnumArgument.EnumParser<>(ArmorStandSize.class);
     }
 
     @Override

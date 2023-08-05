@@ -280,7 +280,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     }
 
     public double getLookThreshold() {
-        return 0.15;
+        return 0.1;
     }
 
     public double getSnapIncrement() {

@@ -1,9 +1,6 @@
 package me.m56738.easyarmorstands.property;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.BooleanArgument;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,11 +8,6 @@ public abstract class BooleanEntityProperty<E extends Entity> extends ToggleEnti
     @Override
     public TypeToken<Boolean> getValueType() {
         return TypeToken.get(Boolean.class);
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Boolean> getArgumentParser() {
-        return new BooleanArgument.BooleanParser<>(true);
     }
 
     @Override

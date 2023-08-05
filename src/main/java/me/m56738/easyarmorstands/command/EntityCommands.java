@@ -45,7 +45,7 @@ public class EntityCommands {
                 .append(Component.space())
                 .append(id));
 
-        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
+        for (LegacyEntityPropertyType property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).values()) {
             showProperty(sender, entity, property);
         }
     }

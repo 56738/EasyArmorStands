@@ -22,13 +22,12 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends MenuNode implements EntityNode {
+public class ArmorStandRootNode extends EntityMenuNode {
     private final Session session;
     private final ArmorStand entity;
     private final PositionBoneButton positionButton;
@@ -36,7 +35,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity) {
-        super(session, Component.text("Select a bone"));
+        super(session, Component.text("Select a bone"), entity);
         this.session = session;
         this.entity = entity;
 
@@ -46,11 +45,11 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(session, entity, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(session, entity, part);
 
-            MenuNode localNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (local)")));
+            MenuNode localNode = new EntityMenuNode(session, part.getDisplayName().append(Component.text(" (local)")), entity);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (global)")));
+            MenuNode globalNode = new EntityMenuNode(session, part.getDisplayName().append(Component.text(" (global)")), entity);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
@@ -64,12 +63,13 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(session, entity);
 
-        MenuNode positionNode = new MenuNode(session, Component.text("Position"));
+        MenuNode positionNode = new EntityMenuNode(session, Component.text("Position"), entity);
         positionNode.addYawButton(session, positionBone, 1);
         positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
         this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);
+        this.positionButton.setPriority(1);
         addButton(this.positionButton);
     }
 
@@ -182,12 +182,7 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
     }
 
     @Override
-    public Entity getEntity() {
+    public ArmorStand getEntity() {
         return entity;
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid() && entity.isValid();
     }
 }

@@ -13,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Intersectiond;
-import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -44,17 +43,18 @@ public class ArmorStandPartButton implements Button {
         Location location = entity.getLocation();
         // rotation = combination of yaw and pose
         Util.fromEuler(part.getPose(entity), rotation)
-                .rotateLocalY(-Math.toRadians(location.getYaw()));
+                .rotateLocalY(Util.getEntityYawAngle(location.getYaw()));
         // start = where the bone is attached to the armor stand, depends on yaw
         part.getOffset(entity)
-                .rotateY(-Math.toRadians(location.getYaw()), start)
+                .rotateY(Util.getEntityYawAngle(location.getYaw()), start)
                 .add(location.getX(), location.getY(), location.getZ());
         // end = where the bone ends, depends on yaw and pose
         part.getLength(entity)
                 .rotate(rotation, end)
                 .add(start);
-        // particles on the lower 2/3 of the bone
-        start.lerp(end, 2.0 / 3, center);
+        // move start down, start-end will be the lower 2/3 of the bone
+        start.lerp(end, 1.0 / 3);
+        start.lerp(end, 0.5, center);
     }
 
     @Override

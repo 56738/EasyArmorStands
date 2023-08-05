@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
 import me.m56738.easyarmorstands.particle.PointParticle;
+import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,7 +19,7 @@ public class PointParticleImpl extends BlockDisplayParticleImpl implements Point
     private final JOMLMapper mapper;
     private final Vector3d position = new Vector3d();
     private final Quaternionf rotation = new Quaternionf();
-    private double size = 0.0625;
+    private double size = Util.PIXEL;
     private boolean billboard = true;
 
     public PointParticleImpl(World world, JOMLMapper mapper) {

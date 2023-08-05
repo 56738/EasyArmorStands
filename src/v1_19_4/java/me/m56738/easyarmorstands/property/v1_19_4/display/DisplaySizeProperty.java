@@ -1,9 +1,6 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.FloatArgument;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
@@ -19,11 +16,6 @@ public abstract class DisplaySizeProperty implements LegacyEntityPropertyType<Di
     @Override
     public @NotNull Class<Display> getEntityType() {
         return Display.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Float> getArgumentParser() {
-        return new FloatArgument.FloatParser<>(0, Float.POSITIVE_INFINITY);
     }
 
     @Override

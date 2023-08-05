@@ -58,7 +58,6 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         this.axisParticle.setColor(color);
         this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
-        this.cursorLineParticle.setWidth(0.015625);
     }
 
     public double getLength() {

@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
 import me.m56738.easyarmorstands.particle.LineParticle;
 import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,7 +21,7 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     private final Vector3d center = new Vector3d();
     private final Quaternionf rotation = new Quaternionf();
     private Axis axis = Axis.Z;
-    private double width = 0.0625;
+    private double width = Util.LINE_WIDTH;
     private double length;
     private double offset;
 
