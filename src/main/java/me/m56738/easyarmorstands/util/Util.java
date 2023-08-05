@@ -26,6 +26,7 @@ import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
+import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -132,7 +133,7 @@ public class Util {
     public static Matrix3dc getRotation(Location location, Matrix3d dest) {
         return dest.rotationZYX(
                 0,
-                -Math.toRadians(location.getYaw()),
+                Util.getEntityYawAngle(location.getYaw()),
                 Math.toRadians(location.getPitch()));
     }
 
@@ -248,7 +249,55 @@ public class Util {
         return Math.floor(angle * 256f / 360f) * 360f / 256f;
     }
 
-    public static float getEntityYawRotation(float degrees) {
+    public static float getEntityYawAngle(float degrees) {
         return -Math.toRadians(roundEntityAngle(degrees));
+    }
+
+    public static Quaterniond getEntityYawRotation(float yaw, Quaterniond dest) {
+        return dest.rotationY(getEntityYawAngle(yaw));
+    }
+
+    public static Quaterniond getEntityYawRotation(Location location, Quaterniond dest) {
+        return getEntityYawRotation(location.getYaw(), dest);
+    }
+
+    public static Quaterniond getEntityYawRotation(Entity entity, Quaterniond dest) {
+        return getEntityYawRotation(entity.getLocation(), dest);
+    }
+
+    public static Quaternionf getEntityYawRotation(float yaw, Quaternionf dest) {
+        return dest.rotationY(getEntityYawAngle(yaw));
+    }
+
+    public static Quaternionf getEntityYawRotation(Location location, Quaternionf dest) {
+        return getEntityYawRotation(location.getYaw(), dest);
+    }
+
+    public static Quaternionf getEntityYawRotation(Entity entity, Quaternionf dest) {
+        return getEntityYawRotation(entity.getLocation(), dest);
+    }
+
+    public static Quaterniond getEntityRotation(float yaw, float pitch, Quaterniond dest) {
+        return getEntityYawRotation(yaw, dest).rotateX(Math.toRadians(pitch));
+    }
+
+    public static Quaterniond getEntityRotation(Location location, Quaterniond dest) {
+        return getEntityRotation(location.getYaw(), location.getPitch(), dest);
+    }
+
+    public static Quaterniond getEntityRotation(Entity entity, Quaterniond dest) {
+        return getEntityRotation(entity.getLocation(), dest);
+    }
+
+    public static Quaternionf getEntityRotation(float yaw, float pitch, Quaternionf dest) {
+        return getEntityYawRotation(yaw, dest).rotateX(Math.toRadians(pitch));
+    }
+
+    public static Quaternionf getEntityRotation(Location location, Quaternionf dest) {
+        return getEntityRotation(location.getYaw(), location.getPitch(), dest);
+    }
+
+    public static Quaternionf getEntityRotation(Entity entity, Quaternionf dest) {
+        return getEntityRotation(entity.getLocation(), dest);
     }
 }

@@ -3,11 +3,10 @@ package me.m56738.easyarmorstands.addon.display;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.annotations.Flag;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
-import me.m56738.easyarmorstands.bone.v1_19_4.DisplayTranslationBone;
+import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -15,9 +14,6 @@ import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
-import me.m56738.easyarmorstands.property.EntityPropertyChange;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
@@ -150,47 +146,16 @@ public class DisplayCommands {
     @CommandPermission("easyarmorstands.property.display.size")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setBoxHeight(Audience sender, Session session, Display entity,
-                             @Argument("height") float value,
-                             @Flag("keep-position") boolean keepPosition) {
-        float oldValue = entity.getDisplayHeight();
+    public void setBoxHeight(Audience sender, Session session, Display entity, @Argument("height") float value) {
         if (session.tryChange(entity, addon.getDisplayHeightProperty(), value)) {
             if (entity.getDisplayWidth() == 0f) {
                 session.tryChange(entity, addon.getDisplayWidthProperty(), 1f);
-            }
-            if (!keepPosition) {
-                adjustOffsetForBox(session, entity, oldValue, value);
             }
             sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
             sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
         }
-    }
-
-    private void adjustOffsetForBox(Session session, Display entity, float oldValue, float value) {
-        // Adjust the entity position so the bounding box center stays in the same place
-
-        DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
-        EntityLocationProperty entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
-
-        float delta = (value - oldValue) / 2;
-
-        List<EntityPropertyChange<?, ?>> changes = new ArrayList<>(2);
-
-        // Move down using location
-        Location location = entityLocationProperty.getValue(entity);
-        Location newLocation = location.clone();
-        newLocation.setY(location.getY() - delta);
-        changes.add(new EntityPropertyChange<>(entity, entityLocationProperty, newLocation));
-
-        // Move up using offset
-        Vector3f translation = new Vector3f(displayTranslationProperty.getValue(entity));
-        translation.y += delta;
-        changes.add(new EntityPropertyChange<>(entity, displayTranslationProperty, translation));
-
-        // Ignore the return value, failure is allowed
-        session.tryChange(changes);
     }
 
     @CommandMethod("box remove")
@@ -213,15 +178,15 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("translation")
+    @CommandMethod("box move")
     @CommandPermission("easyarmorstands.property.display.translation")
     @RequireSession
     @RequireEntity(Display.class)
-    public void editTranslation(Session session, Display entity) {
-        DisplayTranslationBone translationBone = new DisplayTranslationBone(session, entity, addon);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Translation", NamedTextColor.GOLD), entity);
-        node.addPositionButtons(session, translationBone, 3);
-        node.addCarryButton(session, translationBone);
+    public void moveBox(Audience sender, Session session, Display entity) {
+        DisplayBoxBone bone = new DisplayBoxBone(session, entity, addon);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), entity);
+        node.addPositionButtons(session, bone, 3);
+        node.addCarryButton(session, bone);
         session.pushNode(node);
     }
 
@@ -316,12 +281,12 @@ public class DisplayCommands {
         }
 
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(entity).rotateY(Util.getEntityYawRotation(location.getYaw()), new Vector3d());
+        Vector3d offset = part.getOffset(entity).rotateY(Util.getEntityYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
-                .rotateY(Util.getEntityYawRotation(location.getYaw()))
+                .rotateY(Util.getEntityYawAngle(location.getYaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 
