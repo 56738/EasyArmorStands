@@ -71,8 +71,11 @@ public class SessionCommands {
             Session session,
             Entity entity) {
         Player player = session.getPlayer();
-        EasyArmorStands.getInstance().getHistory(player).push(new EntityDestroyAction<>(entity));
-        entity.remove();
+        EntityDestroyAction<?> action = new EntityDestroyAction<>(entity);
+        if (!EntitySpawner.tryRemove(entity, player)) {
+            return;
+        }
+        EasyArmorStands.getInstance().getHistory(player).push(action);
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
 

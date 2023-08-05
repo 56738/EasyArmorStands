@@ -54,6 +54,9 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
         if (hasEquipment() && session.getPlayer().hasPermission("easyarmorstands.color")) {
             addShortcut(new ColorPickerSlot(this));
         }
+        if (session.getPlayer().hasPermission("easyarmorstands.destroy")) {
+            addButton(new DestroySlot(this));
+        }
         Bukkit.getPluginManager().callEvent(new SessionMenuInitializeEvent(this));
         setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
     }
