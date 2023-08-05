@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.addon.display;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.brigadier.CloudBrigadierManager;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
@@ -10,9 +11,11 @@ import me.m56738.easyarmorstands.bone.v1_19_4.DisplayTranslationBone;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
+import me.m56738.easyarmorstands.node.v1_19_4.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
@@ -147,6 +150,15 @@ public class DisplayAddon implements Addon {
         EntityGlowingProperty.addToBlacklist(EntityType.TEXT_DISPLAY);
 
         EasyArmorStands.getInstance().getAnnotationParser().parse(this);
+
+        CloudBrigadierManager<EasCommandSender, ?> brigadierManager = EasyArmorStands.getInstance().getCommandManager().brigadierManager();
+        if (brigadierManager != null) {
+            try {
+                BlockDataArgumentParser.registerBrigadier(brigadierManager);
+            } catch (Throwable e) {
+                EasyArmorStands.getInstance().getLogger().warning("Failed to register Brigadier mappings for block data arguments");
+            }
+        }
     }
 
     @CommandMethod("eas translation")

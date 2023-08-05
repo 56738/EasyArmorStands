@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands;
 
 import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.bukkit.BukkitCommandManager;
@@ -28,7 +27,14 @@ import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.parser.EntityPropertyArgumentParser;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.processor.*;
+import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
+import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
+import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
+import me.m56738.easyarmorstands.command.processor.Keys;
+import me.m56738.easyarmorstands.command.processor.SessionInjector;
+import me.m56738.easyarmorstands.command.processor.SessionPostprocessor;
+import me.m56738.easyarmorstands.command.processor.SessionPreprocessor;
+import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.History;
@@ -37,8 +43,21 @@ import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
-import me.m56738.easyarmorstands.property.armorstand.*;
-import me.m56738.easyarmorstands.property.entity.*;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
+import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
+import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -256,7 +275,7 @@ public class EasyArmorStands extends JavaPlugin {
         return adventure;
     }
 
-    public CommandManager<EasCommandSender> getCommandManager() {
+    public PaperCommandManager<EasCommandSender> getCommandManager() {
         return commandManager;
     }
 

@@ -1,6 +1,7 @@
 [versions]
 adventure-api = "4.14.0"
 adventure-platform = "4.3.0"
+brigadier = "1.0.17"
 bstats = "3.0.2"
 bukkit = "1.8.8-R0.1-SNAPSHOT"
 cloud = "1.8.3"
@@ -18,6 +19,7 @@ adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", ve
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-api" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
