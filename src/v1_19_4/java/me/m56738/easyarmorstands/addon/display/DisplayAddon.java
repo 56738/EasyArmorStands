@@ -124,8 +124,10 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(itemDisplayTransformProperty);
         blockDisplayBlockProperty = new BlockDisplayBlockProperty();
         plugin.getEntityPropertyRegistry().register(blockDisplayBlockProperty);
-        textDisplayAlignmentProperty = new TextDisplayAlignmentProperty();
-        plugin.getEntityPropertyRegistry().register(textDisplayAlignmentProperty);
+        if (TextDisplayAlignmentProperty.isSupported()) {
+            textDisplayAlignmentProperty = new TextDisplayAlignmentProperty();
+            plugin.getEntityPropertyRegistry().register(textDisplayAlignmentProperty);
+        }
         if (TextDisplayBackgroundProperty.isSupported()) {
             textDisplayBackgroundProperty = new TextDisplayBackgroundProperty();
             plugin.getEntityPropertyRegistry().register(textDisplayBackgroundProperty);
