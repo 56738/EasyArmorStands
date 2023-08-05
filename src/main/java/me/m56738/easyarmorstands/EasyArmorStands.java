@@ -44,6 +44,7 @@ import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
@@ -169,8 +170,11 @@ public class EasyArmorStands extends JavaPlugin {
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
 
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(ResettableEntityProperty.class),
+                p -> new EntityPropertyArgumentParser<>(ResettableEntityProperty.class));
+
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(EntityProperty.class),
-                p -> new EntityPropertyArgumentParser());
+                p -> new EntityPropertyArgumentParser<>(EntityProperty.class));
 
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorArgument.TextColorParser<>());

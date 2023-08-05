@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
@@ -277,6 +278,22 @@ public class SessionCommands {
         session.commit();
         sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
                 .append(property.getValueName(canTick)));
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @CommandMethod("reset <property>")
+    @CommandPermission("easyarmorstands.edit")
+    @RequireSession
+    @RequireEntity
+    public void resetProperty(EasCommandSender sender, Session session, Entity entity, @Argument("property") ResettableEntityProperty property) {
+        Object value = property.getResetValue();
+        if (!session.tryChange(entity, property, value)) {
+            sender.sendMessage(Component.text("Unable to change the property", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Reset ", NamedTextColor.GREEN)
+                .append(property.getDisplayName()));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

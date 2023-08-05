@@ -14,11 +14,19 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
-public class EntityPropertyArgumentParser implements ArgumentParser<EasCommandSender, EntityProperty<?, ?>> {
+public class EntityPropertyArgumentParser<T extends EntityProperty<?, ?>> implements ArgumentParser<EasCommandSender, T> {
+    private final Class<T> type;
+
+    public EntityPropertyArgumentParser(Class<T> type) {
+        this.type = type;
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ArgumentParseResult<@NonNull EntityProperty<?, ?>> parse(@NonNull CommandContext<@NonNull EasCommandSender> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
+    public @NonNull ArgumentParseResult<@NonNull T> parse(@NonNull CommandContext<@NonNull EasCommandSender> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
         String input = inputQueue.peek();
         if (input == null) {
             return ArgumentParseResult.failure(new NoInputProvidedException(getClass(), commandContext));
@@ -30,12 +38,12 @@ public class EntityPropertyArgumentParser implements ArgumentParser<EasCommandSe
         }
 
         EntityProperty<Entity, ?> property = EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperty(entity, input);
-        if (property == null) {
+        if (!type.isInstance(property)) {
             return ArgumentParseResult.failure(new IllegalArgumentException("Property not found"));
         }
 
         inputQueue.remove();
-        return ArgumentParseResult.success(property);
+        return ArgumentParseResult.success((T) property);
     }
 
     @Override
@@ -45,6 +53,13 @@ public class EntityPropertyArgumentParser implements ArgumentParser<EasCommandSe
             return Collections.emptyList();
         }
 
-        return new ArrayList<>(EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).keySet());
+        Map<String, EntityProperty<? super Entity, ?>> properties = EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity);
+        ArrayList<String> result = new ArrayList<>(properties.size());
+        for (Map.Entry<String, EntityProperty<? super Entity, ?>> entry : properties.entrySet()) {
+            if (type.isInstance(entry.getValue())) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
     }
 }
