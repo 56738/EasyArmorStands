@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.addon.display;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
@@ -21,6 +22,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -30,6 +32,7 @@ import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -188,6 +191,33 @@ public class DisplayCommands {
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
         session.pushNode(node);
+    }
+
+    @CommandMethod("text set <value>")
+    @CommandPermission("easyarmorstands.property.display.text")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void setText(Audience sender, Session session, TextDisplay entity, @Argument("value") @Greedy String input) {
+        Component value = MiniMessage.miniMessage().deserialize(input);
+        if (session.tryChange(entity, addon.getTextDisplayTextProperty(), value)) {
+            sender.sendMessage(Component.text("Changed the text to ", NamedTextColor.GREEN)
+                    .append(value));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the text", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("text width <value>")
+    @CommandPermission("easyarmorstands.property.display.text.linewidth")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void setTextWidth(Audience sender, Session session, TextDisplay entity, @Argument("value") int value) {
+        if (session.tryChange(entity, addon.getTextDisplayLineWidthProperty(), value)) {
+            sender.sendMessage(Component.text("Changed the line width to ", NamedTextColor.GREEN)
+                    .append(Component.text(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change the line width", NamedTextColor.RED));
+        }
     }
 
     @CommandMethod("scale <scale>")
