@@ -84,9 +84,6 @@ public class PointParticleImpl extends BlockDisplayParticleImpl implements Point
     protected void update(BlockDisplay entity) {
         super.update(entity);
         Vector3f scale = new Vector3f((float) size);
-        if (billboard) {
-            scale.z = 0.001f;
-        }
         entity.setTransformation(mapper.getTransformation(
                 scale.mul(-0.5f, new Vector3f()).rotate(rotation),
                 rotation,

@@ -1,5 +1,9 @@
 package me.m56738.easyarmorstands.util;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,6 +15,7 @@ import org.joml.Vector3dc;
 public class Cursor2D {
     private final Player player;
     private final Session session;
+    private final PointParticle particle;
 
     private final Vector3d origin = new Vector3d();
     private final Vector3d normal = new Vector3d();
@@ -22,12 +27,16 @@ public class Cursor2D {
     public Cursor2D(Player player, Session session) {
         this.player = player;
         this.session = session;
+        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createPoint(session.getWorld());
     }
 
     public void start(Vector3dc origin, Vector3dc cursor, Vector3dc normal) {
         this.origin.set(origin);
         this.current.set(cursor);
         this.normal.set(normal);
+        particle.setPosition(current);
+        particle.setColor(ParticleColor.YELLOW);
+        session.addParticle(particle);
         refresh();
     }
 
@@ -50,9 +59,14 @@ public class Cursor2D {
             }
             currentOrigin.fma(t, currentDirection, current);
         }
+        particle.setPosition(current);
     }
 
     public Vector3dc get() {
         return current;
+    }
+
+    public void stop() {
+        session.removeParticle(particle);
     }
 }

@@ -115,8 +115,9 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void onExit() {
-        super.onExit();
         session.removeParticle(axisParticle);
+        cursor.stop();
+        super.onExit();
     }
 
     private void updateAxisParticle() {

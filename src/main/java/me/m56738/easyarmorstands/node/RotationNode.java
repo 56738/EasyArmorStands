@@ -123,6 +123,7 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     public void onExit() {
         session.removeParticle(circleParticle);
         session.removeParticle(axisParticle);
+        cursor.stop();
         super.onExit();
     }
 

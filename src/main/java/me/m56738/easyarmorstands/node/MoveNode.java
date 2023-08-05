@@ -126,6 +126,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     @Override
     public void onExit() {
         session.removeParticle(axisParticle);
+        cursor.stop();
         super.onExit();
     }
 
