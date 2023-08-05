@@ -156,6 +156,24 @@ public class SessionCommands {
                 .color(NamedTextColor.GREEN));
     }
 
+    @CommandMethod("position <position>")
+    @CommandPermission("easyarmorstands.property.location")
+    @RequireSession
+    @RequireEntity
+    public void position(EasCommandSender sender, Session session, Entity entity, @Argument("position") Location location) {
+        EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
+        Location oldLocation = property.getValue(entity);
+        location.setYaw(oldLocation.getYaw());
+        location.setPitch(oldLocation.getPitch());
+        if (!session.tryChange(entity, property, location)) {
+            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Moved to ", NamedTextColor.GREEN)
+                .append(Util.formatLocation(location)));
+    }
+
     @CommandMethod("yaw <yaw>")
     @CommandPermission("easyarmorstands.property.location")
     @RequireSession
