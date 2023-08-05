@@ -400,6 +400,8 @@ public class DisplayCommands {
                     new Quaternionf()
             ));
         });
+        location.setYaw(0);
+        location.setPitch(0);
         ItemDisplay display = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
         if (display == null) {
             return;
