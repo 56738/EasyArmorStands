@@ -67,13 +67,7 @@ public class DisplayBillboardProperty extends ToggleEntityProperty<Display, Disp
     @Override
     public Display.Billboard getNextValue(Display entity) {
         Display.Billboard[] values = Display.Billboard.values();
-        int i;
-        for (i = 0; i < values.length; i++) {
-            if (values[i] == entity.getBillboard()) {
-                break;
-            }
-        }
-        return values[(i + 1) % values.length];
+        return values[(entity.getBillboard().ordinal() + 1) % values.length];
     }
 
     @Override

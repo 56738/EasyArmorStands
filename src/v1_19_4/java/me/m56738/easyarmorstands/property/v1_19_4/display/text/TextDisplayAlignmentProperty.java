@@ -76,13 +76,7 @@ public class TextDisplayAlignmentProperty extends ToggleEntityProperty<TextDispl
     @Override
     public TextDisplay.TextAlignment getNextValue(TextDisplay entity) {
         TextDisplay.TextAlignment[] values = TextDisplay.TextAlignment.values();
-        int i;
-        for (i = 0; i < values.length; i++) {
-            if (values[i] == entity.getAlignment()) {
-                break;
-            }
-        }
-        return values[(i + 1) % values.length];
+        return values[(entity.getAlignment().ordinal() + 1) % values.length];
     }
 
     @Override
