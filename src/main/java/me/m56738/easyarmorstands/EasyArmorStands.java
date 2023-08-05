@@ -95,6 +95,7 @@ public class EasyArmorStands extends JavaPlugin {
     private EntityCustomNameProperty entityCustomNameProperty;
     private EntityCustomNameVisibleProperty entityCustomNameVisibleProperty;
     private EntityLocationProperty entityLocationProperty;
+    private ArmorStandCanTickProperty armorStandCanTickProperty;
 
     public static EasyArmorStands getInstance() {
         return instance;
@@ -212,12 +213,11 @@ public class EasyArmorStands extends JavaPlugin {
         entityPropertyRegistry.register(new ArmorStandSizeProperty());
         entityPropertyRegistry.register(new ArmorStandBasePlateProperty());
         TickCapability tickCapability = this.getCapability(TickCapability.class);
-        ArmorStandCanTickProperty canTickProperty = null;
         if (tickCapability != null) {
-            canTickProperty = new ArmorStandCanTickProperty(tickCapability);
-            entityPropertyRegistry.register(canTickProperty);
+            armorStandCanTickProperty = new ArmorStandCanTickProperty(tickCapability);
+            entityPropertyRegistry.register(armorStandCanTickProperty);
         }
-        entityPropertyRegistry.register(new ArmorStandGravityProperty(canTickProperty));
+        entityPropertyRegistry.register(new ArmorStandGravityProperty(armorStandCanTickProperty));
         entityPropertyRegistry.register(new ArmorStandVisibilityProperty());
         LockCapability lockCapability = this.getCapability(LockCapability.class);
         if (lockCapability != null) {
@@ -302,6 +302,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public EntityLocationProperty getEntityLocationProperty() {
         return entityLocationProperty;
+    }
+
+    public ArmorStandCanTickProperty getArmorStandCanTickProperty() {
+        return armorStandCanTickProperty;
     }
 
     public ArmorStandPoseProperty getArmorStandPoseProperty(ArmorStandPart part) {

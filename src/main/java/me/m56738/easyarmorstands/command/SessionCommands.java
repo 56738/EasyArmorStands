@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
@@ -27,6 +28,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
@@ -260,6 +262,21 @@ public class SessionCommands {
         session.commit();
         sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
                 .append(property.getValueName(visible)));
+    }
+
+    @CommandMethod("cantick <value>")
+    @CommandPermission("easyarmorstands.property.armorstand.cantick")
+    @RequireSession
+    @RequireEntity(ArmorStand.class)
+    public void setCanTick(EasCommandSender sender, Session session, ArmorStand entity, @Argument("value") boolean canTick) {
+        ArmorStandCanTickProperty property = EasyArmorStands.getInstance().getArmorStandCanTickProperty();
+        if (!session.tryChange(entity, property, canTick)) {
+            sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
+                .append(property.getValueName(canTick)));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
