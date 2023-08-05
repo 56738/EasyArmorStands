@@ -90,6 +90,8 @@ public class EasyArmorStands extends JavaPlugin {
     private BukkitAudiences adventure;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
+    private EntityCustomNameProperty entityCustomNameProperty;
+    private EntityCustomNameVisibleProperty entityCustomNameVisibleProperty;
     private EntityLocationProperty entityLocationProperty;
 
     public static EasyArmorStands getInstance() {
@@ -230,8 +232,10 @@ public class EasyArmorStands extends JavaPlugin {
             entityPropertyRegistry.register(property);
             armorStandPoseProperties.put(part, property);
         }
-        entityPropertyRegistry.register(new EntityCustomNameProperty(getCapability(ComponentCapability.class)));
-        entityPropertyRegistry.register(new EntityCustomNameVisibleProperty());
+        entityCustomNameProperty = new EntityCustomNameProperty(getCapability(ComponentCapability.class));
+        entityPropertyRegistry.register(entityCustomNameProperty);
+        entityCustomNameVisibleProperty = new EntityCustomNameVisibleProperty();
+        entityPropertyRegistry.register(entityCustomNameVisibleProperty);
         entityLocationProperty = new EntityLocationProperty();
         entityPropertyRegistry.register(entityLocationProperty);
 
@@ -281,6 +285,14 @@ public class EasyArmorStands extends JavaPlugin {
 
     public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
+    }
+
+    public EntityCustomNameProperty getEntityCustomNameProperty() {
+        return entityCustomNameProperty;
+    }
+
+    public EntityCustomNameVisibleProperty getEntityCustomNameVisibleProperty() {
+        return entityCustomNameVisibleProperty;
     }
 
     public EntityLocationProperty getEntityLocationProperty() {

@@ -4,6 +4,7 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
@@ -13,6 +14,8 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.CloneSpawner;
 import me.m56738.easyarmorstands.session.EntitySpawner;
@@ -22,6 +25,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -206,6 +210,56 @@ public class SessionCommands {
         session.commit();
         sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(pitch)));
+    }
+
+    @CommandMethod("name set <value>")
+    @CommandPermission("easyarmorstands.property.name")
+    @RequireSession
+    @RequireEntity
+    public void setName(EasCommandSender sender, Session session, Entity entity, @Argument("value") @Greedy String input) {
+        Component name = MiniMessage.miniMessage().deserialize(input);
+        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
+        boolean hadName = entity.getCustomName() != null;
+        if (!session.tryChange(entity, property, name)) {
+            sender.sendMessage(Component.text("Unable to change the name", NamedTextColor.RED));
+            return;
+        }
+        if (!hadName) {
+            session.tryChange(entity, EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty(), true);
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
+                .append(name.colorIfAbsent(NamedTextColor.WHITE)));
+    }
+
+    @CommandMethod("name clear")
+    @CommandPermission("easyarmorstands.property.name")
+    @RequireSession
+    @RequireEntity
+    public void clearName(EasCommandSender sender, Session session, Entity entity) {
+        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
+        if (!session.tryChange(entity, property, null)) {
+            sender.sendMessage(Component.text("Unable to remove the name", NamedTextColor.RED));
+            return;
+        }
+        session.tryChange(entity, EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty(), false);
+        session.commit();
+        sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
+    }
+
+    @CommandMethod("name visible <value>")
+    @CommandPermission("easyarmorstands.property.name.visible")
+    @RequireSession
+    @RequireEntity
+    public void setNameVisible(EasCommandSender sender, Session session, Entity entity, @Argument("value") boolean visible) {
+        EntityCustomNameVisibleProperty property = EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty();
+        if (!session.tryChange(entity, property, visible)) {
+            sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
+            return;
+        }
+        session.commit();
+        sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
+                .append(property.getValueName(visible)));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
