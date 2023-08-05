@@ -191,6 +191,7 @@ public class DisplayCommands {
     public void moveBox(Audience sender, Session session, Display entity) {
         DisplayBoxBone bone = new DisplayBoxBone(session, entity, addon);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), entity);
+        node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
         session.pushNode(node);
