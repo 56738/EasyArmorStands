@@ -3,7 +3,9 @@ package me.m56738.easyarmorstands.addon.display;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.brigadier.CloudBrigadierManager;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
@@ -12,6 +14,7 @@ import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
@@ -46,7 +49,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
@@ -63,6 +69,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DisplayAddon implements Addon {
     private JOMLMapper mapper;
@@ -149,15 +156,91 @@ public class DisplayAddon implements Addon {
 
         EntityGlowingProperty.addToBlacklist(EntityType.TEXT_DISPLAY);
 
-        EasyArmorStands.getInstance().getAnnotationParser().parse(this);
+        plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
+                p -> new BlockDataArgumentParser<>());
 
-        CloudBrigadierManager<EasCommandSender, ?> brigadierManager = EasyArmorStands.getInstance().getCommandManager().brigadierManager();
+        CloudBrigadierManager<EasCommandSender, ?> brigadierManager = plugin.getCommandManager().brigadierManager();
         if (brigadierManager != null) {
             try {
                 BlockDataArgumentParser.registerBrigadier(brigadierManager);
             } catch (Throwable e) {
-                EasyArmorStands.getInstance().getLogger().warning("Failed to register Brigadier mappings for block data arguments");
+                plugin.getLogger().warning("Failed to register Brigadier mappings for block data arguments");
             }
+        }
+
+        plugin.getAnnotationParser().parse(this);
+    }
+
+    @CommandMethod("eas block <value>")
+    @CommandPermission("easyarmorstands.property.display.block")
+    @RequireSession
+    @RequireEntity(BlockDisplay.class)
+    public void setBlock(Audience sender, Session session, BlockDisplay entity, @Argument("value") BlockData value) {
+        if (session.tryChange(entity, blockDisplayBlockProperty, value)) {
+            sender.sendMessage(Component.text("Changed block to ", NamedTextColor.GREEN)
+                    .append(blockDisplayBlockProperty.getValueName(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change block", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("eas brightness block <value>")
+    @CommandPermission("easyarmorstands.property.display.brightness")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setBlockBrightness(Audience sender, Session session, Display entity, @Argument("value") @Range(min = "0", max = "15") int value) {
+        int skyLight = displayBrightnessProperty.getValue(entity).map(Display.Brightness::getSkyLight)
+                .orElseGet(() -> (int) entity.getLocation().getBlock().getLightFromSky());
+        Display.Brightness brightness = new Display.Brightness(value, skyLight);
+        if (session.tryChange(entity, displayBrightnessProperty, Optional.of(brightness))) {
+            sender.sendMessage(Component.text("Changed block brightness to ", NamedTextColor.GREEN)
+                    .append(Component.text(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("eas brightness sky <value>")
+    @CommandPermission("easyarmorstands.property.display.brightness")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setSkyBrightness(Audience sender, Session session, Display entity, @Argument("value") @Range(min = "0", max = "15") int value) {
+        int blockLight = displayBrightnessProperty.getValue(entity).map(Display.Brightness::getBlockLight)
+                .orElseGet(() -> (int) entity.getLocation().getBlock().getLightFromBlocks());
+        Display.Brightness brightness = new Display.Brightness(blockLight, value);
+        if (session.tryChange(entity, displayBrightnessProperty, Optional.of(brightness))) {
+            sender.sendMessage(Component.text("Changed sky brightness to ", NamedTextColor.GREEN)
+                    .append(Component.text(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("eas brightness here")
+    @CommandPermission("easyarmorstands.property.display.brightness")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setLocalBrightness(EasPlayer sender, Session session, Display entity) {
+        Block block = sender.get().getLocation().getBlock();
+        Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
+        if (session.tryChange(entity, displayBrightnessProperty, Optional.of(brightness))) {
+            sender.sendMessage(Component.text("Changed entity brightness to the light level at your location", NamedTextColor.GREEN));
+            sender.sendMessage(Component.text("Block light: ", NamedTextColor.GRAY).append(Component.text(brightness.getBlockLight())));
+            sender.sendMessage(Component.text("Sky light: ", NamedTextColor.GRAY).append(Component.text(brightness.getSkyLight())));
+        } else {
+            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("eas brightness reset")
+    @CommandPermission("easyarmorstands.property.display.brightness")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setDefaultBrightness(Audience sender, Session session, Display entity) {
+        if (session.tryChange(entity, displayBrightnessProperty, Optional.empty())) {
+            sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
         }
     }
 
