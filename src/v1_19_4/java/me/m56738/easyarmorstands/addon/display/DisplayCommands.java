@@ -381,12 +381,12 @@ public class DisplayCommands {
         }
 
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(entity).rotateY(Util.getEntityYawAngle(location.getYaw()), new Vector3d());
+        Vector3d offset = part.getOffset(entity).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
-                .rotateY(Util.getEntityYawAngle(location.getYaw()))
+                .rotateY(Util.getRoundedYawAngle(location.getYaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 

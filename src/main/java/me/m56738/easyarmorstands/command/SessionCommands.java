@@ -301,6 +301,10 @@ public class SessionCommands {
     @RequireEntity(ArmorStand.class)
     public void setCanTick(EasCommandSender sender, Session session, ArmorStand entity, @Argument("value") boolean canTick) {
         ArmorStandCanTickProperty property = EasyArmorStands.getInstance().getArmorStandCanTickProperty();
+        if (property == null) {
+            sender.sendMessage(Component.text("Armor stand ticking cannot be disabled on this server", NamedTextColor.RED));
+            return;
+        }
         if (!session.tryChange(entity, property, canTick)) {
             sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
             return;

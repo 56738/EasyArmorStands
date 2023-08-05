@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.property.EntityProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.Display;
+import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -42,7 +42,7 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
     @Override
     public Vector3dc getOffset() {
         return new Vector3d(translationProperty.getValue(entity))
-                .rotate(Util.getEntityRotation(entity, new Quaterniond()));
+                .rotateY(-Math.toRadians(entity.getLocation().getYaw()));
     }
 
     @Override
@@ -57,16 +57,14 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     @Override
     public Quaterniondc getRotation() {
-        return Util.getEntityRotation(entity, new Quaterniond())
-                .mul(new Quaterniond(rotationProperty.getValue(entity)));
+        return new Quaterniond(rotationProperty.getValue(entity))
+                .rotateLocalY(-Math.toRadians(entity.getLocation().getYaw()));
     }
 
     @Override
     public void setRotation(Quaterniondc rotation) {
-        session.tryChange(entity, rotationProperty, new Quaternionf(
-                Util.getEntityRotation(entity, new Quaterniond())
-                        .conjugate()
-                        .mul(rotation)));
+        session.tryChange(entity, rotationProperty, new Quaternionf(rotation)
+                .rotateLocalY(Math.toRadians(entity.getLocation().getYaw())));
     }
 
     @Override
