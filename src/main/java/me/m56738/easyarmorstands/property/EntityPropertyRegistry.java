@@ -41,6 +41,7 @@ public class EntityPropertyRegistry {
     @SuppressWarnings("unchecked")
     private void registerCommand(EntityProperty property) {
         Command.Builder<EasCommandSender> builder = rootBuilder
+                .literal("property")
                 .meta(Keys.SESSION_REQUIRED, true)
                 .meta(Keys.ENTITY_REQUIRED,
                         e -> property.getEntityType().isAssignableFrom(e.getClass()) && property.isSupported(e));
