@@ -26,7 +26,7 @@ public class CloneSpawner<T extends Entity> implements EntitySpawner<T> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static <T extends Entity> Map<EntityProperty<T, ?>, Object> collectProperties(T entity) {
         Map<EntityProperty<T, ?>, Object> properties = new HashMap<>();
-        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
+        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).values()) {
             if (property instanceof EntityLocationProperty) {
                 continue;
             }

@@ -45,6 +45,6 @@ public class EntityPropertyArgumentParser implements ArgumentParser<EasCommandSe
             return Collections.emptyList();
         }
 
-        return new ArrayList<>(EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).keySet());
+        return new ArrayList<>(EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).keySet());
     }
 }

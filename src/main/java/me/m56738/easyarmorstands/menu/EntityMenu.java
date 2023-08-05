@@ -36,8 +36,8 @@ public class EntityMenu<T extends Entity> extends InventoryMenu {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void initialize() {
         List<InventorySlot> pending = new ArrayList<>();
-        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity.getClass()).values()) {
-            if (property instanceof ButtonEntityProperty && property.isSupported(entity)) {
+        for (EntityProperty property : EasyArmorStands.getInstance().getEntityPropertyRegistry().getProperties(entity).values()) {
+            if (property instanceof ButtonEntityProperty) {
                 ButtonEntityProperty buttonProperty = (ButtonEntityProperty) property;
                 InventorySlot slot = buttonProperty.createSlot(this);
                 int index = buttonProperty.getSlotIndex();

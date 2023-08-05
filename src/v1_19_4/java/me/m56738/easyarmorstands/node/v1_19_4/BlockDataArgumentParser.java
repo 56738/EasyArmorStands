@@ -26,8 +26,11 @@ public class BlockDataArgumentParser<C> implements ArgumentParser<C, BlockData> 
                 new TypeToken<BlockDataArgumentParser<C>>() {
                 },
                 builder -> builder.to(a -> {
+                    final Object[] args = ctr.getParameterCount() == 1
+                            ? new Object[]{CommandBuildContextSupplier.commandBuildContext()}
+                            : new Object[]{};
                     try {
-                        return (ArgumentType<?>) ctr.newInstance(CommandBuildContextSupplier.commandBuildContext());
+                        return (ArgumentType<?>) ctr.newInstance(args);
                     } catch (final ReflectiveOperationException e) {
                         throw new RuntimeException(e);
                     }
