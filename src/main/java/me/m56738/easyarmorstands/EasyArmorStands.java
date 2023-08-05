@@ -177,7 +177,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         Command.Builder<EasCommandSender> rootBuilder = commandManager.commandBuilder("eas", "easyarmorstands");
 
-        entityPropertyRegistry = new EntityPropertyRegistry(commandManager, rootBuilder);
+        entityPropertyRegistry = new EntityPropertyRegistry();
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> CommandMeta.simple()

@@ -1,10 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.item;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.EnumArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -42,11 +39,6 @@ public class ItemDisplayTransformProperty extends ToggleEntityProperty<ItemDispl
     @Override
     public TypeToken<ItemDisplayTransform> getValueType() {
         return TypeToken.get(ItemDisplayTransform.class);
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, ItemDisplayTransform> getArgumentParser() {
-        return new EnumArgument.EnumParser<>(ItemDisplayTransform.class);
     }
 
     @Override

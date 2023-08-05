@@ -1,19 +1,9 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.compound.ArgumentPair;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.types.tuples.Pair;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import net.kyori.adventure.text.Component;
-import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,39 +34,6 @@ public class DisplayBrightnessProperty implements ResettableEntityProperty<Displ
     @Override
     public @NotNull Class<Display> getEntityType() {
         return Display.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Optional<Display.Brightness>> getArgumentParser() {
-        return ArgumentPair.of(EasyArmorStands.getInstance().getCommandManager(),
-                getName(),
-                Pair.of("block", "sky"),
-                Pair.of(int.class, int.class)
-        ).withMapper(new TypeToken<Optional<Display.Brightness>>() {
-        }, (sender, pair) -> {
-            int sky = pair.getFirst();
-            int block = pair.getSecond();
-            if (sky >= 0 && sky <= 15 && block >= 0 && block <= 15) {
-                return Optional.of(new Display.Brightness(block, sky));
-            } else {
-                return Optional.empty();
-            }
-        }).getParser();
-    }
-
-    @Override
-    public boolean hasDefaultValue() {
-        return true;
-    }
-
-    @Override
-    public @Nullable Optional<Display.Brightness> getDefaultValue(@NonNull CommandContext<EasCommandSender> ctx) {
-        CommandSender sender = ctx.getSender().get();
-        if (sender instanceof Player) {
-            Block block = ((Player) sender).getLocation().getBlock();
-            return Optional.of(new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky()));
-        }
-        return Optional.empty();
     }
 
     @Override

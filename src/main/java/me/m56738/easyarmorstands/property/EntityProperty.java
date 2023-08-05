@@ -1,9 +1,6 @@
 package me.m56738.easyarmorstands.property;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.context.CommandContext;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Entity;
@@ -21,16 +18,6 @@ public interface EntityProperty<E extends Entity, T> {
 
     @NotNull Class<E> getEntityType();
 
-    ArgumentParser<EasCommandSender, T> getArgumentParser();
-
-    default boolean hasDefaultValue() {
-        return false;
-    }
-
-    default @Nullable T getDefaultValue(@NotNull CommandContext<EasCommandSender> ctx) {
-        return null;
-    }
-
     @NotNull Component getDisplayName();
 
     @NotNull Component getValueName(T value);
@@ -41,15 +28,7 @@ public interface EntityProperty<E extends Entity, T> {
 
     @Nullable String getPermission();
 
-    default boolean isCreativeModeRequired() {
-        return false;
-    }
-
     default boolean isSupported(E entity) {
         return true;
-    }
-
-    default boolean performChange(ChangeContext context, E entity, T value) {
-        return context.tryChange(new EntityPropertyChange<>(entity, this, value));
     }
 }

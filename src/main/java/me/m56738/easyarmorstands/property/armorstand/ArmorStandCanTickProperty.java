@@ -1,10 +1,7 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.BooleanArgument;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.EntityProperty;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -41,11 +38,6 @@ public class ArmorStandCanTickProperty implements EntityProperty<ArmorStand, Boo
     @Override
     public @NotNull Class<ArmorStand> getEntityType() {
         return ArmorStand.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Boolean> getArgumentParser() {
-        return new BooleanArgument.BooleanParser<>(true);
     }
 
     @Override

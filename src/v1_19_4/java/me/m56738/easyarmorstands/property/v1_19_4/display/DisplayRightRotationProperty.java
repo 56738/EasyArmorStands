@@ -1,8 +1,6 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
@@ -50,11 +48,6 @@ public class DisplayRightRotationProperty implements ResettableEntityProperty<Di
     @Override
     public @NotNull Class<Display> getEntityType() {
         return Display.class;
-    }
-
-    @Override
-    public ArgumentParser<EasCommandSender, Quaternionfc> getArgumentParser() {
-        return null;
     }
 
     @Override
