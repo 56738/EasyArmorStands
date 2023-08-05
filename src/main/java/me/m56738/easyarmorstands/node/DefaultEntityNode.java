@@ -7,12 +7,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 
-public class DefaultEntityNode extends MenuNode implements EntityNode {
+public class DefaultEntityNode extends EntityMenuNode implements EntityNode {
     private final Session session;
     private final Entity entity;
 
     public DefaultEntityNode(Session session, Entity entity) {
-        super(session, Component.text("Position"));
+        super(session, Component.text("Position"), entity);
         this.session = session;
         this.entity = entity;
         EntityLocationBone positionBone = new EntityLocationBone(session, entity);
@@ -28,15 +28,5 @@ public class DefaultEntityNode extends MenuNode implements EntityNode {
             return true;
         }
         return super.onClick(eyes, target, context);
-    }
-
-    @Override
-    public Entity getEntity() {
-        return entity;
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid() && entity.isValid();
     }
 }

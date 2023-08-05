@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.node.v1_19_4;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.node.EntityMenuNode;
 import me.m56738.easyarmorstands.node.EntityNode;
-import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Display;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class DisplayMenuNode extends MenuNode implements EntityNode {
+public class DisplayMenuNode extends EntityMenuNode implements EntityNode {
     private final Session session;
     private final Display entity;
     private final AxisAlignedBoxParticle boxParticle;
@@ -21,7 +21,7 @@ public class DisplayMenuNode extends MenuNode implements EntityNode {
     private boolean isVisible;
 
     public DisplayMenuNode(Session session, Component name, Display entity) {
-        super(session, name);
+        super(session, name, entity);
         this.session = session;
         this.entity = entity;
         this.boxParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createAxisAlignedBox(session.getWorld());
@@ -90,10 +90,5 @@ public class DisplayMenuNode extends MenuNode implements EntityNode {
     @Override
     public Display getEntity() {
         return entity;
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid() && entity.isValid();
     }
 }
