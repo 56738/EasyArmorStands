@@ -38,6 +38,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentOffset = new Vector3d();
     private final LineParticle axisParticle;
+    private final LineParticle cursorLineParticle;
     private final PointParticle positiveParticle;
     private final PointParticle negativeParticle;
     private double currentLength;
@@ -56,6 +57,9 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         this.cursor = new Cursor3D(session.getPlayer(), session);
         ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
         this.axisParticle = particleCapability.createLine(session.getWorld());
+        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursorLineParticle.setColor(ParticleColor.WHITE);
+        this.cursorLineParticle.setWidth(0.015625);
         this.positiveParticle = particleCapability.createPoint(session.getWorld());
         this.positiveParticle.setBillboard(false);
         this.positiveParticle.setSize(0.125);
@@ -73,8 +77,11 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         initialCursor.set(lookTarget != null ? lookTarget : initialPosition);
         cursor.start(initialCursor);
         currentLength = length;
+
         updateAxisParticle();
+        updateCursorLineParticle();
         session.addParticle(axisParticle);
+        session.addParticle(cursorLineParticle);
     }
 
     @Override
@@ -106,8 +113,10 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         ));
 
         currentLength = Math.max(Math.abs(t), length);
+        initialPosition.fma(t, direction, currentPosition);
 
         updateAxisParticle();
+        updateCursorLineParticle();
 
         session.sendActionBar(Component.text().append(name).append(Component.text(": "))
                 .append(Component.text(Util.SCALE_FORMAT.format(scale))));
@@ -116,6 +125,7 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
     @Override
     public void onExit() {
         session.removeParticle(axisParticle);
+        session.removeParticle(cursorLineParticle);
         cursor.stop();
         super.onExit();
     }
@@ -126,6 +136,10 @@ public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
         axisParticle.setRotation(bone.getRotation());
         axisParticle.setLength(currentLength * 2);
         axisParticle.setColor(color);
+    }
+
+    private void updateCursorLineParticle() {
+        cursorLineParticle.setFromTo(currentPosition, cursor.get());
     }
 
     @Override

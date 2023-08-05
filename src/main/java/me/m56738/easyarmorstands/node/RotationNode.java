@@ -35,6 +35,7 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     private final Vector3d snappedCursor = new Vector3d();
     private final LineParticle axisParticle;
     private final CircleParticle circleParticle;
+    private final LineParticle cursorLineParticle;
     private Vector3dc lookTarget;
     private boolean valid;
     private Double manualValue;
@@ -50,6 +51,9 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
         this.axisParticle = particleCapability.createLine(session.getWorld());
         this.circleParticle = particleCapability.createCircle(session.getWorld());
+        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursorLineParticle.setColor(ParticleColor.WHITE);
+        this.cursorLineParticle.setWidth(0.015625);
     }
 
     @Override
@@ -82,11 +86,15 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         axis.getDirection().rotate(rotation, rotatedAxis);
         this.cursor.start(anchor, initialCursor, rotatedAxis);
         initialCursor.sub(anchor, initialOffset);
+        snappedCursor.set(initialCursor);
         valid = initialOffset.lengthSquared() >= 0.2 * 0.2;
+
         updateCircleParticle(color);
         updateAxisParticle();
+        updateCursorLineParticle();
         session.addParticle(circleParticle);
         session.addParticle(axisParticle);
+        session.addParticle(cursorLineParticle);
     }
 
     @Override
@@ -114,6 +122,7 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
 
         updateCircleParticle(color);
         updateAxisParticle();
+        updateCursorLineParticle();
 
         session.sendActionBar(Component.text().append(getName()).append(Component.text(": "))
                 .append(Component.text(Util.ANGLE_FORMAT.format(degrees))));
@@ -123,6 +132,7 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
     public void onExit() {
         session.removeParticle(circleParticle);
         session.removeParticle(axisParticle);
+        session.removeParticle(cursorLineParticle);
         cursor.stop();
         super.onExit();
     }
@@ -185,6 +195,10 @@ public abstract class RotationNode extends EditNode implements Button, ValueNode
         axisParticle.setAxis(axis);
         axisParticle.setColor(color);
         axisParticle.setLength(2 * length * getScale());
+    }
+
+    private void updateCursorLineParticle() {
+        cursorLineParticle.setFromTo(anchor, snappedCursor);
     }
 
     @Override

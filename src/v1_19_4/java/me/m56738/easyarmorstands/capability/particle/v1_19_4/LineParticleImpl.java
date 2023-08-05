@@ -22,6 +22,7 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     private Axis axis = Axis.Z;
     private double width = 0.0625;
     private double length;
+    private double offset;
 
     public LineParticleImpl(World world, JOMLMapper mapper) {
         super(world);
@@ -96,6 +97,19 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     }
 
     @Override
+    public double getOffset() {
+        return offset;
+    }
+
+    @Override
+    public void setOffset(double offset) {
+        if (this.offset != offset) {
+            this.offset = offset;
+            markDirty();
+        }
+    }
+
+    @Override
     protected void update(BlockDisplay entity) {
         super.update(entity);
         float mainScale = (float) length;
@@ -114,8 +128,11 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
             default:
                 throw new IllegalArgumentException();
         }
+        Vector3f translation = scale.mul(-0.5f, new Vector3f());
+        translation.fma((float) offset, axis.getDirection().get(new Vector3f()));
+        translation.rotate(rotation);
         entity.setTransformation(mapper.getTransformation(
-                scale.mul(-0.5f, new Vector3f()).rotate(rotation),
+                translation,
                 rotation,
                 scale,
                 new Quaternionf()));

@@ -14,6 +14,7 @@ public class LineDustParticle extends DustParticle implements LineParticle {
     private final Quaterniond rotation = new Quaterniond();
     private Axis axis = Axis.Z;
     private double length;
+    private double offset;
 
     protected LineDustParticle(DustParticleCapability capability) {
         super(capability);
@@ -23,8 +24,8 @@ public class LineDustParticle extends DustParticle implements LineParticle {
     public void update() {
         Color color = Color.fromRGB(this.color.red(), this.color.green(), this.color.blue());
         Vector3d direction = axis.getDirection().rotate(rotation, new Vector3d());
-        Vector3d start = center.fma(-length / 2, direction, new Vector3d());
-        Vector3d end = center.fma(length / 2, direction, new Vector3d());
+        Vector3d start = center.fma(offset - length / 2, direction, new Vector3d());
+        Vector3d end = center.fma(offset + length / 2, direction, new Vector3d());
         DustParticle.showLine(players, capability,
                 start.x(),
                 start.y(),
@@ -84,5 +85,15 @@ public class LineDustParticle extends DustParticle implements LineParticle {
     @Override
     public void setLength(double length) {
         this.length = length;
+    }
+
+    @Override
+    public double getOffset() {
+        return offset;
+    }
+
+    @Override
+    public void setOffset(double offset) {
+        this.offset = offset;
     }
 }

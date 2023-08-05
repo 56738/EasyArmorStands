@@ -38,6 +38,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     private final Vector3d initialCursor = new Vector3d();
     private final Vector3d offset = new Vector3d();
     private final LineParticle axisParticle;
+    private final LineParticle cursorLineParticle;
     private double initialOffset;
     private Vector3d lookTarget;
     private Double manualValue;
@@ -55,6 +56,9 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         this.cursor = new Cursor3D(session.getPlayer(), session);
         this.axisParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.axisParticle.setColor(color);
+        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursorLineParticle.setColor(ParticleColor.WHITE);
+        this.cursorLineParticle.setWidth(0.015625);
     }
 
     public double getLength() {
@@ -72,10 +76,15 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         manualValue = null;
         refreshDirection();
         initial.set(bone.getPosition());
+        current.set(initial);
         initialOffset = initial.dot(direction);
         initialCursor.set(lookTarget != null ? lookTarget : initial);
         cursor.start(initialCursor);
+
+        updateAxisParticle(color);
+        updateCursorLineParticle();
         session.addParticle(axisParticle);
+        session.addParticle(cursorLineParticle);
     }
 
     @Override
@@ -107,12 +116,8 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         current.fma(-length, direction, negativeEnd);
         current.fma(length, direction, positiveEnd);
 
-        updatePreview(false);
-
-        // TODO Bring this back?
-        // Line from cursor to closest point on the axis
-//        current.add(initialCursor).sub(initial);
-//        session.showLine(current, cursor.get(), NamedTextColor.WHITE, false);
+        updateAxisParticle(color);
+        updateCursorLineParticle();
 
         TextComponent value;
         if (rotationProvider != null) {
@@ -126,6 +131,7 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
     @Override
     public void onExit() {
         session.removeParticle(axisParticle);
+        session.removeParticle(cursorLineParticle);
         cursor.stop();
         super.onExit();
     }
@@ -176,6 +182,10 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
 
     @Override
     public void updatePreview(boolean focused) {
+        updateAxisParticle(focused ? ParticleColor.YELLOW : color);
+    }
+
+    private void updateAxisParticle(ParticleColor color) {
         axisParticle.setCenter(bone.getPosition());
         if (rotationProvider != null) {
             axisParticle.setRotation(rotationProvider.getRotation());
@@ -184,7 +194,13 @@ public class MoveNode extends EditNode implements Button, ValueNode<Double> {
         }
         axisParticle.setAxis(axis);
         axisParticle.setLength(length * 2);
-        axisParticle.setColor(focused ? ParticleColor.YELLOW : color);
+        axisParticle.setColor(color);
+    }
+
+    private void updateCursorLineParticle() {
+        cursorLineParticle.setFromTo(
+                current.add(initialCursor).sub(initial),
+                cursor.get());
     }
 
     @Override
