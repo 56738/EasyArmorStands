@@ -1,3 +1,3 @@
 me.m56738.easyarmorstands.capability.item.v1_13.ItemCapabilityProvider
-me.m56738.easyarmorstands.capability.particle.v1_13.ParticleCapabilityProvider
+me.m56738.easyarmorstands.capability.particle.v1_13.DustParticleCapabilityProvider
 me.m56738.easyarmorstands.capability.persistence.v1_13.PersistenceCapabilityProvider

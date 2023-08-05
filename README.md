@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 **Supported Minecraft versions:** 1.8.8 to 1.20.1
 
-Using [Paper](https://papermc.io/) is highly recommended. Some features like RGB name tags only work on Paper.
+Using [Paper](https://papermc.io/) is highly recommended. Some features only work on Paper.
 
 # Usage
 

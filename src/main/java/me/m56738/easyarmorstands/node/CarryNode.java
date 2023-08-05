@@ -65,6 +65,12 @@ public class CarryNode extends EditNode {
     }
 
     @Override
+    public void onExit() {
+        cursor.stop();
+        super.onExit();
+    }
+
+    @Override
     public boolean isValid() {
         return super.isValid() && bone.isValid();
     }

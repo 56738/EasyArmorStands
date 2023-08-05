@@ -4,13 +4,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 
 public class CapabilityLoader {
@@ -41,10 +35,8 @@ public class CapabilityLoader {
     }
 
     public void load() {
-        for (Map.Entry<Class<?>, Entry> entry : capabilities.entrySet()) {
-            entry.getValue().load(plugin);
-        }
         for (Entry entry : capabilities.values()) {
+            entry.load(plugin);
             if (entry.instance == null && !entry.capability.optional()) {
                 throw new IllegalStateException("Required capability not supported: " + entry.capability.name());
             }
@@ -76,8 +68,7 @@ public class CapabilityLoader {
     public static class Entry {
         private final Class<?> type;
         private final Capability capability;
-        private final TreeSet<CapabilityProvider<?>> providers =
-                new TreeSet<>(Comparator.comparing(CapabilityProvider::getPriority));
+        private final EnumMap<Priority, Set<CapabilityProvider<?>>> providers = new EnumMap<>(Priority.class);
         private CapabilityProvider<?> provider;
         private Object instance;
 
@@ -86,6 +77,9 @@ public class CapabilityLoader {
             this.capability = type.getAnnotation(Capability.class);
             if (this.capability == null) {
                 throw new RuntimeException("Capability is not annotated: " + type.getName());
+            }
+            for (Priority priority : Priority.values()) {
+                providers.put(priority, new HashSet<>());
             }
         }
 
@@ -106,20 +100,22 @@ public class CapabilityLoader {
         }
 
         public synchronized void add(CapabilityProvider<?> provider) {
-            providers.add(provider);
+            providers.get(provider.getPriority()).add(provider);
         }
 
         public synchronized void load(Plugin plugin) {
             instance = null;
-            for (CapabilityProvider<?> provider : providers) {
-                try {
-                    if (provider.isSupported()) {
-                        this.provider = provider;
-                        this.instance = provider.create(plugin);
-                        return;
+            for (Priority priority : Priority.values()) {
+                for (CapabilityProvider<?> provider : providers.get(priority)) {
+                    try {
+                        if (provider.isSupported()) {
+                            this.provider = provider;
+                            this.instance = provider.create(plugin);
+                            return;
+                        }
+                    } catch (Throwable e) {
+                        plugin.getLogger().log(Level.SEVERE, "Failed to process " + provider.getClass().getName(), e);
                     }
-                } catch (Throwable e) {
-                    plugin.getLogger().log(Level.SEVERE, "Failed to process " + provider.getClass().getName(), e);
                 }
             }
         }

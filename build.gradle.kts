@@ -139,7 +139,7 @@ sourceSets {
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
-    "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.27"))
+    "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.30"))
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core") {
         exclude("net.kyori", "adventure-api")
     }

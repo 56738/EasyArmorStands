@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
@@ -13,12 +14,12 @@ import me.m56738.easyarmorstands.event.SessionEntityMenuBuildEvent;
 import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlatePropertyType;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentPropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -46,11 +47,11 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(session, entity, part);
 
             MenuNode localNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (local)")));
-            localNode.addMoveButtons(session, positionBone, poseBone, 3, true);
+            localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
             MenuNode globalNode = new MenuNode(session, part.getDisplayName().append(Component.text(" (global)")));
-            globalNode.addPositionButtons(session, positionBone, 3, true);
+            globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
             localNode.setNextNode(globalNode);
@@ -65,10 +66,10 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
         MenuNode positionNode = new MenuNode(session, Component.text("Position"));
         positionNode.addYawButton(session, positionBone, 1);
-        positionNode.addPositionButtons(session, positionBone, 3, true);
+        positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
-        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), NamedTextColor.GOLD);
+        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);
         addButton(this.positionButton);
     }
 
@@ -104,7 +105,10 @@ public class ArmorStandRootNode extends MenuNode implements EntityNode {
 
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
-        if (glowCapability != null) {
+        ParticleCapability particleCapability = plugin.getCapability(ParticleCapability.class);
+        if (glowCapability != null && !particleCapability.isVisibleThroughWalls()) {
+            // Entity glowing is supported and particles are not visible through walls
+            // Spawn a glowing skeleton instead
             SpawnCapability spawnCapability = plugin.getCapability(SpawnCapability.class);
             skeleton = spawnCapability.spawnEntity(entity.getLocation(), ArmorStand.class, e -> {
                 e.setVisible(false);

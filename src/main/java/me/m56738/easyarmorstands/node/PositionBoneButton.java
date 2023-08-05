@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
+import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.util.RGBLike;
 import org.joml.Vector3dc;
 
 public class PositionBoneButton extends SimpleButton implements NodeFactory {
@@ -11,11 +12,22 @@ public class PositionBoneButton extends SimpleButton implements NodeFactory {
     private final Node node;
     private final Component name;
 
-    public PositionBoneButton(Session session, PositionBone bone, Node node, Component name, RGBLike color) {
+    public PositionBoneButton(Session session, PositionBone bone, Node node, Component name, ParticleColor color) {
         super(session, color);
         this.bone = bone;
         this.node = node;
         this.name = name;
+        if (bone instanceof RotationProvider) {
+            particle.setBillboard(false);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (bone instanceof RotationProvider) {
+            particle.setRotation(((RotationProvider) bone).getRotation());
+        }
     }
 
     @Override

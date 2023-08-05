@@ -18,6 +18,16 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class TextDisplayAlignmentProperty extends ToggleEntityProperty<TextDisplay, TextDisplay.TextAlignment> {
+    public static boolean isSupported() {
+        try {
+            TextDisplay.class.getMethod("getAlignment");
+            TextDisplay.class.getMethod("setAlignment", TextDisplay.TextAlignment.class);
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     @Override
     public TextDisplay.TextAlignment getValue(TextDisplay entity) {
         return entity.getAlignment();

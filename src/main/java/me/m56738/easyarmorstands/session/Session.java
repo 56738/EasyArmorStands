@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
@@ -17,6 +17,7 @@ import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
@@ -29,6 +30,7 @@ import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,10 +48,12 @@ import org.joml.Vector3dc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public final class Session implements ChangeContext, ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -58,9 +62,10 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     private final EntitySelectionNode rootNode = new EntitySelectionNode(this, Component.text("Select an entity"));
     private final Player player;
     private final Audience audience;
-    private final ParticleCapability particleCapability;
+    private final DustParticleCapability dustParticleCapability;
     private final Map<Property<?>, Object> originalValues = new HashMap<>();
     private final Map<Property<?>, Object> pendingValues = new HashMap<>();
+    private final Set<Particle> particles = new HashSet<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -68,7 +73,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     public Session(Player player) {
         this.player = player;
         this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
-        this.particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
+        this.dustParticleCapability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
         this.rootNode.setRoot(true);
         pushNode(this.rootNode);
     }
@@ -210,6 +215,10 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
             }
         }
 
+        for (Particle particle : particles) {
+            particle.update();
+        }
+
         return player.isValid() && isHoldingTool();
     }
 
@@ -237,12 +246,20 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         nodeStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
+        for (Particle particle : particles) {
+            particle.hide(player);
+        }
+        particles.clear();
         commit();
     }
 
     @Override
     public Player getPlayer() {
         return player;
+    }
+
+    public World getWorld() {
+        return player.getWorld();
     }
 
     @Override
@@ -291,18 +308,34 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return audience;
     }
 
+    public void addParticle(Particle particle) {
+        if (particles.add(particle)) {
+            particle.show(player);
+        }
+    }
+
+    public void removeParticle(Particle particle) {
+        if (particles.remove(particle)) {
+            particle.hide(player);
+        }
+    }
+
+    @Deprecated
     private int getParticleCount(double length) {
-        return Math.min((int) Math.round(length * particleCapability.getDensity()), 100);
+        return Math.min((int) Math.round(length * dustParticleCapability.getDensity()), 100);
     }
 
+    @Deprecated
     public void showPoint(Vector3dc position, Color color) {
-        particleCapability.spawnParticle(player, position.x(), position.y(), position.z(), color);
+        dustParticleCapability.spawnParticle(player, position.x(), position.y(), position.z(), color);
     }
 
+    @Deprecated
     public void showPoint(Vector3dc position, RGBLike color) {
         showPoint(position, Util.toColor(color));
     }
 
+    @Deprecated
     private void showLine(double x, double y, double z,
                           double dx, double dy, double dz,
                           Color color, boolean includeEnds, int count) {
@@ -313,7 +346,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         int max = includeEnds ? count : count - 1;
         for (int i = min; i <= max; i++) {
             double t = i / (double) count;
-            particleCapability.spawnParticle(player,
+            dustParticleCapability.spawnParticle(player,
                     x + t * dx,
                     y + t * dy,
                     z + t * dz,
@@ -321,6 +354,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         }
     }
 
+    @Deprecated
     public void showLine(Vector3dc from, Vector3dc to, Color color, boolean includeEnds) {
         double length = from.distance(to);
         double x = from.x();
@@ -332,10 +366,12 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         showLine(x, y, z, dx, dy, dz, color, includeEnds, getParticleCount(length));
     }
 
+    @Deprecated
     public void showLine(Vector3dc start, Vector3dc end, RGBLike color, boolean includeEnds) {
         showLine(start, end, Util.toColor(color), includeEnds);
     }
 
+    @Deprecated
     public void showCircle(Vector3dc center, Vector3dc axis, Color color, double radius) {
         double circumference = 2 * Math.PI * radius;
         int count = getParticleCount(circumference);
@@ -346,7 +382,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         double angle = 2 * Math.PI / count;
         for (int i = 0; i < count; i++) {
             offset.rotateAxis(angle, axisX, axisY, axisZ);
-            particleCapability.spawnParticle(player,
+            dustParticleCapability.spawnParticle(player,
                     center.x() + offset.x,
                     center.y() + offset.y,
                     center.z() + offset.z,
@@ -354,10 +390,12 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         }
     }
 
+    @Deprecated
     public void showCircle(Vector3dc center, Vector3dc axis, RGBLike color, double radius) {
         showCircle(center, axis, Util.toColor(color), radius);
     }
 
+    @Deprecated
     public void showAxisAlignedBox(Vector3dc center, Vector3dc size, Color color) {
         double x = center.x();
         double y = center.y();
@@ -385,6 +423,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         showLine(x + dx, y + dy, z - dz, 0, 0, sz, color, false, cz);
     }
 
+    @Deprecated
     public void showAxisAlignedBox(Vector3dc center, Vector3dc size, RGBLike color) {
         showAxisAlignedBox(center, size, Util.toColor(color));
     }
