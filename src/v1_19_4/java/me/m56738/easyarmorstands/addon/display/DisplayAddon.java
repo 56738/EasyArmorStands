@@ -85,7 +85,7 @@ public class DisplayAddon implements Addon {
         plugin.getEntityPropertyRegistry().register(displayBrightnessProperty);
         displayWidthProperty = new DisplayWidthProperty();
         plugin.getEntityPropertyRegistry().register(displayWidthProperty);
-        displayHeightProperty = new DisplayHeightProperty(this);
+        displayHeightProperty = new DisplayHeightProperty();
         plugin.getEntityPropertyRegistry().register(displayHeightProperty);
         itemDisplayItemProperty = new ItemDisplayItemProperty();
         plugin.getEntityPropertyRegistry().register(itemDisplayItemProperty);

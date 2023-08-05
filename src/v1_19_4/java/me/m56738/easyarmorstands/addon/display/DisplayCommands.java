@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.addon.display;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.Flag;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
@@ -14,6 +15,9 @@ import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
+import me.m56738.easyarmorstands.property.EntityPropertyChange;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
@@ -123,6 +127,89 @@ public class DisplayCommands {
             sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("box width <width>")
+    @CommandPermission("easyarmorstands.property.display.size")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setBoxWidth(Audience sender, Session session, Display entity, @Argument("width") float value) {
+        if (session.tryChange(entity, addon.getDisplayWidthProperty(), value)) {
+            if (entity.getDisplayHeight() == 0f) {
+                session.tryChange(entity, addon.getDisplayHeightProperty(), 1f);
+            }
+            sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
+                    .append(Component.text(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
+        }
+    }
+
+    @CommandMethod("box height <height>")
+    @CommandPermission("easyarmorstands.property.display.size")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void setBoxHeight(Audience sender, Session session, Display entity,
+                             @Argument("height") float value,
+                             @Flag("keep-position") boolean keepPosition) {
+        float oldValue = entity.getDisplayHeight();
+        if (session.tryChange(entity, addon.getDisplayHeightProperty(), value)) {
+            if (entity.getDisplayWidth() == 0f) {
+                session.tryChange(entity, addon.getDisplayWidthProperty(), 1f);
+            }
+            if (!keepPosition) {
+                adjustOffsetForBox(session, entity, oldValue, value);
+            }
+            sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
+                    .append(Component.text(value)));
+        } else {
+            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
+        }
+    }
+
+    private void adjustOffsetForBox(Session session, Display entity, float oldValue, float value) {
+        // Adjust the entity position so the bounding box center stays in the same place
+
+        DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
+        EntityLocationProperty entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
+
+        float delta = (value - oldValue) / 2;
+
+        List<EntityPropertyChange<?, ?>> changes = new ArrayList<>(2);
+
+        // Move down using location
+        Location location = entityLocationProperty.getValue(entity);
+        Location newLocation = location.clone();
+        newLocation.setY(location.getY() - delta);
+        changes.add(new EntityPropertyChange<>(entity, entityLocationProperty, newLocation));
+
+        // Move up using offset
+        Vector3f translation = new Vector3f(displayTranslationProperty.getValue(entity));
+        translation.y += delta;
+        changes.add(new EntityPropertyChange<>(entity, displayTranslationProperty, translation));
+
+        // Ignore the return value, failure is allowed
+        session.tryChange(changes);
+    }
+
+    @CommandMethod("box remove")
+    @CommandPermission("easyarmorstands.property.display.size")
+    @RequireSession
+    @RequireEntity(Display.class)
+    public void removeBox(Audience sender, Session session, Display entity) {
+        int success = 0;
+        if (session.tryChange(entity, addon.getDisplayWidthProperty(), 0f)) {
+            success++;
+        }
+        if (session.tryChange(entity, addon.getDisplayHeightProperty(), 0f)) {
+            success++;
+        }
+
+        if (success > 0) {
+            sender.sendMessage(Component.text("Removed the bounding box", NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
         }
     }
 
