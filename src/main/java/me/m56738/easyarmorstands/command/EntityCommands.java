@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.command;
 
 import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import me.m56738.easyarmorstands.EasyArmorStands;
@@ -24,6 +25,7 @@ public class EntityCommands {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @CommandMethod("info [property]")
     @CommandPermission("easyarmorstands.info")
+    @CommandDescription("Displays entity properties")
     @RequireEntity
     public void info(EasCommandSender sender, Entity entity, @Argument("property") EntityProperty selectedProperty) {
         if (selectedProperty != null) {
