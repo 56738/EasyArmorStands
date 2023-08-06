@@ -1,7 +1,10 @@
 package me.m56738.easyarmorstands.property;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
+@Deprecated
 public abstract class SimpleEntityProperty<T> implements Property<T> {
     private final EntityPropertyType<T> type;
     private final Entity entity;
@@ -12,17 +15,22 @@ public abstract class SimpleEntityProperty<T> implements Property<T> {
     }
 
     @Override
-    public final PropertyType<T> getType() {
-        return type;
-    }
-
-    @Override
     public boolean isValid() {
         return entity.isValid();
     }
 
     @Override
-    public final PropertyReference<T> asReference() {
-        return new EntityPropertyReference<>(entity.getUniqueId(), type);
+    public @Nullable String getPermission() {
+        return type.getPermission();
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return type.getDisplayName();
+    }
+
+    @Override
+    public Component getValueComponent(T value) {
+        return type.getValueComponent(value);
     }
 }

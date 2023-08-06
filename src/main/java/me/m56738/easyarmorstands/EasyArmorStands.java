@@ -17,7 +17,6 @@ import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
-import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.command.EntityCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
@@ -45,10 +44,6 @@ import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
 import me.m56738.easyarmorstands.property.EntityPropertyTypeRegistry;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.ResettableEntityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlatePropertyType;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
@@ -95,7 +90,6 @@ public class EasyArmorStands extends JavaPlugin {
     private EntityCustomNameProperty entityCustomNameProperty;
     private EntityCustomNameVisibleProperty entityCustomNameVisibleProperty;
     private EntityLocationProperty entityLocationProperty;
-    private ArmorStandCanTickProperty armorStandCanTickProperty;
 
     public static EasyArmorStands getInstance() {
         return instance;
@@ -196,15 +190,7 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new EntityCommands());
 
-        entityPropertyRegistry.register(new ArmorStandArmsProperty());
-        entityPropertyTypeRegistry.register(ArmorStandBasePlatePropertyType.INSTANCE);
         entityPropertyRegistry.register(new ArmorStandSizeProperty());
-        TickCapability tickCapability = this.getCapability(TickCapability.class);
-        if (tickCapability != null) {
-            armorStandCanTickProperty = new ArmorStandCanTickProperty(tickCapability);
-            entityPropertyRegistry.register(armorStandCanTickProperty);
-        }
-        entityPropertyRegistry.register(new ArmorStandGravityProperty(armorStandCanTickProperty));
         entityPropertyRegistry.register(new ArmorStandVisibilityProperty());
         LockCapability lockCapability = this.getCapability(LockCapability.class);
         if (lockCapability != null) {
@@ -293,10 +279,6 @@ public class EasyArmorStands extends JavaPlugin {
 
     public EntityLocationProperty getEntityLocationProperty() {
         return entityLocationProperty;
-    }
-
-    public ArmorStandCanTickProperty getArmorStandCanTickProperty() {
-        return armorStandCanTickProperty;
     }
 
     public ArmorStandPoseProperty getArmorStandPoseProperty(ArmorStandPart part) {

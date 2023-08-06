@@ -20,5 +20,6 @@ public interface Action {
      * @param oldId The UUID of the entity which was replaced.
      * @param newId The UUID of the replacement.
      */
+    @Deprecated
     void onEntityReplaced(UUID oldId, UUID newId);
 }

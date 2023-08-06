@@ -20,7 +20,7 @@ public interface ChangeContext {
         }
 
         Player player = getPlayer();
-        if (!player.hasPermission(change.getProperty().getType().getPermission())) {
+        if (!player.hasPermission(change.getProperty().getPermission())) {
             return false;
         }
 

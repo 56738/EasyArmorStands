@@ -9,7 +9,6 @@ import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
 import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.PropertyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
@@ -22,6 +21,7 @@ import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyChange;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -158,7 +158,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
             Object oldValue = originalValues.get(property);
             Object value = entry.getValue();
             if (!Objects.equals(oldValue, value)) {
-                actions.add(new PropertyAction(property, oldValue, value));
+                actions.add(property.createChangeAction(oldValue, value));
             }
         }
         EasyArmorStands.getInstance().getHistory(player).push(actions);
@@ -468,6 +468,16 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         SessionSelectEntityEvent event = new SessionSelectEntityEvent(this, entity);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
+    }
+
+    public <T extends Property<?>> T findProperty(Key<T> key) {
+        for (Node node : nodeStack) {
+            T property = node.properties().get(key);
+            if (property != null) {
+                return property;
+            }
+        }
+        return null;
     }
 
     private static class ChangeKey<E extends Entity, T> {

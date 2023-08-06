@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.property.ButtonProperty;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
@@ -30,7 +29,7 @@ public class ButtonPropertySlot implements MenuSlot {
             return;
         }
 
-        String permission = property.getType().getPermission();
+        String permission = property.getPermission();
         if (permission != null && !session.getPlayer().hasPermission(permission)) {
             session.sendMessage(Component.text("You don't have permission to edit this property.", NamedTextColor.RED));
             return;

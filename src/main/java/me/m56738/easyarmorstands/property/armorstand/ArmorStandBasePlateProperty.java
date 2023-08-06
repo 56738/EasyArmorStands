@@ -14,39 +14,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class ArmorStandArmsProperty implements BooleanToggleProperty {
-    public static final Key<ArmorStandArmsProperty> KEY = Key.of(ArmorStandArmsProperty.class);
+public class ArmorStandBasePlateProperty implements BooleanToggleProperty {
+    public static final Key<ArmorStandBasePlateProperty> KEY = Key.of(ArmorStandBasePlateProperty.class);
     private final ArmorStand entity;
 
-    public ArmorStandArmsProperty(ArmorStand entity) {
+    public ArmorStandBasePlateProperty(ArmorStand entity) {
         this.entity = entity;
     }
 
     @Override
     public Boolean getValue() {
-        return entity.hasArms();
+        return entity.hasBasePlate();
     }
 
     @Override
     public void setValue(Boolean value) {
-        entity.setArms(value);
-    }
-
-    @Override
-    public Action createChangeAction(Boolean oldValue, Boolean value) {
-        return new EntityPropertyAction<>(entity, ArmorStandArmsProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
+        entity.setBasePlate(value);
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.text("arms");
-    }
-
-    @Override
-    public @NotNull Component getValueComponent(Boolean value) {
-        return value
-                ? Component.text("has arms", NamedTextColor.GREEN)
-                : Component.text("has no arms", NamedTextColor.RED);
+        return Component.text("base plate");
     }
 
     @Override
@@ -55,22 +43,27 @@ public class ArmorStandArmsProperty implements BooleanToggleProperty {
     }
 
     @Override
+    public Action createChangeAction(Boolean oldValue, Boolean value) {
+        return new EntityPropertyAction<>(entity, ArmorStandBasePlateProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
+    }
+
+    @Override
     public String getPermission() {
-        return "easyarmorstands.property.armorstand.arms";
+        return "easyarmorstands.property.armorstand.baseplate";
     }
 
     @Override
     public ItemStack createItem() {
         return Util.createItem(
-                ItemType.STICK,
-                Component.text("Toggle arms", NamedTextColor.BLUE),
+                ItemType.STONE_SLAB,
+                Component.text("Toggle base plate", NamedTextColor.BLUE),
                 Arrays.asList(
                         Component.text("Currently ", NamedTextColor.GRAY)
                                 .append(getValueComponent(getValue()))
                                 .append(Component.text(".")),
-                        Component.text("Changes whether the arms", NamedTextColor.GRAY),
-                        Component.text("of the armor stand are", NamedTextColor.GRAY),
-                        Component.text("visible.", NamedTextColor.GRAY)
+                        Component.text("Changes whether the base", NamedTextColor.GRAY),
+                        Component.text("plate of the armor stand", NamedTextColor.GRAY),
+                        Component.text("is visible.", NamedTextColor.GRAY)
                 )
         );
     }

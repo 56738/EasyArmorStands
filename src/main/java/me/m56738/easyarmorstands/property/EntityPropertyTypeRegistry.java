@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class EntityPropertyTypeRegistry {
     private final Set<EntityPropertyType<?>> types = new HashSet<>();
     private final Set<EntityPropertyType<?>> view = Collections.unmodifiableSet(types);

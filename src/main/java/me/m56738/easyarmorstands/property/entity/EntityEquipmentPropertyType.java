@@ -3,6 +3,8 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.EntityPropertyType;
@@ -92,10 +94,12 @@ public class EntityEquipmentPropertyType implements EntityPropertyType<ItemStack
 
     private class Bound extends SimpleEntityProperty<ItemStack> {
         private final EntityEquipment equipment;
+        private final LivingEntity entity;
 
         private Bound(LivingEntity entity) {
             super(EntityEquipmentPropertyType.this, entity);
             this.equipment = entity.getEquipment();
+            this.entity = entity;
         }
 
         @Override
@@ -106,6 +110,11 @@ public class EntityEquipmentPropertyType implements EntityPropertyType<ItemStack
         @Override
         public void setValue(ItemStack value) {
             equipmentCapability.setItem(equipment, equipmentSlot, value);
+        }
+
+        @Override
+        public Action createChangeAction(ItemStack oldValue, ItemStack value) {
+            return new EntityPropertyAction<>(entity, Bound::new, oldValue, value, Component.text("Changed ").append(displayName));
         }
     }
 }

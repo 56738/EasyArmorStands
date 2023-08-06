@@ -4,6 +4,7 @@ import io.leangen.geantyref.TypeToken;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public abstract class BooleanEntityProperty<E extends Entity> extends ToggleEntityProperty<E, Boolean> {
     @Override
     public TypeToken<Boolean> getValueType() {

@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands.property.v1_19_4.display.item;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.EntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.SimpleEntityProperty;
@@ -59,6 +61,11 @@ public class ItemDisplayItemPropertyType implements EntityPropertyType<ItemStack
         @Override
         public void setValue(ItemStack value) {
             entity.setItemStack(value);
+        }
+
+        @Override
+        public Action createChangeAction(ItemStack oldValue, ItemStack value) {
+            return new EntityPropertyAction<>(entity, Bound::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
         }
     }
 }

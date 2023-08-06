@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 public interface LegacyEntityPropertyType<E extends Entity, T> extends EntityPropertyType<T>, EntityPropertyAccessor<E, T> {
     @Override
     default Property<T> bind(Entity entity) {
+        if (entity == null) {
+            return null;
+        }
         try {
             return new EntityPropertyBinding<>(this, getEntityType().cast(entity), this);
         } catch (ClassCastException e) {

@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
+@Deprecated
 public abstract class ToggleEntityProperty<E extends Entity, T> implements ButtonEntityProperty<E, T> {
     public abstract T getNextValue(E entity);
 

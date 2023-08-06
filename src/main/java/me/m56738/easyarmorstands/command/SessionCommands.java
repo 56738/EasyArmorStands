@@ -308,19 +308,14 @@ public class SessionCommands {
     @CommandDescription("Toggle whether the selected armor stand should be ticked")
     @RequireSession
     @RequireEntity(ArmorStand.class)
-    public void setCanTick(EasCommandSender sender, Session session, ArmorStand entity, @Argument("value") boolean canTick) {
-        ArmorStandCanTickProperty property = EasyArmorStands.getInstance().getArmorStandCanTickProperty();
-        if (property == null) {
-            sender.sendMessage(Component.text("Armor stand ticking cannot be disabled on this server", NamedTextColor.RED));
-            return;
-        }
-        if (!session.tryChange(property.bind(entity), canTick)) {
+    public void setCanTick(EasCommandSender sender, Session session, ArmorStandCanTickProperty property, @Argument("value") boolean canTick) {
+        if (!session.tryChange(property, canTick)) {
             sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
             return;
         }
         session.commit();
         sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
-                .append(property.getValueName(canTick)));
+                .append(property.getValueComponent(canTick)));
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

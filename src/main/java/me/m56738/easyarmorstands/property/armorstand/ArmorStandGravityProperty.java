@@ -1,8 +1,12 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.property.BooleanEntityProperty;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.capability.tick.TickCapability;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.BooleanToggleProperty;
+import me.m56738.easyarmorstands.property.ChangeContext;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -15,31 +19,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand> {
+public class ArmorStandGravityProperty implements BooleanToggleProperty {
+    public static final Key<ArmorStandGravityProperty> KEY = Key.of(ArmorStandGravityProperty.class);
+    private final ArmorStand entity;
+    private final @Nullable TickCapability tickCapability;
     private final @Nullable ArmorStandCanTickProperty canTickProperty;
 
-    public ArmorStandGravityProperty(@Nullable ArmorStandCanTickProperty canTickProperty) {
-        this.canTickProperty = canTickProperty;
+    public ArmorStandGravityProperty(ArmorStand entity, @Nullable TickCapability tickCapability) {
+        this.entity = entity;
+        this.tickCapability = tickCapability;
+        this.canTickProperty = tickCapability != null ? new ArmorStandCanTickProperty(entity, tickCapability) : null;
     }
 
     @Override
-    public Boolean getValue(ArmorStand entity) {
+    public Boolean getValue() {
         return entity.hasGravity();
     }
 
     @Override
-    public void setValue(ArmorStand entity, Boolean value) {
+    public void setValue(Boolean value) {
         entity.setGravity(value);
     }
 
     @Override
-    public @NotNull String getName() {
-        return "gravity";
-    }
-
-    @Override
-    public @NotNull Class<ArmorStand> getEntityType() {
-        return ArmorStand.class;
+    public Action createChangeAction(Boolean oldValue, Boolean value) {
+        return new EntityPropertyAction<>(entity, e -> new ArmorStandGravityProperty(e, tickCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -48,10 +52,15 @@ public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand>
     }
 
     @Override
-    public @NotNull Component getValueName(Boolean value) {
+    public @NotNull Component getValueComponent(Boolean value) {
         return value
                 ? Component.text("enabled", NamedTextColor.GREEN)
                 : Component.text("static", NamedTextColor.RED);
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override
@@ -60,10 +69,10 @@ public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand>
     }
 
     @Override
-    public ItemStack createToggleButton(ArmorStand entity) {
+    public ItemStack createItem() {
         List<Component> description = Arrays.asList(
                 Component.text("Currently ", NamedTextColor.GRAY)
-                        .append(canTickProperty != null && !canTickProperty.getValue(entity)
+                        .append(canTickProperty != null && !canTickProperty.getValue()
                                 ? Component.text("frozen", NamedTextColor.GOLD)
                                 : entity.hasGravity()
                                 ? Component.text("has gravity", NamedTextColor.GREEN)
@@ -73,7 +82,7 @@ public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand>
                 Component.text("armor stand will fall", NamedTextColor.GRAY),
                 Component.text("due to gravity.", NamedTextColor.GRAY)
         );
-        if (canTickProperty != null && entity.hasGravity() && !canTickProperty.getValue(entity)) {
+        if (canTickProperty != null && entity.hasGravity() && !canTickProperty.getValue()) {
             description = new ArrayList<>(description);
             description.add(Component.text("Gravity is enabled but", NamedTextColor.GOLD));
             description.add(Component.text("armor stand ticking is", NamedTextColor.GOLD));
@@ -88,14 +97,11 @@ public class ArmorStandGravityProperty extends BooleanEntityProperty<ArmorStand>
     }
 
     @Override
-    public void toggle(Session session, ArmorStand entity) {
-        boolean gravity = !entity.hasGravity();
-        if (gravity && canTickProperty != null && !canTickProperty.getValue(entity) &&
-                session.getPlayer().hasPermission(canTickProperty.getPermission())) {
-            // Attempt to enable ticking when enabling gravity
-            session.tryChange(canTickProperty.bind(entity), true);
+    public void onClick(ChangeContext context) {
+        boolean value = getNextValue();
+        if (value && canTickProperty != null && !canTickProperty.getValue()) {
+            context.tryChange(canTickProperty, true);
         }
-        session.tryChange(bind(entity), gravity);
-        session.commit();
+        context.tryChange(this, value);
     }
 }

@@ -15,7 +15,12 @@ import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
 import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlatePropertyType;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.PropertyRegistry;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentPropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
@@ -32,12 +37,21 @@ public class ArmorStandRootNode extends EntityMenuNode {
     private final ArmorStand entity;
     private final PositionBoneButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
+    private final PropertyRegistry properties = new PropertyRegistry();
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity) {
         super(session, Component.text("Select a bone"), entity);
         this.session = session;
         this.entity = entity;
+
+        properties.register(ArmorStandArmsProperty.KEY, new ArmorStandArmsProperty(entity));
+        properties.register(ArmorStandBasePlateProperty.KEY, new ArmorStandBasePlateProperty(entity));
+        TickCapability tickCapability = EasyArmorStands.getInstance().getCapability(TickCapability.class);
+        if (tickCapability != null) {
+            properties.register(ArmorStandCanTickProperty.KEY, new ArmorStandCanTickProperty(entity, tickCapability));
+        }
+        properties.register(ArmorStandGravityProperty.KEY, new ArmorStandGravityProperty(entity, tickCapability));
 
         setRoot(true);
 
@@ -172,7 +186,8 @@ public class ArmorStandRootNode extends EntityMenuNode {
             } else {
                 SplitMenuBuilder builder = new SplitMenuBuilder();
                 EntityEquipmentPropertyType.populate(builder, entity, session);
-                builder.addButton(new ButtonPropertySlot(ArmorStandBasePlatePropertyType.INSTANCE.bind(entity), session));
+                ArmorStandBasePlateProperty property = session.findProperty(ArmorStandBasePlateProperty.KEY);
+                builder.addButton(new ButtonPropertySlot(property, session));
                 Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
                 player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
             }
@@ -184,5 +199,10 @@ public class ArmorStandRootNode extends EntityMenuNode {
     @Override
     public ArmorStand getEntity() {
         return entity;
+    }
+
+    @Override
+    public PropertyContainer properties() {
+        return properties;
     }
 }

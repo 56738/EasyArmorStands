@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public abstract class ComponentEntityProperty<E extends Entity> implements LegacyEntityPropertyType<E, Component> {
     @Override
     public TypeToken<Component> getValueType() {
