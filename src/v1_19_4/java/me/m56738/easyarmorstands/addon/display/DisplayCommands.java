@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.addon.display;
 
 import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
@@ -8,6 +9,7 @@ import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
+import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -60,6 +62,7 @@ public class DisplayCommands {
 
     @CommandMethod("block <value>")
     @CommandPermission("easyarmorstands.property.display.block")
+    @CommandDescription("Set the block of the selected block display")
     @RequireSession
     @RequireEntity(BlockDisplay.class)
     public void setBlock(Audience sender, Session session, BlockDisplay entity, @Argument("value") BlockData value) {
@@ -73,6 +76,7 @@ public class DisplayCommands {
 
     @CommandMethod("brightness block <value>")
     @CommandPermission("easyarmorstands.property.display.brightness")
+    @CommandDescription("Set the block light level of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setBlockBrightness(Audience sender, Session session, Display entity, @Argument("value") @Range(min = "0", max = "15") int value) {
@@ -89,6 +93,7 @@ public class DisplayCommands {
 
     @CommandMethod("brightness sky <value>")
     @CommandPermission("easyarmorstands.property.display.brightness")
+    @CommandDescription("Set the sky light level of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setSkyBrightness(Audience sender, Session session, Display entity, @Argument("value") @Range(min = "0", max = "15") int value) {
@@ -105,6 +110,7 @@ public class DisplayCommands {
 
     @CommandMethod("brightness here")
     @CommandPermission("easyarmorstands.property.display.brightness")
+    @CommandDescription("Apply the light level at your location to the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setLocalBrightness(EasPlayer sender, Session session, Display entity) {
@@ -121,6 +127,7 @@ public class DisplayCommands {
 
     @CommandMethod("brightness reset")
     @CommandPermission("easyarmorstands.property.display.brightness")
+    @CommandDescription("Remove the custom light level from the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setDefaultBrightness(Audience sender, Session session, Display entity) {
@@ -133,12 +140,13 @@ public class DisplayCommands {
 
     @CommandMethod("box width <width>")
     @CommandPermission("easyarmorstands.property.display.size")
+    @CommandDescription("Set the bounding box width of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setBoxWidth(Audience sender, Session session, Display entity, @Argument("width") float value) {
         if (session.tryChange(addon.getDisplayWidthProperty().bind(entity), value)) {
             if (entity.getDisplayHeight() == 0f) {
-                session.tryChange(addon.getDisplayHeightProperty().bind(entity), 1f);
+                session.tryChange(addon.getDisplayHeightProperty().bind(entity), value);
             }
             sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
@@ -149,12 +157,13 @@ public class DisplayCommands {
 
     @CommandMethod("box height <height>")
     @CommandPermission("easyarmorstands.property.display.size")
+    @CommandDescription("Set the bounding box height of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void setBoxHeight(Audience sender, Session session, Display entity, @Argument("height") float value) {
         if (session.tryChange(addon.getDisplayHeightProperty().bind(entity), value)) {
             if (entity.getDisplayWidth() == 0f) {
-                session.tryChange(addon.getDisplayWidthProperty().bind(entity), 1f);
+                session.tryChange(addon.getDisplayWidthProperty().bind(entity), value);
             }
             sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
@@ -165,6 +174,7 @@ public class DisplayCommands {
 
     @CommandMethod("box remove")
     @CommandPermission("easyarmorstands.property.display.size")
+    @CommandDescription("Remove the bounding box from the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void removeBox(Audience sender, Session session, Display entity) {
@@ -185,18 +195,31 @@ public class DisplayCommands {
 
     @CommandMethod("box move")
     @CommandPermission("easyarmorstands.property.display.translation")
+    @CommandDescription("Select a tool to move the bounding box of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void moveBox(Audience sender, Session session, Display entity) {
         DisplayBoxBone bone = new DisplayBoxBone(session, entity, addon);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), entity);
+        node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
         session.pushNode(node);
     }
 
+    @CommandMethod("text")
+    @CommandPermission("easyarmorstands.property.display.text")
+    @CommandDescription("Show the text of the selected text display")
+    @RequireSession
+    @RequireEntity(TextDisplay.class)
+    public void showText(Audience sender, Session session, TextDisplay entity) {
+        Component text = addon.getTextDisplayTextProperty().getValue(entity);
+        SessionCommands.showText(sender, Component.text("Text", NamedTextColor.YELLOW), text, "/eas text set");
+    }
+
     @CommandMethod("text set <value>")
     @CommandPermission("easyarmorstands.property.display.text")
+    @CommandDescription("Set the text of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void setText(Audience sender, Session session, TextDisplay entity, @Argument("value") @Greedy String input) {
@@ -211,6 +234,7 @@ public class DisplayCommands {
 
     @CommandMethod("text width <value>")
     @CommandPermission("easyarmorstands.property.display.text.linewidth")
+    @CommandDescription("Set the line width of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void setTextWidth(Audience sender, Session session, TextDisplay entity, @Argument("value") int value) {
@@ -224,6 +248,7 @@ public class DisplayCommands {
 
     @CommandMethod("text background color <value>")
     @CommandPermission("easyarmorstands.property.display.text.background")
+    @CommandDescription("Set the background color of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void setTextBackground(Audience sender, Session session, TextDisplay entity, @Argument("value") TextColor color) {
@@ -238,6 +263,7 @@ public class DisplayCommands {
 
     @CommandMethod("text background reset")
     @CommandPermission("easyarmorstands.property.display.text.background")
+    @CommandDescription("Restore the default background color of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void resetTextBackground(Audience sender, Session session, TextDisplay entity) {
@@ -250,6 +276,7 @@ public class DisplayCommands {
 
     @CommandMethod("text background none")
     @CommandPermission("easyarmorstands.property.display.text.background")
+    @CommandDescription("Hide the background of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void hideTextBackground(Audience sender, Session session, TextDisplay entity) {
@@ -262,6 +289,7 @@ public class DisplayCommands {
 
     @CommandMethod("text background alpha <value>")
     @CommandPermission("easyarmorstands.property.display.text.background")
+    @CommandDescription("Set the background transparency of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
     public void hideTextBackground(Audience sender, Session session, TextDisplay entity, @Argument("value") @Range(min = "0", max = "255") int alpha) {
@@ -282,6 +310,7 @@ public class DisplayCommands {
 
     @CommandMethod("scale <scale>")
     @CommandPermission("easyarmorstands.property.display.scale")
+    @CommandDescription("Set the scale of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void editScale(Audience sender, Session session, Display entity, @Argument("scale") float scale) {
@@ -296,6 +325,7 @@ public class DisplayCommands {
 
     @CommandMethod("shear")
     @CommandPermission("easyarmorstands.property.display.shearing")
+    @CommandDescription("Modify the shearing of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
     public void editRightRotation(Session session, Display entity) {
@@ -307,6 +337,7 @@ public class DisplayCommands {
 
     @CommandMethod("convert")
     @CommandPermission("easyarmorstands.convert")
+    @CommandDescription("Convert the selected armor stand to an item display")
     @RequireSession
     @RequireEntity(ArmorStand.class)
     public void convert(Session session, ArmorStand entity) {
@@ -371,12 +402,12 @@ public class DisplayCommands {
         }
 
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(entity).rotateY(Util.getEntityYawAngle(location.getYaw()), new Vector3d());
+        Vector3d offset = part.getOffset(entity).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
-                .rotateY(Util.getEntityYawAngle(location.getYaw()))
+                .rotateY(Util.getRoundedYawAngle(location.getYaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 
@@ -390,6 +421,8 @@ public class DisplayCommands {
                     new Quaternionf()
             ));
         });
+        location.setYaw(0);
+        location.setPitch(0);
         ItemDisplay display = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
         if (display == null) {
             return;

@@ -44,6 +44,34 @@ public class GlobalCommands {
         this.sessionListener = sessionListener;
     }
 
+    @CommandMethod("")
+    @CommandPermission("easyarmorstands.help")
+    @CommandDescription("Shows an overview")
+    public void showOverview(EasCommandSender sender) {
+        if (sender.get().hasPermission("easyarmorstands.version")) {
+            String version = EasyArmorStands.getInstance().getDescription().getVersion();
+            sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        } else {
+            sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
+        }
+        if (sender.get().hasPermission("easyarmorstands.give")) {
+            sender.sendMessage(Component.text()
+                    .content("Use ")
+                    .append(Component.text("/eas give", NamedTextColor.YELLOW)
+                            .hoverEvent(Component.text("Obtain the editor tool"))
+                            .clickEvent(ClickEvent.runCommand("/eas give")))
+                    .append(Component.text(" to get started."))
+                    .color(NamedTextColor.GRAY));
+        }
+        sender.sendMessage(Component.text()
+                .content("Use ")
+                .append(Component.text("/eas help", NamedTextColor.YELLOW)
+                        .hoverEvent(Component.text("Show the command list"))
+                        .clickEvent(ClickEvent.runCommand("/eas help")))
+                .append(Component.text(" to browse available commands."))
+                .color(NamedTextColor.GRAY));
+    }
+
     @CommandMethod("help [query]")
     @CommandPermission("easyarmorstands.help")
     @CommandDescription("Shows the command help")
@@ -78,7 +106,7 @@ public class GlobalCommands {
 
     @CommandMethod("color")
     @CommandPermission("easyarmorstands.color")
-    @CommandDescription("Displays the color picker")
+    @CommandDescription("Opens the color picker")
     public void color(EasPlayer player) {
         player.get().openInventory(new ColorPicker(null, player.get()).getInventory());
     }

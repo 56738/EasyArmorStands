@@ -1,9 +1,5 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.property.ToggleEntityProperty;
@@ -15,15 +11,11 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
 public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisplay, Optional<Color>> {
@@ -127,58 +119,9 @@ public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisp
                         Component.text("Changes the background", NamedTextColor.GRAY),
                         Component.text("behind the text.", NamedTextColor.GRAY),
                         Component.text("Use ", NamedTextColor.GRAY)
-                                .append(Component.text("/eas background", NamedTextColor.BLUE)),
+                                .append(Component.text("/eas text background", NamedTextColor.BLUE)),
                         Component.text("to set the color.", NamedTextColor.GRAY)
                 )
         );
-    }
-
-    public static class BackgroundParser<C> implements ArgumentParser<C, Optional<Color>> {
-        @Override
-        public @NonNull ArgumentParseResult<@NonNull Optional<Color>> parse(@NonNull CommandContext<@NonNull C> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
-            String input = inputQueue.peek();
-            if (input == null) {
-                return ArgumentParseResult.failure(new NoInputProvidedException(getClass(), commandContext));
-            }
-
-            if (input.equals("none")) {
-                inputQueue.remove();
-                return ArgumentParseResult.success(Optional.of(Color.fromARGB(0, 0, 0, 0)));
-            } else if (input.equals("default")) {
-                inputQueue.remove();
-                return ArgumentParseResult.success(Optional.empty());
-            }
-
-            NamedTextColor namedTextColor = NamedTextColor.NAMES.value(input);
-            if (namedTextColor != null) {
-                inputQueue.remove();
-                return ArgumentParseResult.success(Optional.of(Color.fromRGB(namedTextColor.value())));
-            }
-
-            try {
-                int rgb = Integer.parseInt(input, 16);
-                Color color;
-                if (input.length() == 6) {
-                    color = Color.fromRGB(rgb);
-                } else if (input.length() == 8) {
-                    color = Color.fromARGB(rgb);
-                } else {
-                    return ArgumentParseResult.failure(new IllegalArgumentException("Invalid color"));
-                }
-                inputQueue.remove();
-                return ArgumentParseResult.success(Optional.of(color));
-            } catch (IllegalArgumentException e) {
-                return ArgumentParseResult.failure(e);
-            }
-        }
-
-        @Override
-        public @NonNull List<@NonNull String> suggestions(@NonNull CommandContext<C> commandContext, @NonNull String input) {
-            List<String> suggestions = new ArrayList<>();
-            suggestions.add("none");
-            suggestions.add("default");
-            suggestions.addAll(NamedTextColor.NAMES.keys());
-            return suggestions;
-        }
     }
 }

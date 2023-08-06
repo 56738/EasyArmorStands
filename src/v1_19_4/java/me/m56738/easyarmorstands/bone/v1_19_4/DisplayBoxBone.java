@@ -57,7 +57,7 @@ public class DisplayBoxBone implements PositionBone {
 
         // Make sure the display stays in the same place by performing the inverse using the translation
         Vector3fc rotatedDelta = delta.get(new Vector3f())
-                .rotate(Util.getEntityRotation(location, new Quaternionf()).conjugate());
+                .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
         Vector3fc translation = displayTranslationProperty.getValue(entity)
                 .sub(rotatedDelta, new Vector3f());
         changes.add(new PropertyChange<>(displayTranslationProperty.bind(entity), translation));

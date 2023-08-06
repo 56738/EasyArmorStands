@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.bone;
 
-import me.m56738.easyarmorstands.util.Util;
+import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
@@ -15,6 +15,6 @@ public interface PositionAndYawBone extends PositionBone, RotationProvider {
     @Override
     default Quaterniondc getRotation() {
         return new Quaterniond()
-                .rotationY(Util.getEntityYawAngle(getYaw()));
+                .rotationY(-Math.toRadians(getYaw()));
     }
 }

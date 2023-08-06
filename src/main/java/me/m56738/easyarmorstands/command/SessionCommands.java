@@ -25,7 +25,9 @@ import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -38,9 +40,27 @@ import org.joml.Vector3dc;
 
 @CommandMethod("eas")
 public class SessionCommands {
+    public static void showText(Audience audience, Component type, Component text, String command) {
+        String serialized = MiniMessage.miniMessage().serialize(text);
+        audience.sendMessage(type
+                .append(Component.text(": "))
+                .append(Component.text("[Edit]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to edit"))
+                        .clickEvent(ClickEvent.suggestCommand(command + " " + serialized)))
+                .append(Component.space())
+                .append(Component.text("[Copy]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to copy"))
+                        .clickEvent(ClickEvent.copyToClipboard(serialized)))
+                .append(Component.space())
+                .append(Component.text("[Syntax]", NamedTextColor.GRAY)
+                        .hoverEvent(Component.text("Click to open the MiniMessage documentation"))
+                        .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))));
+        audience.sendMessage(text);
+    }
+
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
-    @CommandDescription("Duplicate an entity")
+    @CommandDescription("Spawn a copy of the selected entity")
     @RequireSession
     @RequireEntity
     public void clone(EasPlayer sender,
@@ -63,7 +83,7 @@ public class SessionCommands {
 
     @CommandMethod("spawn")
     @CommandPermission("easyarmorstands.spawn")
-    @CommandDescription("Spawn an armor stand and start editing it")
+    @CommandDescription("Open the spawn menu")
     @RequireSession
     public void spawn(Session session) {
         session.openSpawnMenu();
@@ -71,7 +91,7 @@ public class SessionCommands {
 
     @CommandMethod("destroy")
     @CommandPermission("easyarmorstands.destroy")
-    @CommandDescription("Destroy the selected armor stand")
+    @CommandDescription("Destroy the selected entity")
     @RequireSession
     @RequireEntity
     public void destroy(
@@ -107,7 +127,7 @@ public class SessionCommands {
 
     @CommandMethod("snap move [value]")
     @CommandPermission("easyarmorstands.snap")
-    @CommandDescription("Change the movement snapping increment")
+    @CommandDescription("Change the position snapping increment")
     @RequireSession
     public void setSnapIncrement(
             EasCommandSender sender,
@@ -125,7 +145,7 @@ public class SessionCommands {
 
     @CommandMethod("align [axis] [value] [offset]")
     @CommandPermission("easyarmorstands.align")
-    @CommandDescription("Move an entity to the middle of the block")
+    @CommandDescription("Move the selected entity to the middle of the block")
     @RequireSession
     @RequireEntity
     public void align(
@@ -166,6 +186,7 @@ public class SessionCommands {
 
     @CommandMethod("position <position>")
     @CommandPermission("easyarmorstands.property.location")
+    @CommandDescription("Teleport the selected entity")
     @RequireSession
     @RequireEntity
     public void position(EasCommandSender sender, Session session, Entity entity, @Argument("position") Location location) {
@@ -184,6 +205,7 @@ public class SessionCommands {
 
     @CommandMethod("yaw <yaw>")
     @CommandPermission("easyarmorstands.property.location")
+    @CommandDescription("Set the yaw of the selected entity")
     @RequireSession
     @RequireEntity
     public void setYaw(EasCommandSender sender, Session session, Entity entity, @Argument("yaw") float yaw) {
@@ -201,6 +223,7 @@ public class SessionCommands {
 
     @CommandMethod("pitch <pitch>")
     @CommandPermission("easyarmorstands.property.location")
+    @CommandDescription("Set the pitch of the selected entity")
     @RequireSession
     @RequireEntity
     public void setPitch(EasCommandSender sender, Session session, Entity entity, @Argument("pitch") float pitch) {
@@ -216,8 +239,20 @@ public class SessionCommands {
                 .append(Util.formatAngle(pitch)));
     }
 
+    @CommandMethod("name")
+    @CommandPermission("easyarmorstands.property.name")
+    @CommandDescription("Show the custom name of the selected entity")
+    @RequireSession
+    @RequireEntity
+    public void showName(EasCommandSender sender, Session session, Entity entity) {
+        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
+        Component text = property.getValue(entity);
+        showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
+    }
+
     @CommandMethod("name set <value>")
     @CommandPermission("easyarmorstands.property.name")
+    @CommandDescription("Set the custom name of the selected entity")
     @RequireSession
     @RequireEntity
     public void setName(EasCommandSender sender, Session session, Entity entity, @Argument("value") @Greedy String input) {
@@ -238,6 +273,7 @@ public class SessionCommands {
 
     @CommandMethod("name clear")
     @CommandPermission("easyarmorstands.property.name")
+    @CommandDescription("Remove the custom name of the selected entity")
     @RequireSession
     @RequireEntity
     public void clearName(EasCommandSender sender, Session session, Entity entity) {
@@ -253,6 +289,7 @@ public class SessionCommands {
 
     @CommandMethod("name visible <value>")
     @CommandPermission("easyarmorstands.property.name.visible")
+    @CommandDescription("Change the custom name visibility of the selected entity")
     @RequireSession
     @RequireEntity
     public void setNameVisible(EasCommandSender sender, Session session, Entity entity, @Argument("value") boolean visible) {
@@ -268,10 +305,15 @@ public class SessionCommands {
 
     @CommandMethod("cantick <value>")
     @CommandPermission("easyarmorstands.property.armorstand.cantick")
+    @CommandDescription("Toggle whether the selected armor stand should be ticked")
     @RequireSession
     @RequireEntity(ArmorStand.class)
     public void setCanTick(EasCommandSender sender, Session session, ArmorStand entity, @Argument("value") boolean canTick) {
         ArmorStandCanTickProperty property = EasyArmorStands.getInstance().getArmorStandCanTickProperty();
+        if (property == null) {
+            sender.sendMessage(Component.text("Armor stand ticking cannot be disabled on this server", NamedTextColor.RED));
+            return;
+        }
         if (!session.tryChange(property.bind(entity), canTick)) {
             sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
             return;
@@ -284,6 +326,7 @@ public class SessionCommands {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @CommandMethod("reset <property>")
     @CommandPermission("easyarmorstands.edit")
+    @CommandDescription("Reset a property of the selected entity")
     @RequireSession
     @RequireEntity
     public void resetProperty(EasCommandSender sender, Session session, Entity entity, @Argument("property") ResettableEntityProperty property) {
@@ -300,6 +343,7 @@ public class SessionCommands {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @CommandMethod("set <value>")
     @CommandPermission("easyarmorstands.edit")
+    @CommandDescription("Set the value of the selected tool")
     public void set(
             EasCommandSender sender,
             Session session,
