@@ -67,6 +67,7 @@ public class DisplayCommands {
     @RequireEntity(BlockDisplay.class)
     public void setBlock(Audience sender, Session session, BlockDisplay entity, @Argument("value") BlockData value) {
         if (session.tryChange(entity, addon.getBlockDisplayBlockProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed block to ", NamedTextColor.GREEN)
                     .append(addon.getBlockDisplayBlockProperty().getValueName(value)));
         } else {
@@ -84,6 +85,7 @@ public class DisplayCommands {
                 .orElseGet(() -> (int) entity.getLocation().getBlock().getLightFromSky());
         Display.Brightness brightness = new Display.Brightness(value, skyLight);
         if (session.tryChange(entity, addon.getDisplayBrightnessProperty(), Optional.of(brightness))) {
+            session.commit();
             sender.sendMessage(Component.text("Changed block brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -101,6 +103,7 @@ public class DisplayCommands {
                 .orElseGet(() -> (int) entity.getLocation().getBlock().getLightFromBlocks());
         Display.Brightness brightness = new Display.Brightness(blockLight, value);
         if (session.tryChange(entity, addon.getDisplayBrightnessProperty(), Optional.of(brightness))) {
+            session.commit();
             sender.sendMessage(Component.text("Changed sky brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -117,6 +120,7 @@ public class DisplayCommands {
         Block block = sender.get().getLocation().getBlock();
         Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
         if (session.tryChange(entity, addon.getDisplayBrightnessProperty(), Optional.of(brightness))) {
+            session.commit();
             sender.sendMessage(Component.text("Changed entity brightness to the light level at your location", NamedTextColor.GREEN));
             sender.sendMessage(Component.text("Block light: ", NamedTextColor.GRAY).append(Component.text(brightness.getBlockLight())));
             sender.sendMessage(Component.text("Sky light: ", NamedTextColor.GRAY).append(Component.text(brightness.getSkyLight())));
@@ -132,6 +136,7 @@ public class DisplayCommands {
     @RequireEntity(Display.class)
     public void setDefaultBrightness(Audience sender, Session session, Display entity) {
         if (session.tryChange(entity, addon.getDisplayBrightnessProperty(), Optional.empty())) {
+            session.commit();
             sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
@@ -148,6 +153,7 @@ public class DisplayCommands {
             if (entity.getDisplayHeight() == 0f) {
                 session.tryChange(entity, addon.getDisplayHeightProperty(), value);
             }
+            session.commit();
             sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -165,6 +171,7 @@ public class DisplayCommands {
             if (entity.getDisplayWidth() == 0f) {
                 session.tryChange(entity, addon.getDisplayWidthProperty(), value);
             }
+            session.commit();
             sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -187,6 +194,7 @@ public class DisplayCommands {
         }
 
         if (success > 0) {
+            session.commit();
             sender.sendMessage(Component.text("Removed the bounding box", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
@@ -225,6 +233,7 @@ public class DisplayCommands {
     public void setText(Audience sender, Session session, TextDisplay entity, @Argument("value") @Greedy String input) {
         Component value = MiniMessage.miniMessage().deserialize(input);
         if (session.tryChange(entity, addon.getTextDisplayTextProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed the text to ", NamedTextColor.GREEN)
                     .append(value));
         } else {
@@ -239,6 +248,7 @@ public class DisplayCommands {
     @RequireEntity(TextDisplay.class)
     public void setTextWidth(Audience sender, Session session, TextDisplay entity, @Argument("value") int value) {
         if (session.tryChange(entity, addon.getTextDisplayLineWidthProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed the line width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -254,6 +264,7 @@ public class DisplayCommands {
     public void setTextBackground(Audience sender, Session session, TextDisplay entity, @Argument("value") TextColor color) {
         Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
         if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed the background color to ", NamedTextColor.GREEN)
                     .append(addon.getTextDisplayBackgroundProperty().getValueName(value)));
         } else {
@@ -268,6 +279,7 @@ public class DisplayCommands {
     @RequireEntity(TextDisplay.class)
     public void resetTextBackground(Audience sender, Session session, TextDisplay entity) {
         if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), Optional.empty())) {
+            session.commit();
             sender.sendMessage(Component.text("Reset the background color", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -281,6 +293,7 @@ public class DisplayCommands {
     @RequireEntity(TextDisplay.class)
     public void hideTextBackground(Audience sender, Session session, TextDisplay entity) {
         if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), Optional.of(Color.fromARGB(0)))) {
+            session.commit();
             sender.sendMessage(Component.text("Made the background invisible", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -301,6 +314,7 @@ public class DisplayCommands {
 
         Optional<Color> value = Optional.of(oldValue.get().setAlpha(alpha));
         if (session.tryChange(entity, addon.getTextDisplayBackgroundProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed the background transparency to ", NamedTextColor.GREEN)
                     .append(Component.text(alpha)));
         } else {
@@ -316,6 +330,7 @@ public class DisplayCommands {
     public void editScale(Audience sender, Session session, Display entity, @Argument("scale") float scale) {
         Vector3f value = new Vector3f(scale);
         if (session.tryChange(entity, addon.getDisplayScaleProperty(), value)) {
+            session.commit();
             sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
                     .append(addon.getDisplayScaleProperty().getValueName(value)));
         } else {
