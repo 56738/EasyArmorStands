@@ -208,6 +208,8 @@ easyarmorstands.traincarts.model:
   description: "Allow using the TrainCarts resource pack model browser"
 easyarmorstands.undo:
   description: "Allow undoing changes"
+easyarmorstands.update.notify:
+  description: "Be notified when a new version of EasyArmorStands is available"
 easyarmorstands.version:
   description: "Allow viewing the plugin version"
 easyarmorstands.worldguard.bypass:

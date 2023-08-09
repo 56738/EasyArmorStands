@@ -63,6 +63,8 @@ import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
+import me.m56738.easyarmorstands.update.UpdateListener;
+import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -90,6 +92,7 @@ public class EasyArmorStands extends JavaPlugin {
     private EntityPropertyRegistry entityPropertyRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
+    private UpdateManager updateManager;
     private BukkitAudiences adventure;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
@@ -249,6 +252,17 @@ public class EasyArmorStands extends JavaPlugin {
         entityPropertyRegistry.register(entityLocationProperty);
 
         addonLoader.load();
+
+        getConfig().options().copyDefaults(true);
+        getConfig().addDefault("update-check", true);
+        saveConfig();
+
+        boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
+        if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
+            updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
+            getServer().getPluginManager().registerEvents(new UpdateListener(updateManager, adventure), this);
+            getServer().getScheduler().runTaskTimerAsynchronously(this, updateManager::refresh, 0, 20 * 60 * 60 * 24);
+        }
     }
 
     @Override
