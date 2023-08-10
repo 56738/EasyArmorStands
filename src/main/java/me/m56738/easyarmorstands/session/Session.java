@@ -100,6 +100,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
         }
+        commit();
         nodeStack.push(node);
         node.onAdd();
         node.onEnter();
@@ -109,6 +110,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
+        commit();
         nodeStack.push(node);
         node.onAdd();
         node.onEnter();
@@ -118,6 +120,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
+        commit();
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onEnter();
         }
@@ -133,6 +136,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
             }
         }
         nodeStack.clear();
+        commit();
         nodeStack.push(rootNode);
         rootNode.onEnter();
     }
