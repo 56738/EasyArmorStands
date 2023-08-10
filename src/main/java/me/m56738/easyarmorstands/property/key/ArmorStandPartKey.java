@@ -14,6 +14,11 @@ class ArmorStandPartKey<T> implements Key<T> {
     }
 
     @Override
+    public String toString() {
+        return "(" + key + ", " + part + ")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

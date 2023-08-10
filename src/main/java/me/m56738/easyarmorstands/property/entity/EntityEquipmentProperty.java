@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.EquipmentSlotKey;
 import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
@@ -34,7 +33,7 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     }
 
     public static Key<EntityEquipmentProperty> key(EquipmentSlot slot) {
-        return new EquipmentSlotKey<>(KEY, slot);
+        return Key.of(KEY, slot);
     }
 
     public static void populate(SplitMenuBuilder builder, Session session) {
