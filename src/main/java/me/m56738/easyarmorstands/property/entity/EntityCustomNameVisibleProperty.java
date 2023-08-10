@@ -1,36 +1,36 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.BooleanProperty;
+import me.m56738.easyarmorstands.property.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityCustomNameVisibleProperty implements LegacyEntityPropertyType<Entity, Boolean> {
+public class EntityCustomNameVisibleProperty implements BooleanProperty {
+    public static final Key<EntityCustomNameVisibleProperty> KEY = Key.of(EntityCustomNameVisibleProperty.class);
+    private final Entity entity;
+
+    public EntityCustomNameVisibleProperty(Entity entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public Boolean getValue(Entity entity) {
+    public Boolean getValue() {
         return entity.isCustomNameVisible();
     }
 
     @Override
-    public TypeToken<Boolean> getValueType() {
-        return TypeToken.get(Boolean.class);
-    }
-
-    @Override
-    public void setValue(Entity entity, Boolean value) {
+    public void setValue(Boolean value) {
         entity.setCustomNameVisible(value);
     }
 
     @Override
-    public @NotNull String getName() {
-        return "namevisible";
-    }
-
-    @Override
-    public @NotNull Class<Entity> getEntityType() {
-        return Entity.class;
+    public Action createChangeAction(Boolean oldValue, Boolean value) {
+        return new EntityPropertyAction<>(entity, EntityCustomNameVisibleProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -39,13 +39,15 @@ public class EntityCustomNameVisibleProperty implements LegacyEntityPropertyType
     }
 
     @Override
-    public @NotNull Component getValueName(Boolean value) {
-        return Component.text(value);
+    public @NotNull Component getValueComponent(Boolean value) {
+        return value
+                ? Component.text("visible", NamedTextColor.GREEN)
+                : Component.text("invisible", NamedTextColor.RED);
     }
 
     @Override
-    public @NotNull String getValueClipboardContent(Boolean value) {
-        return Boolean.toString(value);
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override

@@ -7,11 +7,7 @@ public interface Key<T> {
         return new TypeKey<>(type);
     }
 
-    static <T> Key<T> of(Class<T> type, ArmorStandPart part) {
-        return Key.of(type).withPart(part);
-    }
-
-    default Key<T> withPart(ArmorStandPart part) {
-        return new ArmorStandPartKey<>(part, this);
+    static <T> Key<T> of(Key<T> key, ArmorStandPart part) {
+        return new ArmorStandPartKey<>(key, part);
     }
 }

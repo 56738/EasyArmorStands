@@ -4,7 +4,11 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
+import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
+import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
+import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
@@ -21,16 +25,29 @@ import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
-import me.m56738.easyarmorstands.property.entity.EntityEquipmentPropertyType;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
+import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
+import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
+import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.joml.Vector3dc;
 
 import java.util.EnumMap;
+import java.util.Locale;
 
 public class ArmorStandRootNode extends EntityMenuNode {
     private final Session session;
@@ -45,13 +62,42 @@ public class ArmorStandRootNode extends EntityMenuNode {
         this.session = session;
         this.entity = entity;
 
+        ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
+        EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
+        GlowCapability glowCapability = EasyArmorStands.getInstance().getCapability(GlowCapability.class);
+        if (glowCapability != null) {
+            properties.register(EntityGlowingProperty.KEY, new EntityGlowingProperty(entity, glowCapability));
+        }
+        properties.register(EntityLocationProperty.KEY, new EntityLocationProperty(entity));
+        properties.register(EntityCustomNameProperty.KEY, new EntityCustomNameProperty(entity, componentCapability));
+        properties.register(EntityCustomNameVisibleProperty.KEY, new EntityCustomNameVisibleProperty(entity));
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            String upperName = slot.name().replace('_', ' ');
+            String lowerName = upperName.toLowerCase(Locale.ROOT);
+            properties.register(EntityEquipmentProperty.key(slot), new EntityEquipmentProperty(entity, slot, Component.text(lowerName), equipmentCapability, componentCapability));
+        }
         properties.register(ArmorStandArmsProperty.KEY, new ArmorStandArmsProperty(entity));
         properties.register(ArmorStandBasePlateProperty.KEY, new ArmorStandBasePlateProperty(entity));
+        properties.register(ArmorStandMarkerProperty.KEY, new ArmorStandMarkerProperty(entity));
+        properties.register(ArmorStandSizeProperty.KEY, new ArmorStandSizeProperty(entity));
+        properties.register(ArmorStandVisibilityProperty.KEY, new ArmorStandVisibilityProperty(entity));
         TickCapability tickCapability = EasyArmorStands.getInstance().getCapability(TickCapability.class);
         if (tickCapability != null) {
             properties.register(ArmorStandCanTickProperty.KEY, new ArmorStandCanTickProperty(entity, tickCapability));
         }
         properties.register(ArmorStandGravityProperty.KEY, new ArmorStandGravityProperty(entity, tickCapability));
+        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStands.getInstance().getCapability(InvulnerabilityCapability.class);
+        if (invulnerabilityCapability != null) {
+            properties.register(ArmorStandInvulnerabilityProperty.KEY, new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
+        }
+        LockCapability lockCapability = EasyArmorStands.getInstance().getCapability(LockCapability.class);
+        if (lockCapability != null) {
+            properties.register(ArmorStandLockProperty.KEY, new ArmorStandLockProperty(entity, lockCapability));
+        }
+        for (ArmorStandPart part : ArmorStandPart.values()) {
+            ArmorStandPoseProperty property = new ArmorStandPoseProperty(entity, part);
+            properties.register(Key.of(ArmorStandPoseProperty.KEY, part), property);
+        }
 
         setRoot(true);
 
@@ -185,7 +231,7 @@ public class ArmorStandRootNode extends EntityMenuNode {
                 player.openInventory(new LegacyArmorStandMenu(session, entity).getInventory());
             } else {
                 SplitMenuBuilder builder = new SplitMenuBuilder();
-                EntityEquipmentPropertyType.populate(builder, entity, session);
+                EntityEquipmentProperty.populate(builder, session);
                 ArmorStandBasePlateProperty property = session.findProperty(ArmorStandBasePlateProperty.KEY);
                 builder.addButton(new ButtonPropertySlot(property, session));
                 Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));

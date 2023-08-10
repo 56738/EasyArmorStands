@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.node.v1_19_4.BlockDataArgumentParser;
-import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
@@ -27,7 +26,6 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextPr
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.EntityType;
 
 public class DisplayAddon implements Addon {
     private JOMLMapper mapper;
@@ -108,8 +106,6 @@ public class DisplayAddon implements Addon {
 
         DisplaySessionListener listener = new DisplaySessionListener(this);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
-
-        EntityGlowingProperty.addToBlacklist(EntityType.TEXT_DISPLAY);
 
         plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());

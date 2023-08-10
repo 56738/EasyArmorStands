@@ -1,7 +1,10 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.property.BooleanEntityProperty;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.BooleanToggleProperty;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -11,25 +14,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class ArmorStandMarkerProperty extends BooleanEntityProperty<ArmorStand> {
+public class ArmorStandMarkerProperty implements BooleanToggleProperty {
+    public static final Key<ArmorStandMarkerProperty> KEY = Key.of(ArmorStandMarkerProperty.class);
+    private final ArmorStand entity;
+
+    public ArmorStandMarkerProperty(ArmorStand entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public Boolean getValue(ArmorStand entity) {
+    public Boolean getValue() {
         return entity.isMarker();
     }
 
     @Override
-    public void setValue(ArmorStand entity, Boolean value) {
+    public void setValue(Boolean value) {
         entity.setMarker(value);
     }
 
     @Override
-    public @NotNull String getName() {
-        return "marker";
-    }
-
-    @Override
-    public @NotNull Class<ArmorStand> getEntityType() {
-        return ArmorStand.class;
+    public Action createChangeAction(Boolean oldValue, Boolean value) {
+        return new EntityPropertyAction<>(entity, ArmorStandMarkerProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -38,10 +43,15 @@ public class ArmorStandMarkerProperty extends BooleanEntityProperty<ArmorStand> 
     }
 
     @Override
-    public @NotNull Component getValueName(Boolean value) {
+    public @NotNull Component getValueComponent(Boolean value) {
         return value
                 ? Component.text("a marker", NamedTextColor.GREEN)
                 : Component.text("not a marker", NamedTextColor.RED);
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override
@@ -50,13 +60,13 @@ public class ArmorStandMarkerProperty extends BooleanEntityProperty<ArmorStand> 
     }
 
     @Override
-    public ItemStack createToggleButton(ArmorStand entity) {
+    public ItemStack createItem() {
         return Util.createItem(
                 ItemType.SUNFLOWER,
                 Component.text("Toggle marker", NamedTextColor.BLUE),
                 Arrays.asList(
                         Component.text("Currently ", NamedTextColor.GRAY)
-                                .append(getValueName(getValue(entity)))
+                                .append(getValueComponent(getValue()))
                                 .append(Component.text(".")),
                         Component.text("Changes whether the", NamedTextColor.GRAY),
                         Component.text("armor stand is a marker", NamedTextColor.GRAY),

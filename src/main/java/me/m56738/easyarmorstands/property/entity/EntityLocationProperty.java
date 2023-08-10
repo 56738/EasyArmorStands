@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -9,30 +11,27 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityLocationProperty implements LegacyEntityPropertyType<Entity, Location> {
+public class EntityLocationProperty implements Property<Location> {
+    public static final Key<EntityLocationProperty> KEY = Key.of(EntityLocationProperty.class);
+    private final Entity entity;
+
+    public EntityLocationProperty(Entity entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public Location getValue(Entity entity) {
+    public Location getValue() {
         return entity.getLocation();
     }
 
     @Override
-    public TypeToken<Location> getValueType() {
-        return TypeToken.get(Location.class);
-    }
-
-    @Override
-    public void setValue(Entity entity, Location value) {
+    public void setValue(Location value) {
         entity.teleport(value);
     }
 
     @Override
-    public @NotNull String getName() {
-        return "location";
-    }
-
-    @Override
-    public @NotNull Class<Entity> getEntityType() {
-        return Entity.class;
+    public Action createChangeAction(Location oldValue, Location value) {
+        return new EntityPropertyAction<>(entity, EntityLocationProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -41,8 +40,13 @@ public class EntityLocationProperty implements LegacyEntityPropertyType<Entity, 
     }
 
     @Override
-    public @NotNull Component getValueName(Location value) {
+    public @NotNull Component getValueComponent(Location value) {
         return Util.formatLocation(value);
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override

@@ -5,10 +5,10 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import java.util.Objects;
 
 class ArmorStandPartKey<T> implements Key<T> {
-    private final ArmorStandPart part;
     private final Key<T> key;
+    private final ArmorStandPart part;
 
-    ArmorStandPartKey(ArmorStandPart part, Key<T> key) {
+    ArmorStandPartKey(Key<T> key, ArmorStandPart part) {
         this.part = part;
         this.key = key;
     }

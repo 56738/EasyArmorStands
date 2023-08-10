@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.property.PropertyChange;
@@ -23,11 +22,13 @@ public class DisplayBoxBone implements PositionBone {
     private final Session session;
     private final Display entity;
     private final DisplayAddon addon;
+    private final EntityLocationProperty entityLocationProperty;
 
     public DisplayBoxBone(Session session, Display entity, DisplayAddon addon) {
         this.session = session;
         this.entity = entity;
         this.addon = addon;
+        this.entityLocationProperty = session.findProperty(EntityLocationProperty.KEY);
     }
 
     @Override
@@ -46,14 +47,13 @@ public class DisplayBoxBone implements PositionBone {
         Vector3dc delta = position.sub(getPosition(), new Vector3d());
 
         DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
-        EntityLocationProperty entityLocationProperty = EasyArmorStands.getInstance().getEntityLocationProperty();
 
         List<PropertyChange<?>> changes = new ArrayList<>(2);
 
         // Move box by modifying the location
-        Location location = entityLocationProperty.getValue(entity).clone()
+        Location location = entityLocationProperty.getValue().clone()
                 .add(delta.x(), delta.y(), delta.z());
-        changes.add(new PropertyChange<>(entityLocationProperty.bind(entity), location));
+        changes.add(new PropertyChange<>(entityLocationProperty, location));
 
         // Make sure the display stays in the same place by performing the inverse using the translation
         Vector3fc rotatedDelta = delta.get(new Vector3f())

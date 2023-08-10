@@ -2,7 +2,10 @@ package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
-import me.m56738.easyarmorstands.property.BooleanEntityProperty;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.BooleanToggleProperty;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,31 +15,29 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class ArmorStandLockProperty extends BooleanEntityProperty<ArmorStand> {
+public class ArmorStandLockProperty implements BooleanToggleProperty {
+    public static final Key<ArmorStandLockProperty> KEY = Key.of(ArmorStandLockProperty.class);
+    private final ArmorStand entity;
     private final LockCapability lockCapability;
 
-    public ArmorStandLockProperty(LockCapability lockCapability) {
+    public ArmorStandLockProperty(ArmorStand entity, LockCapability lockCapability) {
+        this.entity = entity;
         this.lockCapability = lockCapability;
     }
 
     @Override
-    public Boolean getValue(ArmorStand entity) {
+    public Boolean getValue() {
         return lockCapability.isLocked(entity);
     }
 
     @Override
-    public void setValue(ArmorStand entity, Boolean value) {
+    public void setValue(Boolean value) {
         lockCapability.setLocked(entity, value);
     }
 
     @Override
-    public @NotNull String getName() {
-        return "lock";
-    }
-
-    @Override
-    public @NotNull Class<ArmorStand> getEntityType() {
-        return ArmorStand.class;
+    public Action createChangeAction(Boolean oldValue, Boolean value) {
+        return new EntityPropertyAction<>(entity, e -> new ArmorStandLockProperty(e, lockCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -45,10 +46,15 @@ public class ArmorStandLockProperty extends BooleanEntityProperty<ArmorStand> {
     }
 
     @Override
-    public @NotNull Component getValueName(Boolean value) {
+    public @NotNull Component getValueComponent(Boolean value) {
         return value
                 ? Component.text("locked", NamedTextColor.GREEN)
                 : Component.text("unlocked", NamedTextColor.RED);
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override
@@ -57,13 +63,13 @@ public class ArmorStandLockProperty extends BooleanEntityProperty<ArmorStand> {
     }
 
     @Override
-    public ItemStack createToggleButton(ArmorStand entity) {
+    public ItemStack createItem() {
         return Util.createItem(
                 ItemType.IRON_BARS,
                 Component.text("Toggle lock", NamedTextColor.BLUE),
                 Arrays.asList(
                         Component.text("Currently ", NamedTextColor.GRAY)
-                                .append(getValueName(getValue(entity)))
+                                .append(getValueComponent(getValue()))
                                 .append(Component.text(".")),
                         Component.text("Changes whether the", NamedTextColor.GRAY),
                         Component.text("equipment can be changed", NamedTextColor.GRAY),

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ public class EntityLocationBone implements PositionAndYawBone {
     public EntityLocationBone(Session session, Entity entity) {
         this.session = session;
         this.entity = entity;
-        this.property = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
+        this.property = session.findProperty(EntityLocationProperty.KEY);
     }
 
     public Vector3dc getOffset() {

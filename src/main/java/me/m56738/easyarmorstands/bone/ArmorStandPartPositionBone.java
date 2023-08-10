@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ public class ArmorStandPartPositionBone implements PositionBone {
         this.session = session;
         this.entity = entity;
         this.part = part;
-        this.locationProperty = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
+        this.locationProperty = session.findProperty(EntityLocationProperty.KEY);
     }
 
     @Override

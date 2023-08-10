@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.ResettableEntityProperty;
+import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -11,36 +13,29 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 
-public class ArmorStandPoseProperty implements ResettableEntityProperty<ArmorStand, Quaterniondc> {
+public class ArmorStandPoseProperty implements Property<Quaterniondc> {
+    public static final Key<ArmorStandPoseProperty> KEY = Key.of(ArmorStandPoseProperty.class);
+    private final ArmorStand entity;
     private final ArmorStandPart part;
 
-    public ArmorStandPoseProperty(ArmorStandPart part) {
+    public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
+        this.entity = entity;
         this.part = part;
     }
 
     @Override
-    public Quaterniondc getValue(ArmorStand entity) {
+    public Quaterniondc getValue() {
         return Util.fromEuler(part.getPose(entity), new Quaterniond());
     }
 
     @Override
-    public TypeToken<Quaterniondc> getValueType() {
-        return TypeToken.get(Quaterniondc.class);
-    }
-
-    @Override
-    public void setValue(ArmorStand entity, Quaterniondc value) {
+    public void setValue(Quaterniondc value) {
         part.setPose(entity, Util.toEuler(value));
     }
 
     @Override
-    public @NotNull String getName() {
-        return part.getName();
-    }
-
-    @Override
-    public @NotNull Class<ArmorStand> getEntityType() {
-        return ArmorStand.class;
+    public Action createChangeAction(Quaterniondc oldValue, Quaterniondc value) {
+        return new EntityPropertyAction<>(entity, e -> new ArmorStandPoseProperty(e, part), oldValue, value, Component.text("Changed ").append(getDisplayName()));
     }
 
     @Override
@@ -49,8 +44,13 @@ public class ArmorStandPoseProperty implements ResettableEntityProperty<ArmorSta
     }
 
     @Override
-    public @NotNull Component getValueName(Quaterniondc value) {
+    public @NotNull Component getValueComponent(Quaterniondc value) {
         return Util.formatAngle(Util.toEuler(value));
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override
@@ -58,8 +58,9 @@ public class ArmorStandPoseProperty implements ResettableEntityProperty<ArmorSta
         return "easyarmorstands.property.armorstand.pose." + part.getName();
     }
 
-    @Override
-    public Quaterniondc getResetValue() {
-        return new Quaterniond();
-    }
+    // TODO /eas reset
+//    @Override
+//    public Quaterniondc getResetValue() {
+//        return new Quaterniond();
+//    }
 }

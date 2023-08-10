@@ -14,8 +14,6 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
@@ -151,7 +149,7 @@ public class SessionCommands {
     public void align(
             EasCommandSender sender,
             Session session,
-            Entity entity,
+            EntityLocationProperty property,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
@@ -164,12 +162,12 @@ public class SessionCommands {
         } else if (offset != null) {
             offsetVector.set(offset, offset, offset);
         }
-        Vector3dc position = axis.snap(Util.toVector3d(entity.getLocation()), value, offsetVector, new Vector3d());
-        Location location = entity.getLocation();
+        Location location = property.getValue();
+        Vector3dc position = axis.snap(Util.toVector3d(location), value, offsetVector, new Vector3d());
         location.setX(position.x());
         location.setY(position.y());
         location.setZ(position.z());
-        if (!session.tryChange(EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity), location)) {
+        if (!session.tryChange(property, location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -189,12 +187,11 @@ public class SessionCommands {
     @CommandDescription("Teleport the selected entity")
     @RequireSession
     @RequireEntity
-    public void position(EasCommandSender sender, Session session, Entity entity, @Argument("position") Location location) {
-        EntityLocationProperty property = EasyArmorStands.getInstance().getEntityLocationProperty();
-        Location oldLocation = property.getValue(entity);
+    public void position(EasCommandSender sender, Session session, EntityLocationProperty property, @Argument("position") Location location) {
+        Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
         location.setPitch(oldLocation.getPitch());
-        if (!session.tryChange(property.bind(entity), location)) {
+        if (!session.tryChange(property, location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -208,8 +205,7 @@ public class SessionCommands {
     @CommandDescription("Set the yaw of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setYaw(EasCommandSender sender, Session session, Entity entity, @Argument("yaw") float yaw) {
-        Property<Location> property = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
+    public void setYaw(EasCommandSender sender, Session session, EntityLocationProperty property, @Argument("yaw") float yaw) {
         Location location = property.getValue();
         location.setYaw(yaw);
         if (!session.tryChange(property, location)) {
@@ -226,8 +222,7 @@ public class SessionCommands {
     @CommandDescription("Set the pitch of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setPitch(EasCommandSender sender, Session session, Entity entity, @Argument("pitch") float pitch) {
-        Property<Location> property = EasyArmorStands.getInstance().getEntityLocationProperty().bind(entity);
+    public void setPitch(EasCommandSender sender, Session session, EntityLocationProperty property, @Argument("pitch") float pitch) {
         Location location = property.getValue();
         location.setPitch(pitch);
         if (!session.tryChange(property, location)) {
@@ -244,9 +239,8 @@ public class SessionCommands {
     @CommandDescription("Show the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void showName(EasCommandSender sender, Session session, Entity entity) {
-        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
-        Component text = property.getValue(entity);
+    public void showName(EasCommandSender sender, Session session, EntityCustomNameProperty property) {
+        Component text = property.getValue();
         showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
     }
 
@@ -255,16 +249,18 @@ public class SessionCommands {
     @CommandDescription("Set the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setName(EasCommandSender sender, Session session, Entity entity, @Argument("value") @Greedy String input) {
+    public void setName(EasCommandSender sender, Session session,
+                        EntityCustomNameProperty nameProperty,
+                        EntityCustomNameVisibleProperty nameVisibleProperty,
+                        @Argument("value") @Greedy String input) {
         Component name = MiniMessage.miniMessage().deserialize(input);
-        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
-        boolean hadName = entity.getCustomName() != null;
-        if (!session.tryChange(property.bind(entity), name)) {
+        boolean hadName = nameProperty.hasCustomName();
+        if (!session.tryChange(nameProperty, name)) {
             sender.sendMessage(Component.text("Unable to change the name", NamedTextColor.RED));
             return;
         }
         if (!hadName) {
-            session.tryChange(EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty().bind(entity), true);
+            session.tryChange(nameVisibleProperty, true);
         }
         session.commit();
         sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
@@ -276,13 +272,14 @@ public class SessionCommands {
     @CommandDescription("Remove the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void clearName(EasCommandSender sender, Session session, Entity entity) {
-        EntityCustomNameProperty property = EasyArmorStands.getInstance().getEntityCustomNameProperty();
-        if (!session.tryChange(property.bind(entity), null)) {
+    public void clearName(EasCommandSender sender, Session session,
+                          EntityCustomNameProperty nameProperty,
+                          EntityCustomNameVisibleProperty nameVisibleProperty) {
+        if (!session.tryChange(nameProperty, null)) {
             sender.sendMessage(Component.text("Unable to remove the name", NamedTextColor.RED));
             return;
         }
-        session.tryChange(EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty().bind(entity), false);
+        session.tryChange(nameVisibleProperty, false);
         session.commit();
         sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
     }
@@ -292,15 +289,15 @@ public class SessionCommands {
     @CommandDescription("Change the custom name visibility of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setNameVisible(EasCommandSender sender, Session session, Entity entity, @Argument("value") boolean visible) {
-        EntityCustomNameVisibleProperty property = EasyArmorStands.getInstance().getEntityCustomNameVisibleProperty();
-        if (!session.tryChange(property.bind(entity), visible)) {
+    public void setNameVisible(EasCommandSender sender, Session session, EntityCustomNameVisibleProperty property,
+                               @Argument("value") boolean visible) {
+        if (!session.tryChange(property, visible)) {
             sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
             return;
         }
         session.commit();
         sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
-                .append(property.getValueName(visible)));
+                .append(property.getValueComponent(visible)));
     }
 
     @CommandMethod("cantick <value>")
@@ -318,22 +315,23 @@ public class SessionCommands {
                 .append(property.getValueComponent(canTick)));
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @CommandMethod("reset <property>")
-    @CommandPermission("easyarmorstands.edit")
-    @CommandDescription("Reset a property of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void resetProperty(EasCommandSender sender, Session session, Entity entity, @Argument("property") ResettableEntityProperty property) {
-        Object value = property.getResetValue();
-        if (!session.tryChange(property.bind(entity), value)) {
-            sender.sendMessage(Component.text("Unable to change the property", NamedTextColor.RED));
-            return;
-        }
-        session.commit();
-        sender.sendMessage(Component.text("Reset ", NamedTextColor.GREEN)
-                .append(property.getDisplayName()));
-    }
+    // TODO Restore /eas reset?
+//    @SuppressWarnings({"rawtypes", "unchecked"})
+//    @CommandMethod("reset <property>")
+//    @CommandPermission("easyarmorstands.edit")
+//    @CommandDescription("Reset a property of the selected entity")
+//    @RequireSession
+//    @RequireEntity
+//    public void resetProperty(EasCommandSender sender, Session session, Entity entity, @Argument("property") ResettableEntityProperty property) {
+//        Object value = property.getResetValue();
+//        if (!session.tryChange(property.bind(entity), value)) {
+//            sender.sendMessage(Component.text("Unable to change the property", NamedTextColor.RED));
+//            return;
+//        }
+//        session.commit();
+//        sender.sendMessage(Component.text("Reset ", NamedTextColor.GREEN)
+//                .append(property.getDisplayName()));
+//    }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @CommandMethod("set <value>")

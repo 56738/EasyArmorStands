@@ -13,10 +13,6 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
-import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.command.EntityCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
@@ -44,16 +40,7 @@ import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
 import me.m56738.easyarmorstands.property.EntityPropertyTypeRegistry;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.ResettableEntityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
-import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -90,9 +77,6 @@ public class EasyArmorStands extends JavaPlugin {
     private BukkitAudiences adventure;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
-    private EntityCustomNameProperty entityCustomNameProperty;
-    private EntityCustomNameVisibleProperty entityCustomNameVisibleProperty;
-    private EntityLocationProperty entityLocationProperty;
 
     public static EasyArmorStands getInstance() {
         return instance;
@@ -193,33 +177,6 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new EntityCommands());
 
-        entityPropertyRegistry.register(new ArmorStandSizeProperty());
-        entityPropertyRegistry.register(new ArmorStandVisibilityProperty());
-        LockCapability lockCapability = this.getCapability(LockCapability.class);
-        if (lockCapability != null) {
-            entityPropertyRegistry.register(new ArmorStandLockProperty(lockCapability));
-        }
-        GlowCapability glowCapability = this.getCapability(GlowCapability.class);
-        if (glowCapability != null) {
-            entityPropertyRegistry.register(new EntityGlowingProperty(glowCapability));
-        }
-        InvulnerabilityCapability invulnerabilityCapability = this.getCapability(InvulnerabilityCapability.class);
-        if (invulnerabilityCapability != null) {
-            entityPropertyRegistry.register(new ArmorStandInvulnerabilityProperty(invulnerabilityCapability));
-        }
-        entityPropertyRegistry.register(new ArmorStandMarkerProperty());
-        for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPoseProperty property = new ArmorStandPoseProperty(part);
-            entityPropertyRegistry.register(property);
-            armorStandPoseProperties.put(part, property);
-        }
-        entityCustomNameProperty = new EntityCustomNameProperty(getCapability(ComponentCapability.class));
-        entityPropertyRegistry.register(entityCustomNameProperty);
-        entityCustomNameVisibleProperty = new EntityCustomNameVisibleProperty();
-        entityPropertyRegistry.register(entityCustomNameVisibleProperty);
-        entityLocationProperty = new EntityLocationProperty();
-        entityPropertyRegistry.register(entityLocationProperty);
-
         addonLoader.load();
 
         getConfig().options().copyDefaults(true);
@@ -281,21 +238,5 @@ public class EasyArmorStands extends JavaPlugin {
 
     public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
-    }
-
-    public EntityCustomNameProperty getEntityCustomNameProperty() {
-        return entityCustomNameProperty;
-    }
-
-    public EntityCustomNameVisibleProperty getEntityCustomNameVisibleProperty() {
-        return entityCustomNameVisibleProperty;
-    }
-
-    public EntityLocationProperty getEntityLocationProperty() {
-        return entityLocationProperty;
-    }
-
-    public ArmorStandPoseProperty getArmorStandPoseProperty(ArmorStandPart part) {
-        return armorStandPoseProperties.get(part);
     }
 }
