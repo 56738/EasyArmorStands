@@ -1,6 +1,10 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.*;
+import me.m56738.easyarmorstands.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.bone.RotationBone;
+import me.m56738.easyarmorstands.bone.RotationProvider;
+import me.m56738.easyarmorstands.bone.ScaleBone;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Axis;

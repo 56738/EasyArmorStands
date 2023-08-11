@@ -15,11 +15,6 @@ public abstract class EditNode implements Node {
         this.session = session;
     }
 
-    @Override
-    public void onExit() {
-        session.commit();
-    }
-
     /**
      * Reverts the property to the original value it had when this node was {@link #onEnter() entered}.
      */

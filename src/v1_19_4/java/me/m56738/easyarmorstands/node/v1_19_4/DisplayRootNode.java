@@ -1,13 +1,11 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.event.EntityObjectMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.ClickType;
 import me.m56738.easyarmorstands.node.EditableObjectNode;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.joml.Vector3dc;
 
 public class DisplayRootNode extends DisplayMenuNode implements EditableObjectNode {
@@ -22,16 +20,11 @@ public class DisplayRootNode extends DisplayMenuNode implements EditableObjectNo
         this.editableObject = editableObject;
     }
 
-    protected void populate(SplitMenuBuilder builder) {
-    }
-
     @Override
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
-        if (context.getType() == ClickType.LEFT_CLICK) {
-            SplitMenuBuilder builder = new SplitMenuBuilder();
-            populate(builder);
-            Bukkit.getPluginManager().callEvent(new EntityObjectMenuInitializeEvent(editableObject, builder));
-            session.getPlayer().openInventory(builder.build(name).getInventory());
+        Player player = session.getPlayer();
+        if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
+            editableObject.openMenu(player);
             return true;
         }
         return super.onClick(eyes, target, context);

@@ -1,7 +1,13 @@
 package me.m56738.easyarmorstands.property;
 
+import java.util.function.Consumer;
+
 class EmptyPropertyContainer implements PropertyContainer {
     static final EmptyPropertyContainer INSTANCE = new EmptyPropertyContainer();
+
+    @Override
+    public void forEach(Consumer<Property<?>> consumer) {
+    }
 
     @Override
     public <T> Property<T> getOrNull(PropertyType<T> type) {
@@ -11,5 +17,9 @@ class EmptyPropertyContainer implements PropertyContainer {
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public void commit() {
     }
 }

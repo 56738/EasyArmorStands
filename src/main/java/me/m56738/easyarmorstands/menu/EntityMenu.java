@@ -2,13 +2,9 @@ package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
-import me.m56738.easyarmorstands.inventory.DisabledSlot;
 import me.m56738.easyarmorstands.inventory.InventorySlot;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
@@ -30,14 +26,6 @@ public class EntityMenu<T extends Entity> extends SessionMenu {
     @Override
     public void initialize() {
         // TODO
-        if (hasEquipment() && session.getPlayer().hasPermission("easyarmorstands.color")) {
-            addShortcut(new ColorPickerSlot(this));
-        }
-        if (session.getPlayer().hasPermission("easyarmorstands.destroy")) {
-            addButton(new DestroySlot(this));
-        }
-        Bukkit.getPluginManager().callEvent(new SessionMenuInitializeEvent(this));
-        setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
     }
 
     public void addButton(InventorySlot slot) {

@@ -305,4 +305,16 @@ public class Util {
     public static Quaternionf getRoundedYawPitchRotation(Entity entity, Quaternionf dest) {
         return getRoundedYawPitchRotation(entity.getLocation(), dest);
     }
+
+    public static <T extends Enum<T>> T getEnumNeighbour(T value, int offset) {
+        T[] values = value.getDeclaringClass().getEnumConstants();
+        int index = value.ordinal() + offset;
+        while (index < 0) {
+            index += values.length;
+        }
+        while (index >= values.length) {
+            index -= values.length;
+        }
+        return values[index];
+    }
 }

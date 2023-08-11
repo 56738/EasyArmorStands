@@ -2,17 +2,17 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemPropertySlot implements MenuSlot {
     private final Property<ItemStack> property;
-    private final Session session;
+    private final PropertyContainer container;
 
-    public ItemPropertySlot(Property<ItemStack> property, Session session) {
+    public ItemPropertySlot(Property<ItemStack> property, PropertyContainer container) {
         this.property = property;
-        this.session = session;
+        this.container = container;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ItemPropertySlot implements MenuSlot {
                 item = new ItemStack(Material.AIR);
             }
             property.setValue(item);
-            session.commit();
+            container.commit();
         });
     }
 }

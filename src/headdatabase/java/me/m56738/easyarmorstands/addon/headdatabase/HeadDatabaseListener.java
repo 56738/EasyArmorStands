@@ -3,12 +3,11 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.MenuObject;
+import me.m56738.easyarmorstands.event.EntityObjectMenuInitializeEvent;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,20 +31,20 @@ public class HeadDatabaseListener implements Listener {
         if (session == null) {
             return;
         }
-        Entity entity = session.getEntity();
-        if (!(entity instanceof ArmorStand)) {
+        EditableObject editableObject = session.getEditableObject();
+        if (editableObject == null || !editableObject.hasItemSlots() || !(editableObject instanceof MenuObject)) {
             return;
         }
-        ArmorStand armorStand = (ArmorStand) entity;
+        MenuObject menuObject = (MenuObject) editableObject;
         event.setCancelled(true);
-        player.openInventory(new LegacyArmorStandMenu(session, armorStand).getInventory());
+        menuObject.openMenu(player);
         player.setItemOnCursor(event.getHead());
     }
 
     @EventHandler
-    public void onMenuInitialize(SessionMenuInitializeEvent event) {
-        if (event.getMenu().hasEquipment() && event.getPlayer().hasPermission("headdb.open")) {
-            event.getMenu().addShortcut(new HeadDatabaseSlot(event.getMenu(), api));
+    public void onMenuInitialize(EntityObjectMenuInitializeEvent event) {
+        if (event.getEntityObject().hasItemSlots() && event.getPlayer().hasPermission("headdb.open")) {
+            event.getMenuBuilder().addUtility(new HeadDatabaseSlot(api));
         }
     }
 }

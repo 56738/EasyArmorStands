@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.property.EnumTogglePropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.property.TogglePropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -49,7 +49,7 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
         return true;
     }
 
-    private static class Type implements TogglePropertyType<TextAlignment> {
+    private static class Type implements EnumTogglePropertyType<TextAlignment> {
         @Override
         public String getPermission() {
             return "easyarmorstands.property.display.text.alignment";
@@ -63,12 +63,6 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
         @Override
         public Component getValueComponent(TextAlignment value) {
             return Component.text(value.name().toLowerCase(Locale.ROOT));
-        }
-
-        @Override
-        public TextAlignment getNextValue(TextAlignment value) {
-            TextAlignment[] values = TextAlignment.values();
-            return values[(value.ordinal() + 1) % values.length];
         }
 
         @Override

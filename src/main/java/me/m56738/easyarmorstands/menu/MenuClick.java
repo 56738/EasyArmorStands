@@ -4,6 +4,8 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,12 @@ public interface MenuClick extends ForwardingAudience.Single {
 
     void cancel();
 
+    void open(Inventory inventory);
+
+    default void open(InventoryHolder holder) {
+        open(holder.getInventory());
+    }
+
     void close();
 
     void updateItem();
@@ -25,6 +33,8 @@ public interface MenuClick extends ForwardingAudience.Single {
     void queueTask(Consumer<ItemStack> task);
 
     boolean isLeftClick();
+
+    boolean isRightClick();
 
     @Override
     default @NotNull Audience audience() {
@@ -57,6 +67,10 @@ public interface MenuClick extends ForwardingAudience.Single {
         }
 
         @Override
+        public void open(Inventory inventory) {
+        }
+
+        @Override
         public void close() {
         }
 
@@ -77,6 +91,11 @@ public interface MenuClick extends ForwardingAudience.Single {
         @Override
         public boolean isLeftClick() {
             return true;
+        }
+
+        @Override
+        public boolean isRightClick() {
+            return false;
         }
 
         @Override

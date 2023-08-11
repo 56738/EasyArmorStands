@@ -67,7 +67,7 @@ public class CarryNode extends EditNode {
     @Override
     public void onExit() {
         cursor.stop();
-        super.onExit();
+        bone.commit();
     }
 
     @Override

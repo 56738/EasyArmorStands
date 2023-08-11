@@ -9,7 +9,10 @@ import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.bukkit.Location;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartPoseBone implements RotationBone {
     private final PropertyContainer container;
@@ -29,6 +32,11 @@ public class ArmorStandPartPoseBone implements RotationBone {
     @Override
     public boolean isValid() {
         return container.isValid();
+    }
+
+    @Override
+    public void commit() {
+        container.commit();
     }
 
     @Override

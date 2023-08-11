@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.item;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.property.EnumTogglePropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.property.TogglePropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -41,7 +41,7 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
         return true;
     }
 
-    private static class Type implements TogglePropertyType<ItemDisplayTransform> {
+    private static class Type implements EnumTogglePropertyType<ItemDisplayTransform> {
         @Override
         public @Nullable String getPermission() {
             return "easyarmorstands.property.display.item.transform";
@@ -55,12 +55,6 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
         @Override
         public @NotNull Component getValueComponent(ItemDisplayTransform value) {
             return Component.text(value.name().toLowerCase(Locale.ROOT));
-        }
-
-        @Override
-        public ItemDisplayTransform getNextValue(ItemDisplayTransform value) {
-            ItemDisplayTransform[] values = ItemDisplayTransform.values();
-            return values[(value.ordinal() + 1) % values.length];
         }
 
         @Override

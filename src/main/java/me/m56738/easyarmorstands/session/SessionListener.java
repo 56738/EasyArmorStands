@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.inventory.InventoryListener;
 import me.m56738.easyarmorstands.node.ClickContext;
+import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -81,9 +82,9 @@ public class SessionListener implements Listener {
         if (!isTool(player, item)) {
             return false;
         }
-        session = manager.start(player);
+        manager.start(player);
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            session.openSpawnMenu();
+            Session.openSpawnMenu(player);
         }
         return true;
     }
@@ -218,7 +219,11 @@ public class SessionListener implements Listener {
     public void onDrop(PlayerDropItemEvent event) {
         Session session = manager.getSession(event.getPlayer());
         if (session != null) {
-            session.clearNode();
+            EntitySelectionNode node = session.findNode(EntitySelectionNode.class);
+            if (node != null) {
+                session.clearNode();
+                session.pushNode(node);
+            }
             event.setCancelled(true);
         }
     }

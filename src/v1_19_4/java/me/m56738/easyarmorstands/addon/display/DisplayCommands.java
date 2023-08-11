@@ -20,7 +20,11 @@ import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.*;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayRightRotationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayBackgroundProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayLineWidthProperty;
@@ -40,14 +44,24 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.BlockDisplay;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Matrix4d;
+import org.joml.Matrix4dc;
+import org.joml.Quaternionf;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,10 +79,10 @@ public class DisplayCommands {
     @CommandDescription("Set the block of the selected block display")
     @RequireSession
     @RequireEntity(BlockDisplay.class)
-    public void setBlock(Audience sender, Session session, PropertyContainer container, @Argument("value") BlockData value) {
+    public void setBlock(Audience sender, PropertyContainer container, @Argument("value") BlockData value) {
         Property<BlockData> property = container.get(BlockDisplayBlockProperty.TYPE);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed block to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {
@@ -81,7 +95,7 @@ public class DisplayCommands {
     @CommandDescription("Set the block light level of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setBlockBrightness(Audience sender, Session session, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
+    public void setBlockBrightness(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
         Location location = container.get(EntityLocationProperty.TYPE).getValue();
         Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
         Display.Brightness brightness = property.getValue();
@@ -91,7 +105,7 @@ public class DisplayCommands {
             brightness = new Display.Brightness(value, location.getBlock().getLightFromSky());
         }
         if (property.setValue(brightness)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed block brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -104,7 +118,7 @@ public class DisplayCommands {
     @CommandDescription("Set the sky light level of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setSkyBrightness(Audience sender, Session session, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
+    public void setSkyBrightness(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
         Location location = container.get(EntityLocationProperty.TYPE).getValue();
         Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
         Display.Brightness brightness = property.getValue();
@@ -114,7 +128,7 @@ public class DisplayCommands {
             brightness = new Display.Brightness(location.getBlock().getLightFromBlocks(), value);
         }
         if (property.setValue(brightness)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed sky brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -127,12 +141,12 @@ public class DisplayCommands {
     @CommandDescription("Apply the light level at your location to the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setLocalBrightness(EasPlayer sender, Session session, PropertyContainer container) {
+    public void setLocalBrightness(EasPlayer sender, PropertyContainer container) {
         Block block = sender.get().getLocation().getBlock();
         Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
         Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
         if (property.setValue(brightness)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed entity brightness to the light level at your location", NamedTextColor.GREEN));
             sender.sendMessage(Component.text("Block light: ", NamedTextColor.GRAY).append(Component.text(brightness.getBlockLight())));
             sender.sendMessage(Component.text("Sky light: ", NamedTextColor.GRAY).append(Component.text(brightness.getSkyLight())));
@@ -146,10 +160,10 @@ public class DisplayCommands {
     @CommandDescription("Remove the custom light level from the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setDefaultBrightness(Audience sender, Session session, PropertyContainer container) {
+    public void setDefaultBrightness(Audience sender, PropertyContainer container) {
         Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
         if (property.setValue(null)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
@@ -161,14 +175,14 @@ public class DisplayCommands {
     @CommandDescription("Set the bounding box width of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setBoxWidth(Audience sender, Session session, PropertyContainer container, @Argument("width") float value) {
+    public void setBoxWidth(Audience sender, PropertyContainer container, @Argument("width") float value) {
         Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
         if (widthProperty.setValue(value)) {
             Property<Float> heightProperty = container.get(DisplayHeightProperty.TYPE);
             if (heightProperty.getValue() == 0f) {
                 heightProperty.setValue(value);
             }
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -181,14 +195,14 @@ public class DisplayCommands {
     @CommandDescription("Set the bounding box height of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void setBoxHeight(Audience sender, Session session, PropertyContainer container, @Argument("height") float value) {
+    public void setBoxHeight(Audience sender, PropertyContainer container, @Argument("height") float value) {
         Property<Float> heightProperty = container.get(DisplayHeightProperty.TYPE);
         if (heightProperty.setValue(value)) {
             Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
             if (widthProperty.getValue() == 0f) {
                 widthProperty.setValue(value);
             }
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -201,7 +215,7 @@ public class DisplayCommands {
     @CommandDescription("Remove the bounding box from the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void removeBox(Audience sender, Session session, PropertyContainer container) {
+    public void removeBox(Audience sender, PropertyContainer container) {
         int success = 0;
         Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
         if (widthProperty.setValue(0f)) {
@@ -213,7 +227,7 @@ public class DisplayCommands {
         }
 
         if (success > 0) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Removed the bounding box", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
@@ -225,7 +239,7 @@ public class DisplayCommands {
     @CommandDescription("Select a tool to move the bounding box of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void moveBox(Audience sender, Session session, PropertyContainer container) {
+    public void moveBox(Session session, PropertyContainer container) {
         DisplayBoxBone bone = new DisplayBoxBone(container);
         DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), container);
         node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
@@ -239,7 +253,7 @@ public class DisplayCommands {
     @CommandDescription("Show the text of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void showText(Audience sender, Session session, PropertyContainer container) {
+    public void showText(Audience sender, PropertyContainer container) {
         Component text = container.get(TextDisplayTextProperty.TYPE).getValue();
         SessionCommands.showText(sender, Component.text("Text", NamedTextColor.YELLOW), text, "/eas text set");
     }
@@ -249,11 +263,11 @@ public class DisplayCommands {
     @CommandDescription("Set the text of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void setText(Audience sender, Session session, PropertyContainer container, @Argument("value") @Greedy String input) {
+    public void setText(Audience sender, PropertyContainer container, @Argument("value") @Greedy String input) {
         Component value = MiniMessage.miniMessage().deserialize(input);
         Property<Component> property = container.get(TextDisplayTextProperty.TYPE);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed the text to ", NamedTextColor.GREEN)
                     .append(value));
         } else {
@@ -266,10 +280,10 @@ public class DisplayCommands {
     @CommandDescription("Set the line width of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void setTextWidth(Audience sender, Session session, PropertyContainer container, @Argument("value") int value) {
+    public void setTextWidth(Audience sender, PropertyContainer container, @Argument("value") int value) {
         Property<Integer> property = container.get(TextDisplayLineWidthProperty.TYPE);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed the line width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -282,11 +296,11 @@ public class DisplayCommands {
     @CommandDescription("Set the background color of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void setTextBackground(Audience sender, Session session, PropertyContainer container, @Argument("value") TextColor color) {
+    public void setTextBackground(Audience sender, PropertyContainer container, @Argument("value") TextColor color) {
         Color value = Color.fromRGB(color.value());
         Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed the background color to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {
@@ -299,10 +313,10 @@ public class DisplayCommands {
     @CommandDescription("Restore the default background color of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void resetTextBackground(Audience sender, Session session, PropertyContainer container) {
+    public void resetTextBackground(Audience sender, PropertyContainer container) {
         Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
         if (property.setValue(null)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Reset the background color", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -314,11 +328,11 @@ public class DisplayCommands {
     @CommandDescription("Hide the background of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void hideTextBackground(Audience sender, Session session, PropertyContainer container) {
+    public void hideTextBackground(Audience sender, PropertyContainer container) {
         Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
         Color value = Color.fromARGB(0);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Made the background invisible", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -330,7 +344,7 @@ public class DisplayCommands {
     @CommandDescription("Set the background transparency of the selected text display")
     @RequireSession
     @RequireEntity(TextDisplay.class)
-    public void hideTextBackground(Audience sender, Session session, PropertyContainer container, @Argument("value") @Range(min = "0", max = "255") int alpha) {
+    public void hideTextBackground(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "255") int alpha) {
         Property<@Nullable Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
         Color oldValue = property.getValue();
         if (oldValue == null) {
@@ -340,7 +354,7 @@ public class DisplayCommands {
 
         Color value = oldValue.setAlpha(alpha);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed the background transparency to ", NamedTextColor.GREEN)
                     .append(Component.text(alpha)));
         } else {
@@ -353,11 +367,11 @@ public class DisplayCommands {
     @CommandDescription("Set the scale of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void editScale(Audience sender, Session session, PropertyContainer container, @Argument("scale") float scale) {
+    public void editScale(Audience sender, PropertyContainer container, @Argument("scale") float scale) {
         Vector3f value = new Vector3f(scale);
         Property<Vector3fc> property = container.get(DisplayScaleProperty.TYPE);
         if (property.setValue(value)) {
-            session.commit();
+            container.commit();
             sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {

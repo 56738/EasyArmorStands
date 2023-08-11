@@ -1,29 +1,23 @@
 package me.m56738.easyarmorstands.addon.headdatabase;
 
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.menu.EntityMenu;
+import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 
-public class HeadDatabaseSlot implements InventorySlot {
-    private final EntityMenu<?> menu;
+public class HeadDatabaseSlot implements MenuSlot {
     private final HeadDatabaseAPI api;
-    private final Player player;
 
-    public HeadDatabaseSlot(EntityMenu<?> menu, HeadDatabaseAPI api) {
-        this.menu = menu;
+    public HeadDatabaseSlot(HeadDatabaseAPI api) {
         this.api = api;
-        this.player = menu.getSession().getPlayer();
     }
 
     @Override
-    public void initialize(int slot) {
+    public ItemStack getItem() {
         ItemStack item = api.getItemHead("227");
         if (item == null) {
             item = api.getRandomHead();
@@ -35,17 +29,16 @@ public class HeadDatabaseSlot implements InventorySlot {
                 ChatColor.GRAY + "using Head Database."
         ));
         item.setItemMeta(meta);
-        menu.getInventory().setItem(slot, item);
+        return item;
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
-        if (put) {
-            // Delete items placed into this slot
-            menu.queueTask(() -> menu.getSession().getPlayer().setItemOnCursor(null));
-            return false;
+    public void onClick(MenuClick click) {
+        click.cancel();
+        if (click.isLeftClick()) {
+            // TODO Delete items placed into this slot
+            click.queueTask(() -> click.player().performCommand("headdb"));
+            click.close();
         }
-        menu.queueTask(() -> player.performCommand("headdb"));
-        return false;
     }
 }

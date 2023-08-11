@@ -5,4 +5,9 @@ public interface BooleanTogglePropertyType extends BooleanPropertyType, TogglePr
     default Boolean getNextValue(Boolean value) {
         return !value;
     }
+
+    @Override
+    default Boolean getPreviousValue(Boolean value) {
+        return getNextValue(value);
+    }
 }

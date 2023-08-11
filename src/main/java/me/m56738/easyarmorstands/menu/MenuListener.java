@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,11 @@ public class MenuListener implements Listener {
         }
 
         @Override
+        public void open(Inventory inventory) {
+            queueTask(() -> player.openInventory(inventory));
+        }
+
+        @Override
         public void close() {
             queueTask(() -> {
                 if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
@@ -122,6 +128,11 @@ public class MenuListener implements Listener {
         public boolean isLeftClick() {
             return event.isLeftClick();
         }
+
+        @Override
+        public boolean isRightClick() {
+            return event.isRightClick();
+        }
     }
 
     private static class DragClick extends Click {
@@ -135,6 +146,11 @@ public class MenuListener implements Listener {
         @Override
         public boolean isLeftClick() {
             return event.getType() == DragType.EVEN;
+        }
+
+        @Override
+        public boolean isRightClick() {
+            return event.getType() == DragType.SINGLE;
         }
     }
 }

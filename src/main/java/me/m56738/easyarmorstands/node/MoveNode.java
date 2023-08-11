@@ -132,7 +132,7 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
         cursor.stop();
-        super.onExit();
+        bone.commit();
     }
 
     @Override

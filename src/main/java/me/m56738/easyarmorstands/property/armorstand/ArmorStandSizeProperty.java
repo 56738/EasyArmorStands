@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.property.EnumTogglePropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.property.TogglePropertyType;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -39,7 +39,7 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
         return true;
     }
 
-    private static class Type implements TogglePropertyType<ArmorStandSize> {
+    private static class Type implements EnumTogglePropertyType<ArmorStandSize> {
         @Override
         public String getPermission() {
             return "easyarmorstands.property.armorstand.size";
@@ -60,11 +60,6 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
                 default:
                     throw new IllegalArgumentException();
             }
-        }
-
-        @Override
-        public ArmorStandSize getNextValue(ArmorStandSize value) {
-            return value == ArmorStandSize.NORMAL ? ArmorStandSize.SMALL : ArmorStandSize.NORMAL;
         }
 
         @Override

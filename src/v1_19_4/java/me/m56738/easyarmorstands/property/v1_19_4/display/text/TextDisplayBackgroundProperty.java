@@ -105,6 +105,11 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
         }
 
         @Override
+        public @Nullable Color getPreviousValue(@Nullable Color value) {
+            return getNextValue(value);
+        }
+
+        @Override
         public ItemStack createItem(Property<@Nullable Color> property, PropertyContainer container) {
             return Util.createItem(
                     ItemType.STONE_SLAB,

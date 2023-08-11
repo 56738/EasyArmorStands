@@ -12,13 +12,11 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
 
 public class DisplayObject<T extends Display> extends SimpleEntityObject {
-    private final Session session;
     private final T entity;
     private final DisplayRootNodeFactory<T> factory;
 
-    public DisplayObject(Session session, T entity, DisplayRootNodeFactory<T> factory) {
-        super(session, entity);
-        this.session = session;
+    public DisplayObject(T entity, DisplayRootNodeFactory<T> factory) {
+        super(entity);
         this.entity = entity;
         this.factory = factory;
     }
@@ -29,12 +27,12 @@ public class DisplayObject<T extends Display> extends SimpleEntityObject {
     }
 
     @Override
-    public Button createButton() {
+    public Button createButton(Session session) {
         return new DisplayButton<>(session, entity);
     }
 
     @Override
-    public EditableObjectNode createNode() {
+    public EditableObjectNode createNode(Session session) {
         PropertyContainer container = session.properties(this);
 
         DisplayBone bone = new DisplayBone(container, DisplayLeftRotationProperty.TYPE);

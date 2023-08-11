@@ -3,12 +3,12 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
@@ -44,24 +44,29 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         return TYPES.get(slot);
     }
 
-    public static void populate(SplitMenuBuilder builder, Session session, PropertyContainer container) {
-        populate(builder, session, container, 19, EquipmentSlot.HEAD);
-        populate(builder, session, container, 27, EasyArmorStands.getInstance().getCapability(EquipmentCapability.class).getOffHand());
-        populate(builder, session, container, 28, EquipmentSlot.CHEST);
-        populate(builder, session, container, 29, EquipmentSlot.HAND);
-        populate(builder, session, container, 37, EquipmentSlot.LEGS);
-        populate(builder, session, container, 46, EquipmentSlot.FEET);
+    public static void populate(MenuBuilder builder, PropertyContainer container) {
+        populate(builder, container, 19, EquipmentSlot.HEAD);
+        populate(builder, container, 27, EasyArmorStands.getInstance().getCapability(EquipmentCapability.class).getOffHand());
+        populate(builder, container, 28, EquipmentSlot.CHEST);
+        populate(builder, container, 29, EquipmentSlot.HAND);
+        populate(builder, container, 37, EquipmentSlot.LEGS);
+        populate(builder, container, 46, EquipmentSlot.FEET);
     }
 
-    private static void populate(SplitMenuBuilder builder, Session session, PropertyContainer container, int index, EquipmentSlot slot) {
-        if (slot == null) {
+    private static void populate(MenuBuilder builder, PropertyContainer container, int index, EquipmentSlot equipmentSlot) {
+        if (equipmentSlot == null) {
             return;
         }
-        Property<ItemStack> property = container.getOrNull(type(slot));
+        Property<ItemStack> property = container.getOrNull(type(equipmentSlot));
         if (property == null) {
             return;
         }
-        builder.setSlot(index, new ItemPropertySlot(property, session));
+        ItemPropertySlot slot = new ItemPropertySlot(property, container);
+        if (builder instanceof SplitMenuBuilder) {
+            ((SplitMenuBuilder) builder).setSlot(index, slot);
+        } else {
+            builder.addUtility(slot);
+        }
     }
 
     @Override

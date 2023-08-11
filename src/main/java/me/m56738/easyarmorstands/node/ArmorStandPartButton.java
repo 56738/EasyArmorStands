@@ -15,10 +15,13 @@ import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartButton implements NodeButton {
     private final Session session;

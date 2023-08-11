@@ -1,5 +1,8 @@
 package me.m56738.easyarmorstands.editor;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -13,7 +16,11 @@ public class EntityObjectReference implements EditableObjectReference {
 
     @Override
     public @Nullable EditableObject restoreObject() {
-        return null;
+        Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
+        if (entity == null) {
+            return null;
+        }
+        return EasyArmorStands.getInstance().getEntityObjectProviderRegistry().createEditableObject(entity);
     }
 
     @Override

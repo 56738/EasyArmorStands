@@ -21,5 +21,10 @@ public abstract class AbstractEditableObject implements EditableObject {
         public boolean isValid() {
             return owner.isValid();
         }
+
+        @Override
+        public void commit() {
+            // properties contained in this registry perform their changes immediately
+        }
     }
 }

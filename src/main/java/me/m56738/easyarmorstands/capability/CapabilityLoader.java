@@ -4,7 +4,14 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class CapabilityLoader {

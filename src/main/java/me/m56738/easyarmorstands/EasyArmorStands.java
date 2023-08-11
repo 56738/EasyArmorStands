@@ -19,9 +19,24 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.processor.*;
+import me.m56738.easyarmorstands.command.processor.EditableObjectInjector;
+import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
+import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
+import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
+import me.m56738.easyarmorstands.command.processor.Keys;
+import me.m56738.easyarmorstands.command.processor.PropertyContainerInjector;
+import me.m56738.easyarmorstands.command.processor.SessionInjector;
+import me.m56738.easyarmorstands.command.processor.SessionPostprocessor;
+import me.m56738.easyarmorstands.command.processor.SessionPreprocessor;
+import me.m56738.easyarmorstands.command.processor.UnknownPropertyExceptionHandler;
+import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.editor.ArmorStandObjectProvider;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.EntityObjectMenuListener;
+import me.m56738.easyarmorstands.editor.EntityObjectProviderRegistry;
+import me.m56738.easyarmorstands.editor.SimpleEntityObjectProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
@@ -57,6 +72,7 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
+    private EntityObjectProviderRegistry entityObjectProviderRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
@@ -89,14 +105,19 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
 
         loader.load();
 
+        entityObjectProviderRegistry = new EntityObjectProviderRegistry();
         sessionManager = new SessionManager();
         historyManager = new HistoryManager();
         adventure = BukkitAudiences.create(this);
+
+        entityObjectProviderRegistry.register(new ArmorStandObjectProvider());
+        entityObjectProviderRegistry.register(new SimpleEntityObjectProvider());
 
         SessionListener sessionListener = new SessionListener(this, sessionManager);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(sessionListener, this);
         getServer().getPluginManager().registerEvents(historyManager, this);
+        getServer().getPluginManager().registerEvents(new EntityObjectMenuListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
 
         CommandSenderWrapper senderWrapper = new CommandSenderWrapper(adventure);
@@ -139,6 +160,7 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
         commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
 
         commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector<>());
+        commandManager.parameterInjectorRegistry().registerInjector(EditableObject.class, new EditableObjectInjector<>());
         commandManager.parameterInjectorRegistry().registerInjector(PropertyContainer.class, new PropertyContainerInjector<>());
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
@@ -193,6 +215,10 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
 
     public CapabilityLoader getCapabilityLoader() {
         return loader;
+    }
+
+    public EntityObjectProviderRegistry getEntityObjectProviderRegistry() {
+        return entityObjectProviderRegistry;
     }
 
     public SessionManager getSessionManager() {

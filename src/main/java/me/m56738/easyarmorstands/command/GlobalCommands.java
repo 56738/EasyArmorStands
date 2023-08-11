@@ -15,12 +15,16 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.editor.EditableObject;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -154,20 +158,48 @@ public class GlobalCommands {
 
         if (sender.get() instanceof Player) {
             Session session = sessionManager.getSession(((Player) sender.get()));
+            EditableObject editableObject = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
                 boolean first = true;
                 for (Node node : session.getNodeStack()) {
                     sender.sendMessage(
                             Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
-                                    .append(
-                                            Component.text(node.getClass().getSimpleName())
-                                                    .hoverEvent(Component.text(node.getClass().getName()))
-                                    ));
+                                    .append(Component.text(node.getClass().getSimpleName())
+                                            .hoverEvent(Component.text(node.getClass().getName()))));
                     first = false;
                 }
+                editableObject = session.getEditableObject();
+            }
+            if (editableObject != null) {
+                sender.sendMessage(Component.text("Selected object: ", NamedTextColor.GOLD)
+                        .append(Component.text(editableObject.getClass().getSimpleName(), NamedTextColor.GREEN)
+                                .hoverEvent(Component.text(editableObject.getClass().getName()))));
+                TextComponent.Builder builder = Component.text();
+                builder.color(NamedTextColor.GRAY);
+                editableObject.properties().forEach(property -> appendPropertyDebug(builder, property));
+                sender.sendMessage(builder);
             }
         }
+    }
+
+    private <T> void appendPropertyDebug(TextComponent.Builder builder, Property<T> property) {
+        PropertyType<T> type = property.getType();
+
+        TextComponent.Builder hover = Component.text();
+        hover.append(debugLine(Component.text("Type"), Component.text(type.getClass().getName())));
+        hover.appendNewline();
+        hover.append(debugLine(Component.text("Value"), type.getValueComponent(property.getValue())));
+        String permission = type.getPermission();
+        if (permission != null) {
+            hover.appendNewline();
+            hover.append(debugLine(Component.text("Permission"), Component.text(permission)));
+        }
+
+        if (!builder.children().isEmpty()) {
+            builder.append(Component.text(", "));
+        }
+        builder.append(type.getDisplayName().hoverEvent(hover.build()));
     }
 
     private Component debugLine(Component key, Component value) {

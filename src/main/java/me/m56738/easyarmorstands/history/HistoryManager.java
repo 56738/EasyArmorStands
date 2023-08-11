@@ -14,7 +14,7 @@ public class HistoryManager implements Listener {
 
     public History getHistory(Player player) {
         if (!player.isOnline()) {
-            throw new IllegalArgumentException("Player is offline");
+            return new History();
         }
         return history.computeIfAbsent(player, p -> new History());
     }

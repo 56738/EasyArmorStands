@@ -51,6 +51,11 @@ public class BoneRotationNode extends RotationNode {
     }
 
     @Override
+    protected void commit() {
+        bone.commit();
+    }
+
+    @Override
     public Component getName() {
         return name;
     }

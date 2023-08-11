@@ -62,4 +62,9 @@ public class EntityLocationBone implements PositionAndYawBone {
     public boolean isValid() {
         return container.isValid();
     }
+
+    @Override
+    public void commit() {
+        container.commit();
+    }
 }

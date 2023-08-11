@@ -6,12 +6,15 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
+import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
+import me.m56738.easyarmorstands.editor.DestroyableObject;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.MenuObject;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.Property;
@@ -41,7 +44,7 @@ import org.joml.Vector3dc;
 @CommandMethod("eas")
 public class SessionCommands {
     public static void showText(Audience audience, Component type, Component text, String command) {
-        String serialized = MiniMessage.miniMessage().serialize(text);
+        String serialized = MiniMessage.miniMessage().serializeOr(text, "");
         audience.sendMessage(type
                 .append(Component.text(": "))
                 .append(Component.text("[Edit]", NamedTextColor.GRAY)
@@ -58,17 +61,51 @@ public class SessionCommands {
         audience.sendMessage(text);
     }
 
+    @CommandMethod("open")
+    @CommandPermission("easyarmorstands.open")
+    @CommandDescription("Open the menu")
+    public void open(EasPlayer sender, EditableObject editableObject) {
+        if (!(editableObject instanceof MenuObject)) {
+            sender.sendMessage(Component.text("You're not editing an object which allows opening a menu.", NamedTextColor.RED));
+            return;
+        }
+        MenuObject menuObject = (MenuObject) editableObject;
+        menuObject.openMenu(sender.get());
+    }
+
+    @CommandMethod("open <entity>")
+    @CommandPermission("easyarmorstands.open")
+    @CommandDescription("Open the menu of an entity")
+    public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
+        Entity entity = selector.getEntity();
+        if (entity == null) {
+            sender.sendMessage(Component.text("Entity not found.", NamedTextColor.RED));
+            return;
+        }
+        EditableObject editableObject = EasyArmorStands.getInstance().getEntityObjectProviderRegistry().createEditableObject(entity);
+        if (editableObject == null) {
+            sender.sendMessage(Component.text("Cannot edit this entity.", NamedTextColor.RED));
+            return;
+        }
+        if (!(editableObject instanceof MenuObject)) {
+            sender.sendMessage(Component.text("This entity doesn't have a menu.", NamedTextColor.RED));
+            return;
+        }
+        MenuObject menuObject = (MenuObject) editableObject;
+        menuObject.openMenu(sender.get());
+    }
+
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Spawn a copy of the selected entity")
     @RequireSession
     @RequireEntity
     public void clone(EasPlayer sender,
-                      Session session,
                       Entity entity) {
         Location location = entity.getLocation();
+        // TODO
         CloneSpawner<Entity> spawner = new CloneSpawner<>(entity);
-        Entity clone = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
+        Entity clone = EntitySpawner.trySpawn(spawner, location, sender.get());
         if (clone == null) {
             sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
             return;
@@ -78,15 +115,14 @@ public class SessionCommands {
         EasyArmorStands.getInstance().getHistory(sender.get()).push(action);
 
         sender.sendMessage(Component.text("Entity cloned", NamedTextColor.GREEN));
-        session.selectEntity(clone);
+//        session.selectEntity(clone);
     }
 
     @CommandMethod("spawn")
     @CommandPermission("easyarmorstands.spawn")
     @CommandDescription("Open the spawn menu")
-    @RequireSession
-    public void spawn(Session session) {
-        session.openSpawnMenu();
+    public void spawn(EasPlayer sender) {
+        Session.openSpawnMenu(sender.get());
     }
 
     @CommandMethod("destroy")
@@ -96,14 +132,18 @@ public class SessionCommands {
     @RequireEntity
     public void destroy(
             EasCommandSender sender,
-            Session session,
-            Entity entity) {
+            Session session) {
         Player player = session.getPlayer();
-        EntityDestroyAction<?> action = new EntityDestroyAction<>(entity);
-        if (!EntitySpawner.tryRemove(entity, player)) {
+        EditableObject editableObject = session.getEditableObject();
+        if (!(editableObject instanceof DestroyableObject)) {
+            sender.sendMessage(Component.text("You're not editing an object which can be destroyed", NamedTextColor.RED));
             return;
         }
-        EasyArmorStands.getInstance().getHistory(player).push(action);
+        DestroyableObject destroyableObject = (DestroyableObject) editableObject;
+        if (!destroyableObject.destroy(player)) {
+            sender.sendMessage(Component.text("Unable to destroy", NamedTextColor.RED));
+            return;
+        }
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
 
@@ -150,7 +190,6 @@ public class SessionCommands {
     @RequireEntity
     public void align(
             EasCommandSender sender,
-            Session session,
             PropertyContainer container,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
@@ -174,7 +213,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text()
                 .content("Moved to ")
                 .append(Component.text(Util.POSITION_FORMAT.format(position.x()), TextColor.color(0xFF7777)))
@@ -190,7 +229,7 @@ public class SessionCommands {
     @CommandDescription("Teleport the selected entity")
     @RequireSession
     @RequireEntity
-    public void position(EasCommandSender sender, Session session, PropertyContainer container,
+    public void position(EasCommandSender sender, PropertyContainer container,
                          @Argument("position") Location location) {
         Property<Location> property = container.get(EntityLocationProperty.TYPE);
         Location oldLocation = property.getValue();
@@ -200,7 +239,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Moved to ", NamedTextColor.GREEN)
                 .append(Util.formatLocation(location)));
     }
@@ -210,7 +249,7 @@ public class SessionCommands {
     @CommandDescription("Set the yaw of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setYaw(EasCommandSender sender, Session session, PropertyContainer container,
+    public void setYaw(EasCommandSender sender, PropertyContainer container,
                        @Argument("yaw") float yaw) {
         Property<Location> property = container.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
@@ -219,7 +258,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Changed yaw to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(yaw)));
     }
@@ -229,7 +268,7 @@ public class SessionCommands {
     @CommandDescription("Set the pitch of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setPitch(EasCommandSender sender, Session session, PropertyContainer container,
+    public void setPitch(EasCommandSender sender, PropertyContainer container,
                          @Argument("pitch") float pitch) {
         Property<Location> property = container.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
@@ -238,7 +277,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(pitch)));
     }
@@ -248,7 +287,7 @@ public class SessionCommands {
     @CommandDescription("Show the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void showName(EasCommandSender sender, Session session, PropertyContainer container) {
+    public void showName(EasCommandSender sender, PropertyContainer container) {
         Property<Component> property = container.get(EntityCustomNameProperty.TYPE);
         Component text = property.getValue();
         showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
@@ -259,7 +298,7 @@ public class SessionCommands {
     @CommandDescription("Set the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setName(EasCommandSender sender, Session session, PropertyContainer container,
+    public void setName(EasCommandSender sender, PropertyContainer container,
                         @Argument("value") @Greedy String input) {
         Property<Component> nameProperty = container.get(EntityCustomNameProperty.TYPE);
         Property<Boolean> nameVisibleProperty = container.get(EntityCustomNameVisibleProperty.TYPE);
@@ -272,7 +311,7 @@ public class SessionCommands {
         if (!hadName) {
             nameVisibleProperty.setValue(true);
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
                 .append(name.colorIfAbsent(NamedTextColor.WHITE)));
     }
@@ -282,7 +321,7 @@ public class SessionCommands {
     @CommandDescription("Remove the custom name of the selected entity")
     @RequireSession
     @RequireEntity
-    public void clearName(EasCommandSender sender, Session session, PropertyContainer container) {
+    public void clearName(EasCommandSender sender, PropertyContainer container) {
         Property<Component> nameProperty = container.get(EntityCustomNameProperty.TYPE);
         Property<Boolean> nameVisibleProperty = container.get(EntityCustomNameVisibleProperty.TYPE);
         if (!nameProperty.setValue(null)) {
@@ -290,7 +329,7 @@ public class SessionCommands {
             return;
         }
         nameVisibleProperty.setValue(false);
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
     }
 
@@ -299,14 +338,14 @@ public class SessionCommands {
     @CommandDescription("Change the custom name visibility of the selected entity")
     @RequireSession
     @RequireEntity
-    public void setNameVisible(EasCommandSender sender, Session session, PropertyContainer container,
+    public void setNameVisible(EasCommandSender sender, PropertyContainer container,
                                @Argument("value") boolean visible) {
         Property<Boolean> property = container.get(EntityCustomNameVisibleProperty.TYPE);
         if (!property.setValue(visible)) {
             sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
                 .append(property.getType().getValueComponent(visible)));
     }
@@ -316,7 +355,7 @@ public class SessionCommands {
     @CommandDescription("Toggle whether the selected armor stand should be ticked")
     @RequireSession
     @RequireEntity(ArmorStand.class)
-    public void setCanTick(EasCommandSender sender, Session session, PropertyContainer container,
+    public void setCanTick(EasCommandSender sender, PropertyContainer container,
                            @Argument("value") boolean canTick) {
         Property<Boolean> property = container.getOrNull(ArmorStandCanTickProperty.TYPE);
         if (property == null) {
@@ -327,7 +366,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
             return;
         }
-        session.commit();
+        container.commit();
         sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
                 .append(property.getType().getValueComponent(canTick)));
     }
@@ -356,7 +395,6 @@ public class SessionCommands {
     @CommandDescription("Set the value of the selected tool")
     public void set(
             EasCommandSender sender,
-            Session session,
             ValueNode node,
             @Argument(value = "value", parserName = "node_value") Object value
     ) {

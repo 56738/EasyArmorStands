@@ -7,20 +7,16 @@ import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import me.m56738.easyarmorstands.editor.EditableObject;
 import me.m56738.easyarmorstands.editor.EntityObject;
-import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
-import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.PropertyAction;
+import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
-import me.m56738.easyarmorstands.node.*;
+import me.m56738.easyarmorstands.node.ClickContext;
+import me.m56738.easyarmorstands.node.EditableObjectNode;
+import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.particle.Particle;
-import me.m56738.easyarmorstands.property.PendingChange;
-import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -44,18 +40,19 @@ import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private final LinkedList<Node> nodeStack = new LinkedList<>();
-    private final EntitySelectionNode rootNode = new EntitySelectionNode(this, Component.text("Select an entity"));
     private final Player player;
     private final Audience audience;
     private final DustParticleCapability dustParticleCapability;
-    private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
-    private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
     private final Set<Particle> particles = new HashSet<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
@@ -66,8 +63,27 @@ public final class Session implements ForwardingAudience.Single {
         this.player = player;
         this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
         this.dustParticleCapability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
-        this.rootNode.setRoot(true);
-        pushNode(this.rootNode);
+    }
+
+    public static void openSpawnMenu(Player player) {
+        SimpleMenuBuilder builder = new SimpleMenuBuilder();
+        if (player.hasPermission("easyarmorstands.spawn.armorstand")) {
+            EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
+            builder.addButton(new SpawnSlot(new ArmorStandSpawner(), Util.createItem(
+                    ItemType.ARMOR_STAND,
+                    entityTypeCapability.getName(EntityType.ARMOR_STAND))));
+        }
+        Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player, builder));
+        int size = builder.getSize();
+        if (size == 0) {
+            return;
+        }
+        if (size == 1) {
+            // Only one button, click it immediately
+            builder.getSlot(0).onClick(new MenuClick.FakeLeftClick(0, player));
+        } else {
+            player.openInventory(builder.build(Component.text("Spawn")).getInventory());
+        }
     }
 
     public Node getNode() {
@@ -92,7 +108,6 @@ public final class Session implements ForwardingAudience.Single {
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
         }
-        commit();
         nodeStack.push(node);
         node.onAdd();
         node.onEnter();
@@ -102,7 +117,6 @@ public final class Session implements ForwardingAudience.Single {
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
-        commit();
         nodeStack.push(node);
         node.onAdd();
         node.onEnter();
@@ -112,7 +126,6 @@ public final class Session implements ForwardingAudience.Single {
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
-        commit();
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onEnter();
         }
@@ -123,14 +136,9 @@ public final class Session implements ForwardingAudience.Single {
             nodeStack.peek().onExit();
         }
         for (Node node : nodeStack) {
-            if (node != rootNode) {
-                node.onRemove();
-            }
+            node.onRemove();
         }
         nodeStack.clear();
-        commit();
-        nodeStack.push(rootNode);
-        rootNode.onEnter();
     }
 
     public boolean handleClick(ClickContext context) {
@@ -143,23 +151,6 @@ public final class Session implements ForwardingAudience.Single {
         Vector3dc eyes = Util.toVector3d(eyeLocation);
         Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
         return node.onClick(eyes, target, context);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void commit() {
-        Bukkit.getPluginManager().callEvent(new SessionCommitEvent(this));
-        List<Action> actions = new ArrayList<>();
-        for (Map.Entry<ChangeKey<?>, Object> entry : pendingValues.entrySet()) {
-            ChangeKey key = entry.getKey();
-            Object oldValue = originalValues.get(key);
-            Object value = entry.getValue();
-            if (!Objects.equals(oldValue, value)) {
-                actions.add(key.createChangeAction(oldValue, value));
-            }
-        }
-        EasyArmorStands.getInstance().getHistory(player).push(actions);
-        originalValues.clear();
-        pendingValues.clear();
     }
 
     public double snap(double value) {
@@ -178,19 +169,23 @@ public final class Session implements ForwardingAudience.Single {
 
     @Deprecated
     public Entity getEntity() {
-        for (Node node : nodeStack) {
-            if (node instanceof EditableObjectNode) {
-                EditableObject editableObject = ((EditableObjectNode) node).getEditableObject();
-                if (editableObject instanceof EntityObject) {
-                    return ((EntityObject) editableObject).getEntity();
-                }
-            }
+        EditableObject editableObject = getEditableObject();
+        if (editableObject instanceof EntityObject) {
+            return ((EntityObject) editableObject).getEntity();
         }
         return null;
     }
 
-    public void addProvider(EntityObjectProvider provider) {
-        rootNode.addProvider(provider);
+    public EditableObject getEditableObject() {
+        for (Node node : nodeStack) {
+            if (node instanceof EditableObjectNode) {
+                EditableObject editableObject = ((EditableObjectNode) node).getEditableObject();
+                if (editableObject != null) {
+                    return editableObject;
+                }
+            }
+        }
+        return null;
     }
 
     public boolean update() {
@@ -250,7 +245,6 @@ public final class Session implements ForwardingAudience.Single {
             particle.hide(player);
         }
         particles.clear();
-        commit();
         valid = false;
     }
 
@@ -421,31 +415,6 @@ public final class Session implements ForwardingAudience.Single {
         return position.distanceSquared(closestOnEyeRay) < threshold * threshold;
     }
 
-    public boolean selectEntity(Entity entity) {
-        return rootNode.selectEntity(entity);
-    }
-
-    public void openSpawnMenu() {
-        SimpleMenuBuilder builder = new SimpleMenuBuilder();
-        if (player.hasPermission("easyarmorstands.spawn.armorstand")) {
-            EntityTypeCapability entityTypeCapability = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class);
-            builder.addButton(new SpawnSlot(this, new ArmorStandSpawner(), Util.createItem(
-                    ItemType.ARMOR_STAND,
-                    entityTypeCapability.getName(EntityType.ARMOR_STAND))));
-        }
-        Bukkit.getPluginManager().callEvent(new SessionSpawnMenuBuildEvent(this, builder));
-        int size = builder.getSize();
-        if (size == 0) {
-            return;
-        }
-        if (size == 1) {
-            // Only one button, click it immediately
-            builder.getSlot(0).onClick(new MenuClick.FakeLeftClick(0, player));
-        } else {
-            player.openInventory(builder.build(Component.text("Spawn")).getInventory());
-        }
-    }
-
     public boolean canSelectEntity(Entity entity) {
         SessionSelectEntityEvent event = new SessionSelectEntityEvent(this, entity);
         Bukkit.getPluginManager().callEvent(event);
@@ -453,111 +422,10 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     public PropertyContainer properties(EditableObject editableObject) {
-        return new PropertyContainerImpl(editableObject);
+        return PropertyContainer.tracked(editableObject, player);
     }
 
     public boolean isValid() {
         return valid;
-    }
-
-    private static class ChangeKey<T> {
-        private final EditableObject editableObject;
-        private final PropertyType<T> propertyType;
-
-        private ChangeKey(EditableObject editableObject, PropertyType<T> propertyType) {
-            this.editableObject = editableObject;
-            this.propertyType = propertyType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ChangeKey<?> changeKey = (ChangeKey<?>) o;
-            return Objects.equals(editableObject, changeKey.editableObject) && Objects.equals(propertyType, changeKey.propertyType);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(editableObject, propertyType);
-        }
-
-        public Action createChangeAction(T oldValue, T value) {
-            return new PropertyAction<>(editableObject.asReference(), propertyType, oldValue, value);
-        }
-    }
-
-    private class PropertyContainerImpl implements PropertyContainer {
-        private final EditableObject editableObject;
-        private final PropertyContainer container;
-
-        private PropertyContainerImpl(EditableObject editableObject) {
-            this.editableObject = editableObject;
-            this.container = PropertyContainer.asPlayer(editableObject.properties(), player);
-        }
-
-        private <T> Property<T> wrap(Property<T> property) {
-            if (property == null) {
-                return null;
-            }
-            return new SessionProperty<>(editableObject, property);
-        }
-
-        @Override
-        public @Nullable <T> Property<T> getOrNull(PropertyType<T> type) {
-            return wrap(container.getOrNull(type));
-        }
-
-        @Override
-        public @NotNull <T> Property<T> get(PropertyType<T> type) {
-            return wrap(container.get(type));
-        }
-
-        @Override
-        public boolean isValid() {
-            return container.isValid();
-        }
-    }
-
-    private class SessionProperty<T> implements Property<T> {
-        private final Property<T> property;
-        private final ChangeKey<T> key;
-
-        private SessionProperty(EditableObject editableObject, Property<T> property) {
-            this.property = property;
-            this.key = new ChangeKey<>(editableObject, property.getType());
-        }
-
-        @Override
-        public PropertyType<T> getType() {
-            return property.getType();
-        }
-
-        @Override
-        public T getValue() {
-            return property.getValue();
-        }
-
-        @Override
-        public boolean setValue(T value) {
-            T oldValue = property.getValue();
-            if (Objects.equals(oldValue, value)) {
-                return true;
-            }
-            if (!property.setValue(value)) {
-                return false;
-            }
-            originalValues.putIfAbsent(key, oldValue);
-            pendingValues.put(key, value);
-            return true;
-        }
-
-        @Override
-        public @Nullable PendingChange prepareChange(T value) {
-            if (property.prepareChange(value) == null) {
-                return null;
-            }
-            return PendingChange.of(this, value);
-        }
     }
 }

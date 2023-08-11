@@ -9,7 +9,11 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.joml.*;
+import org.joml.Quaternionf;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class DisplayBoxBone implements PositionBone {
     private final PropertyContainer container;
@@ -27,6 +31,11 @@ public class DisplayBoxBone implements PositionBone {
     @Override
     public boolean isValid() {
         return container.isValid();
+    }
+
+    @Override
+    public void commit() {
+        container.commit();
     }
 
     @Override

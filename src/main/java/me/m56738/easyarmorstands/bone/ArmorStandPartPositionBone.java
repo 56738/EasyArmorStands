@@ -30,6 +30,11 @@ public class ArmorStandPartPositionBone implements PositionBone {
     }
 
     @Override
+    public void commit() {
+        container.commit();
+    }
+
+    @Override
     public Vector3dc getPosition() {
         Location location = locationProperty.getValue();
         ArmorStandSize size = sizeProperty.getValue();

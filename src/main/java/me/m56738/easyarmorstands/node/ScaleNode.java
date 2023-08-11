@@ -126,7 +126,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
         cursor.stop();
-        super.onExit();
+        bone.commit();
     }
 
     private void updateAxisParticle() {

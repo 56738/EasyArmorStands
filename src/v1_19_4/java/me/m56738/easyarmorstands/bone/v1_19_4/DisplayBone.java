@@ -9,7 +9,14 @@ import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import org.joml.Math;
-import org.joml.*;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class DisplayBone extends EntityLocationBone implements RotationBone, ScaleBone {
     private final Property<Vector3fc> translationProperty;

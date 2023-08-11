@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
@@ -14,12 +15,10 @@ import org.joml.Matrix3d;
 import org.joml.Vector3d;
 
 public class SpawnSlot implements MenuSlot {
-    private final Session session;
     private final EntitySpawner<?> spawner;
     private final ItemStack item;
 
-    public SpawnSlot(Session session, EntitySpawner<?> spawner, ItemStack item) {
-        this.session = session;
+    public SpawnSlot(EntitySpawner<?> spawner, ItemStack item) {
         this.spawner = spawner;
         this.item = item;
     }
@@ -40,12 +39,16 @@ public class SpawnSlot implements MenuSlot {
             if (!player.isFlying()) {
                 position.y = 0;
             }
+            Session session = EasyArmorStands.getInstance().getSessionManager().getSession(player);
             Location location = player.getLocation().add(position.x, position.y, position.z);
-            location.setX(session.snap(location.getX()));
-            location.setY(session.snap(location.getY()));
-            location.setZ(session.snap(location.getZ()));
-            location.setYaw((float) session.snapAngle(location.getYaw() + 180));
-            location.setPitch((float) session.snapAngle(location.getPitch()));
+            location.setYaw(location.getYaw() + 180);
+            if (session != null) {
+                location.setX(session.snap(location.getX()));
+                location.setY(session.snap(location.getY()));
+                location.setZ(session.snap(location.getZ()));
+                location.setYaw((float) session.snapAngle(location.getYaw()));
+                location.setPitch((float) session.snapAngle(location.getPitch()));
+            }
             Entity entity = EntitySpawner.trySpawn(spawner, location, player);
             if (entity == null) {
                 return;
@@ -53,7 +56,13 @@ public class SpawnSlot implements MenuSlot {
             EntitySpawnAction<?> action = new EntitySpawnAction<>(location, spawner, entity.getUniqueId());
             EasyArmorStands.getInstance().getHistory(player).push(action);
 
-            session.selectEntity(entity);
+            if (session != null) {
+                EntitySelectionNode selectionNode = session.findNode(EntitySelectionNode.class);
+                if (selectionNode != null) {
+                    selectionNode.selectEntity(entity);
+                }
+            }
+
             click.close();
         }
     }

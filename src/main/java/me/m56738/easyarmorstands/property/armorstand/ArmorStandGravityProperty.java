@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.property.BooleanTogglePropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -88,14 +89,18 @@ public class ArmorStandGravityProperty implements Property<Boolean> {
         }
 
         @Override
-        public void onClick(Property<Boolean> property, PropertyContainer container) {
-            BooleanTogglePropertyType.super.onClick(property, container);
+        public boolean onClick(Property<Boolean> property, PropertyContainer container, MenuClick click) {
+            boolean changed = BooleanTogglePropertyType.super.onClick(property, container, click);
 
-            // Attempt to also turn on armor stand ticking when turning on gravity
-            Property<Boolean> canTickProperty = container.getOrNull(ArmorStandCanTickProperty.TYPE);
-            if (property.getValue() && canTickProperty != null && !canTickProperty.getValue()) {
-                canTickProperty.setValue(true);
+            if (changed) {
+                // Attempt to also turn on armor stand ticking when turning on gravity
+                Property<Boolean> canTickProperty = container.getOrNull(ArmorStandCanTickProperty.TYPE);
+                if (property.getValue() && canTickProperty != null && !canTickProperty.getValue()) {
+                    canTickProperty.setValue(true); // Ignore failure
+                }
             }
+
+            return changed;
         }
     }
 }

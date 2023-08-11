@@ -2,8 +2,16 @@ package me.m56738.easyarmorstands.addon.display;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
+import me.m56738.easyarmorstands.editor.EntityObject;
 import me.m56738.easyarmorstands.editor.SimpleEntityObject;
 import me.m56738.easyarmorstands.event.EntityObjectInitializeEvent;
+import me.m56738.easyarmorstands.event.EntityObjectMenuInitializeEvent;
+import me.m56738.easyarmorstands.menu.Menu;
+import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
+import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
@@ -30,6 +38,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 public class DisplayListener implements Listener {
     private final JOMLMapper mapper;
@@ -40,7 +49,27 @@ public class DisplayListener implements Listener {
 
     @EventHandler
     public void onInitialize(EntityObjectInitializeEvent event) {
-        registerProperties(event.getEntityObject());
+        EntityObject entityObject = event.getEntityObject();
+        if (entityObject instanceof SimpleEntityObject) {
+            registerProperties((SimpleEntityObject) entityObject);
+        }
+    }
+
+    @EventHandler
+    public void onInitializeMenu(EntityObjectMenuInitializeEvent event) {
+        MenuBuilder builder = event.getMenuBuilder();
+        PropertyContainer properties = event.getProperties();
+        Property<ItemStack> property = properties.getOrNull(ItemDisplayItemProperty.TYPE);
+        if (property != null) {
+            ItemPropertySlot slot = new ItemPropertySlot(property, properties);
+            if (builder instanceof SplitMenuBuilder) {
+                SplitMenuBuilder splitMenuBuilder = (SplitMenuBuilder) builder;
+                splitMenuBuilder.setSlot(Menu.index(3, 1), slot);
+                splitMenuBuilder.ensureRow(4);
+            } else {
+                builder.addUtility(slot);
+            }
+        }
     }
 
     private void registerProperties(SimpleEntityObject entityObject) {

@@ -39,13 +39,12 @@ public class PropertyAction<T> implements Action {
         if (editableObject == null) {
             return false;
         }
-        PropertyContainer properties = PropertyContainer.asPlayer(editableObject.properties(), player);
+        PropertyContainer properties = PropertyContainer.identified(editableObject.properties(), player);
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;
         }
-        property.setValue(value);
-        return true;
+        return property.setValue(value);
     }
 
     @Override

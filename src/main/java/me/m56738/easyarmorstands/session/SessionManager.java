@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.editor.ArmorStandObjectProvider;
-import me.m56738.easyarmorstands.editor.SimpleEntityObjectProvider;
+import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.editor.EntityObjectProviderRegistry;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
+import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +27,10 @@ public class SessionManager {
 
     public Session start(Player player) {
         Session session = new Session(player);
-        session.addProvider(new ArmorStandObjectProvider(session));
-        session.addProvider(new SimpleEntityObjectProvider(session));
+        EntityObjectProviderRegistry registry = EasyArmorStands.getInstance().getEntityObjectProviderRegistry();
+        EntitySelectionNode node = new EntitySelectionNode(session, Component.text("Select an entity"), registry);
+        node.setRoot(true);
+        session.pushNode(node);
         start(session);
         return session;
     }
@@ -71,14 +74,5 @@ public class SessionManager {
 
     public @Nullable Session getSession(Player player) {
         return sessions.get(player);
-    }
-
-    public @Nullable Session getSession(Entity entity) {
-        for (Session session : sessions.values()) {
-            if (session.getEntity() == entity) {
-                return session;
-            }
-        }
-        return null;
     }
 }

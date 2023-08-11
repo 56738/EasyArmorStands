@@ -133,12 +133,14 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
         cursor.stop();
-        super.onExit();
+        commit();
     }
 
     protected abstract void refresh();
 
     protected abstract void apply(double angle, double degrees);
+
+    protected abstract void commit();
 
     @Override
     public void update() {

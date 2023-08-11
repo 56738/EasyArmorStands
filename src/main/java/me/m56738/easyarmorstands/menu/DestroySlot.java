@@ -1,56 +1,43 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
-import me.m56738.easyarmorstands.inventory.InventorySlot;
-import me.m56738.easyarmorstands.session.EntitySpawner;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.editor.DestroyableObject;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 
-public class DestroySlot implements InventorySlot {
-    private final EntityMenu<?> menu;
+public class DestroySlot implements MenuSlot {
+    private final DestroyableObject destroyableObject;
 
-    public DestroySlot(EntityMenu<?> menu) {
-        this.menu = menu;
+    public DestroySlot(DestroyableObject destroyableObject) {
+        this.destroyableObject = destroyableObject;
     }
 
     @Override
-    public void initialize(int slot) {
-        ItemStack item = Util.createItem(
+    public ItemStack getItem() {
+        return Util.createItem(
                 ItemType.BARRIER,
                 Component.text("Destroy", NamedTextColor.BLUE),
                 Collections.singletonList(
                         Component.text("Deletes this entity.", NamedTextColor.GRAY)
                 )
         );
-        menu.getInventory().setItem(slot, item);
     }
 
     @Override
-    public boolean onInteract(int slot, boolean click, boolean put, boolean take, ClickType type) {
-        if (!click) {
-            return false;
+    public void onClick(MenuClick click) {
+        click.cancel();
+
+        if (!click.isLeftClick()) {
+            return;
         }
-        menu.queueTask(() -> {
-            Session session = menu.getSession();
-            Player player = session.getPlayer();
-            Entity entity = menu.getEntity();
-            EntityDestroyAction<?> action = new EntityDestroyAction<>(entity);
-            if (!EntitySpawner.tryRemove(entity, player)) {
-                return;
-            }
-            EasyArmorStands.getInstance().getHistory(player).push(action);
-            menu.close(player);
-        });
-        return false;
+
+        if (destroyableObject.destroy(click.player())) {
+            click.close();
+        }
     }
 }

@@ -1,6 +1,5 @@
-package me.m56738.easyarmorstands.node;
+package me.m56738.easyarmorstands.editor;
 
-import me.m56738.easyarmorstands.editor.EntityObject;
 import org.bukkit.entity.Entity;
 
 public interface EntityObjectProvider {

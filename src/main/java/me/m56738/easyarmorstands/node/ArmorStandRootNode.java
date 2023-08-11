@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.editor.ArmorStandObject;
 import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.session.Session;
@@ -168,17 +167,7 @@ public class ArmorStandRootNode extends MenuNode implements EditableObjectNode {
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         Player player = session.getPlayer();
         if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
-            if (player.isSneaking()) {
-                player.openInventory(new LegacyArmorStandMenu(session, entity).getInventory());
-            } else {
-                // TODO
-//                SplitMenuBuilder builder = new SplitMenuBuilder();
-//                EntityEquipmentProperty.populate(builder, session);
-//                Property<Boolean> property = session.findProperty(ArmorStandBasePlateProperty.TYPE);
-//                builder.addButton(new ButtonPropertySlot((BooleanToggleProperty) property, session));
-//                Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
-//                player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
-            }
+            entityObject.openMenu(player);
             return true;
         }
         return super.onClick(eyes, target, context);
