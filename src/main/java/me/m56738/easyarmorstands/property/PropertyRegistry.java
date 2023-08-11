@@ -13,7 +13,7 @@ public class PropertyRegistry implements PropertyContainer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Property<T> get(PropertyType<T> type) {
+    public <T> Property<T> getOrNull(PropertyType<T> type) {
         return (Property<T>) properties.get(type);
     }
 }

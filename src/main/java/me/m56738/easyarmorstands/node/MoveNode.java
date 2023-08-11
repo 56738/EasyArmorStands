@@ -21,7 +21,7 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class MoveNode extends EditNode implements Button, ValueNode<Double> {
+public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
     private final PositionBone bone;
     private final RotationProvider rotationProvider;

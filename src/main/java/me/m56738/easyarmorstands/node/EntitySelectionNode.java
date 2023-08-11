@@ -1,41 +1,36 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.EntityObject;
 import me.m56738.easyarmorstands.editor.SimpleEntityObject;
-import me.m56738.easyarmorstands.session.EntityButtonPriority;
-import me.m56738.easyarmorstands.session.EntityButtonProvider;
+import me.m56738.easyarmorstands.event.EntityObjectInitializeEvent;
+import me.m56738.easyarmorstands.property.entity.DefaultEntityProperties;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.joml.Vector3dc;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-@SuppressWarnings("deprecation")
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
-    private final Map<Entity, Button> buttons = new HashMap<>();
-    private final EnumMap<EntityButtonPriority, List<EntityButtonProvider>> providers = new EnumMap<>(EntityButtonPriority.class);
+    private final Map<Entity, EditableObjectButton> buttons = new HashMap<>();
+    private final Map<EntityObjectProvider.Priority, List<EntityObjectProvider>> providers = new LinkedHashMap<>();
 
     public EntitySelectionNode(Session session, Component name) {
         super(session, name);
         this.session = session;
-        for (EntityButtonPriority priority : EntityButtonPriority.values()) {
+        for (EntityObjectProvider.Priority priority : EntityObjectProvider.Priority.values()) {
             this.providers.put(priority, new ArrayList<>());
         }
     }
 
-    @Deprecated
-    public void addProvider(EntityButtonProvider provider) {
+    public void addProvider(EntityObjectProvider provider) {
         providers.get(provider.getPriority()).add(provider);
     }
 
@@ -52,11 +47,11 @@ public class EntitySelectionNode extends MenuNode {
                 return (EditableObject) value;
             }
         }
-        for (EntityButtonPriority priority : EntityButtonPriority.values()) {
-            for (EntityButtonProvider provider : providers.get(priority)) {
-                Button button = provider.createButton(session, entity);
-                if (button != null) {
-                    return new SimpleEntityObject(entity, button);
+        for (List<EntityObjectProvider> providers : providers.values()) {
+            for (EntityObjectProvider provider : providers) {
+                EntityObject entityObject = provider.createObject(entity);
+                if (entityObject != null) {
+                    return entityObject;
                 }
             }
         }
@@ -81,11 +76,9 @@ public class EntitySelectionNode extends MenuNode {
 
             // entity is new, create a button for it
             EditableObject editableObject = createEditableObject(entity);
-            Button button = null;
+            EditableObjectButton button = null;
             if (editableObject != null) {
-                button = editableObject.createButton();
-            }
-            if (button != null) {
+                button = new EditableObjectButton(editableObject);
                 addButton(button);
             }
 
@@ -109,12 +102,9 @@ public class EntitySelectionNode extends MenuNode {
         if (context.getType() == ClickType.RIGHT_CLICK) {
             Entity entity = context.getEntity();
             if (entity != null) {
-                Button button = buttons.get(entity);
+                EditableObjectButton button = buttons.get(entity);
                 if (button != null) {
-                    Node node = button.createNode();
-                    if (node != null) {
-                        session.pushNode(node);
-                    }
+                    button.onClick(session);
                     return true;
                 }
             }
@@ -139,5 +129,26 @@ public class EntitySelectionNode extends MenuNode {
             }
         }
         return false;
+    }
+
+    private static class EditableObjectButton implements MenuButton {
+        private final EditableObject editableObject;
+
+        private EditableObjectButton(EditableObject editableObject) {
+            this.editableObject = editableObject;
+        }
+
+        @Override
+        public Button createButton() {
+            return editableObject.createButton();
+        }
+
+        @Override
+        public void onClick(Session session) {
+            EditableObjectNode node = editableObject.createNode();
+            if (node != null) {
+                session.pushNode(node);
+            }
+        }
     }
 }

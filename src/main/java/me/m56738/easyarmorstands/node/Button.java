@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public interface Button extends NodeFactory {
+public interface Button {
     /**
      * Updates internal properties of the button.
      */
@@ -60,12 +60,4 @@ public interface Button extends NodeFactory {
     }
 
     Component getName();
-
-    /**
-     * Creates a node that should be entered when this button is clicked.
-     *
-     * @return The node which can be entered using this button.
-     */
-    @Override
-    @Nullable Node createNode();
 }

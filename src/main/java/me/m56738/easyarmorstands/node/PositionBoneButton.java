@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
 
-public class PositionBoneButton extends SimpleButton implements NodeFactory {
+public class PositionBoneButton extends SimpleButton implements NodeButton {
     private final PositionBone bone;
     private final Node node;
     private final Component name;

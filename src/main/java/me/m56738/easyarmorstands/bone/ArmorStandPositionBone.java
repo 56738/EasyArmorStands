@@ -1,22 +1,24 @@
 package me.m56738.easyarmorstands.bone;
 
-import me.m56738.easyarmorstands.session.Session;
-import org.bukkit.entity.ArmorStand;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandPositionBone extends EntityLocationBone {
-    private final ArmorStand entity;
+    private final Property<ArmorStandSize> sizeProperty;
 
-    public ArmorStandPositionBone(Session session, ArmorStand entity) {
-        super(session, entity);
-        this.entity = entity;
+    public ArmorStandPositionBone(PropertyContainer container) {
+        super(container);
+        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
     }
 
     @Override
     public Vector3dc getOffset() {
         double offset = 1.25;
-        if (entity.isSmall()) {
+        if (sizeProperty.getValue().isSmall()) {
             offset /= 2;
         }
         return new Vector3d(0, offset, 0);

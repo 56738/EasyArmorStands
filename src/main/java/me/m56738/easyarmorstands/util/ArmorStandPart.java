@@ -95,17 +95,25 @@ public enum ArmorStandPart {
         return displayName;
     }
 
-    public Vector3dc getOffset(ArmorStand armorStand) {
-        if (armorStand.isSmall()) {
+    public Vector3dc getOffset(ArmorStandSize size) {
+        if (size.isSmall()) {
             return smallOffset;
         }
         return offset;
     }
 
-    public Vector3dc getLength(ArmorStand armorStand) {
-        if (armorStand.isSmall()) {
+    public Vector3dc getOffset(ArmorStand armorStand) {
+        return getOffset(ArmorStandSize.get(armorStand));
+    }
+
+    public Vector3dc getLength(ArmorStandSize size) {
+        if (size.isSmall()) {
             return smallLength;
         }
         return length;
+    }
+
+    public Vector3dc getLength(ArmorStand armorStand) {
+        return getLength(ArmorStandSize.get(armorStand));
     }
 }

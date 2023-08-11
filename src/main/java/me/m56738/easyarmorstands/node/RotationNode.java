@@ -20,7 +20,7 @@ import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public abstract class RotationNode extends EditNode implements Button, ValueNode<Double> {
+public abstract class RotationNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
     private final ParticleColor color;
     private final Vector3d anchor;

@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
 import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
-import me.m56738.easyarmorstands.node.v1_19_4.DisplayButtonProvider;
+import me.m56738.easyarmorstands.node.v1_19_4.DisplayObjectProvider;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNode;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNodeFactory;
 import me.m56738.easyarmorstands.node.v1_19_4.ItemDisplayRootNode;
@@ -85,6 +85,6 @@ public class DisplaySessionListener implements Listener {
     }
 
     private <T extends Display> void register(Session session, Class<T> type, DisplayRootNodeFactory<T> factory) {
-        session.addProvider(new DisplayButtonProvider<>(type, addon, factory));
+        session.addProvider(new DisplayObjectProvider<>(session, type, factory));
     }
 }

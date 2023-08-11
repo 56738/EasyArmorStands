@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.property.PropertyContainer;
 import org.joml.Vector3dc;
 
 public interface Node {
@@ -23,9 +22,5 @@ public interface Node {
 
     default boolean isValid() {
         return true;
-    }
-
-    default PropertyContainer properties() {
-        return PropertyContainer.empty();
     }
 }

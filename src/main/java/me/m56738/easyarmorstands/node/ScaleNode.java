@@ -20,7 +20,7 @@ import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class ScaleNode extends EditNode implements Button, ValueNode<Double> {
+public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
     private final ScaleBone bone;
     private final Component name;

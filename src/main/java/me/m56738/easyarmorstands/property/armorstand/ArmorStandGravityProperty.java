@@ -65,7 +65,7 @@ public class ArmorStandGravityProperty implements Property<Boolean> {
 
         @Override
         public ItemStack createItem(Property<Boolean> property, PropertyContainer container) {
-            Property<Boolean> canTickProperty = container.get(ArmorStandCanTickProperty.TYPE);
+            Property<Boolean> canTickProperty = container.getOrNull(ArmorStandCanTickProperty.TYPE);
             List<Component> description = Arrays.asList(
                     Component.text("Currently ", NamedTextColor.GRAY)
                             .append(canTickProperty != null && !canTickProperty.getValue()
@@ -97,7 +97,7 @@ public class ArmorStandGravityProperty implements Property<Boolean> {
             BooleanTogglePropertyType.super.onClick(property, container);
 
             // Attempt to also turn on armor stand ticking when turning on gravity
-            Property<Boolean> canTickProperty = container.get(ArmorStandCanTickProperty.TYPE);
+            Property<Boolean> canTickProperty = container.getOrNull(ArmorStandCanTickProperty.TYPE);
             if (property.getValue() && canTickProperty != null && !canTickProperty.getValue()) {
                 canTickProperty.setValue(true);
             }

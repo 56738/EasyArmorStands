@@ -15,13 +15,10 @@ import me.m56738.easyarmorstands.history.action.PropertyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
-import me.m56738.easyarmorstands.node.ClickContext;
-import me.m56738.easyarmorstands.node.EditableObjectNode;
-import me.m56738.easyarmorstands.node.EntityNode;
-import me.m56738.easyarmorstands.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.node.*;
 import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -46,15 +43,7 @@ import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
@@ -195,8 +184,7 @@ public final class Session implements ForwardingAudience.Single {
         return null;
     }
 
-    @Deprecated
-    public void addProvider(EntityButtonProvider provider) {
+    public void addProvider(EntityObjectProvider provider) {
         rootNode.addProvider(provider);
     }
 
@@ -459,25 +447,8 @@ public final class Session implements ForwardingAudience.Single {
         return !event.isCancelled();
     }
 
-    public <T> @Nullable Property<T> findProperty(PropertyType<T> type) {
-        for (Node node : nodeStack) {
-            if (node instanceof EditableObjectNode) {
-                EditableObject editableObject = ((EditableObjectNode) node).getEditableObject();
-                Property<T> property = editableObject.properties().get(type);
-                if (property != null) {
-                    return new SessionProperty<>(editableObject.asReference(), property);
-                }
-            }
-        }
-        return null;
-    }
-
-    public <T> @NotNull Property<T> getProperty(PropertyType<T> type) {
-        Property<T> property = findProperty(type);
-        if (property == null) {
-            throw new IllegalArgumentException("Property not found: " + type);
-        }
-        return property;
+    public PropertyContainer properties(EditableObject editableObject) {
+        return new PropertyContainerImpl(editableObject);
     }
 
     public boolean isValid() {
@@ -508,6 +479,31 @@ public final class Session implements ForwardingAudience.Single {
 
         public Action createChangeAction(T oldValue, T value) {
             return new PropertyAction<>(editableObjectReference, propertyType, oldValue, value);
+        }
+    }
+
+    private class PropertyContainerImpl implements PropertyContainer {
+        private final EditableObject editableObject;
+
+        private PropertyContainerImpl(EditableObject editableObject) {
+            this.editableObject = editableObject;
+        }
+
+        private <T> Property<T> wrap(Property<T> property) {
+            if (property == null) {
+                return null;
+            }
+            return new SessionProperty<>(editableObject.asReference(), property);
+        }
+
+        @Override
+        public @Nullable <T> Property<T> getOrNull(PropertyType<T> type) {
+            return wrap(editableObject.properties().getOrNull(type));
+        }
+
+        @Override
+        public @NotNull <T> Property<T> get(PropertyType<T> type) {
+            return wrap(editableObject.properties().get(type));
         }
     }
 

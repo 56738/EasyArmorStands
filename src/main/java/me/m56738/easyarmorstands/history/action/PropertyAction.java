@@ -37,7 +37,7 @@ public class PropertyAction<T> implements Action {
         if (editableObject == null) {
             return false;
         }
-        Property<T> property = editableObject.properties().get(propertyType);
+        Property<T> property = editableObject.properties().getOrNull(propertyType);
         if (property == null) {
             return false;
         }

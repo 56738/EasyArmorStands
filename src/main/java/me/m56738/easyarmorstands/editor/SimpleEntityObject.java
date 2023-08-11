@@ -1,18 +1,20 @@
 package me.m56738.easyarmorstands.editor;
 
 import me.m56738.easyarmorstands.node.Button;
-import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.node.EditableObjectNode;
+import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Entity;
 
-public class SimpleEntityObject extends AbstractEditableObject {
+public class SimpleEntityObject extends AbstractEditableObject implements EntityObject {
+    private final Session session;
     private final Entity entity;
-    private final Button button;
 
-    public SimpleEntityObject(Entity entity, Button button) {
+    public SimpleEntityObject(Session session, Entity entity) {
+        this.session = session;
         this.entity = entity;
-        this.button = button;
     }
 
+    @Override
     public Entity getEntity() {
         return entity;
     }
@@ -24,11 +26,11 @@ public class SimpleEntityObject extends AbstractEditableObject {
 
     @Override
     public Button createButton() {
-        return button;
+        return new SimpleEntityButton(session, entity);
     }
 
     @Override
-    public Node createNode() {
-        return button.createNode();
+    public EditableObjectNode createNode() {
+        return new SimpleEntityNode(session, this, entity);
     }
 }

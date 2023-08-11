@@ -4,7 +4,7 @@ class EmptyPropertyContainer implements PropertyContainer {
     static final EmptyPropertyContainer INSTANCE = new EmptyPropertyContainer();
 
     @Override
-    public <T> Property<T> get(PropertyType<T> type) {
+    public <T> Property<T> getOrNull(PropertyType<T> type) {
         return null;
     }
 }

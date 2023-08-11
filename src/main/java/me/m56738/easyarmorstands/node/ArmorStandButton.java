@@ -9,7 +9,7 @@ import org.bukkit.entity.ArmorStand;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class ArmorStandButton extends AxisAlignedBoxButton {
+public class ArmorStandButton extends AxisAlignedBoxButton implements Button {
     private final Session session;
     private final ArmorStand entity;
 
@@ -49,13 +49,5 @@ public class ArmorStandButton extends AxisAlignedBoxButton {
     @Override
     public Component getName() {
         return Component.text(Util.getId(entity.getUniqueId()));
-    }
-
-    @Override
-    public Node createNode() {
-        if (!session.canSelectEntity(entity)) {
-            return null;
-        }
-        return new ArmorStandRootNode(session, entity);
     }
 }

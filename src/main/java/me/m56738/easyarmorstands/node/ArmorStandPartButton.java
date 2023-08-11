@@ -18,7 +18,7 @@ import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class ArmorStandPartButton implements Button {
+public class ArmorStandPartButton implements NodeButton {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandPart part;

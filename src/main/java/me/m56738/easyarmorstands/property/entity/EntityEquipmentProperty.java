@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
@@ -43,20 +44,20 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         return TYPES.get(slot);
     }
 
-    public static void populate(SplitMenuBuilder builder, Session session) {
-        populate(builder, session, 19, EquipmentSlot.HEAD);
-        populate(builder, session, 27, EasyArmorStands.getInstance().getCapability(EquipmentCapability.class).getOffHand());
-        populate(builder, session, 28, EquipmentSlot.CHEST);
-        populate(builder, session, 29, EquipmentSlot.HAND);
-        populate(builder, session, 37, EquipmentSlot.LEGS);
-        populate(builder, session, 46, EquipmentSlot.FEET);
+    public static void populate(SplitMenuBuilder builder, Session session, PropertyContainer container) {
+        populate(builder, session, container, 19, EquipmentSlot.HEAD);
+        populate(builder, session, container, 27, EasyArmorStands.getInstance().getCapability(EquipmentCapability.class).getOffHand());
+        populate(builder, session, container, 28, EquipmentSlot.CHEST);
+        populate(builder, session, container, 29, EquipmentSlot.HAND);
+        populate(builder, session, container, 37, EquipmentSlot.LEGS);
+        populate(builder, session, container, 46, EquipmentSlot.FEET);
     }
 
-    private static void populate(SplitMenuBuilder builder, Session session, int index, EquipmentSlot slot) {
+    private static void populate(SplitMenuBuilder builder, Session session, PropertyContainer container, int index, EquipmentSlot slot) {
         if (slot == null) {
             return;
         }
-        Property<ItemStack> property = session.findProperty(type(slot));
+        Property<ItemStack> property = container.getOrNull(type(slot));
         if (property == null) {
             return;
         }

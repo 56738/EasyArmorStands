@@ -15,19 +15,18 @@ import net.kyori.adventure.title.Title;
 import org.joml.Vector3dc;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A node which can contain multiple {@link Button buttons}.
- * Clicking a button {@link Button#createNode() creates a node} and navigates to it.
  */
 public class MenuNode implements Node {
     private final Session session;
     private final Component name;
-    private final Set<Button> buttons = new HashSet<>();
+    private final Map<MenuButton, Button> buttons = new HashMap<>();
     private boolean root;
-    private Button targetButton;
+    private MenuButton targetButton;
     private Node nextNode;
     private boolean visible;
 
@@ -48,17 +47,30 @@ public class MenuNode implements Node {
         this.nextNode = nextNode;
     }
 
-    public void addButton(Button button) {
-        if (buttons.add(button) && visible) {
-            button.update();
-            button.updatePreview(false);
-            button.showPreview();
-        }
+    public void addButton(MenuButton menuButton) {
+        setButton(menuButton, menuButton.createButton());
     }
 
-    public void removeButton(Button button) {
-        if (buttons.remove(button) && visible) {
-            button.hidePreview();
+    public void removeButton(MenuButton menuButton) {
+        setButton(menuButton, null);
+    }
+
+    private void setButton(MenuButton menuButton, Button button) {
+        Button oldButton;
+        if (button != null) {
+            oldButton = buttons.put(menuButton, button);
+        } else {
+            oldButton = buttons.remove(menuButton);
+        }
+        if (visible) {
+            if (oldButton != null) {
+                oldButton.hidePreview();
+            }
+            if (button != null) {
+                button.update();
+                button.updatePreview(false);
+                button.showPreview();
+            }
         }
     }
 
@@ -149,7 +161,7 @@ public class MenuNode implements Node {
     public void onEnter() {
         targetButton = null;
         visible = true;
-        for (Button button : buttons) {
+        for (Button button : buttons.values()) {
             button.update();
             button.updatePreview(false);
             button.showPreview();
@@ -160,7 +172,7 @@ public class MenuNode implements Node {
     public void onExit() {
         targetButton = null;
         visible = false;
-        for (Button button : buttons) {
+        for (Button button : buttons.values()) {
             button.hidePreview();
         }
     }
@@ -168,9 +180,12 @@ public class MenuNode implements Node {
     @Override
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
         Button bestButton = null;
+        MenuButton bestMenuButton = null;
         int bestPriority = Integer.MIN_VALUE;
         double bestDistance = Double.POSITIVE_INFINITY;
-        for (Button button : buttons) {
+        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
+            MenuButton menuButton = entry.getKey();
+            Button button = entry.getValue();
             button.update();
             button.updateLookTarget(eyes, target);
             Vector3dc position = button.getLookTarget();
@@ -184,11 +199,12 @@ public class MenuNode implements Node {
             double distance = position.distanceSquared(eyes);
             if (priority > bestPriority || distance < bestDistance) {
                 bestButton = button;
+                bestMenuButton = menuButton;
                 bestPriority = priority;
                 bestDistance = distance;
             }
         }
-        for (Button button : buttons) {
+        for (Button button : buttons.values()) {
             button.updatePreview(button == bestButton);
         }
         Component targetName;
@@ -200,17 +216,14 @@ public class MenuNode implements Node {
         session.sendActionBar(name);
         session.showTitle(Title.title(Component.empty(), targetName,
                 Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO)));
-        targetButton = bestButton;
+        targetButton = bestMenuButton;
     }
 
     @Override
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         if (context.getType() == ClickType.RIGHT_CLICK) {
             if (targetButton != null) {
-                Node node = targetButton.createNode();
-                if (node != null) {
-                    session.pushNode(node);
-                }
+                targetButton.onClick(session);
                 return true;
             }
             if (nextNode != null) {

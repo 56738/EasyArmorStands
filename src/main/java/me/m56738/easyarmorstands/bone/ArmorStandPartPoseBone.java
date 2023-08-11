@@ -1,57 +1,56 @@
 package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.util.EulerAngle;
 import org.joml.Math;
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class ArmorStandPartPoseBone implements RotationBone {
-    private final Session session;
-    private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final Property<Quaterniondc> property;
+    private final Property<Quaterniondc> poseProperty;
+    private final Property<Location> locationProperty;
+    private final Property<ArmorStandSize> sizeProperty;
 
-    public ArmorStandPartPoseBone(Session session, ArmorStand entity, ArmorStandPart part) {
-        this.session = session;
-        this.entity = entity;
+    public ArmorStandPartPoseBone(PropertyContainer container, ArmorStandPart part) {
         this.part = part;
-        this.property = session.findProperty(ArmorStandPoseProperty.type(part));
+        this.poseProperty = container.get(ArmorStandPoseProperty.type(part));
+        this.locationProperty = container.get(EntityLocationProperty.TYPE);
+        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
     }
 
     @Override
     public boolean isValid() {
-        return entity.isValid();
+        return poseProperty.isValid();
     }
 
     @Override
     public Vector3dc getAnchor() {
-        Location location = entity.getLocation();
-        return part.getOffset(entity)
+        Location location = locationProperty.getValue();
+        ArmorStandSize size = sizeProperty.getValue();
+        return part.getOffset(size)
                 .rotateY(-Math.toRadians(location.getYaw()), new Vector3d())
                 .add(location.getX(), location.getY(), location.getZ());
     }
 
     @Override
     public Quaterniondc getRotation() {
-        Location location = entity.getLocation();
-        EulerAngle angle = part.getPose(entity);
+        Location location = locationProperty.getValue();
+        Quaterniondc pose = poseProperty.getValue();
         return new Quaterniond()
                 .rotationY(-Math.toRadians(location.getYaw()))
-                .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX());
+                .mul(pose);
     }
 
     @Override
     public void setRotation(Quaterniondc rotation) {
-        Location location = entity.getLocation();
+        Location location = locationProperty.getValue();
         float rotY = -Math.toRadians(location.getYaw());
-        property.setValue(rotation.rotateLocalY(-rotY, new Quaterniond()));
+        poseProperty.setValue(rotation.rotateLocalY(-rotY, new Quaterniond()));
     }
 }

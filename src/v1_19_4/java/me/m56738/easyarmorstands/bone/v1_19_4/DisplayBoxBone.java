@@ -3,38 +3,34 @@ package me.m56738.easyarmorstands.bone.v1_19_4;
 import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.property.PendingChange;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.bukkit.entity.Display;
-import org.joml.Quaternionf;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.*;
 
 public class DisplayBoxBone implements PositionBone {
-    private final Display entity;
     private final Property<Location> entityLocationProperty;
     private final Property<Vector3fc> displayTranslationProperty;
+    private final Property<Float> displayHeightProperty;
 
-    public DisplayBoxBone(Session session, Display entity) {
-        this.entity = entity;
-        this.entityLocationProperty = session.getProperty(EntityLocationProperty.TYPE);
-        this.displayTranslationProperty = session.getProperty(DisplayTranslationProperty.TYPE);
+    public DisplayBoxBone(PropertyContainer container) {
+        this.entityLocationProperty = container.get(EntityLocationProperty.TYPE);
+        this.displayTranslationProperty = container.get(DisplayTranslationProperty.TYPE);
+        this.displayHeightProperty = container.get(DisplayHeightProperty.TYPE);
     }
 
     @Override
     public boolean isValid() {
-        return entity.isValid();
+        return entityLocationProperty.isValid() && displayTranslationProperty.isValid();
     }
 
     @Override
     public Vector3dc getPosition() {
-        return Util.toVector3d(entity.getLocation())
-                .add(0, entity.getDisplayHeight() / 2, 0);
+        return Util.toVector3d(entityLocationProperty.getValue())
+                .add(0, displayHeightProperty.getValue() / 2, 0);
     }
 
     @Override

@@ -4,98 +4,47 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
-import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
+import me.m56738.easyarmorstands.editor.ArmorStandObject;
+import me.m56738.easyarmorstands.editor.EditableObject;
 import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
-import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
-import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends EntityMenuNode {
+public class ArmorStandRootNode extends EntityMenuNode implements EditableObjectNode {
     private final Session session;
     private final ArmorStand entity;
+    private final ArmorStandObject entityObject;
     private final PositionBoneButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
-    private final PropertyRegistry properties = new PropertyRegistry();
     private ArmorStand skeleton;
 
-    public ArmorStandRootNode(Session session, ArmorStand entity) {
+    public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandObject entityObject) {
         super(session, Component.text("Select a bone"), entity);
         this.session = session;
         this.entity = entity;
-
-        ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
-        EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
-        GlowCapability glowCapability = EasyArmorStands.getInstance().getCapability(GlowCapability.class);
-        if (glowCapability != null) {
-            properties.register(new EntityGlowingProperty(entity, glowCapability));
-        }
-        properties.register(new EntityLocationProperty(entity));
-        properties.register(new EntityCustomNameProperty(entity, componentCapability));
-        properties.register(new EntityCustomNameVisibleProperty(entity));
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            properties.register(new EntityEquipmentProperty(entity, slot, equipmentCapability, componentCapability));
-        }
-        properties.register(new ArmorStandArmsProperty(entity));
-        properties.register(new ArmorStandBasePlateProperty(entity));
-        properties.register(new ArmorStandMarkerProperty(entity));
-        properties.register(new ArmorStandSizeProperty(entity));
-        properties.register(new ArmorStandVisibilityProperty(entity));
-        TickCapability tickCapability = EasyArmorStands.getInstance().getCapability(TickCapability.class);
-        if (tickCapability != null) {
-            properties.register(new ArmorStandCanTickProperty(entity, tickCapability));
-        }
-        properties.register(new ArmorStandGravityProperty(entity));
-        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStands.getInstance().getCapability(InvulnerabilityCapability.class);
-        if (invulnerabilityCapability != null) {
-            properties.register(new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
-        }
-        LockCapability lockCapability = EasyArmorStands.getInstance().getCapability(LockCapability.class);
-        if (lockCapability != null) {
-            properties.register(new ArmorStandLockProperty(entity, lockCapability));
-        }
-        for (ArmorStandPart part : ArmorStandPart.values()) {
-            properties.register(new ArmorStandPoseProperty(entity, part));
-        }
+        this.entityObject = entityObject;
+        PropertyContainer container = session.properties(entityObject);
 
         setRoot(true);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(session, entity, part);
-            ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(session, entity, part);
+            ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
+            ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
             MenuNode localNode = new EntityMenuNode(session, part.getDisplayName().append(Component.text(" (local)")), entity);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
@@ -113,7 +62,7 @@ public class ArmorStandRootNode extends EntityMenuNode {
             partButtons.put(part, partButton);
         }
 
-        ArmorStandPositionBone positionBone = new ArmorStandPositionBone(session, entity);
+        ArmorStandPositionBone positionBone = new ArmorStandPositionBone(container);
 
         MenuNode positionNode = new EntityMenuNode(session, Component.text("Position"), entity);
         positionNode.addYawButton(session, positionBone, 1);
@@ -241,7 +190,7 @@ public class ArmorStandRootNode extends EntityMenuNode {
     }
 
     @Override
-    public PropertyContainer properties() {
-        return properties;
+    public EditableObject getEditableObject() {
+        return entityObject;
     }
 }

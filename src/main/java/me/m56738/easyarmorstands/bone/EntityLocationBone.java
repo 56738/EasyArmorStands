@@ -1,20 +1,17 @@
 package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 
 public class EntityLocationBone implements PositionAndYawBone {
-    private final Entity entity;
     private final Property<Location> property;
 
-    public EntityLocationBone(Session session, Entity entity) {
-        this.entity = entity;
-        this.property = session.findProperty(EntityLocationProperty.TYPE);
+    public EntityLocationBone(PropertyContainer container) {
+        this.property = container.get(EntityLocationProperty.TYPE);
     }
 
     public Vector3dc getOffset() {
@@ -23,13 +20,13 @@ public class EntityLocationBone implements PositionAndYawBone {
 
     @Override
     public Vector3dc getPosition() {
-        return Util.toVector3d(entity.getLocation()).add(getOffset());
+        return Util.toVector3d(property.getValue()).add(getOffset());
     }
 
     @Override
     public void setPosition(Vector3dc position) {
         Vector3dc offset = getOffset();
-        Location location = entity.getLocation();
+        Location location = property.getValue();
         location.setX(position.x() - offset.x());
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
@@ -38,12 +35,12 @@ public class EntityLocationBone implements PositionAndYawBone {
 
     @Override
     public float getYaw() {
-        return entity.getLocation().getYaw();
+        return property.getValue().getYaw();
     }
 
     @Override
     public void setYaw(float yaw) {
-        Location location = entity.getLocation();
+        Location location = property.getValue();
         location.setYaw(yaw);
         property.setValue(location);
     }
@@ -51,7 +48,7 @@ public class EntityLocationBone implements PositionAndYawBone {
     @Override
     public void setPositionAndYaw(Vector3dc position, float yaw) {
         Vector3dc offset = getOffset();
-        Location location = entity.getLocation();
+        Location location = property.getValue();
         location.setX(position.x() - offset.x());
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
@@ -61,6 +58,6 @@ public class EntityLocationBone implements PositionAndYawBone {
 
     @Override
     public boolean isValid() {
-        return entity.isValid();
+        return property.isValid();
     }
 }

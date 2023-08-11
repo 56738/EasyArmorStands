@@ -11,8 +11,8 @@ public class ItemDisplayRootNode extends DisplayRootNode {
     private final Session session;
     private final ItemDisplay entity;
 
-    public ItemDisplayRootNode(Session session, Component name, ItemDisplay entity) {
-        super(session, name, entity);
+    public ItemDisplayRootNode(Session session, Component name, DisplayObject<ItemDisplay> editableObject, ItemDisplay entity) {
+        super(session, name, editableObject, entity);
         this.session = session;
         this.entity = entity;
     }

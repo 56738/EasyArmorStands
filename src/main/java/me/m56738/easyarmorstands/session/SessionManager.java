@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.session;
 
+import me.m56738.easyarmorstands.editor.ArmorStandObjectProvider;
+import me.m56738.easyarmorstands.editor.SimpleEntityObjectProvider;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.Node;
@@ -24,9 +26,9 @@ public class SessionManager {
 
     public Session start(Player player) {
         Session session = new Session(player);
-        session.addProvider(new ArmorStandButtonProvider());
+        session.addProvider(new ArmorStandObjectProvider(session));
+        session.addProvider(new SimpleEntityObjectProvider(session));
         start(session);
-        session.addProvider(new DefaultEntityButtonProvider());
         return session;
     }
 
