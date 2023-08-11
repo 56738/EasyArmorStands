@@ -8,9 +8,11 @@ import org.bukkit.Location;
 import org.joml.Vector3dc;
 
 public class EntityLocationBone implements PositionAndYawBone {
+    private final PropertyContainer container;
     private final Property<Location> property;
 
     public EntityLocationBone(PropertyContainer container) {
+        this.container = container;
         this.property = container.get(EntityLocationProperty.TYPE);
     }
 
@@ -58,6 +60,6 @@ public class EntityLocationBone implements PositionAndYawBone {
 
     @Override
     public boolean isValid() {
-        return property.isValid();
+        return container.isValid();
     }
 }

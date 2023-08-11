@@ -23,7 +23,7 @@ public class SplitMenuBuilder implements MenuBuilder {
 
     private final ArrayList<MenuSlot> slots = new ArrayList<>();
 
-    private void ensureRow(int row) {
+    public void ensureRow(int row) {
         while (slots.size() <= 9 * row) {
             slots.addAll(emptyRow);
         }

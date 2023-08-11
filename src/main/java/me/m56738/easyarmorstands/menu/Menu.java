@@ -20,6 +20,10 @@ public class Menu implements InventoryHolder {
         }
     }
 
+    public static int index(int row, int column) {
+        return 9 * row + column;
+    }
+
     public MenuSlot getSlot(int index) {
         if (index < 0 || index >= slots.length) {
             return null;

@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -29,8 +30,8 @@ public class EntitySpawnAction<E extends Entity> implements Action {
     }
 
     @Override
-    public boolean execute() {
-        E entity = EntitySpawner.trySpawn(spawner, location, null); // TODO
+    public boolean execute(Player player) {
+        E entity = EntitySpawner.trySpawn(spawner, location, player);
         if (entity == null) {
             return false;
         }
@@ -43,12 +44,12 @@ public class EntitySpawnAction<E extends Entity> implements Action {
     }
 
     @Override
-    public boolean undo() {
+    public boolean undo(Player player) {
         E entity = findEntity();
         if (entity == null) {
             throw new IllegalStateException();
         }
-        if (!EntitySpawner.canRemove(entity, null)) { // TODO
+        if (!EntitySpawner.canRemove(entity, player)) {
             return false;
         }
         location = entity.getLocation();

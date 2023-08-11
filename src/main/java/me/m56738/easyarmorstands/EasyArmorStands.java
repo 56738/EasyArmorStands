@@ -19,14 +19,7 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
-import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
-import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
-import me.m56738.easyarmorstands.command.processor.Keys;
-import me.m56738.easyarmorstands.command.processor.SessionInjector;
-import me.m56738.easyarmorstands.command.processor.SessionPostprocessor;
-import me.m56738.easyarmorstands.command.processor.SessionPreprocessor;
-import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
+import me.m56738.easyarmorstands.command.processor.*;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.history.History;
@@ -34,6 +27,7 @@ import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
+import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -134,6 +128,8 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
                         (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
                 .apply(commandManager, s -> s);
 
+        UnknownPropertyExceptionHandler.register(commandManager);
+
         commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
         commandManager.registerCommandPostProcessor(new EntityPostprocessor());
         commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
@@ -143,6 +139,7 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
         commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
 
         commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector<>());
+        commandManager.parameterInjectorRegistry().registerInjector(PropertyContainer.class, new PropertyContainerInjector<>());
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());

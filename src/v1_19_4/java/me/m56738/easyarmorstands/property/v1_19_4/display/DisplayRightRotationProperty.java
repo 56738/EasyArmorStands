@@ -41,11 +41,6 @@ public class DisplayRightRotationProperty implements Property<Quaternionfc> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<Quaternionfc> {
         @Override
         public String getPermission() {

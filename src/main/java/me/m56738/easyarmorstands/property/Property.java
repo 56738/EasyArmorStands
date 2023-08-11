@@ -12,6 +12,4 @@ public interface Property<T> {
     default @Nullable PendingChange prepareChange(T value) {
         return PendingChange.of(this, value);
     }
-
-    boolean isValid();
 }

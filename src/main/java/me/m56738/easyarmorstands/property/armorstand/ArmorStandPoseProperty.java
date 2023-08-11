@@ -51,11 +51,6 @@ public class ArmorStandPoseProperty implements Property<Quaterniondc> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     // TODO /eas reset
 //    @Override
 //    public Quaterniondc getResetValue() {

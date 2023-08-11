@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.EditableObjectReference;
+import me.m56738.easyarmorstands.editor.EntityObject;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
@@ -17,6 +17,7 @@ import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.*;
 import me.m56738.easyarmorstands.particle.Particle;
+import me.m56738.easyarmorstands.property.PendingChange;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
@@ -175,10 +176,14 @@ public final class Session implements ForwardingAudience.Single {
         return Util.snap(value, angleSnapIncrement);
     }
 
+    @Deprecated
     public Entity getEntity() {
         for (Node node : nodeStack) {
-            if (node instanceof EntityNode) {
-                return ((EntityNode) node).getEntity();
+            if (node instanceof EditableObjectNode) {
+                EditableObject editableObject = ((EditableObjectNode) node).getEditableObject();
+                if (editableObject instanceof EntityObject) {
+                    return ((EntityObject) editableObject).getEntity();
+                }
             }
         }
         return null;
@@ -456,11 +461,11 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     private static class ChangeKey<T> {
-        private final EditableObjectReference editableObjectReference;
+        private final EditableObject editableObject;
         private final PropertyType<T> propertyType;
 
-        private ChangeKey(EditableObjectReference editableObjectReference, PropertyType<T> propertyType) {
-            this.editableObjectReference = editableObjectReference;
+        private ChangeKey(EditableObject editableObject, PropertyType<T> propertyType) {
+            this.editableObject = editableObject;
             this.propertyType = propertyType;
         }
 
@@ -469,41 +474,48 @@ public final class Session implements ForwardingAudience.Single {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ChangeKey<?> changeKey = (ChangeKey<?>) o;
-            return Objects.equals(editableObjectReference, changeKey.editableObjectReference) && Objects.equals(propertyType, changeKey.propertyType);
+            return Objects.equals(editableObject, changeKey.editableObject) && Objects.equals(propertyType, changeKey.propertyType);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(editableObjectReference, propertyType);
+            return Objects.hash(editableObject, propertyType);
         }
 
         public Action createChangeAction(T oldValue, T value) {
-            return new PropertyAction<>(editableObjectReference, propertyType, oldValue, value);
+            return new PropertyAction<>(editableObject.asReference(), propertyType, oldValue, value);
         }
     }
 
     private class PropertyContainerImpl implements PropertyContainer {
         private final EditableObject editableObject;
+        private final PropertyContainer container;
 
         private PropertyContainerImpl(EditableObject editableObject) {
             this.editableObject = editableObject;
+            this.container = PropertyContainer.asPlayer(editableObject.properties(), player);
         }
 
         private <T> Property<T> wrap(Property<T> property) {
             if (property == null) {
                 return null;
             }
-            return new SessionProperty<>(editableObject.asReference(), property);
+            return new SessionProperty<>(editableObject, property);
         }
 
         @Override
         public @Nullable <T> Property<T> getOrNull(PropertyType<T> type) {
-            return wrap(editableObject.properties().getOrNull(type));
+            return wrap(container.getOrNull(type));
         }
 
         @Override
         public @NotNull <T> Property<T> get(PropertyType<T> type) {
-            return wrap(editableObject.properties().get(type));
+            return wrap(container.get(type));
+        }
+
+        @Override
+        public boolean isValid() {
+            return container.isValid();
         }
     }
 
@@ -511,9 +523,9 @@ public final class Session implements ForwardingAudience.Single {
         private final Property<T> property;
         private final ChangeKey<T> key;
 
-        private SessionProperty(EditableObjectReference objectReference, Property<T> property) {
+        private SessionProperty(EditableObject editableObject, Property<T> property) {
             this.property = property;
-            this.key = new ChangeKey<>(objectReference, property.getType());
+            this.key = new ChangeKey<>(editableObject, property.getType());
         }
 
         @Override
@@ -541,8 +553,11 @@ public final class Session implements ForwardingAudience.Single {
         }
 
         @Override
-        public boolean isValid() {
-            return property.isValid();
+        public @Nullable PendingChange prepareChange(T value) {
+            if (property.prepareChange(value) == null) {
+                return null;
+            }
+            return PendingChange.of(this, value);
         }
     }
 }

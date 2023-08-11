@@ -33,11 +33,6 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<ItemStack> {
 
         @Override

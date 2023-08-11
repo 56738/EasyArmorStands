@@ -12,11 +12,13 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandPartPositionBone implements PositionBone {
+    private final PropertyContainer container;
     private final ArmorStandPart part;
     private final Property<Location> locationProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
     public ArmorStandPartPositionBone(PropertyContainer container, ArmorStandPart part) {
+        this.container = container;
         this.part = part;
         this.locationProperty = container.get(EntityLocationProperty.TYPE);
         this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
@@ -24,7 +26,7 @@ public class ArmorStandPartPositionBone implements PositionBone {
 
     @Override
     public boolean isValid() {
-        return locationProperty.isValid() && sizeProperty.isValid();
+        return container.isValid();
     }
 
     @Override

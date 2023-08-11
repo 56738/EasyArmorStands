@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayLeftRotationPro
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.ItemDisplay;
 
 public class DisplayObject<T extends Display> extends SimpleEntityObject {
     private final Session session;
@@ -23,6 +24,11 @@ public class DisplayObject<T extends Display> extends SimpleEntityObject {
     }
 
     @Override
+    public boolean hasItemSlots() {
+        return entity instanceof ItemDisplay;
+    }
+
+    @Override
     public Button createButton() {
         return new DisplayButton<>(session, entity);
     }
@@ -33,14 +39,14 @@ public class DisplayObject<T extends Display> extends SimpleEntityObject {
 
         DisplayBone bone = new DisplayBone(container, DisplayLeftRotationProperty.TYPE);
 
-        DisplayRootNode localNode = factory.createRootNode(session, Component.text("Local"), this, entity);
+        DisplayRootNode localNode = factory.createRootNode(session, Component.text("Local"), this);
         localNode.setRoot(true);
         localNode.addMoveButtons(session, bone, bone, 2);
         localNode.addCarryButtonWithYaw(session, bone);
         localNode.addRotationButtons(session, bone, 1, bone);
         localNode.addScaleButtons(session, bone, 2);
 
-        DisplayRootNode globalNode = factory.createRootNode(session, Component.text("Global"), this, entity);
+        DisplayRootNode globalNode = factory.createRootNode(session, Component.text("Global"), this);
         globalNode.setRoot(true);
         globalNode.addPositionButtons(session, bone, 3);
         globalNode.addCarryButtonWithYaw(session, bone);

@@ -39,11 +39,6 @@ public class DisplayBillboardProperty implements Property<Billboard> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements TogglePropertyType<Billboard> {
         @Override
         public String getPermission() {

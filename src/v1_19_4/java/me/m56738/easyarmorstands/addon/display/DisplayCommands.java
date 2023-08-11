@@ -28,6 +28,7 @@ import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextPr
 import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -224,9 +225,9 @@ public class DisplayCommands {
     @CommandDescription("Select a tool to move the bounding box of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void moveBox(Audience sender, Session session, Display entity, PropertyContainer container) {
+    public void moveBox(Audience sender, Session session, PropertyContainer container) {
         DisplayBoxBone bone = new DisplayBoxBone(container);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), entity);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), container);
         node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
@@ -369,9 +370,9 @@ public class DisplayCommands {
     @CommandDescription("Modify the shearing of the selected display")
     @RequireSession
     @RequireEntity(Display.class)
-    public void editRightRotation(Session session, Display entity, PropertyContainer container) {
+    public void editRightRotation(Session session, PropertyContainer container) {
         DisplayBone rotationBone = new DisplayBone(container, DisplayRightRotationProperty.TYPE);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), entity);
+        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), container);
         node.addRotationButtons(session, rotationBone, 1, null);
         session.pushNode(node);
     }
@@ -443,7 +444,7 @@ public class DisplayCommands {
         }
 
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(entity).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
+        Vector3d offset = part.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);

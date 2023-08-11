@@ -29,8 +29,4 @@ public class DisplayWidthProperty implements Property<Float> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
 }

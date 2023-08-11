@@ -45,6 +45,6 @@ public class YawBoneNode extends RotationNode {
 
     @Override
     public boolean isValid() {
-        return super.isValid() && bone.isValid();
+        return bone.isValid();
     }
 }

@@ -32,11 +32,6 @@ public class DisplayBrightnessProperty implements Property<@Nullable Brightness>
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<@Nullable Brightness> {
         @Override
         public String getPermission() {

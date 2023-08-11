@@ -38,11 +38,6 @@ public class ArmorStandBasePlateProperty implements Property<Boolean> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements BooleanTogglePropertyType {
         @Override
         public String getPermission() {

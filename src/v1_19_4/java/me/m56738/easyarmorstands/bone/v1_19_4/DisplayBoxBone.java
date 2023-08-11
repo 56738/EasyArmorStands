@@ -12,11 +12,13 @@ import org.bukkit.Location;
 import org.joml.*;
 
 public class DisplayBoxBone implements PositionBone {
+    private final PropertyContainer container;
     private final Property<Location> entityLocationProperty;
     private final Property<Vector3fc> displayTranslationProperty;
     private final Property<Float> displayHeightProperty;
 
     public DisplayBoxBone(PropertyContainer container) {
+        this.container = container;
         this.entityLocationProperty = container.get(EntityLocationProperty.TYPE);
         this.displayTranslationProperty = container.get(DisplayTranslationProperty.TYPE);
         this.displayHeightProperty = container.get(DisplayHeightProperty.TYPE);
@@ -24,7 +26,7 @@ public class DisplayBoxBone implements PositionBone {
 
     @Override
     public boolean isValid() {
-        return entityLocationProperty.isValid() && displayTranslationProperty.isValid();
+        return container.isValid();
     }
 
     @Override

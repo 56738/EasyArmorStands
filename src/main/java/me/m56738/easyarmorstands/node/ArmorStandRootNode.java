@@ -25,7 +25,7 @@ import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends EntityMenuNode implements EditableObjectNode {
+public class ArmorStandRootNode extends MenuNode implements EditableObjectNode {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandObject entityObject;
@@ -34,7 +34,7 @@ public class ArmorStandRootNode extends EntityMenuNode implements EditableObject
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandObject entityObject) {
-        super(session, Component.text("Select a bone"), entity);
+        super(session, Component.text("Select a bone"));
         this.session = session;
         this.entity = entity;
         this.entityObject = entityObject;
@@ -46,25 +46,25 @@ public class ArmorStandRootNode extends EntityMenuNode implements EditableObject
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
-            MenuNode localNode = new EntityMenuNode(session, part.getDisplayName().append(Component.text(" (local)")), entity);
+            MenuNode localNode = new PropertyMenuNode(session, part.getDisplayName().append(Component.text(" (local)")), container);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new EntityMenuNode(session, part.getDisplayName().append(Component.text(" (global)")), entity);
+            MenuNode globalNode = new PropertyMenuNode(session, part.getDisplayName().append(Component.text(" (global)")), container);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
             localNode.setNextNode(globalNode);
             globalNode.setNextNode(localNode);
 
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, entity, part, localNode);
+            ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part, localNode);
             addButton(partButton);
             partButtons.put(part, partButton);
         }
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(container);
 
-        MenuNode positionNode = new EntityMenuNode(session, Component.text("Position"), entity);
+        MenuNode positionNode = new PropertyMenuNode(session, Component.text("Position"), container);
         positionNode.addYawButton(session, positionBone, 1);
         positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
@@ -185,8 +185,8 @@ public class ArmorStandRootNode extends EntityMenuNode implements EditableObject
     }
 
     @Override
-    public ArmorStand getEntity() {
-        return entity;
+    public boolean isValid() {
+        return entity.isValid();
     }
 
     @Override

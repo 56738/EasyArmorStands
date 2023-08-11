@@ -7,4 +7,9 @@ class EmptyPropertyContainer implements PropertyContainer {
     public <T> Property<T> getOrNull(PropertyType<T> type) {
         return null;
     }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 }

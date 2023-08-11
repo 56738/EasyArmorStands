@@ -46,7 +46,7 @@ public class HistoryCommands {
             if (action != null) {
                 boolean ok;
                 try {
-                    ok = action.execute();
+                    ok = action.execute(sender.get());
                 } catch (IllegalStateException e) {
                     sender.sendMessage(Component.text("Failed to redo change: ", NamedTextColor.RED)
                             .append(action.describe()));
@@ -78,7 +78,7 @@ public class HistoryCommands {
             if (action != null) {
                 boolean ok;
                 try {
-                    ok = action.undo();
+                    ok = action.undo(sender.get());
                 } catch (IllegalStateException e) {
                     sender.sendMessage(Component.text("Failed to undo change: ", NamedTextColor.RED)
                             .append(action.describe()));

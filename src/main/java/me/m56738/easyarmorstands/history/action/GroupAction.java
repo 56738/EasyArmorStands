@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.history.action;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,19 +16,19 @@ public class GroupAction implements Action {
     }
 
     @Override
-    public boolean execute() {
+    public boolean execute(Player player) {
         boolean ok = true;
         for (Action action : actions) {
-            ok &= action.execute();
+            ok &= action.execute(player);
         }
         return ok;
     }
 
     @Override
-    public boolean undo() {
+    public boolean undo(Player player) {
         boolean ok = true;
         for (int i = actions.length - 1; i >= 0; i--) {
-            ok &= actions[i].undo();
+            ok &= actions[i].undo(player);
         }
         return ok;
     }

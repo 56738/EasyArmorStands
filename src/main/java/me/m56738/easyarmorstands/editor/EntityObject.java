@@ -4,4 +4,6 @@ import org.bukkit.entity.Entity;
 
 public interface EntityObject extends EditableObject {
     Entity getEntity();
+
+    boolean hasItemSlots();
 }

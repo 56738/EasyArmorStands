@@ -30,11 +30,6 @@ public class EntityLocationProperty implements Property<Location> {
         return entity.teleport(value);
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<Location> {
         @Override
         public String getPermission() {

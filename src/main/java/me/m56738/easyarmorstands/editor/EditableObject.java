@@ -12,4 +12,6 @@ public interface EditableObject {
     Button createButton();
 
     EditableObjectNode createNode();
+
+    boolean isValid();
 }

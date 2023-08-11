@@ -67,11 +67,6 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements TogglePropertyType<@Nullable Color> {
         @Override
         public String getPermission() {

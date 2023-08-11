@@ -41,11 +41,6 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements TogglePropertyType<ItemDisplayTransform> {
         @Override
         public @Nullable String getPermission() {

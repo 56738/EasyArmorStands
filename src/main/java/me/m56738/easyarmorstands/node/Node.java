@@ -20,7 +20,5 @@ public interface Node {
 
     boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context);
 
-    default boolean isValid() {
-        return true;
-    }
+    boolean isValid();
 }

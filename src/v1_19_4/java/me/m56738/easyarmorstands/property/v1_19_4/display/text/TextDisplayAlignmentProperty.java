@@ -49,11 +49,6 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements TogglePropertyType<TextAlignment> {
         @Override
         public String getPermission() {

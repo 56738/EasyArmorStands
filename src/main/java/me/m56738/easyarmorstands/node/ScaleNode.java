@@ -227,6 +227,6 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
 
     @Override
     public boolean isValid() {
-        return super.isValid() && bone.isValid();
+        return bone.isValid();
     }
 }

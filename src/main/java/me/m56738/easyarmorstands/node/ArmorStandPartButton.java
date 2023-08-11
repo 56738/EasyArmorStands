@@ -4,23 +4,24 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.particle.LineParticle;
 import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Axis;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Math;
-import org.joml.Quaterniond;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import org.joml.*;
 
 public class ArmorStandPartButton implements NodeButton {
     private final Session session;
-    private final ArmorStand entity;
     private final ArmorStandPart part;
     private final Node node;
     private final Vector3d start = new Vector3d();
@@ -28,29 +29,34 @@ public class ArmorStandPartButton implements NodeButton {
     private final Vector3d center = new Vector3d();
     private final Quaterniond rotation = new Quaterniond();
     private final LineParticle particle;
+    private final Property<Location> locationProperty;
+    private final Property<Quaterniondc> poseProperty;
+    private final Property<ArmorStandSize> sizeProperty;
     private Vector3dc lookTarget;
 
-    public ArmorStandPartButton(Session session, ArmorStand entity, ArmorStandPart part, Node node) {
+    public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, Node node) {
         this.session = session;
-        this.entity = entity;
         this.part = part;
         this.node = node;
         this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.particle.setAxis(Axis.Y);
+        this.locationProperty = container.get(EntityLocationProperty.TYPE);
+        this.poseProperty = container.get(ArmorStandPoseProperty.type(part));
+        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
     }
 
     @Override
     public void update() {
-        Location location = entity.getLocation();
+        Location location = locationProperty.getValue();
+        ArmorStandSize size = sizeProperty.getValue();
         // rotation = combination of yaw and pose
-        Util.fromEuler(part.getPose(entity), rotation)
-                .rotateLocalY(-Math.toRadians(location.getYaw()));
+        poseProperty.getValue().rotateLocalY(-Math.toRadians(location.getYaw()), rotation);
         // start = where the bone is attached to the armor stand, depends on yaw
-        part.getOffset(entity)
+        part.getOffset(size)
                 .rotateY(-Math.toRadians(location.getYaw()), start)
                 .add(location.getX(), location.getY(), location.getZ());
         // end = where the bone ends, depends on yaw and pose
-        part.getLength(entity)
+        part.getLength(size)
                 .rotate(rotation, end)
                 .add(start);
         // move start down, start-end will be the lower 2/3 of the bone

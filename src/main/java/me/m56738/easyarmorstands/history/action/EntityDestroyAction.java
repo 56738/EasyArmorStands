@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class EntityDestroyAction<E extends Entity> extends EntitySpawnAction<E> {
     public EntityDestroyAction(E entity) {
@@ -11,13 +12,13 @@ public class EntityDestroyAction<E extends Entity> extends EntitySpawnAction<E> 
     }
 
     @Override
-    public boolean execute() {
-        return super.undo();
+    public boolean execute(Player player) {
+        return super.undo(player);
     }
 
     @Override
-    public boolean undo() {
-        return super.execute();
+    public boolean undo(Player player) {
+        return super.execute(player);
     }
 
     @Override

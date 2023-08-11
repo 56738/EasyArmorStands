@@ -32,11 +32,6 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<BlockData> {
         @Override
         public @Nullable String getPermission() {

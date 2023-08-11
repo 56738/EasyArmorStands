@@ -31,11 +31,6 @@ public class EntityCustomNameVisibleProperty implements Property<Boolean> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements BooleanPropertyType {
         @Override
         public String getPermission() {

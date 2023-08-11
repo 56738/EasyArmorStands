@@ -1,24 +1,13 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.history.EntityReplacementListener;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 
-import java.util.UUID;
+public interface Action extends EntityReplacementListener {
+    boolean execute(Player player);
 
-public interface Action {
-    boolean execute();
-
-    boolean undo();
+    boolean undo(Player player);
 
     Component describe();
-
-    /**
-     * When an entity is spawned, it has a random UUID.
-     * For example, to undo a destroy action, we spawn a replacement entity.
-     * All references to the old UUID must be updated to the new UUID.
-     *
-     * @param oldId The UUID of the entity which was replaced.
-     * @param newId The UUID of the replacement.
-     */
-    @Deprecated
-    void onEntityReplaced(UUID oldId, UUID newId);
 }

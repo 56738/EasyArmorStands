@@ -24,11 +24,6 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
     }
 
     @Override
-    public boolean isValid() {
-        return super.isValid() && translationProperty.isValid() && rotationProperty.isValid() && scaleProperty.isValid();
-    }
-
-    @Override
     public Vector3dc getOffset() {
         return new Vector3d(translationProperty.getValue())
                 .rotateY(-Math.toRadians(getYaw()));

@@ -39,11 +39,6 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements TogglePropertyType<ArmorStandSize> {
         @Override
         public String getPermission() {

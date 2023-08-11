@@ -42,11 +42,6 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<Vector3fc> {
         @Override
         public Component getDisplayName() {

@@ -80,11 +80,6 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements PropertyType<ItemStack> {
         private final EquipmentSlot slot;
         private final Component displayName;

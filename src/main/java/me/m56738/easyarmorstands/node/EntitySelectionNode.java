@@ -2,15 +2,10 @@ package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.editor.EditableObject;
 import me.m56738.easyarmorstands.editor.EntityObject;
-import me.m56738.easyarmorstands.editor.SimpleEntityObject;
-import me.m56738.easyarmorstands.event.EntityObjectInitializeEvent;
-import me.m56738.easyarmorstands.property.entity.DefaultEntityProperties;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.joml.Vector3dc;
@@ -116,6 +111,11 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 
     public boolean selectEntity(Entity entity) {

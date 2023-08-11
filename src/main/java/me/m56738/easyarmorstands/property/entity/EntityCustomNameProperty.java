@@ -35,11 +35,6 @@ public class EntityCustomNameProperty implements Property<@Nullable Component> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements ComponentPropertyType {
         @Override
         public String getPermission() {

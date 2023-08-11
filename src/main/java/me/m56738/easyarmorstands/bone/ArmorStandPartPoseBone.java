@@ -12,12 +12,14 @@ import org.joml.Math;
 import org.joml.*;
 
 public class ArmorStandPartPoseBone implements RotationBone {
+    private final PropertyContainer container;
     private final ArmorStandPart part;
     private final Property<Quaterniondc> poseProperty;
     private final Property<Location> locationProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
     public ArmorStandPartPoseBone(PropertyContainer container, ArmorStandPart part) {
+        this.container = container;
         this.part = part;
         this.poseProperty = container.get(ArmorStandPoseProperty.type(part));
         this.locationProperty = container.get(EntityLocationProperty.TYPE);
@@ -26,7 +28,7 @@ public class ArmorStandPartPoseBone implements RotationBone {
 
     @Override
     public boolean isValid() {
-        return poseProperty.isValid();
+        return container.isValid();
     }
 
     @Override

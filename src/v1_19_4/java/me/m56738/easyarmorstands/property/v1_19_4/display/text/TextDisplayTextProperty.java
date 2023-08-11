@@ -33,11 +33,6 @@ public class TextDisplayTextProperty implements Property<Component> {
         return true;
     }
 
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
     private static class Type implements ComponentPropertyType {
         @Override
         public String getPermission() {
