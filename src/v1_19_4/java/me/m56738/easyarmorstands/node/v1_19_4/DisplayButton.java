@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.node.Node;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayLeftRotationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -51,7 +52,7 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
             return null;
         }
 
-        DisplayBone bone = new DisplayBone(session, entity, addon, addon.getDisplayLeftRotationProperty());
+        DisplayBone bone = new DisplayBone(session, entity, session.getProperty(DisplayLeftRotationProperty.TYPE));
 
         MenuNode localNode = factory.createRootNode(session, Component.text("Local"), entity);
         localNode.setRoot(true);

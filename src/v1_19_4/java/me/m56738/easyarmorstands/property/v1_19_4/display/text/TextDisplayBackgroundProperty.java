@@ -1,8 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.property.ToggleEntityProperty;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.PropertyType;
+import me.m56738.easyarmorstands.property.TogglePropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -11,14 +13,19 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
-public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisplay, Optional<Color>> {
+public class TextDisplayBackgroundProperty implements Property<@Nullable Color> {
+    public static final PropertyType<@Nullable Color> TYPE = new Type();
+    private final TextDisplay entity;
+
+    public TextDisplayBackgroundProperty(TextDisplay entity) {
+        this.entity = entity;
+    }
+
     public static boolean isSupported() {
         try {
             TextDisplay.class.getMethod("getBackgroundColor");
@@ -32,96 +39,92 @@ public class TextDisplayBackgroundProperty extends ToggleEntityProperty<TextDisp
     }
 
     @Override
-    public Optional<Color> getValue(TextDisplay entity) {
+    public PropertyType<@Nullable Color> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public @Nullable Color getValue() {
         if (entity.isDefaultBackground()) {
-            return Optional.empty();
+            return null;
         }
         Color color = entity.getBackgroundColor();
         if (color == null) {
             color = Color.WHITE;
         }
-        return Optional.of(color);
+        return color;
     }
 
     @Override
-    public TypeToken<Optional<Color>> getValueType() {
-        return new TypeToken<Optional<Color>>() {
-        };
-    }
-
-    @Override
-    public void setValue(TextDisplay entity, Optional<Color> value) {
-        if (value.isPresent()) {
+    public boolean setValue(@Nullable Color value) {
+        if (value != null) {
             entity.setDefaultBackground(false);
-            entity.setBackgroundColor(value.get());
+            entity.setBackgroundColor(value);
         } else {
             entity.setDefaultBackground(true);
             entity.setBackgroundColor(null);
         }
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "background";
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Class<TextDisplay> getEntityType() {
-        return TextDisplay.class;
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("background");
-    }
-
-    @Override
-    public @NotNull Component getValueName(Optional<Color> value) {
-        if (value.isPresent()) {
-            Color color = value.get();
-            if (color.getAlpha() == 0) {
-                return Component.text("none", NamedTextColor.WHITE);
-            }
-            TextColor textColor = TextColor.color(color.asRGB());
-            TextComponent hex = Component.text(textColor.asHexString(), textColor);
-            if (textColor instanceof NamedTextColor) {
-                return hex.append(Component.text(" (" + textColor + ")"));
-            }
-            return hex;
-        } else {
-            return Component.text("default", NamedTextColor.DARK_GRAY);
+    private static class Type implements TogglePropertyType<@Nullable Color> {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.display.text.background";
         }
-    }
 
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.text.background";
-    }
-
-    @Override
-    public Optional<Color> getNextValue(TextDisplay entity) {
-        if (entity.isDefaultBackground()) {
-            return Optional.of(Color.fromARGB(0, 0, 0, 0));
-        } else {
-            return Optional.empty();
+        @Override
+        public Component getDisplayName() {
+            return Component.text("background");
         }
-    }
 
-    @Override
-    public ItemStack createToggleButton(TextDisplay entity) {
-        return Util.createItem(
-                ItemType.STONE_SLAB,
-                Component.text("Toggle background", NamedTextColor.BLUE),
-                Arrays.asList(
-                        Component.text("Currently ", NamedTextColor.GRAY)
-                                .append(getValueName(getValue(entity)))
-                                .append(Component.text(".")),
-                        Component.text("Changes the background", NamedTextColor.GRAY),
-                        Component.text("behind the text.", NamedTextColor.GRAY),
-                        Component.text("Use ", NamedTextColor.GRAY)
-                                .append(Component.text("/eas text background", NamedTextColor.BLUE)),
-                        Component.text("to set the color.", NamedTextColor.GRAY)
-                )
-        );
+        @Override
+        public Component getValueComponent(@Nullable Color value) {
+            if (value != null) {
+                if (value.getAlpha() == 0) {
+                    return Component.text("none", NamedTextColor.WHITE);
+                }
+                TextColor textColor = TextColor.color(value.asRGB());
+                TextComponent hex = Component.text(textColor.asHexString(), textColor);
+                if (textColor instanceof NamedTextColor) {
+                    return hex.append(Component.text(" (" + textColor + ")"));
+                }
+                return hex;
+            } else {
+                return Component.text("default", NamedTextColor.DARK_GRAY);
+            }
+        }
+
+        @Override
+        public Color getNextValue(@Nullable Color value) {
+            if (value == null) {
+                return Color.fromARGB(0, 0, 0, 0);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public ItemStack createItem(Property<@Nullable Color> property, PropertyContainer container) {
+            return Util.createItem(
+                    ItemType.STONE_SLAB,
+                    Component.text("Toggle background", NamedTextColor.BLUE),
+                    Arrays.asList(
+                            Component.text("Currently ", NamedTextColor.GRAY)
+                                    .append(getValueComponent(property.getValue()))
+                                    .append(Component.text(".")),
+                            Component.text("Changes the background", NamedTextColor.GRAY),
+                            Component.text("behind the text.", NamedTextColor.GRAY),
+                            Component.text("Use ", NamedTextColor.GRAY)
+                                    .append(Component.text("/eas text background", NamedTextColor.BLUE)),
+                            Component.text("to set the color.", NamedTextColor.GRAY)
+                    )
+            );
+        }
     }
 }

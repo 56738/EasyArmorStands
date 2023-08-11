@@ -13,13 +13,11 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.command.EntityCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
-import me.m56738.easyarmorstands.command.parser.EntityPropertyArgumentParser;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
 import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
@@ -36,10 +34,6 @@ import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
-import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
-import me.m56738.easyarmorstands.property.EntityPropertyTypeRegistry;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
-import me.m56738.easyarmorstands.property.ResettableEntityProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
@@ -69,8 +63,6 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
-    private EntityPropertyRegistry entityPropertyRegistry;
-    private EntityPropertyTypeRegistry entityPropertyTypeRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
@@ -155,17 +147,8 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
 
-        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(ResettableEntityProperty.class),
-                p -> new EntityPropertyArgumentParser<>(ResettableEntityProperty.class));
-
-        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(LegacyEntityPropertyType.class),
-                p -> new EntityPropertyArgumentParser<>(LegacyEntityPropertyType.class));
-
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorArgument.TextColorParser<>());
-
-        entityPropertyRegistry = new EntityPropertyRegistry();
-        entityPropertyTypeRegistry = new EntityPropertyTypeRegistry();
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
                 p -> CommandMeta.simple()
@@ -179,7 +162,6 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
-        annotationParser.parse(new EntityCommands());
 
         addonLoader.load();
 
@@ -214,14 +196,6 @@ public class EasyArmorStands extends JavaPlugin implements Namespaced {
 
     public CapabilityLoader getCapabilityLoader() {
         return loader;
-    }
-
-    public EntityPropertyRegistry getEntityPropertyRegistry() {
-        return entityPropertyRegistry;
-    }
-
-    public EntityPropertyTypeRegistry getEntityPropertyTypeRegistry() {
-        return entityPropertyTypeRegistry;
     }
 
     public SessionManager getSessionManager() {

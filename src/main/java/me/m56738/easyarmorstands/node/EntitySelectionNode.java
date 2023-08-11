@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.EntityObject;
+import me.m56738.easyarmorstands.editor.SimpleEntityObject;
 import me.m56738.easyarmorstands.session.EntityButtonPriority;
 import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
@@ -56,7 +56,7 @@ public class EntitySelectionNode extends MenuNode {
             for (EntityButtonProvider provider : providers.get(priority)) {
                 Button button = provider.createButton(session, entity);
                 if (button != null) {
-                    return new EntityObject(entity, button);
+                    return new SimpleEntityObject(entity, button);
                 }
             }
         }

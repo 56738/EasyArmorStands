@@ -1,8 +1,10 @@
 package me.m56738.easyarmorstands.addon.worldguard.v6;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.EntityObject;
 import me.m56738.easyarmorstands.event.PlayerDestroyEntityEvent;
-import me.m56738.easyarmorstands.event.PlayerEditEntityPropertyEvent;
+import me.m56738.easyarmorstands.event.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.event.PlayerPreSpawnEntityEvent;
 import me.m56738.easyarmorstands.event.SessionInitializeEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
@@ -57,9 +59,14 @@ public class WorldGuardListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEdit(PlayerEditEntityPropertyEvent<?, ?> event) {
-        if (isAllowed(event.getPlayer(), event.getEntity().getLocation())) {
-            if (!(event.getProperty() instanceof EntityLocationProperty)) {
+    public void onEdit(PlayerEditPropertyEvent<?> event) {
+        EditableObject owner = event.getOwner();
+        if (!(owner instanceof EntityObject)) {
+            return;
+        }
+        Entity entity = ((EntityObject) owner).getEntity();
+        if (isAllowed(event.getPlayer(), entity.getLocation())) {
+            if (event.getProperty().getType() != EntityLocationProperty.TYPE) {
                 return;
             }
             if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue())) {

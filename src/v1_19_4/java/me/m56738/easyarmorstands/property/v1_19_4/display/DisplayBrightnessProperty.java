@@ -1,69 +1,72 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.ResettableEntityProperty;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Display.Brightness;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+public class DisplayBrightnessProperty implements Property<@Nullable Brightness> {
+    public static final PropertyType<@Nullable Brightness> TYPE = new Type();
+    private final Display entity;
 
-public class DisplayBrightnessProperty implements ResettableEntityProperty<Display, Optional<Display.Brightness>> {
-    @Override
-    public Optional<Display.Brightness> getValue(Display entity) {
-        return Optional.ofNullable(entity.getBrightness());
+    public DisplayBrightnessProperty(Display entity) {
+        this.entity = entity;
     }
 
     @Override
-    public TypeToken<Optional<Display.Brightness>> getValueType() {
-        return new TypeToken<Optional<Display.Brightness>>() {
-        };
+    public PropertyType<@Nullable Brightness> getType() {
+        return TYPE;
     }
 
     @Override
-    public void setValue(Display entity, Optional<Display.Brightness> value) {
-        entity.setBrightness(value.orElse(null));
+    public @Nullable Brightness getValue() {
+        return entity.getBrightness();
     }
 
     @Override
-    public @NotNull String getName() {
-        return "brightness";
+    public boolean setValue(@Nullable Brightness value) {
+        entity.setBrightness(value);
+        return true;
     }
 
     @Override
-    public @NotNull Class<Display> getEntityType() {
-        return Display.class;
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("brightness");
-    }
-
-    @Override
-    public @NotNull Component getValueName(Optional<Display.Brightness> value) {
-        if (value.isPresent()) {
-            Display.Brightness brightness = value.get();
-            return Component.text()
-                    .content("Block: ")
-                    .append(Component.text(brightness.getBlockLight()))
-                    .append(Component.text(", "))
-                    .append(Component.text("Sky: "))
-                    .append(Component.text(brightness.getSkyLight()))
-                    .build();
-        } else {
-            return Component.text("default");
+    private static class Type implements PropertyType<@Nullable Brightness> {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.display.brightness";
         }
-    }
 
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.brightness";
-    }
+        @Override
+        public @NotNull Component getDisplayName() {
+            return Component.text("brightness");
+        }
 
-    @Override
-    public Optional<Display.Brightness> getResetValue() {
-        return Optional.empty();
+        @Override
+        public @NotNull Component getValueComponent(@Nullable Brightness value) {
+            if (value != null) {
+                return Component.text()
+                        .content("Block: ")
+                        .append(Component.text(value.getBlockLight()))
+                        .append(Component.text(", "))
+                        .append(Component.text("Sky: "))
+                        .append(Component.text(value.getSkyLight()))
+                        .build();
+            } else {
+                return Component.text("default");
+            }
+        }
+
+        // TODO /eas reset
+//        @Override
+//        public Optional<Brightness> getResetValue() {
+//            return Optional.empty();
+//        }
     }
 }

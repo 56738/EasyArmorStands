@@ -1,50 +1,53 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class TextDisplayLineWidthProperty implements LegacyEntityPropertyType<TextDisplay, Integer> {
+public class TextDisplayLineWidthProperty implements Property<Integer> {
+    public static final PropertyType<Integer> TYPE = new Type();
+    private final TextDisplay entity;
+
+    public TextDisplayLineWidthProperty(TextDisplay entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public Integer getValue(TextDisplay entity) {
+    public PropertyType<Integer> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public Integer getValue() {
         return entity.getLineWidth();
     }
 
     @Override
-    public TypeToken<Integer> getValueType() {
-        return TypeToken.get(Integer.class);
-    }
-
-    @Override
-    public void setValue(TextDisplay entity, Integer value) {
+    public boolean setValue(Integer value) {
         entity.setLineWidth(value);
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "linewidth";
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Class<TextDisplay> getEntityType() {
-        return TextDisplay.class;
-    }
+    private static class Type implements PropertyType<Integer> {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.display.text.linewidth";
+        }
 
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("line width");
-    }
+        @Override
+        public Component getDisplayName() {
+            return Component.text("line width");
+        }
 
-    @Override
-    public @NotNull Component getValueName(Integer value) {
-        return Component.text(value);
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.text.linewidth";
+        @Override
+        public Component getValueComponent(Integer value) {
+            return Component.text(value);
+        }
     }
 }

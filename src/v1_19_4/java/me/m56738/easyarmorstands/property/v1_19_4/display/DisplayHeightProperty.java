@@ -1,27 +1,36 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
-import org.jetbrains.annotations.NotNull;
 
-public class DisplayHeightProperty extends DisplaySizeProperty {
+public class DisplayHeightProperty implements Property<Float> {
+    public static final PropertyType<Float> TYPE = new DisplaySizePropertyType(Component.text("height"));
+    private final Display entity;
+
+    public DisplayHeightProperty(Display entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public Float getValue(Display entity) {
+    public PropertyType<Float> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public Float getValue() {
         return entity.getDisplayHeight();
     }
 
     @Override
-    public void setValue(Display entity, Float value) {
+    public boolean setValue(Float value) {
         entity.setDisplayHeight(value);
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "height";
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("height");
+    public boolean isValid() {
+        return entity.isValid();
     }
 }

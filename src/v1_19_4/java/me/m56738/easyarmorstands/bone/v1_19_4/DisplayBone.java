@@ -1,11 +1,10 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
-import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.EntityLocationBone;
 import me.m56738.easyarmorstands.bone.RotationBone;
 import me.m56738.easyarmorstands.bone.ScaleBone;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.entity.Display;
@@ -20,19 +19,17 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayBone extends EntityLocationBone implements RotationBone, ScaleBone {
-    private final Session session;
     private final Display entity;
-    private final DisplayTranslationProperty translationProperty;
+    private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
     private final Property<Vector3fc> scaleProperty;
 
-    public DisplayBone(Session session, Display entity, DisplayAddon addon, LegacyEntityPropertyType<Display, Quaternionfc> rotationProperty) {
+    public DisplayBone(Session session, Display entity, Property<Quaternionfc> rotationProperty) {
         super(session, entity);
-        this.session = session;
         this.entity = entity;
-        this.translationProperty = addon.getDisplayTranslationProperty();
-        this.rotationProperty = rotationProperty.bind(entity);
-        this.scaleProperty = addon.getDisplayScaleProperty().bind(entity);
+        this.translationProperty = session.getProperty(DisplayTranslationProperty.TYPE);
+        this.rotationProperty = rotationProperty;
+        this.scaleProperty = session.getProperty(DisplayScaleProperty.TYPE);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     @Override
     public Vector3dc getOffset() {
-        return new Vector3d(translationProperty.getValue(entity))
+        return new Vector3d(translationProperty.getValue())
                 .rotateY(-Math.toRadians(entity.getLocation().getYaw()));
     }
 

@@ -1,77 +1,71 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.ResettableEntityProperty;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-public class DisplayTranslationProperty implements ResettableEntityProperty<Display, Vector3fc> {
+public class DisplayTranslationProperty implements Property<Vector3fc> {
+    public static final PropertyType<Vector3fc> TYPE = new Type();
+    private final Display entity;
     private final JOMLMapper mapper;
 
-    public DisplayTranslationProperty(JOMLMapper mapper) {
+    public DisplayTranslationProperty(Display entity, JOMLMapper mapper) {
+        this.entity = entity;
         this.mapper = mapper;
     }
 
     @Override
-    public Vector3fc getValue(Display entity) {
+    public PropertyType<Vector3fc> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public Vector3fc getValue() {
         return mapper.getTranslation(entity.getTransformation());
     }
 
     @Override
-    public TypeToken<Vector3fc> getValueType() {
-        return TypeToken.get(Vector3fc.class);
-    }
-
-    @Override
-    public void setValue(Display entity, Vector3fc value) {
+    public boolean setValue(Vector3fc value) {
         Transformation transformation = entity.getTransformation();
         entity.setTransformation(mapper.getTransformation(
                 value,
                 mapper.getLeftRotation(transformation),
                 mapper.getScale(transformation),
                 mapper.getRightRotation(transformation)));
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "translation";
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Class<Display> getEntityType() {
-        return Display.class;
-    }
+    private static class Type implements PropertyType<Vector3fc> {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.display.translation";
+        }
 
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("translation");
-    }
+        @Override
+        public Component getDisplayName() {
+            return Component.text("translation");
+        }
 
-    @Override
-    public @NotNull Component getValueName(Vector3fc value) {
-        return Util.formatOffset(new Vector3d(value));
-    }
+        @Override
+        public Component getValueComponent(Vector3fc value) {
+            return Util.formatOffset(new Vector3d(value));
+        }
 
-    @Override
-    public @NotNull String getValueClipboardContent(Vector3fc value) {
-        return value.x() + " " + value.y() + " " + value.z();
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.translation";
-    }
-
-    @Override
-    public Vector3fc getResetValue() {
-        return new Vector3f();
+        // TODO /eas reset
+//        @Override
+//        public Vector3fc getResetValue() {
+//            return new Vector3f();
+//        }
     }
 }

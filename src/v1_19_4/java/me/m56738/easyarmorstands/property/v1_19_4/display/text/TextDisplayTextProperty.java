@@ -1,46 +1,52 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
-import me.m56738.easyarmorstands.property.ComponentEntityProperty;
+import me.m56738.easyarmorstands.property.ComponentPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class TextDisplayTextProperty extends ComponentEntityProperty<TextDisplay> {
+public class TextDisplayTextProperty implements Property<Component> {
+    public static final PropertyType<Component> TYPE = new Type();
+    private final TextDisplay entity;
     private final TextDisplayCapability textDisplayCapability;
 
-    public TextDisplayTextProperty(TextDisplayCapability textDisplayCapability) {
+    public TextDisplayTextProperty(TextDisplay entity, TextDisplayCapability textDisplayCapability) {
+        this.entity = entity;
         this.textDisplayCapability = textDisplayCapability;
     }
 
     @Override
-    public Component getValue(TextDisplay entity) {
+    public PropertyType<Component> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public Component getValue() {
         return textDisplayCapability.getText(entity);
     }
 
     @Override
-    public void setValue(TextDisplay entity, Component value) {
+    public boolean setValue(Component value) {
         textDisplayCapability.setText(entity, value);
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "text";
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Class<TextDisplay> getEntityType() {
-        return TextDisplay.class;
-    }
+    private static class Type implements ComponentPropertyType {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.display.text";
+        }
 
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("text");
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.text";
+        @Override
+        public Component getDisplayName() {
+            return Component.text("text");
+        }
     }
 }

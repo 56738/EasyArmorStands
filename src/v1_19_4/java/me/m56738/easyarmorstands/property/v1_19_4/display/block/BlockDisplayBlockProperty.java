@@ -1,56 +1,56 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.block;
 
-import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockDisplayBlockProperty implements LegacyEntityPropertyType<BlockDisplay, BlockData> {
+public class BlockDisplayBlockProperty implements Property<BlockData> {
+    public static final PropertyType<BlockData> TYPE = new Type();
+    private final BlockDisplay entity;
+
+    public BlockDisplayBlockProperty(BlockDisplay entity) {
+        this.entity = entity;
+    }
+
     @Override
-    public BlockData getValue(BlockDisplay entity) {
+    public PropertyType<BlockData> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public BlockData getValue() {
         return entity.getBlock();
     }
 
     @Override
-    public TypeToken<BlockData> getValueType() {
-        return TypeToken.get(BlockData.class);
-    }
-
-    @Override
-    public void setValue(BlockDisplay entity, BlockData value) {
+    public boolean setValue(BlockData value) {
         entity.setBlock(value);
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return "block";
+    public boolean isValid() {
+        return entity.isValid();
     }
 
-    @Override
-    public @NotNull Class<BlockDisplay> getEntityType() {
-        return BlockDisplay.class;
-    }
+    private static class Type implements PropertyType<BlockData> {
+        @Override
+        public @Nullable String getPermission() {
+            return "easyarmorstands.property.display.block";
+        }
 
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("block");
-    }
+        @Override
+        public @NotNull Component getDisplayName() {
+            return Component.text("block");
+        }
 
-    @Override
-    public @NotNull Component getValueName(BlockData value) {
-        return Component.text(value.getAsString());
-    }
-
-    @Override
-    public @NotNull String getValueClipboardContent(BlockData value) {
-        return value.getAsString(true);
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.display.block";
+        @Override
+        public @NotNull Component getValueComponent(BlockData value) {
+            return Component.text(value.getAsString());
+        }
     }
 }

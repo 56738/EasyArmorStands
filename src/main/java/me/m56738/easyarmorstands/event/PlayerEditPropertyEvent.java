@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.property.Property;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -11,17 +11,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when an entity property is modified.
  */
-public class PlayerEditEntityPropertyEvent<E extends Entity, T> extends PlayerEvent implements Cancellable {
+public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
-    private final E entity;
-    private final LegacyEntityPropertyType<E, T> property;
+    private final EditableObject editableObject;
+    private final Property<T> property;
     private final T oldValue;
     private final T newValue;
     private boolean cancelled;
 
-    public PlayerEditEntityPropertyEvent(Player player, E entity, LegacyEntityPropertyType<E, T> property, T oldValue, T newValue) {
+    public PlayerEditPropertyEvent(Player player, EditableObject editableObject, Property<T> property, T oldValue, T newValue) {
         super(player);
-        this.entity = entity;
+        this.editableObject = editableObject;
         this.property = property;
         this.oldValue = oldValue;
         this.newValue = newValue;
@@ -31,11 +31,11 @@ public class PlayerEditEntityPropertyEvent<E extends Entity, T> extends PlayerEv
         return handlerList;
     }
 
-    public @NotNull E getEntity() {
-        return entity;
+    public EditableObject getOwner() {
+        return editableObject;
     }
 
-    public @NotNull LegacyEntityPropertyType<E, T> getProperty() {
+    public @NotNull Property<T> getProperty() {
         return property;
     }
 

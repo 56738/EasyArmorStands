@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
-import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.property.PendingChange;
 import me.m56738.easyarmorstands.property.Property;
@@ -17,16 +16,14 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayBoxBone implements PositionBone {
-    private final Session session;
     private final Display entity;
-    private final DisplayAddon addon;
     private final Property<Location> entityLocationProperty;
+    private final Property<Vector3fc> displayTranslationProperty;
 
-    public DisplayBoxBone(Session session, Display entity, DisplayAddon addon) {
-        this.session = session;
+    public DisplayBoxBone(Session session, Display entity) {
         this.entity = entity;
-        this.addon = addon;
-        this.entityLocationProperty = session.findProperty(EntityLocationProperty.TYPE);
+        this.entityLocationProperty = session.getProperty(EntityLocationProperty.TYPE);
+        this.displayTranslationProperty = session.getProperty(DisplayTranslationProperty.TYPE);
     }
 
     @Override
@@ -44,8 +41,6 @@ public class DisplayBoxBone implements PositionBone {
     public void setPosition(Vector3dc position) {
         Vector3dc delta = position.sub(getPosition(), new Vector3d());
 
-        DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
-
         // Move box by modifying the location
         Location location = entityLocationProperty.getValue().clone()
                 .add(delta.x(), delta.y(), delta.z());
@@ -54,9 +49,9 @@ public class DisplayBoxBone implements PositionBone {
         // Make sure the display stays in the same place by performing the inverse using the translation
         Vector3fc rotatedDelta = delta.get(new Vector3f())
                 .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
-        Vector3fc translation = displayTranslationProperty.getValue(entity)
+        Vector3fc translation = displayTranslationProperty.getValue()
                 .sub(rotatedDelta, new Vector3f());
-        PendingChange translationChange = displayTranslationProperty.bind(entity).prepareChange(translation);
+        PendingChange translationChange = displayTranslationProperty.prepareChange(translation);
 
         // Only execute changes if both are allowed
         if (locationChange != null && translationChange != null) {
