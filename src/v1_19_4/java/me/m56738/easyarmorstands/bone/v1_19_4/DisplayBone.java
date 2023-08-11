@@ -64,7 +64,7 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     @Override
     public void setRotation(Quaterniondc rotation) {
-        session.tryChange(rotationProperty, new Quaternionf(rotation)
+        rotationProperty.setValue(new Quaternionf(rotation)
                 .rotateLocalY(Math.toRadians(entity.getLocation().getYaw())));
     }
 
@@ -75,6 +75,6 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     @Override
     public void setScale(Vector3dc scale) {
-        session.tryChange(scaleProperty, scale.get(new Vector3f()));
+        scaleProperty.setValue(scale.get(new Vector3f()));
     }
 }

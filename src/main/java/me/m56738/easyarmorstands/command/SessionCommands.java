@@ -167,7 +167,7 @@ public class SessionCommands {
         location.setX(position.x());
         location.setY(position.y());
         location.setZ(position.z());
-        if (!session.tryChange(property, location)) {
+        if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -191,7 +191,7 @@ public class SessionCommands {
         Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
         location.setPitch(oldLocation.getPitch());
-        if (!session.tryChange(property, location)) {
+        if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -208,7 +208,7 @@ public class SessionCommands {
     public void setYaw(EasCommandSender sender, Session session, EntityLocationProperty property, @Argument("yaw") float yaw) {
         Location location = property.getValue();
         location.setYaw(yaw);
-        if (!session.tryChange(property, location)) {
+        if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -225,7 +225,7 @@ public class SessionCommands {
     public void setPitch(EasCommandSender sender, Session session, EntityLocationProperty property, @Argument("pitch") float pitch) {
         Location location = property.getValue();
         location.setPitch(pitch);
-        if (!session.tryChange(property, location)) {
+        if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
@@ -254,13 +254,13 @@ public class SessionCommands {
                         EntityCustomNameVisibleProperty nameVisibleProperty,
                         @Argument("value") @Greedy String input) {
         Component name = MiniMessage.miniMessage().deserialize(input);
-        boolean hadName = nameProperty.hasCustomName();
-        if (!session.tryChange(nameProperty, name)) {
+        boolean hadName = nameProperty.getValue() != null;
+        if (!nameProperty.setValue(name)) {
             sender.sendMessage(Component.text("Unable to change the name", NamedTextColor.RED));
             return;
         }
         if (!hadName) {
-            session.tryChange(nameVisibleProperty, true);
+            nameVisibleProperty.setValue(true);
         }
         session.commit();
         sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
@@ -275,11 +275,11 @@ public class SessionCommands {
     public void clearName(EasCommandSender sender, Session session,
                           EntityCustomNameProperty nameProperty,
                           EntityCustomNameVisibleProperty nameVisibleProperty) {
-        if (!session.tryChange(nameProperty, null)) {
+        if (!nameProperty.setValue(null)) {
             sender.sendMessage(Component.text("Unable to remove the name", NamedTextColor.RED));
             return;
         }
-        session.tryChange(nameVisibleProperty, false);
+        nameVisibleProperty.setValue(false);
         session.commit();
         sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
     }
@@ -291,13 +291,13 @@ public class SessionCommands {
     @RequireEntity
     public void setNameVisible(EasCommandSender sender, Session session, EntityCustomNameVisibleProperty property,
                                @Argument("value") boolean visible) {
-        if (!session.tryChange(property, visible)) {
+        if (!property.setValue(visible)) {
             sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
             return;
         }
         session.commit();
         sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
-                .append(property.getValueComponent(visible)));
+                .append(property.getType().getValueComponent(visible)));
     }
 
     @CommandMethod("cantick <value>")
@@ -306,13 +306,13 @@ public class SessionCommands {
     @RequireSession
     @RequireEntity(ArmorStand.class)
     public void setCanTick(EasCommandSender sender, Session session, ArmorStandCanTickProperty property, @Argument("value") boolean canTick) {
-        if (!session.tryChange(property, canTick)) {
+        if (!property.setValue(canTick)) {
             sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
             return;
         }
         session.commit();
         sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
-                .append(property.getValueComponent(canTick)));
+                .append(property.getType().getValueComponent(canTick)));
     }
 
     // TODO Restore /eas reset?

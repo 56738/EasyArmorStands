@@ -48,7 +48,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.joml.Vector3dc;
 
 import java.util.EnumMap;
-import java.util.Locale;
 
 public class ArmorStandRootNode extends EntityMenuNode {
     private final Session session;
@@ -67,37 +66,34 @@ public class ArmorStandRootNode extends EntityMenuNode {
         EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
         GlowCapability glowCapability = EasyArmorStands.getInstance().getCapability(GlowCapability.class);
         if (glowCapability != null) {
-            properties.register(EntityGlowingProperty.KEY, new EntityGlowingProperty(entity, glowCapability));
+            properties.register(new EntityGlowingProperty(entity, glowCapability));
         }
-        properties.register(EntityLocationProperty.KEY, new EntityLocationProperty(entity));
-        properties.register(EntityCustomNameProperty.KEY, new EntityCustomNameProperty(entity, componentCapability));
-        properties.register(EntityCustomNameVisibleProperty.KEY, new EntityCustomNameVisibleProperty(entity));
+        properties.register(new EntityLocationProperty(entity));
+        properties.register(new EntityCustomNameProperty(entity, componentCapability));
+        properties.register(new EntityCustomNameVisibleProperty(entity));
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            String upperName = slot.name().replace('_', ' ');
-            String lowerName = upperName.toLowerCase(Locale.ROOT);
-            properties.register(EntityEquipmentProperty.key(slot), new EntityEquipmentProperty(entity, slot, Component.text(lowerName), equipmentCapability, componentCapability));
+            properties.register(new EntityEquipmentProperty(entity, slot, equipmentCapability, componentCapability));
         }
-        properties.register(ArmorStandArmsProperty.KEY, new ArmorStandArmsProperty(entity));
-        properties.register(ArmorStandBasePlateProperty.KEY, new ArmorStandBasePlateProperty(entity));
-        properties.register(ArmorStandMarkerProperty.KEY, new ArmorStandMarkerProperty(entity));
-        properties.register(ArmorStandSizeProperty.KEY, new ArmorStandSizeProperty(entity));
-        properties.register(ArmorStandVisibilityProperty.KEY, new ArmorStandVisibilityProperty(entity));
+        properties.register(new ArmorStandArmsProperty(entity));
+        properties.register(new ArmorStandBasePlateProperty(entity));
+        properties.register(new ArmorStandMarkerProperty(entity));
+        properties.register(new ArmorStandSizeProperty(entity));
+        properties.register(new ArmorStandVisibilityProperty(entity));
         TickCapability tickCapability = EasyArmorStands.getInstance().getCapability(TickCapability.class);
         if (tickCapability != null) {
-            properties.register(ArmorStandCanTickProperty.KEY, new ArmorStandCanTickProperty(entity, tickCapability));
+            properties.register(new ArmorStandCanTickProperty(entity, tickCapability));
         }
-        properties.register(ArmorStandGravityProperty.KEY, new ArmorStandGravityProperty(entity, tickCapability));
+        properties.register(new ArmorStandGravityProperty(entity));
         InvulnerabilityCapability invulnerabilityCapability = EasyArmorStands.getInstance().getCapability(InvulnerabilityCapability.class);
         if (invulnerabilityCapability != null) {
-            properties.register(ArmorStandInvulnerabilityProperty.KEY, new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
+            properties.register(new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
         }
         LockCapability lockCapability = EasyArmorStands.getInstance().getCapability(LockCapability.class);
         if (lockCapability != null) {
-            properties.register(ArmorStandLockProperty.KEY, new ArmorStandLockProperty(entity, lockCapability));
+            properties.register(new ArmorStandLockProperty(entity, lockCapability));
         }
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPoseProperty property = new ArmorStandPoseProperty(entity, part);
-            properties.register(ArmorStandPoseProperty.key(part), property);
+            properties.register(new ArmorStandPoseProperty(entity, part));
         }
 
         setRoot(true);
@@ -231,12 +227,13 @@ public class ArmorStandRootNode extends EntityMenuNode {
             if (player.isSneaking()) {
                 player.openInventory(new LegacyArmorStandMenu(session, entity).getInventory());
             } else {
-                SplitMenuBuilder builder = new SplitMenuBuilder();
-                EntityEquipmentProperty.populate(builder, session);
-                Property<Boolean> property = session.findProperty(ArmorStandBasePlateProperty.KEY);
-                builder.addButton(new ButtonPropertySlot((BooleanToggleProperty) property, session));
-                Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
-                player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
+                // TODO
+//                SplitMenuBuilder builder = new SplitMenuBuilder();
+//                EntityEquipmentProperty.populate(builder, session);
+//                Property<Boolean> property = session.findProperty(ArmorStandBasePlateProperty.TYPE);
+//                builder.addButton(new ButtonPropertySlot((BooleanToggleProperty) property, session));
+//                Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
+//                player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
             }
             return true;
         }

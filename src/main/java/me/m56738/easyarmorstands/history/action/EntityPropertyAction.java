@@ -1,8 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyChange;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 
@@ -21,22 +19,23 @@ public class EntityPropertyAction<E extends Entity, T> extends EntityAction<E> {
     }
 
     @Override
-    public boolean execute(ChangeContext context) {
-        return tryChange(newValue, context);
+    public boolean execute() {
+        return tryChange(newValue);
     }
 
     @Override
-    public boolean undo(ChangeContext context) {
-        return tryChange(oldValue, context);
+    public boolean undo() {
+        return tryChange(oldValue);
     }
 
-    private boolean tryChange(T value, ChangeContext context) {
+    private boolean tryChange(T value) {
         E entity = findEntity();
         Property<T> bound = property.bind(entity);
         if (bound == null) {
             throw new IllegalStateException("Unable to bind property");
         }
-        return context.tryChange(new PropertyChange<>(bound, value));
+        bound.setValue(value);
+        return true;
     }
 
     @Override

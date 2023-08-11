@@ -22,7 +22,7 @@ public class ItemPropertySlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        String permission = property.getPermission();
+        String permission = property.getType().getPermission();
         if (permission != null && !click.player().hasPermission(permission)) {
             click.cancel();
             return;
@@ -31,7 +31,7 @@ public class ItemPropertySlot implements MenuSlot {
             if (item == null) {
                 item = new ItemStack(Material.AIR);
             }
-            session.tryChange(property, item);
+            property.setValue(item);
             session.commit();
         });
     }

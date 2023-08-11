@@ -1,18 +1,16 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.property.ComponentProperty;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.ComponentPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityCustomNameProperty implements ComponentProperty {
-    public static final PropertyKey<Component> KEY = PropertyKey.of(EasyArmorStands.key("entity_name"));
+public class EntityCustomNameProperty implements Property<@Nullable Component> {
+    public static final PropertyType<Component> TYPE = new Type();
     private final Entity entity;
     private final ComponentCapability componentCapability;
 
@@ -22,31 +20,19 @@ public class EntityCustomNameProperty implements ComponentProperty {
     }
 
     @Override
-    public Component getValue() {
-        Component name = componentCapability.getCustomName(entity);
-        if (name == null) {
-            name = Component.empty();
-        }
-        return name;
+    public PropertyType<Component> getType() {
+        return TYPE;
     }
 
     @Override
-    public void setValue(Component value) {
+    public @Nullable Component getValue() {
+        return componentCapability.getCustomName(entity);
+    }
+
+    @Override
+    public boolean setValue(@Nullable Component value) {
         componentCapability.setCustomName(entity, value);
-    }
-
-    public boolean hasCustomName() {
-        return entity.getCustomName() != null;
-    }
-
-    @Override
-    public Action createChangeAction(Component oldValue, Component value) {
-        return new EntityPropertyAction<>(entity, e -> new EntityCustomNameProperty(e, componentCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("custom name");
+        return true;
     }
 
     @Override
@@ -54,8 +40,15 @@ public class EntityCustomNameProperty implements ComponentProperty {
         return entity.isValid();
     }
 
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.name";
+    private static class Type implements ComponentPropertyType {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.name";
+        }
+
+        @Override
+        public @NotNull Component getDisplayName() {
+            return Component.text("custom name");
+        }
     }
 }

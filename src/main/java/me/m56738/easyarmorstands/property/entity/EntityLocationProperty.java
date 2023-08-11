@@ -1,23 +1,23 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityLocationProperty implements Property<Location> {
-    public static final PropertyKey<Location> KEY = PropertyKey.of(EasyArmorStands.key("entity_location"));
+    public static final PropertyType<Location> TYPE = new Type();
     private final Entity entity;
 
     public EntityLocationProperty(Entity entity) {
         this.entity = entity;
+    }
+
+    @Override
+    public PropertyType<Location> getType() {
+        return TYPE;
     }
 
     @Override
@@ -26,23 +26,8 @@ public class EntityLocationProperty implements Property<Location> {
     }
 
     @Override
-    public void setValue(Location value) {
-        entity.teleport(value);
-    }
-
-    @Override
-    public Action createChangeAction(Location oldValue, Location value) {
-        return new EntityPropertyAction<>(entity, EntityLocationProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("position");
-    }
-
-    @Override
-    public @NotNull Component getValueComponent(Location value) {
-        return Util.formatLocation(value);
+    public boolean setValue(Location value) {
+        return entity.teleport(value);
     }
 
     @Override
@@ -50,8 +35,20 @@ public class EntityLocationProperty implements Property<Location> {
         return entity.isValid();
     }
 
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.location";
+    private static class Type implements PropertyType<Location> {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.location";
+        }
+
+        @Override
+        public Component getDisplayName() {
+            return Component.text("position");
+        }
+
+        @Override
+        public Component getValueComponent(Location value) {
+            return Util.formatLocation(value);
+        }
     }
 }

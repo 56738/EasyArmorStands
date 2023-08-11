@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.property.ChangeContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,19 +15,19 @@ public class GroupAction implements Action {
     }
 
     @Override
-    public boolean execute(ChangeContext context) {
+    public boolean execute() {
         boolean ok = true;
         for (Action action : actions) {
-            ok &= action.execute(context);
+            ok &= action.execute();
         }
         return ok;
     }
 
     @Override
-    public boolean undo(ChangeContext context) {
+    public boolean undo() {
         boolean ok = true;
         for (int i = actions.length - 1; i >= 0; i--) {
-            ok &= actions[i].undo(context);
+            ok &= actions[i].undo();
         }
         return ok;
     }

@@ -1,14 +1,13 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.property.ChangeContext;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
 public interface Action {
-    boolean execute(ChangeContext context);
+    boolean execute();
 
-    boolean undo(ChangeContext context);
+    boolean undo();
 
     Component describe();
 

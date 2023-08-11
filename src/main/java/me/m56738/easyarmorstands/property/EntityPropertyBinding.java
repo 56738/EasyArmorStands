@@ -1,10 +1,6 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
 
 @Deprecated
 public class EntityPropertyBinding<E extends Entity, T> implements Property<T> {
@@ -12,10 +8,16 @@ public class EntityPropertyBinding<E extends Entity, T> implements Property<T> {
     private final E entity;
     private final EntityPropertyAccessor<E, T> accessor;
 
+    @SuppressWarnings("PatternValidation")
     public EntityPropertyBinding(EntityPropertyType<T> type, E entity, EntityPropertyAccessor<E, T> accessor) {
         this.entity = entity;
         this.type = type;
         this.accessor = accessor;
+    }
+
+    @Override
+    public PropertyType<T> getType() {
+        return type;
     }
 
     @Override
@@ -24,28 +26,9 @@ public class EntityPropertyBinding<E extends Entity, T> implements Property<T> {
     }
 
     @Override
-    public void setValue(T value) {
+    public boolean setValue(T value) {
         accessor.setValue(entity, value);
-    }
-
-    @Override
-    public Action createChangeAction(T oldValue, T value) {
-        return new EntityPropertyAction<>(entity, type::bind, oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return type.getPermission();
-    }
-
-    @Override
-    public Component getDisplayName() {
-        return type.getDisplayName();
-    }
-
-    @Override
-    public Component getValueComponent(T value) {
-        return type.getValueComponent(value);
+        return true;
     }
 
     @Override

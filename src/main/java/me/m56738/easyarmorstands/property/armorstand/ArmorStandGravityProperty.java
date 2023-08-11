@@ -1,35 +1,32 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.property.BooleanToggleProperty;
-import me.m56738.easyarmorstands.property.ChangeContext;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.BooleanTogglePropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ArmorStandGravityProperty implements BooleanToggleProperty {
-    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("armor_stand_gravity"));
+public class ArmorStandGravityProperty implements Property<Boolean> {
+    public static final PropertyType<Boolean> TYPE = new Type();
     private final ArmorStand entity;
-    private final @Nullable TickCapability tickCapability;
-    private final @Nullable ArmorStandCanTickProperty canTickProperty;
 
-    public ArmorStandGravityProperty(ArmorStand entity, @Nullable TickCapability tickCapability) {
+    public ArmorStandGravityProperty(ArmorStand entity) {
         this.entity = entity;
-        this.tickCapability = tickCapability;
-        this.canTickProperty = tickCapability != null ? new ArmorStandCanTickProperty(entity, tickCapability) : null;
+    }
+
+    @Override
+    public PropertyType<Boolean> getType() {
+        return TYPE;
     }
 
     @Override
@@ -38,25 +35,9 @@ public class ArmorStandGravityProperty implements BooleanToggleProperty {
     }
 
     @Override
-    public void setValue(Boolean value) {
+    public boolean setValue(Boolean value) {
         entity.setGravity(value);
-    }
-
-    @Override
-    public Action createChangeAction(Boolean oldValue, Boolean value) {
-        return new EntityPropertyAction<>(entity, e -> new ArmorStandGravityProperty(e, tickCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("gravity");
-    }
-
-    @Override
-    public @NotNull Component getValueComponent(Boolean value) {
-        return value
-                ? Component.text("enabled", NamedTextColor.GREEN)
-                : Component.text("static", NamedTextColor.RED);
+        return true;
     }
 
     @Override
@@ -64,45 +45,62 @@ public class ArmorStandGravityProperty implements BooleanToggleProperty {
         return entity.isValid();
     }
 
-    @Override
-    public String getPermission() {
-        return "easyarmorstands.property.gravity";
-    }
-
-    @Override
-    public ItemStack createItem() {
-        List<Component> description = Arrays.asList(
-                Component.text("Currently ", NamedTextColor.GRAY)
-                        .append(canTickProperty != null && !canTickProperty.getValue()
-                                ? Component.text("frozen", NamedTextColor.GOLD)
-                                : entity.hasGravity()
-                                ? Component.text("has gravity", NamedTextColor.GREEN)
-                                : Component.text("static", NamedTextColor.RED))
-                        .append(Component.text(".")),
-                Component.text("Changes whether the", NamedTextColor.GRAY),
-                Component.text("armor stand will fall", NamedTextColor.GRAY),
-                Component.text("due to gravity.", NamedTextColor.GRAY)
-        );
-        if (canTickProperty != null && entity.hasGravity() && !canTickProperty.getValue()) {
-            description = new ArrayList<>(description);
-            description.add(Component.text("Gravity is enabled but", NamedTextColor.GOLD));
-            description.add(Component.text("armor stand ticking is", NamedTextColor.GOLD));
-            description.add(Component.text("disabled, so gravity", NamedTextColor.GOLD));
-            description.add(Component.text("has no effect.", NamedTextColor.GOLD));
+    private static class Type implements BooleanTogglePropertyType {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.gravity";
         }
-        return Util.createItem(
-                ItemType.FEATHER,
-                Component.text("Toggle gravity", NamedTextColor.BLUE),
-                description
-        );
-    }
 
-    @Override
-    public void onClick(ChangeContext context) {
-        boolean value = getNextValue();
-        if (value && canTickProperty != null && !canTickProperty.getValue()) {
-            context.tryChange(canTickProperty, true);
+        @Override
+        public @NotNull Component getDisplayName() {
+            return Component.text("gravity");
         }
-        context.tryChange(this, value);
+
+        @Override
+        public @NotNull Component getValueComponent(Boolean value) {
+            return value
+                    ? Component.text("enabled", NamedTextColor.GREEN)
+                    : Component.text("static", NamedTextColor.RED);
+        }
+
+        @Override
+        public ItemStack createItem(Property<Boolean> property, PropertyContainer container) {
+            Property<Boolean> canTickProperty = container.get(ArmorStandCanTickProperty.TYPE);
+            List<Component> description = Arrays.asList(
+                    Component.text("Currently ", NamedTextColor.GRAY)
+                            .append(canTickProperty != null && !canTickProperty.getValue()
+                                    ? Component.text("frozen", NamedTextColor.GOLD)
+                                    : property.getValue()
+                                    ? Component.text("has gravity", NamedTextColor.GREEN)
+                                    : Component.text("static", NamedTextColor.RED))
+                            .append(Component.text(".")),
+                    Component.text("Changes whether the", NamedTextColor.GRAY),
+                    Component.text("armor stand will fall", NamedTextColor.GRAY),
+                    Component.text("due to gravity.", NamedTextColor.GRAY)
+            );
+            if (canTickProperty != null && property.getValue() && !canTickProperty.getValue()) {
+                description = new ArrayList<>(description);
+                description.add(Component.text("Gravity is enabled but", NamedTextColor.GOLD));
+                description.add(Component.text("armor stand ticking is", NamedTextColor.GOLD));
+                description.add(Component.text("disabled, so gravity", NamedTextColor.GOLD));
+                description.add(Component.text("has no effect.", NamedTextColor.GOLD));
+            }
+            return Util.createItem(
+                    ItemType.FEATHER,
+                    Component.text("Toggle gravity", NamedTextColor.BLUE),
+                    description
+            );
+        }
+
+        @Override
+        public void onClick(Property<Boolean> property, PropertyContainer container) {
+            BooleanTogglePropertyType.super.onClick(property, container);
+
+            // Attempt to also turn on armor stand ticking when turning on gravity
+            Property<Boolean> canTickProperty = container.get(ArmorStandCanTickProperty.TYPE);
+            if (property.getValue() && canTickProperty != null && !canTickProperty.getValue()) {
+                canTickProperty.setValue(true);
+            }
+        }
     }
 }

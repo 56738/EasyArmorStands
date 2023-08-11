@@ -14,7 +14,7 @@ public abstract class ToggleEntityProperty<E extends Entity, T> implements Butto
     public abstract ItemStack createToggleButton(E entity);
 
     public void toggle(Session session, E entity) {
-        session.tryChange(bind(entity), getNextValue(entity));
+        bind(entity).setValue(getNextValue(entity));
         session.commit();
     }
 

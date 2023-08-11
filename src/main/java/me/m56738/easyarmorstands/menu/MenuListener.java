@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +12,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -52,12 +55,14 @@ public class MenuListener implements Listener {
         private final InventoryInteractEvent event;
         private final int slot;
         private final Player player;
+        private final Audience audience;
 
         private Click(Menu menu, InventoryInteractEvent event, int slot) {
             this.menu = menu;
             this.event = event;
-            this.player = (Player) event.getWhoClicked();
             this.slot = slot;
+            this.player = (Player) event.getWhoClicked();
+            this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
         }
 
         @Override
@@ -97,6 +102,11 @@ public class MenuListener implements Listener {
         @Override
         public void queueTask(Consumer<ItemStack> task) {
             queueTask(() -> task.accept(menu.getInventory().getItem(slot)));
+        }
+
+        @Override
+        public @NotNull Audience audience() {
+            return audience;
         }
     }
 

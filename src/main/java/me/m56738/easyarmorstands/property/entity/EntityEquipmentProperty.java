@@ -3,38 +3,44 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumMap;
+import java.util.Locale;
 
 public class EntityEquipmentProperty implements Property<ItemStack> {
-    private static final Key KEY = EasyArmorStands.key("entity_equipment");
+    private static final EnumMap<EquipmentSlot, PropertyType<ItemStack>> TYPES = new EnumMap<>(EquipmentSlot.class);
+
+    static {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            TYPES.put(slot, new Type(slot));
+        }
+    }
+
     private final LivingEntity entity;
     private final EquipmentSlot slot;
-    private final Component displayName;
+    private final PropertyType<ItemStack> type;
     private final EquipmentCapability equipmentCapability;
     private final ComponentCapability componentCapability;
 
-    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, Component displayName, EquipmentCapability equipmentCapability, ComponentCapability componentCapability) {
+    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, EquipmentCapability equipmentCapability, ComponentCapability componentCapability) {
         this.entity = entity;
         this.slot = slot;
-        this.displayName = displayName;
+        this.type = type(slot);
         this.equipmentCapability = equipmentCapability;
         this.componentCapability = componentCapability;
     }
 
-    public static PropertyKey<ItemStack> key(EquipmentSlot slot) {
-        return PropertyKey.of(KEY, slot);
+    public static PropertyType<ItemStack> type(EquipmentSlot slot) {
+        return TYPES.get(slot);
     }
 
     public static void populate(SplitMenuBuilder builder, Session session) {
@@ -50,11 +56,16 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         if (slot == null) {
             return;
         }
-        Property<ItemStack> property = session.findProperty(key(slot));
+        Property<ItemStack> property = session.findProperty(type(slot));
         if (property == null) {
             return;
         }
         builder.setSlot(index, new ItemPropertySlot(property, session));
+    }
+
+    @Override
+    public PropertyType<ItemStack> getType() {
+        return type;
     }
 
     @Override
@@ -63,23 +74,9 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     }
 
     @Override
-    public void setValue(ItemStack value) {
+    public boolean setValue(ItemStack value) {
         equipmentCapability.setItem(entity.getEquipment(), slot, value);
-    }
-
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.equipment";
-    }
-
-    @Override
-    public Component getDisplayName() {
-        return displayName;
-    }
-
-    @Override
-    public Component getValueComponent(ItemStack value) {
-        return componentCapability.getItemDisplayName(value);
+        return true;
     }
 
     @Override
@@ -87,8 +84,31 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         return entity.isValid();
     }
 
-    @Override
-    public Action createChangeAction(ItemStack oldValue, ItemStack value) {
-        return new EntityPropertyAction<>(entity, e -> new EntityEquipmentProperty(e, slot, displayName, equipmentCapability, componentCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
+    private static class Type implements PropertyType<ItemStack> {
+        private final EquipmentSlot slot;
+        private final Component displayName;
+
+        private Type(EquipmentSlot slot) {
+            this.slot = slot;
+            String upperName = slot.name().replace('_', ' ');
+            String lowerName = upperName.toLowerCase(Locale.ROOT);
+            this.displayName = Component.text(lowerName);
+        }
+
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.equipment";
+        }
+
+        @Override
+        public Component getDisplayName() {
+            return displayName;
+        }
+
+        @Override
+        public Component getValueComponent(ItemStack value) {
+            ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
+            return componentCapability.getItemDisplayName(value);
+        }
     }
 }

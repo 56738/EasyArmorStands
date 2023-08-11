@@ -1,23 +1,21 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.property.BooleanToggleProperty;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.BooleanTogglePropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class EntityGlowingProperty implements BooleanToggleProperty {
-    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("entity_glow"));
+public class EntityGlowingProperty implements Property<Boolean> {
+    public static final PropertyType<Boolean> TYPE = new Type();
     private final Entity entity;
     private final GlowCapability glowCapability;
 
@@ -27,30 +25,19 @@ public class EntityGlowingProperty implements BooleanToggleProperty {
     }
 
     @Override
+    public PropertyType<Boolean> getType() {
+        return TYPE;
+    }
+
+    @Override
     public Boolean getValue() {
         return glowCapability.isGlowing(entity);
     }
 
     @Override
-    public void setValue(Boolean value) {
+    public boolean setValue(Boolean value) {
         glowCapability.setGlowing(entity, value);
-    }
-
-    @Override
-    public Action createChangeAction(Boolean oldValue, Boolean value) {
-        return new EntityPropertyAction<>(entity, e -> new EntityGlowingProperty(e, glowCapability), oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("glowing");
-    }
-
-    @Override
-    public @NotNull Component getValueComponent(Boolean value) {
-        return value
-                ? Component.text("glowing", NamedTextColor.GREEN)
-                : Component.text("not glowing", NamedTextColor.RED);
+        return true;
     }
 
     @Override
@@ -58,24 +45,38 @@ public class EntityGlowingProperty implements BooleanToggleProperty {
         return entity.isValid();
     }
 
-    @Override
-    public String getPermission() {
-        return "easyarmorstands.property.glow";
-    }
+    private static class Type implements BooleanTogglePropertyType {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.glow";
+        }
 
-    @Override
-    public ItemStack createItem() {
-        return Util.createItem(
-                ItemType.GLOWSTONE_DUST,
-                Component.text("Toggle glowing", NamedTextColor.BLUE),
-                Arrays.asList(
-                        Component.text("Currently ", NamedTextColor.GRAY)
-                                .append(getValueComponent(getValue()))
-                                .append(Component.text(".")),
-                        Component.text("Changes whether the", NamedTextColor.GRAY),
-                        Component.text("outline of this entity", NamedTextColor.GRAY),
-                        Component.text("is shown.", NamedTextColor.GRAY)
-                )
-        );
+        @Override
+        public Component getDisplayName() {
+            return Component.text("glowing");
+        }
+
+        @Override
+        public Component getValueComponent(Boolean value) {
+            return value
+                    ? Component.text("glowing", NamedTextColor.GREEN)
+                    : Component.text("not glowing", NamedTextColor.RED);
+        }
+
+        @Override
+        public ItemStack createItem(Property<Boolean> property, PropertyContainer container) {
+            return Util.createItem(
+                    ItemType.GLOWSTONE_DUST,
+                    Component.text("Toggle glowing", NamedTextColor.BLUE),
+                    Arrays.asList(
+                            Component.text("Currently ", NamedTextColor.GRAY)
+                                    .append(getValueComponent(property.getValue()))
+                                    .append(Component.text(".")),
+                            Component.text("Changes whether the", NamedTextColor.GRAY),
+                            Component.text("outline of this entity", NamedTextColor.GRAY),
+                            Component.text("is shown.", NamedTextColor.GRAY)
+                    )
+            );
+        }
     }
 }

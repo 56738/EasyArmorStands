@@ -5,23 +5,24 @@ import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.EditableObjectReference;
 import me.m56738.easyarmorstands.event.SessionCommitEvent;
 import me.m56738.easyarmorstands.event.SessionSelectEntityEvent;
 import me.m56738.easyarmorstands.event.SessionSpawnMenuBuildEvent;
 import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.history.action.PropertyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.ClickContext;
+import me.m56738.easyarmorstands.node.EditableObjectNode;
 import me.m56738.easyarmorstands.node.EntityNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.particle.Particle;
-import me.m56738.easyarmorstands.property.ChangeContext;
-import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyChange;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -55,7 +56,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public final class Session implements ChangeContext, ForwardingAudience.Single {
+public final class Session implements ForwardingAudience.Single {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private final LinkedList<Node> nodeStack = new LinkedList<>();
@@ -63,12 +64,13 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     private final Player player;
     private final Audience audience;
     private final DustParticleCapability dustParticleCapability;
-    private final Map<Property<?>, Object> originalValues = new HashMap<>();
-    private final Map<Property<?>, Object> pendingValues = new HashMap<>();
+    private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
+    private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
     private final Set<Particle> particles = new HashSet<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
+    private boolean valid = true;
 
     public Session(Player player) {
         this.player = player;
@@ -157,12 +159,12 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
     public void commit() {
         Bukkit.getPluginManager().callEvent(new SessionCommitEvent(this));
         List<Action> actions = new ArrayList<>();
-        for (Map.Entry<Property<?>, Object> entry : pendingValues.entrySet()) {
-            Property property = entry.getKey();
-            Object oldValue = originalValues.get(property);
+        for (Map.Entry<ChangeKey<?>, Object> entry : pendingValues.entrySet()) {
+            ChangeKey key = entry.getKey();
+            Object oldValue = originalValues.get(key);
             Object value = entry.getValue();
             if (!Objects.equals(oldValue, value)) {
-                actions.add(property.createChangeAction(oldValue, value));
+                actions.add(key.createChangeAction(oldValue, value));
             }
         }
         EasyArmorStands.getInstance().getHistory(player).push(actions);
@@ -256,28 +258,15 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         }
         particles.clear();
         commit();
+        valid = false;
     }
 
-    @Override
     public Player getPlayer() {
         return player;
     }
 
     public World getWorld() {
         return player.getWorld();
-    }
-
-    @Override
-    public <T> void applyChange(PropertyChange<T> change) {
-        Property<T> property = change.getProperty();
-        T value = change.getValue();
-        T oldValue = property.getValue();
-        if (Objects.equals(oldValue, value)) {
-            return;
-        }
-        property.setValue(value);
-        originalValues.putIfAbsent(property, oldValue);
-        pendingValues.put(property, value);
     }
 
     public double getRange() {
@@ -470,36 +459,94 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return !event.isCancelled();
     }
 
-    public <T> Property<T> findProperty(PropertyKey<T> key) {
+    public <T> @Nullable Property<T> findProperty(PropertyType<T> type) {
         for (Node node : nodeStack) {
-            Property<T> property = node.properties().get(key);
-            if (property != null) {
-                return property;
+            if (node instanceof EditableObjectNode) {
+                EditableObject editableObject = ((EditableObjectNode) node).getEditableObject();
+                Property<T> property = editableObject.properties().get(type);
+                if (property != null) {
+                    return new SessionProperty<>(editableObject.asReference(), property);
+                }
             }
         }
         return null;
     }
 
-    private static class ChangeKey<E extends Entity, T> {
-        private final E entity;
-        private final LegacyEntityPropertyType<E, T> property;
+    public <T> @NotNull Property<T> getProperty(PropertyType<T> type) {
+        Property<T> property = findProperty(type);
+        if (property == null) {
+            throw new IllegalArgumentException("Property not found: " + type);
+        }
+        return property;
+    }
 
-        public ChangeKey(E entity, LegacyEntityPropertyType<E, T> property) {
-            this.entity = entity;
-            this.property = property;
+    public boolean isValid() {
+        return valid;
+    }
+
+    private static class ChangeKey<T> {
+        private final EditableObjectReference editableObjectReference;
+        private final PropertyType<T> propertyType;
+
+        private ChangeKey(EditableObjectReference editableObjectReference, PropertyType<T> propertyType) {
+            this.editableObjectReference = editableObjectReference;
+            this.propertyType = propertyType;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            ChangeKey<?, ?> changeKey = (ChangeKey<?, ?>) o;
-            return Objects.equals(entity, changeKey.entity) && Objects.equals(property, changeKey.property);
+            ChangeKey<?> changeKey = (ChangeKey<?>) o;
+            return Objects.equals(editableObjectReference, changeKey.editableObjectReference) && Objects.equals(propertyType, changeKey.propertyType);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(entity, property);
+            return Objects.hash(editableObjectReference, propertyType);
+        }
+
+        public Action createChangeAction(T oldValue, T value) {
+            return new PropertyAction<>(editableObjectReference, propertyType, oldValue, value);
+        }
+    }
+
+    private class SessionProperty<T> implements Property<T> {
+        private final Property<T> property;
+        private final ChangeKey<T> key;
+
+        private SessionProperty(EditableObjectReference objectReference, Property<T> property) {
+            this.property = property;
+            this.key = new ChangeKey<>(objectReference, property.getType());
+        }
+
+        @Override
+        public PropertyType<T> getType() {
+            return property.getType();
+        }
+
+        @Override
+        public T getValue() {
+            return property.getValue();
+        }
+
+        @Override
+        public boolean setValue(T value) {
+            T oldValue = property.getValue();
+            if (Objects.equals(oldValue, value)) {
+                return true;
+            }
+            if (!property.setValue(value)) {
+                return false;
+            }
+            originalValues.putIfAbsent(key, oldValue);
+            pendingValues.put(key, value);
+            return true;
+        }
+
+        @Override
+        public boolean isValid() {
+            return property.isValid();
         }
     }
 }

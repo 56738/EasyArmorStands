@@ -18,6 +18,11 @@ public class EntityObject extends AbstractEditableObject {
     }
 
     @Override
+    public EditableObjectReference asReference() {
+        return new EntityObjectReference(entity.getUniqueId());
+    }
+
+    @Override
     public Button createButton() {
         return button;
     }

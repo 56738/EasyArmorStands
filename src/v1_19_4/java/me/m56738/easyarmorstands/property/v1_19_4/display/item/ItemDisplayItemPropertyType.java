@@ -59,13 +59,9 @@ public class ItemDisplayItemPropertyType implements EntityPropertyType<ItemStack
         }
 
         @Override
-        public void setValue(ItemStack value) {
+        public boolean setValue(ItemStack value) {
             entity.setItemStack(value);
-        }
-
-        @Override
-        public Action createChangeAction(ItemStack oldValue, ItemStack value) {
-            return new EntityPropertyAction<>(entity, Bound::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
+            return true;
         }
     }
 }

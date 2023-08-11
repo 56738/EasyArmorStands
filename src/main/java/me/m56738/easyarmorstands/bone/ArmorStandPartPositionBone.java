@@ -11,16 +11,14 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandPartPositionBone implements PositionBone {
-    private final Session session;
     private final ArmorStand entity;
     private final ArmorStandPart part;
     private final Property<Location> locationProperty;
 
     public ArmorStandPartPositionBone(Session session, ArmorStand entity, ArmorStandPart part) {
-        this.session = session;
         this.entity = entity;
         this.part = part;
-        this.locationProperty = session.findProperty(EntityLocationProperty.KEY);
+        this.locationProperty = session.findProperty(EntityLocationProperty.TYPE);
     }
 
     @Override
@@ -43,6 +41,6 @@ public class ArmorStandPartPositionBone implements PositionBone {
         location.setX(position.x() - offset.x);
         location.setY(position.y() - offset.y);
         location.setZ(position.z() - offset.z);
-        session.tryChange(locationProperty, location);
+        locationProperty.setValue(location);
     }
 }

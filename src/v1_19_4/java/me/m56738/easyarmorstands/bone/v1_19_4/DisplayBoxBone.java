@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.bone.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.property.PendingChange;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyChange;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.session.Session;
@@ -16,9 +16,6 @@ import org.joml.Vector3dc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DisplayBoxBone implements PositionBone {
     private final Session session;
     private final Display entity;
@@ -29,7 +26,7 @@ public class DisplayBoxBone implements PositionBone {
         this.session = session;
         this.entity = entity;
         this.addon = addon;
-        this.entityLocationProperty = session.findProperty(EntityLocationProperty.KEY);
+        this.entityLocationProperty = session.findProperty(EntityLocationProperty.TYPE);
     }
 
     @Override
@@ -49,21 +46,23 @@ public class DisplayBoxBone implements PositionBone {
 
         DisplayTranslationProperty displayTranslationProperty = addon.getDisplayTranslationProperty();
 
-        List<PropertyChange<?>> changes = new ArrayList<>(2);
-
         // Move box by modifying the location
         Location location = entityLocationProperty.getValue().clone()
                 .add(delta.x(), delta.y(), delta.z());
-        changes.add(new PropertyChange<>(entityLocationProperty, location));
+        PendingChange locationChange = entityLocationProperty.prepareChange(location);
 
         // Make sure the display stays in the same place by performing the inverse using the translation
         Vector3fc rotatedDelta = delta.get(new Vector3f())
                 .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
         Vector3fc translation = displayTranslationProperty.getValue(entity)
                 .sub(rotatedDelta, new Vector3f());
-        changes.add(new PropertyChange<>(displayTranslationProperty.bind(entity), translation));
+        PendingChange translationChange = displayTranslationProperty.bind(entity).prepareChange(translation);
 
-        // Submit both changes at once - either both or none are performed
-        session.tryChange(changes);
+        // Only execute changes if both are allowed
+        if (locationChange != null && translationChange != null) {
+            if (locationChange.execute()) {
+                translationChange.execute();
+            }
+        }
     }
 }

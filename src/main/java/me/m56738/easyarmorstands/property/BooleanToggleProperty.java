@@ -1,8 +1,5 @@
 package me.m56738.easyarmorstands.property;
 
+@Deprecated
 public interface BooleanToggleProperty extends BooleanProperty, ToggleProperty<Boolean> {
-    @Override
-    default Boolean getNextValue() {
-        return !getValue();
-    }
 }

@@ -1,22 +1,23 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
-import me.m56738.easyarmorstands.property.BooleanProperty;
-import me.m56738.easyarmorstands.property.key.PropertyKey;
+import me.m56738.easyarmorstands.property.BooleanPropertyType;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class EntityCustomNameVisibleProperty implements BooleanProperty {
-    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("entity_name_visible"));
+public class EntityCustomNameVisibleProperty implements Property<Boolean> {
+    public static final PropertyType<Boolean> TYPE = new Type();
     private final Entity entity;
 
     public EntityCustomNameVisibleProperty(Entity entity) {
         this.entity = entity;
+    }
+
+    @Override
+    public PropertyType<Boolean> getType() {
+        return TYPE;
     }
 
     @Override
@@ -25,25 +26,9 @@ public class EntityCustomNameVisibleProperty implements BooleanProperty {
     }
 
     @Override
-    public void setValue(Boolean value) {
+    public boolean setValue(Boolean value) {
         entity.setCustomNameVisible(value);
-    }
-
-    @Override
-    public Action createChangeAction(Boolean oldValue, Boolean value) {
-        return new EntityPropertyAction<>(entity, EntityCustomNameVisibleProperty::new, oldValue, value, Component.text("Changed ").append(getDisplayName()));
-    }
-
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.text("custom name visible");
-    }
-
-    @Override
-    public @NotNull Component getValueComponent(Boolean value) {
-        return value
-                ? Component.text("visible", NamedTextColor.GREEN)
-                : Component.text("invisible", NamedTextColor.RED);
+        return true;
     }
 
     @Override
@@ -51,8 +36,22 @@ public class EntityCustomNameVisibleProperty implements BooleanProperty {
         return entity.isValid();
     }
 
-    @Override
-    public @Nullable String getPermission() {
-        return "easyarmorstands.property.name.visible";
+    private static class Type implements BooleanPropertyType {
+        @Override
+        public String getPermission() {
+            return "easyarmorstands.property.name.visible";
+        }
+
+        @Override
+        public Component getDisplayName() {
+            return Component.text("custom name visible");
+        }
+
+        @Override
+        public Component getValueComponent(Boolean value) {
+            return value
+                    ? Component.text("visible", NamedTextColor.GREEN)
+                    : Component.text("invisible", NamedTextColor.RED);
+        }
     }
 }

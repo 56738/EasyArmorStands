@@ -9,14 +9,12 @@ import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 
 public class EntityLocationBone implements PositionAndYawBone {
-    private final Session session;
     private final Entity entity;
     private final Property<Location> property;
 
     public EntityLocationBone(Session session, Entity entity) {
-        this.session = session;
         this.entity = entity;
-        this.property = session.findProperty(EntityLocationProperty.KEY);
+        this.property = session.findProperty(EntityLocationProperty.TYPE);
     }
 
     public Vector3dc getOffset() {
@@ -35,7 +33,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setX(position.x() - offset.x());
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
-        session.tryChange(property, location);
+        property.setValue(location);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class EntityLocationBone implements PositionAndYawBone {
     public void setYaw(float yaw) {
         Location location = entity.getLocation();
         location.setYaw(yaw);
-        session.tryChange(property, location);
+        property.setValue(location);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class EntityLocationBone implements PositionAndYawBone {
         location.setY(position.y() - offset.y());
         location.setZ(position.z() - offset.z());
         location.setYaw(yaw);
-        session.tryChange(property, location);
+        property.setValue(location);
     }
 
     @Override

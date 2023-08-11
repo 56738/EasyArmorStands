@@ -1,11 +1,15 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public interface MenuClick {
+public interface MenuClick extends ForwardingAudience.Single {
     int slot();
 
     Player player();
@@ -22,13 +26,20 @@ public interface MenuClick {
 
     boolean isLeftClick();
 
+    @Override
+    default @NotNull Audience audience() {
+        return EasyArmorStands.getInstance().getAdventure().player(player());
+    }
+
     class FakeLeftClick implements MenuClick {
         private final int slot;
         private final Player player;
+        private final Audience audience;
 
         public FakeLeftClick(int slot, Player player) {
             this.slot = slot;
             this.player = player;
+            this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
         }
 
         @Override
@@ -66,6 +77,11 @@ public interface MenuClick {
         @Override
         public boolean isLeftClick() {
             return true;
+        }
+
+        @Override
+        public @NotNull Audience audience() {
+            return audience;
         }
     }
 }

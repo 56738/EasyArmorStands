@@ -23,7 +23,7 @@ public class ArmorStandPartPoseBone implements RotationBone {
         this.session = session;
         this.entity = entity;
         this.part = part;
-        this.property = session.findProperty(ArmorStandPoseProperty.key(part));
+        this.property = session.findProperty(ArmorStandPoseProperty.type(part));
     }
 
     @Override
@@ -52,6 +52,6 @@ public class ArmorStandPartPoseBone implements RotationBone {
     public void setRotation(Quaterniondc rotation) {
         Location location = entity.getLocation();
         float rotY = -Math.toRadians(location.getYaw());
-        session.tryChange(property, rotation.rotateLocalY(-rotY, new Quaterniond()));
+        property.setValue(rotation.rotateLocalY(-rotY, new Quaterniond()));
     }
 }
