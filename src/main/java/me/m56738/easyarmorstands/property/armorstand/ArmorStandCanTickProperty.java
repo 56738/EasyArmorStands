@@ -1,16 +1,17 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.BooleanProperty;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandCanTickProperty implements BooleanProperty {
-    public static final Key<ArmorStandCanTickProperty> KEY = Key.of(ArmorStandCanTickProperty.class);
+    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("armor_stand_can_tick"));
     private final ArmorStand entity;
     private final TickCapability tickCapability;
 

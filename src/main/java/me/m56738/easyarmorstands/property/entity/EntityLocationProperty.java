@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.entity;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityLocationProperty implements Property<Location> {
-    public static final Key<EntityLocationProperty> KEY = Key.of(EntityLocationProperty.class);
+    public static final PropertyKey<Location> KEY = PropertyKey.of(EasyArmorStands.key("entity_location"));
     private final Entity entity;
 
     public EntityLocationProperty(Entity entity) {

@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.BooleanToggleProperty;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 public class ArmorStandMarkerProperty implements BooleanToggleProperty {
-    public static final Key<ArmorStandMarkerProperty> KEY = Key.of(ArmorStandMarkerProperty.class);
+    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("armor_stand_marker"));
     private final ArmorStand entity;
 
     public ArmorStandMarkerProperty(ArmorStand entity) {

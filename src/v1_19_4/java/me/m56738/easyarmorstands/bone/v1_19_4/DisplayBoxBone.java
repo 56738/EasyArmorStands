@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.bone.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyChange;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
@@ -22,7 +23,7 @@ public class DisplayBoxBone implements PositionBone {
     private final Session session;
     private final Display entity;
     private final DisplayAddon addon;
-    private final EntityLocationProperty entityLocationProperty;
+    private final Property<Location> entityLocationProperty;
 
     public DisplayBoxBone(Session session, Display entity, DisplayAddon addon) {
         this.session = session;

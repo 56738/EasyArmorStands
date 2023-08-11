@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.editor.EntityObject;
 import me.m56738.easyarmorstands.session.EntityButtonPriority;
 import me.m56738.easyarmorstands.session.EntityButtonProvider;
 import me.m56738.easyarmorstands.session.Session;
@@ -7,11 +9,18 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.metadata.MetadataValue;
 import org.joml.Vector3dc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
     private final Map<Entity, Button> buttons = new HashMap<>();
@@ -25,22 +34,29 @@ public class EntitySelectionNode extends MenuNode {
         }
     }
 
+    @Deprecated
     public void addProvider(EntityButtonProvider provider) {
         providers.get(provider.getPriority()).add(provider);
     }
 
-    private @Nullable Button createButton(Entity entity) {
+    private EditableObject createEditableObject(Entity entity) {
         if (!entity.isValid()) {
             return null;
         }
         if (entity.hasMetadata("easyarmorstands_ignore")) {
             return null;
         }
+        for (MetadataValue metadataValue : entity.getMetadata("easyarmorstands_object")) {
+            Object value = metadataValue.value();
+            if (value instanceof EditableObject) {
+                return (EditableObject) value;
+            }
+        }
         for (EntityButtonPriority priority : EntityButtonPriority.values()) {
             for (EntityButtonProvider provider : providers.get(priority)) {
                 Button button = provider.createButton(session, entity);
                 if (button != null) {
-                    return button;
+                    return new EntityObject(entity, button);
                 }
             }
         }
@@ -64,7 +80,11 @@ public class EntitySelectionNode extends MenuNode {
             }
 
             // entity is new, create a button for it
-            Button button = createButton(entity);
+            EditableObject editableObject = createEditableObject(entity);
+            Button button = null;
+            if (editableObject != null) {
+                button = editableObject.createButton();
+            }
             if (button != null) {
                 addButton(button);
             }
@@ -108,13 +128,16 @@ public class EntitySelectionNode extends MenuNode {
         return false;
     }
 
-    public void selectEntity(Entity entity) {
-        Button button = createButton(entity);
-        if (button != null) {
-            Node node = button.createNode();
+    public boolean selectEntity(Entity entity) {
+        EditableObject editableObject = createEditableObject(entity);
+        if (editableObject != null) {
+            Node node = editableObject.createNode();
             if (node != null) {
+                session.clearNode();
                 session.pushNode(node);
+                return true;
             }
         }
+        return false;
     }
 }

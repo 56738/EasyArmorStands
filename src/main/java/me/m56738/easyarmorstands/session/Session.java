@@ -21,7 +21,7 @@ import me.m56738.easyarmorstands.property.ChangeContext;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyChange;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -193,6 +193,7 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return null;
     }
 
+    @Deprecated
     public void addProvider(EntityButtonProvider provider) {
         rootNode.addProvider(provider);
     }
@@ -301,10 +302,6 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
 
     public void setAngleSnapIncrement(double angleSnapIncrement) {
         this.angleSnapIncrement = angleSnapIncrement;
-    }
-
-    public EntitySelectionNode getRootNode() {
-        return rootNode;
     }
 
     @Override
@@ -442,9 +439,8 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return position.distanceSquared(closestOnEyeRay) < threshold * threshold;
     }
 
-    public void selectEntity(Entity entity) {
-        clearNode();
-        rootNode.selectEntity(entity);
+    public boolean selectEntity(Entity entity) {
+        return rootNode.selectEntity(entity);
     }
 
     public void openSpawnMenu() {
@@ -474,9 +470,9 @@ public final class Session implements ChangeContext, ForwardingAudience.Single {
         return !event.isCancelled();
     }
 
-    public <T extends Property<?>> T findProperty(Key<T> key) {
+    public <T> Property<T> findProperty(PropertyKey<T> key) {
         for (Node node : nodeStack) {
-            T property = node.properties().get(key);
+            Property<T> property = node.properties().get(key);
             if (property != null) {
                 return property;
             }

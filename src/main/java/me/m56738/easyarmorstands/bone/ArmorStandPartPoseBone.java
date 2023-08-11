@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Location;
@@ -24,7 +23,7 @@ public class ArmorStandPartPoseBone implements RotationBone {
         this.session = session;
         this.entity = entity;
         this.part = part;
-        this.property = session.findProperty(Key.of(ArmorStandPoseProperty.KEY, part));
+        this.property = session.findProperty(ArmorStandPoseProperty.key(part));
     }
 
     @Override

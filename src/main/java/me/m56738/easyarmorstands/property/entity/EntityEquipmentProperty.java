@@ -8,8 +8,9 @@ import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.session.Session;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityEquipmentProperty implements Property<ItemStack> {
-    private static final Key<EntityEquipmentProperty> KEY = Key.of(EntityEquipmentProperty.class);
+    private static final Key KEY = EasyArmorStands.key("entity_equipment");
     private final LivingEntity entity;
     private final EquipmentSlot slot;
     private final Component displayName;
@@ -32,8 +33,8 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         this.componentCapability = componentCapability;
     }
 
-    public static Key<EntityEquipmentProperty> key(EquipmentSlot slot) {
-        return Key.of(KEY, slot);
+    public static PropertyKey<ItemStack> key(EquipmentSlot slot) {
+        return PropertyKey.of(KEY, slot);
     }
 
     public static void populate(SplitMenuBuilder builder, Session session) {
@@ -49,7 +50,7 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
         if (slot == null) {
             return;
         }
-        EntityEquipmentProperty property = session.findProperty(key(slot));
+        Property<ItemStack> property = session.findProperty(key(slot));
         if (property == null) {
             return;
         }

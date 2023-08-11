@@ -19,6 +19,8 @@ import me.m56738.easyarmorstands.menu.LegacyArmorStandMenu;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
 import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.property.BooleanToggleProperty;
+import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
@@ -36,7 +38,6 @@ import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.property.key.Key;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import net.kyori.adventure.text.Component;
@@ -96,7 +97,7 @@ public class ArmorStandRootNode extends EntityMenuNode {
         }
         for (ArmorStandPart part : ArmorStandPart.values()) {
             ArmorStandPoseProperty property = new ArmorStandPoseProperty(entity, part);
-            properties.register(Key.of(ArmorStandPoseProperty.KEY, part), property);
+            properties.register(ArmorStandPoseProperty.key(part), property);
         }
 
         setRoot(true);
@@ -232,8 +233,8 @@ public class ArmorStandRootNode extends EntityMenuNode {
             } else {
                 SplitMenuBuilder builder = new SplitMenuBuilder();
                 EntityEquipmentProperty.populate(builder, session);
-                ArmorStandBasePlateProperty property = session.findProperty(ArmorStandBasePlateProperty.KEY);
-                builder.addButton(new ButtonPropertySlot(property, session));
+                Property<Boolean> property = session.findProperty(ArmorStandBasePlateProperty.KEY);
+                builder.addButton(new ButtonPropertySlot((BooleanToggleProperty) property, session));
                 Bukkit.getPluginManager().callEvent(new SessionEntityMenuBuildEvent(session, builder, entity));
                 player.openInventory(builder.build(Component.text("EasyArmorStands")).getInventory());
             }

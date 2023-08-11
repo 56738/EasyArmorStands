@@ -1,11 +1,13 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +16,17 @@ import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 
 public class ArmorStandPoseProperty implements Property<Quaterniondc> {
-    public static final Key<ArmorStandPoseProperty> KEY = Key.of(ArmorStandPoseProperty.class);
+    private static final Key KEY = EasyArmorStands.key("armor_stand_pose");
     private final ArmorStand entity;
     private final ArmorStandPart part;
 
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
         this.entity = entity;
         this.part = part;
+    }
+
+    public static PropertyKey<Quaterniondc> key(ArmorStandPart part) {
+        return PropertyKey.of(KEY, part);
     }
 
     @Override

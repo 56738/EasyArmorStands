@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.BooleanToggleProperty;
 import me.m56738.easyarmorstands.property.ChangeContext;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ArmorStandGravityProperty implements BooleanToggleProperty {
-    public static final Key<ArmorStandGravityProperty> KEY = Key.of(ArmorStandGravityProperty.class);
+    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("armor_stand_gravity"));
     private final ArmorStand entity;
     private final @Nullable TickCapability tickCapability;
     private final @Nullable ArmorStandCanTickProperty canTickProperty;

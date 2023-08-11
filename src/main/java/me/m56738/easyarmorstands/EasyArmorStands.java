@@ -40,13 +40,14 @@ import me.m56738.easyarmorstands.property.EntityPropertyRegistry;
 import me.m56738.easyarmorstands.property.EntityPropertyTypeRegistry;
 import me.m56738.easyarmorstands.property.LegacyEntityPropertyType;
 import me.m56738.easyarmorstands.property.ResettableEntityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateListener;
 import me.m56738.easyarmorstands.update.UpdateManager;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.Namespaced;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -55,20 +56,19 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.EnumMap;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class EasyArmorStands extends JavaPlugin {
+public class EasyArmorStands extends JavaPlugin implements Namespaced {
+    public static final String NAMESPACE = "easyarmorstands";
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
-    private final EnumMap<ArmorStandPart, ArmorStandPoseProperty> armorStandPoseProperties =
-            new EnumMap<>(ArmorStandPart.class);
     private EntityPropertyRegistry entityPropertyRegistry;
     private EntityPropertyTypeRegistry entityPropertyTypeRegistry;
     private SessionManager sessionManager;
@@ -80,6 +80,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public static EasyArmorStands getInstance() {
         return instance;
+    }
+
+    public static Key key(@KeyPattern.Value @NotNull String value) {
+        return Key.key(NAMESPACE, value);
     }
 
     @Override
@@ -238,5 +242,11 @@ public class EasyArmorStands extends JavaPlugin {
 
     public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
+    }
+
+    @Override
+    @KeyPattern.Namespace
+    public @NotNull String namespace() {
+        return NAMESPACE;
     }
 }

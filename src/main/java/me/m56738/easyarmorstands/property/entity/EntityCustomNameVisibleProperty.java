@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.entity;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.EntityPropertyAction;
 import me.m56738.easyarmorstands.property.BooleanProperty;
-import me.m56738.easyarmorstands.property.key.Key;
+import me.m56738.easyarmorstands.property.key.PropertyKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Entity;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityCustomNameVisibleProperty implements BooleanProperty {
-    public static final Key<EntityCustomNameVisibleProperty> KEY = Key.of(EntityCustomNameVisibleProperty.class);
+    public static final PropertyKey<Boolean> KEY = PropertyKey.of(EasyArmorStands.key("entity_name_visible"));
     private final Entity entity;
 
     public EntityCustomNameVisibleProperty(Entity entity) {
