@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.EditableObjectReference;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.element.ElementReference;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class PropertyAction<T> implements Action {
-    private final EditableObjectReference objectReference;
+    private final ElementReference elementReference;
     private final PropertyType<T> propertyType;
     private final T oldValue;
     private final T newValue;
 
-    public PropertyAction(EditableObjectReference objectReference, PropertyType<T> propertyType, T oldValue, T newValue) {
-        this.objectReference = objectReference;
+    public PropertyAction(ElementReference elementReference, PropertyType<T> propertyType, T oldValue, T newValue) {
+        this.elementReference = elementReference;
         this.propertyType = propertyType;
         this.oldValue = oldValue;
         this.newValue = newValue;
@@ -35,11 +35,11 @@ public class PropertyAction<T> implements Action {
     }
 
     private boolean tryChange(T value, Player player) {
-        EditableObject editableObject = objectReference.restoreObject();
-        if (editableObject == null) {
+        Element element = elementReference.getElement();
+        if (element == null) {
             return false;
         }
-        PropertyContainer properties = PropertyContainer.identified(editableObject.properties(), player);
+        PropertyContainer properties = PropertyContainer.identified(element.getProperties(), player);
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;
@@ -62,6 +62,6 @@ public class PropertyAction<T> implements Action {
 
     @Override
     public void onEntityReplaced(UUID oldId, UUID newId) {
-        objectReference.onEntityReplaced(oldId, newId);
+        elementReference.onEntityReplaced(oldId, newId);
     }
 }

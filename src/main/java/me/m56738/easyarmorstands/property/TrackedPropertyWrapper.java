@@ -1,18 +1,18 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.element.Element;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 class TrackedPropertyWrapper<T> implements Property<T> {
     private final TrackedPropertyContainer container;
-    private final EditableObject editableObject;
+    private final Element element;
     private final Property<T> property;
 
-    TrackedPropertyWrapper(TrackedPropertyContainer container, EditableObject editableObject, Property<T> property) {
+    TrackedPropertyWrapper(TrackedPropertyContainer container, Element element, Property<T> property) {
         this.container = container;
-        this.editableObject = editableObject;
+        this.element = element;
         this.property = property;
     }
 
@@ -35,7 +35,7 @@ class TrackedPropertyWrapper<T> implements Property<T> {
         if (!property.setValue(value)) {
             return false;
         }
-        container.recordChange(editableObject, property, oldValue, value);
+        container.recordChange(element, property, oldValue, value);
         return true;
     }
 

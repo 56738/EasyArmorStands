@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.event;
 
-import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.property.Property;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,19 +9,19 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when an entity property is modified.
+ * Called when an element property is modified.
  */
 public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
-    private final EditableObject editableObject;
+    private final Element element;
     private final Property<T> property;
     private final T oldValue;
     private final T newValue;
     private boolean cancelled;
 
-    public PlayerEditPropertyEvent(Player player, EditableObject editableObject, Property<T> property, T oldValue, T newValue) {
+    public PlayerEditPropertyEvent(Player player, Element element, Property<T> property, T oldValue, T newValue) {
         super(player);
-        this.editableObject = editableObject;
+        this.element = element;
         this.property = property;
         this.oldValue = oldValue;
         this.newValue = newValue;
@@ -31,8 +31,8 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
         return handlerList;
     }
 
-    public EditableObject getOwner() {
-        return editableObject;
+    public Element getElement() {
+        return element;
     }
 
     public @NotNull Property<T> getProperty() {

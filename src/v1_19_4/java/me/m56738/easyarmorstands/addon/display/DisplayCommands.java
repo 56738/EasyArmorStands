@@ -13,23 +13,31 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.element.ArmorStandElement;
+import me.m56738.easyarmorstands.element.EntityElement;
+import me.m56738.easyarmorstands.element.EntityElementType;
+import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
-import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
+import me.m56738.easyarmorstands.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayLeftRotationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayRightRotationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayItemProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.item.ItemDisplayTransformProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayBackgroundProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayLineWidthProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.text.TextDisplayTextProperty;
-import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
@@ -47,7 +55,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.EntityEquipment;
@@ -396,7 +403,8 @@ public class DisplayCommands {
     @CommandDescription("Convert the selected armor stand to an item display")
     @RequireSession
     @RequireEntity(ArmorStand.class)
-    public void convert(Session session, ArmorStand entity) {
+    public void convert(Session session, ArmorStandElement element) {
+        ArmorStand entity = element.getEntity();
         EntityEquipment equipment = entity.getEquipment();
         if (equipment == null) {
             return;
@@ -442,7 +450,7 @@ public class DisplayCommands {
             return;
         }
 
-        actions.add(new EntityDestroyAction<>(entity));
+        actions.add(new ElementDestroyAction(element));
         entity.remove();
 
         EasyArmorStands.getInstance().getHistory(session.getPlayer()).push(actions);
@@ -460,6 +468,8 @@ public class DisplayCommands {
         Location location = entity.getLocation();
         Vector3d offset = part.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
+        location.setYaw(0);
+        location.setPitch(0);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
@@ -467,23 +477,23 @@ public class DisplayCommands {
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 
-        EntitySpawner<ItemDisplay> spawner = EntitySpawner.of(EntityType.ITEM_DISPLAY, e -> {
-            e.setItemStack(item);
-            e.setItemDisplayTransform(itemTransform);
-            e.setTransformation(addon.getMapper().getTransformation(
-                    transform.getTranslation(new Vector3d()).get(new Vector3f()),
-                    transform.getUnnormalizedRotation(new Quaternionf()),
-                    transform.getScale(new Vector3d()).get(new Vector3f()),
-                    new Quaternionf()
-            ));
-        });
-        location.setYaw(0);
-        location.setPitch(0);
-        ItemDisplay display = EntitySpawner.trySpawn(spawner, location, session.getPlayer());
-        if (display == null) {
+        PropertyRegistry properties = new PropertyRegistry();
+        properties.register(Property.of(EntityLocationProperty.TYPE, location));
+        properties.register(Property.of(ItemDisplayItemProperty.TYPE, item));
+        properties.register(Property.of(ItemDisplayTransformProperty.TYPE, itemTransform));
+        properties.register(Property.of(DisplayTranslationProperty.TYPE, transform.getTranslation(new Vector3d()).get(new Vector3f())));
+        properties.register(Property.of(DisplayLeftRotationProperty.TYPE, transform.getUnnormalizedRotation(new Quaternionf())));
+        properties.register(Property.of(DisplayScaleProperty.TYPE, transform.getScale(new Vector3d()).get(new Vector3f())));
+
+        EntityElementType<ItemDisplay> type = addon.getItemDisplayType();
+
+        PlayerCreateElementEvent event = new PlayerCreateElementEvent(session.getPlayer(), type, properties);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             return;
         }
 
-        actions.add(new EntitySpawnAction<>(location, spawner, display.getUniqueId()));
+        EntityElement<ItemDisplay> element = type.createElement(properties);
+        actions.add(new ElementCreateAction(element));
     }
 }

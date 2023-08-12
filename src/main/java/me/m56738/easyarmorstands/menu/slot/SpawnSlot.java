@@ -1,25 +1,30 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.element.ElementType;
+import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
+import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.session.EntitySpawner;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyRegistry;
+import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
 
 public class SpawnSlot implements MenuSlot {
-    private final EntitySpawner<?> spawner;
+    private final ElementType type;
     private final ItemStack item;
 
-    public SpawnSlot(EntitySpawner<?> spawner, ItemStack item) {
-        this.spawner = spawner;
+    public SpawnSlot(ElementType type, ItemStack item) {
+        this.type = type;
         this.item = item;
     }
 
@@ -49,17 +54,24 @@ public class SpawnSlot implements MenuSlot {
                 location.setYaw((float) session.snapAngle(location.getYaw()));
                 location.setPitch((float) session.snapAngle(location.getPitch()));
             }
-            Entity entity = EntitySpawner.trySpawn(spawner, location, player);
-            if (entity == null) {
+
+            PropertyRegistry properties = new PropertyRegistry();
+            properties.register(Property.of(EntityLocationProperty.TYPE, location));
+            type.applyDefaultProperties(properties);
+
+            PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
                 return;
             }
-            EntitySpawnAction<?> action = new EntitySpawnAction<>(location, spawner, entity.getUniqueId());
-            EasyArmorStands.getInstance().getHistory(player).push(action);
+
+            Element element = type.createElement(properties);
+            EasyArmorStands.getInstance().getHistory(player).push(new ElementCreateAction(element));
 
             if (session != null) {
                 EntitySelectionNode selectionNode = session.findNode(EntitySelectionNode.class);
                 if (selectionNode != null) {
-                    selectionNode.selectEntity(entity);
+                    selectionNode.selectElement(element);
                 }
             }
 

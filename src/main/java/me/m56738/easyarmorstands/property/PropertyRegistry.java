@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public abstract class PropertyRegistry implements PropertyContainer {
+public class PropertyRegistry implements PropertyContainer {
     @SuppressWarnings("rawtypes")
     private final Map<PropertyType, Property> properties = new HashMap<>();
 
@@ -23,5 +23,24 @@ public abstract class PropertyRegistry implements PropertyContainer {
     @SuppressWarnings("unchecked")
     public <T> Property<T> getOrNull(PropertyType<T> type) {
         return (Property<T>) properties.get(type);
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
+    public void commit() {
+    }
+
+    public <T> boolean merge(Property<T> property) {
+        Property<T> existingProperty = getOrNull(property.getType());
+        if (existingProperty != null) {
+            return existingProperty.setValue(property.getValue());
+        } else {
+            register(property);
+            return true;
+        }
     }
 }

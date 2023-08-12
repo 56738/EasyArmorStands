@@ -4,8 +4,9 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
 import me.m56738.easyarmorstands.capability.entityplace.EntityPlaceEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.history.action.EntityDestroyAction;
-import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.inventory.InventoryListener;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
@@ -197,7 +198,12 @@ public class SessionListener implements Listener {
     public void onPlaceEntity(EntityPlaceEvent event) {
         Entity entity = event.getEntity();
         Player player = event.getPlayer();
-        EasyArmorStands.getInstance().getHistory(player).push(new EntitySpawnAction<>(entity));
+        Bukkit.getScheduler().runTask(EasyArmorStands.getInstance(), () -> {
+            Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+            if (element != null) {
+                EasyArmorStands.getInstance().getHistory(player).push(new ElementCreateAction(element));
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -208,9 +214,16 @@ public class SessionListener implements Listener {
         }
         Player player = (Player) damager;
         Entity entity = event.getEntity();
+
+        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        if (element == null) {
+            return;
+        }
+
+        ElementDestroyAction action = new ElementDestroyAction(element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
-                EasyArmorStands.getInstance().getHistory(player).push(new EntityDestroyAction<>(entity));
+                EasyArmorStands.getInstance().getHistory(player).push(action);
             }
         });
     }

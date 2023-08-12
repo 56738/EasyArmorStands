@@ -10,8 +10,7 @@ import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
-import me.m56738.easyarmorstands.editor.ArmorStandObject;
-import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.session.Session;
@@ -24,20 +23,20 @@ import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends MenuNode implements EditableObjectNode {
+public class ArmorStandRootNode extends MenuNode implements ElementNode {
     private final Session session;
     private final ArmorStand entity;
-    private final ArmorStandObject entityObject;
+    private final ArmorStandElement element;
     private final PositionBoneButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
     private ArmorStand skeleton;
 
-    public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandObject entityObject) {
+    public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
         super(session, Component.text("Select a bone"));
         this.session = session;
         this.entity = entity;
-        this.entityObject = entityObject;
-        PropertyContainer container = session.properties(entityObject);
+        this.element = element;
+        PropertyContainer container = PropertyContainer.tracked(element, session.getPlayer());
 
         setRoot(true);
 
@@ -167,7 +166,7 @@ public class ArmorStandRootNode extends MenuNode implements EditableObjectNode {
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
         Player player = session.getPlayer();
         if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
-            entityObject.openMenu(player);
+            element.openMenu(player);
             return true;
         }
         return super.onClick(eyes, target, context);
@@ -179,7 +178,7 @@ public class ArmorStandRootNode extends MenuNode implements EditableObjectNode {
     }
 
     @Override
-    public EditableObject getEditableObject() {
-        return entityObject;
+    public ArmorStandElement getElement() {
+        return element;
     }
 }

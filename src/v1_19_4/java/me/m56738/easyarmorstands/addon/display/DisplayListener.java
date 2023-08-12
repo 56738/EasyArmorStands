@@ -2,10 +2,9 @@ package me.m56738.easyarmorstands.addon.display;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
-import me.m56738.easyarmorstands.editor.EntityObject;
-import me.m56738.easyarmorstands.editor.SimpleEntityObject;
-import me.m56738.easyarmorstands.event.EntityObjectInitializeEvent;
-import me.m56738.easyarmorstands.event.EntityObjectMenuInitializeEvent;
+import me.m56738.easyarmorstands.element.ConfigurableEntityElement;
+import me.m56738.easyarmorstands.event.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
@@ -48,15 +47,13 @@ public class DisplayListener implements Listener {
     }
 
     @EventHandler
-    public void onInitialize(EntityObjectInitializeEvent event) {
-        EntityObject entityObject = event.getEntityObject();
-        if (entityObject instanceof SimpleEntityObject) {
-            registerProperties((SimpleEntityObject) entityObject);
-        }
+    public void onInitialize(EntityElementInitializeEvent event) {
+        ConfigurableEntityElement<?> element = event.getElement();
+        registerProperties(element.getEntity(), element.getProperties());
     }
 
     @EventHandler
-    public void onInitializeMenu(EntityObjectMenuInitializeEvent event) {
+    public void onInitializeMenu(EntityElementMenuInitializeEvent event) {
         MenuBuilder builder = event.getMenuBuilder();
         PropertyContainer properties = event.getProperties();
         Property<ItemStack> property = properties.getOrNull(ItemDisplayItemProperty.TYPE);
@@ -70,10 +67,6 @@ public class DisplayListener implements Listener {
                 builder.addUtility(slot);
             }
         }
-    }
-
-    private void registerProperties(SimpleEntityObject entityObject) {
-        registerProperties(entityObject.getEntity(), entityObject.properties());
     }
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {

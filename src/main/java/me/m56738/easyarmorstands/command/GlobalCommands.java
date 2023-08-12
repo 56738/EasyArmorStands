@@ -15,7 +15,7 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyType;
@@ -158,7 +158,7 @@ public class GlobalCommands {
 
         if (sender.get() instanceof Player) {
             Session session = sessionManager.getSession(((Player) sender.get()));
-            EditableObject editableObject = null;
+            Element element = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
                 boolean first = true;
@@ -169,15 +169,15 @@ public class GlobalCommands {
                                             .hoverEvent(Component.text(node.getClass().getName()))));
                     first = false;
                 }
-                editableObject = session.getEditableObject();
+                element = session.getElement();
             }
-            if (editableObject != null) {
-                sender.sendMessage(Component.text("Selected object: ", NamedTextColor.GOLD)
-                        .append(Component.text(editableObject.getClass().getSimpleName(), NamedTextColor.GREEN)
-                                .hoverEvent(Component.text(editableObject.getClass().getName()))));
+            if (element != null) {
+                sender.sendMessage(Component.text("Selected element: ", NamedTextColor.GOLD)
+                        .append(Component.text(element.getClass().getSimpleName(), NamedTextColor.GREEN)
+                                .hoverEvent(Component.text(element.getClass().getName()))));
                 TextComponent.Builder builder = Component.text();
                 builder.color(NamedTextColor.GRAY);
-                editableObject.properties().forEach(property -> appendPropertyDebug(builder, property));
+                element.getProperties().forEach(property -> appendPropertyDebug(builder, property));
                 sender.sendMessage(builder);
             }
         }

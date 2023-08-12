@@ -6,5 +6,5 @@ import org.bukkit.entity.Display;
 
 @FunctionalInterface
 public interface DisplayRootNodeFactory<T extends Display> {
-    DisplayRootNode createRootNode(Session session, Component name, DisplayObject<T> editableObject);
+    DisplayRootNode createRootNode(Session session, Component name, DisplayElement<T> element);
 }

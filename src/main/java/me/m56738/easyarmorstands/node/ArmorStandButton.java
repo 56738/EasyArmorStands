@@ -10,12 +10,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandButton extends AxisAlignedBoxButton implements Button {
-    private final Session session;
     private final ArmorStand entity;
 
     public ArmorStandButton(Session session, ArmorStand entity) {
         super(session);
-        this.session = session;
         this.entity = entity;
     }
 

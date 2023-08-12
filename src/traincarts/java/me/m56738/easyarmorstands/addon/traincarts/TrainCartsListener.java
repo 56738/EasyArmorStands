@@ -1,14 +1,16 @@
 package me.m56738.easyarmorstands.addon.traincarts;
 
-import me.m56738.easyarmorstands.event.SessionMenuInitializeEvent;
+import me.m56738.easyarmorstands.element.MenuElement;
+import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class TrainCartsListener implements Listener {
     @EventHandler
-    public void onMenuInitialize(SessionMenuInitializeEvent event) {
-        if (event.getMenu().hasEquipment() && event.getPlayer().hasPermission("easyarmorstands.traincarts.model")) {
-            event.getMenu().addShortcut(new TrainCartsModelListingSlot(event.getMenu()));
+    public void onMenuInitialize(EntityElementMenuInitializeEvent event) {
+        MenuElement element = event.getElement();
+        if (element.hasItemSlots() && event.getPlayer().hasPermission("easyarmorstands.traincarts.model")) {
+            event.getMenuBuilder().addUtility(new TrainCartsModelListingSlot(element));
         }
     }
 }

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.property;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.editor.EditableObject;
+import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.PropertyAction;
 import org.bukkit.entity.Player;
@@ -13,23 +13,23 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @see PropertyContainer#tracked(EditableObject, Player)
+ * @see PropertyContainer#tracked(Element, Player)
  */
 class TrackedPropertyContainer extends PropertyWrapperContainer {
-    private final EditableObject editableObject;
+    private final Element element;
     private final Player player;
     private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
     private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
 
-    TrackedPropertyContainer(EditableObject editableObject, Player player) {
-        super(PropertyContainer.identified(editableObject.properties(), player));
-        this.editableObject = editableObject;
+    TrackedPropertyContainer(Element element, Player player) {
+        super(PropertyContainer.identified(element.getProperties(), player));
+        this.element = element;
         this.player = player;
     }
 
     @Override
     protected <T> Property<T> wrap(Property<T> property) {
-        return new TrackedPropertyWrapper<>(this, editableObject, property);
+        return new TrackedPropertyWrapper<>(this, element, property);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -50,18 +50,18 @@ class TrackedPropertyContainer extends PropertyWrapperContainer {
         super.commit();
     }
 
-    public <T> void recordChange(EditableObject editableObject, Property<T> property, T oldValue, T value) {
-        ChangeKey<T> key = new ChangeKey<>(editableObject, property.getType());
+    public <T> void recordChange(Element element, Property<T> property, T oldValue, T value) {
+        ChangeKey<T> key = new ChangeKey<>(element, property.getType());
         originalValues.putIfAbsent(key, oldValue);
         pendingValues.put(key, value);
     }
 
     private static class ChangeKey<T> {
-        private final EditableObject editableObject;
+        private final Element element;
         private final PropertyType<T> propertyType;
 
-        private ChangeKey(EditableObject editableObject, PropertyType<T> propertyType) {
-            this.editableObject = editableObject;
+        private ChangeKey(Element element, PropertyType<T> propertyType) {
+            this.element = element;
             this.propertyType = propertyType;
         }
 
@@ -70,16 +70,16 @@ class TrackedPropertyContainer extends PropertyWrapperContainer {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ChangeKey<?> changeKey = (ChangeKey<?>) o;
-            return Objects.equals(editableObject, changeKey.editableObject) && Objects.equals(propertyType, changeKey.propertyType);
+            return Objects.equals(element, changeKey.element) && Objects.equals(propertyType, changeKey.propertyType);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(editableObject, propertyType);
+            return Objects.hash(element, propertyType);
         }
 
         public Action createChangeAction(T oldValue, T value) {
-            return new PropertyAction<>(editableObject.asReference(), propertyType, oldValue, value);
+            return new PropertyAction<>(element.getReference(), propertyType, oldValue, value);
         }
     }
 }

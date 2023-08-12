@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.editor.EntityObjectProviderRegistry;
-import me.m56738.easyarmorstands.event.SessionInitializeEvent;
+import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
@@ -22,12 +22,12 @@ public class SessionManager {
         if (old != null) {
             old.stop();
         }
-        Bukkit.getPluginManager().callEvent(new SessionInitializeEvent(session));
+        Bukkit.getPluginManager().callEvent(new SessionStartEvent(session));
     }
 
     public Session start(Player player) {
         Session session = new Session(player);
-        EntityObjectProviderRegistry registry = EasyArmorStands.getInstance().getEntityObjectProviderRegistry();
+        EntityElementProviderRegistry registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
         EntitySelectionNode node = new EntitySelectionNode(session, Component.text("Select an entity"), registry);
         node.setRoot(true);
         session.pushNode(node);

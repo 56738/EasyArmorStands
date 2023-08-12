@@ -30,14 +30,12 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     private final EquipmentSlot slot;
     private final PropertyType<ItemStack> type;
     private final EquipmentCapability equipmentCapability;
-    private final ComponentCapability componentCapability;
 
-    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, EquipmentCapability equipmentCapability, ComponentCapability componentCapability) {
+    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, EquipmentCapability equipmentCapability) {
         this.entity = entity;
         this.slot = slot;
         this.type = type(slot);
         this.equipmentCapability = equipmentCapability;
-        this.componentCapability = componentCapability;
     }
 
     public static PropertyType<ItemStack> type(EquipmentSlot slot) {
@@ -86,11 +84,9 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     }
 
     private static class Type implements PropertyType<ItemStack> {
-        private final EquipmentSlot slot;
         private final Component displayName;
 
         private Type(EquipmentSlot slot) {
-            this.slot = slot;
             String upperName = slot.name().replace('_', ' ');
             String lowerName = upperName.toLowerCase(Locale.ROOT);
             this.displayName = Component.text(lowerName);

@@ -3,9 +3,9 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.MenuObject;
-import me.m56738.easyarmorstands.event.EntityObjectMenuInitializeEvent;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.element.MenuElement;
+import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionManager;
 import org.bukkit.entity.Player;
@@ -31,19 +31,22 @@ public class HeadDatabaseListener implements Listener {
         if (session == null) {
             return;
         }
-        EditableObject editableObject = session.getEditableObject();
-        if (editableObject == null || !editableObject.hasItemSlots() || !(editableObject instanceof MenuObject)) {
+        Element element = session.getElement();
+        if (!(element instanceof MenuElement)) {
             return;
         }
-        MenuObject menuObject = (MenuObject) editableObject;
+        MenuElement menuElement = (MenuElement) element;
+        if (!menuElement.hasItemSlots()) {
+            return;
+        }
         event.setCancelled(true);
-        menuObject.openMenu(player);
+        menuElement.openMenu(player);
         player.setItemOnCursor(event.getHead());
     }
 
     @EventHandler
-    public void onMenuInitialize(EntityObjectMenuInitializeEvent event) {
-        if (event.getEntityObject().hasItemSlots() && event.getPlayer().hasPermission("headdb.open")) {
+    public void onMenuInitialize(EntityElementMenuInitializeEvent event) {
+        if (event.getElement().hasItemSlots() && event.getPlayer().hasPermission("headdb.open")) {
             event.getMenuBuilder().addUtility(new HeadDatabaseSlot(api));
         }
     }

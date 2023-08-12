@@ -1,9 +1,12 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.EntityObjectProviderRegistry;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.element.SelectableElement;
+import me.m56738.easyarmorstands.event.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,10 +19,10 @@ import java.util.Set;
 
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
-    private final EntityObjectProviderRegistry providerRegistry;
-    private final Map<Entity, EditableObjectButton> buttons = new HashMap<>();
+    private final EntityElementProviderRegistry providerRegistry;
+    private final Map<Entity, ElementButton> buttons = new HashMap<>();
 
-    public EntitySelectionNode(Session session, Component name, EntityObjectProviderRegistry providerRegistry) {
+    public EntitySelectionNode(Session session, Component name, EntityElementProviderRegistry providerRegistry) {
         super(session, name);
         this.session = session;
         this.providerRegistry = providerRegistry;
@@ -27,7 +30,7 @@ public class EntitySelectionNode extends MenuNode {
 
     @Override
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
-        Set<Entity> removed = new HashSet<>(buttons.keySet());
+        Set<Entity> notSeen = new HashSet<>(buttons.keySet());
         double range = session.getRange();
         Player player = session.getPlayer();
         Location location = player.getLocation();
@@ -36,16 +39,16 @@ public class EntitySelectionNode extends MenuNode {
                 continue;
             }
 
-            // entity exists, wasn't removed
-            if (removed.remove(entity)) {
+            if (notSeen.remove(entity)) {
+                // entity already existed
                 continue;
             }
 
             // entity is new, create a button for it
-            EditableObject editableObject = providerRegistry.createEditableObject(entity);
-            EditableObjectButton button = null;
-            if (editableObject != null) {
-                button = new EditableObjectButton(session, editableObject);
+            Element element = providerRegistry.getElement(entity);
+            ElementButton button = null;
+            if (element instanceof SelectableElement) {
+                button = new ElementButton(session, (SelectableElement) element);
                 addButton(button);
             }
 
@@ -53,7 +56,7 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         // remove buttons of entities which no longer exist
-        for (Entity entity : removed) {
+        for (Entity entity : notSeen) {
             removeButton(buttons.remove(entity));
         }
 
@@ -69,7 +72,7 @@ public class EntitySelectionNode extends MenuNode {
         if (context.getType() == ClickType.RIGHT_CLICK) {
             Entity entity = context.getEntity();
             if (entity != null) {
-                EditableObjectButton button = buttons.get(entity);
+                ElementButton button = buttons.get(entity);
                 if (button != null) {
                     button.onClick(session);
                     return true;
@@ -91,37 +94,52 @@ public class EntitySelectionNode extends MenuNode {
         return true;
     }
 
-    public boolean selectEntity(Entity entity) {
-        EditableObject editableObject = providerRegistry.createEditableObject(entity);
-        if (editableObject != null) {
-            Node node = editableObject.createNode(session);
-            if (node != null) {
-                session.clearNode();
-                session.pushNode(this);
-                session.pushNode(node);
-                return true;
-            }
+    public boolean selectElement(Element element) {
+        if (!(element instanceof SelectableElement)) {
+            return false;
         }
-        return false;
+
+        SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        Node node = ((SelectableElement) element).createNode(session);
+        if (node == null) {
+            return false;
+        }
+
+        session.clearNode();
+        session.pushNode(this);
+        session.pushNode(node);
+        return true;
+
     }
 
-    private static class EditableObjectButton implements MenuButton {
+    private static class ElementButton implements MenuButton {
         private final Session session;
-        private final EditableObject editableObject;
+        private final SelectableElement element;
 
-        private EditableObjectButton(Session session, EditableObject editableObject) {
+        private ElementButton(Session session, SelectableElement element) {
             this.session = session;
-            this.editableObject = editableObject;
+            this.element = element;
         }
 
         @Override
         public Button createButton() {
-            return editableObject.createButton(session);
+            return element.createButton(session);
         }
 
         @Override
         public void onClick(Session session) {
-            EditableObjectNode node = editableObject.createNode(session);
+            SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+
+            Node node = element.createNode(session);
             if (node != null) {
                 session.pushNode(node);
             }

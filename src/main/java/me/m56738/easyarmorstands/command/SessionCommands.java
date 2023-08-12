@@ -12,10 +12,14 @@ import me.m56738.easyarmorstands.command.annotation.RequireEntity;
 import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.DestroyableObject;
-import me.m56738.easyarmorstands.editor.EditableObject;
-import me.m56738.easyarmorstands.editor.MenuObject;
-import me.m56738.easyarmorstands.history.action.EntitySpawnAction;
+import me.m56738.easyarmorstands.element.DestroyableElement;
+import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.element.ElementType;
+import me.m56738.easyarmorstands.element.MenuElement;
+import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
+import me.m56738.easyarmorstands.event.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -23,8 +27,6 @@ import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.session.CloneSpawner;
-import me.m56738.easyarmorstands.session.EntitySpawner;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
@@ -34,6 +36,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -64,13 +67,13 @@ public class SessionCommands {
     @CommandMethod("open")
     @CommandPermission("easyarmorstands.open")
     @CommandDescription("Open the menu")
-    public void open(EasPlayer sender, EditableObject editableObject) {
-        if (!(editableObject instanceof MenuObject)) {
-            sender.sendMessage(Component.text("You're not editing an object which allows opening a menu.", NamedTextColor.RED));
+    public void open(EasPlayer sender, Element element) {
+        if (!(element instanceof MenuElement)) {
+            sender.sendMessage(Component.text("You're not editing an entity which allows opening a menu.", NamedTextColor.RED));
             return;
         }
-        MenuObject menuObject = (MenuObject) editableObject;
-        menuObject.openMenu(sender.get());
+        MenuElement menuElement = (MenuElement) element;
+        menuElement.openMenu(sender.get());
     }
 
     @CommandMethod("open <entity>")
@@ -82,17 +85,17 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Entity not found.", NamedTextColor.RED));
             return;
         }
-        EditableObject editableObject = EasyArmorStands.getInstance().getEntityObjectProviderRegistry().createEditableObject(entity);
-        if (editableObject == null) {
+        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        if (element == null) {
             sender.sendMessage(Component.text("Cannot edit this entity.", NamedTextColor.RED));
             return;
         }
-        if (!(editableObject instanceof MenuObject)) {
+        if (!(element instanceof MenuElement)) {
             sender.sendMessage(Component.text("This entity doesn't have a menu.", NamedTextColor.RED));
             return;
         }
-        MenuObject menuObject = (MenuObject) editableObject;
-        menuObject.openMenu(sender.get());
+        MenuElement menuElement = (MenuElement) element;
+        menuElement.openMenu(sender.get());
     }
 
     @CommandMethod("clone")
@@ -100,22 +103,22 @@ public class SessionCommands {
     @CommandDescription("Spawn a copy of the selected entity")
     @RequireSession
     @RequireEntity
-    public void clone(EasPlayer sender,
-                      Entity entity) {
-        Location location = entity.getLocation();
-        // TODO
-        CloneSpawner<Entity> spawner = new CloneSpawner<>(entity);
-        Entity clone = EntitySpawner.trySpawn(spawner, location, sender.get());
-        if (clone == null) {
+    public void clone(EasPlayer sender, Element element) {
+        Player player = sender.get();
+        ElementType type = element.getType();
+        PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
+
+        PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
             return;
         }
 
-        EntitySpawnAction<Entity> action = new EntitySpawnAction<>(location, spawner, clone.getUniqueId());
-        EasyArmorStands.getInstance().getHistory(sender.get()).push(action);
+        Element clone = type.createElement(properties);
+        EasyArmorStands.getInstance().getHistory(player).push(new ElementCreateAction(clone));
 
         sender.sendMessage(Component.text("Entity cloned", NamedTextColor.GREEN));
-//        session.selectEntity(clone);
     }
 
     @CommandMethod("spawn")
@@ -130,20 +133,24 @@ public class SessionCommands {
     @CommandDescription("Destroy the selected entity")
     @RequireSession
     @RequireEntity
-    public void destroy(
-            EasCommandSender sender,
-            Session session) {
+    public void destroy(EasCommandSender sender, Session session) {
         Player player = session.getPlayer();
-        EditableObject editableObject = session.getEditableObject();
-        if (!(editableObject instanceof DestroyableObject)) {
-            sender.sendMessage(Component.text("You're not editing an object which can be destroyed", NamedTextColor.RED));
+
+        Element element = session.getElement();
+        if (!(element instanceof DestroyableElement)) {
+            sender.sendMessage(Component.text("You're not editing an entity which can be destroyed", NamedTextColor.RED));
             return;
         }
-        DestroyableObject destroyableObject = (DestroyableObject) editableObject;
-        if (!destroyableObject.destroy(player)) {
+
+        PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             sender.sendMessage(Component.text("Unable to destroy", NamedTextColor.RED));
             return;
         }
+
+        EasyArmorStands.getInstance().getHistoryManager().getHistory(player).push(new ElementDestroyAction(element));
+        ((DestroyableElement) element).destroy();
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
 

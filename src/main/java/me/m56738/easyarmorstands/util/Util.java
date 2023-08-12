@@ -317,4 +317,9 @@ public class Util {
         }
         return values[index];
     }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends Entity> Class<E> getEntityClass(E entity) {
+        return (Class<E>) entity.getType().getEntityClass();
+    }
 }
