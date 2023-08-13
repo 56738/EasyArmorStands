@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class BackgroundSlot implements MenuSlot {
@@ -21,5 +22,8 @@ public class BackgroundSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
+        if (click.isRightClick() && click.cursor().getType() == Material.AIR) {
+            click.close();
+        }
     }
 }

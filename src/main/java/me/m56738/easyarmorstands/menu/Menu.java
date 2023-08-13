@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -96,5 +97,11 @@ public class Menu implements InventoryHolder {
 
     public void interceptNextClick(MenuClickInterceptor interceptor) {
         currentInterceptor = interceptor;
+    }
+
+    public void close(Player player) {
+        if (inventory.equals(player.getOpenInventory().getTopInventory())) {
+            player.closeInventory();
+        }
     }
 }

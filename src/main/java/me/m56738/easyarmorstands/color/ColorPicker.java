@@ -1,33 +1,37 @@
 package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.DyeColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.Consumer;
+import java.util.Arrays;
 
-import static me.m56738.easyarmorstands.menu.Menu.index;
+public class ColorPicker extends Menu {
+    private final Runnable callback;
 
-public class ColorPicker {
-    private ColorPicker() {
+    private ColorPicker(Component title, MenuSlot[] slots, Runnable callback) {
+        super(title, slots);
+        this.callback = callback;
     }
 
-    public static Menu create(ItemPropertySlot slot, Consumer<MenuClick> callback) {
+    public static Menu create(ItemPropertySlot slot, Runnable callback) {
         return create(slot.getProperty(), slot.getContainer(), callback);
     }
 
-    public static Menu create(Property<ItemStack> property, PropertyContainer container, Consumer<MenuClick> callback) {
-        SimpleMenuBuilder builder = new SimpleMenuBuilder();
+    public static Menu create(Property<ItemStack> property, PropertyContainer container, Runnable callback) {
+        MenuSlot[] slots = new MenuSlot[9 * 4];
+        Arrays.fill(slots, BackgroundSlot.INSTANCE);
 
         ColorPickerContext context = new ColorPickerContext(property, container);
 
-        builder.setSlot(2, new ColorIndicatorSlot(context, callback));
+        slots[2] = new ColorIndicatorSlot(context);
 
         // names unstable across versions, use legacy numbers
         @SuppressWarnings("deprecation") DyeColor gray = DyeColor.getByWoolData((byte) 7);
@@ -35,15 +39,15 @@ public class ColorPicker {
 
         for (ColorAxis axis : ColorAxis.values()) {
             int row = axis.ordinal() + 1;
-            builder.setSlot(index(row, 1), new ColorAxisChangeSlot(context, axis, gray, -10, -1, -50));
-            builder.setSlot(index(row, 2), new ColorAxisSlot(context, axis));
-            builder.setSlot(index(row, 3), new ColorAxisChangeSlot(context, axis, lightGray, 10, 1, 50));
+            slots[index(row, 1)] = new ColorAxisChangeSlot(context, axis, gray, -10, -1, -50);
+            slots[index(row, 2)] = new ColorAxisSlot(context, axis);
+            slots[index(row, 3)] = new ColorAxisChangeSlot(context, axis, lightGray, 10, 1, 50);
         }
 
         int row = 0;
         int column = 5;
         for (DyeColor color : DyeColor.values()) {
-            builder.setSlot(index(row, column), new ColorPresetSlot(context, color));
+            slots[index(row, column)] = new ColorPresetSlot(context, color);
             column++;
             if (column >= 9) {
                 row++;
@@ -54,6 +58,15 @@ public class ColorPicker {
             }
         }
 
-        return builder.build(Component.text("Color picker"));
+        return new ColorPicker(Component.text("Color picker"), slots, callback);
+    }
+
+    @Override
+    public void close(Player player) {
+        if (callback != null) {
+            callback.run();
+        } else {
+            super.close(player);
+        }
     }
 }

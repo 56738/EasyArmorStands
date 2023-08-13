@@ -80,7 +80,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
 
         if (foundSlots == 1) {
             // Found exactly one applicable item property slot
-            click.open(ColorPicker.create(foundSlot, this::returnToElementMenu).getInventory());
+            click.open(ColorPicker.create(foundSlot, () -> element.openMenu(click.player())).getInventory());
         } else {
             // Ask the user to click a slot
             active = true;
@@ -103,13 +103,9 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         if (slot instanceof ItemPropertySlot) {
             ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
             if (isApplicable(itemSlot)) {
-                click.open(ColorPicker.create(itemSlot, this::returnToElementMenu).getInventory());
+                click.open(ColorPicker.create(itemSlot, () -> element.openMenu(click.player())).getInventory());
             }
         }
-    }
-
-    private void returnToElementMenu(MenuClick click) {
-        click.queueTask(() -> element.openMenu(click.player()));
     }
 
     private boolean isApplicable(ItemPropertySlot slot) {

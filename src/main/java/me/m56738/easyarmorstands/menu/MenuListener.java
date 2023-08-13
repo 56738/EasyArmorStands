@@ -105,9 +105,7 @@ public class MenuListener implements Listener {
         @Override
         public void close() {
             queueTask(() -> {
-                if (menu.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                    player.closeInventory();
-                }
+                menu.close(player);
             });
         }
 
