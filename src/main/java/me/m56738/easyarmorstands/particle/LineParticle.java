@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.util.Util;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -15,6 +16,13 @@ public interface LineParticle extends ColoredParticle {
      */
     default void setFromTo(Vector3dc from, Vector3dc to) {
         Vector3dc delta = to.sub(from, new Vector3d());
+        if (delta.lengthSquared() < 1e-4) {
+            setCenter(from);
+            setRotation(Util.IDENTITY);
+            setLength(0);
+            setOffset(0);
+            return;
+        }
         Quaterniondc rotation = new Quaterniond().rotationTo(getAxis().getDirection(), delta);
         double length = delta.length();
         setCenter(from);
