@@ -4,6 +4,7 @@ import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -34,11 +35,14 @@ public class HeadDatabaseSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
-        if (click.isLeftClick()) {
-            // TODO Delete items placed into this slot
-            click.queueTask(() -> click.player().performCommand("headdb"));
-            click.close();
+        if (!click.isLeftClick()) {
+            return;
         }
+        click.queueTask(() -> {
+            Player player = click.player();
+            player.setItemOnCursor(null);
+            player.performCommand("headdb");
+        });
+        click.close();
     }
 }

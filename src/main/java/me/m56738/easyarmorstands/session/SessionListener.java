@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.inventory.InventoryListener;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.util.Util;
@@ -19,13 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.DragType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -37,7 +29,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -264,112 +255,5 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         manager.stop(event.getPlayer());
-    }
-
-    private InventoryListener getInventoryListener(InventoryEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
-        if (holder instanceof InventoryListener) {
-            return (InventoryListener) holder;
-        } else {
-            return null;
-        }
-    }
-
-    private boolean onInventoryClick(InventoryListener inventoryListener,
-                                     int slot, boolean click, boolean put, boolean take, ClickType type) {
-        Bukkit.getScheduler().runTask(plugin, inventoryListener::update);
-        return !inventoryListener.onClick(slot, click, put, take, type);
-    }
-
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        InventoryListener inventoryListener = getInventoryListener(event);
-        if (inventoryListener == null) {
-            return;
-        }
-        InventoryAction action = event.getAction();
-        if (action == InventoryAction.COLLECT_TO_CURSOR) {
-            event.setCancelled(true);
-            return;
-        }
-        int slot = event.getSlot();
-        if (slot != event.getRawSlot()) {
-            // Not the upper inventory
-            if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                event.setCancelled(true);
-            }
-            return;
-        }
-        boolean click = false;
-        boolean put = false;
-        boolean take = false;
-        switch (action) {
-            case CLONE_STACK:
-                click = true;
-                break;
-            case PICKUP_ALL:
-            case PICKUP_SOME:
-            case PICKUP_HALF:
-            case PICKUP_ONE:
-            case MOVE_TO_OTHER_INVENTORY:
-                click = true;
-                take = true;
-                break;
-            case PLACE_ALL:
-            case PLACE_SOME:
-            case PLACE_ONE:
-                click = true;
-                put = true;
-                break;
-            case SWAP_WITH_CURSOR:
-                click = true;
-                put = true;
-                take = true;
-                break;
-            case DROP_ALL_SLOT:
-            case DROP_ONE_SLOT:
-            case HOTBAR_MOVE_AND_READD:
-            case HOTBAR_SWAP:
-                take = true;
-                break;
-            case DROP_ALL_CURSOR:
-            case DROP_ONE_CURSOR:
-                return;
-            default:
-                event.setCancelled(true);
-                return;
-        }
-        if (onInventoryClick(inventoryListener, slot, click, put, take, event.getClick())) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent event) {
-        InventoryListener inventoryListener = getInventoryListener(event);
-        if (inventoryListener == null) {
-            return;
-        }
-        if (event.getRawSlots().size() != 1) {
-            event.setCancelled(true);
-            return;
-        }
-        int slot = event.getRawSlots().iterator().next();
-        if (slot != event.getView().convertSlot(slot)) {
-            return;
-        }
-        ClickType type = event.getType() == DragType.EVEN ? ClickType.LEFT : ClickType.RIGHT;
-        if (onInventoryClick(inventoryListener, slot, true, true, false, type)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        InventoryListener inventoryListener = getInventoryListener(event);
-        if (inventoryListener == null) {
-            return;
-        }
-        inventoryListener.onClose();
     }
 }

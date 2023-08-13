@@ -1,52 +1,49 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.item.ItemType;
-import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
-import me.m56738.easyarmorstands.inventory.DisabledSlot;
-import me.m56738.easyarmorstands.inventory.InventoryMenu;
-import me.m56738.easyarmorstands.inventory.InventorySlot;
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.menu.Menu;
+import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
+import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
+import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.property.PropertyContainer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.DyeColor;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.function.Consumer;
 
-public class ColorPicker extends InventoryMenu {
-    private final ItemStack item;
-    private final Player player;
-    private Color color;
+import static me.m56738.easyarmorstands.menu.Menu.index;
 
-    public ColorPicker(ItemStack item, Player player) {
-        super(4, "EasyArmorStands color picker");
-        this.item = item;
-        this.player = player;
+public class ColorPicker {
+    private ColorPicker() {
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void initialize() {
-        setSlot(0, 2, new ColorItemSlot(this));
+    public static Menu create(ItemPropertySlot slot, Consumer<MenuClick> callback) {
+        return create(slot.getProperty(), slot.getContainer(), callback);
+    }
 
-        ColorAxis[] axes = ColorAxis.values();
-        for (int i = 0; i < axes.length; i++) {
-            ColorAxis axis = axes[i];
-            // names unstable across versions, use legacy numbers
-            DyeColor gray = DyeColor.getByWoolData((byte) 7);
-            DyeColor lightGray = DyeColor.getByWoolData((byte) 8);
-            setSlot(i + 1, 1, new ColorAxisChangeSlot(this, axis, gray, -10, -1, -50));
-            setSlot(i + 1, 2, new ColorAxisSlot(this, axis));
-            setSlot(i + 1, 3, new ColorAxisChangeSlot(this, axis, lightGray, 10, 1, 50));
+    public static Menu create(Property<ItemStack> property, PropertyContainer container, Consumer<MenuClick> callback) {
+        SimpleMenuBuilder builder = new SimpleMenuBuilder();
+
+        ColorPickerContext context = new ColorPickerContext(property, container);
+
+        builder.setSlot(2, new ColorIndicatorSlot(context, callback));
+
+        // names unstable across versions, use legacy numbers
+        @SuppressWarnings("deprecation") DyeColor gray = DyeColor.getByWoolData((byte) 7);
+        @SuppressWarnings("deprecation") DyeColor lightGray = DyeColor.getByWoolData((byte) 8);
+
+        for (ColorAxis axis : ColorAxis.values()) {
+            int row = axis.ordinal() + 1;
+            builder.setSlot(index(row, 1), new ColorAxisChangeSlot(context, axis, gray, -10, -1, -50));
+            builder.setSlot(index(row, 2), new ColorAxisSlot(context, axis));
+            builder.setSlot(index(row, 3), new ColorAxisChangeSlot(context, axis, lightGray, 10, 1, 50));
         }
 
         int row = 0;
         int column = 5;
         for (DyeColor color : DyeColor.values()) {
-            setSlot(row, column, new ColorPresetSlot(this, color));
+            builder.setSlot(index(row, column), new ColorPresetSlot(context, color));
             column++;
             if (column >= 9) {
                 row++;
@@ -57,54 +54,6 @@ public class ColorPicker extends InventoryMenu {
             }
         }
 
-        setEmptySlots(new DisabledSlot(this, ItemType.LIGHT_BLUE_STAINED_GLASS_PANE));
-
-        if (item != null) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                ItemColorCapability itemColorCapability = EasyArmorStands.getInstance().getCapability(ItemColorCapability.class);
-                color = itemColorCapability.getColor(meta);
-            }
-        }
-        if (color == null) {
-            color = Color.WHITE;
-        }
-        getInventory().setItem(2, item);
-        setColor(color);
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-        for (InventorySlot slot : slots) {
-            if (slot instanceof ColorListener) {
-                ((ColorListener) slot).onColorChanged(color);
-            }
-        }
-    }
-
-    @Override
-    public void onClose() {
-        List<ItemStack> items = new ArrayList<>();
-        for (int i = 0; i < slots.length; i++) {
-            if (slots[i] instanceof ColorItemSlot) {
-                ItemStack item = getInventory().getItem(i);
-                if (item != null) {
-                    items.add(item);
-                    getInventory().setItem(i, null);
-                }
-            }
-        }
-        HashMap<Integer, ItemStack> remaining = player.getInventory().addItem(items.toArray(new ItemStack[0]));
-        for (ItemStack item : remaining.values()) {
-            player.getWorld().dropItem(player.getLocation(), item);
-        }
-    }
-
-    public boolean onTake(int slot) {
-        return true;
+        return builder.build(Component.text("Color picker"));
     }
 }

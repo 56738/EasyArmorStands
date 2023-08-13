@@ -35,19 +35,23 @@ public class TrainCartsModelListingSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
-        // TODO Delete items placed into this slot
+        if (!click.isLeftClick()) {
+            return;
+        }
         Player player = click.player();
-        click.queueTask(() -> TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStands.getInstance())
-                .cancelOnRootRightClick()
-                .show()
-                .thenAccept(result -> {
-                    if (result.cancelledWithRootRightClick()) {
-                        element.openMenu(player);
-                    } else if (result.success()) {
-                        element.openMenu(player);
-                        player.setItemOnCursor(result.selectedItem());
-                    }
-                }));
+        click.queueTask(() -> {
+            player.setItemOnCursor(null);
+            TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStands.getInstance())
+                    .cancelOnRootRightClick()
+                    .show()
+                    .thenAccept(result -> {
+                        if (result.cancelledWithRootRightClick()) {
+                            element.openMenu(player);
+                        } else if (result.success()) {
+                            element.openMenu(player);
+                            player.setItemOnCursor(result.selectedItem());
+                        }
+                    });
+        });
     }
 }

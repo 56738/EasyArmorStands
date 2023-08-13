@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +32,7 @@ public class MenuListener implements Listener {
                 return;
             }
             Menu menu = (Menu) holder;
+            event.setCancelled(true);
             menu.onClick(new SingleClick(menu, event));
         }
     }
@@ -47,28 +50,41 @@ public class MenuListener implements Listener {
                 return;
             }
             Menu menu = (Menu) holder;
+            event.setCancelled(true);
             menu.onClick(new DragClick(menu, event, slot));
         }
     }
 
     private static abstract class Click implements MenuClick {
         private final Menu menu;
+        private final MenuSlot slot;
         private final InventoryInteractEvent event;
-        private final int slot;
+        private final int index;
         private final Player player;
         private final Audience audience;
 
-        private Click(Menu menu, InventoryInteractEvent event, int slot) {
+        private Click(Menu menu, InventoryInteractEvent event, int index) {
             this.menu = menu;
+            this.slot = menu.getSlot(index);
             this.event = event;
-            this.slot = slot;
+            this.index = index;
             this.player = (Player) event.getWhoClicked();
             this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
         }
 
         @Override
-        public int slot() {
+        public Menu menu() {
+            return menu;
+        }
+
+        @Override
+        public MenuSlot slot() {
             return slot;
+        }
+
+        @Override
+        public int index() {
+            return index;
         }
 
         @Override
@@ -77,8 +93,8 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public void cancel() {
-            event.setCancelled(true);
+        public void allow() {
+            event.setCancelled(false);
         }
 
         @Override
@@ -97,6 +113,11 @@ public class MenuListener implements Listener {
 
         @Override
         public void updateItem() {
+            queueTask(() -> menu.updateItem(index));
+        }
+
+        @Override
+        public void updateItem(MenuSlot slot) {
             queueTask(() -> menu.updateItem(slot));
         }
 
@@ -107,7 +128,12 @@ public class MenuListener implements Listener {
 
         @Override
         public void queueTask(Consumer<ItemStack> task) {
-            queueTask(() -> task.accept(menu.getInventory().getItem(slot)));
+            queueTask(() -> task.accept(menu.getInventory().getItem(index)));
+        }
+
+        @Override
+        public void interceptNextClick(MenuClickInterceptor interceptor) {
+            menu.interceptNextClick(interceptor);
         }
 
         @Override
@@ -125,6 +151,15 @@ public class MenuListener implements Listener {
         }
 
         @Override
+        public ItemStack cursor() {
+            ItemStack item = event.getCursor();
+            if (item == null) {
+                return new ItemStack(Material.AIR);
+            }
+            return item;
+        }
+
+        @Override
         public boolean isLeftClick() {
             return event.isLeftClick();
         }
@@ -132,6 +167,11 @@ public class MenuListener implements Listener {
         @Override
         public boolean isRightClick() {
             return event.isRightClick();
+        }
+
+        @Override
+        public boolean isShiftClick() {
+            return event.isShiftClick();
         }
     }
 
@@ -144,6 +184,15 @@ public class MenuListener implements Listener {
         }
 
         @Override
+        public ItemStack cursor() {
+            ItemStack item = event.getCursor();
+            if (item == null) {
+                return new ItemStack(Material.AIR);
+            }
+            return item;
+        }
+
+        @Override
         public boolean isLeftClick() {
             return event.getType() == DragType.EVEN;
         }
@@ -151,6 +200,11 @@ public class MenuListener implements Listener {
         @Override
         public boolean isRightClick() {
             return event.getType() == DragType.SINGLE;
+        }
+
+        @Override
+        public boolean isShiftClick() {
+            return false;
         }
     }
 }

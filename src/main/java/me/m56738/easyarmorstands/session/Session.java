@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
+import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
@@ -65,11 +66,12 @@ public final class Session implements ForwardingAudience.Single {
         if (size == 0) {
             return;
         }
+        Menu menu = builder.build(Component.text("Spawn"));
         if (size == 1) {
             // Only one button, click it immediately
-            builder.getSlot(0).onClick(new MenuClick.FakeLeftClick(0, player));
+            menu.getSlot(0).onClick(new MenuClick.FakeLeftClick(menu, 0, player));
         } else {
-            player.openInventory(builder.build(Component.text("Spawn")).getInventory());
+            player.openInventory(menu.getInventory());
         }
     }
 

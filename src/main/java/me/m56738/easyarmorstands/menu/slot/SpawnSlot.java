@@ -35,7 +35,6 @@ public class SpawnSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
         if (click.isLeftClick()) {
             Player player = click.player();
             Location eyeLocation = player.getEyeLocation();

@@ -88,11 +88,6 @@ public abstract class MenuNode implements Node {
         }
     }
 
-    @Deprecated
-    public void addMoveButtons(Session session, PositionBone bone, RotationProvider rotationProvider, double length, boolean includeEnds) {
-        addMoveButtons(session, bone, rotationProvider, length);
-    }
-
     public void addPositionButtons(Session session, PositionBone bone, double length) {
         for (Axis axis : Axis.values()) {
             addButton(new MoveNode(
@@ -105,11 +100,6 @@ public abstract class MenuNode implements Node {
                     length
             ));
         }
-    }
-
-    @Deprecated
-    public void addPositionButtons(Session session, PositionBone bone, double length, boolean includeEnds) {
-        addPositionButtons(session, bone, length);
     }
 
     public void addCarryButton(Session session, PositionBone bone) {

@@ -22,7 +22,7 @@ public class ElementMenuListener implements Listener {
         MenuBuilder builder = event.getMenuBuilder();
         PropertyContainer properties = event.getProperties();
         if (element.hasItemSlots() && player.hasPermission("easyarmorstands.color")) {
-            builder.addUtility(new ColorPickerSlot());
+            builder.addUtility(new ColorPickerSlot(element));
         }
         if (element instanceof DestroyableElement && player.hasPermission("easyarmorstands.destroy")) {
             builder.addButton(new DestroySlot((DestroyableElement) element));

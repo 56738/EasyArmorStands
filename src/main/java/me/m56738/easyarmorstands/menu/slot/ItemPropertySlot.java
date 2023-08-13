@@ -15,6 +15,14 @@ public class ItemPropertySlot implements MenuSlot {
         this.container = container;
     }
 
+    public Property<ItemStack> getProperty() {
+        return property;
+    }
+
+    public PropertyContainer getContainer() {
+        return container;
+    }
+
     @Override
     public ItemStack getItem() {
         return property.getValue();
@@ -24,9 +32,9 @@ public class ItemPropertySlot implements MenuSlot {
     public void onClick(MenuClick click) {
         String permission = property.getType().getPermission();
         if (permission != null && !click.player().hasPermission(permission)) {
-            click.cancel();
             return;
         }
+        click.allow();
         click.queueTask(item -> {
             if (item == null) {
                 item = new ItemStack(Material.AIR);

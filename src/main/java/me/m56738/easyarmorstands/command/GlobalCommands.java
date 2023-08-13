@@ -12,7 +12,6 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.Element;
@@ -78,13 +77,6 @@ public class GlobalCommands {
         sender.get().getInventory().addItem(Util.createTool());
         sender.sendMessage(Message.TOOL_GIVEN.render());
         sessionListener.updateHeldItem(sender.get());
-    }
-
-    @CommandMethod("color")
-    @CommandPermission("easyarmorstands.color")
-    @CommandDescription("Opens the color picker")
-    public void color(EasPlayer player) {
-        player.get().openInventory(new ColorPicker(null, player.get()).getInventory());
     }
 
     @CommandMethod("version")

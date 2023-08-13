@@ -35,7 +35,6 @@ public class DestroySlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
         if (!click.isLeftClick()) {
             return;
         }

@@ -21,6 +21,5 @@ public class BackgroundSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
     }
 }

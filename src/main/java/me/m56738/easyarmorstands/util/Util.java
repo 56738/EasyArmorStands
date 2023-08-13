@@ -322,4 +322,20 @@ public class Util {
     public static <E extends Entity> Class<E> getEntityClass(E entity) {
         return (Class<E>) entity.getType().getEntityClass();
     }
+
+    public static Component formatColor(Color color) {
+        if (color == null) {
+            color = Color.BLACK;
+        }
+        String red = String.format("%02X", color.getRed());
+        String green = String.format("%02X", color.getGreen());
+        String blue = String.format("%02X", color.getBlue());
+        return Component.text()
+                .content("#")
+                .append(Component.text(red, NamedTextColor.RED))
+                .append(Component.text(green, NamedTextColor.GREEN))
+                .append(Component.text(blue, NamedTextColor.BLUE))
+                .color(NamedTextColor.GRAY)
+                .build();
+    }
 }

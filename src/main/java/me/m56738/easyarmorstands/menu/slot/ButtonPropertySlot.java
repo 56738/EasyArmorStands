@@ -24,8 +24,6 @@ public class ButtonPropertySlot<T> implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
-
         if (propertyType.onClick(property, container, click)) {
             container.commit();
             click.updateItem();

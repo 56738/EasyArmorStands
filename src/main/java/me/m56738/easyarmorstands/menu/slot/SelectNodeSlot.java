@@ -42,7 +42,6 @@ public class SelectNodeSlot implements MenuSlot {
 
     @Override
     public void onClick(MenuClick click) {
-        click.cancel();
         if (click.isLeftClick()) {
             session.pushNode(nodeFactory.createNode());
             click.close();
