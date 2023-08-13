@@ -106,6 +106,9 @@ public final class Session {
     }
 
     public void pushNode(@NotNull Node node) {
+        if (!valid) {
+            return;
+        }
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
         }
@@ -115,6 +118,9 @@ public final class Session {
     }
 
     public void replaceNode(@NotNull Node node) {
+        if (!valid) {
+            return;
+        }
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
@@ -124,6 +130,9 @@ public final class Session {
     }
 
     public void popNode() {
+        if (!valid) {
+            return;
+        }
         Node removed = nodeStack.pop();
         removed.onExit();
         removed.onRemove();
@@ -133,6 +142,9 @@ public final class Session {
     }
 
     public void clearNode() {
+        if (!valid) {
+            return;
+        }
         if (!nodeStack.isEmpty()) {
             nodeStack.peek().onExit();
         }
@@ -143,6 +155,9 @@ public final class Session {
     }
 
     public boolean handleClick(ClickContext context) {
+        if (!valid) {
+            return false;
+        }
         Node node = nodeStack.peek();
         if (node == null || clickTicks > 0) {
             return false;
@@ -180,7 +195,7 @@ public final class Session {
         return null;
     }
 
-    public boolean update() {
+    boolean update() {
         pendingTitle = Component.empty();
         pendingSubtitle = Component.empty();
         pendingActionBar = Component.empty();
@@ -252,7 +267,7 @@ public final class Session {
         return false;
     }
 
-    public void stop() {
+    void stop() {
         Node currentNode = nodeStack.peek();
         if (currentNode != null) {
             currentNode.onExit();
@@ -303,12 +318,18 @@ public final class Session {
     }
 
     public void addParticle(Particle particle) {
+        if (!valid) {
+            return;
+        }
         if (particles.add(particle)) {
             particle.show(player);
         }
     }
 
     public void removeParticle(Particle particle) {
+        if (!valid) {
+            return;
+        }
         if (particles.remove(particle)) {
             particle.hide(player);
         }
