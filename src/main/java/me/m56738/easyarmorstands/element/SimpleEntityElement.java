@@ -67,7 +67,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         SplitMenuBuilder builder = new SplitMenuBuilder();
         PropertyContainer container = PropertyContainer.tracked(this, player);
         Component title = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
-        populateMenu(player, builder);
+        populateMenu(player, builder, container);
         Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player, this, builder, container, title));
         player.openInventory(builder.build(title).getInventory());
     }
@@ -77,7 +77,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         return entity instanceof LivingEntity;
     }
 
-    protected void populateMenu(Player player, SplitMenuBuilder builder) {
+    protected void populateMenu(Player player, SplitMenuBuilder builder, PropertyContainer container) {
     }
 
     @Override

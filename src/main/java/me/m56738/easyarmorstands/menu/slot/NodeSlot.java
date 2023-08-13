@@ -9,23 +9,33 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-public class SelectNodeSlot implements MenuSlot {
+public class NodeSlot implements MenuSlot {
     private final Session session;
     private final NodeFactory nodeFactory;
+    private final Consumer<MenuClick> resetAction;
     private final ItemType type;
     private final Component name;
 
-    public SelectNodeSlot(Session session, NodeFactory nodeFactory, ItemType type, Component name) {
+    public NodeSlot(Session session, NodeFactory nodeFactory, Consumer<MenuClick> resetAction, ItemType type, Component name) {
         this.session = session;
         this.nodeFactory = nodeFactory;
+        this.resetAction = resetAction;
         this.type = type;
         this.name = name;
     }
 
     @Override
     public ItemStack getItem() {
+        List<Component> description = new ArrayList<>();
+        description.add(Component.text("Click to select this", NamedTextColor.GRAY));
+        description.add(Component.text("bone in the editor.", NamedTextColor.GRAY));
+        if (resetAction != null) {
+            description.add(Component.text("Right click to reset.", NamedTextColor.GRAY));
+        }
         return Util.createItem(
                 type,
                 Component.text()
@@ -33,10 +43,7 @@ public class SelectNodeSlot implements MenuSlot {
                         .append(name)
                         .color(NamedTextColor.BLUE)
                         .build(),
-                Arrays.asList(
-                        Component.text("Selects this bone", NamedTextColor.GRAY),
-                        Component.text("in the editor.", NamedTextColor.GRAY)
-                )
+                description
         );
     }
 
@@ -45,6 +52,10 @@ public class SelectNodeSlot implements MenuSlot {
         if (click.isLeftClick()) {
             session.pushNode(nodeFactory.createNode());
             click.close();
+        } else if (click.isRightClick()) {
+            if (resetAction != null) {
+                resetAction.accept(click);
+            }
         }
     }
 }
