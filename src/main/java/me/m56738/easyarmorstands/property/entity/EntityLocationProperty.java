@@ -45,5 +45,10 @@ public class EntityLocationProperty implements Property<Location> {
         public Component getValueComponent(Location value) {
             return Util.formatLocation(value);
         }
+
+        @Override
+        public Location cloneValue(Location value) {
+            return value.clone();
+        }
     }
 }

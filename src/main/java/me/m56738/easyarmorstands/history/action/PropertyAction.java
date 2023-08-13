@@ -20,8 +20,8 @@ public class PropertyAction<T> implements Action {
     public PropertyAction(ElementReference elementReference, PropertyType<T> propertyType, T oldValue, T newValue) {
         this.elementReference = elementReference;
         this.propertyType = propertyType;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+        this.oldValue = propertyType.cloneValue(oldValue);
+        this.newValue = propertyType.cloneValue(newValue);
     }
 
     @Override

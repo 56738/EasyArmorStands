@@ -20,4 +20,8 @@ public interface PropertyType<T> {
      * @return The formatted value.
      */
     Component getValueComponent(T value);
+
+    default T cloneValue(T value) {
+        return value;
+    }
 }

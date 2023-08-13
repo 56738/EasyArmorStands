@@ -39,7 +39,7 @@ public class PropertySnapshot implements PropertyContainer {
 
         private SnapshotProperty(PropertyType<T> type, T value) {
             this.type = type;
-            this.value = value;
+            this.value = type.cloneValue(value);
         }
 
         public SnapshotProperty(Property<T> property) {
@@ -53,12 +53,12 @@ public class PropertySnapshot implements PropertyContainer {
 
         @Override
         public T getValue() {
-            return value;
+            return type.cloneValue(value);
         }
 
         @Override
         public boolean setValue(T value) {
-            this.value = value;
+            this.value = type.cloneValue(value);
             return true;
         }
     }

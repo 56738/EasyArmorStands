@@ -51,9 +51,10 @@ class TrackedPropertyContainer extends PropertyWrapperContainer {
     }
 
     public <T> void recordChange(Element element, Property<T> property, T oldValue, T value) {
-        ChangeKey<T> key = new ChangeKey<>(element, property.getType());
-        originalValues.putIfAbsent(key, oldValue);
-        pendingValues.put(key, value);
+        PropertyType<T> type = property.getType();
+        ChangeKey<T> key = new ChangeKey<>(element, type);
+        originalValues.putIfAbsent(key, type.cloneValue(oldValue));
+        pendingValues.put(key, type.cloneValue(value));
     }
 
     private static class ChangeKey<T> {

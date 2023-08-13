@@ -50,5 +50,10 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
             ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
             return componentCapability.getItemDisplayName(value);
         }
+
+        @Override
+        public ItemStack cloneValue(ItemStack value) {
+            return value.clone();
+        }
     }
 }
