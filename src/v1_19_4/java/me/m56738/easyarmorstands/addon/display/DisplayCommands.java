@@ -611,14 +611,15 @@ public class DisplayCommands {
         Location location = entity.getLocation();
         Vector3d offset = part.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
-        location.setYaw(0);
-        location.setPitch(0);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
                 .rotateY(Util.getRoundedYawAngle(location.getYaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
+
+        location.setYaw(0);
+        location.setPitch(0);
 
         PropertyRegistry properties = new PropertyRegistry();
         properties.register(Property.of(EntityLocationProperty.TYPE, location));
