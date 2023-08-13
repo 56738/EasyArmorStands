@@ -589,7 +589,7 @@ public class DisplayCommands {
         convert(player, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
         convert(player, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
         if (actions.isEmpty()) {
-            session.sendMessage(Component.text("Unable to convert", NamedTextColor.RED));
+            sender.sendMessage(Component.text("Unable to convert", NamedTextColor.RED));
             return;
         }
 

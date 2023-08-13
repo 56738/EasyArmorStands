@@ -11,10 +11,8 @@ import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.title.Title;
 import org.joml.Vector3dc;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -203,9 +201,9 @@ public abstract class MenuNode implements Node {
         } else {
             targetName = Component.empty();
         }
-        session.sendActionBar(name);
-        session.showTitle(Title.title(Component.empty(), targetName,
-                Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO)));
+        session.setActionBar(name);
+        session.setTitle(Component.empty());
+        session.setSubtitle(targetName);
         targetButton = bestMenuButton;
     }
 

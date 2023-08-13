@@ -123,7 +123,9 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
         updateAxisParticle();
         updateCursorLineParticle();
 
-        session.sendActionBar(Component.text().append(getName()).append(Component.text(": "))
+        session.setActionBar(Component.text()
+                .append(getName())
+                .append(Component.text(": "))
                 .append(Component.text(Util.ANGLE_FORMAT.format(degrees))));
     }
 

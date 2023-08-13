@@ -117,7 +117,9 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
         updateAxisParticle();
         updateCursorLineParticle();
 
-        session.sendActionBar(Component.text().append(name).append(Component.text(": "))
+        session.setActionBar(Component.text()
+                .append(name)
+                .append(Component.text(": "))
                 .append(Component.text(Util.SCALE_FORMAT.format(scale))));
     }
 

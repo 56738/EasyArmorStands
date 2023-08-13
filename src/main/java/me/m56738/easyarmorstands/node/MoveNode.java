@@ -124,7 +124,10 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
         } else {
             value = Component.text(Util.POSITION_FORMAT.format(t + initialOffset));
         }
-        session.sendActionBar(Component.text().append(name).append(Component.text(": ")).append(value));
+        session.setActionBar(Component.text()
+                .append(name)
+                .append(Component.text(": "))
+                .append(value));
     }
 
     @Override

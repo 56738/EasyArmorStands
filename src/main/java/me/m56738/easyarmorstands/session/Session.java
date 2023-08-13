@@ -16,8 +16,10 @@ import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,15 +34,18 @@ import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-public final class Session implements ForwardingAudience.Single {
+public final class Session {
     public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
+    private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
     private final Player player;
     private final Audience audience;
@@ -49,6 +54,13 @@ public final class Session implements ForwardingAudience.Single {
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
     private boolean valid = true;
+    private Component currentTitle = Component.empty();
+    private Component currentSubtitle = Component.empty();
+    private Component currentActionBar = Component.empty();
+    private Component pendingTitle = Component.empty();
+    private Component pendingSubtitle = Component.empty();
+    private Component pendingActionBar = Component.empty();
+    private int overlayTicks;
 
     public Session(Player player) {
         this.player = player;
@@ -169,6 +181,10 @@ public final class Session implements ForwardingAudience.Single {
     }
 
     public boolean update() {
+        pendingTitle = Component.empty();
+        pendingSubtitle = Component.empty();
+        pendingActionBar = Component.empty();
+
         if (clickTicks > 0) {
             clickTicks--;
         }
@@ -194,7 +210,33 @@ public final class Session implements ForwardingAudience.Single {
             particle.update();
         }
 
+        updateOverlay();
+
         return player.isValid() && isHoldingTool();
+    }
+
+    private void updateOverlay() {
+        // Resend everything once per second
+        // Send changes immediately
+
+        boolean resendOverlay = overlayTicks >= 20;
+        if (resendOverlay) {
+            overlayTicks = 0;
+            audience.sendTitlePart(TitlePart.TIMES, titleTimes);
+        }
+        overlayTicks++;
+
+        if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
+            currentTitle = pendingTitle;
+            currentSubtitle = pendingSubtitle;
+            audience.sendTitlePart(TitlePart.SUBTITLE, currentTitle);
+            audience.sendTitlePart(TitlePart.TITLE, currentSubtitle);
+        }
+
+        if (resendOverlay || !Objects.equals(currentActionBar, pendingActionBar)) {
+            currentActionBar = pendingActionBar;
+            audience.sendActionBar(currentActionBar);
+        }
     }
 
     private boolean isHoldingTool() {
@@ -260,11 +302,6 @@ public final class Session implements ForwardingAudience.Single {
         this.angleSnapIncrement = angleSnapIncrement;
     }
 
-    @Override
-    public @NotNull Audience audience() {
-        return audience;
-    }
-
     public void addParticle(Particle particle) {
         if (particles.add(particle)) {
             particle.show(player);
@@ -289,5 +326,17 @@ public final class Session implements ForwardingAudience.Single {
 
     public boolean isValid() {
         return valid;
+    }
+
+    public void setTitle(ComponentLike title) {
+        pendingTitle = title.asComponent();
+    }
+
+    public void setSubtitle(ComponentLike subtitle) {
+        pendingSubtitle = subtitle.asComponent();
+    }
+
+    public void setActionBar(ComponentLike actionBar) {
+        pendingActionBar = actionBar.asComponent();
     }
 }
