@@ -8,8 +8,6 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.command.annotation.RequireEntity;
-import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.DestroyableElement;
@@ -32,13 +30,14 @@ import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
@@ -64,16 +63,94 @@ public class SessionCommands {
         audience.sendMessage(text);
     }
 
+    public static void sendNoSessionError(EasCommandSender sender) {
+        TextComponent.Builder builder = Component.text()
+                .content("You are not using the editor.")
+                .color(NamedTextColor.RED);
+
+        if (sender.get().hasPermission("easyarmorstands.give")) {
+            builder.appendNewline()
+                    .append(Component.text()
+                            .content("Use ")
+                            .append(Component.text()
+                                    .content("/eas give")
+                                    .decorate(TextDecoration.UNDERLINED)
+                                    .clickEvent(ClickEvent.runCommand("/eas give")))
+                            .append(Component.text(" to obtain the tool."))
+                            .color(NamedTextColor.GRAY));
+        }
+
+        sender.sendMessage(builder);
+    }
+
+    public static void sendNoSessionElementError(EasCommandSender sender) {
+        TextComponent.Builder builder = Component.text()
+                .content("You are not editing an entity.")
+                .color(NamedTextColor.RED)
+                .appendNewline()
+                .append(Component.text("Right click an entity to select it.", NamedTextColor.GRAY));
+
+        sender.sendMessage(builder);
+    }
+
+    public static void sendNoEntityElementError(EasCommandSender sender) {
+        sender.sendMessage(Component.text("This entity cannot be edited.", NamedTextColor.RED));
+    }
+
+    public static void sendNoEntityError(EasCommandSender sender) {
+        sender.sendMessage(Component.text("Entity not found.", NamedTextColor.RED));
+    }
+
+    public static Session getSessionOrError(EasPlayer sender) {
+        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(sender.get());
+        if (session == null) {
+            sendNoSessionError(sender);
+        }
+        return session;
+    }
+
+    public static Element getElementOrError(EasPlayer sender, Session session) {
+        if (session == null) {
+            return null;
+        }
+        Element element = session.getElement();
+        if (element == null) {
+            sendNoSessionElementError(sender);
+        }
+        return element;
+    }
+
+    public static Element getElementOrError(EasPlayer sender) {
+        return getElementOrError(sender, getSessionOrError(sender));
+    }
+
+    public static Element getElementOrError(EasPlayer sender, Entity entity) {
+        if (entity == null) {
+            sendNoEntityError(sender);
+            return null;
+        }
+        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        if (element == null) {
+            sendNoEntityElementError(sender);
+        }
+        return element;
+    }
+
     @CommandMethod("open")
     @CommandPermission("easyarmorstands.open")
     @CommandDescription("Open the menu")
-    public void open(EasPlayer sender, Element element) {
+    public void open(EasPlayer sender) {
+        Player player = sender.get();
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
         if (!(element instanceof MenuElement)) {
-            sender.sendMessage(Component.text("You're not editing an entity which allows opening a menu.", NamedTextColor.RED));
+            sender.sendMessage(Component.text("This entity doesn't have a menu.", NamedTextColor.RED));
             return;
         }
         MenuElement menuElement = (MenuElement) element;
-        menuElement.openMenu(sender.get());
+        menuElement.openMenu(player);
     }
 
     @CommandMethod("open <entity>")
@@ -81,13 +158,8 @@ public class SessionCommands {
     @CommandDescription("Open the menu of an entity")
     public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
         Entity entity = selector.getEntity();
-        if (entity == null) {
-            sender.sendMessage(Component.text("Entity not found.", NamedTextColor.RED));
-            return;
-        }
-        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        Element element = getElementOrError(sender, entity);
         if (element == null) {
-            sender.sendMessage(Component.text("Cannot edit this entity.", NamedTextColor.RED));
             return;
         }
         if (!(element instanceof MenuElement)) {
@@ -101,13 +173,15 @@ public class SessionCommands {
     @CommandMethod("clone")
     @CommandPermission("easyarmorstands.clone")
     @CommandDescription("Spawn a copy of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void clone(EasPlayer sender, Element element) {
-        Player player = sender.get();
+    public void clone(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
         ElementType type = element.getType();
         PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
 
+        Player player = sender.get();
         PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -131,17 +205,17 @@ public class SessionCommands {
     @CommandMethod("destroy")
     @CommandPermission("easyarmorstands.destroy")
     @CommandDescription("Destroy the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void destroy(EasCommandSender sender, Session session) {
-        Player player = session.getPlayer();
-
-        Element element = session.getElement();
+    public void destroy(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
         if (!(element instanceof DestroyableElement)) {
-            sender.sendMessage(Component.text("You're not editing an entity which can be destroyed", NamedTextColor.RED));
+            sender.sendMessage(Component.text("This entity cannot be destroyed", NamedTextColor.RED));
             return;
         }
 
+        Player player = sender.get();
         PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -157,11 +231,13 @@ public class SessionCommands {
     @CommandMethod("snap angle [value]")
     @CommandPermission("easyarmorstands.snap")
     @CommandDescription("Change the angle snapping increment")
-    @RequireSession
     public void setAngleSnapIncrement(
-            EasCommandSender sender,
-            Session session,
+            EasPlayer sender,
             @Argument(value = "value") @Range(min = "0", max = "90") Double value) {
+        Session session = getSessionOrError(sender);
+        if (session == null) {
+            return;
+        }
         if (value == null) {
             value = Session.DEFAULT_ANGLE_SNAP_INCREMENT;
             if (value == session.getAngleSnapIncrement()) {
@@ -175,11 +251,13 @@ public class SessionCommands {
     @CommandMethod("snap move [value]")
     @CommandPermission("easyarmorstands.snap")
     @CommandDescription("Change the position snapping increment")
-    @RequireSession
     public void setSnapIncrement(
-            EasCommandSender sender,
-            Session session,
+            EasPlayer sender,
             @Argument(value = "value") @Range(min = "0", max = "10") Double value) {
+        Session session = getSessionOrError(sender);
+        if (session == null) {
+            return;
+        }
         if (value == null) {
             value = Session.DEFAULT_SNAP_INCREMENT;
             if (value == session.getSnapIncrement()) {
@@ -193,16 +271,18 @@ public class SessionCommands {
     @CommandMethod("align [axis] [value] [offset]")
     @CommandPermission("easyarmorstands.align")
     @CommandDescription("Move the selected entity to the middle of the block")
-    @RequireSession
-    @RequireEntity
     public void align(
-            EasCommandSender sender,
-            PropertyContainer container,
+            EasPlayer sender,
             @Argument(value = "axis", defaultValue = "all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
     ) {
-        Property<Location> property = container.get(EntityLocationProperty.TYPE);
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Vector3d offsetVector = new Vector3d();
         if (value == null) {
             // None specified: Snap to the middle of the bottom of a block
@@ -220,7 +300,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text()
                 .content("Moved to ")
                 .append(Component.text(Util.POSITION_FORMAT.format(position.x()), TextColor.color(0xFF7777)))
@@ -234,11 +314,13 @@ public class SessionCommands {
     @CommandMethod("position <position>")
     @CommandPermission("easyarmorstands.property.location")
     @CommandDescription("Teleport the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void position(EasCommandSender sender, PropertyContainer container,
-                         @Argument("position") Location location) {
-        Property<Location> property = container.get(EntityLocationProperty.TYPE);
+    public void position(EasPlayer sender, @Argument("position") Location location) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
         location.setPitch(oldLocation.getPitch());
@@ -246,7 +328,7 @@ public class SessionCommands {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text("Moved to ", NamedTextColor.GREEN)
                 .append(Util.formatLocation(location)));
     }
@@ -254,18 +336,20 @@ public class SessionCommands {
     @CommandMethod("yaw <yaw>")
     @CommandPermission("easyarmorstands.property.location")
     @CommandDescription("Set the yaw of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void setYaw(EasCommandSender sender, PropertyContainer container,
-                       @Argument("yaw") float yaw) {
-        Property<Location> property = container.get(EntityLocationProperty.TYPE);
+    public void setYaw(EasPlayer sender, @Argument("yaw") float yaw) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
         location.setYaw(yaw);
         if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text("Changed yaw to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(yaw)));
     }
@@ -273,18 +357,20 @@ public class SessionCommands {
     @CommandMethod("pitch <pitch>")
     @CommandPermission("easyarmorstands.property.location")
     @CommandDescription("Set the pitch of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void setPitch(EasCommandSender sender, PropertyContainer container,
-                         @Argument("pitch") float pitch) {
-        Property<Location> property = container.get(EntityLocationProperty.TYPE);
+    public void setPitch(EasPlayer sender, @Argument("pitch") float pitch) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
         location.setPitch(pitch);
         if (!property.setValue(location)) {
             sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
             return;
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
                 .append(Util.formatAngle(pitch)));
     }
@@ -292,10 +378,16 @@ public class SessionCommands {
     @CommandMethod("name")
     @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Show the custom name of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void showName(EasCommandSender sender, PropertyContainer container) {
-        Property<Component> property = container.get(EntityCustomNameProperty.TYPE);
+    public void showName(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        Property<Component> property = element.getProperties().getOrNull(EntityCustomNameProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            return;
+        }
         Component text = property.getValue();
         showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
     }
@@ -303,22 +395,28 @@ public class SessionCommands {
     @CommandMethod("name set <value>")
     @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Set the custom name of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void setName(EasCommandSender sender, PropertyContainer container,
-                        @Argument("value") @Greedy String input) {
-        Property<Component> nameProperty = container.get(EntityCustomNameProperty.TYPE);
-        Property<Boolean> nameVisibleProperty = container.get(EntityCustomNameVisibleProperty.TYPE);
+    public void setName(EasPlayer sender, @Argument("value") @Greedy String input) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
+        if (nameProperty == null) {
+            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            return;
+        }
+        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         Component name = MiniMessage.miniMessage().deserialize(input);
         boolean hadName = nameProperty.getValue() != null;
         if (!nameProperty.setValue(name)) {
             sender.sendMessage(Component.text("Unable to change the name", NamedTextColor.RED));
             return;
         }
-        if (!hadName) {
+        if (!hadName && nameVisibleProperty != null) {
             nameVisibleProperty.setValue(true);
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
                 .append(name.colorIfAbsent(NamedTextColor.WHITE)));
     }
@@ -326,33 +424,48 @@ public class SessionCommands {
     @CommandMethod("name clear")
     @CommandPermission("easyarmorstands.property.name")
     @CommandDescription("Remove the custom name of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void clearName(EasCommandSender sender, PropertyContainer container) {
-        Property<Component> nameProperty = container.get(EntityCustomNameProperty.TYPE);
-        Property<Boolean> nameVisibleProperty = container.get(EntityCustomNameVisibleProperty.TYPE);
+    public void clearName(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
+        if (nameProperty == null) {
+            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            return;
+        }
+        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         if (!nameProperty.setValue(null)) {
             sender.sendMessage(Component.text("Unable to remove the name", NamedTextColor.RED));
             return;
         }
-        nameVisibleProperty.setValue(false);
-        container.commit();
+        if (nameVisibleProperty != null) {
+            nameVisibleProperty.setValue(false);
+        }
+        properties.commit();
         sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
     }
 
     @CommandMethod("name visible <value>")
     @CommandPermission("easyarmorstands.property.name.visible")
     @CommandDescription("Change the custom name visibility of the selected entity")
-    @RequireSession
-    @RequireEntity
-    public void setNameVisible(EasCommandSender sender, PropertyContainer container,
-                               @Argument("value") boolean visible) {
-        Property<Boolean> property = container.get(EntityCustomNameVisibleProperty.TYPE);
+    public void setNameVisible(EasPlayer sender, @Argument("value") boolean visible) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Boolean> property = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            return;
+        }
         if (!property.setValue(visible)) {
             sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
             return;
         }
-        container.commit();
+        properties.commit();
         sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
                 .append(property.getType().getValueComponent(visible)));
     }
@@ -360,21 +473,23 @@ public class SessionCommands {
     @CommandMethod("cantick <value>")
     @CommandPermission("easyarmorstands.property.armorstand.cantick")
     @CommandDescription("Toggle whether the selected armor stand should be ticked")
-    @RequireSession
-    @RequireEntity(ArmorStand.class)
-    public void setCanTick(EasCommandSender sender, PropertyContainer container,
-                           @Argument("value") boolean canTick) {
-        Property<Boolean> property = container.getOrNull(ArmorStandCanTickProperty.TYPE);
+    public void setCanTick(EasPlayer sender, @Argument("value") boolean canTick) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Boolean> property = properties.getOrNull(ArmorStandCanTickProperty.TYPE);
         if (property == null) {
-            sender.sendMessage(Component.text("Armor stand ticking can only be disabled on Paper servers", NamedTextColor.RED));
+            sender.sendMessage(Component.text("Cannot toggle ticking for this entity.", NamedTextColor.RED));
             return;
         }
         if (!property.setValue(canTick)) {
-            sender.sendMessage(Component.text("Unable to change the armor stand ticking status", NamedTextColor.RED));
+            sender.sendMessage(Component.text("Unable to change the entity ticking status.", NamedTextColor.RED));
             return;
         }
-        container.commit();
-        sender.sendMessage(Component.text("Changed the armor stand ticking to ", NamedTextColor.GREEN)
+        properties.commit();
+        sender.sendMessage(Component.text("Changed the ticking status to ", NamedTextColor.GREEN)
                 .append(property.getType().getValueComponent(canTick)));
     }
 

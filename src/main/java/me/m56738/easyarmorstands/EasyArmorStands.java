@@ -16,24 +16,11 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.command.annotation.RequireEntity;
-import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
-import me.m56738.easyarmorstands.command.processor.ElementInjector;
-import me.m56738.easyarmorstands.command.processor.EntityInjectionService;
-import me.m56738.easyarmorstands.command.processor.EntityPostprocessor;
-import me.m56738.easyarmorstands.command.processor.EntityPreprocessor;
-import me.m56738.easyarmorstands.command.processor.Keys;
-import me.m56738.easyarmorstands.command.processor.PropertyContainerInjector;
-import me.m56738.easyarmorstands.command.processor.SessionInjector;
-import me.m56738.easyarmorstands.command.processor.SessionPostprocessor;
-import me.m56738.easyarmorstands.command.processor.SessionPreprocessor;
-import me.m56738.easyarmorstands.command.processor.UnknownPropertyExceptionHandler;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
-import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementMenuListener;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
@@ -43,8 +30,6 @@ import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateListener;
@@ -143,19 +128,7 @@ public class EasyArmorStands extends JavaPlugin {
                         (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
                 .apply(commandManager, s -> s);
 
-        UnknownPropertyExceptionHandler.register(commandManager);
-
-        commandManager.registerCommandPreProcessor(new EntityPreprocessor<>());
-        commandManager.registerCommandPostProcessor(new EntityPostprocessor());
-        commandManager.parameterInjectorRegistry().registerInjectionService(new EntityInjectionService<>());
-
-        commandManager.registerCommandPreProcessor(new SessionPreprocessor<>(sessionManager, EasCommandSender::get));
-        commandManager.registerCommandPostProcessor(new SessionPostprocessor());
-        commandManager.parameterInjectorRegistry().registerInjector(Session.class, new SessionInjector<>());
-
-        commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector<>());
-        commandManager.parameterInjectorRegistry().registerInjector(Element.class, new ElementInjector<>());
-        commandManager.parameterInjectorRegistry().registerInjector(PropertyContainer.class, new PropertyContainerInjector<>());
+        commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector());
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
@@ -167,10 +140,6 @@ public class EasyArmorStands extends JavaPlugin {
                 p -> CommandMeta.simple()
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
-
-        annotationParser.registerBuilderModifier(RequireSession.class, (a, b) -> b.meta(Keys.SESSION_REQUIRED, true));
-        annotationParser.registerBuilderModifier(RequireEntity.class, (a, b) -> b.meta(Keys.ENTITY_REQUIRED,
-                entity -> a.value().isAssignableFrom(entity.getClass())));
 
         annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
         annotationParser.parse(new SessionCommands());

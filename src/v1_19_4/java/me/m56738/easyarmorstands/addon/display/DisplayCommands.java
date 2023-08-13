@@ -10,10 +10,9 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
 import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.command.annotation.RequireEntity;
-import me.m56738.easyarmorstands.command.annotation.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
+import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.EntityElement;
 import me.m56738.easyarmorstands.element.EntityElementType;
 import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
@@ -24,6 +23,7 @@ import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
+import me.m56738.easyarmorstands.property.UnknownPropertyException;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
@@ -42,7 +42,6 @@ import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -53,15 +52,13 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.TextDisplay;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
@@ -72,6 +69,9 @@ import org.joml.Vector3fc;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static me.m56738.easyarmorstands.command.SessionCommands.getElementOrError;
+import static me.m56738.easyarmorstands.command.SessionCommands.getSessionOrError;
 
 @CommandMethod("eas")
 public class DisplayCommands {
@@ -84,12 +84,19 @@ public class DisplayCommands {
     @CommandMethod("block <value>")
     @CommandPermission("easyarmorstands.property.display.block")
     @CommandDescription("Set the block of the selected block display")
-    @RequireSession
-    @RequireEntity(BlockDisplay.class)
-    public void setBlock(Audience sender, PropertyContainer container, @Argument("value") BlockData value) {
-        Property<BlockData> property = container.get(BlockDisplayBlockProperty.TYPE);
+    public void setBlock(EasPlayer sender, @Argument("value") BlockData value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<BlockData> property = properties.getOrNull(BlockDisplayBlockProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the displayed block of this entity."));
+            return;
+        }
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed block to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {
@@ -100,11 +107,18 @@ public class DisplayCommands {
     @CommandMethod("brightness block <value>")
     @CommandPermission("easyarmorstands.property.display.brightness")
     @CommandDescription("Set the block light level of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setBlockBrightness(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
-        Location location = container.get(EntityLocationProperty.TYPE).getValue();
-        Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
+    public void setBlockBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Location location = properties.get(EntityLocationProperty.TYPE).getValue();
+        Property<Display.Brightness> property = properties.getOrNull(DisplayBrightnessProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            return;
+        }
         Display.Brightness brightness = property.getValue();
         if (brightness != null) {
             brightness = new Display.Brightness(value, brightness.getSkyLight());
@@ -112,7 +126,7 @@ public class DisplayCommands {
             brightness = new Display.Brightness(value, location.getBlock().getLightFromSky());
         }
         if (property.setValue(brightness)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed block brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -123,11 +137,18 @@ public class DisplayCommands {
     @CommandMethod("brightness sky <value>")
     @CommandPermission("easyarmorstands.property.display.brightness")
     @CommandDescription("Set the sky light level of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setSkyBrightness(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "15") int value) {
-        Location location = container.get(EntityLocationProperty.TYPE).getValue();
-        Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
+    public void setSkyBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Location location = properties.get(EntityLocationProperty.TYPE).getValue();
+        Property<Display.Brightness> property = properties.getOrNull(DisplayBrightnessProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            return;
+        }
         Display.Brightness brightness = property.getValue();
         if (brightness != null) {
             brightness = new Display.Brightness(brightness.getBlockLight(), value);
@@ -135,7 +156,7 @@ public class DisplayCommands {
             brightness = new Display.Brightness(location.getBlock().getLightFromBlocks(), value);
         }
         if (property.setValue(brightness)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed sky brightness to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -146,14 +167,21 @@ public class DisplayCommands {
     @CommandMethod("brightness here")
     @CommandPermission("easyarmorstands.property.display.brightness")
     @CommandDescription("Apply the light level at your location to the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setLocalBrightness(EasPlayer sender, PropertyContainer container) {
+    public void setLocalBrightness(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Display.Brightness> property = properties.getOrNull(DisplayBrightnessProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            return;
+        }
         Block block = sender.get().getLocation().getBlock();
         Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
-        Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
         if (property.setValue(brightness)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed entity brightness to the light level at your location", NamedTextColor.GREEN));
             sender.sendMessage(Component.text("Block light: ", NamedTextColor.GRAY).append(Component.text(brightness.getBlockLight())));
             sender.sendMessage(Component.text("Sky light: ", NamedTextColor.GRAY).append(Component.text(brightness.getSkyLight())));
@@ -165,12 +193,19 @@ public class DisplayCommands {
     @CommandMethod("brightness reset")
     @CommandPermission("easyarmorstands.property.display.brightness")
     @CommandDescription("Remove the custom light level from the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setDefaultBrightness(Audience sender, PropertyContainer container) {
-        Property<Display.Brightness> property = container.get(DisplayBrightnessProperty.TYPE);
+    public void setDefaultBrightness(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Display.Brightness> property = properties.getOrNull(DisplayBrightnessProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            return;
+        }
         if (property.setValue(null)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
@@ -180,16 +215,23 @@ public class DisplayCommands {
     @CommandMethod("box width <width>")
     @CommandPermission("easyarmorstands.property.display.size")
     @CommandDescription("Set the bounding box width of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setBoxWidth(Audience sender, PropertyContainer container, @Argument("width") float value) {
-        Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
+    public void setBoxWidth(EasPlayer sender, @Argument("width") float value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Float> widthProperty = properties.getOrNull(DisplayWidthProperty.TYPE);
+        if (widthProperty == null) {
+            sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
+            return;
+        }
         if (widthProperty.setValue(value)) {
-            Property<Float> heightProperty = container.get(DisplayHeightProperty.TYPE);
-            if (heightProperty.getValue() == 0f) {
+            Property<Float> heightProperty = properties.getOrNull(DisplayHeightProperty.TYPE);
+            if (heightProperty != null && heightProperty.getValue() == 0f) {
                 heightProperty.setValue(value);
             }
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -200,16 +242,23 @@ public class DisplayCommands {
     @CommandMethod("box height <height>")
     @CommandPermission("easyarmorstands.property.display.size")
     @CommandDescription("Set the bounding box height of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void setBoxHeight(Audience sender, PropertyContainer container, @Argument("height") float value) {
-        Property<Float> heightProperty = container.get(DisplayHeightProperty.TYPE);
+    public void setBoxHeight(EasPlayer sender, @Argument("height") float value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Float> heightProperty = properties.getOrNull(DisplayHeightProperty.TYPE);
+        if (heightProperty == null) {
+            sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
+            return;
+        }
         if (heightProperty.setValue(value)) {
-            Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
-            if (widthProperty.getValue() == 0f) {
+            Property<Float> widthProperty = properties.getOrNull(DisplayWidthProperty.TYPE);
+            if (widthProperty != null && widthProperty.getValue() == 0f) {
                 widthProperty.setValue(value);
             }
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -220,21 +269,29 @@ public class DisplayCommands {
     @CommandMethod("box remove")
     @CommandPermission("easyarmorstands.property.display.size")
     @CommandDescription("Remove the bounding box from the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void removeBox(Audience sender, PropertyContainer container) {
+    public void removeBox(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+
         int success = 0;
-        Property<Float> widthProperty = container.get(DisplayWidthProperty.TYPE);
-        if (widthProperty.setValue(0f)) {
+        Property<Float> widthProperty = properties.getOrNull(DisplayWidthProperty.TYPE);
+        Property<Float> heightProperty = properties.getOrNull(DisplayHeightProperty.TYPE);
+        if (widthProperty == null && heightProperty == null) {
+            sender.sendMessage(Component.text("Cannot remove the bounding box of this entity.", NamedTextColor.RED));
+        }
+
+        if (widthProperty != null && widthProperty.setValue(0f)) {
             success++;
         }
-        Property<Float> heightProperty = container.get(DisplayHeightProperty.TYPE);
-        if (heightProperty.setValue(0f)) {
+        if (heightProperty != null && heightProperty.setValue(0f)) {
             success++;
         }
 
         if (success > 0) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Removed the bounding box", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
@@ -244,11 +301,22 @@ public class DisplayCommands {
     @CommandMethod("box move")
     @CommandPermission("easyarmorstands.property.display.translation")
     @CommandDescription("Select a tool to move the bounding box of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void moveBox(Session session, PropertyContainer container) {
-        DisplayBoxBone bone = new DisplayBoxBone(container);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), container);
+    public void moveBox(EasPlayer sender) {
+        Session session = getSessionOrError(sender);
+        Element element = getElementOrError(sender, session);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        DisplayBoxBone bone;
+        DisplayMenuNode node;
+        try {
+            bone = new DisplayBoxBone(properties);
+            node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), properties);
+        } catch (UnknownPropertyException e) {
+            sender.sendMessage(Component.text("Cannot move the bounding box of this entity.", NamedTextColor.RED));
+            return;
+        }
         node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
         node.addPositionButtons(session, bone, 3);
         node.addCarryButton(session, bone);
@@ -258,23 +326,37 @@ public class DisplayCommands {
     @CommandMethod("text")
     @CommandPermission("easyarmorstands.property.display.text")
     @CommandDescription("Show the text of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void showText(Audience sender, PropertyContainer container) {
-        Component text = container.get(TextDisplayTextProperty.TYPE).getValue();
+    public void showText(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        Property<Component> property = element.getProperties().getOrNull(TextDisplayTextProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
+            return;
+        }
+        Component text = property.getValue();
         SessionCommands.showText(sender, Component.text("Text", NamedTextColor.YELLOW), text, "/eas text set");
     }
 
     @CommandMethod("text set <value>")
     @CommandPermission("easyarmorstands.property.display.text")
     @CommandDescription("Set the text of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void setText(Audience sender, PropertyContainer container, @Argument("value") @Greedy String input) {
+    public void setText(EasPlayer sender, @Argument("value") @Greedy String input) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Component> property = properties.getOrNull(TextDisplayTextProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
+            return;
+        }
         Component value = MiniMessage.miniMessage().deserialize(input);
-        Property<Component> property = container.get(TextDisplayTextProperty.TYPE);
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed the text to ", NamedTextColor.GREEN)
                     .append(value));
         } else {
@@ -285,12 +367,19 @@ public class DisplayCommands {
     @CommandMethod("text width <value>")
     @CommandPermission("easyarmorstands.property.display.text.linewidth")
     @CommandDescription("Set the line width of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void setTextWidth(Audience sender, PropertyContainer container, @Argument("value") int value) {
-        Property<Integer> property = container.get(TextDisplayLineWidthProperty.TYPE);
+    public void setTextWidth(EasPlayer sender, @Argument("value") int value) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Integer> property = properties.getOrNull(TextDisplayLineWidthProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the line width of this entity.", NamedTextColor.RED));
+            return;
+        }
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed the line width to ", NamedTextColor.GREEN)
                     .append(Component.text(value)));
         } else {
@@ -301,13 +390,20 @@ public class DisplayCommands {
     @CommandMethod("text background color <value>")
     @CommandPermission("easyarmorstands.property.display.text.background")
     @CommandDescription("Set the background color of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void setTextBackground(Audience sender, PropertyContainer container, @Argument("value") TextColor color) {
+    public void setTextBackground(EasPlayer sender, @Argument("value") TextColor color) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Color> property = properties.getOrNull(TextDisplayBackgroundProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            return;
+        }
         Color value = Color.fromRGB(color.value());
-        Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed the background color to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {
@@ -318,12 +414,19 @@ public class DisplayCommands {
     @CommandMethod("text background reset")
     @CommandPermission("easyarmorstands.property.display.text.background")
     @CommandDescription("Restore the default background color of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void resetTextBackground(Audience sender, PropertyContainer container) {
-        Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
+    public void resetTextBackground(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Color> property = properties.getOrNull(TextDisplayBackgroundProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            return;
+        }
         if (property.setValue(null)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Reset the background color", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -333,13 +436,20 @@ public class DisplayCommands {
     @CommandMethod("text background none")
     @CommandPermission("easyarmorstands.property.display.text.background")
     @CommandDescription("Hide the background of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void hideTextBackground(Audience sender, PropertyContainer container) {
-        Property<Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
+    public void hideTextBackground(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Color> property = properties.getOrNull(TextDisplayBackgroundProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            return;
+        }
         Color value = Color.fromARGB(0);
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Made the background invisible", NamedTextColor.GREEN));
         } else {
             sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
@@ -349,10 +459,17 @@ public class DisplayCommands {
     @CommandMethod("text background alpha <value>")
     @CommandPermission("easyarmorstands.property.display.text.background")
     @CommandDescription("Set the background transparency of the selected text display")
-    @RequireSession
-    @RequireEntity(TextDisplay.class)
-    public void hideTextBackground(Audience sender, PropertyContainer container, @Argument("value") @Range(min = "0", max = "255") int alpha) {
-        Property<@Nullable Color> property = container.get(TextDisplayBackgroundProperty.TYPE);
+    public void hideTextBackground(EasPlayer sender, @Argument("value") @Range(min = "0", max = "255") int alpha) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Color> property = properties.getOrNull(TextDisplayBackgroundProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            return;
+        }
         Color oldValue = property.getValue();
         if (oldValue == null) {
             sender.sendMessage(Component.text("No background color configured", NamedTextColor.RED));
@@ -361,7 +478,7 @@ public class DisplayCommands {
 
         Color value = oldValue.setAlpha(alpha);
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed the background transparency to ", NamedTextColor.GREEN)
                     .append(Component.text(alpha)));
         } else {
@@ -372,13 +489,20 @@ public class DisplayCommands {
     @CommandMethod("scale <scale>")
     @CommandPermission("easyarmorstands.property.display.scale")
     @CommandDescription("Set the scale of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void editScale(Audience sender, PropertyContainer container, @Argument("scale") float scale) {
+    public void editScale(EasPlayer sender, @Argument("scale") float scale) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        Property<Vector3fc> property = properties.getOrNull(DisplayScaleProperty.TYPE);
+        if (property == null) {
+            sender.sendMessage(Component.text("Cannot change the scale of this entity.", NamedTextColor.RED));
+            return;
+        }
         Vector3f value = new Vector3f(scale);
-        Property<Vector3fc> property = container.get(DisplayScaleProperty.TYPE);
         if (property.setValue(value)) {
-            container.commit();
+            properties.commit();
             sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
                     .append(property.getType().getValueComponent(value)));
         } else {
@@ -389,22 +513,41 @@ public class DisplayCommands {
     @CommandMethod("shear")
     @CommandPermission("easyarmorstands.property.display.shearing")
     @CommandDescription("Modify the shearing of the selected display")
-    @RequireSession
-    @RequireEntity(Display.class)
-    public void editRightRotation(Session session, PropertyContainer container) {
-        DisplayBone rotationBone = new DisplayBone(container, DisplayRightRotationProperty.TYPE);
-        DisplayMenuNode node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), container);
-        node.addRotationButtons(session, rotationBone, 1, null);
+    public void editRightRotation(EasPlayer sender) {
+        Session session = getSessionOrError(sender);
+        Element element = getElementOrError(sender, session);
+        if (element == null) {
+            return;
+        }
+        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        DisplayBone bone;
+        DisplayMenuNode node;
+        try {
+            bone = new DisplayBone(properties, DisplayRightRotationProperty.TYPE);
+            node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), properties);
+        } catch (UnknownPropertyException e) {
+            sender.sendMessage(Component.text("Cannot edit the shearing of this entity.", NamedTextColor.RED));
+            return;
+        }
+        node.addRotationButtons(session, bone, 1, null);
         session.pushNode(node);
     }
 
     @CommandMethod("convert")
     @CommandPermission("easyarmorstands.convert")
     @CommandDescription("Convert the selected armor stand to an item display")
-    @RequireSession
-    @RequireEntity(ArmorStand.class)
-    public void convert(Session session, ArmorStandElement element) {
-        ArmorStand entity = element.getEntity();
+    public void convert(EasPlayer sender) {
+        Session session = getSessionOrError(sender);
+        Element element = getElementOrError(sender, session);
+        if (element == null) {
+            return;
+        }
+        if (!(element instanceof ArmorStandElement)) {
+            sender.sendMessage(Component.text("Only armor stands can be converted.", NamedTextColor.RED));
+            return;
+        }
+        Player player = sender.get();
+        ArmorStand entity = ((ArmorStandElement) element).getEntity();
         EntityEquipment equipment = entity.getEquipment();
         if (equipment == null) {
             return;
@@ -442,9 +585,9 @@ public class DisplayCommands {
         }
 
         List<Action> actions = new ArrayList<>();
-        convert(session, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
-        convert(session, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
-        convert(session, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
+        convert(player, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
+        convert(player, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
+        convert(player, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
         if (actions.isEmpty()) {
             session.sendMessage(Component.text("Unable to convert", NamedTextColor.RED));
             return;
@@ -460,7 +603,7 @@ public class DisplayCommands {
         return item != null && item.getItemMeta() instanceof SkullMeta;
     }
 
-    private void convert(Session session, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions) {
+    private void convert(Player player, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -487,7 +630,7 @@ public class DisplayCommands {
 
         EntityElementType<ItemDisplay> type = addon.getItemDisplayType();
 
-        PlayerCreateElementEvent event = new PlayerCreateElementEvent(session.getPlayer(), type, properties);
+        PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;

@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.EntityElement;
 import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
@@ -21,7 +20,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -154,15 +152,6 @@ public final class Session implements ForwardingAudience.Single {
             return value;
         }
         return Util.snap(value, angleSnapIncrement);
-    }
-
-    @Deprecated
-    public Entity getEntity() {
-        Element element = getElement();
-        if (element instanceof EntityElement<?>) {
-            return ((EntityElement<?>) element).getEntity();
-        }
-        return null;
     }
 
     public Element getElement() {
