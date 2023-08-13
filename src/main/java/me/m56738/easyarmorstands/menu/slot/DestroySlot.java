@@ -25,7 +25,7 @@ public class DestroySlot implements MenuSlot {
     @Override
     public ItemStack getItem() {
         return Util.createItem(
-                ItemType.BARRIER,
+                ItemType.TNT,
                 Component.text("Destroy", NamedTextColor.BLUE),
                 Collections.singletonList(
                         Component.text("Deletes this entity.", NamedTextColor.GRAY)

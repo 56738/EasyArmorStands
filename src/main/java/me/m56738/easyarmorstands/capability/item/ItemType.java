@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.capability.item;
 
 public enum ItemType {
     ARMOR_STAND,
-    BARRIER,
     BLAZE_ROD,
     BONE_MEAL,
     BOOK,
@@ -20,5 +19,6 @@ public enum ItemType {
     STICK,
     STONE,
     STONE_SLAB,
-    SUNFLOWER
+    SUNFLOWER,
+    TNT
 }

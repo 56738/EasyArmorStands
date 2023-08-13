@@ -41,8 +41,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
             switch (type) {
                 case ARMOR_STAND:
                     return new ItemStack(Material.ARMOR_STAND);
-                case BARRIER:
-                    return new ItemStack(Material.BARRIER);
                 case BLAZE_ROD:
                     return new ItemStack(Material.BLAZE_ROD);
                 case BONE_MEAL:
@@ -90,6 +88,8 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.STONE_SLAB);
                 case SUNFLOWER:
                     return new ItemStack(Material.SUNFLOWER);
+                case TNT:
+                    return new ItemStack(Material.TNT);
                 default:
                     throw new IllegalArgumentException();
             }
