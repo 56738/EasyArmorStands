@@ -33,7 +33,6 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     private final Vector3d positiveEnd = new Vector3d();
     private final Vector3d currentPosition = new Vector3d();
     private final Vector3d initialPosition = new Vector3d();
-    private final Vector3d initialScale = new Vector3d();
     private final Vector3d initialCursor = new Vector3d();
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentOffset = new Vector3d();
@@ -41,6 +40,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     private final LineParticle cursorLineParticle;
     private final PointParticle positiveParticle;
     private final PointParticle negativeParticle;
+    private double initialScale;
     private double currentLength;
     private Vector3d lookTarget;
     private Double manualValue;
@@ -72,7 +72,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
         manualValue = null;
         bone.getRotation().transform(axis.getDirection(), direction).normalize();
         initialPosition.set(bone.getOrigin());
-        initialScale.set(bone.getScale());
+        initialScale = bone.getScale(axis);
         initialCursor.set(lookTarget != null ? lookTarget : initialPosition);
         cursor.start(initialCursor);
         currentLength = length;
@@ -85,7 +85,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
 
     @Override
     protected void abort() {
-        bone.setScale(initialScale);
+        bone.setScale(axis, initialScale);
     }
 
     @Override
@@ -96,20 +96,14 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
         cursor.get().sub(initialPosition, currentOffset);
         double t;
         double scale;
-        Vector3dc axisDirection = axis.getDirection();
-        double originalScale = initialScale.dot(axisDirection);
         if (manualValue != null) {
             scale = manualValue;
-            t = scale / originalScale * initialOffset.dot(direction);
+            t = scale / initialScale * initialOffset.dot(direction);
         } else {
             t = currentOffset.dot(direction);
-            scale = t / initialOffset.dot(direction) * originalScale;
+            scale = t / initialOffset.dot(direction) * initialScale;
         }
-        bone.setScale(new Vector3d(
-                Math.lerp(initialScale.x, scale, axisDirection.x()),
-                Math.lerp(initialScale.y, scale, axisDirection.y()),
-                Math.lerp(initialScale.z, scale, axisDirection.z())
-        ));
+        bone.setScale(axis, scale);
 
         currentLength = Math.max(Math.abs(t), length);
         initialPosition.fma(t, direction, currentPosition);

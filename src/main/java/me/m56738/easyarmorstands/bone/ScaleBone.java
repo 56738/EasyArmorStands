@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.bone;
 
+import me.m56738.easyarmorstands.util.Axis;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -8,7 +9,7 @@ public interface ScaleBone extends Bone {
 
     Quaterniondc getRotation();
 
-    Vector3dc getScale();
+    double getScale(Axis axis);
 
-    void setScale(Vector3dc scale);
+    void setScale(Axis axis, double scale);
 }

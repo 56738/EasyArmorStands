@@ -20,6 +20,11 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton imple
 
     @Override
     protected Vector3dc getPosition() {
+        return Util.toVector3d(entity.getLocation());
+    }
+
+    @Override
+    protected Vector3dc getCenter() {
         Location location = entity.getLocation();
         return new Vector3d(location.getX(), location.getY() + entity.getDisplayHeight() / 2, location.getZ());
     }

@@ -8,7 +8,6 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
-import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
@@ -19,6 +18,7 @@ import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.node.v1_19_4.DisplayBoxNode;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -308,18 +308,13 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
-        DisplayBoxBone bone;
-        DisplayMenuNode node;
+        DisplayBoxNode node;
         try {
-            bone = new DisplayBoxBone(properties);
-            node = new DisplayMenuNode(session, Component.text("Bounding box", NamedTextColor.GOLD), properties);
+            node = new DisplayBoxNode(session, properties);
         } catch (UnknownPropertyException e) {
             sender.sendMessage(Component.text("Cannot move the bounding box of this entity.", NamedTextColor.RED));
             return;
         }
-        node.setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
-        node.addPositionButtons(session, bone, 3);
-        node.addCarryButton(session, bone);
         session.pushNode(node);
     }
 

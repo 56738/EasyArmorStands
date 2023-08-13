@@ -229,8 +229,8 @@ public final class Session {
         if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
             currentTitle = pendingTitle;
             currentSubtitle = pendingSubtitle;
-            audience.sendTitlePart(TitlePart.SUBTITLE, currentTitle);
-            audience.sendTitlePart(TitlePart.TITLE, currentSubtitle);
+            audience.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
+            audience.sendTitlePart(TitlePart.TITLE, currentTitle);
         }
 
         if (resendOverlay || !Objects.equals(currentActionBar, pendingActionBar)) {

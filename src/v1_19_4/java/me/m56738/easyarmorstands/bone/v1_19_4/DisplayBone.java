@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
+import me.m56738.easyarmorstands.util.Axis;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
@@ -59,12 +60,14 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
     }
 
     @Override
-    public Vector3dc getScale() {
-        return new Vector3d(scaleProperty.getValue());
+    public double getScale(Axis axis) {
+        return axis.getValue(scaleProperty.getValue());
     }
 
     @Override
-    public void setScale(Vector3dc scale) {
-        scaleProperty.setValue(scale.get(new Vector3f()));
+    public void setScale(Axis axis, double value) {
+        Vector3f scale = new Vector3f(scaleProperty.getValue());
+        axis.setValue(scale, (float) value);
+        scaleProperty.setValue(scale);
     }
 }

@@ -4,13 +4,6 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.event.EntityElementInitializeEvent;
-import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
-import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
-import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
@@ -37,7 +30,6 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
 public class DisplayListener implements Listener {
     private final JOMLMapper mapper;
@@ -50,23 +42,6 @@ public class DisplayListener implements Listener {
     public void onInitialize(EntityElementInitializeEvent event) {
         ConfigurableEntityElement<?> element = event.getElement();
         registerProperties(element.getEntity(), element.getProperties());
-    }
-
-    @EventHandler
-    public void onInitializeMenu(EntityElementMenuInitializeEvent event) {
-        MenuBuilder builder = event.getMenuBuilder();
-        PropertyContainer properties = event.getProperties();
-        Property<ItemStack> property = properties.getOrNull(ItemDisplayItemProperty.TYPE);
-        if (property != null) {
-            ItemPropertySlot slot = new ItemPropertySlot(property, properties);
-            if (builder instanceof SplitMenuBuilder) {
-                SplitMenuBuilder splitMenuBuilder = (SplitMenuBuilder) builder;
-                splitMenuBuilder.setSlot(Menu.index(3, 1), slot);
-                splitMenuBuilder.ensureRow(4);
-            } else {
-                builder.addUtility(slot);
-            }
-        }
     }
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {
