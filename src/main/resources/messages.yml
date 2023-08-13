@@ -1,0 +1,23 @@
+templates:
+  prefix: ''
+  success: '<t:prefix><green>'
+  error: '<t:prefix><red>'
+  hint: '<t:prefix><gray>'
+  header: '<t:prefix><gold>'
+
+error:
+  not-using-editor: '<t:error>You are not using the editor.'
+  not-using-editor-hint: '<t:hint>Use <cmd:/eas give> to obtain the tool.'
+
+overview:
+  - '<t:header>EasyArmorStands v<version>'
+  - '<t:hint>Use <cmd:/eas give> to get started.'
+  - '<t:hint>Use <cmd:/eas help> to browse available commands.'
+
+tool-given:
+  - '<t:success>Tool added to your inventory.'
+  - '<t:hint>Right click an entity to select it.'
+  - '<t:hint>Sneak + right click so spawn an entity.'
+  - '<t:hint>Drop to deselect an entity.'
+
+command.give: 'Gives you the editor tool'
