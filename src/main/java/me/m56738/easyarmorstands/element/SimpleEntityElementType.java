@@ -43,7 +43,8 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     public SimpleEntityElement<E> createElement(PropertyContainer properties) {
         Location location = properties.get(EntityLocationProperty.TYPE).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        EasyArmorStands.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
+        E entity = EasyArmorStands.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
+        entity.teleport(location);
         return configurator.getElement();
     }
 
