@@ -18,8 +18,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class DisplayMenuNode extends MenuNode {
+    protected final PropertyContainer container;
     private final Session session;
-    private final PropertyContainer container;
     private final AxisAlignedBoxParticle boxParticle;
     private final Property<Location> locationProperty;
     private final Property<Float> widthProperty;

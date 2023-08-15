@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,10 +48,10 @@ public class SessionListener implements Listener {
         return Util.isTool(item) && player.hasPermission("easyarmorstands.edit");
     }
 
-    public boolean onLeftClick(Player player, ItemStack item) {
+    public boolean onLeftClick(Player player, ItemStack item, Block block) {
         Session session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, null));
+            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, null, block));
             return true;
         }
         return isTool(player, item);
@@ -59,16 +60,16 @@ public class SessionListener implements Listener {
     public boolean onLeftClickEntity(Player player, Entity entity, ItemStack item) {
         Session session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, entity));
+            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, entity, null));
             return true;
         }
-        return onLeftClick(player, item);
+        return onLeftClick(player, item, null);
     }
 
-    public boolean onRightClick(Player player, ItemStack item) {
+    public boolean onRightClick(Player player, ItemStack item, Block block) {
         Session session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, null));
+            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, null, block));
             return true;
         }
         if (!isTool(player, item)) {
@@ -84,10 +85,10 @@ public class SessionListener implements Listener {
     public boolean onRightClickEntity(Player player, Entity entity, ItemStack item) {
         Session session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, entity));
+            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, entity, null));
             return true;
         }
-        return onRightClick(player, item);
+        return onRightClick(player, item, null);
     }
 
     @EventHandler
@@ -97,7 +98,7 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (onLeftClick(event.getPlayer(), event.getItem())) {
+        if (onLeftClick(event.getPlayer(), event.getItem(), event.getClickedBlock())) {
             event.setCancelled(true);
         }
     }
@@ -107,7 +108,7 @@ public class SessionListener implements Listener {
         Player player = event.getPlayer();
         EntityEquipment equipment = player.getEquipment();
         ItemStack item = equipmentCapability.getItem(equipment, event.getHand());
-        if (onLeftClick(player, item)) {
+        if (onLeftClick(player, item, null)) {
             event.setCancelled(true);
         }
     }
@@ -162,7 +163,7 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (onRightClick(event.getPlayer(), event.getItem())) {
+        if (onRightClick(event.getPlayer(), event.getItem(), event.getClickedBlock())) {
             event.setCancelled(true);
         }
     }
