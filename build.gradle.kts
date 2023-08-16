@@ -38,6 +38,12 @@ tasks {
         options.encoding = "UTF-8"
     }
 
+    javadoc {
+        options.encoding = "UTF-8"
+        isFailOnError = true
+        (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:all,-missing", "-quiet")
+    }
+
     withType<AbstractArchiveTask>().configureEach {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
@@ -71,6 +77,8 @@ tasks {
 
 java {
     disableAutoTargetJvm()
+    withSourcesJar()
+    withJavadocJar()
 }
 
 fun registerSourceSet(name: String) {
@@ -154,11 +162,12 @@ dependencies {
 
 publishing {
     repositories {
-        val snapshotUrl = "https://repo.bundlegroup.gg/snapshots"
-        val releaseUrl = "https://repo.bundlegroup.gg/releases"
-        maven(if (version.toString().endsWith("-SNAPSHOT")) snapshotUrl else releaseUrl) {
-            name = "bundlegroup"
+        maven("https://ci.mg-dev.eu/plugin/repository/everything") {
+            name = "MGDev"
             credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
         }
     }
 
