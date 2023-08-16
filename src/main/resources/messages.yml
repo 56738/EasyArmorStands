@@ -17,7 +17,7 @@ overview:
 tool-given:
   - '<t:success>Tool added to your inventory.'
   - '<t:hint>Right click an entity to select it.'
-  - '<t:hint>Sneak + right click so spawn an entity.'
+  - '<t:hint>Sneak + right click to spawn an entity.'
   - '<t:hint>Drop to deselect an entity.'
 
 command.give: 'Gives you the editor tool'
