@@ -21,7 +21,6 @@ import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
-import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -29,7 +28,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,13 +36,11 @@ import java.util.stream.Collectors;
 public class GlobalCommands {
     private final CommandManager<EasCommandSender> commandManager;
     private final MinecraftHelp<EasCommandSender> help;
-    private final SessionManager sessionManager;
     private final SessionListener sessionListener;
 
-    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionManager sessionManager, SessionListener sessionListener) {
+    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionListener sessionListener) {
         this.commandManager = commandManager;
         this.help = new MinecraftHelp<>("/eas help", s -> s, commandManager);
-        this.sessionManager = sessionManager;
         this.sessionListener = sessionListener;
     }
 
@@ -120,8 +116,8 @@ public class GlobalCommands {
             ));
         }
 
-        if (sender.get() instanceof Player) {
-            Session session = sessionManager.getSession(((Player) sender.get()));
+        if (sender instanceof EasPlayer) {
+            Session session = ((EasPlayer) sender).session();
             Element element = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));

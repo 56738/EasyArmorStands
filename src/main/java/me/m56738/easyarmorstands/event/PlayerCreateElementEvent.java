@@ -16,7 +16,7 @@ public class PlayerCreateElementEvent extends PlayerEvent implements Cancellable
     public PlayerCreateElementEvent(Player who, ElementType type, PropertyContainer properties) {
         super(who);
         this.type = type;
-        this.properties = properties;
+        this.properties = PropertyContainer.immutable(properties);
     }
 
     public static HandlerList getHandlerList() {

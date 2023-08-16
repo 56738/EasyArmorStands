@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 
 public class ElementCreateAction extends ElementPresenceAction {
     public ElementCreateAction(Element element) {
@@ -10,13 +10,13 @@ public class ElementCreateAction extends ElementPresenceAction {
     }
 
     @Override
-    public boolean execute(Player player) {
-        return create(player);
+    public boolean execute(ChangeContext context) {
+        return create(context);
     }
 
     @Override
-    public boolean undo(Player player) {
-        return destroy(player);
+    public boolean undo(ChangeContext context) {
+        return destroy(context);
     }
 
     @Override

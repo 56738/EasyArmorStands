@@ -31,7 +31,7 @@ public class ItemPropertySlot implements MenuSlot {
     @Override
     public void onClick(MenuClick click) {
         String permission = property.getType().getPermission();
-        if (permission != null && !click.player().hasPermission(permission)) {
+        if (permission != null && !click.player().permissions().test(permission)) {
             return;
         }
         click.allow();

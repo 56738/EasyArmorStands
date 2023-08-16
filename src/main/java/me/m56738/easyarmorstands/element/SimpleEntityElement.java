@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.node.Button;
@@ -15,7 +16,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement {
     private final E entity;
@@ -63,13 +63,13 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public void openMenu(Player player) {
+    public void openMenu(EasPlayer player) {
         SplitMenuBuilder builder = new SplitMenuBuilder();
-        PropertyContainer container = PropertyContainer.tracked(this, player);
+        PropertyContainer container = PropertyContainer.tracked(player, this);
         Component title = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
         populateMenu(player, builder, container);
-        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player, this, builder, container, title));
-        player.openInventory(builder.build(title).getInventory());
+        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player.get(), this, builder, container, title));
+        player.get().openInventory(builder.build(title).getInventory());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         return entity instanceof LivingEntity;
     }
 
-    protected void populateMenu(Player player, SplitMenuBuilder builder, PropertyContainer container) {
+    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer container) {
     }
 
     @Override

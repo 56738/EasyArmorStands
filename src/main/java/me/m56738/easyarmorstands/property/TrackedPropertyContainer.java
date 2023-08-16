@@ -1,10 +1,9 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.PropertyAction;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,18 +12,18 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @see PropertyContainer#tracked(Element, Player)
+ * @see PropertyContainer#tracked(ChangeContext, Element)
  */
 class TrackedPropertyContainer extends PropertyWrapperContainer {
     private final Element element;
-    private final Player player;
+    private final ChangeContext context;
     private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
     private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
 
-    TrackedPropertyContainer(Element element, Player player) {
-        super(PropertyContainer.identified(element.getProperties(), player));
+    TrackedPropertyContainer(Element element, ChangeContext context) {
+        super(PropertyContainer.identified(context, element.getProperties()));
         this.element = element;
-        this.player = player;
+        this.context = context;
     }
 
     @Override
@@ -44,7 +43,7 @@ class TrackedPropertyContainer extends PropertyWrapperContainer {
                 actions.add(key.createChangeAction(oldValue, value));
             }
         }
-        EasyArmorStands.getInstance().getHistory(player).push(actions);
+        context.history().push(actions);
         originalValues.clear();
         pendingValues.clear();
         super.commit();

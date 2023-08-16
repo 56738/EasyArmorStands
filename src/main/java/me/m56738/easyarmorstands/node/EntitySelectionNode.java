@@ -32,7 +32,7 @@ public class EntitySelectionNode extends MenuNode {
     public void onUpdate(Vector3dc eyes, Vector3dc target) {
         Set<Entity> notSeen = new HashSet<>(buttons.keySet());
         double range = session.getRange();
-        Player player = session.getPlayer();
+        Player player = session.getPlayer().get();
         Location location = player.getLocation();
         for (Entity entity : location.getWorld().getNearbyEntities(location, range, range, range)) {
             if (entity.getLocation().distanceSquared(location) > range * range) {
@@ -79,7 +79,7 @@ public class EntitySelectionNode extends MenuNode {
                 }
             }
 
-            Player player = session.getPlayer();
+            Player player = session.getPlayer().get();
             if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
                 Session.openSpawnMenu(player);
                 return true;

@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -36,7 +37,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
         this.session = session;
         this.entity = entity;
         this.element = element;
-        PropertyContainer container = PropertyContainer.tracked(element, session.getPlayer());
+        PropertyContainer container = PropertyContainer.tracked(session.getPlayer(), element);
 
         setRoot(true);
 
@@ -125,7 +126,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
                 updateSkeleton(e);
                 VisibilityCapability visibilityCapability = plugin.getCapability(VisibilityCapability.class);
                 if (visibilityCapability != null) {
-                    Player player = session.getPlayer();
+                    Player player = session.getPlayer().get();
                     for (Player other : Bukkit.getOnlinePlayers()) {
                         if (player != other) {
                             visibilityCapability.hideEntity(other, plugin, e);
@@ -164,8 +165,8 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
 
     @Override
     public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
-        Player player = session.getPlayer();
-        if (context.getType() == ClickType.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
+        EasPlayer player = session.getPlayer();
+        if (context.getType() == ClickType.LEFT_CLICK && player.permissions().test("easyarmorstands.open")) {
             element.openMenu(player);
             return true;
         }

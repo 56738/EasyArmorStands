@@ -3,11 +3,12 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
+import me.m56738.easyarmorstands.menu.FakeLeftClick;
 import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.ClickContext;
@@ -15,13 +16,11 @@ import me.m56738.easyarmorstands.node.ElementNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
@@ -47,8 +46,7 @@ public final class Session {
     public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
-    private final Player player;
-    private final Audience audience;
+    private final EasPlayer player;
     private final Set<Particle> particles = new HashSet<>();
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
@@ -62,9 +60,8 @@ public final class Session {
     private Component pendingActionBar = Component.empty();
     private int overlayTicks;
 
-    public Session(Player player) {
+    public Session(EasPlayer player) {
         this.player = player;
-        this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
     }
 
     public static void openSpawnMenu(Player player) {
@@ -81,7 +78,7 @@ public final class Session {
         Menu menu = builder.build(Component.text("Spawn"));
         if (size == 1) {
             // Only one button, click it immediately
-            menu.getSlot(0).onClick(new MenuClick.FakeLeftClick(menu, 0, player));
+            menu.getSlot(0).onClick(new FakeLeftClick(menu, 0, player));
         } else {
             player.openInventory(menu.getInventory());
         }
@@ -163,9 +160,8 @@ public final class Session {
             return false;
         }
         clickTicks = 5;
-        Location eyeLocation = player.getEyeLocation();
-        Vector3dc eyes = Util.toVector3d(eyeLocation);
-        Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
+        Vector3dc eyes = player.eyePosition();
+        Vector3dc target = eyes.fma(getRange(), player.eyeDirection(), new Vector3d());
         return node.onClick(eyes, target, context);
     }
 
@@ -210,9 +206,8 @@ public final class Session {
 
         Node currentNode = nodeStack.peek();
         if (currentNode != null) {
-            Location eyeLocation = player.getEyeLocation();
-            Vector3dc eyes = Util.toVector3d(eyeLocation);
-            Vector3dc target = eyes.fma(getRange(), Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
+            Vector3dc eyes = player.eyePosition();
+            Vector3dc target = eyes.fma(getRange(), player.eyeDirection(), new Vector3d());
             currentNode.onUpdate(eyes, target);
         }
         for (Node node : nodeStack) {
@@ -237,27 +232,27 @@ public final class Session {
         boolean resendOverlay = overlayTicks >= 20;
         if (resendOverlay) {
             overlayTicks = 0;
-            audience.sendTitlePart(TitlePart.TIMES, titleTimes);
+            player.sendTitlePart(TitlePart.TIMES, titleTimes);
         }
         overlayTicks++;
 
         if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
             currentTitle = pendingTitle;
             currentSubtitle = pendingSubtitle;
-            audience.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
-            audience.sendTitlePart(TitlePart.TITLE, currentTitle);
+            player.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
+            player.sendTitlePart(TitlePart.TITLE, currentTitle);
         }
 
         if (resendOverlay || !Objects.equals(currentActionBar, pendingActionBar)) {
             currentActionBar = pendingActionBar;
-            audience.sendActionBar(currentActionBar);
+            player.sendActionBar(currentActionBar);
         }
     }
 
     private boolean isHoldingTool() {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
-        EntityEquipment equipment = player.getEquipment();
+        EntityEquipment equipment = player.get().getEquipment();
         for (EquipmentSlot hand : equipmentCapability.getHands()) {
             ItemStack item = equipmentCapability.getItem(equipment, hand);
             if (Util.isTool(item)) {
@@ -276,21 +271,21 @@ public final class Session {
             node.onRemove();
         }
         nodeStack.clear();
-        audience.clearTitle();
-        audience.sendActionBar(Component.empty());
+        player.clearTitle();
+        player.sendActionBar(Component.empty());
         for (Particle particle : particles) {
-            particle.hide(player);
+            particle.hide(player.get());
         }
         particles.clear();
         valid = false;
     }
 
-    public Player getPlayer() {
+    public EasPlayer getPlayer() {
         return player;
     }
 
     public World getWorld() {
-        return player.getWorld();
+        return player.get().getWorld();
     }
 
     public double getRange() {
@@ -322,7 +317,7 @@ public final class Session {
             return;
         }
         if (particles.add(particle)) {
-            particle.show(player);
+            particle.show(player.get());
         }
     }
 
@@ -331,7 +326,7 @@ public final class Session {
             return;
         }
         if (particles.remove(particle)) {
-            particle.hide(player);
+            particle.hide(player.get());
         }
     }
 

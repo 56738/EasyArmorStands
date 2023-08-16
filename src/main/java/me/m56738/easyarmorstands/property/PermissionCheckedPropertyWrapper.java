@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.property;
 
-import org.bukkit.entity.Player;
+import net.kyori.adventure.permission.PermissionChecker;
 import org.jetbrains.annotations.Nullable;
 
-class PlayerPropertyWrapper<T> implements Property<T> {
+class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     private final Property<T> property;
-    private final Player player;
+    private final PermissionChecker permissionChecker;
     private Boolean hasPermissionCache;
 
-    PlayerPropertyWrapper(Property<T> property, Player player) {
+    PermissionCheckedPropertyWrapper(Property<T> property, PermissionChecker permissionChecker) {
         this.property = property;
-        this.player = player;
+        this.permissionChecker = permissionChecker;
     }
 
     public boolean hasPermission() {
@@ -21,7 +21,7 @@ class PlayerPropertyWrapper<T> implements Property<T> {
         String permission = property.getType().getPermission();
         boolean result;
         if (permission != null) {
-            result = player.hasPermission(permission);
+            result = permissionChecker.test(permission);
         } else {
             result = true;
         }

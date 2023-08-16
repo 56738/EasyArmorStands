@@ -1,11 +1,9 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.PositionBone;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Cursor3D;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -26,9 +24,9 @@ public class CarryNode extends EditNode {
 
     @Override
     public void onEnter() {
-        Location location = session.getPlayer().getLocation();
+        Vector3dc position = session.getPlayer().position();
         initialPosition.set(bone.getPosition());
-        initialPosition.sub(Util.toVector3d(location), initialOffset);
+        initialPosition.sub(position, initialOffset);
         cursor.start(initialPosition);
     }
 
@@ -39,17 +37,17 @@ public class CarryNode extends EditNode {
 
     protected void update() {
         cursor.update(false);
-        Player player = session.getPlayer();
-        Location location = player.getLocation();
-        if (location.getPitch() > 80) {
-            currentPosition.set(location.getX(), location.getY(), location.getZ());
+        EasPlayer player = session.getPlayer();
+        Vector3dc position = player.position();
+        if (player.pitch() > 80) {
+            currentPosition.set(position);
         } else {
             Vector3dc cursor = this.cursor.get();
             currentPosition.x = session.snap(cursor.x() - initialPosition.x) + initialPosition.x;
             currentPosition.y = session.snap(cursor.y() - initialPosition.y) + initialPosition.y;
             currentPosition.z = session.snap(cursor.z() - initialPosition.z) + initialPosition.z;
             if (!player.isFlying()) {
-                currentPosition.y = location.getY() + initialOffset.y;
+                currentPosition.y = position.y() + initialOffset.y;
             }
         }
     }

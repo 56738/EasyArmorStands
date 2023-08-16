@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementReference;
 import me.m56738.easyarmorstands.property.Property;
@@ -7,7 +8,6 @@ import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -25,21 +25,21 @@ public class PropertyAction<T> implements Action {
     }
 
     @Override
-    public boolean execute(Player player) {
-        return tryChange(newValue, player);
+    public boolean execute(ChangeContext context) {
+        return tryChange(newValue, context);
     }
 
     @Override
-    public boolean undo(Player player) {
-        return tryChange(oldValue, player);
+    public boolean undo(ChangeContext context) {
+        return tryChange(oldValue, context);
     }
 
-    private boolean tryChange(T value, Player player) {
+    private boolean tryChange(T value, ChangeContext context) {
         Element element = elementReference.getElement();
         if (element == null) {
             return false;
         }
-        PropertyContainer properties = PropertyContainer.identified(element.getProperties(), player);
+        PropertyContainer properties = PropertyContainer.identified(context, element.getProperties());
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;

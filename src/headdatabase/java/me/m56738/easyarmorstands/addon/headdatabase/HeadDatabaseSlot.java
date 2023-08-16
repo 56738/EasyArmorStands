@@ -39,7 +39,7 @@ public class HeadDatabaseSlot implements MenuSlot {
             return;
         }
         click.queueTask(() -> {
-            Player player = click.player();
+            Player player = click.player().get();
             player.setItemOnCursor(null);
             player.performCommand("headdb");
         });

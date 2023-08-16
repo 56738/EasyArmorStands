@@ -1,9 +1,8 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.session.Session;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public class CarryWithYawNode extends CarryNode {
     private final Session session;
@@ -22,7 +21,7 @@ public class CarryWithYawNode extends CarryNode {
     public void onEnter() {
         super.onEnter();
         initialYaw = bone.getYaw();
-        yawOffset = initialYaw - session.getPlayer().getLocation().getYaw();
+        yawOffset = initialYaw - session.getPlayer().yaw();
     }
 
     @Override
@@ -33,12 +32,12 @@ public class CarryWithYawNode extends CarryNode {
     @Override
     protected void update() {
         super.update();
-        Player player = session.getPlayer();
-        Location location = player.getLocation();
-        if (location.getPitch() > 80) {
-            currentYaw = location.getYaw();
+        EasPlayer player = session.getPlayer();
+        float pitch = player.pitch();
+        if (pitch > 80) {
+            currentYaw = player.yaw();
         } else {
-            currentYaw = (float) session.snapAngle(location.getYaw() + yawOffset - initialYaw) + initialYaw;
+            currentYaw = (float) session.snapAngle(player.yaw() + yawOffset - initialYaw) + initialYaw;
         }
     }
 

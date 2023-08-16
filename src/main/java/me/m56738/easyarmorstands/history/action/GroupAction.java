@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.context.ChangeContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,19 +16,19 @@ public class GroupAction implements Action {
     }
 
     @Override
-    public boolean execute(Player player) {
+    public boolean execute(ChangeContext context) {
         boolean ok = true;
         for (Action action : actions) {
-            ok &= action.execute(player);
+            ok &= action.execute(context);
         }
         return ok;
     }
 
     @Override
-    public boolean undo(Player player) {
+    public boolean undo(ChangeContext context) {
         boolean ok = true;
         for (int i = actions.length - 1; i >= 0; i--) {
-            ok &= actions[i].undo(player);
+            ok &= actions[i].undo(context);
         }
         return ok;
     }

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.MenuElement;
 import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
@@ -40,7 +41,7 @@ public class HeadDatabaseListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        menuElement.openMenu(player);
+        menuElement.openMenu(new EasPlayer(player));
         player.setItemOnCursor(event.getHead());
     }
 

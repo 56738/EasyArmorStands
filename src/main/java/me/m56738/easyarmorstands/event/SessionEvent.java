@@ -8,7 +8,7 @@ public abstract class SessionEvent extends PlayerEvent {
     private final Session session;
 
     public SessionEvent(Session session) {
-        super(session.getPlayer());
+        super(session.getPlayer().get());
         this.session = session;
     }
 

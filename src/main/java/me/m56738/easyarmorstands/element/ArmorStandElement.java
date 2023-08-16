@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
@@ -20,7 +20,6 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
 import org.joml.Quaterniondc;
 
 import java.util.function.Consumer;
@@ -44,10 +43,10 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     @Override
-    protected void populateMenu(Player player, SplitMenuBuilder builder, PropertyContainer container) {
+    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer container) {
         super.populateMenu(player, builder, container);
 
-        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(player);
+        Session session = player.session();
         ArmorStandRootNode root = null;
         if (session != null) {
             root = session.findNode(ArmorStandRootNode.class);

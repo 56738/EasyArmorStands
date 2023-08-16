@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.menu.Menu;
@@ -26,7 +26,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
@@ -53,7 +52,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public ElementNode createNode(Session session) {
-        PropertyContainer container = PropertyContainer.tracked(this, session.getPlayer());
+        PropertyContainer container = PropertyContainer.tracked(session.getPlayer(), this);
 
         DisplayBone bone = new DisplayBone(container, DisplayLeftRotationProperty.TYPE);
 
@@ -92,7 +91,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    protected void populateMenu(Player player, SplitMenuBuilder builder, PropertyContainer properties) {
+    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer properties) {
         super.populateMenu(player, builder, properties);
 
         MenuSlot contentSlot = getContentSlot(properties);
@@ -101,7 +100,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
             builder.setSlot(Menu.index(2, 1), contentSlot);
         }
 
-        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(player);
+        Session session = player.session();
         DisplayRootNode root = null;
         if (session != null) {
             root = session.findNode(DisplayRootNode.class);

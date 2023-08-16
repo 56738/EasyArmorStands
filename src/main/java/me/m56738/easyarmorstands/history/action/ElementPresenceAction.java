@@ -1,17 +1,14 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.DestroyableElement;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementReference;
 import me.m56738.easyarmorstands.element.ElementType;
 import me.m56738.easyarmorstands.element.EntityElementReference;
-import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
-import me.m56738.easyarmorstands.event.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertySnapshot;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,10 +23,8 @@ abstract class ElementPresenceAction implements Action {
         this.reference = element.getReference();
     }
 
-    protected boolean create(Player player) {
-        PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+    protected boolean create(ChangeContext context) {
+        if (!context.canCreateElement(type, properties)) {
             return false;
         }
 
@@ -48,7 +43,7 @@ abstract class ElementPresenceAction implements Action {
         return true;
     }
 
-    protected boolean destroy(Player player) {
+    protected boolean destroy(ChangeContext context) {
         if (reference == null) {
             return false;
         }
@@ -58,13 +53,12 @@ abstract class ElementPresenceAction implements Action {
             return false;
         }
 
-        PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+        DestroyableElement destroyableElement = (DestroyableElement) element;
+        if (!context.canDestroyElement(destroyableElement)) {
             return false;
         }
 
-        ((DestroyableElement) element).destroy();
+        destroyableElement.destroy();
         return true;
     }
 

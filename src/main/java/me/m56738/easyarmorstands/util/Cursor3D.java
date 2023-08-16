@@ -2,24 +2,23 @@ package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.session.Session;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.joml.Matrix3d;
+import org.joml.Matrix4d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class Cursor3D {
-    private final Player player;
+    private final EasPlayer player;
     private final Session session;
     private final PointParticle particle;
 
     private final Vector3d cursor = new Vector3d();
     private final Vector3d current = new Vector3d();
 
-    public Cursor3D(Player player, Session session) {
+    public Cursor3D(EasPlayer player, Session session) {
         this.player = player;
         this.session = session;
         this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createPoint(session.getWorld());
@@ -34,18 +33,14 @@ public class Cursor3D {
     }
 
     private void refresh() {
-        this.cursor.set(current);
-        Location eyeLocation = player.getEyeLocation();
-        this.cursor.sub(Util.toVector3d(eyeLocation));
-        this.cursor.mulTranspose(Util.getRotation(eyeLocation, new Matrix3d()));
+        player.eyeMatrix().invertAffine(new Matrix4d()).transformPosition(current, cursor);
     }
 
     public void update(boolean freeLook) {
         if (freeLook) {
             refresh();
         } else {
-            Location eyeLocation = player.getEyeLocation();
-            Util.getRotation(eyeLocation, new Matrix3d()).transform(cursor, current).add(Util.toVector3d(eyeLocation));
+            player.eyeMatrix().transformPosition(cursor, current);
         }
         particle.setPosition(current);
     }
@@ -56,8 +51,7 @@ public class Cursor3D {
 
     public void reset() {
         cursor.set(0, 0, 2);
-        Location eyeLocation = player.getEyeLocation();
-        Util.getRotation(eyeLocation, new Matrix3d()).transform(cursor, current).add(Util.toVector3d(eyeLocation));
+        player.eyeMatrix().transformPosition(cursor, current);
     }
 
     public void stop() {

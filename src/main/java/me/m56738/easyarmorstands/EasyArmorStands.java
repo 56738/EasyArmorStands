@@ -178,7 +178,7 @@ public class EasyArmorStands extends JavaPlugin {
         }
         MessageLoader.setConfig(messageConfig);
 
-        annotationParser.parse(new GlobalCommands(commandManager, sessionManager, sessionListener));
+        annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
 

@@ -5,7 +5,6 @@ import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Range;
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
@@ -20,7 +19,7 @@ public class HistoryCommands {
     @CommandPermission("easyarmorstands.history")
     @CommandDescription("View your history")
     public void history(EasPlayer sender) {
-        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+        History history = sender.history();
         if (history.getPast().isEmpty()) {
             sender.sendMessage(Component.text("Your history is empty.", NamedTextColor.GRAY));
             return;
@@ -40,13 +39,13 @@ public class HistoryCommands {
     @CommandDescription("Redo a change")
     public void redo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+        History history = sender.history();
         for (int i = 0; i < count; i++) {
             Action action = history.takeRedoAction();
             if (action != null) {
                 boolean ok;
                 try {
-                    ok = action.execute(sender.get());
+                    ok = action.execute(sender);
                 } catch (IllegalStateException e) {
                     sender.sendMessage(Component.text("Failed to redo change: ", NamedTextColor.RED)
                             .append(action.describe()));
@@ -72,13 +71,13 @@ public class HistoryCommands {
     @CommandDescription("Undo a change")
     public void undo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
-        History history = EasyArmorStands.getInstance().getHistory(sender.get());
+        History history = sender.history();
         for (int i = 0; i < count; i++) {
             Action action = history.takeUndoAction();
             if (action != null) {
                 boolean ok;
                 try {
-                    ok = action.undo(sender.get());
+                    ok = action.undo(sender);
                 } catch (IllegalStateException e) {
                     sender.sendMessage(Component.text("Failed to undo change: ", NamedTextColor.RED)
                             .append(action.describe()));

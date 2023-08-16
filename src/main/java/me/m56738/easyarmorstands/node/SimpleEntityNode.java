@@ -13,7 +13,7 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
         super(session, name);
         this.element = element;
 
-        EntityLocationBone bone = new EntityLocationBone(PropertyContainer.tracked(element, session.getPlayer()));
+        EntityLocationBone bone = new EntityLocationBone(PropertyContainer.tracked(session.getPlayer(), element));
         setRoot(true);
         addPositionButtons(session, bone, 3);
         addCarryButtonWithYaw(session, bone);

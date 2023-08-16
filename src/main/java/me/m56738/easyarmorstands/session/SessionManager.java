@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
@@ -18,7 +19,7 @@ public class SessionManager {
     private final HashMap<Player, Session> sessions = new HashMap<>();
 
     public void start(Session session) {
-        final Session old = sessions.put(session.getPlayer(), session);
+        final Session old = sessions.put(session.getPlayer().get(), session);
         if (old != null) {
             old.stop();
         }
@@ -26,7 +27,7 @@ public class SessionManager {
     }
 
     public Session start(Player player) {
-        Session session = new Session(player);
+        Session session = new Session(new EasPlayer(player));
         EntityElementProviderRegistry registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
         EntitySelectionNode node = new EntitySelectionNode(session, Component.text("Select an entity"), registry);
         node.setRoot(true);

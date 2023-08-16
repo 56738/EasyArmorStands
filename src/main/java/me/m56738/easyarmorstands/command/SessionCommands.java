@@ -14,8 +14,6 @@ import me.m56738.easyarmorstands.element.DestroyableElement;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementType;
 import me.m56738.easyarmorstands.element.MenuElement;
-import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
-import me.m56738.easyarmorstands.event.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
@@ -36,10 +34,8 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -65,7 +61,7 @@ public class SessionCommands {
 
     public static void sendNoSessionError(EasCommandSender sender) {
         sender.sendMessage(Message.ERROR_NOT_USING_EDITOR.render());
-        if (sender.get().hasPermission("easyarmorstands.give")) {
+        if (sender.permissions().test("easyarmorstands.give")) {
             sender.sendMessage(Message.ERROR_NOT_USING_EDITOR_HINT.render());
         }
     }
@@ -89,7 +85,7 @@ public class SessionCommands {
     }
 
     public static Session getSessionOrError(EasPlayer sender) {
-        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(sender.get());
+        Session session = sender.session();
         if (session == null) {
             sendNoSessionError(sender);
         }
@@ -127,7 +123,6 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.open")
     @CommandDescription("Open the menu")
     public void open(EasPlayer sender) {
-        Player player = sender.get();
         Element element = getElementOrError(sender);
         if (element == null) {
             return;
@@ -137,7 +132,7 @@ public class SessionCommands {
             return;
         }
         MenuElement menuElement = (MenuElement) element;
-        menuElement.openMenu(player);
+        menuElement.openMenu(sender);
     }
 
     @CommandMethod("open <entity>")
@@ -154,7 +149,7 @@ public class SessionCommands {
             return;
         }
         MenuElement menuElement = (MenuElement) element;
-        menuElement.openMenu(sender.get());
+        menuElement.openMenu(sender);
     }
 
     @CommandMethod("clone")
@@ -167,17 +162,13 @@ public class SessionCommands {
         }
         ElementType type = element.getType();
         PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
-
-        Player player = sender.get();
-        PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+        if (!sender.canCreateElement(type, properties)) {
             sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
             return;
         }
 
         Element clone = type.createElement(properties);
-        EasyArmorStands.getInstance().getHistory(player).push(new ElementCreateAction(clone));
+        sender.history().push(new ElementCreateAction(clone));
 
         sender.sendMessage(Component.text("Entity cloned", NamedTextColor.GREEN));
     }
@@ -202,16 +193,14 @@ public class SessionCommands {
             return;
         }
 
-        Player player = sender.get();
-        PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+        DestroyableElement destroyableElement = (DestroyableElement) element;
+        if (!sender.canDestroyElement(destroyableElement)) {
             sender.sendMessage(Component.text("Unable to destroy", NamedTextColor.RED));
             return;
         }
 
-        EasyArmorStands.getInstance().getHistoryManager().getHistory(player).push(new ElementDestroyAction(element));
-        ((DestroyableElement) element).destroy();
+        sender.history().push(new ElementDestroyAction(element));
+        destroyableElement.destroy();
         sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
     }
 
@@ -268,7 +257,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Vector3d offsetVector = new Vector3d();
         if (value == null) {
@@ -306,7 +295,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
@@ -328,7 +317,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
         location.setYaw(yaw);
@@ -349,7 +338,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Location> property = properties.get(EntityLocationProperty.TYPE);
         Location location = property.getValue();
         location.setPitch(pitch);
@@ -387,7 +376,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
         if (nameProperty == null) {
             sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
@@ -416,7 +405,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
         if (nameProperty == null) {
             sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
@@ -442,7 +431,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Boolean> property = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         if (property == null) {
             sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
@@ -465,7 +454,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(element, sender.get());
+        PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Boolean> property = properties.getOrNull(ArmorStandCanTickProperty.TYPE);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot toggle ticking for this entity.", NamedTextColor.RED));

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Material;
@@ -60,16 +61,14 @@ public class MenuListener implements Listener {
         private final MenuSlot slot;
         private final InventoryInteractEvent event;
         private final int index;
-        private final Player player;
-        private final Audience audience;
+        private final EasPlayer player;
 
         private Click(Menu menu, InventoryInteractEvent event, int index) {
             this.menu = menu;
             this.slot = menu.getSlot(index);
             this.event = event;
             this.index = index;
-            this.player = (Player) event.getWhoClicked();
-            this.audience = EasyArmorStands.getInstance().getAdventure().player(player);
+            this.player = new EasPlayer((Player) event.getWhoClicked());
         }
 
         @Override
@@ -88,7 +87,7 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public Player player() {
+        public EasPlayer player() {
             return player;
         }
 
@@ -99,13 +98,13 @@ public class MenuListener implements Listener {
 
         @Override
         public void open(Inventory inventory) {
-            queueTask(() -> player.openInventory(inventory));
+            queueTask(() -> player.get().openInventory(inventory));
         }
 
         @Override
         public void close() {
             queueTask(() -> {
-                menu.close(player);
+                menu.close(player.get());
             });
         }
 
@@ -136,7 +135,7 @@ public class MenuListener implements Listener {
 
         @Override
         public @NotNull Audience audience() {
-            return audience;
+            return player;
         }
     }
 
