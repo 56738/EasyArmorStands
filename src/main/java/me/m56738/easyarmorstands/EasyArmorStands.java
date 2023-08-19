@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands;
 
 import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.arguments.parser.ParserParameters;
 import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.bukkit.CloudBukkitCapabilities;
@@ -14,7 +13,6 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.command.Description;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
@@ -30,9 +28,6 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
-import me.m56738.easyarmorstands.message.CommandTagResolver;
-import me.m56738.easyarmorstands.message.MessageLoader;
-import me.m56738.easyarmorstands.message.TemplateTagResolver;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -43,23 +38,15 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -153,30 +140,6 @@ public class EasyArmorStands extends JavaPlugin {
                 p -> CommandMeta.simple()
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
-
-        annotationParser.registerAnnotationMapper(Description.class,
-                a -> ParserParameters.single(StandardParameters.DESCRIPTION,
-                        PlainTextComponentSerializer.plainText().serialize(a.value().render())));
-
-        MessageLoader.setSerializer(MiniMessage.builder()
-                .editTags(builder -> builder.resolvers(
-                        new CommandTagResolver(commandManager),
-                        new TemplateTagResolver(),
-                        TagResolver.resolver("version", Tag.selfClosingInserting(Component.text(getDescription().getVersion())))))
-                .build());
-
-        YamlConfiguration messageConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "messages.yml"));
-        InputStream defaultMessagesStream = getResource("messages.yml");
-        if (defaultMessagesStream != null) {
-            try (InputStreamReader reader = new InputStreamReader(defaultMessagesStream, StandardCharsets.UTF_8)) {
-                YamlConfiguration defaults = new YamlConfiguration();
-                defaults.load(reader);
-                messageConfig.setDefaults(defaults);
-            } catch (IOException | InvalidConfigurationException e) {
-                getLogger().log(Level.SEVERE, "Failed to load default messages", e);
-            }
-        }
-        MessageLoader.setConfig(messageConfig);
 
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands());

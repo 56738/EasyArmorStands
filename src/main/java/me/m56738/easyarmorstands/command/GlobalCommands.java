@@ -15,7 +15,6 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyType;
@@ -48,7 +47,28 @@ public class GlobalCommands {
     @CommandPermission("easyarmorstands.help")
     @CommandDescription("Shows an overview")
     public void showOverview(EasCommandSender sender) {
-        sender.sendMessage(Message.OVERVIEW.render());
+        if (sender.get().hasPermission("easyarmorstands.version")) {
+            String version = EasyArmorStands.getInstance().getDescription().getVersion();
+            sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
+        } else {
+            sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
+        }
+        if (sender.get().hasPermission("easyarmorstands.give")) {
+            sender.sendMessage(Component.text()
+                    .content("Use ")
+                    .append(Component.text("/eas give", NamedTextColor.YELLOW)
+                            .hoverEvent(Component.text("Obtain the editor tool"))
+                            .clickEvent(ClickEvent.runCommand("/eas give")))
+                    .append(Component.text(" to get started."))
+                    .color(NamedTextColor.GRAY));
+        }
+        sender.sendMessage(Component.text()
+                .content("Use ")
+                .append(Component.text("/eas help", NamedTextColor.YELLOW)
+                        .hoverEvent(Component.text("Show the command list"))
+                        .clickEvent(ClickEvent.runCommand("/eas help")))
+                .append(Component.text(" to browse available commands."))
+                .color(NamedTextColor.GRAY));
     }
 
     @CommandMethod("help [query]")
@@ -68,10 +88,18 @@ public class GlobalCommands {
 
     @CommandMethod("give")
     @CommandPermission("easyarmorstands.give")
-    @Description(Message.COMMAND_GIVE)
+    @CommandDescription("Gives you the editor tool")
     public void give(EasPlayer sender) {
         sender.get().getInventory().addItem(Util.createTool());
-        sender.sendMessage(Message.TOOL_GIVEN.render());
+        sender.sendMessage(Component.text(
+                "Tool added to your inventory\n",
+                NamedTextColor.GREEN
+        ).append(Component.text(
+                "Right click an entity to edit it.\n" +
+                        "Sneak + right click to spawn an entity.\n" +
+                        "Drop to stop editing.",
+                NamedTextColor.GRAY
+        )));
         sessionListener.updateHeldItem(sender.get());
     }
 

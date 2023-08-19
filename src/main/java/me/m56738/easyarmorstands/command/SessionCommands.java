@@ -16,7 +16,6 @@ import me.m56738.easyarmorstands.element.ElementType;
 import me.m56738.easyarmorstands.element.MenuElement;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -33,6 +32,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -60,10 +60,23 @@ public class SessionCommands {
     }
 
     public static void sendNoSessionError(EasCommandSender sender) {
-        sender.sendMessage(Message.ERROR_NOT_USING_EDITOR.render());
-        if (sender.permissions().test("easyarmorstands.give")) {
-            sender.sendMessage(Message.ERROR_NOT_USING_EDITOR_HINT.render());
+        TextComponent.Builder builder = Component.text()
+                .content("You are not using the editor.")
+                .color(NamedTextColor.RED);
+
+        if (sender.get().hasPermission("easyarmorstands.give")) {
+            builder.appendNewline()
+                    .append(Component.text()
+                            .content("Use ")
+                            .append(Component.text()
+                                    .content("/eas give")
+                                    .decorate(TextDecoration.UNDERLINED)
+                                    .clickEvent(ClickEvent.runCommand("/eas give")))
+                            .append(Component.text(" to obtain the tool."))
+                            .color(NamedTextColor.GRAY));
         }
+
+        sender.sendMessage(builder);
     }
 
     public static void sendNoSessionElementError(EasCommandSender sender) {
