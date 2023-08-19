@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.addon.worldguard.v6;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.EntityElement;
 import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
@@ -8,7 +9,9 @@ import me.m56738.easyarmorstands.event.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.event.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.event.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +27,10 @@ public class WorldGuardListener implements Listener {
     private final String bypassPermission = "easyarmorstands.worldguard.bypass";
 
     public WorldGuardListener() {
+    }
+
+    private static Audience audience(Player player) {
+        return EasyArmorStands.getInstance().getAdventure().player(player);
     }
 
     private boolean isAllowed(Player player, Location location) {
@@ -44,6 +51,7 @@ public class WorldGuardListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.worldguard.deny-select"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -55,6 +63,7 @@ public class WorldGuardListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.worldguard.deny-create"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -87,6 +96,7 @@ public class WorldGuardListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.worldguard.deny-destroy"));
     }
 
     private boolean canBypass(Player player) {

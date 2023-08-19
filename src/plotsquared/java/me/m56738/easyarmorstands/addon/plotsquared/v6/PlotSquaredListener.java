@@ -5,6 +5,7 @@ import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.location.Location;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.EntityElement;
 import me.m56738.easyarmorstands.event.PlayerCreateElementEvent;
@@ -12,7 +13,9 @@ import me.m56738.easyarmorstands.event.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.event.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.event.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,6 +32,10 @@ public class PlotSquaredListener implements Listener {
 
     public PlotSquaredListener(PlotAPI api) {
         this.api = api;
+    }
+
+    private static Audience audience(Player player) {
+        return EasyArmorStands.getInstance().getAdventure().player(player);
     }
 
     private boolean isAllowed(Player player, org.bukkit.Location location) {
@@ -57,6 +64,7 @@ public class PlotSquaredListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-select"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -68,6 +76,7 @@ public class PlotSquaredListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-create"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -100,6 +109,7 @@ public class PlotSquaredListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-destroy"));
     }
 
     private boolean canBypass(Player player) {

@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.element.ElementType;
 import me.m56738.easyarmorstands.element.MenuElement;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
@@ -28,11 +29,8 @@ import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -45,56 +43,42 @@ public class SessionCommands {
         String serialized = MiniMessage.miniMessage().serializeOr(text, "");
         audience.sendMessage(type
                 .append(Component.text(": "))
-                .append(Component.text("[Edit]", NamedTextColor.GRAY)
-                        .hoverEvent(Component.text("Click to edit"))
+                .append(Message.button("easyarmorstands.button.text.edit")
+                        .hoverEvent(Message.hover("easyarmorstands.click-to-edit"))
                         .clickEvent(ClickEvent.suggestCommand(command + " " + serialized)))
                 .append(Component.space())
-                .append(Component.text("[Copy]", NamedTextColor.GRAY)
-                        .hoverEvent(Component.text("Click to copy"))
+                .append(Message.button("easyarmorstands.button.text.copy")
+                        .hoverEvent(Message.hover("easyarmorstands.click-to-copy"))
                         .clickEvent(ClickEvent.copyToClipboard(serialized)))
                 .append(Component.space())
-                .append(Component.text("[Syntax]", NamedTextColor.GRAY)
-                        .hoverEvent(Component.text("Click to open the MiniMessage documentation"))
+                .append(Message.button("easyarmorstands.button.text.syntax-help")
+                        .hoverEvent(Message.hover("easyarmorstands.click-to-open-minimessage"))
                         .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))));
-        audience.sendMessage(text);
+        if (text == null) {
+            audience.sendMessage(Message.hint("easyarmorstands.hint.not-set"));
+        } else {
+            audience.sendMessage(text);
+        }
     }
 
     public static void sendNoSessionError(EasCommandSender sender) {
-        TextComponent.Builder builder = Component.text()
-                .content("You are not using the editor.")
-                .color(NamedTextColor.RED);
-
+        sender.sendMessage(Message.error("easyarmorstands.error.not-using-editor"));
         if (sender.get().hasPermission("easyarmorstands.give")) {
-            builder.appendNewline()
-                    .append(Component.text()
-                            .content("Use ")
-                            .append(Component.text()
-                                    .content("/eas give")
-                                    .decorate(TextDecoration.UNDERLINED)
-                                    .clickEvent(ClickEvent.runCommand("/eas give")))
-                            .append(Component.text(" to obtain the tool."))
-                            .color(NamedTextColor.GRAY));
+            sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
         }
-
-        sender.sendMessage(builder);
     }
 
     public static void sendNoSessionElementError(EasCommandSender sender) {
-        TextComponent.Builder builder = Component.text()
-                .content("You are not editing an entity.")
-                .color(NamedTextColor.RED)
-                .appendNewline()
-                .append(Component.text("Right click an entity to select it.", NamedTextColor.GRAY));
-
-        sender.sendMessage(builder);
+        sender.sendMessage(Message.error("easyarmorstands.error.nothing-selected"));
+        sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
     }
 
-    public static void sendNoEntityElementError(EasCommandSender sender) {
-        sender.sendMessage(Component.text("This entity cannot be edited.", NamedTextColor.RED));
+    public static void sendUnsupportedEntityError(EasCommandSender sender) {
+        sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
     }
 
     public static void sendNoEntityError(EasCommandSender sender) {
-        sender.sendMessage(Component.text("Entity not found.", NamedTextColor.RED));
+        sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
     }
 
     public static Session getSessionOrError(EasPlayer sender) {
@@ -127,7 +111,7 @@ public class SessionCommands {
         }
         Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
         if (element == null) {
-            sendNoEntityElementError(sender);
+            sendUnsupportedEntityError(sender);
         }
         return element;
     }
@@ -141,7 +125,7 @@ public class SessionCommands {
             return;
         }
         if (!(element instanceof MenuElement)) {
-            sender.sendMessage(Component.text("This entity doesn't have a menu.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
         MenuElement menuElement = (MenuElement) element;
@@ -158,7 +142,7 @@ public class SessionCommands {
             return;
         }
         if (!(element instanceof MenuElement)) {
-            sender.sendMessage(Component.text("This entity doesn't have a menu.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
         MenuElement menuElement = (MenuElement) element;
@@ -176,14 +160,13 @@ public class SessionCommands {
         ElementType type = element.getType();
         PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
         if (!sender.canCreateElement(type, properties)) {
-            sender.sendMessage(Component.text("Unable to spawn entity", NamedTextColor.RED));
             return;
         }
 
         Element clone = type.createElement(properties);
         sender.history().push(new ElementCreateAction(clone));
 
-        sender.sendMessage(Component.text("Entity cloned", NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.entity-cloned"));
     }
 
     @CommandMethod("spawn")
@@ -202,19 +185,18 @@ public class SessionCommands {
             return;
         }
         if (!(element instanceof DestroyableElement)) {
-            sender.sendMessage(Component.text("This entity cannot be destroyed", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.destroy-unsupported"));
             return;
         }
 
         DestroyableElement destroyableElement = (DestroyableElement) element;
         if (!sender.canDestroyElement(destroyableElement)) {
-            sender.sendMessage(Component.text("Unable to destroy", NamedTextColor.RED));
             return;
         }
 
         sender.history().push(new ElementDestroyAction(element));
         destroyableElement.destroy();
-        sender.sendMessage(Component.text("Entity destroyed", NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed"));
     }
 
     @CommandMethod("snap angle [value]")
@@ -234,7 +216,7 @@ public class SessionCommands {
             }
         }
         session.setAngleSnapIncrement(value);
-        sender.sendMessage(Component.text("Set angle snapping increment to " + value + "°", NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.snap-changed.angle", Component.text(value)));
     }
 
     @CommandMethod("snap move [value]")
@@ -254,7 +236,7 @@ public class SessionCommands {
             }
         }
         session.setSnapIncrement(value);
-        sender.sendMessage(Component.text("Set movement snapping increment to " + value, NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.snap-changed.position", Component.text(value)));
     }
 
     @CommandMethod("align [axis] [value] [offset]")
@@ -286,18 +268,11 @@ public class SessionCommands {
         location.setY(position.y());
         location.setZ(position.z());
         if (!property.setValue(location)) {
-            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text()
-                .content("Moved to ")
-                .append(Component.text(Util.POSITION_FORMAT.format(position.x()), TextColor.color(0xFF7777)))
-                .append(Component.text(", "))
-                .append(Component.text(Util.POSITION_FORMAT.format(position.y()), TextColor.color(0x77FF77)))
-                .append(Component.text(", "))
-                .append(Component.text(Util.POSITION_FORMAT.format(position.z()), TextColor.color(0x7777FF)))
-                .color(NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatPosition(position)));
     }
 
     @CommandMethod("position <position>")
@@ -314,12 +289,11 @@ public class SessionCommands {
         location.setYaw(oldLocation.getYaw());
         location.setPitch(oldLocation.getPitch());
         if (!property.setValue(location)) {
-            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text("Moved to ", NamedTextColor.GREEN)
-                .append(Util.formatLocation(location)));
+        sender.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatLocation(location)));
     }
 
     @CommandMethod("yaw <yaw>")
@@ -335,12 +309,11 @@ public class SessionCommands {
         Location location = property.getValue();
         location.setYaw(yaw);
         if (!property.setValue(location)) {
-            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text("Changed yaw to ", NamedTextColor.GREEN)
-                .append(Util.formatAngle(yaw)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-yaw", Util.formatAngle(yaw)));
     }
 
     @CommandMethod("pitch <pitch>")
@@ -356,12 +329,11 @@ public class SessionCommands {
         Location location = property.getValue();
         location.setPitch(pitch);
         if (!property.setValue(location)) {
-            sender.sendMessage(Component.text("Unable to move", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text("Changed pitch to ", NamedTextColor.GREEN)
-                .append(Util.formatAngle(pitch)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-pitch", Util.formatAngle(pitch)));
     }
 
     @CommandMethod("name")
@@ -374,11 +346,11 @@ public class SessionCommands {
         }
         Property<Component> property = element.getProperties().getOrNull(EntityCustomNameProperty.TYPE);
         if (property == null) {
-            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Component text = property.getValue();
-        showText(sender, Component.text("Custom name", NamedTextColor.YELLOW), text, "/eas name set");
+        showText(sender, Message.hint("easyarmorstands.hint.custom-name"), text, "/eas name set");
     }
 
     @CommandMethod("name set <value>")
@@ -392,22 +364,21 @@ public class SessionCommands {
         PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
         if (nameProperty == null) {
-            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         Component name = MiniMessage.miniMessage().deserialize(input);
         boolean hadName = nameProperty.getValue() != null;
         if (!nameProperty.setValue(name)) {
-            sender.sendMessage(Component.text("Unable to change the name", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
         if (!hadName && nameVisibleProperty != null) {
             nameVisibleProperty.setValue(true);
         }
         properties.commit();
-        sender.sendMessage(Component.text("Changed name to ", NamedTextColor.GREEN)
-                .append(name.colorIfAbsent(NamedTextColor.WHITE)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-name", name.colorIfAbsent(NamedTextColor.WHITE)));
     }
 
     @CommandMethod("name clear")
@@ -421,19 +392,19 @@ public class SessionCommands {
         PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Component> nameProperty = properties.getOrNull(EntityCustomNameProperty.TYPE);
         if (nameProperty == null) {
-            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         if (!nameProperty.setValue(null)) {
-            sender.sendMessage(Component.text("Unable to remove the name", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
         if (nameVisibleProperty != null) {
             nameVisibleProperty.setValue(false);
         }
         properties.commit();
-        sender.sendMessage(Component.text("Removed the custom name", NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.removed-name"));
     }
 
     @CommandMethod("name visible <value>")
@@ -447,16 +418,15 @@ public class SessionCommands {
         PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Boolean> property = properties.getOrNull(EntityCustomNameVisibleProperty.TYPE);
         if (property == null) {
-            sender.sendMessage(Component.text("This entity cannot be renamed.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         if (!property.setValue(visible)) {
-            sender.sendMessage(Component.text("Unable to change the name visibility", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text("Changed the custom name visibility to ", NamedTextColor.GREEN)
-                .append(property.getType().getValueComponent(visible)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-name-visibility", property.getType().getValueComponent(visible)));
     }
 
     @CommandMethod("cantick <value>")
@@ -470,16 +440,20 @@ public class SessionCommands {
         PropertyContainer properties = PropertyContainer.tracked(sender, element);
         Property<Boolean> property = properties.getOrNull(ArmorStandCanTickProperty.TYPE);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot toggle ticking for this entity.", NamedTextColor.RED));
+            if (ArmorStandCanTickProperty.isSupported()) {
+                sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));
+            } else {
+                sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported"));
+            }
             return;
         }
         if (!property.setValue(canTick)) {
-            sender.sendMessage(Component.text("Unable to change the entity ticking status.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
         properties.commit();
-        sender.sendMessage(Component.text("Changed the ticking status to ", NamedTextColor.GREEN)
-                .append(property.getType().getValueComponent(canTick)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-can-tick",
+                property.getType().getValueComponent(canTick)));
     }
 
     // TODO Restore /eas reset?
@@ -510,11 +484,8 @@ public class SessionCommands {
             @Argument(value = "value", parserName = "node_value") Object value
     ) {
         node.setValue(value);
-        sender.sendMessage(Component.text()
-                .content("Set ")
-                .append(node.getName())
-                .append(Component.text(" to "))
-                .append(node.getValueComponent(value))
-                .color(NamedTextColor.GREEN));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-value",
+                node.getName(),
+                node.getValueComponent(value)));
     }
 }

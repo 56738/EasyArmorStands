@@ -28,11 +28,11 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
+import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
-import me.m56738.easyarmorstands.update.UpdateListener;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -54,6 +54,7 @@ public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
+    private MessageManager messageManager;
     private EntityElementProviderRegistry entityElementProviderRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
@@ -74,6 +75,9 @@ public class EasyArmorStands extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
+
+        messageManager = new MessageManager(this);
+        load();
 
         try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/permissions.yml")))) {
             new PermissionLoader(this).load(YamlConfiguration.loadConfiguration(reader));
@@ -146,22 +150,38 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new HistoryCommands());
 
         addonLoader.load();
-
-        getConfig().options().copyDefaults(true);
-        getConfig().addDefault("update-check", true);
-        saveConfig();
-
-        boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
-        if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
-            updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
-            getServer().getPluginManager().registerEvents(new UpdateListener(updateManager, adventure), this);
-            getServer().getScheduler().runTaskTimerAsynchronously(this, updateManager::refresh, 0, 20 * 60 * 60 * 24);
-        }
     }
 
     @Override
     public void onDisable() {
         sessionManager.stopAllSessions();
+    }
+
+    private void load() {
+        getConfig().options().copyDefaults(true);
+        getConfig().options().header("EasyArmorStands v" + getDescription().getVersion());
+
+        messageManager.load(getDataFolder().toPath(), getConfig());
+
+        getConfig().addDefault("update-check", true);
+        boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
+        if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
+            if (updateManager == null) {
+                updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
+            }
+        } else {
+            if (updateManager != null) {
+                updateManager.unregister();
+                updateManager = null;
+            }
+        }
+
+        saveConfig();
+    }
+
+    public void reload() {
+        reloadConfig();
+        load();
     }
 
     public History getHistory(Player player) {
@@ -180,6 +200,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public CapabilityLoader getCapabilityLoader() {
         return loader;
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
     }
 
     public EntityElementProviderRegistry getEntityElementProviderRegistry() {

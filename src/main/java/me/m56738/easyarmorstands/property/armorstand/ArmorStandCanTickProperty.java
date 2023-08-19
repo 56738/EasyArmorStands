@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.property.BooleanPropertyType;
 import me.m56738.easyarmorstands.property.Property;
@@ -16,6 +17,10 @@ public class ArmorStandCanTickProperty implements Property<Boolean> {
     public ArmorStandCanTickProperty(ArmorStand entity, TickCapability tickCapability) {
         this.entity = entity;
         this.tickCapability = tickCapability;
+    }
+
+    public static boolean isSupported() {
+        return EasyArmorStands.getInstance().getCapability(TickCapability.class) != null;
     }
 
     @Override

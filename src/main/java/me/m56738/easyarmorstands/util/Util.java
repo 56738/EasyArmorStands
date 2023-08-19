@@ -6,10 +6,12 @@ import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Util {
@@ -155,15 +158,14 @@ public class Util {
         return (T) entity;
     }
 
-    public static ItemStack createTool() {
+    public static ItemStack createTool(Locale locale) {
         ItemStack item = createItem(
                 ItemType.BLAZE_ROD,
                 Component.text("EasyArmorStands", NamedTextColor.GOLD),
                 Arrays.asList(
-                        Component.text("Right click an entity to edit it.", NamedTextColor.GRAY),
-                        Component.text("Sneak + right click to spawn an entity.", NamedTextColor.GRAY),
-                        Component.text("Drop to stop editing.", NamedTextColor.GRAY)
-                )
+                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.select-entity"), locale),
+                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.spawn-entity"), locale),
+                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.deselect-entity"), locale))
         );
         ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
         if (toolCapability != null) {

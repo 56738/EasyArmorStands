@@ -7,7 +7,9 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,6 +20,8 @@ public class UpdateManager {
     private final String permission;
     private final SpigotVersionFetcher updateChecker;
     private final String spigotUrl;
+    private final UpdateListener listener;
+    private final BukkitTask timer;
     private String latestVersion;
 
     public UpdateManager(Plugin plugin, BukkitAudiences adventure, String permission, int id) {
@@ -26,6 +30,14 @@ public class UpdateManager {
         this.permission = permission;
         this.updateChecker = new SpigotVersionFetcher("https://api.spigotmc.org/simple/0.2/index.php?action=getResource&id=" + id);
         this.spigotUrl = "https://www.spigotmc.org/resources/" + id;
+        this.listener = new UpdateListener(this, adventure);
+        this.timer = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::refresh, 0, 20 * 60 * 60 * 24);
+        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+    }
+
+    public void unregister() {
+        HandlerList.unregisterAll(listener);
+        timer.cancel();
     }
 
     public void refresh() {
