@@ -6,6 +6,8 @@ public enum MessageStyle {
     WARNING,
     ERROR,
     HINT,
-    BUTTON,
-    HOVER
+    CHAT_BUTTON,
+    HOVER,
+    BUTTON_NAME,
+    BUTTON_DESCRIPTION
 }

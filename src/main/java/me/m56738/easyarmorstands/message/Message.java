@@ -58,12 +58,12 @@ public class Message {
         return messageManager.format(MessageStyle.HINT, component(key, args));
     }
 
-    public static Component button(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.BUTTON, component(key));
+    public static Component chatButton(@PropertyKey(resourceBundle = BUNDLE) String key) {
+        return messageManager.format(MessageStyle.CHAT_BUTTON, component(key));
     }
 
-    public static Component button(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.BUTTON, component(key, args));
+    public static Component chatButton(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
+        return messageManager.format(MessageStyle.CHAT_BUTTON, component(key, args));
     }
 
     public static HoverEventSource<Component> hover(@PropertyKey(resourceBundle = BUNDLE) String key) {
@@ -72,6 +72,22 @@ public class Message {
 
     public static HoverEventSource<Component> hover(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
         return messageManager.format(MessageStyle.HOVER, component(key, args));
+    }
+
+    public static Component buttonName(@PropertyKey(resourceBundle = BUNDLE) String key) {
+        return messageManager.format(MessageStyle.BUTTON_NAME, component(key));
+    }
+
+    public static Component buttonName(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
+        return messageManager.format(MessageStyle.BUTTON_NAME, component(key, args));
+    }
+
+    public static Component buttonDescription(@PropertyKey(resourceBundle = BUNDLE) String key) {
+        return messageManager.format(MessageStyle.BUTTON_DESCRIPTION, component(key));
+    }
+
+    public static Component buttonDescription(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
+        return messageManager.format(MessageStyle.BUTTON_DESCRIPTION, component(key, args));
     }
 
     public static Component component(@PropertyKey(resourceBundle = BUNDLE) String key) {

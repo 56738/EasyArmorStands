@@ -42,15 +42,15 @@ public class SessionCommands {
         audience.sendMessage(Component.text()
                 .append(Message.title(type))
                 .append(Component.space())
-                .append(Message.button("easyarmorstands.button.text.edit")
+                .append(Message.chatButton("easyarmorstands.button.text.edit")
                         .hoverEvent(Message.hover("easyarmorstands.click-to-edit"))
                         .clickEvent(ClickEvent.suggestCommand(command + " " + serialized)))
                 .append(Component.space())
-                .append(Message.button("easyarmorstands.button.text.copy")
+                .append(Message.chatButton("easyarmorstands.button.text.copy")
                         .hoverEvent(Message.hover("easyarmorstands.click-to-copy"))
                         .clickEvent(ClickEvent.copyToClipboard(serialized)))
                 .append(Component.space())
-                .append(Message.button("easyarmorstands.button.text.syntax-help")
+                .append(Message.chatButton("easyarmorstands.button.text.syntax-help")
                         .hoverEvent(Message.hover("easyarmorstands.click-to-open-minimessage"))
                         .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))));
         if (text == null) {

@@ -9,7 +9,6 @@ import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -45,7 +44,7 @@ public class SessionListener implements Listener {
     }
 
     private boolean isTool(Player player, ItemStack item) {
-        return Util.isTool(item) && player.hasPermission("easyarmorstands.edit");
+        return EasyArmorStands.getInstance().isTool(item) && player.hasPermission("easyarmorstands.edit");
     }
 
     public boolean onLeftClick(Player player, ItemStack item, Block block) {
@@ -236,7 +235,7 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (Util.isTool(item)) {
+            if (EasyArmorStands.getInstance().isTool(item)) {
                 event.getInventory().setResult(null);
                 break;
             }

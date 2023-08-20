@@ -21,7 +21,6 @@ import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.type.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -82,7 +81,7 @@ public class GlobalCommands {
     @CommandDescription("Gives you the editor tool")
     public void give(EasPlayer sender) {
         Locale locale = sender.pointers().getOrDefault(Identity.LOCALE, Locale.US);
-        sender.get().getInventory().addItem(Util.createTool(locale));
+        sender.get().getInventory().addItem(EasyArmorStands.getInstance().createTool(locale));
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));

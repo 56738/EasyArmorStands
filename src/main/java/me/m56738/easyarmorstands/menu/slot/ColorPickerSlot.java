@@ -11,7 +11,6 @@ import me.m56738.easyarmorstands.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -34,10 +33,8 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     public ItemStack getItem(Locale locale) {
         ItemStack item = Util.createItem(
                 ItemType.LEATHER_CHESTPLATE,
-                Message.component("easyarmorstands.menu.color-picker.open").color(NamedTextColor.BLUE),
-                active ? Collections.singletonList(
-                        Message.component("easyarmorstands.menu.color-picker.click-target")
-                                .color(NamedTextColor.GRAY))
+                Message.buttonName("easyarmorstands.menu.color-picker.open"),
+                active ? Collections.singletonList(Message.buttonDescription("easyarmorstands.menu.color-picker.click-target"))
                         : Collections.emptyList(),
                 locale
         );

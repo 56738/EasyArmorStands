@@ -13,6 +13,7 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
@@ -35,11 +36,16 @@ import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
+import me.m56738.easyarmorstands.util.ConfigUtil;
+import me.m56738.easyarmorstands.util.ItemTemplate;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +56,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class EasyArmorStands extends JavaPlugin {
@@ -62,6 +70,7 @@ public class EasyArmorStands extends JavaPlugin {
     private HistoryManager historyManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
+    private ItemTemplate toolTemplate;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
@@ -160,6 +169,8 @@ public class EasyArmorStands extends JavaPlugin {
 
         messageManager.load(getDataFolder().toPath(), getConfig());
 
+        toolTemplate = ConfigUtil.getItem(getConfig(), "tool").editMeta(this::configureTool);
+
         boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
         if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
             if (updateManager == null) {
@@ -175,6 +186,13 @@ public class EasyArmorStands extends JavaPlugin {
         saveConfig();
 
         loadProperties();
+    }
+
+    private void configureTool(ItemMeta meta) {
+        ToolCapability toolCapability = getCapability(ToolCapability.class);
+        if (toolCapability != null) {
+            toolCapability.configureTool(meta);
+        }
     }
 
     private void loadProperties() {
@@ -253,5 +271,31 @@ public class EasyArmorStands extends JavaPlugin {
 
     public AnnotationParser<EasCommandSender> getAnnotationParser() {
         return annotationParser;
+    }
+
+    public ItemStack createTool(Locale locale) {
+        return toolTemplate.render(locale, TagResolver.empty());
+    }
+
+    public boolean isTool(ItemStack item) {
+        if (item == null) {
+            return false;
+        }
+        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
+        if (toolCapability != null) {
+            return toolCapability.isTool(item);
+        }
+
+        // Tool capability is not supported
+        // Match any item with the right material and any customized display name
+        // TODO Add NBT implementation for tool capability to avoid this
+        if (!Objects.equals(toolTemplate.getType(), item.getType())) {
+            return false;
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+        return meta.hasDisplayName();
     }
 }

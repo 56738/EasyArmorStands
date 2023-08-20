@@ -5,15 +5,12 @@ import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
-import me.m56738.easyarmorstands.capability.tool.ToolCapability;
-import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.RGBLike;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -35,7 +32,6 @@ import org.joml.Vector3dc;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -156,42 +152,6 @@ public class Util {
             return null;
         }
         return (T) entity;
-    }
-
-    public static ItemStack createTool(Locale locale) {
-        ItemStack item = createItem(
-                ItemType.BLAZE_ROD,
-                Message.component("easyarmorstands.tool-name").color(NamedTextColor.GOLD),
-                Arrays.asList(
-                        Message.hint("easyarmorstands.hint.select-entity"),
-                        Message.hint("easyarmorstands.hint.spawn-entity"),
-                        Message.hint("easyarmorstands.hint.deselect-entity")),
-                locale);
-        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
-        if (toolCapability != null) {
-            ItemMeta meta = item.getItemMeta();
-            toolCapability.configureTool(meta);
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
-    public static boolean isTool(ItemStack item) {
-        if (item == null) {
-            return false;
-        }
-        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
-        if (toolCapability != null) {
-            return toolCapability.isTool(item);
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-        if (!meta.hasDisplayName()) {
-            return false;
-        }
-        return meta.getDisplayName().equals(ChatColor.GOLD + "EasyArmorStands");
     }
 
     @Deprecated

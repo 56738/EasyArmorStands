@@ -259,7 +259,7 @@ public final class Session {
         EntityEquipment equipment = player.get().getEquipment();
         for (EquipmentSlot hand : equipmentCapability.getHands()) {
             ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (Util.isTool(item)) {
+            if (EasyArmorStands.getInstance().isTool(item)) {
                 return true;
             }
         }

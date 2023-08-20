@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -24,9 +23,9 @@ public class DestroySlot implements MenuSlot {
     public ItemStack getItem(Locale locale) {
         return Util.createItem(
                 ItemType.TNT,
-                Message.component("easyarmorstands.menu.destroy").color(NamedTextColor.BLUE),
+                Message.buttonName("easyarmorstands.menu.destroy"),
                 Collections.singletonList(
-                        Message.component("easyarmorstands.menu.destroy.description").color(NamedTextColor.GRAY)),
+                        Message.buttonDescription("easyarmorstands.menu.destroy.description")),
                 locale
         );
     }

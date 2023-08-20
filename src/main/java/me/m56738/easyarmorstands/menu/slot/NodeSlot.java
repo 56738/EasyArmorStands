@@ -33,9 +33,9 @@ public class NodeSlot implements MenuSlot {
     @Override
     public ItemStack getItem(Locale locale) {
         List<Component> description = new ArrayList<>();
-        description.add(Message.component("easyarmorstands.menu.node.left-click-to-select").color(NamedTextColor.GRAY));
+        description.add(Message.buttonDescription("easyarmorstands.menu.node.left-click-to-select"));
         if (resetAction != null) {
-            description.add(Message.component("easyarmorstands.menu.node.right-click-to-reset").color(NamedTextColor.GRAY));
+            description.add(Message.buttonDescription("easyarmorstands.menu.node.right-click-to-reset"));
         }
         return Util.createItem(
                 type,

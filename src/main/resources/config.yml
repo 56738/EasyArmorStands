@@ -8,11 +8,21 @@ format:
   warning: <yellow><message>
   error: <red><message>
   hint: <gray><message>
-  button: <gray>[<message>]
+  chat-button: <gray>[<message>]
   hover: <gray><message>
+  button-name: <blue><message>
+  button-description: <gray><message>
 
 menu:
   spawn:
     title: <lang:easyarmorstands.menu.spawn.title>
   color-picker:
     title: <lang:easyarmorstands.menu.color-picker.title>
+
+tool:
+  type: blaze_rod
+  name: <gold><lang:easyarmorstands.tool-name>
+  description:
+    - <gray><lang:easyarmorstands.hint.select-entity>
+    - <gray><lang:easyarmorstands.hint.spawn-entity>
+    - <gray><lang:easyarmorstands.hint.deselect-entity>

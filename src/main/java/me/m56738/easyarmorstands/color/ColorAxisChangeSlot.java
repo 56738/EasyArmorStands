@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.color;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -38,9 +37,9 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
     @Override
     protected List<Component> getDescription(Locale locale) {
         List<Component> description = new ArrayList<>(super.getDescription(locale));
-        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change").color(NamedTextColor.GRAY), locale));
-        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change.right-click").color(NamedTextColor.GRAY), locale));
-        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change.shift-click").color(NamedTextColor.GRAY), locale));
+        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change"), locale));
+        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change.right-click"), locale));
+        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change.shift-click"), locale));
         return description;
     }
 
