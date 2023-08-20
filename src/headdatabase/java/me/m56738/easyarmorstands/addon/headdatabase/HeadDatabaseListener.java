@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.addon.headdatabase;
 
-import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -14,10 +13,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class HeadDatabaseListener implements Listener {
+    private final HeadDatabaseAddon addon;
     private final EasyArmorStands plugin;
-    private final HeadDatabaseAPI api = new HeadDatabaseAPI();
 
-    public HeadDatabaseListener(EasyArmorStands plugin) {
+    public HeadDatabaseListener(HeadDatabaseAddon addon, EasyArmorStands plugin) {
+        this.addon = addon;
         this.plugin = plugin;
     }
 
@@ -48,7 +48,7 @@ public class HeadDatabaseListener implements Listener {
     @EventHandler
     public void onMenuInitialize(EntityElementMenuInitializeEvent event) {
         if (event.getElement().hasItemSlots() && event.getPlayer().hasPermission("headdb.open")) {
-            event.getMenuBuilder().addUtility(new HeadDatabaseSlot(api));
+            event.getMenuBuilder().addUtility(new HeadDatabaseSlot(addon));
         }
     }
 }

@@ -3,12 +3,9 @@ package me.m56738.easyarmorstands.session.v1_19_4;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,26 +32,17 @@ public class DisplaySessionListener implements Listener {
         if (player.hasPermission("easyarmorstands.spawn.itemdisplay")) {
             builder.addButton(new SpawnSlot(
                     addon.getItemDisplayType(),
-                    Util.createItem(
-                            ItemType.STICK,
-                            entityTypeCapability.getName(EntityType.ITEM_DISPLAY),
-                            locale)));
+                    addon.getItemDisplayType().getButtonTemplate()));
         }
         if (player.hasPermission("easyarmorstands.spawn.blockdisplay")) {
             builder.addButton(new SpawnSlot(
                     addon.getBlockDisplayType(),
-                    Util.createItem(
-                            ItemType.STONE,
-                            entityTypeCapability.getName(EntityType.BLOCK_DISPLAY),
-                            locale)));
+                    addon.getBlockDisplayType().getButtonTemplate()));
         }
         if (player.hasPermission("easyarmorstands.spawn.textdisplay")) {
             builder.addButton(new SpawnSlot(
                     addon.getTextDisplayType(),
-                    Util.createItem(
-                            ItemType.NAME_TAG,
-                            entityTypeCapability.getName(EntityType.TEXT_DISPLAY),
-                            locale)));
+                    addon.getTextDisplayType().getButtonTemplate()));
         }
     }
 

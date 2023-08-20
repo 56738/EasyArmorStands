@@ -19,7 +19,7 @@ public class EnumTogglePropertyType<T extends Enum<T>> extends EnumPropertyType<
     @Override
     public void load(ConfigurationSection config) {
         super.load(config);
-        buttonTemplate = ConfigUtil.getItem(config, "button");
+        buttonTemplate = ConfigUtil.getButton(config, "button");
     }
 
     @Override

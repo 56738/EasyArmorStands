@@ -27,4 +27,8 @@ public class WorldGuardAddon implements Addon {
     public void enable(EasyArmorStands plugin) {
         plugin.getServer().getPluginManager().registerEvents(new WorldGuardListener(), plugin);
     }
+
+    @Override
+    public void reload(EasyArmorStands plugin) {
+    }
 }

@@ -13,6 +13,7 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
@@ -36,13 +37,17 @@ import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
+import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ConfigUtil;
 import me.m56738.easyarmorstands.util.ItemTemplate;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,6 +61,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -71,6 +77,13 @@ public class EasyArmorStands extends JavaPlugin {
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
     private ItemTemplate toolTemplate;
+    private ItemTemplate backgroundTemplate;
+    private ItemTemplate destroyButtonTemplate;
+    private ItemTemplate colorPickerButtonTemplate;
+    private ItemTemplate colorPickerActiveButtonTemplate;
+    private ItemTemplate armorStandButtonTemplate;
+    private ItemTemplate armorStandPositionButtonTemplate;
+    private EnumMap<ArmorStandPart, ItemTemplate> armorStandPartButtonTemplates;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
@@ -164,15 +177,24 @@ public class EasyArmorStands extends JavaPlugin {
     }
 
     private void load() {
-        getConfig().options().copyDefaults(true);
-        getConfig().options().header("EasyArmorStands v" + getDescription().getVersion());
+        FileConfiguration config = getConfig();
 
-        messageManager.load(getDataFolder().toPath(), getConfig());
+        messageManager.load(getDataFolder().toPath(), config);
 
-        toolTemplate = ConfigUtil.getItem(getConfig(), "tool").editMeta(this::configureTool);
+        toolTemplate = ConfigUtil.getItem(config, "tool").editMeta(this::configureTool);
+        backgroundTemplate = ConfigUtil.getButton(config, "menu.background");
+        destroyButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.destroy");
+        colorPickerButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.color-picker");
+        colorPickerActiveButtonTemplate = colorPickerButtonTemplate.appendLore(config.getStringList("menu.element.buttons.color-picker.active-description"));
+        armorStandButtonTemplate = ConfigUtil.getButton(config, "menu.spawn.buttons.armor-stand").addResolver(TagResolver.resolver("type", Tag.selfClosingInserting(getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND))));
+        armorStandPositionButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone.position");
+        armorStandPartButtonTemplates = new EnumMap<>(ArmorStandPart.class);
+        for (ArmorStandPart part : ArmorStandPart.values()) {
+            armorStandPartButtonTemplates.put(part, ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone." + part.getName()));
+        }
 
         boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
-        if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
+        if (config.getBoolean("update-check", false) && !isSnapshot) {
             if (updateManager == null) {
                 updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
             }
@@ -182,8 +204,6 @@ public class EasyArmorStands extends JavaPlugin {
                 updateManager = null;
             }
         }
-
-        saveConfig();
 
         loadProperties();
     }
@@ -221,6 +241,7 @@ public class EasyArmorStands extends JavaPlugin {
     public void reload() {
         reloadConfig();
         load();
+        addonLoader.reload();
     }
 
     public History getHistory(Player player) {
@@ -274,7 +295,7 @@ public class EasyArmorStands extends JavaPlugin {
     }
 
     public ItemStack createTool(Locale locale) {
-        return toolTemplate.render(locale, TagResolver.empty());
+        return toolTemplate.render(locale);
     }
 
     public boolean isTool(ItemStack item) {
@@ -297,5 +318,29 @@ public class EasyArmorStands extends JavaPlugin {
             return false;
         }
         return meta.hasDisplayName();
+    }
+
+    public ItemTemplate getBackgroundTemplate() {
+        return backgroundTemplate;
+    }
+
+    public ItemTemplate getDestroyButtonTemplate() {
+        return destroyButtonTemplate;
+    }
+
+    public ItemTemplate getColorPickerButtonTemplate(boolean active) {
+        return active ? colorPickerActiveButtonTemplate : colorPickerButtonTemplate;
+    }
+
+    public ItemTemplate getArmorStandButtonTemplate() {
+        return armorStandButtonTemplate;
+    }
+
+    public ItemTemplate getArmorStandPositionButtonTemplate() {
+        return armorStandPositionButtonTemplate;
+    }
+
+    public ItemTemplate getArmorStandPartButtonTemplate(ArmorStandPart part) {
+        return armorStandPartButtonTemplates.get(part);
     }
 }

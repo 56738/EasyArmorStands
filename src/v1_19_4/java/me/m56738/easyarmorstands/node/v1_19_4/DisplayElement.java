@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
+import me.m56738.easyarmorstands.addon.display.DisplayAddon;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
@@ -27,11 +27,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.function.Consumer;
 
 public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
+    private final DisplayAddon addon;
     private final T entity;
     private final DisplayRootNodeFactory<T> factory;
 
-    public DisplayElement(T entity, SimpleEntityElementType<T> type, DisplayRootNodeFactory<T> factory) {
+    public DisplayElement(DisplayAddon addon, T entity, SimpleEntityElementType<T> type, DisplayRootNodeFactory<T> factory) {
         super(entity, type);
+        this.addon = addon;
         this.entity = entity;
         this.factory = factory;
     }
@@ -123,8 +125,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
                             return new DisplayBoxNode(session, properties);
                         },
                         new BoxResetAction(properties),
-                        ItemType.STONE,
-                        Component.text("bounding box")));
+                        addon.getDisplayBoxButtonTemplate()));
     }
 
     private static class BoxResetAction implements Consumer<MenuClick> {

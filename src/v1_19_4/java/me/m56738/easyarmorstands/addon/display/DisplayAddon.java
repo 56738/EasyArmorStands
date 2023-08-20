@@ -13,8 +13,11 @@ import me.m56738.easyarmorstands.node.v1_19_4.DisplayElementType;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNode;
 import me.m56738.easyarmorstands.node.v1_19_4.TextDisplayElementType;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
+import me.m56738.easyarmorstands.util.ConfigUtil;
+import me.m56738.easyarmorstands.util.ItemTemplate;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
@@ -25,6 +28,7 @@ public class DisplayAddon implements Addon {
     private DisplayElementType<ItemDisplay> itemDisplayType;
     private DisplayElementType<BlockDisplay> blockDisplayType;
     private DisplayElementType<TextDisplay> textDisplayType;
+    private ItemTemplate displayBoxButtonTemplate;
 
     public DisplayAddon() {
         try {
@@ -49,14 +53,16 @@ public class DisplayAddon implements Addon {
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
 
-        itemDisplayType = new DisplayElementType<>(ItemDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.ITEM_DISPLAY), DisplayRootNode::new);
-        blockDisplayType = new DisplayElementType<>(BlockDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.BLOCK_DISPLAY), DisplayRootNode::new);
-        textDisplayType = new TextDisplayElementType(DisplayRootNode::new);
+        itemDisplayType = new DisplayElementType<>(this, ItemDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.ITEM_DISPLAY), DisplayRootNode::new);
+        blockDisplayType = new DisplayElementType<>(this, BlockDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.BLOCK_DISPLAY), DisplayRootNode::new);
+        textDisplayType = new TextDisplayElementType(this, DisplayRootNode::new);
 
         EntityElementProviderRegistry registry = plugin.getEntityElementProviderRegistry();
         registry.register(new DisplayElementProvider<>(itemDisplayType));
         registry.register(new DisplayElementProvider<>(blockDisplayType));
         registry.register(new DisplayElementProvider<>(textDisplayType));
+
+        load(plugin.getConfig());
 
         plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
@@ -73,6 +79,18 @@ public class DisplayAddon implements Addon {
         plugin.getAnnotationParser().parse(new DisplayCommands(this));
     }
 
+    @Override
+    public void reload(EasyArmorStands plugin) {
+        load(plugin.getConfig());
+    }
+
+    private void load(ConfigurationSection config) {
+        itemDisplayType.load(config, "menu.spawn.buttons.item-display");
+        blockDisplayType.load(config, "menu.spawn.buttons.block-display");
+        textDisplayType.load(config, "menu.spawn.buttons.text-display");
+        displayBoxButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.display-bone.bounding-box");
+    }
+
     public JOMLMapper getMapper() {
         return mapper;
     }
@@ -87,5 +105,9 @@ public class DisplayAddon implements Addon {
 
     public DisplayElementType<TextDisplay> getTextDisplayType() {
         return textDisplayType;
+    }
+
+    public ItemTemplate getDisplayBoxButtonTemplate() {
+        return displayBoxButtonTemplate;
     }
 }

@@ -1,24 +1,19 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.element.MenuElement;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.MenuClickInterceptor;
-import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.util.Collections;
 import java.util.Locale;
 
 public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
@@ -31,20 +26,13 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        ItemStack item = Util.createItem(
-                ItemType.LEATHER_CHESTPLATE,
-                Message.buttonName("easyarmorstands.menu.color-picker.open"),
-                active ? Collections.singletonList(Message.buttonDescription("easyarmorstands.menu.color-picker.click-target"))
-                        : Collections.emptyList(),
-                locale
-        );
-        ItemMeta meta = item.getItemMeta();
+        ItemStack item = EasyArmorStands.getInstance().getColorPickerButtonTemplate(active).render(locale);
         if (active) {
+            ItemMeta meta = item.getItemMeta();
             LeatherArmorMeta armorMeta = (LeatherArmorMeta) meta;
             armorMeta.setColor(Color.YELLOW);
-            armorMeta.addItemFlags(ItemFlag.values());
+            item.setItemMeta(meta);
         }
-        item.setItemMeta(meta);
         return item;
     }
 

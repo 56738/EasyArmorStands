@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.util.ItemTemplate;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3d;
@@ -18,16 +19,16 @@ import java.util.Locale;
 
 public class SpawnSlot implements MenuSlot {
     private final ElementType type;
-    private final ItemStack item;
+    private final ItemTemplate template;
 
-    public SpawnSlot(ElementType type, ItemStack item) {
+    public SpawnSlot(ElementType type, ItemTemplate template) {
         this.type = type;
-        this.item = item;
+        this.template = template;
     }
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return item;
+        return template.render(locale);
     }
 
     @Override

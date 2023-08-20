@@ -1,15 +1,12 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import me.m56738.easyarmorstands.capability.item.ItemType;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.DestroyableElement;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
 import java.util.Locale;
 
 public class DestroySlot implements MenuSlot {
@@ -21,13 +18,7 @@ public class DestroySlot implements MenuSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return Util.createItem(
-                ItemType.TNT,
-                Message.buttonName("easyarmorstands.menu.destroy"),
-                Collections.singletonList(
-                        Message.buttonDescription("easyarmorstands.menu.destroy.description")),
-                locale
-        );
+        return EasyArmorStands.getInstance().getDestroyButtonTemplate().render(locale);
     }
 
     @Override

@@ -8,4 +8,6 @@ public interface Addon {
     String getName();
 
     void enable(EasyArmorStands plugin);
+
+    void reload(EasyArmorStands plugin);
 }

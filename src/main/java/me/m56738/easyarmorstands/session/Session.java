@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.Element;
@@ -67,7 +66,7 @@ public final class Session {
         SimpleMenuBuilder builder = new SimpleMenuBuilder();
         if (player.permissions().test("easyarmorstands.spawn.armorstand")) {
             ArmorStandElementType type = new ArmorStandElementType();
-            builder.addButton(new SpawnSlot(type, Util.createItem(ItemType.ARMOR_STAND, type.getDisplayName(), locale)));
+            builder.addButton(new SpawnSlot(type, EasyArmorStands.getInstance().getArmorStandButtonTemplate()));
         }
         Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player.get(), locale, builder));
         int size = builder.getSize();

@@ -32,6 +32,12 @@ public class AddonLoader {
         }
     }
 
+    public void reload() {
+        for (Addon addon : addonMap.values()) {
+            addon.reload(plugin);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Addon> @Nullable T get(Class<T> type) {
         return (T) addonMap.get(type);

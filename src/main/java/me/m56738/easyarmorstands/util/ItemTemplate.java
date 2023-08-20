@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -21,24 +22,55 @@ public class ItemTemplate {
     private final ItemStack template;
     private final String displayName;
     private final List<String> lore;
+    private final TagResolver resolver;
 
-    public ItemTemplate(ItemStack template, String displayName, List<String> lore) {
+    public ItemTemplate(ItemStack template, String displayName, List<String> lore, TagResolver resolver) {
         this.template = template.clone();
         this.displayName = displayName;
-        this.lore = new ArrayList<>(lore);
+        this.lore = Collections.unmodifiableList(new ArrayList<>(lore));
+        this.resolver = resolver;
+    }
+
+    public ItemTemplate(ItemTemplate template) {
+        this.template = template.template.clone();
+        this.displayName = template.displayName;
+        this.lore = template.lore;
+        this.resolver = template.resolver;
+    }
+
+    protected Component renderName(String name, Locale locale, TagResolver resolver) {
+        return GlobalTranslator.render(miniMessage().deserialize(name, resolver), locale);
+    }
+
+    protected Component renderLoreLine(String line, Locale locale, TagResolver resolver) {
+        return GlobalTranslator.render(miniMessage().deserialize(line, resolver), locale);
+    }
+
+    protected List<Component> renderLore(List<String> lore, Locale locale, TagResolver resolver) {
+        List<Component> renderedLore = new ArrayList<>(lore.size());
+        for (String line : lore) {
+            renderedLore.add(renderLoreLine(line, locale, resolver));
+        }
+        return renderedLore;
+    }
+
+    public ItemStack render(Locale locale) {
+        return render(locale, TagResolver.empty());
     }
 
     public ItemStack render(Locale locale, TagResolver resolver) {
+        resolver = TagResolver.builder()
+                .resolver(this.resolver)
+                .resolver(resolver)
+                .build();
+
         ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
-        List<Component> renderedLore = new ArrayList<>(lore.size());
-        for (String line : lore) {
-            renderedLore.add(GlobalTranslator.render(miniMessage().deserialize(line, resolver), locale));
-        }
+        List<Component> renderedLore = renderLore(lore, locale, resolver);
 
         ItemStack item = template.clone();
         ItemMeta meta = item.getItemMeta();
         if (displayName != null) {
-            componentCapability.setDisplayName(meta, GlobalTranslator.render(miniMessage().deserialize(displayName, resolver), locale));
+            componentCapability.setDisplayName(meta, renderName(displayName, locale, resolver));
         }
         componentCapability.setLore(meta, renderedLore);
         meta.addItemFlags(ItemFlag.values());
@@ -50,7 +82,7 @@ public class ItemTemplate {
         List<String> newLore = new ArrayList<>(this.lore.size() + lore.size());
         newLore.addAll(this.lore);
         newLore.addAll(lore);
-        return new ItemTemplate(template, displayName, newLore);
+        return new ItemTemplate(template, displayName, newLore, resolver);
     }
 
     public ItemTemplate editMeta(Consumer<ItemMeta> consumer) {
@@ -60,7 +92,13 @@ public class ItemTemplate {
             consumer.accept(meta);
             newTemplate.setItemMeta(meta);
         }
-        return new ItemTemplate(newTemplate, displayName, lore);
+        return new ItemTemplate(newTemplate, displayName, lore, resolver);
+    }
+
+    public ItemTemplate addResolver(TagResolver resolver) {
+        return new ItemTemplate(template, displayName, lore, TagResolver.resolver(
+                this.resolver,
+                resolver));
     }
 
     public Material getType() {

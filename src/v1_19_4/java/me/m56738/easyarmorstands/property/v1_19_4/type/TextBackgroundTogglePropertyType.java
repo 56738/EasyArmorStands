@@ -25,7 +25,7 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<C
     @Override
     public void load(ConfigurationSection config) {
         super.load(config);
-        buttonTemplate = ConfigUtil.getItem(config, "button");
+        buttonTemplate = ConfigUtil.getButton(config, "button");
     }
 
     @Override

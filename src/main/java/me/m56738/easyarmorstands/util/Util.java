@@ -7,8 +7,6 @@ import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Color;
@@ -32,7 +30,6 @@ import org.joml.Vector3dc;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -155,11 +152,6 @@ public class Util {
     }
 
     @Deprecated
-    public static ItemStack createItem(ItemType type, Component title, Locale locale) {
-        return createItem(type, title, Collections.emptyList(), locale);
-    }
-
-    @Deprecated
     public static ItemStack createItem(ItemType type, Component title, List<Component> lore, Locale locale) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         ItemCapability itemCapability = plugin.getCapability(ItemCapability.class);
@@ -176,16 +168,6 @@ public class Util {
         componentCapability.setLore(meta, translatedLore);
         item.setItemMeta(meta);
         return item;
-    }
-
-    @Deprecated
-    public static ItemStack createItem(ItemType type, String title, List<String> lore, Locale locale, TagResolver resolver) {
-        Component titleComponent = MiniMessage.miniMessage().deserialize(title, resolver);
-        List<Component> loreComponents = new ArrayList<>(lore.size());
-        for (String line : lore) {
-            loreComponents.add(MiniMessage.miniMessage().deserialize(line, resolver));
-        }
-        return Util.createItem(type, titleComponent, loreComponents, locale);
     }
 
     public static double intersectRayDoubleSidedPlane(

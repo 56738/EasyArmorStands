@@ -28,7 +28,7 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
         super.load(config);
         none = MiniMessage.miniMessage().deserializeOr(config.getString("value.none"),
                 Component.text("none", NamedTextColor.GRAY, TextDecoration.ITALIC));
-        buttonTemplate = ConfigUtil.getItem(config, "button");
+        buttonTemplate = ConfigUtil.getButton(config, "button");
     }
 
     @Override

@@ -40,8 +40,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.ARMOR_STAND);
                 case BLAZE_ROD:
                     return new ItemStack(Material.BLAZE_ROD);
-                case BOOK:
-                    return new ItemStack(Material.BOOK);
                 case BUCKET:
                     return new ItemStack(Material.BUCKET);
                 case FEATHER:
@@ -65,8 +63,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.NAME_TAG);
                 case PLAYER_HEAD:
                     return new ItemStack(Material.PLAYER_HEAD);
-                case STICK:
-                    return new ItemStack(Material.STICK);
                 case STONE:
                     return new ItemStack(Material.STONE);
                 case STONE_SLAB:

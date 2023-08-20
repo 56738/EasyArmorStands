@@ -20,4 +20,8 @@ public class PlotSquaredAddon implements Addon {
     public void enable(EasyArmorStands plugin) {
         plugin.getServer().getPluginManager().registerEvents(new PlotSquaredListener(new PlotAPI()), plugin);
     }
+
+    @Override
+    public void reload(EasyArmorStands plugin) {
+    }
 }
