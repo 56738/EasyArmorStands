@@ -30,7 +30,6 @@ import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.permission.PermissionLoader;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
@@ -39,15 +38,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Objects;
 import java.util.logging.Level;
 
 public class EasyArmorStands extends JavaPlugin {
@@ -78,12 +73,6 @@ public class EasyArmorStands extends JavaPlugin {
 
         messageManager = new MessageManager(this);
         load();
-
-        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/permissions.yml")))) {
-            new PermissionLoader(this).load(YamlConfiguration.loadConfiguration(reader));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         loader.load();
 

@@ -8,3 +8,221 @@ softdepend:
   - PlotSquared
   - Train_Carts
   - WorldGuard
+
+permissions:
+  # Categories
+  easyarmorstands.survival:
+    description: "Allow editing armor stands and their basic properties"
+    children:
+      - easyarmorstands.edit.armorstand
+      - easyarmorstands.give
+      - easyarmorstands.property.armorstand.arms
+      - easyarmorstands.property.armorstand.baseplate
+      - easyarmorstands.property.armorstand.cantick
+      - easyarmorstands.property.armorstand.lock
+      - easyarmorstands.property.armorstand.pose.body
+      - easyarmorstands.property.armorstand.pose.head
+      - easyarmorstands.property.armorstand.pose.leftarm
+      - easyarmorstands.property.armorstand.pose.leftleg
+      - easyarmorstands.property.armorstand.pose.rightarm
+      - easyarmorstands.property.armorstand.pose.rightleg
+      - easyarmorstands.property.armorstand.size
+      - easyarmorstands.property.equipment
+      - easyarmorstands.property.gravity
+      - easyarmorstands.property.location
+      - easyarmorstands.property.visible
+      - easyarmorstands.snap
+  easyarmorstands.creative:
+    description: "Allow spawning and editing armor stands and display entities"
+    children:
+      - easyarmorstands.survival
+      - easyarmorstands.clone
+      - easyarmorstands.color
+      - easyarmorstands.convert
+      - easyarmorstands.destroy
+      - easyarmorstands.edit.blockdisplay
+      - easyarmorstands.edit.itemdisplay
+      - easyarmorstands.edit.textdisplay
+      - easyarmorstands.property.display.billboard
+      - easyarmorstands.property.display.block
+      - easyarmorstands.property.display.brightness
+      - easyarmorstands.property.display.item
+      - easyarmorstands.property.display.item.transform
+      - easyarmorstands.property.display.rotation
+      - easyarmorstands.property.display.scale
+      - easyarmorstands.property.display.shearing
+      - easyarmorstands.property.display.size
+      - easyarmorstands.property.display.text
+      - easyarmorstands.property.display.text.alignment
+      - easyarmorstands.property.display.text.background
+      - easyarmorstands.property.display.text.linewidth
+      - easyarmorstands.property.display.text.seethrough
+      - easyarmorstands.property.display.text.shadow
+      - easyarmorstands.property.display.translation
+      - easyarmorstands.property.glow
+      - easyarmorstands.property.invulnerable
+      - easyarmorstands.property.marker
+      - easyarmorstands.property.name
+      - easyarmorstands.property.name.visible
+      - easyarmorstands.redo
+      - easyarmorstands.spawn.armorstand
+      - easyarmorstands.spawn.blockdisplay
+      - easyarmorstands.spawn.itemdisplay
+      - easyarmorstands.spawn.textdisplay
+      - easyarmorstands.undo
+
+  # Permissions
+  easyarmorstands.align:
+    description: "Allow aligning entities to the block grid"
+  easyarmorstands.clone:
+    description: "Allow cloning entities"
+  easyarmorstands.color:
+    description: "Allow using the color picker"
+  easyarmorstands.convert:
+    description: "Allow converting armor stands to item displays"
+  easyarmorstands.debug:
+    description: "Allow viewing troubleshooting information"
+  easyarmorstands.destroy:
+    description: "Allow destroying entities"
+  easyarmorstands.edit:
+    description: "Allow using the editor"
+    children:
+      - easyarmorstands.help
+      - easyarmorstands.history
+      - easyarmorstands.info
+      - easyarmorstands.open
+      - easyarmorstands.version
+  easyarmorstands.edit.armorstand:
+    description: "Allow editing armor stands"
+    children:
+      - easyarmorstands.edit
+  easyarmorstands.edit.blockdisplay:
+    description: "Allow editing block displays"
+    children:
+      - easyarmorstands.edit
+  easyarmorstands.edit.itemdisplay:
+    description: "Allow editing item displays"
+    children:
+      - easyarmorstands.edit
+  easyarmorstands.edit.textdisplay:
+    description: "Allow editing text displays"
+    children:
+      - easyarmorstands.edit
+  easyarmorstands.give:
+    description: "Allow spawning the tool item"
+  easyarmorstands.help:
+    description: "Allow using the help command"
+  easyarmorstands.history:
+    description: "Allow showing the history"
+  easyarmorstands.info:
+    description: "Allow viewing entity properties"
+  easyarmorstands.open:
+    description: "Allow opening the menu"
+  easyarmorstands.plotsquared.bypass:
+    description: "Allow bypassing PlotSquared restrictions"
+  easyarmorstands.property.armorstand.arms:
+    description: "Allow editing armor stand arm visibility"
+  easyarmorstands.property.armorstand.baseplate:
+    description: "Allow editing armor stand base plate visibility"
+  easyarmorstands.property.armorstand.cantick:
+    description: "Allow toggling armor stand ticking"
+  easyarmorstands.property.armorstand.lock:
+    description: "Allow toggling armor stand equipment lock"
+  easyarmorstands.property.armorstand.marker:
+    description: "Allow toggling whether an armor stand is a marker"
+  easyarmorstands.property.armorstand.pose.body:
+    description: "Allow editing armor stand body pose"
+  easyarmorstands.property.armorstand.pose.head:
+    description: "Allow editing armor stand head pose"
+  easyarmorstands.property.armorstand.pose.leftarm:
+    description: "Allow editing armor stand left arm pose"
+  easyarmorstands.property.armorstand.pose.leftleg:
+    description: "Allow editing armor stand left leg pose"
+  easyarmorstands.property.armorstand.pose.rightarm:
+    description: "Allow editing armor stand right arm pose"
+  easyarmorstands.property.armorstand.pose.rightleg:
+    description: "Allow editing armor stand right leg pose"
+  easyarmorstands.property.armorstand.size:
+    description: "Allow toggling armor stand size"
+  easyarmorstands.property.display.billboard:
+    description: "Allow editing the billboard mode of a display"
+  easyarmorstands.property.display.block:
+    description: "Allow editing the block shown in a block display"
+  easyarmorstands.property.display.brightness:
+    description: "Allow editing the brightness of a display"
+  easyarmorstands.property.display.item:
+    description: "Allow editing the item shown in an item display"
+  easyarmorstands.property.display.item.transform:
+    description: "Allow editing the item transform mode of an item display"
+  easyarmorstands.property.display.rotation:
+    description: "Allow rotating displays"
+  easyarmorstands.property.display.scale:
+    description: "Allow scaling displays"
+  easyarmorstands.property.display.shearing:
+    description: "Allow applying shearing to displays"
+  easyarmorstands.property.display.size:
+    description: "Allow editing the bounding box of a display"
+  easyarmorstands.property.display.text:
+    description: "Allow editing the text of a text display"
+  easyarmorstands.property.display.text.alignment:
+    description: "Allow editing the alignment of a text display"
+  easyarmorstands.property.display.text.background:
+    description: "Allow editing the background of a text display"
+  easyarmorstands.property.display.text.linewidth:
+    description: "Allow editing the line width of a text display"
+  easyarmorstands.property.display.text.seethrough:
+    description: "Allow changing whether a text display is visible through walls"
+  easyarmorstands.property.display.text.shadow:
+    description: "Allow editing the text shadow of a text display"
+  easyarmorstands.property.display.translation:
+    description: "Allow editing the translation of a display"
+  easyarmorstands.property.equipment:
+    description: "Allow editing entity equipment"
+  easyarmorstands.property.glow:
+    description: "Allow changing whether an entity is glowing"
+  easyarmorstands.property.gravity:
+    description: "Allow changing whether gravity applies to an entity"
+  easyarmorstands.property.invulnerable:
+    description: "Allow toggling entity invulnerability"
+  easyarmorstands.property.location:
+    description: "Allow moving entities"
+    children:
+      - easyarmorstands.align
+  easyarmorstands.property.name:
+    description: "Allow renaming entities"
+  easyarmorstands.property.name.visible:
+    description: "Allow toggling entity name tag visibility"
+  easyarmorstands.property.visible:
+    description: "Allow toggling entity visibility"
+  easyarmorstands.redo:
+    description: "Allow redoing changes"
+  easyarmorstands.snap:
+    description: "Allow configuring the snapping increment"
+  easyarmorstands.spawn:
+    description: "Allow spawning entities"
+  easyarmorstands.spawn.armorstand:
+    description: "Allow spawning armor stands"
+    children:
+      - easyarmorstands.spawn
+  easyarmorstands.spawn.blockdisplay:
+    description: "Allow spawning block displays"
+    children:
+      - easyarmorstands.spawn
+  easyarmorstands.spawn.itemdisplay:
+    description: "Allow spawning item displays"
+    children:
+      - easyarmorstands.spawn
+  easyarmorstands.spawn.textdisplay:
+    description: "Allow spawning text displays"
+    children:
+      - easyarmorstands.spawn
+  easyarmorstands.traincarts.model:
+    description: "Allow using the TrainCarts resource pack model browser"
+  easyarmorstands.undo:
+    description: "Allow undoing changes"
+  easyarmorstands.update.notify:
+    description: "Be notified when a new version of EasyArmorStands is available"
+  easyarmorstands.version:
+    description: "Allow viewing the plugin version"
+  easyarmorstands.worldguard.bypass:
+    description: "Allow bypassing WorldGuard restrictions"
