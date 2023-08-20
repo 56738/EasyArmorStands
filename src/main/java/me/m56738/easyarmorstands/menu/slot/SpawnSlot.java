@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +48,7 @@ public class SpawnSlot implements MenuSlot {
             }
 
             PropertyRegistry properties = new PropertyRegistry();
-            properties.register(Property.of(EntityLocationProperty.TYPE, location));
+            properties.register(Property.of(PropertyTypes.ENTITY_LOCATION, location));
             type.applyDefaultProperties(properties);
 
             if (!click.player().canCreateElement(type, properties)) {

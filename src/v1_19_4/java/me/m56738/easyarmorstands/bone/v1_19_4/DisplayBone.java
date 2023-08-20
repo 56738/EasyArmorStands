@@ -5,9 +5,8 @@ import me.m56738.easyarmorstands.bone.RotationBone;
 import me.m56738.easyarmorstands.bone.ScaleBone;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayScaleProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayTranslationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.util.Axis;
 import org.joml.Math;
 import org.joml.Quaterniond;
@@ -26,9 +25,9 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     public DisplayBone(PropertyContainer container, PropertyType<Quaternionfc> rotationType) {
         super(container);
-        this.translationProperty = container.get(DisplayTranslationProperty.TYPE);
+        this.translationProperty = container.get(DisplayPropertyTypes.DISPLAY_TRANSLATION);
         this.rotationProperty = container.get(rotationType);
-        this.scaleProperty = container.get(DisplayScaleProperty.TYPE);
+        this.scaleProperty = container.get(DisplayPropertyTypes.DISPLAY_SCALE);
     }
 
     @Override

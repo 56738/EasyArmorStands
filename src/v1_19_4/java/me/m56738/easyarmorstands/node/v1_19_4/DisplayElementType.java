@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -25,7 +25,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
     @Override
     public void applyDefaultProperties(PropertyRegistry properties) {
         super.applyDefaultProperties(properties);
-        Property<Location> locationProperty = properties.get(EntityLocationProperty.TYPE);
+        Property<Location> locationProperty = properties.get(PropertyTypes.ENTITY_LOCATION);
         Location location = locationProperty.getValue().clone();
         location.setYaw(0);
         location.setPitch(0);

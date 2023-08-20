@@ -5,6 +5,8 @@ import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
@@ -33,7 +35,18 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
     }
 
     private static class ComponentCapabilityImpl implements ComponentCapability {
+        private static final Style fallbackStyle = Style.style(
+                NamedTextColor.WHITE,
+                TextDecoration.ITALIC.withState(false));
+
         private final LegacyComponentSerializer serializer = BukkitComponentSerializer.legacy();
+
+        private static Component style(Component component) {
+            if (component == null) {
+                return null;
+            }
+            return component.applyFallbackStyle(fallbackStyle);
+        }
 
         @Override
         public Component getCustomName(Entity entity) {
@@ -51,16 +64,14 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
                 meta.setDisplayName(ChatColor.RESET.toString());
                 return;
             }
-            meta.setDisplayName(serializer.serialize(
-                    displayName.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
+            meta.setDisplayName(serializer.serializeOrNull(style(displayName)));
         }
 
         @Override
         public void setLore(ItemMeta meta, List<Component> lore) {
             List<String> legacyLore = new ArrayList<>(lore.size());
             for (Component component : lore) {
-                legacyLore.add(serializer.serialize(
-                        component.applyFallbackStyle(TextDecoration.ITALIC.withState(false))));
+                legacyLore.add(serializer.serialize(style(component)));
             }
             meta.setLore(legacyLore);
         }

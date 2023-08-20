@@ -2,15 +2,12 @@ package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.property.BooleanPropertyType;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
-import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandCanTickProperty implements Property<Boolean> {
-    public static final PropertyType<Boolean> TYPE = new Type();
     private final ArmorStand entity;
     private final TickCapability tickCapability;
 
@@ -25,7 +22,7 @@ public class ArmorStandCanTickProperty implements Property<Boolean> {
 
     @Override
     public PropertyType<Boolean> getType() {
-        return TYPE;
+        return PropertyTypes.ARMOR_STAND_CAN_TICK;
     }
 
     @Override
@@ -37,17 +34,5 @@ public class ArmorStandCanTickProperty implements Property<Boolean> {
     public boolean setValue(Boolean value) {
         tickCapability.setCanTick(entity, value);
         return true;
-    }
-
-    private static class Type implements BooleanPropertyType {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.armorstand.cantick";
-        }
-
-        @Override
-        public @NotNull Component getDisplayName() {
-            return Component.text("ticking");
-        }
     }
 }

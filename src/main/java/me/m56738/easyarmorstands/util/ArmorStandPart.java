@@ -29,7 +29,7 @@ public enum ArmorStandPart {
     LEFT_ARM(
             ArmorStand::getLeftArmPose,
             ArmorStand::setLeftArmPose,
-            "leftarm",
+            "left-arm",
             Component.text("Left arm"),
             new Vector3d(5, 22, 0),
             new Vector3d(0, -10, 0)
@@ -37,7 +37,7 @@ public enum ArmorStandPart {
     RIGHT_ARM(
             ArmorStand::getRightArmPose,
             ArmorStand::setRightArmPose,
-            "rightarm",
+            "right-arm",
             Component.text("Right arm"),
             new Vector3d(-5, 22, 0),
             new Vector3d(0, -10, 0)
@@ -45,7 +45,7 @@ public enum ArmorStandPart {
     LEFT_LEG(
             ArmorStand::getLeftLegPose,
             ArmorStand::setLeftLegPose,
-            "leftleg",
+            "left-leg",
             Component.text("Left leg"),
             new Vector3d(1.9, 12, 0),
             new Vector3d(0, -11, 0)
@@ -53,7 +53,7 @@ public enum ArmorStandPart {
     RIGHT_LEG(
             ArmorStand::getRightLegPose,
             ArmorStand::setRightLegPose,
-            "rightleg",
+            "right-leg",
             Component.text("Right leg"),
             new Vector3d(-1.9, 12, 0),
             new Vector3d(0, -11, 0)

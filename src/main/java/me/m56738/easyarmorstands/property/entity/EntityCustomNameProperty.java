@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.property.entity;
 
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.property.ComponentPropertyType;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityCustomNameProperty implements Property<@Nullable Component> {
-    public static final PropertyType<Component> TYPE = new Type();
     private final Entity entity;
     private final ComponentCapability componentCapability;
 
@@ -21,7 +19,7 @@ public class EntityCustomNameProperty implements Property<@Nullable Component> {
 
     @Override
     public PropertyType<Component> getType() {
-        return TYPE;
+        return PropertyTypes.ENTITY_CUSTOM_NAME;
     }
 
     @Override
@@ -33,17 +31,5 @@ public class EntityCustomNameProperty implements Property<@Nullable Component> {
     public boolean setValue(@Nullable Component value) {
         componentCapability.setCustomName(entity, value);
         return true;
-    }
-
-    private static class Type implements ComponentPropertyType {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.name";
-        }
-
-        @Override
-        public @NotNull Component getDisplayName() {
-            return Component.text("custom name");
-        }
     }
 }

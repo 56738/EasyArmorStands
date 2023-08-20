@@ -2,8 +2,7 @@ package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.bukkit.Location;
@@ -20,8 +19,8 @@ public class ArmorStandPartPositionBone implements PositionBone {
     public ArmorStandPartPositionBone(PropertyContainer container, ArmorStandPart part) {
         this.container = container;
         this.part = part;
-        this.locationProperty = container.get(EntityLocationProperty.TYPE);
-        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
+        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
+        this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property;
 
+import me.m56738.easyarmorstands.property.type.PropertyType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

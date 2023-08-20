@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.PropertyAction;
+import me.m56738.easyarmorstands.property.type.PropertyType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

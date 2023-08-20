@@ -6,9 +6,7 @@ import me.m56738.easyarmorstands.particle.LineParticle;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
@@ -43,9 +41,9 @@ public class ArmorStandPartButton implements NodeButton {
         this.node = node;
         this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
         this.particle.setAxis(Axis.Y);
-        this.locationProperty = container.get(EntityLocationProperty.TYPE);
-        this.poseProperty = container.get(ArmorStandPoseProperty.type(part));
-        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
+        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
+        this.poseProperty = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
+        this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);
     }
 
     @Override

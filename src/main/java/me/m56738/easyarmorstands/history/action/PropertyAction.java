@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementReference;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -51,7 +51,7 @@ public class PropertyAction<T> implements Action {
     public Component describe() {
         return Component.text()
                 .content("Changed ")
-                .append(propertyType.getDisplayName().colorIfAbsent(NamedTextColor.WHITE))
+                .append(propertyType.getName().colorIfAbsent(NamedTextColor.WHITE))
                 .append(Component.text(" from "))
                 .append(propertyType.getValueComponent(oldValue).colorIfAbsent(NamedTextColor.WHITE))
                 .append(Component.text(" to "))

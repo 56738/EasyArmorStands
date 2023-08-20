@@ -1,14 +1,12 @@
 package me.m56738.easyarmorstands.property.entity;
 
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
-import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 public class EntityLocationProperty implements Property<Location> {
-    public static final PropertyType<Location> TYPE = new Type();
     private final Entity entity;
 
     public EntityLocationProperty(Entity entity) {
@@ -17,7 +15,7 @@ public class EntityLocationProperty implements Property<Location> {
 
     @Override
     public PropertyType<Location> getType() {
-        return TYPE;
+        return PropertyTypes.ENTITY_LOCATION;
     }
 
     @Override
@@ -28,27 +26,5 @@ public class EntityLocationProperty implements Property<Location> {
     @Override
     public boolean setValue(Location value) {
         return entity.teleport(value);
-    }
-
-    private static class Type implements PropertyType<Location> {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.location";
-        }
-
-        @Override
-        public Component getDisplayName() {
-            return Component.text("position");
-        }
-
-        @Override
-        public Component getValueComponent(Location value) {
-            return Util.formatLocation(value);
-        }
-
-        @Override
-        public Location cloneValue(Location value) {
-            return value.clone();
-        }
     }
 }

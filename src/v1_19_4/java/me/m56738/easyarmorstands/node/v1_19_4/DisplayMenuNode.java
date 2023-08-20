@@ -7,9 +7,8 @@ import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;
-import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayWidthProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -34,9 +33,9 @@ public class DisplayMenuNode extends MenuNode {
         this.session = session;
         this.container = container;
         this.boxParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createAxisAlignedBox(session.getWorld());
-        this.locationProperty = container.get(EntityLocationProperty.TYPE);
-        this.widthProperty = container.get(DisplayWidthProperty.TYPE);
-        this.heightProperty = container.get(DisplayHeightProperty.TYPE);
+        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
+        this.widthProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
+        this.heightProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
     }
 
     @Override

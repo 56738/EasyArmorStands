@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.property;
 
+import me.m56738.easyarmorstands.property.type.PropertyType;
+
 public class SimpleProperty<T> implements Property<T> {
     private final PropertyType<T> type;
     private T value;

@@ -1,12 +1,11 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import org.bukkit.entity.TextDisplay;
 
 public class TextDisplayLineWidthProperty implements Property<Integer> {
-    public static final PropertyType<Integer> TYPE = new Type();
     private final TextDisplay entity;
 
     public TextDisplayLineWidthProperty(TextDisplay entity) {
@@ -15,7 +14,7 @@ public class TextDisplayLineWidthProperty implements Property<Integer> {
 
     @Override
     public PropertyType<Integer> getType() {
-        return TYPE;
+        return DisplayPropertyTypes.TEXT_DISPLAY_LINE_WIDTH;
     }
 
     @Override
@@ -27,22 +26,5 @@ public class TextDisplayLineWidthProperty implements Property<Integer> {
     public boolean setValue(Integer value) {
         entity.setLineWidth(value);
         return true;
-    }
-
-    private static class Type implements PropertyType<Integer> {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.display.text.linewidth";
-        }
-
-        @Override
-        public Component getDisplayName() {
-            return Component.text("line width");
-        }
-
-        @Override
-        public Component getValueComponent(Integer value) {
-            return Component.text(value);
-        }
     }
 }

@@ -9,10 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
 
 public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability> {
     @Override
@@ -43,8 +40,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.ARMOR_STAND);
                 case BLAZE_ROD:
                     return new ItemStack(Material.BLAZE_ROD);
-                case BONE_MEAL:
-                    return new ItemStack(Material.BONE_MEAL);
                 case BOOK:
                     return new ItemStack(Material.BOOK);
                 case BUCKET:
@@ -53,16 +48,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.FEATHER);
                 case GLOWSTONE_DUST:
                     return new ItemStack(Material.GLOWSTONE_DUST);
-                case GOLDEN_APPLE:
-                    return new ItemStack(Material.GOLDEN_APPLE);
-                case INVISIBILITY_POTION: {
-                    ItemStack item = new ItemStack(Material.POTION);
-                    PotionMeta meta = (PotionMeta) item.getItemMeta();
-                    meta.setBasePotionData(new PotionData(PotionType.INVISIBILITY));
-                    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                    item.setItemMeta(meta);
-                    return item;
-                }
                 case IRON_BARS:
                     return new ItemStack(Material.IRON_BARS);
                 case LEATHER_CHESTPLATE: {
@@ -86,8 +71,6 @@ public class ItemCapabilityProvider implements CapabilityProvider<ItemCapability
                     return new ItemStack(Material.STONE);
                 case STONE_SLAB:
                     return new ItemStack(Material.STONE_SLAB);
-                case SUNFLOWER:
-                    return new ItemStack(Material.SUNFLOWER);
                 case TNT:
                     return new ItemStack(Material.TNT);
                 default:

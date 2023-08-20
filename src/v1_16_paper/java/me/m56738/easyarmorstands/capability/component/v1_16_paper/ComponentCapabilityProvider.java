@@ -4,6 +4,8 @@ import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +51,10 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
     }
 
     private static class ComponentCapabilityImpl implements ComponentCapability {
+        private static final Style fallbackStyle = Style.style(
+                NamedTextColor.WHITE,
+                TextDecoration.ITALIC.withState(false));
+
         private final NativeComponentMapper mapper;
         private final MethodHandle getCustomName;
         private final MethodHandle setCustomName;
@@ -69,6 +75,13 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
                     MethodType.methodType(void.class, List.class));
             getItemDisplayName = lookup.findVirtual(ItemStack.class, "displayName",
                     MethodType.methodType(mapper.getComponentClass()));
+        }
+
+        private static Component style(Component component) {
+            if (component == null) {
+                return null;
+            }
+            return component.applyFallbackStyle(fallbackStyle);
         }
 
         @Override
@@ -92,8 +105,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         @Override
         public void setDisplayName(ItemMeta meta, Component displayName) {
             try {
-                setDisplayName.invoke(meta, mapper.convertToNative(
-                        displayName.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+                setDisplayName.invoke(meta, mapper.convertToNative(style(displayName)));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -103,8 +115,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         public void setLore(ItemMeta meta, List<Component> lore) {
             List<Object> nativeLore = new ArrayList<>(lore.size());
             for (Component component : lore) {
-                nativeLore.add(mapper.convertToNative(
-                        component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+                nativeLore.add(mapper.convertToNative(style(component)));
             }
             try {
                 setLore.invoke(meta, nativeLore);

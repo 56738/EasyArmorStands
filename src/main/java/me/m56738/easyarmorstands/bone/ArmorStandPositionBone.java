@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.bone;
 
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -12,7 +12,7 @@ public class ArmorStandPositionBone extends EntityLocationBone {
 
     public ArmorStandPositionBone(PropertyContainer container) {
         super(container);
-        this.sizeProperty = container.get(ArmorStandSizeProperty.TYPE);
+        this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);
     }
 
     @Override

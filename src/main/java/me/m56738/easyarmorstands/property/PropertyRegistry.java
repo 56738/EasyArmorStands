@@ -1,12 +1,14 @@
 package me.m56738.easyarmorstands.property;
 
-import java.util.HashMap;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class PropertyRegistry implements PropertyContainer {
     @SuppressWarnings("rawtypes")
-    private final Map<PropertyType, Property> properties = new HashMap<>();
+    private final Map<PropertyType, Property> properties = new LinkedHashMap<>();
 
     public <T> void register(Property<T> property) {
         properties.put(property.getType(), property);

@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.node.ClickType;
 import me.m56738.easyarmorstands.node.ElementNode;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.v1_19_4.display.block.BlockDisplayBlockProperty;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
@@ -22,7 +22,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
         super(session, name, PropertyContainer.tracked(session.getPlayer(), element));
         this.session = session;
         this.element = element;
-        this.blockDataProperty = container.getOrNull(BlockDisplayBlockProperty.TYPE);
+        this.blockDataProperty = container.getOrNull(DisplayPropertyTypes.BLOCK_DISPLAY_BLOCK);
     }
 
     @Override

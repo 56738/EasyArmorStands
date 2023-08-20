@@ -1,14 +1,13 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
 import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
-import me.m56738.easyarmorstands.property.ComponentPropertyType;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
 
 public class TextDisplayTextProperty implements Property<Component> {
-    public static final PropertyType<Component> TYPE = new Type();
     private final TextDisplay entity;
     private final TextDisplayCapability textDisplayCapability;
 
@@ -19,7 +18,7 @@ public class TextDisplayTextProperty implements Property<Component> {
 
     @Override
     public PropertyType<Component> getType() {
-        return TYPE;
+        return DisplayPropertyTypes.TEXT_DISPLAY_TEXT;
     }
 
     @Override
@@ -31,17 +30,5 @@ public class TextDisplayTextProperty implements Property<Component> {
     public boolean setValue(Component value) {
         textDisplayCapability.setText(entity, value);
         return true;
-    }
-
-    private static class Type implements ComponentPropertyType {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.display.text";
-        }
-
-        @Override
-        public Component getDisplayName() {
-            return Component.text("text");
-        }
     }
 }

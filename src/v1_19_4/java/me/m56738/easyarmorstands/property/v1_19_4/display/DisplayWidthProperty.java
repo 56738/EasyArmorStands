@@ -1,12 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.property.type.PropertyType;
 import org.bukkit.entity.Display;
 
 public class DisplayWidthProperty implements Property<Float> {
-    public static final PropertyType<Float> TYPE = new DisplaySizePropertyType(Component.text("width"));
     private final Display entity;
 
     public DisplayWidthProperty(Display entity) {
@@ -15,7 +13,7 @@ public class DisplayWidthProperty implements Property<Float> {
 
     @Override
     public PropertyType<Float> getType() {
-        return TYPE;
+        return DisplayPropertyTypes.DISPLAY_BOX_WIDTH;
     }
 
     @Override
@@ -28,5 +26,4 @@ public class DisplayWidthProperty implements Property<Float> {
         entity.setDisplayWidth(value);
         return true;
     }
-
 }

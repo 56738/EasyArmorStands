@@ -18,7 +18,7 @@ import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyType;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.util.Util;
@@ -182,7 +182,7 @@ public class GlobalCommands {
         if (!builder.children().isEmpty()) {
             builder.append(Component.text(", "));
         }
-        builder.append(type.getDisplayName().hoverEvent(hover.build()));
+        builder.append(type.getName().hoverEvent(hover.build()));
     }
 
     private Component debugLine(Component key, Component value) {

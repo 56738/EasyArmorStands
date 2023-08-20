@@ -1,32 +1,28 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.property.ButtonPropertyType;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.button.PropertyButton;
 import org.bukkit.inventory.ItemStack;
 
-public class ButtonPropertySlot<T> implements MenuSlot {
-    private final Property<T> property;
-    private final ButtonPropertyType<T> propertyType;
-    private final PropertyContainer container;
+import java.util.Locale;
 
-    public ButtonPropertySlot(Property<T> property, ButtonPropertyType<T> propertyType, PropertyContainer container) {
-        this.property = property;
-        this.propertyType = propertyType;
-        this.container = container;
+public class ButtonPropertySlot<T> implements MenuSlot {
+    private final PropertyButton button;
+    private final Locale locale;
+
+    public ButtonPropertySlot(PropertyButton button, Locale locale) {
+        this.button = button;
+        this.locale = locale;
     }
 
     @Override
     public ItemStack getItem() {
-        return propertyType.createItem(property, container);
+        return button.createItem(locale);
     }
 
     @Override
     public void onClick(MenuClick click) {
-        if (propertyType.onClick(property, container, click)) {
-            container.commit();
-            click.updateItem();
-        }
+        button.onClick(click);
+        click.updateItem();
     }
 }

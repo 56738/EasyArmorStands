@@ -1,14 +1,11 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.property.BooleanPropertyType;
 import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyType;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.Entity;
 
 public class EntityCustomNameVisibleProperty implements Property<Boolean> {
-    public static final PropertyType<Boolean> TYPE = new Type();
     private final Entity entity;
 
     public EntityCustomNameVisibleProperty(Entity entity) {
@@ -17,7 +14,7 @@ public class EntityCustomNameVisibleProperty implements Property<Boolean> {
 
     @Override
     public PropertyType<Boolean> getType() {
-        return TYPE;
+        return PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE;
     }
 
     @Override
@@ -29,24 +26,5 @@ public class EntityCustomNameVisibleProperty implements Property<Boolean> {
     public boolean setValue(Boolean value) {
         entity.setCustomNameVisible(value);
         return true;
-    }
-
-    private static class Type implements BooleanPropertyType {
-        @Override
-        public String getPermission() {
-            return "easyarmorstands.property.name.visible";
-        }
-
-        @Override
-        public Component getDisplayName() {
-            return Component.text("custom name visible");
-        }
-
-        @Override
-        public Component getValueComponent(Boolean value) {
-            return value
-                    ? Component.text("visible", NamedTextColor.GREEN)
-                    : Component.text("invisible", NamedTextColor.RED);
-        }
     }
 }

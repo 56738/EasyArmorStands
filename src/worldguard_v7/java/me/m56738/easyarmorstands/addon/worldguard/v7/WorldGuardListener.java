@@ -18,7 +18,7 @@ import me.m56738.easyarmorstands.event.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.event.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -62,7 +62,7 @@ public class WorldGuardListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSelect(SessionSelectElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityLocationProperty.TYPE).getValue())) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(PropertyTypes.ENTITY_LOCATION).getValue())) {
             return;
         }
         if (event.getPlayer().hasPermission(bypassPermission)) {
@@ -74,7 +74,7 @@ public class WorldGuardListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSpawn(PlayerCreateElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getProperties().get(EntityLocationProperty.TYPE).getValue())) {
+        if (isAllowed(event.getPlayer(), event.getProperties().get(PropertyTypes.ENTITY_LOCATION).getValue())) {
             return;
         }
         if (event.getPlayer().hasPermission(bypassPermission)) {
@@ -92,7 +92,7 @@ public class WorldGuardListener implements Listener {
         }
         Entity entity = ((EntityElement<?>) element).getEntity();
         if (isAllowed(event.getPlayer(), entity.getLocation())) {
-            if (event.getProperty().getType() != EntityLocationProperty.TYPE) {
+            if (event.getProperty().getType() != PropertyTypes.ENTITY_LOCATION) {
                 return;
             }
             if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue())) {
@@ -107,7 +107,7 @@ public class WorldGuardListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDestroy(PlayerDestroyElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityLocationProperty.TYPE).getValue())) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(PropertyTypes.ENTITY_LOCATION).getValue())) {
             return;
         }
         if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {

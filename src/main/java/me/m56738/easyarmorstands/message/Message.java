@@ -15,51 +15,59 @@ public class Message {
     }
 
     public static Component success(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.SUCCESS, Component.translatable(key));
+        return messageManager.format(MessageStyle.SUCCESS, component(key));
     }
 
     public static Component success(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.SUCCESS, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.SUCCESS, component(key, args));
     }
 
     public static Component warning(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.WARNING, Component.translatable(key));
+        return messageManager.format(MessageStyle.WARNING, component(key));
     }
 
     public static Component warning(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.WARNING, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.WARNING, component(key, args));
     }
 
     public static Component error(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.ERROR, Component.translatable(key));
+        return messageManager.format(MessageStyle.ERROR, component(key));
     }
 
     public static Component error(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.ERROR, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.ERROR, component(key, args));
     }
 
     public static Component hint(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.HINT, Component.translatable(key));
+        return messageManager.format(MessageStyle.HINT, component(key));
     }
 
     public static Component hint(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.HINT, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.HINT, component(key, args));
     }
 
     public static Component button(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.BUTTON, Component.translatable(key));
+        return messageManager.format(MessageStyle.BUTTON, component(key));
     }
 
     public static Component button(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.BUTTON, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.BUTTON, component(key, args));
     }
 
     public static HoverEventSource<Component> hover(@PropertyKey(resourceBundle = BUNDLE) String key) {
-        return messageManager.format(MessageStyle.HOVER, Component.translatable(key));
+        return messageManager.format(MessageStyle.HOVER, component(key));
     }
 
     public static HoverEventSource<Component> hover(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
-        return messageManager.format(MessageStyle.HOVER, Component.translatable(key, args));
+        return messageManager.format(MessageStyle.HOVER, component(key, args));
+    }
+
+    public static Component component(@PropertyKey(resourceBundle = BUNDLE) String key) {
+        return Component.translatable(key);
+    }
+
+    public static Component component(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
+        return Component.translatable(key, args);
     }
 
     public static Component command(String command) {
