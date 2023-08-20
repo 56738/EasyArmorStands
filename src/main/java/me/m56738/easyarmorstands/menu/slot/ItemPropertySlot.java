@@ -6,6 +6,8 @@ import me.m56738.easyarmorstands.property.PropertyContainer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
+
 public class ItemPropertySlot implements MenuSlot {
     private final Property<ItemStack> property;
     private final PropertyContainer container;
@@ -24,7 +26,7 @@ public class ItemPropertySlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return property.getValue();
     }
 

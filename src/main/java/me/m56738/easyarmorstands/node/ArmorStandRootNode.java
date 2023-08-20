@@ -12,11 +12,11 @@ import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
-        super(session, Component.text("Select a bone"));
+        super(session, Message.component("easyarmorstands.node.select-bone"));
         this.session = session;
         this.entity = entity;
         this.element = element;
@@ -45,11 +45,11 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
-            MenuNode localNode = new PropertyMenuNode(session, part.getDisplayName().append(Component.text(" (local)")), container);
+            MenuNode localNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.local", part.getDisplayName()), container);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new PropertyMenuNode(session, part.getDisplayName().append(Component.text(" (global)")), container);
+            MenuNode globalNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.global", part.getDisplayName()), container);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
@@ -63,12 +63,12 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(container);
 
-        MenuNode positionNode = new PropertyMenuNode(session, Component.text("Position"), container);
+        MenuNode positionNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.select-axis"), container);
         positionNode.addYawButton(session, positionBone, 1);
         positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
 
-        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Component.text("Position"), ParticleColor.YELLOW);
+        this.positionButton = new PositionBoneButton(session, positionBone, positionNode, Message.component("easyarmorstands.node.position"), ParticleColor.YELLOW);
         this.positionButton.setPriority(1);
         addButton(this.positionButton);
     }

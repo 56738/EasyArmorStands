@@ -81,7 +81,7 @@ public class EntitySelectionNode extends MenuNode {
 
             Player player = session.getPlayer().get();
             if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-                Session.openSpawnMenu(player);
+                Session.openSpawnMenu(session.getPlayer());
                 return true;
             }
         }

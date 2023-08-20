@@ -7,16 +7,18 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
+
 public class BackgroundSlot implements MenuSlot {
     public static final BackgroundSlot INSTANCE = new BackgroundSlot();
 
-    private final ItemStack item = Util.createItem(ItemType.LIGHT_BLUE_STAINED_GLASS_PANE, Component.empty());
+    private final ItemStack item = Util.createItem(ItemType.LIGHT_BLUE_STAINED_GLASS_PANE, Component.empty(), Locale.US);
 
     private BackgroundSlot() {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return item;
     }
 

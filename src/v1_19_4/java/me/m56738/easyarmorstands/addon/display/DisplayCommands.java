@@ -318,7 +318,7 @@ public class DisplayCommands {
             return;
         }
         Component text = property.getValue();
-        SessionCommands.showText(sender, Component.text("Text", NamedTextColor.YELLOW), text, "/eas text set");
+        SessionCommands.showText(sender, DisplayPropertyTypes.TEXT_DISPLAY_TEXT.getName(), text, "/eas text set");
     }
 
     @CommandMethod("text set <value>")

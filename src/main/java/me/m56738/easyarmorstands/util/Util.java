@@ -161,12 +161,12 @@ public class Util {
     public static ItemStack createTool(Locale locale) {
         ItemStack item = createItem(
                 ItemType.BLAZE_ROD,
-                Component.text("EasyArmorStands", NamedTextColor.GOLD),
+                Message.component("easyarmorstands.tool-name").color(NamedTextColor.GOLD),
                 Arrays.asList(
-                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.select-entity"), locale),
-                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.spawn-entity"), locale),
-                        GlobalTranslator.render(Message.hint("easyarmorstands.hint.deselect-entity"), locale))
-        );
+                        Message.hint("easyarmorstands.hint.select-entity"),
+                        Message.hint("easyarmorstands.hint.spawn-entity"),
+                        Message.hint("easyarmorstands.hint.deselect-entity")),
+                locale);
         ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
         if (toolCapability != null) {
             ItemMeta meta = item.getItemMeta();
@@ -194,29 +194,38 @@ public class Util {
         return meta.getDisplayName().equals(ChatColor.GOLD + "EasyArmorStands");
     }
 
-    public static ItemStack createItem(ItemType type, Component title) {
-        return createItem(type, title, Collections.emptyList());
+    @Deprecated
+    public static ItemStack createItem(ItemType type, Component title, Locale locale) {
+        return createItem(type, title, Collections.emptyList(), locale);
     }
 
-    public static ItemStack createItem(ItemType type, Component title, List<Component> lore) {
+    @Deprecated
+    public static ItemStack createItem(ItemType type, Component title, List<Component> lore, Locale locale) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         ItemCapability itemCapability = plugin.getCapability(ItemCapability.class);
         ComponentCapability componentCapability = plugin.getCapability(ComponentCapability.class);
         ItemStack item = itemCapability.createItem(type);
         ItemMeta meta = item.getItemMeta();
-        componentCapability.setDisplayName(meta, title);
-        componentCapability.setLore(meta, lore);
+        if (title != null) {
+            componentCapability.setDisplayName(meta, GlobalTranslator.render(title, locale));
+        }
+        List<Component> translatedLore = new ArrayList<>(lore.size());
+        for (Component line : lore) {
+            translatedLore.add(GlobalTranslator.render(line, locale));
+        }
+        componentCapability.setLore(meta, translatedLore);
         item.setItemMeta(meta);
         return item;
     }
 
-    public static ItemStack createItem(ItemType type, String title, List<String> lore, TagResolver resolver) {
+    @Deprecated
+    public static ItemStack createItem(ItemType type, String title, List<String> lore, Locale locale, TagResolver resolver) {
         Component titleComponent = MiniMessage.miniMessage().deserialize(title, resolver);
         List<Component> loreComponents = new ArrayList<>(lore.size());
         for (String line : lore) {
             loreComponents.add(MiniMessage.miniMessage().deserialize(line, resolver));
         }
-        return Util.createItem(type, titleComponent, loreComponents);
+        return Util.createItem(type, titleComponent, loreComponents, locale);
     }
 
     public static double intersectRayDoubleSidedPlane(

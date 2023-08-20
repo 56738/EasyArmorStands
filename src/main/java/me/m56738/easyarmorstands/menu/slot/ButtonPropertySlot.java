@@ -16,8 +16,8 @@ public class ButtonPropertySlot<T> implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
-        return button.createItem(locale);
+    public ItemStack getItem(Locale locale) {
+        return button.createItem(this.locale);
     }
 
     @Override

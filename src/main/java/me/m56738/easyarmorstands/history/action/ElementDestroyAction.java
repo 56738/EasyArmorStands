@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 
 public class ElementDestroyAction extends ElementPresenceAction {
@@ -21,6 +22,6 @@ public class ElementDestroyAction extends ElementPresenceAction {
 
     @Override
     public Component describe() {
-        return Component.text("Deleted ").append(getType().getDisplayName());
+        return Message.component("easyarmorstands.history.destroy-element", getType().getDisplayName());
     }
 }

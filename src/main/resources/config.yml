@@ -1,0 +1,18 @@
+update-check: true
+
+server-side-translation: true
+
+format:
+  title: '<gold><message>:'
+  success: <green><message>
+  warning: <yellow><message>
+  error: <red><message>
+  hint: <gray><message>
+  button: <gray>[<message>]
+  hover: <gray><message>
+
+menu:
+  spawn:
+    title: <lang:easyarmorstands.menu.spawn.title>
+  color-picker:
+    title: <lang:easyarmorstands.menu.color-picker.title>

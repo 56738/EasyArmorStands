@@ -39,7 +39,7 @@ public class ColorAxisSlot implements ColorSlot {
         return Component.text(result, axis.getTextColor());
     }
 
-    protected List<Component> getDescription() {
+    protected List<Component> getDescription(Locale locale) {
         Color color = context.getColor();
         if (color != null) {
             return Collections.singletonList(Util.formatColor(color));
@@ -48,14 +48,14 @@ public class ColorAxisSlot implements ColorSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         ItemCapability itemCapability = plugin.getCapability(ItemCapability.class);
         ComponentCapability componentCapability = plugin.getCapability(ComponentCapability.class);
         ItemStack item = itemCapability.createColor(getItemColor());
         ItemMeta meta = item.getItemMeta();
         componentCapability.setDisplayName(meta, getDisplayName());
-        componentCapability.setLore(meta, getDescription());
+        componentCapability.setLore(meta, getDescription(locale));
         item.setItemMeta(meta);
         return item;
     }

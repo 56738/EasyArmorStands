@@ -56,9 +56,7 @@ public class MessageManager {
         // Load message styles
         for (MessageStyle style : MessageStyle.values()) {
             String name = style.name().toLowerCase(Locale.ROOT).replace('_', '-');
-            String formatPath = "format." + name;
-            config.addDefault(formatPath, style.getDefaultFormat());
-            String format = config.getString(formatPath);
+            String format = config.getString("format." + name);
             styleTemplates.put(style, format);
         }
 
@@ -78,7 +76,6 @@ public class MessageManager {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }
 
-        config.addDefault("server-side-translation", true);
         if (config.getBoolean("server-side-translation")) {
             GlobalTranslator.translator().addSource(registry);
         }

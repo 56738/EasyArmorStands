@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.history.action;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.element.ElementReference;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.type.PropertyType;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.UUID;
 
@@ -49,15 +49,10 @@ public class PropertyAction<T> implements Action {
 
     @Override
     public Component describe() {
-        return Component.text()
-                .content("Changed ")
-                .append(propertyType.getName().colorIfAbsent(NamedTextColor.WHITE))
-                .append(Component.text(" from "))
-                .append(propertyType.getValueComponent(oldValue).colorIfAbsent(NamedTextColor.WHITE))
-                .append(Component.text(" to "))
-                .append(propertyType.getValueComponent(newValue).colorIfAbsent(NamedTextColor.WHITE))
-                .color(NamedTextColor.GRAY)
-                .build();
+        return Message.component("easyarmorstands.history.changed-property",
+                propertyType.getName(),
+                propertyType.getValueComponent(oldValue),
+                propertyType.getValueComponent(newValue));
     }
 
     @Override

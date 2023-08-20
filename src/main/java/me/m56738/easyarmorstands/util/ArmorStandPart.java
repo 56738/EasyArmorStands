@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
@@ -14,7 +15,7 @@ public enum ArmorStandPart {
             ArmorStand::getHeadPose,
             ArmorStand::setHeadPose,
             "head",
-            Component.text("Head"),
+            Message.component("easyarmorstands.armor-stand-part.head"),
             new Vector3d(0, 23, 0),
             new Vector3d(0, 7, 0)
     ),
@@ -22,7 +23,7 @@ public enum ArmorStandPart {
             ArmorStand::getBodyPose,
             ArmorStand::setBodyPose,
             "body",
-            Component.text("Body"),
+            Message.component("easyarmorstands.armor-stand-part.body"),
             new Vector3d(0, 24, 0),
             new Vector3d(0, -12, 0)
     ),
@@ -30,7 +31,7 @@ public enum ArmorStandPart {
             ArmorStand::getLeftArmPose,
             ArmorStand::setLeftArmPose,
             "left-arm",
-            Component.text("Left arm"),
+            Message.component("easyarmorstands.armor-stand-part.left-arm"),
             new Vector3d(5, 22, 0),
             new Vector3d(0, -10, 0)
     ),
@@ -38,7 +39,7 @@ public enum ArmorStandPart {
             ArmorStand::getRightArmPose,
             ArmorStand::setRightArmPose,
             "right-arm",
-            Component.text("Right arm"),
+            Message.component("easyarmorstands.armor-stand-part.right-arm"),
             new Vector3d(-5, 22, 0),
             new Vector3d(0, -10, 0)
     ),
@@ -46,7 +47,7 @@ public enum ArmorStandPart {
             ArmorStand::getLeftLegPose,
             ArmorStand::setLeftLegPose,
             "left-leg",
-            Component.text("Left leg"),
+            Message.component("easyarmorstands.armor-stand-part.left-leg"),
             new Vector3d(1.9, 12, 0),
             new Vector3d(0, -11, 0)
     ),
@@ -54,7 +55,7 @@ public enum ArmorStandPart {
             ArmorStand::getRightLegPose,
             ArmorStand::setRightLegPose,
             "right-leg",
-            Component.text("Right leg"),
+            Message.component("easyarmorstands.armor-stand-part.right-leg"),
             new Vector3d(-1.9, 12, 0),
             new Vector3d(0, -11, 0)
     );

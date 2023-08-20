@@ -75,9 +75,9 @@ public class SessionListener implements Listener {
         if (!isTool(player, item)) {
             return false;
         }
-        manager.start(player);
+        session = manager.start(player);
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            Session.openSpawnMenu(player);
+            Session.openSpawnMenu(session.getPlayer());
         }
         return true;
     }

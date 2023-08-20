@@ -8,6 +8,7 @@ import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -21,10 +22,10 @@ public class HistoryCommands {
     public void history(EasPlayer sender) {
         History history = sender.history();
         if (history.getPast().isEmpty()) {
-            sender.sendMessage(Component.text("Your history is empty.", NamedTextColor.GRAY));
+            sender.sendMessage(Message.warning("easyarmorstands.warning.history-empty"));
             return;
         }
-        sender.sendMessage(Component.text("History:", NamedTextColor.GOLD));
+        sender.sendMessage(Message.title("easyarmorstands.title.history"));
         for (Iterator<Action> it = history.getPast().descendingIterator(); it.hasNext(); ) {
             Action action = it.next();
             sender.sendMessage(Component.text()
@@ -43,24 +44,13 @@ public class HistoryCommands {
         for (int i = 0; i < count; i++) {
             Action action = history.takeRedoAction();
             if (action != null) {
-                boolean ok;
-                try {
-                    ok = action.execute(sender);
-                } catch (IllegalStateException e) {
-                    sender.sendMessage(Component.text("Failed to redo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
+                if (!action.execute(sender)) {
+                    sender.sendMessage(Message.error("easyarmorstands.error.cannot-redo", action.describe()));
                     break;
                 }
-                if (!ok) {
-                    sender.sendMessage(Component.text("Unable to redo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
-                    break;
-                }
-                sender.sendMessage(Component.text()
-                        .append(Component.text("Redone change: ", NamedTextColor.GREEN))
-                        .append(action.describe()));
+                sender.sendMessage(Message.success("easyarmorstands.success.redone-change", action.describe()));
             } else {
-                sender.sendMessage(Component.text("No changes left to redo", NamedTextColor.RED));
+                sender.sendMessage(Message.error("easyarmorstands.error.nothing-to-redo"));
                 break;
             }
         }
@@ -75,24 +65,13 @@ public class HistoryCommands {
         for (int i = 0; i < count; i++) {
             Action action = history.takeUndoAction();
             if (action != null) {
-                boolean ok;
-                try {
-                    ok = action.undo(sender);
-                } catch (IllegalStateException e) {
-                    sender.sendMessage(Component.text("Failed to undo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
+                if (!action.undo(sender)) {
+                    sender.sendMessage(Message.error("easyarmorstands.error.cannot-undo", action.describe()));
                     break;
                 }
-                if (!ok) {
-                    sender.sendMessage(Component.text("Unable to undo change: ", NamedTextColor.RED)
-                            .append(action.describe()));
-                    break;
-                }
-                sender.sendMessage(Component.text()
-                        .append(Component.text("Undone change: ", NamedTextColor.GREEN))
-                        .append(action.describe()));
+                sender.sendMessage(Message.success("easyarmorstands.success.undone-change", action.describe()));
             } else {
-                sender.sendMessage(Component.text("No changes left to undo", NamedTextColor.RED));
+                sender.sendMessage(Message.error("easyarmorstands.error.nothing-to-undo"));
                 break;
             }
         }

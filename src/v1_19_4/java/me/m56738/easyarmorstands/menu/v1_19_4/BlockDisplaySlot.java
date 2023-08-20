@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class BlockDisplaySlot implements MenuSlot {
     private final Property<BlockData> property;
@@ -49,7 +50,7 @@ public class BlockDisplaySlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         BlockData blockData = property.getValue();
         Material material = blockData.getMaterial();
         ItemStack item = getItem(blockData, material);

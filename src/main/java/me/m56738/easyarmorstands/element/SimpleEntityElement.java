@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.Button;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
@@ -12,10 +13,13 @@ import me.m56738.easyarmorstands.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.session.Session;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+
+import java.util.Locale;
 
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement {
     private final E entity;
@@ -59,17 +63,18 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public Node createNode(Session session) {
-        return new SimpleEntityNode(session, Component.text("Editing an entity"), this);
+        return new SimpleEntityNode(session, Message.component("easyarmorstands.node.select-axis"), this);
     }
 
     @Override
     public void openMenu(EasPlayer player) {
+        Locale locale = player.pointers().getOrDefault(Identity.LOCALE, Locale.US);
         SplitMenuBuilder builder = new SplitMenuBuilder();
         PropertyContainer container = PropertyContainer.tracked(player, this);
         Component title = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
         populateMenu(player, builder, container);
-        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player.get(), this, builder, container, title));
-        player.get().openInventory(builder.build(title).getInventory());
+        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player.get(), locale, this, builder, container, title));
+        player.get().openInventory(builder.build(title, locale).getInventory());
     }
 
     @Override

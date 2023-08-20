@@ -5,9 +5,10 @@ import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,7 @@ public class ColorPresetSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         EasyArmorStands plugin = EasyArmorStands.getInstance();
         ItemCapability itemCapability = plugin.getCapability(ItemCapability.class);
         ComponentCapability componentCapability = plugin.getCapability(ComponentCapability.class);
@@ -37,17 +38,8 @@ public class ColorPresetSlot implements MenuSlot {
         ItemMeta meta = item.getItemMeta();
         componentCapability.setDisplayName(meta, Component.text(name, TextColor.color(color.getColor().asRGB())));
         componentCapability.setLore(meta, Arrays.asList(
-                Component.text()
-                        .content("Left click: ")
-                        .append(Component.text("Select", NamedTextColor.GOLD))
-                        .color(NamedTextColor.GRAY)
-                        .build(),
-                Component.text()
-                        .content("Right click: ")
-                        .append(Component.text("Mix", NamedTextColor.GOLD))
-                        .color(NamedTextColor.GRAY)
-                        .build()
-        ));
+                GlobalTranslator.render(Message.hint("easyarmorstands.menu.color-picker.left-click-to-select"), locale),
+                GlobalTranslator.render(Message.hint("easyarmorstands.menu.color-picker.right-click-to-mix"), locale)));
         item.setItemMeta(meta);
         return item;
     }

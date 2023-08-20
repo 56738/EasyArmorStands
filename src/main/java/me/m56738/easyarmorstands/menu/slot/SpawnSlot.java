@@ -14,6 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3d;
 
+import java.util.Locale;
+
 public class SpawnSlot implements MenuSlot {
     private final ElementType type;
     private final ItemStack item;
@@ -24,7 +26,7 @@ public class SpawnSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return item;
     }
 

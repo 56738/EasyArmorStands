@@ -39,8 +39,9 @@ import org.joml.Vector3dc;
 public class SessionCommands {
     public static void showText(Audience audience, Component type, Component text, String command) {
         String serialized = MiniMessage.miniMessage().serializeOr(text, "");
-        audience.sendMessage(type
-                .append(Component.text(": "))
+        audience.sendMessage(Component.text()
+                .append(Message.title(type))
+                .append(Component.space())
                 .append(Message.button("easyarmorstands.button.text.edit")
                         .hoverEvent(Message.hover("easyarmorstands.click-to-edit"))
                         .clickEvent(ClickEvent.suggestCommand(command + " " + serialized)))
@@ -171,7 +172,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.spawn")
     @CommandDescription("Open the spawn menu")
     public void spawn(EasPlayer sender) {
-        Session.openSpawnMenu(sender.get());
+        Session.openSpawnMenu(sender);
     }
 
     @CommandMethod("destroy")
@@ -348,7 +349,7 @@ public class SessionCommands {
             return;
         }
         Component text = property.getValue();
-        showText(sender, Message.component("easyarmorstands.property.custom-name.name"), text, "/eas name set");
+        showText(sender, PropertyTypes.ENTITY_CUSTOM_NAME.getName(), text, "/eas name set");
     }
 
     @CommandMethod("name set <value>")

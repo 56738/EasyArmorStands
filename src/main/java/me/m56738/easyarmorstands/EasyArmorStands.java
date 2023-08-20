@@ -28,6 +28,7 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.MenuListener;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
@@ -35,8 +36,6 @@ import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -125,7 +124,7 @@ public class EasyArmorStands extends JavaPlugin {
                 .withNoPermissionHandler()
                 .withCommandExecutionHandler()
                 .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER,
-                        (sender, e) -> Component.text("Only players can use this command", NamedTextColor.RED))
+                        (sender, e) -> Message.error("easyarmorstands.error.not-a-player"))
                 .apply(commandManager, s -> s);
 
         commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector());
@@ -161,7 +160,6 @@ public class EasyArmorStands extends JavaPlugin {
 
         messageManager.load(getDataFolder().toPath(), getConfig());
 
-        getConfig().addDefault("update-check", true);
         boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
         if (getConfig().getBoolean("update-check", false) && !isSnapshot) {
             if (updateManager == null) {

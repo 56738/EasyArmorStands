@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class HeadDatabaseSlot implements MenuSlot {
     private final HeadDatabaseAPI api;
@@ -18,7 +19,7 @@ public class HeadDatabaseSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         ItemStack item = api.getItemHead("227");
         if (item == null) {
             item = api.getRandomHead();

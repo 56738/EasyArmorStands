@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class TrainCartsModelListingSlot implements MenuSlot {
     private final MenuElement element;
@@ -22,14 +23,15 @@ public class TrainCartsModelListingSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return Util.createItem(
                 ItemType.BOOK,
                 Component.text("Open model browser", NamedTextColor.BLUE),
                 Arrays.asList(
                         Component.text("Select a resource pack model from", NamedTextColor.GRAY),
                         Component.text("the TrainCarts model browser.", NamedTextColor.GRAY)
-                )
+                ),
+                locale
         );
     }
 

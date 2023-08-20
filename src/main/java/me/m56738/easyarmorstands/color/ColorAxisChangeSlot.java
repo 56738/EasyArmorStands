@@ -1,18 +1,18 @@
 package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ColorAxisChangeSlot extends ColorAxisSlot {
-    private static final NumberFormat FORMAT = new DecimalFormat("+0;-0");
     private final ColorPickerContext context;
     private final ColorAxis axis;
     private final DyeColor displayColor;
@@ -36,20 +36,12 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
     }
 
     @Override
-    protected List<Component> getDescription() {
-        List<Component> description = new ArrayList<>(super.getDescription());
-        description.add(formatChange("Left click", leftChange));
-        description.add(formatChange("Right click", rightChange));
-        description.add(formatChange("Shift click", shiftChange));
+    protected List<Component> getDescription(Locale locale) {
+        List<Component> description = new ArrayList<>(super.getDescription(locale));
+        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change").color(NamedTextColor.GRAY), locale));
+        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change.right-click").color(NamedTextColor.GRAY), locale));
+        description.add(GlobalTranslator.render(Message.component("easyarmorstands.menu.color-picker.change.shift-click").color(NamedTextColor.GRAY), locale));
         return description;
-    }
-
-    private Component formatChange(String type, int change) {
-        return Component.text()
-                .content(type + ": ")
-                .append(Component.text(FORMAT.format(change), NamedTextColor.GOLD))
-                .color(NamedTextColor.GRAY)
-                .build();
     }
 
     @Override

@@ -92,22 +92,22 @@ armor-stand-marker:
 armor-stand-pose:
   head:
     permission: easyarmorstands.property.armorstand.pose.head
-    name: <lang:easyarmorstands.property.armor-stand.pose.head.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.head>'>
   body:
     permission: easyarmorstands.property.armorstand.pose.body
-    name: <lang:easyarmorstands.property.armor-stand.pose.body.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.body>'>
   left-arm:
     permission: easyarmorstands.property.armorstand.pose.leftarm
-    name: <lang:easyarmorstands.property.armor-stand.pose.left-arm.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-arm>'>
   right-arm:
     permission: easyarmorstands.property.armorstand.pose.rightarm
-    name: <lang:easyarmorstands.property.armor-stand.pose.right-arm.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-arm>'>
   left-leg:
     permission: easyarmorstands.property.armorstand.pose.leftleg
-    name: <lang:easyarmorstands.property.armor-stand.pose.left-leg.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-leg>'>
   right-leg:
     permission: easyarmorstands.property.armorstand.pose.rightleg
-    name: <lang:easyarmorstands.property.armor-stand.pose.right-leg.name>
+    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-leg>'>
 
 armor-stand-size:
   permission: easyarmorstands.property.armorstand.size

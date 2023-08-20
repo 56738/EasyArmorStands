@@ -8,16 +8,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.Locale;
+
 public class EntityElementMenuInitializeEvent extends Event {
     private static final HandlerList handlerList = new HandlerList();
     private final Player player;
+    private final Locale locale;
     private final MenuElement element;
     private final MenuBuilder menuBuilder;
     private final PropertyContainer properties;
     private Component title;
 
-    public EntityElementMenuInitializeEvent(Player player, MenuElement element, MenuBuilder menuBuilder, PropertyContainer properties, Component title) {
+    public EntityElementMenuInitializeEvent(Player player, Locale locale, MenuElement element, MenuBuilder menuBuilder, PropertyContainer properties, Component title) {
         this.player = player;
+        this.locale = locale;
         this.element = element;
         this.menuBuilder = menuBuilder;
         this.properties = properties;
@@ -35,6 +39,10 @@ public class EntityElementMenuInitializeEvent extends Event {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 
     public MenuElement getElement() {

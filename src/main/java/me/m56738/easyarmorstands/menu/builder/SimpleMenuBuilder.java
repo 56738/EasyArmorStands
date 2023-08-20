@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SimpleMenuBuilder implements MenuBuilder {
     private static final List<MenuSlot> emptyRow = new ArrayList<>(9);
@@ -55,13 +56,13 @@ public class SimpleMenuBuilder implements MenuBuilder {
     }
 
     @Override
-    public Menu build(Component title) {
+    public Menu build(Component title, Locale locale) {
         MenuSlot[] slots = this.slots.toArray(new MenuSlot[0]);
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] == null) {
                 slots[i] = BackgroundSlot.INSTANCE;
             }
         }
-        return new Menu(title, slots);
+        return new Menu(title, slots, locale);
     }
 }

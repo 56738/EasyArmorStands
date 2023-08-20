@@ -16,7 +16,6 @@ import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.joml.Quaterniondc;
@@ -61,7 +60,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.HEAD),
                         getResetAction(ArmorStandPart.HEAD, container),
                         ItemType.PLAYER_HEAD,
-                        Component.text("head")));
+                        ArmorStandPart.HEAD.getDisplayName()));
         builder.setSlot(
                 Menu.index(4, 6),
                 new NodeSlot(
@@ -69,7 +68,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.LEFT_ARM),
                         getResetAction(ArmorStandPart.LEFT_ARM, container),
                         ItemType.LEVER,
-                        Component.text("left arm")));
+                        ArmorStandPart.LEFT_ARM.getDisplayName()));
         builder.setSlot(
                 Menu.index(4, 7),
                 new NodeSlot(
@@ -77,7 +76,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.BODY),
                         getResetAction(ArmorStandPart.BODY, container),
                         ItemType.LEATHER_CHESTPLATE,
-                        Component.text("body")));
+                        ArmorStandPart.BODY.getDisplayName()));
         builder.setSlot(
                 Menu.index(4, 8),
                 new NodeSlot(
@@ -85,7 +84,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.RIGHT_ARM),
                         getResetAction(ArmorStandPart.RIGHT_ARM, container),
                         ItemType.LEVER,
-                        Component.text("right arm")));
+                        ArmorStandPart.RIGHT_ARM.getDisplayName()));
         builder.setSlot(
                 Menu.index(5, 6),
                 new NodeSlot(
@@ -93,7 +92,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.LEFT_LEG),
                         getResetAction(ArmorStandPart.LEFT_LEG, container),
                         ItemType.LEVER,
-                        Component.text("left leg")));
+                        ArmorStandPart.LEFT_LEG.getDisplayName()));
         builder.setSlot(
                 Menu.index(5, 7),
                 new NodeSlot(
@@ -101,7 +100,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPositionButton(),
                         new YawResetAction(container.get(PropertyTypes.ENTITY_LOCATION), container),
                         ItemType.BUCKET,
-                        Component.text("position")));
+                        PropertyTypes.ENTITY_LOCATION.getName()));
         builder.setSlot(
                 Menu.index(5, 8),
                 new NodeSlot(
@@ -109,7 +108,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                         root.getPartButton(ArmorStandPart.RIGHT_LEG),
                         getResetAction(ArmorStandPart.RIGHT_LEG, container),
                         ItemType.LEVER,
-                        Component.text("right leg")));
+                        ArmorStandPart.RIGHT_LEG.getDisplayName()));
     }
 
     private Consumer<MenuClick> getResetAction(ArmorStandPart part, PropertyContainer container) {

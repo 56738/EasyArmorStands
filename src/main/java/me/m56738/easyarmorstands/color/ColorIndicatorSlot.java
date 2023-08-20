@@ -3,6 +3,8 @@ package me.m56738.easyarmorstands.color;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
+
 public class ColorIndicatorSlot implements ColorSlot {
     private final ColorPickerContext context;
 
@@ -11,7 +13,7 @@ public class ColorIndicatorSlot implements ColorSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return context.getItem();
     }
 

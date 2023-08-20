@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
@@ -7,25 +8,27 @@ import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class ColorPicker extends Menu {
     private final Runnable callback;
 
-    private ColorPicker(Component title, MenuSlot[] slots, Runnable callback) {
-        super(title, slots);
+    private ColorPicker(Component title, MenuSlot[] slots, Locale locale, Runnable callback) {
+        super(title, slots, locale);
         this.callback = callback;
     }
 
-    public static Menu create(ItemPropertySlot slot, Runnable callback) {
-        return create(slot.getProperty(), slot.getContainer(), callback);
+    public static Menu create(ItemPropertySlot slot, Locale locale, Runnable callback) {
+        return create(slot.getProperty(), slot.getContainer(), locale, callback);
     }
 
-    public static Menu create(Property<ItemStack> property, PropertyContainer container, Runnable callback) {
+    public static Menu create(Property<ItemStack> property, PropertyContainer container, Locale locale, Runnable callback) {
         MenuSlot[] slots = new MenuSlot[9 * 4];
         Arrays.fill(slots, BackgroundSlot.INSTANCE);
 
@@ -58,7 +61,8 @@ public class ColorPicker extends Menu {
             }
         }
 
-        return new ColorPicker(Component.text("Color picker"), slots, callback);
+        Component title = MiniMessage.miniMessage().deserialize(EasyArmorStands.getInstance().getConfig().getString("menu.color-picker.title"));
+        return new ColorPicker(title, slots, locale, callback);
     }
 
     @Override

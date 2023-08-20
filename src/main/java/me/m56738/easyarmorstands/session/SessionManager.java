@@ -4,10 +4,10 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.event.SessionStartEvent;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.node.Node;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class SessionManager {
     public Session start(Player player) {
         Session session = new Session(new EasPlayer(player));
         EntityElementProviderRegistry registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
-        EntitySelectionNode node = new EntitySelectionNode(session, Component.text("Select an entity"), registry);
+        EntitySelectionNode node = new EntitySelectionNode(session, Message.component("easyarmorstands.node.select-entity"), registry);
         node.setRoot(true);
         session.pushNode(node);
         start(session);

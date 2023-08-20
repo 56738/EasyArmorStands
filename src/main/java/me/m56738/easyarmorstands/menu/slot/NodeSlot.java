@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.NodeFactory;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class NodeSlot implements MenuSlot {
@@ -29,21 +31,17 @@ public class NodeSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         List<Component> description = new ArrayList<>();
-        description.add(Component.text("Click to select this", NamedTextColor.GRAY));
-        description.add(Component.text("bone in the editor.", NamedTextColor.GRAY));
+        description.add(Message.component("easyarmorstands.menu.node.left-click-to-select").color(NamedTextColor.GRAY));
         if (resetAction != null) {
-            description.add(Component.text("Right click to reset.", NamedTextColor.GRAY));
+            description.add(Message.component("easyarmorstands.menu.node.right-click-to-reset").color(NamedTextColor.GRAY));
         }
         return Util.createItem(
                 type,
-                Component.text()
-                        .content("Edit ")
-                        .append(name)
-                        .color(NamedTextColor.BLUE)
-                        .build(),
-                description
+                name.color(NamedTextColor.BLUE),
+                description,
+                locale
         );
     }
 

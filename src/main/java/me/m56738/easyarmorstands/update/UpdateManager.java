@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.update;
 
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -81,9 +81,8 @@ public class UpdateManager {
     }
 
     public void notify(Audience audience, String version) {
-        audience.sendMessage(Component
-                .text("EasyArmorStands v" + version + " is available", NamedTextColor.GOLD)
-                .hoverEvent(Component.text("Click to visit " + plugin.getName() + " on SpigotMC"))
+        audience.sendMessage(Message.warning("easyarmorstands.update.available", Component.text(version))
+                .hoverEvent(Message.hover("easyarmorstands.update.click-to-visit"))
                 .clickEvent(ClickEvent.openUrl(spigotUrl)));
     }
 }

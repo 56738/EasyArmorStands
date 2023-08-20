@@ -5,12 +5,13 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.DestroyableElement;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
+import java.util.Locale;
 
 public class DestroySlot implements MenuSlot {
     private final DestroyableElement element;
@@ -20,13 +21,13 @@ public class DestroySlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack getItem(Locale locale) {
         return Util.createItem(
                 ItemType.TNT,
-                Component.text("Destroy", NamedTextColor.BLUE),
+                Message.component("easyarmorstands.menu.destroy").color(NamedTextColor.BLUE),
                 Collections.singletonList(
-                        Component.text("Deletes this entity.", NamedTextColor.GRAY)
-                )
+                        Message.component("easyarmorstands.menu.destroy.description").color(NamedTextColor.GRAY)),
+                locale
         );
     }
 

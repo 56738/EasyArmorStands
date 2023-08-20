@@ -14,6 +14,18 @@ public class Message {
     private Message() {
     }
 
+    public static Component title(Component component) {
+        return messageManager.format(MessageStyle.TITLE, component);
+    }
+
+    public static Component title(@PropertyKey(resourceBundle = BUNDLE) String key) {
+        return messageManager.format(MessageStyle.TITLE, component(key));
+    }
+
+    public static Component title(@PropertyKey(resourceBundle = BUNDLE) String key, ComponentLike... args) {
+        return messageManager.format(MessageStyle.TITLE, component(key, args));
+    }
+
     public static Component success(@PropertyKey(resourceBundle = BUNDLE) String key) {
         return messageManager.format(MessageStyle.SUCCESS, component(key));
     }

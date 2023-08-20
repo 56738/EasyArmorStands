@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.bone.PositionBone;
 import me.m56738.easyarmorstands.bone.RotationBone;
 import me.m56738.easyarmorstands.bone.RotationProvider;
 import me.m56738.easyarmorstands.bone.ScaleBone;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.particle.ParticleColor;
 import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Axis;
@@ -78,7 +79,8 @@ public abstract class MenuNode implements Node {
                     session,
                     bone,
                     rotationProvider,
-                    Component.text("Move " + axis.getName(), TextColor.color(axis.getColor())),
+                    Message.component("easyarmorstands.node.move-along-axis", Component.text(axis.getName()))
+                            .color(TextColor.color(axis.getColor())),
                     axis,
                     axis.getColor(),
                     length
@@ -109,13 +111,13 @@ public abstract class MenuNode implements Node {
     }
 
     private void addCarryButton(Session session, PositionBone bone, CarryNode node) {
-        PositionBoneButton button = new PositionBoneButton(session, bone, node, Component.text("Pick up"), ParticleColor.YELLOW);
+        PositionBoneButton button = new PositionBoneButton(session, bone, node, Message.component("easyarmorstands.node.pick-up"), ParticleColor.YELLOW);
         button.setPriority(1);
         addButton(button);
     }
 
     public void addYawButton(Session session, PositionAndYawBone bone, double radius) {
-        addButton(new YawBoneNode(session, Component.text("Yaw", NamedTextColor.YELLOW), ParticleColor.YELLOW, radius, bone));
+        addButton(new YawBoneNode(session, Message.component("easyarmorstands.node.yaw").color(NamedTextColor.YELLOW), ParticleColor.YELLOW, radius, bone));
     }
 
     public void addRotationButtons(Session session, RotationBone bone, double radius, RotationProvider rotationProvider) {
@@ -123,7 +125,8 @@ public abstract class MenuNode implements Node {
             addButton(new BoneRotationNode(
                     session,
                     bone,
-                    Component.text("Rotate " + axis.getName(), TextColor.color(axis.getColor())),
+                    Message.component("easyarmorstands.node.rotate-around-axis", Component.text(axis.getName()))
+                            .color(TextColor.color(axis.getColor())),
                     axis,
                     axis.getColor(),
                     radius,
@@ -137,7 +140,8 @@ public abstract class MenuNode implements Node {
             addButton(new ScaleNode(
                     session,
                     bone,
-                    Component.text("Scale " + axis.getName(), TextColor.color(axis.getColor())),
+                    Message.component("easyarmorstands.node.scale-along-axis", Component.text(axis.getName()))
+                            .color(TextColor.color(axis.getColor())),
                     axis,
                     ParticleColor.AQUA,
                     length

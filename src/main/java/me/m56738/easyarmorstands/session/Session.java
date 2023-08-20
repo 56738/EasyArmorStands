@@ -16,13 +16,14 @@ import me.m56738.easyarmorstands.node.ElementNode;
 import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.particle.Particle;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +39,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -64,23 +66,25 @@ public final class Session {
         this.player = player;
     }
 
-    public static void openSpawnMenu(Player player) {
+    public static void openSpawnMenu(EasPlayer player) {
+        Locale locale = player.pointers().getOrDefault(Identity.LOCALE, Locale.US);
         SimpleMenuBuilder builder = new SimpleMenuBuilder();
-        if (player.hasPermission("easyarmorstands.spawn.armorstand")) {
+        if (player.permissions().test("easyarmorstands.spawn.armorstand")) {
             ArmorStandElementType type = new ArmorStandElementType();
-            builder.addButton(new SpawnSlot(type, Util.createItem(ItemType.ARMOR_STAND, type.getDisplayName())));
+            builder.addButton(new SpawnSlot(type, Util.createItem(ItemType.ARMOR_STAND, type.getDisplayName(), locale)));
         }
-        Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player, builder));
+        Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player.get(), locale, builder));
         int size = builder.getSize();
         if (size == 0) {
             return;
         }
-        Menu menu = builder.build(Component.text("Spawn"));
+        Component title = MiniMessage.miniMessage().deserialize(EasyArmorStands.getInstance().getConfig().getString("menu.spawn.title"));
+        Menu menu = builder.build(title, locale);
         if (size == 1) {
             // Only one button, click it immediately
-            menu.getSlot(0).onClick(new FakeLeftClick(menu, 0, player));
+            menu.getSlot(0).onClick(new FakeLeftClick(menu, 0, player.get()));
         } else {
-            player.openInventory(menu.getInventory());
+            player.get().openInventory(menu.getInventory());
         }
     }
 
