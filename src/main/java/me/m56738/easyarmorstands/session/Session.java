@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
@@ -24,9 +23,6 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -226,7 +222,7 @@ public final class Session {
 
         updateOverlay();
 
-        return player.isValid() && isHoldingTool();
+        return player.isValid();
     }
 
     private void updateOverlay() {
@@ -251,19 +247,6 @@ public final class Session {
             currentActionBar = pendingActionBar;
             player.sendActionBar(currentActionBar);
         }
-    }
-
-    private boolean isHoldingTool() {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
-        EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
-        EntityEquipment equipment = player.get().getEquipment();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (EasyArmorStands.getInstance().isTool(item)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     void stop() {

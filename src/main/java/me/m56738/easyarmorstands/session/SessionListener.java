@@ -12,12 +12,14 @@ import me.m56738.easyarmorstands.node.EntitySelectionNode;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -26,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -45,6 +48,22 @@ public class SessionListener implements Listener {
 
     private boolean isTool(Player player, ItemStack item) {
         return EasyArmorStands.getInstance().isTool(item) && player.hasPermission("easyarmorstands.edit");
+    }
+
+    private boolean isHoldingTool(Player player) {
+        if (!player.hasPermission("easyarmorstands.edit")) {
+            return false;
+        }
+        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
+        EntityEquipment equipment = player.getEquipment();
+        for (EquipmentSlot hand : equipmentCapability.getHands()) {
+            ItemStack item = equipmentCapability.getItem(equipment, hand);
+            if (plugin.isTool(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean onLeftClick(Player player, ItemStack item, Block block) {
@@ -130,29 +149,34 @@ public class SessionListener implements Listener {
     }
 
     public void updateHeldItem(Player player) {
-        if (manager.getSession(player) != null) {
-            return;
-        }
-        EntityEquipment equipment = player.getEquipment();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (isTool(player, item)) {
+        if (isHoldingTool(player)) {
+            if (manager.getSession(player) == null) {
                 manager.start(player);
-                return;
             }
+        } else {
+            manager.stop(player);
         }
     }
 
     @EventHandler
     public void onHoldItem(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = player.getInventory().getItem(event.getNewSlot());
-        if (manager.getSession(player) != null) {
+        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
+    }
+
+    @EventHandler
+    public void onPickup(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
+    }
+
+    @EventHandler
+    public void onClick(InventoryCloseEvent event) {
+        HumanEntity player = event.getPlayer();
+        if (!(player instanceof Player)) {
             return;
         }
-        if (isTool(player, item)) {
-            manager.start(player);
-        }
+        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem((Player) player));
     }
 
     @EventHandler
@@ -221,7 +245,8 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
-        Session session = manager.getSession(event.getPlayer());
+        Player player = event.getPlayer();
+        Session session = manager.getSession(player);
         if (session != null) {
             EntitySelectionNode node = session.findNode(EntitySelectionNode.class);
             if (node != null) {
