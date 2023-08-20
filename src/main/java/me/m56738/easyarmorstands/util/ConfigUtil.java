@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.util;
 
+import me.m56738.easyarmorstands.item.ItemRenderer;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -13,11 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigUtil {
-    public static ItemTemplate getItem(ConfigurationSection section, String path) {
-        return getItem(section, path, new ItemStack(Material.STONE));
+    public static ItemTemplate getItem(ConfigurationSection section, String path, ItemRenderer renderer) {
+        return getItem(section, path, new ItemStack(Material.STONE), renderer);
     }
 
-    public static ItemTemplate getItem(ConfigurationSection section, String path, ItemStack template) {
+    public static ItemTemplate getItem(ConfigurationSection section, String path, ItemStack template, ItemRenderer renderer) {
         ItemStack item = template.clone();
         String name;
         List<String> lore;
@@ -37,15 +39,15 @@ public class ConfigUtil {
             name = null;
             lore = Collections.emptyList();
         }
-        return new ItemTemplate(item, name, lore, TagResolver.empty());
+        return new ItemTemplate(item, name, lore, TagResolver.empty(), renderer);
     }
 
-    public static ButtonTemplate getButton(ConfigurationSection section, String path) {
-        return new ButtonTemplate(getItem(section, path));
+    public static ItemTemplate getButton(ConfigurationSection section, String path) {
+        return getItem(section, path, ItemRenderer.button());
     }
 
-    public static ButtonTemplate getButton(ConfigurationSection section, String path, ItemStack template) {
-        return new ButtonTemplate(getItem(section, path, template));
+    public static ItemTemplate getButton(ConfigurationSection section, String path, ItemStack template) {
+        return getItem(section, path, template, ItemRenderer.button());
     }
 
     private static void configureType(ItemStack item, ConfigurationSection section, String path) {

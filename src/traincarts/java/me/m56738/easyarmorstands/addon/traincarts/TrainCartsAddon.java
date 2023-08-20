@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.addon.traincarts;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class TrainCartsAddon implements Addon {

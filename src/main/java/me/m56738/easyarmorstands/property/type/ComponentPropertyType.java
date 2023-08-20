@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.ComponentButton;
 import me.m56738.easyarmorstands.property.button.PropertyButton;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

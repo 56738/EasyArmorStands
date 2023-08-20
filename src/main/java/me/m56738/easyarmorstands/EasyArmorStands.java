@@ -29,6 +29,8 @@ import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
+import me.m56738.easyarmorstands.item.ItemRenderer;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
@@ -39,7 +41,6 @@ import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.util.ItemTemplate;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -99,6 +100,7 @@ public class EasyArmorStands extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
+        adventure = BukkitAudiences.create(this);
 
         messageManager = new MessageManager(this);
         loader.load();
@@ -107,7 +109,6 @@ public class EasyArmorStands extends JavaPlugin {
         entityElementProviderRegistry = new EntityElementProviderRegistry();
         sessionManager = new SessionManager();
         historyManager = new HistoryManager();
-        adventure = BukkitAudiences.create(this);
 
         entityElementProviderRegistry.register(new ArmorStandElementProvider());
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
@@ -181,7 +182,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         messageManager.load(getDataFolder().toPath(), config);
 
-        toolTemplate = ConfigUtil.getItem(config, "tool").editMeta(this::configureTool);
+        toolTemplate = ConfigUtil.getItem(config, "tool", ItemRenderer.item()).editMeta(this::configureTool);
         backgroundTemplate = ConfigUtil.getButton(config, "menu.background");
         destroyButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.destroy");
         colorPickerButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.color-picker");
@@ -194,7 +195,7 @@ public class EasyArmorStands extends JavaPlugin {
         }
 
         boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
-        if (config.getBoolean("update-check", false) && !isSnapshot) {
+        if (config.getBoolean("update-check") && !isSnapshot) {
             if (updateManager == null) {
                 updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
             }

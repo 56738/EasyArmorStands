@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.node.NodeFactory;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;

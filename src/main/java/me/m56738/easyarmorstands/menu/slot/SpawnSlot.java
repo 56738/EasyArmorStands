@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3d;

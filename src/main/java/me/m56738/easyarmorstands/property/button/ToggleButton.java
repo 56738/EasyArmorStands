@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.button;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 
 public abstract class ToggleButton<T> extends SimpleButton<T> {
     public ToggleButton(Property<T> property, PropertyContainer container, ItemTemplate item) {

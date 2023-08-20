@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 
 public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     private final T[] values;

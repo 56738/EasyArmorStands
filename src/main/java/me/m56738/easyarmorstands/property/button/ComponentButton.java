@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.property.Property;
 import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.Component;
 
 public class ComponentButton extends SimpleButton<Component> {

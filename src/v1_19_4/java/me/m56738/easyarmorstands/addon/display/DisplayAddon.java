@@ -14,7 +14,7 @@ import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNode;
 import me.m56738.easyarmorstands.node.v1_19_4.TextDisplayElementType;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;

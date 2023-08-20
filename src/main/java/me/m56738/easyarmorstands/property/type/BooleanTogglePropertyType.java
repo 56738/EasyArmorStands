@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.BooleanToggleButton;
 import me.m56738.easyarmorstands.property.button.PropertyButton;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
