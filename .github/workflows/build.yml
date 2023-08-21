@@ -24,4 +24,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Package
-          path: build/libs
+          path: easyarmorstands-plugin/build/EasyArmorStands-*.jar

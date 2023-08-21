@@ -61,6 +61,9 @@ fun registerSourceSet(name: String) {
     tasks {
         shadowJar {
             from(sourceSet.map { it.output })
+            archiveBaseName.set("EasyArmorStands")
+            archiveClassifier.set("")
+            destinationDirectory.set(layout.buildDirectory)
         }
     }
 }

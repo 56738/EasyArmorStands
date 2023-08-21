@@ -5,3 +5,4 @@ pluginManagement {
 }
 
 include("easyarmorstands-api")
+include("easyarmorstands-plugin")
