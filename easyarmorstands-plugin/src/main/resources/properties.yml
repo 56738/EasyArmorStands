@@ -122,19 +122,6 @@ easyarmorstands:armor_stand_size:
     description:
       - <value>
 
-easyarmorstands:armor_stand_visibility:
-  permission: easyarmorstands.property.visible
-  name: <lang:easyarmorstands.property.visibility.name>
-  value:
-    enabled: <green><lang:easyarmorstands.property.common.visible>
-    disabled: <red><lang:easyarmorstands.property.common.invisible>
-  button:
-    type: potion
-    effect: invisibility
-    name: <name>
-    description:
-      - <value>
-
 easyarmorstands:entity_custom_name:
   permission: easyarmorstands.property.name
   name: <lang:easyarmorstands.property.custom-name.name>
@@ -197,6 +184,19 @@ easyarmorstands:entity_location:
     description:
       - <value>
       - <lang:easyarmorstands.property.glow.description>
+
+easyarmorstands:entity_visibility:
+  permission: easyarmorstands.property.visible
+  name: <lang:easyarmorstands.property.visibility.name>
+  value:
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+  button:
+    type: potion
+    effect: invisibility
+    name: <name>
+    description:
+      - <value>
 
 easyarmorstands:block_display_block:
   permission: easyarmorstands.property.display.block

@@ -1,0 +1,4 @@
+me.m56738.easyarmorstands.display.capability.entitytype.EntityTypeCapabilityProvider
+me.m56738.easyarmorstands.display.capability.particle.ParticleCapabilityProvider
+me.m56738.easyarmorstands.display.capability.textdisplay.TextDisplayCapabilityProvider
+me.m56738.easyarmorstands.display.capability.textdisplay.PaperTextDisplayCapabilityProvider

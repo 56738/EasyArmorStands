@@ -41,6 +41,9 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
 
     @Override
     public Component getName() {
+        if (name == null) {
+            throw new IllegalStateException("Property not configured: " + key);
+        }
         return name;
     }
 }

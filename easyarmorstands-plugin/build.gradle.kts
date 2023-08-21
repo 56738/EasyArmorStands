@@ -4,17 +4,19 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":easyarmorstands-api"))
     compileOnly(libs.bukkit)
-    implementation(libs.adventure.platform.bukkit)
-    implementation(libs.adventure.text.minimessage)
-    implementation(libs.adventure.text.serializer.gson)
-    implementation(libs.adventure.text.serializer.legacy)
-    implementation(libs.bstats)
-    implementation(libs.cloud.annotations)
-    implementation(libs.cloud.minecraft.extras)
-    implementation(libs.cloud.paper)
-    implementation(libs.joml)
+    api(project(":easyarmorstands-addon"))
+    api(project(":easyarmorstands-api"))
+    api(libs.adventure.platform.bukkit)
+    api(libs.adventure.text.minimessage)
+    api(libs.adventure.text.serializer.gson)
+    api(libs.adventure.text.serializer.legacy)
+    api(libs.bstats)
+    api(libs.cloud.annotations)
+    api(libs.cloud.minecraft.extras)
+    api(libs.cloud.paper)
+    api(libs.joml)
+    runtimeOnly(project(":easyarmorstands-display"))
 }
 
 tasks {
@@ -97,23 +99,12 @@ registerVersion("v1_16", "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 registerVersion("v1_16_paper", "com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
-registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
-registerVersion("v1_19_4_paper", "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 
 registerAddon("headdatabase")
 registerAddon("plotsquared")
 registerAddon("traincarts")
 registerAddon("worldguard_v6")
 registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
-
-sourceSets {
-    named("v1_19_4_paper") {
-        compileClasspath += named("v1_19_4").get().output
-        runtimeClasspath += named("v1_19_4").get().output
-        compileClasspath += named("v1_16_paper").get().output
-        runtimeClasspath += named("v1_16_paper").get().output
-    }
-}
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
@@ -127,5 +118,4 @@ dependencies {
     "traincartsCompileOnly"(libs.traincarts)
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
-    "v1_19_4CompileOnly"(libs.brigadier)
 }

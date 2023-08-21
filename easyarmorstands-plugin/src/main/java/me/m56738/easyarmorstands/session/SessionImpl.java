@@ -107,6 +107,7 @@ public final class SessionImpl implements Session {
             MenuSlot slot = menu.getSlot(0);
             if (slot != null) {
                 slot.onClick(new FakeLeftClick(menu, 0, player));
+                return;
             }
         }
         player.openInventory(menu.getInventory());
