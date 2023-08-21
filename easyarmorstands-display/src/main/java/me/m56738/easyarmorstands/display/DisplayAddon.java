@@ -2,8 +2,9 @@ package me.m56738.easyarmorstands.display;
 
 import cloud.commandframework.brigadier.CloudBrigadierManager;
 import io.leangen.geantyref.TypeToken;
+import me.m56738.easyarmorstands.EasConfig;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.display.command.BlockDataArgumentParser;
@@ -14,9 +15,9 @@ import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
-import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.util.ConfigUtil;
+import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.BlockDisplay;
@@ -24,32 +25,20 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 
-public class DisplayAddon implements Addon {
-    private JOMLMapper mapper;
-    private DisplayElementType<ItemDisplay> itemDisplayType;
-    private DisplayElementType<BlockDisplay> blockDisplayType;
-    private DisplayElementType<TextDisplay> textDisplayType;
+public class DisplayAddon {
+    private final JOMLMapper mapper;
+    private final DisplayElementType<ItemDisplay> itemDisplayType;
+    private final DisplayElementType<BlockDisplay> blockDisplayType;
+    private final DisplayElementType<TextDisplay> textDisplayType;
     private ItemTemplate displayBoxButtonTemplate;
 
-    public DisplayAddon() {
+    public DisplayAddon(EasyArmorStands plugin) {
         try {
             mapper = new JOMLMapper();
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
-    }
 
-    @Override
-    public boolean isSupported() {
-        return mapper != null;
-    }
-
-    @Override
-    public String getName() {
-        return "display entity";
-    }
-
-    @Override
-    public void enable(EasyArmorStands plugin) {
         new DefaultDisplayPropertyTypes(plugin.getPropertyTypeRegistry());
 
         DisplaySessionListener listener = new DisplaySessionListener(this);
@@ -65,7 +54,7 @@ public class DisplayAddon implements Addon {
         registry.register(new DisplayElementProvider<>(blockDisplayType));
         registry.register(new DisplayElementProvider<>(textDisplayType));
 
-        load(plugin.getConfig());
+        plugin.getConfiguration().subscribe(this::load);
 
         plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
@@ -82,16 +71,12 @@ public class DisplayAddon implements Addon {
         plugin.getAnnotationParser().parse(new DisplayCommands(this));
     }
 
-    @Override
-    public void reload(EasyArmorStands plugin) {
-        load(plugin.getConfig());
-    }
-
-    private void load(ConfigurationSection config) {
-        itemDisplayType.load(config, "menu.spawn.buttons.item-display");
-        blockDisplayType.load(config, "menu.spawn.buttons.block-display");
-        textDisplayType.load(config, "menu.spawn.buttons.text-display");
-        displayBoxButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.display-bone.bounding-box");
+    private void load(EasConfig config) {
+        ConfigurationSection cfg = config.getConfig();
+        itemDisplayType.load(cfg, "menu.spawn.buttons.item-display");
+        blockDisplayType.load(cfg, "menu.spawn.buttons.block-display");
+        textDisplayType.load(cfg, "menu.spawn.buttons.text-display");
+        displayBoxButtonTemplate = ConfigUtil.getButton(cfg, "menu.element.buttons.display-bone.bounding-box");
     }
 
     public JOMLMapper getMapper() {

@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -68,6 +69,7 @@ public class MessageManager {
         // Load other locales from custom messages_*.properties
         try (Stream<Path> paths = Files.list(path)) {
             paths.forEach(this::load);
+        } catch (NoSuchFileException ignored) {
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }

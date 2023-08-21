@@ -1,10 +1,8 @@
 package me.m56738.easyarmorstands.display;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.display.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.display.property.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayHeightProperty;
@@ -22,6 +20,7 @@ import me.m56738.easyarmorstands.display.property.display.text.TextDisplayLineWi
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplaySeeThroughProperty;
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplayShadowProperty;
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplayTextProperty;
+import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -79,7 +78,6 @@ public class DisplayListener implements Listener {
     }
 
     private void registerTextDisplayProperties(TextDisplay entity, PropertyRegistry registry) {
-        TextDisplayCapability textDisplayCapability = EasyArmorStands.getInstance().getCapability(TextDisplayCapability.class);
         if (TextDisplayAlignmentProperty.isSupported()) {
             registry.register(new TextDisplayAlignmentProperty(entity));
         }
@@ -89,6 +87,6 @@ public class DisplayListener implements Listener {
         registry.register(new TextDisplayLineWidthProperty(entity));
         registry.register(new TextDisplaySeeThroughProperty(entity));
         registry.register(new TextDisplayShadowProperty(entity));
-        registry.register(new TextDisplayTextProperty(entity, textDisplayCapability));
+        registry.register(new TextDisplayTextProperty(entity));
     }
 }

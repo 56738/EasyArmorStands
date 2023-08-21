@@ -1,41 +1,23 @@
 package me.m56738.easyarmorstands.addon.headdatabase;
 
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import me.m56738.easyarmorstands.EasConfig;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-public class HeadDatabaseAddon implements Addon {
+public class HeadDatabaseAddon {
     private ItemTemplate buttonTemplate;
     private boolean buttonTemplateValid;
 
-    @Override
-    public boolean isSupported() {
-        return Bukkit.getPluginManager().getPlugin("HeadDatabase") != null;
-    }
-
-    @Override
-    public String getName() {
-        return "HeadDatabase";
-    }
-
-    @Override
-    public void enable(EasyArmorStands plugin) {
-        load(plugin.getConfig());
+    public HeadDatabaseAddon(EasyArmorStands plugin) {
+        plugin.getConfiguration().subscribe(this::load);
         plugin.getServer().getPluginManager().registerEvents(new HeadDatabaseListener(this, plugin), plugin);
     }
 
-    @Override
-    public void reload(EasyArmorStands plugin) {
-        load(plugin.getConfig());
-    }
-
-    private void load(ConfigurationSection config) {
+    private void load(EasConfig config) {
         HeadDatabaseAPI api = new HeadDatabaseAPI();
         ItemStack item = api.getItemHead("227");
         if (item != null) {
@@ -43,12 +25,12 @@ public class HeadDatabaseAddon implements Addon {
         } else {
             item = new ItemStack(Material.STONE);
         }
-        buttonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.headdb", item);
+        buttonTemplate = ConfigUtil.getButton(config.getConfig(), "menu.element.buttons.headdb", item);
     }
 
     public ItemTemplate getButtonTemplate() {
         if (!buttonTemplateValid) {
-            load(EasyArmorStands.getInstance().getConfig());
+            load(EasyArmorStands.getInstance().getConfiguration());
         }
         return buttonTemplate;
     }

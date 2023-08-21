@@ -34,6 +34,7 @@ public class EasConfig {
     private final Set<Consumer<EasConfig>> subscriptions = new HashSet<>();
     private final Map<MessageStyle, String> messageFormats = new EnumMap<>(MessageStyle.class);
     private boolean loaded;
+    private ConfigurationSection config;
     private boolean updateCheck;
     private boolean serverSideTranslation;
     private ItemTemplate toolTemplate;
@@ -51,7 +52,7 @@ public class EasConfig {
     }
 
     void load() {
-        ConfigurationSection config = getConfig("config.yml");
+        config = getConfig("config.yml");
         updateCheck = config.getBoolean("update-check");
         serverSideTranslation = config.getBoolean("server-side-translation");
         messageFormats.clear();
@@ -151,6 +152,10 @@ public class EasConfig {
 
     public ItemTemplate getArmorStandPartButtonTemplate(ArmorStandPart part) {
         return armorStandPartButtonTemplates.get(part);
+    }
+
+    public ConfigurationSection getConfig() {
+        return config;
     }
 
     public ConfigurationSection getPropertyConfig() {

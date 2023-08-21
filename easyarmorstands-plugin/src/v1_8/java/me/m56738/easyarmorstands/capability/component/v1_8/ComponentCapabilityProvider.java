@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -60,7 +61,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
 
         @Override
         public void setDisplayName(ItemMeta meta, Component displayName) {
-            if (displayName == Component.empty()) {
+            if (displayName instanceof TextComponent && ((TextComponent) displayName).content().isEmpty()) {
                 meta.setDisplayName(ChatColor.RESET.toString());
                 return;
             }

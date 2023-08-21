@@ -2,19 +2,17 @@ package me.m56738.easyarmorstands.display.property.display.text;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.display.adapter.TextDisplayAdapter;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.capability.textdisplay.TextDisplayCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 
 public class TextDisplayTextProperty implements Property<Component> {
     private final TextDisplay entity;
-    private final TextDisplayCapability textDisplayCapability;
 
-    public TextDisplayTextProperty(TextDisplay entity, TextDisplayCapability textDisplayCapability) {
+    public TextDisplayTextProperty(TextDisplay entity) {
         this.entity = entity;
-        this.textDisplayCapability = textDisplayCapability;
     }
 
     @Override
@@ -24,12 +22,12 @@ public class TextDisplayTextProperty implements Property<Component> {
 
     @Override
     public Component getValue() {
-        return textDisplayCapability.getText(entity);
+        return TextDisplayAdapter.getInstance().getText(entity);
     }
 
     @Override
     public boolean setValue(Component value) {
-        textDisplayCapability.setText(entity, value);
+        TextDisplayAdapter.getInstance().setText(entity, value);
         return true;
     }
 }

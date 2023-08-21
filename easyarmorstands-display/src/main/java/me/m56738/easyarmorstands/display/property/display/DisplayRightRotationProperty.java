@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.display.property.display;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.JOMLMapper;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class DisplayRightRotationProperty implements Property<Quaternionfc> {
     @Override
     public boolean setValue(Quaternionfc value) {
         Transformation transformation = entity.getTransformation();
-        entity.setTransformation(mapper.getTransformation(
+        entity.setTransformation((Transformation) mapper.getTransformation(
                 mapper.getTranslation(transformation),
                 mapper.getLeftRotation(transformation),
                 mapper.getScale(transformation),

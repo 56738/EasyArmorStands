@@ -10,8 +10,7 @@ import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.TextColorArgument;
 import cloud.commandframework.paper.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.addon.AddonLoader;
+import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
@@ -25,7 +24,6 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ElementMenuListener;
 import me.m56738.easyarmorstands.element.EntityElementListener;
-import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
@@ -42,13 +40,14 @@ import me.m56738.easyarmorstands.update.UpdateManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -56,7 +55,6 @@ import java.util.logging.Level;
 public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
-    private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
     private EasConfig config;
     private MessageManager messageManager;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
@@ -158,7 +156,35 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
 
-        addonLoader.load();
+        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+            getLogger().info("Enabling WorldGuard integration");
+            if (hasClass("com.sk89q.worldguard.protection.regions.RegionContainer")) {
+                loadAddon("me.m56738.easyarmorstands.addon.worldguard.v7.WorldGuardAddon");
+            } else if (hasClass("com.sk89q.worldguard.bukkit.WGBukkit")) {
+                loadAddon("me.m56738.easyarmorstands.addon.worldguard.v6.WorldGuardAddon");
+            } else {
+                getLogger().warning("Unsupported WorldGuard version");
+            }
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlotSquared")) {
+            getLogger().info("Enabling PlotSquared integration");
+            loadAddon("me.m56738.easyarmorstands.addon.plotsquared.v6.PlotSquaredAddon");
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
+            getLogger().info("Enabling HeadDatabase integration");
+            loadAddon("me.m56738.easyarmorstands.addon.headdatabase.HeadDatabaseAddon");
+        }
+
+        if (hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {
+            getLogger().info("Enabling TrainCarts integration");
+            loadAddon("me.m56738.easyarmorstands.addon.traincarts.TrainCartsAddon");
+        }
+
+        if (hasClass("org.bukkit.entity.ItemDisplay")) {
+            loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
+        }
 
         if (!getDescription().getVersion().endsWith("-SNAPSHOT")) {
             config.subscribe(cfg -> {
@@ -176,6 +202,25 @@ public class EasyArmorStands extends JavaPlugin {
         }
     }
 
+    private boolean hasClass(String name) {
+        try {
+            Class.forName(name);
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    private void loadAddon(String name) {
+        try {
+            Class.forName(name).getDeclaredConstructor(EasyArmorStands.class).newInstance(this);
+        } catch (InvocationTargetException e) {
+            getLogger().log(Level.SEVERE, "Failed to enable addon " + name, e.getCause());
+        } catch (ReflectiveOperationException e) {
+            getLogger().log(Level.SEVERE, "Failed to instantiate addon " + name, e);
+        }
+    }
+
     @Override
     public void onDisable() {
         if (sessionManager != null) {
@@ -186,7 +231,6 @@ public class EasyArmorStands extends JavaPlugin {
     public void reload() {
         reloadConfig();
         config.load();
-        addonLoader.reload();
     }
 
     public History getHistory(Player player) {
@@ -196,11 +240,6 @@ public class EasyArmorStands extends JavaPlugin {
     @Contract(pure = true)
     public <T> T getCapability(Class<T> type) {
         return loader.get(type);
-    }
-
-    @Contract(pure = true)
-    public <T extends Addon> @Nullable T getAddon(Class<T> type) {
-        return addonLoader.get(type);
     }
 
     public CapabilityLoader getCapabilityLoader() {
