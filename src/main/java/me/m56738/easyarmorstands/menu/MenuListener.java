@@ -1,8 +1,12 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,6 +21,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4dc;
 
 import java.util.function.Consumer;
 
@@ -87,8 +93,18 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public EasPlayer player() {
-            return player;
+        public Player player() {
+            return player.get();
+        }
+
+        @Override
+        public @Nullable Session session() {
+            return player.session();
+        }
+
+        @Override
+        public Matrix4dc eyeMatrix() {
+            return Util.toMatrix4d(player.get().getEyeLocation());
         }
 
         @Override
@@ -103,9 +119,7 @@ public class MenuListener implements Listener {
 
         @Override
         public void close() {
-            queueTask(() -> {
-                menu.close(player.get());
-            });
+            queueTask(() -> menu.close(player.get()));
         }
 
         @Override

@@ -1,14 +1,15 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.event.EntityElementInitializeEvent;
-import me.m56738.easyarmorstands.property.PropertyRegistry;
+import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;

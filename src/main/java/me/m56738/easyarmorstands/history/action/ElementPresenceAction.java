@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementReference;
+import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.EntityElementReference;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.element.DestroyableElement;
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.ElementReference;
-import me.m56738.easyarmorstands.element.ElementType;
-import me.m56738.easyarmorstands.element.EntityElementReference;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertySnapshot;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ abstract class ElementPresenceAction implements Action {
 
     public ElementPresenceAction(Element element) {
         this.type = element.getType();
-        this.properties = new PropertySnapshot(element.getProperties());
+        this.properties = new PropertyMap(element.getProperties());
         this.reference = element.getReference();
     }
 

@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.menu.builder;
 
-import me.m56738.easyarmorstands.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.menu.MenuImpl;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -64,13 +65,13 @@ public class SplitMenuBuilder implements MenuBuilder {
     }
 
     @Override
-    public Menu build(Component title, Locale locale) {
+    public MenuImpl build(Component title, Locale locale) {
         MenuSlot[] slots = this.slots.toArray(new MenuSlot[0]);
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] == null) {
                 slots[i] = BackgroundSlot.INSTANCE;
             }
         }
-        return new Menu(title, slots, locale);
+        return new MenuImpl(title, slots, locale);
     }
 }

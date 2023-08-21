@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyRegistry;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -37,7 +37,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
     }
 
     @Override
-    public void applyDefaultProperties(PropertyRegistry properties) {
+    public void applyDefaultProperties(PropertyMap properties) {
         super.applyDefaultProperties(properties);
         Property<Location> locationProperty = properties.get(PropertyTypes.ENTITY_LOCATION);
         Location location = locationProperty.getValue().clone();

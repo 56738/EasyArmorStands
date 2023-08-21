@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.capability.particle;
 
 import me.m56738.easyarmorstands.capability.Capability;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.CircleParticle;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.PointParticle;
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.CircleParticle;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.PointParticle;
 import org.bukkit.World;
 
 @Capability(name = "Particles")

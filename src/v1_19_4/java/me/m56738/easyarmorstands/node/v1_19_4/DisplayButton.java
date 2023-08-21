@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
+import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
-import me.m56738.easyarmorstands.node.Button;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -10,7 +9,7 @@ import org.bukkit.entity.Display;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class DisplayButton<T extends Display> extends AxisAlignedBoxButton implements Button {
+public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
     private final T entity;
 
     public DisplayButton(Session session, T entity) {

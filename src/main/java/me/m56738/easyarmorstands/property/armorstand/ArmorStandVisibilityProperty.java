@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandVisibilityProperty implements Property<Boolean> {
     public static final PropertyType<Boolean> TYPE = PropertyTypes.ARMOR_STAND_VISIBILITY;
@@ -14,7 +15,7 @@ public class ArmorStandVisibilityProperty implements Property<Boolean> {
     }
 
     @Override
-    public PropertyType<Boolean> getType() {
+    public @NotNull PropertyType<Boolean> getType() {
         return TYPE;
     }
 

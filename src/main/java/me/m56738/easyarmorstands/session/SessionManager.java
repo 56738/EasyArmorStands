@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
-import me.m56738.easyarmorstands.event.SessionStartEvent;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -16,18 +16,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class SessionManager {
-    private final HashMap<Player, Session> sessions = new HashMap<>();
+    private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
 
-    public void start(Session session) {
-        final Session old = sessions.put(session.getPlayer().get(), session);
+    public void start(SessionImpl session) {
+        final SessionImpl old = sessions.put(session.player(), session);
         if (old != null) {
             old.stop();
         }
         Bukkit.getPluginManager().callEvent(new SessionStartEvent(session));
     }
 
-    public Session start(Player player) {
-        Session session = new Session(new EasPlayer(player));
+    public SessionImpl start(Player player) {
+        SessionImpl session = new SessionImpl(new EasPlayer(player));
         EntityElementProviderRegistry registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
         EntitySelectionNode node = new EntitySelectionNode(session, Message.component("easyarmorstands.node.select-entity"), registry);
         node.setRoot(true);
@@ -37,7 +37,7 @@ public class SessionManager {
     }
 
     public boolean stop(Player player) {
-        Session session = sessions.remove(player);
+        SessionImpl session = sessions.remove(player);
         if (session != null) {
             session.stop();
             return true;
@@ -46,8 +46,8 @@ public class SessionManager {
     }
 
     public void update() {
-        for (Iterator<Session> iterator = sessions.values().iterator(); iterator.hasNext(); ) {
-            Session session = iterator.next();
+        for (Iterator<SessionImpl> iterator = sessions.values().iterator(); iterator.hasNext(); ) {
+            SessionImpl session = iterator.next();
             boolean valid = session.update();
             if (!valid) {
                 iterator.remove();
@@ -57,7 +57,7 @@ public class SessionManager {
     }
 
     public void hideSkeletons(Player player) {
-        for (Session session : sessions.values()) {
+        for (SessionImpl session : sessions.values()) {
             for (Node node : session.getNodeStack()) {
                 if (node instanceof ArmorStandRootNode) {
                     ((ArmorStandRootNode) node).hideSkeleton(player);
@@ -67,13 +67,13 @@ public class SessionManager {
     }
 
     public void stopAllSessions() {
-        for (Session session : sessions.values()) {
+        for (SessionImpl session : sessions.values()) {
             session.stop();
         }
         sessions.clear();
     }
 
-    public @Nullable Session getSession(Player player) {
+    public @Nullable SessionImpl getSession(Player player) {
         return sessions.get(player);
     }
 }

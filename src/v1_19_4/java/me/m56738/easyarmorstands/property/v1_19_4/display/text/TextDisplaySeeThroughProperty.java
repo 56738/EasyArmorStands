@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import org.bukkit.entity.TextDisplay;
+import org.jetbrains.annotations.NotNull;
 
 public class TextDisplaySeeThroughProperty implements Property<Boolean> {
     private final TextDisplay entity;
@@ -13,7 +14,7 @@ public class TextDisplaySeeThroughProperty implements Property<Boolean> {
     }
 
     @Override
-    public PropertyType<Boolean> getType() {
+    public @NotNull PropertyType<Boolean> getType() {
         return DisplayPropertyTypes.TEXT_DISPLAY_SEE_THROUGH;
     }
 

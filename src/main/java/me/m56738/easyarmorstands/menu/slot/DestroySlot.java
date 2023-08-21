@@ -1,10 +1,12 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.element.DestroyableElement;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.menu.MenuClick;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -27,7 +29,7 @@ public class DestroySlot implements MenuSlot {
             return;
         }
 
-        ChangeContext context = click.player();
+        ChangeContext context = new EasPlayer(click.player());
         if (!context.canDestroyElement(element)) {
             return;
         }

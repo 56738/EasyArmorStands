@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.property.entity;
 
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityEquipmentProperty implements Property<ItemStack> {
     private final LivingEntity entity;
@@ -22,7 +23,7 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     }
 
     @Override
-    public PropertyType<ItemStack> getType() {
+    public @NotNull PropertyType<ItemStack> getType() {
         return type;
     }
 

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
-import me.m56738.easyarmorstands.particle.PointParticle;
+import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;

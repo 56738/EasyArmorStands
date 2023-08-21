@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBoxBone;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

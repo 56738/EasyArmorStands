@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.property.button.PropertyButton;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-public class ButtonPropertySlot<T> implements MenuSlot {
+public class ButtonPropertySlot implements MenuSlot {
     private final PropertyButton button;
     private final Locale locale;
 

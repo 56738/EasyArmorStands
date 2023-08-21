@@ -1,7 +1,10 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.PendingChange;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -18,7 +21,7 @@ class TrackedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public PropertyType<T> getType() {
+    public @NotNull PropertyType<T> getType() {
         return property.getType();
     }
 

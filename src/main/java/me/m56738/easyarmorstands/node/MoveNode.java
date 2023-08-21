@@ -2,24 +2,28 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.PositionBone;
-import me.m56738.easyarmorstands.bone.RotationProvider;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
+import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Consumer;
 
 public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
@@ -40,7 +44,6 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
     private final LineParticle axisParticle;
     private final LineParticle cursorLineParticle;
     private double initialOffset;
-    private Vector3d lookTarget;
     private Double manualValue;
 
     public MoveNode(Session session, PositionBone bone, RotationProvider rotationProvider, Component name, Axis axis, ParticleColor color, double length) {
@@ -53,10 +56,10 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
         this.direction = new Vector3d(axis.getDirection());
         this.color = color;
         this.length = length;
-        this.cursor = new Cursor3D(session.getPlayer(), session);
-        this.axisParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursor = new Cursor3D(session);
+        this.axisParticle = session.particleFactory().createLine();
         this.axisParticle.setColor(color);
-        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursorLineParticle = session.particleFactory().createLine();
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
     }
 
@@ -71,13 +74,13 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
     }
 
     @Override
-    public void onEnter() {
+    public void onEnter(EnterContext context) {
         manualValue = null;
         refreshDirection();
         initial.set(bone.getPosition());
         current.set(initial);
         initialOffset = initial.dot(direction);
-        initialCursor.set(lookTarget != null ? lookTarget : initial);
+        initialCursor.set(context.cursorOrDefault(initial));
         cursor.start(initialCursor);
 
         updateAxisParticle(color);
@@ -92,7 +95,7 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
         refreshDirection();
 
         cursor.update(false);
@@ -105,7 +108,7 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
                 t -= initialOffset;
             }
         } else {
-            t = session.snap(offset.dot(direction));
+            t = session.snapPosition(offset.dot(direction));
         }
 
         initial.fma(t, direction, current);
@@ -131,7 +134,7 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitContext context) {
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
         cursor.stop();
@@ -158,28 +161,11 @@ public class MoveNode extends EditNode implements NodeButton, ValueNode<Double> 
     }
 
     @Override
-    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
-        Vector3d lookRayPoint = new Vector3d();
-        Vector3d handlePoint = new Vector3d();
-        double d = Intersectiond.findClosestPointsLineSegments(
-                eyes.x(), eyes.y(), eyes.z(),
-                target.x(), target.y(), target.z(),
-                negativeEnd.x, negativeEnd.y, negativeEnd.z,
-                positiveEnd.x, positiveEnd.y, positiveEnd.z,
-                lookRayPoint,
-                handlePoint
-        );
-        double threshold = session.getLookThreshold();
-        if (d < threshold * threshold) {
-            lookTarget = handlePoint;
-        } else {
-            lookTarget = null;
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+        Vector3dc intersection = ray.intersectLine(negativeEnd, positiveEnd);
+        if (intersection != null) {
+            results.accept(ButtonResult.of(intersection));
         }
-    }
-
-    @Override
-    public @Nullable Vector3d getLookTarget() {
-        return lookTarget;
     }
 
     @Override

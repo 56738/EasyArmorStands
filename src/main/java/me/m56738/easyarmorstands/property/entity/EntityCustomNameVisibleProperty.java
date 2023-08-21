@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCustomNameVisibleProperty implements Property<Boolean> {
     private final Entity entity;
@@ -13,7 +14,7 @@ public class EntityCustomNameVisibleProperty implements Property<Boolean> {
     }
 
     @Override
-    public PropertyType<Boolean> getType() {
+    public @NotNull PropertyType<Boolean> getType() {
         return PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE;
     }
 

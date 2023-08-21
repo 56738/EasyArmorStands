@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.particle.Particle;
+import me.m56738.easyarmorstands.api.particle.Particle;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;

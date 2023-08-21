@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.property.button;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;

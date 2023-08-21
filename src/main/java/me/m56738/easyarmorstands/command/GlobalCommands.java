@@ -11,15 +11,15 @@ import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.node.Node;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
@@ -139,7 +139,7 @@ public class GlobalCommands {
         }
 
         if (sender instanceof EasPlayer) {
-            Session session = ((EasPlayer) sender).session();
+            SessionImpl session = ((EasPlayer) sender).session();
             Element element = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));

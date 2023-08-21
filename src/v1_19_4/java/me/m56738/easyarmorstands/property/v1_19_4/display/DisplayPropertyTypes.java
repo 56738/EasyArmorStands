@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.property.type.EnumTogglePropertyType;
 import me.m56738.easyarmorstands.property.type.FloatPropertyType;
 import me.m56738.easyarmorstands.property.type.IntegerPropertyType;
 import me.m56738.easyarmorstands.property.type.ItemPropertyType;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.property.type.QuaternionfcPropertyType;
 import me.m56738.easyarmorstands.property.type.Vector3fcPropertyType;

@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import org.bukkit.Color;
 import org.bukkit.entity.TextDisplay;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
@@ -28,7 +29,7 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
     }
 
     @Override
-    public PropertyType<@Nullable Color> getType() {
+    public @NotNull PropertyType<@Nullable Color> getType() {
         return DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND;
     }
 

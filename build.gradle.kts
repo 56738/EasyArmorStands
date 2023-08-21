@@ -1,25 +1,10 @@
-import org.gradle.api.credentials.PasswordCredentials
-
 plugins {
-    id("java-library")
-    id("maven-publish")
+    id("easyarmorstands.base")
     alias(libs.plugins.shadow)
 }
 
-group = "me.m56738"
-version = "2.0.0-SNAPSHOT"
-
-repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://maven.enginehub.org/repo/")
-    maven("https://ci.mg-dev.eu/plugin/repository/everything/") {
-        content {
-            includeGroupByRegex("com\\.bergerkiller(\\..*)?")
-        }
-    }
-}
-
 dependencies {
+    implementation(project(":easyarmorstands-api"))
     compileOnly(libs.bukkit)
     implementation(libs.adventure.platform.bukkit)
     implementation(libs.adventure.text.minimessage)
@@ -33,22 +18,6 @@ dependencies {
 }
 
 tasks {
-    withType<JavaCompile>().configureEach {
-        options.release.set(8)
-        options.encoding = "UTF-8"
-    }
-
-    javadoc {
-        options.encoding = "UTF-8"
-        isFailOnError = true
-        (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:all,-missing", "-quiet")
-    }
-
-    withType<AbstractArchiveTask>().configureEach {
-        isPreserveFileTimestamps = false
-        isReproducibleFileOrder = true
-    }
-
     assemble {
         dependsOn(shadowJar)
     }
@@ -77,8 +46,6 @@ tasks {
 
 java {
     disableAutoTargetJvm()
-    withSourcesJar()
-    withJavadocJar()
 }
 
 fun registerSourceSet(name: String) {
@@ -158,22 +125,4 @@ dependencies {
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
     "v1_19_4CompileOnly"(libs.brigadier)
-}
-
-publishing {
-    repositories {
-        maven("https://ci.mg-dev.eu/plugin/repository/everything") {
-            name = "MGDev"
-            credentials(PasswordCredentials::class)
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-        }
-    }
-
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-    }
 }

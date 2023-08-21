@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.bone;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import org.joml.Vector3d;

@@ -21,6 +21,7 @@ import org.joml.Intersectiond;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
+import org.joml.Matrix4d;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -41,14 +42,6 @@ public class Util {
     public static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");
 
     public static final Vector3dc ZERO = new Vector3d();
-
-    public static final Vector3dc X = new Vector3d(1, 0, 0);
-    public static final Vector3dc Y = new Vector3d(0, 1, 0);
-    public static final Vector3dc Z = new Vector3d(0, 0, 1);
-
-    public static final Vector3dc YZ = new Vector3d(0, 1, 1);
-    public static final Vector3dc XZ = new Vector3d(1, 0, 1);
-    public static final Vector3dc XY = new Vector3d(1, 1, 0);
 
     public static final Quaterniondc IDENTITY = new Quaterniond();
 
@@ -127,6 +120,13 @@ public class Util {
         return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
     }
 
+    public static Matrix4d toMatrix4d(Location location) {
+        return new Matrix4d()
+                .translation(Util.toVector3d(location))
+                .rotateY(-Math.toRadians(location.getYaw()))
+                .rotateX(Math.toRadians(location.getPitch()));
+    }
+
     public static Matrix3dc getRotation(Location location, Matrix3d dest) {
         return dest.rotationZYX(
                 0,
@@ -170,6 +170,7 @@ public class Util {
         return item;
     }
 
+    @Deprecated
     public static double intersectRayDoubleSidedPlane(
             Vector3dc origin, Vector3dc direction, Vector3dc point, Vector3dc normal) {
         double ox = origin.x(), oy = origin.y(), oz = origin.z();
@@ -197,7 +198,7 @@ public class Util {
     }
 
     public static String capitalize(String value) {
-        if (value.length() < 1) {
+        if (value.isEmpty()) {
             return value;
         }
         return Character.toUpperCase(value.charAt(0)) + value.substring(1);
@@ -257,18 +258,6 @@ public class Util {
 
     public static Quaternionf getRoundedYawPitchRotation(Entity entity, Quaternionf dest) {
         return getRoundedYawPitchRotation(entity.getLocation(), dest);
-    }
-
-    public static <T extends Enum<T>> T getEnumNeighbour(T value, int offset) {
-        T[] values = value.getDeclaringClass().getEnumConstants();
-        int index = value.ordinal() + offset;
-        while (index < 0) {
-            index += values.length;
-        }
-        while (index >= values.length) {
-            index -= values.length;
-        }
-        return values[index];
     }
 
     @SuppressWarnings("unchecked")

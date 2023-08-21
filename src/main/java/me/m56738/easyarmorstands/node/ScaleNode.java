@@ -2,23 +2,28 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.bone.ScaleBone;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.particle.PointParticle;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Consumer;
 
 public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
@@ -42,7 +47,6 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     private final PointParticle negativeParticle;
     private double initialScale;
     private double currentLength;
-    private Vector3d lookTarget;
     private Double manualValue;
 
     public ScaleNode(Session session, ScaleBone bone, Component name, Axis axis, ParticleColor color, double length) {
@@ -54,26 +58,25 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
         this.direction = new Vector3d(axis.getDirection());
         this.color = color;
         this.length = length;
-        this.cursor = new Cursor3D(session.getPlayer(), session);
-        ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
-        this.axisParticle = particleCapability.createLine(session.getWorld());
-        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursor = new Cursor3D(session);
+        this.axisParticle = session.particleFactory().createLine();
+        this.cursorLineParticle = session.particleFactory().createLine();
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
-        this.positiveParticle = particleCapability.createPoint(session.getWorld());
+        this.positiveParticle = session.particleFactory().createPoint();
         this.positiveParticle.setBillboard(false);
         this.positiveParticle.setSize(Util.PIXEL);
-        this.negativeParticle = particleCapability.createPoint(session.getWorld());
+        this.negativeParticle = session.particleFactory().createPoint();
         this.negativeParticle.setBillboard(false);
         this.negativeParticle.setSize(Util.PIXEL);
     }
 
     @Override
-    public void onEnter() {
+    public void onEnter(EnterContext context) {
         manualValue = null;
         bone.getRotation().transform(axis.getDirection(), direction).normalize();
         initialPosition.set(bone.getOrigin());
         initialScale = bone.getScale(axis);
-        initialCursor.set(lookTarget != null ? lookTarget : initialPosition);
+        initialCursor.set(context.cursorOrDefault(initialPosition));
         cursor.start(initialCursor);
         currentLength = length;
 
@@ -89,7 +92,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
         cursor.update(false);
 
         initialCursor.sub(initialPosition, initialOffset);
@@ -118,7 +121,7 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitContext context) {
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
         cursor.stop();
@@ -163,11 +166,6 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     }
 
     @Override
-    public int getLookPriority() {
-        return 1;
-    }
-
-    @Override
     public void update() {
         bone.getRotation().transform(axis.getDirection(), direction).normalize();
         Vector3dc position = bone.getOrigin();
@@ -176,27 +174,15 @@ public class ScaleNode extends EditNode implements NodeButton, ValueNode<Double>
     }
 
     @Override
-    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
-        boolean positive = session.isLookingAtPoint(eyes, target, positiveEnd);
-        boolean negative = session.isLookingAtPoint(eyes, target, negativeEnd);
-        if (positive && negative) {
-            if (positiveEnd.distanceSquared(eyes) < negativeEnd.distanceSquared(eyes)) {
-                lookTarget = positiveEnd;
-            } else {
-                lookTarget = negativeEnd;
-            }
-        } else if (positive) {
-            lookTarget = positiveEnd;
-        } else if (negative) {
-            lookTarget = negativeEnd;
-        } else {
-            lookTarget = null;
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+        Vector3dc positive = ray.intersectPoint(positiveEnd);
+        if (positive != null) {
+            results.accept(ButtonResult.of(positive, 1));
         }
-    }
-
-    @Override
-    public @Nullable Vector3dc getLookTarget() {
-        return lookTarget;
+        Vector3dc negative = ray.intersectPoint(negativeEnd);
+        if (negative != null) {
+            results.accept(ButtonResult.of(negative, 1));
+        }
     }
 
     @Override

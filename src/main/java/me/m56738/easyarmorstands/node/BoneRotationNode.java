@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.RotationBone;
-import me.m56738.easyarmorstands.bone.RotationProvider;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
+import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import net.kyori.adventure.text.Component;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -26,8 +27,8 @@ public class BoneRotationNode extends RotationNode {
     }
 
     @Override
-    public void onEnter() {
-        super.onEnter();
+    public void onEnter(EnterContext context) {
+        super.onEnter(context);
         initial.set(bone.getRotation());
     }
 

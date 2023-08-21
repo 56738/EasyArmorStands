@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.MetadataValue;
 

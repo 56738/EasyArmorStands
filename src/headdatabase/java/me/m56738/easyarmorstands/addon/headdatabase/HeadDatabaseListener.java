@@ -2,11 +2,10 @@ package me.m56738.easyarmorstands.addon.headdatabase;
 
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.MenuElement;
-import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.session.SessionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +40,7 @@ public class HeadDatabaseListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        menuElement.openMenu(new EasPlayer(player));
+        menuElement.openMenu(player);
         player.setItemOnCursor(event.getHead());
     }
 

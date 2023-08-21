@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
-import me.m56738.easyarmorstands.particle.CircleParticle;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.particle.CircleParticle;
+import me.m56738.easyarmorstands.api.Axis;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.joml.Math;

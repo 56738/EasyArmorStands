@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
-import me.m56738.easyarmorstands.particle.ColoredParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.particle.ColoredParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Material;
 import org.bukkit.World;

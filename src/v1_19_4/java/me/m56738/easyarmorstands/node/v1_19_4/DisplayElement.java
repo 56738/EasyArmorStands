@@ -1,23 +1,23 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.MenuClick;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
 import me.m56738.easyarmorstands.menu.v1_19_4.BlockDisplaySlot;
-import me.m56738.easyarmorstands.node.Button;
 import me.m56738.easyarmorstands.node.ElementNode;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.session.Session;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Display;
@@ -50,7 +50,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public ElementNode createNode(Session session) {
-        PropertyContainer container = PropertyContainer.tracked(session.getPlayer(), this);
+        PropertyContainer container = session.properties(this);
 
         DisplayBone bone = new DisplayBone(container, DisplayPropertyTypes.DISPLAY_LEFT_ROTATION);
 

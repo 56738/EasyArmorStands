@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;

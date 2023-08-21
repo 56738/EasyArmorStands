@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.session.v1_19_4;
 
 import me.m56738.easyarmorstands.addon.display.DisplayAddon;
-import me.m56738.easyarmorstands.event.SpawnMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
+import me.m56738.easyarmorstands.api.event.menu.SpawnMenuInitializeEvent;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

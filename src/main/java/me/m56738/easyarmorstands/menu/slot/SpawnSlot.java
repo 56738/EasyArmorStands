@@ -1,17 +1,18 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.ElementType;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3d;
 
@@ -34,32 +35,33 @@ public class SpawnSlot implements MenuSlot {
     @Override
     public void onClick(MenuClick click) {
         if (click.isLeftClick()) {
-            EasPlayer player = click.player();
-            Vector3d offset = player.eyeMatrix().transformDirection(0, 0, 2, new Vector3d());
+            Player player = click.player();
+            Vector3d offset = click.eyeMatrix().transformDirection(0, 0, 2, new Vector3d());
             if (!player.isFlying()) {
                 offset.y = 0;
             }
-            Location location = player.get().getLocation().add(offset.x, offset.y, offset.z);
+            Location location = player.getLocation().add(offset.x, offset.y, offset.z);
             location.setYaw(location.getYaw() + 180);
-            Session session = player.session();
+            Session session = click.session();
             if (session != null) {
-                location.setX(session.snap(location.getX()));
-                location.setY(session.snap(location.getY()));
-                location.setZ(session.snap(location.getZ()));
+                location.setX(session.snapPosition(location.getX()));
+                location.setY(session.snapPosition(location.getY()));
+                location.setZ(session.snapPosition(location.getZ()));
                 location.setYaw((float) session.snapAngle(location.getYaw()));
                 location.setPitch((float) session.snapAngle(location.getPitch()));
             }
 
-            PropertyRegistry properties = new PropertyRegistry();
-            properties.register(Property.of(PropertyTypes.ENTITY_LOCATION, location));
+            PropertyMap properties = new PropertyMap();
+            properties.put(PropertyTypes.ENTITY_LOCATION, location);
             type.applyDefaultProperties(properties);
 
-            if (!click.player().canCreateElement(type, properties)) {
+            EasPlayer context = new EasPlayer(player);
+            if (!context.canCreateElement(type, properties)) {
                 return;
             }
 
             Element element = type.createElement(properties);
-            player.history().push(new ElementCreateAction(element));
+            context.history().push(new ElementCreateAction(element));
 
             if (session != null) {
                 EntitySelectionNode selectionNode = session.findNode(EntitySelectionNode.class);

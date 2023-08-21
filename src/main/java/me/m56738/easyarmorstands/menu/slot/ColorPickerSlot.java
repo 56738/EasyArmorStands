@@ -1,18 +1,19 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.color.ColorPicker;
-import me.m56738.easyarmorstands.element.MenuElement;
-import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.MenuClickInterceptor;
-import net.kyori.adventure.identity.Identity;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -65,8 +66,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
 
         if (foundSlots == 1) {
             // Found exactly one applicable item property slot
-            Locale locale = click.player().getOrDefault(Identity.LOCALE, Locale.US);
-            click.open(ColorPicker.create(foundSlot, locale, () -> element.openMenu(click.player())).getInventory());
+            click.open(ColorPicker.create(foundSlot, click.locale(), () -> element.openMenu(click.player())).getInventory());
         } else {
             // Ask the user to click a slot
             active = true;
@@ -77,7 +77,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     @Override
-    public void interceptClick(MenuClick click) {
+    public void interceptClick(@NotNull MenuClick click) {
         active = false;
         click.updateItem(this);
 
@@ -89,8 +89,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         if (slot instanceof ItemPropertySlot) {
             ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
             if (isApplicable(itemSlot)) {
-                Locale locale = click.player().getOrDefault(Identity.LOCALE, Locale.US);
-                click.open(ColorPicker.create(itemSlot, locale, () -> element.openMenu(click.player())).getInventory());
+                click.open(ColorPicker.create(itemSlot, click.locale(), () -> element.openMenu(click.player())).getInventory());
             }
         }
     }

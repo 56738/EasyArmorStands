@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.menu.v1_19_4;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
-import me.m56738.easyarmorstands.property.Property;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.property.Property;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;

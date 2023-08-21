@@ -1,15 +1,21 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
-import me.m56738.easyarmorstands.element.SelectableElement;
-import me.m56738.easyarmorstands.event.SessionSelectElementEvent;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
 import java.util.HashMap;
@@ -29,10 +35,10 @@ public class EntitySelectionNode extends MenuNode {
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
         Set<Entity> notSeen = new HashSet<>(buttons.keySet());
-        double range = session.getRange();
-        Player player = session.getPlayer().get();
+        double range = context.eyeRay().length();
+        Player player = session.player();
         Location location = player.getLocation();
         for (Entity entity : location.getWorld().getNearbyEntities(location, range, range, range)) {
             if (entity.getLocation().distanceSquared(location) > range * range) {
@@ -60,28 +66,28 @@ public class EntitySelectionNode extends MenuNode {
             removeButton(buttons.remove(entity));
         }
 
-        super.onUpdate(eyes, target);
+        super.onUpdate(context);
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
-        if (super.onClick(eyes, target, context)) {
+    public boolean onClick(ClickContext context) {
+        if (super.onClick(context)) {
             return true;
         }
 
-        if (context.getType() == ClickType.RIGHT_CLICK) {
-            Entity entity = context.getEntity();
+        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
+            Entity entity = context.entity();
             if (entity != null) {
                 ElementButton button = buttons.get(entity);
                 if (button != null) {
-                    button.onClick(session);
+                    button.onClick(session, null);
                     return true;
                 }
             }
 
-            Player player = session.getPlayer().get();
+            Player player = session.player();
             if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-                Session.openSpawnMenu(session.getPlayer());
+                SessionImpl.openSpawnMenu(session.player());
                 return true;
             }
         }
@@ -105,7 +111,7 @@ public class EntitySelectionNode extends MenuNode {
             return false;
         }
 
-        Node node = ((SelectableElement) element).createNode(session);
+        me.m56738.easyarmorstands.api.editor.node.Node node = ((SelectableElement) element).createNode(session);
         if (node == null) {
             return false;
         }
@@ -132,7 +138,7 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         @Override
-        public void onClick(Session session) {
+        public void onClick(Session session, @Nullable Vector3dc cursor) {
             SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
@@ -141,7 +147,7 @@ public class EntitySelectionNode extends MenuNode {
 
             Node node = element.createNode(session);
             if (node != null) {
-                session.pushNode(node);
+                session.pushNode(node, cursor);
             }
         }
     }

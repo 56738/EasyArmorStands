@@ -1,18 +1,19 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.PositionBone;
-import me.m56738.easyarmorstands.bone.RotationProvider;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
+import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
 
 public class PositionBoneButton extends SimpleButton implements NodeButton {
     private final PositionBone bone;
-    private final Node node;
+    private final me.m56738.easyarmorstands.api.editor.node.Node node;
     private final Component name;
 
-    public PositionBoneButton(Session session, PositionBone bone, Node node, Component name, ParticleColor color) {
+    public PositionBoneButton(Session session, PositionBone bone, me.m56738.easyarmorstands.api.editor.node.Node node, Component name, ParticleColor color) {
         super(session, color);
         this.bone = bone;
         this.node = node;

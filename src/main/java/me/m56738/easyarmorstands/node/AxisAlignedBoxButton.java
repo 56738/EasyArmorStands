@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.particle.PointParticle;
-import me.m56738.easyarmorstands.session.Session;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
-import org.joml.Vector2d;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.particle.PointParticle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Consumer;
 
 public abstract class AxisAlignedBoxButton implements Button {
     private final Session session;
@@ -21,15 +21,12 @@ public abstract class AxisAlignedBoxButton implements Button {
     private final AxisAlignedBoxParticle boxParticle;
     private boolean previewVisible;
     private boolean boxVisible;
-    private Vector3dc lookTarget;
-    private int lookPriority = 0;
 
     public AxisAlignedBoxButton(Session session) {
         this.session = session;
-        ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
-        this.pointParticle = particleCapability.createPoint(session.getWorld());
+        this.pointParticle = session.particleFactory().createPoint();
         this.pointParticle.setBillboard(false);
-        this.boxParticle = particleCapability.createAxisAlignedBox(session.getWorld());
+        this.boxParticle = session.particleFactory().createAxisAlignedBox();
     }
 
     protected abstract Vector3dc getPosition();
@@ -48,42 +45,17 @@ public abstract class AxisAlignedBoxButton implements Button {
     }
 
     @Override
-    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
-        if (session.isLookingAtPoint(eyes, target, position)) {
-            lookTarget = position;
-            lookPriority = 0;
-            return;
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+        Vector3dc intersection = ray.intersectPoint(position);
+        if (intersection != null) {
+            results.accept(ButtonResult.of(intersection));
         }
         if (size.x != 0 && size.y != 0 && size.z != 0) {
-            Vector3d min = center.fma(-0.5, size, new Vector3d());
-            Vector3d max = center.fma(0.5, size, new Vector3d());
-            Vector3d direction = target.sub(eyes, new Vector3d());
-            Vector2d result = new Vector2d();
-            if (Intersectiond.intersectRayAab(eyes, direction, min, max, result) && result.x <= 1) {
-                if (result.x > 0) {
-                    // Looking at the box from outside
-                    lookTarget = eyes.fma(result.x, direction, new Vector3d());
-                    lookPriority = -1;
-                } else {
-                    // Inside the box
-                    lookTarget = eyes;
-                    lookPriority = -2;
-                }
-                return;
+            intersection = ray.intersectBox(center, size);
+            if (intersection != null) {
+                results.accept(ButtonResult.of(intersection, -1));
             }
         }
-
-        lookTarget = null;
-    }
-
-    @Override
-    public @Nullable Vector3dc getLookTarget() {
-        return lookTarget;
-    }
-
-    @Override
-    public int getLookPriority() {
-        return lookPriority;
     }
 
     @Override

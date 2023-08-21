@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
-import me.m56738.easyarmorstands.event.EntityElementInitializeEvent;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

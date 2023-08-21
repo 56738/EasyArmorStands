@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.item;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemDisplayItemProperty implements Property<ItemStack> {
     private final ItemDisplay entity;
@@ -14,7 +15,7 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
     }
 
     @Override
-    public PropertyType<ItemStack> getType() {
+    public @NotNull PropertyType<ItemStack> getType() {
         return DisplayPropertyTypes.ITEM_DISPLAY_ITEM;
     }
 

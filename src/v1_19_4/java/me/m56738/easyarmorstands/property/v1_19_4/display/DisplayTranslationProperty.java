@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3fc;
 
 public class DisplayTranslationProperty implements Property<Vector3fc> {
@@ -17,7 +18,7 @@ public class DisplayTranslationProperty implements Property<Vector3fc> {
     }
 
     @Override
-    public PropertyType<Vector3fc> getType() {
+    public @NotNull PropertyType<Vector3fc> getType() {
         return DisplayPropertyTypes.DISPLAY_TRANSLATION;
     }
 

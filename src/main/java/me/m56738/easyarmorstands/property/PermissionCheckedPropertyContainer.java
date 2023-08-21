@@ -1,17 +1,25 @@
 package me.m56738.easyarmorstands.property;
 
-import net.kyori.adventure.permission.PermissionChecker;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
+import me.m56738.easyarmorstands.context.ChangeContext;
 
-class PermissionCheckedPropertyContainer extends PropertyWrapperContainer {
-    private final PermissionChecker permissionChecker;
+/**
+ * A property container which performs permission checks before modifying the value.
+ */
+public class PermissionCheckedPropertyContainer extends PropertyWrapperContainer {
+    private final Element element;
+    private final ChangeContext context;
 
-    public PermissionCheckedPropertyContainer(PropertyContainer container, PermissionChecker permissionChecker) {
-        super(container);
-        this.permissionChecker = permissionChecker;
+    public PermissionCheckedPropertyContainer(Element element, ChangeContext context) {
+        super(element.getProperties());
+        this.element = element;
+        this.context = context;
     }
 
     @Override
     protected <T> Property<T> wrap(Property<T> property) {
-        return new PermissionCheckedPropertyWrapper<>(property, permissionChecker);
+        return new PermissionCheckedPropertyWrapper<>(property, element, context);
     }
 }

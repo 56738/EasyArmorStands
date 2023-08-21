@@ -2,23 +2,28 @@ package me.m56738.easyarmorstands.node;
 
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.arguments.standard.DoubleArgument;
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.CircleParticle;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.CircleParticle;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Consumer;
 
 public abstract class RotationNode extends EditNode implements NodeButton, ValueNode<Double> {
     private final Session session;
@@ -36,7 +41,6 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
     private final LineParticle axisParticle;
     private final CircleParticle circleParticle;
     private final LineParticle cursorLineParticle;
-    private Vector3dc lookTarget;
     private boolean valid;
     private Double manualValue;
 
@@ -47,11 +51,10 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
         this.anchor = new Vector3d(anchor);
         this.axis = axis;
         this.radius = radius;
-        this.cursor = new Cursor2D(session.getPlayer(), session);
-        ParticleCapability particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
-        this.axisParticle = particleCapability.createLine(session.getWorld());
-        this.circleParticle = particleCapability.createCircle(session.getWorld());
-        this.cursorLineParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.cursor = new Cursor2D(session);
+        this.axisParticle = session.particleFactory().createLine();
+        this.circleParticle = session.particleFactory().createCircle();
+        this.cursorLineParticle = session.particleFactory().createLine();
         this.cursorLineParticle.setColor(ParticleColor.WHITE);
     }
 
@@ -78,10 +81,10 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
     }
 
     @Override
-    public void onEnter() {
+    public void onEnter(EnterContext context) {
         manualValue = null;
         refresh();
-        Vector3dc initialCursor = lookTarget != null ? lookTarget : anchor;
+        Vector3dc initialCursor = context.cursorOrDefault(anchor);
         axis.getDirection().rotate(rotation, rotatedAxis);
         this.cursor.start(anchor, initialCursor, rotatedAxis);
         initialCursor.sub(anchor, initialOffset);
@@ -97,7 +100,7 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
         axis.getDirection().rotate(rotation, rotatedAxis);
         cursor.update(false);
         cursor.get().sub(anchor, currentOffset);
@@ -130,7 +133,7 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitContext context) {
         session.removeParticle(circleParticle);
         session.removeParticle(axisParticle);
         session.removeParticle(cursorLineParticle);
@@ -151,27 +154,11 @@ public abstract class RotationNode extends EditNode implements NodeButton, Value
     }
 
     @Override
-    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
-        Vector3dc direction = target.sub(eyes, new Vector3d());
-        double threshold = session.getLookThreshold();
-        double t = Util.intersectRayDoubleSidedPlane(eyes, direction, anchor, rotatedAxis);
-        this.lookTarget = null;
-        if (t >= 0 && t < 1) {
-            // Looking at the plane
-            Vector3d lookTarget = eyes.fma(t, direction, new Vector3d());
-            double d = lookTarget.distanceSquared(anchor);
-            double min = radius * getScale() - threshold;
-            double max = radius * getScale() + threshold;
-            if (d >= min * min && d <= max * max) {
-                // Looking at the circle
-                this.lookTarget = lookTarget;
-            }
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+        Vector3dc intersection = ray.intersectCircle(anchor, rotatedAxis, radius * getScale());
+        if (intersection != null) {
+            results.accept(ButtonResult.of(intersection));
         }
-    }
-
-    @Override
-    public @Nullable Vector3dc getLookTarget() {
-        return lookTarget;
     }
 
     @Override

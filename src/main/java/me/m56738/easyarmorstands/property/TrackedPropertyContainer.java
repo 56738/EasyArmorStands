@@ -1,10 +1,12 @@
 package me.m56738.easyarmorstands.property;
 
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.PropertyAction;
-import me.m56738.easyarmorstands.property.type.PropertyType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +15,19 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @see PropertyContainer#tracked(ChangeContext, Element)
+ * A property container which collects changes into a single history action.
+ * <p>
+ * Changes are performed immediately, but the history action is only created when {@link #commit()} is called.
+ * Also performs permission checks.
  */
-class TrackedPropertyContainer extends PropertyWrapperContainer {
+public class TrackedPropertyContainer extends PropertyWrapperContainer {
     private final Element element;
     private final ChangeContext context;
     private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
     private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
 
-    TrackedPropertyContainer(Element element, ChangeContext context) {
-        super(PropertyContainer.identified(context, element.getProperties()));
+    public TrackedPropertyContainer(Element element, ChangeContext context) {
+        super(new PermissionCheckedPropertyContainer(element, context));
         this.element = element;
         this.context = context;
     }

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;

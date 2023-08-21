@@ -1,20 +1,22 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.AddContext;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.node.MenuNode;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 public class DisplayMenuNode extends MenuNode {
     protected final PropertyContainer container;
@@ -32,21 +34,21 @@ public class DisplayMenuNode extends MenuNode {
         super(session, name);
         this.session = session;
         this.container = container;
-        this.boxParticle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createAxisAlignedBox(session.getWorld());
+        this.boxParticle = session.particleFactory().createAxisAlignedBox();
         this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
         this.widthProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
         this.heightProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
     }
 
     @Override
-    public void onAdd() {
+    public void onAdd(AddContext context) {
         canShow = true;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
     }
 
     @Override
-    public void onRemove() {
+    public void onRemove(RemoveContext context) {
         canShow = false;
         if (isVisible) {
             session.removeParticle(boxParticle);
@@ -55,31 +57,31 @@ public class DisplayMenuNode extends MenuNode {
     }
 
     @Override
-    public void onEnter() {
+    public void onEnter(EnterContext context) {
         isActive = true;
         boxParticle.setColor(ParticleColor.WHITE);
         updateBoundingBox();
-        super.onEnter();
+        super.onEnter(context);
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitContext context) {
         isActive = false;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
-        super.onExit();
+        super.onExit(context);
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
         updateBoundingBox();
-        super.onUpdate(eyes, target);
+        super.onUpdate(context);
     }
 
     @Override
-    public void onInactiveUpdate() {
+    public void onInactiveUpdate(UpdateContext context) {
         updateBoundingBox();
-        super.onInactiveUpdate();
+        super.onInactiveUpdate(context);
     }
 
     @Override

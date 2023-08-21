@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.Axis;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.joml.Math;

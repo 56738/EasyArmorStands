@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.addon.headdatabase;
 
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,7 +25,7 @@ public class HeadDatabaseSlot implements MenuSlot {
             return;
         }
         click.queueTask(() -> {
-            Player player = click.player().get();
+            Player player = click.player();
             player.setItemOnCursor(null);
             player.performCommand("headdb");
         });

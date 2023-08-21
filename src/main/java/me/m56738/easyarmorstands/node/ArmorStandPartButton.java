@@ -1,25 +1,26 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
-import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.function.Consumer;
 
 public class ArmorStandPartButton implements NodeButton {
     private final Session session;
@@ -33,13 +34,12 @@ public class ArmorStandPartButton implements NodeButton {
     private final Property<Location> locationProperty;
     private final Property<Quaterniondc> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
-    private Vector3dc lookTarget;
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, Node node) {
         this.session = session;
         this.part = part;
         this.node = node;
-        this.particle = EasyArmorStands.getInstance().getCapability(ParticleCapability.class).createLine(session.getWorld());
+        this.particle = session.particleFactory().createLine();
         this.particle.setAxis(Axis.Y);
         this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
         this.poseProperty = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
@@ -66,23 +66,10 @@ public class ArmorStandPartButton implements NodeButton {
     }
 
     @Override
-    public void updateLookTarget(Vector3dc eyes, Vector3dc target) {
-        Vector3d closestOnLookRay = new Vector3d();
-        Vector3d closestOnBone = new Vector3d();
-        double distanceSquared = Intersectiond.findClosestPointsLineSegments(
-                eyes.x(), eyes.y(), eyes.z(),
-                target.x(), target.y(), target.z(),
-                start.x(), start.y(), start.z(),
-                end.x(), end.y(), end.z(),
-                closestOnLookRay,
-                closestOnBone
-        );
-
-        double threshold = session.getLookThreshold();
-        if (distanceSquared < threshold * threshold) {
-            lookTarget = closestOnLookRay;
-        } else {
-            lookTarget = null;
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+        Vector3dc intersection = ray.intersectLine(start, end);
+        if (intersection != null) {
+            results.accept(ButtonResult.of(intersection));
         }
     }
 
@@ -102,11 +89,6 @@ public class ArmorStandPartButton implements NodeButton {
     @Override
     public void hidePreview() {
         session.removeParticle(particle);
-    }
-
-    @Override
-    public @Nullable Vector3dc getLookTarget() {
-        return lookTarget;
     }
 
     @Override

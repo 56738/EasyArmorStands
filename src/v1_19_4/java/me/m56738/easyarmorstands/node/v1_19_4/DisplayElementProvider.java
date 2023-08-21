@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.element.Element;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.element.EntityElementProvider;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;

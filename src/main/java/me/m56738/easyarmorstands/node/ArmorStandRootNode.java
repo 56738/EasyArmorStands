@@ -1,6 +1,13 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.context.AddContext;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
@@ -10,17 +17,12 @@ import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.session.Session;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.joml.Vector3dc;
 
 import java.util.EnumMap;
 
@@ -37,7 +39,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
         this.session = session;
         this.entity = entity;
         this.element = element;
-        PropertyContainer container = PropertyContainer.tracked(session.getPlayer(), element);
+        PropertyContainer container = session.properties(element);
 
         setRoot(true);
 
@@ -74,16 +76,16 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
-        super.onUpdate(eyes, target);
+    public void onUpdate(UpdateContext context) {
+        super.onUpdate(context);
         if (skeleton != null) {
             updateSkeleton(skeleton);
         }
     }
 
     @Override
-    public void onInactiveUpdate() {
-        super.onInactiveUpdate();
+    public void onInactiveUpdate(UpdateContext context) {
+        super.onInactiveUpdate(context);
         if (skeleton != null) {
             updateSkeleton(skeleton);
         }
@@ -98,7 +100,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
     }
 
     @Override
-    public void onAdd() {
+    public void onAdd(AddContext context) {
         if (skeleton != null) {
             skeleton.remove();
         }
@@ -126,7 +128,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
                 updateSkeleton(e);
                 VisibilityCapability visibilityCapability = plugin.getCapability(VisibilityCapability.class);
                 if (visibilityCapability != null) {
-                    Player player = session.getPlayer().get();
+                    Player player = session.player();
                     for (Player other : Bukkit.getOnlinePlayers()) {
                         if (player != other) {
                             visibilityCapability.hideEntity(other, plugin, e);
@@ -157,20 +159,20 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
     }
 
     @Override
-    public void onRemove() {
+    public void onRemove(RemoveContext context) {
         if (skeleton != null) {
             skeleton.remove();
         }
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
-        EasPlayer player = session.getPlayer();
-        if (context.getType() == ClickType.LEFT_CLICK && player.permissions().test("easyarmorstands.open")) {
+    public boolean onClick(ClickContext context) {
+        Player player = session.player();
+        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
             element.openMenu(player);
             return true;
         }
-        return super.onClick(eyes, target, context);
+        return super.onClick(context);
     }
 
     @Override

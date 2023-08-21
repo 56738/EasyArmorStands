@@ -1,14 +1,15 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
 import me.m56738.easyarmorstands.capability.entityplace.EntityPlaceEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.element.Element;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.node.ClickContext;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -67,27 +68,27 @@ public class SessionListener implements Listener {
     }
 
     public boolean onLeftClick(Player player, ItemStack item, Block block) {
-        Session session = manager.getSession(player);
+        SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, null, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, null, block));
             return true;
         }
         return isTool(player, item);
     }
 
     public boolean onLeftClickEntity(Player player, Entity entity, ItemStack item) {
-        Session session = manager.getSession(player);
+        SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.LEFT_CLICK, entity, null));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, null));
             return true;
         }
         return onLeftClick(player, item, null);
     }
 
     public boolean onRightClick(Player player, ItemStack item, Block block) {
-        Session session = manager.getSession(player);
+        SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, null, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, null, block));
             return true;
         }
         if (!isTool(player, item)) {
@@ -95,15 +96,15 @@ public class SessionListener implements Listener {
         }
         session = manager.start(player);
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            Session.openSpawnMenu(session.getPlayer());
+            SessionImpl.openSpawnMenu(session.player());
         }
         return true;
     }
 
     public boolean onRightClickEntity(Player player, Entity entity, ItemStack item) {
-        Session session = manager.getSession(player);
+        SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContext(me.m56738.easyarmorstands.node.ClickType.RIGHT_CLICK, entity, null));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, null));
             return true;
         }
         return onRightClick(player, item, null);
@@ -246,7 +247,7 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        Session session = manager.getSession(player);
+        SessionImpl session = manager.getSession(player);
         if (session != null) {
             EntitySelectionNode node = session.findNode(EntitySelectionNode.class);
             if (node != null) {

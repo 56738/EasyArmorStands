@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.addon.traincarts;
 
-import me.m56738.easyarmorstands.element.MenuElement;
-import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

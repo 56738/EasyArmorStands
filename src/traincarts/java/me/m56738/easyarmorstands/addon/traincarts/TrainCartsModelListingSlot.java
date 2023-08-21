@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.addon.traincarts;
 
 import com.bergerkiller.bukkit.tc.TrainCarts;
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.MenuElement;
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -29,10 +29,10 @@ public class TrainCartsModelListingSlot implements MenuSlot {
         if (!click.isLeftClick()) {
             return;
         }
-        EasPlayer player = click.player();
+        Player player = click.player();
         click.queueTask(() -> {
-            player.get().setItemOnCursor(null);
-            TrainCarts.plugin.getModelListing().buildDialog(player.get(), EasyArmorStands.getInstance())
+            player.setItemOnCursor(null);
+            TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStands.getInstance())
                     .cancelOnRootRightClick()
                     .show()
                     .thenAccept(result -> {
@@ -40,7 +40,7 @@ public class TrainCartsModelListingSlot implements MenuSlot {
                             element.openMenu(player);
                         } else if (result.success()) {
                             element.openMenu(player);
-                            player.get().setItemOnCursor(result.selectedItem());
+                            player.setItemOnCursor(result.selectedItem());
                         }
                     });
         });

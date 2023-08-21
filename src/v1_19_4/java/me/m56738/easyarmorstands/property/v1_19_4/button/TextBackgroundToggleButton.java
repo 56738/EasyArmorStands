@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.button;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.ToggleButton;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.Color;

@@ -8,21 +8,23 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.DestroyableElement;
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.ElementType;
-import me.m56738.easyarmorstands.element.MenuElement;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -80,8 +82,8 @@ public class SessionCommands {
         sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
     }
 
-    public static Session getSessionOrError(EasPlayer sender) {
-        Session session = sender.session();
+    public static SessionImpl getSessionOrError(EasPlayer sender) {
+        SessionImpl session = sender.session();
         if (session == null) {
             sendNoSessionError(sender);
         }
@@ -128,7 +130,7 @@ public class SessionCommands {
             return;
         }
         MenuElement menuElement = (MenuElement) element;
-        menuElement.openMenu(sender);
+        menuElement.openMenu(sender.get());
     }
 
     @CommandMethod("open <entity>")
@@ -145,7 +147,7 @@ public class SessionCommands {
             return;
         }
         MenuElement menuElement = (MenuElement) element;
-        menuElement.openMenu(sender);
+        menuElement.openMenu(sender.get());
     }
 
     @CommandMethod("clone")
@@ -172,7 +174,7 @@ public class SessionCommands {
     @CommandPermission("easyarmorstands.spawn")
     @CommandDescription("Open the spawn menu")
     public void spawn(EasPlayer sender) {
-        Session.openSpawnMenu(sender);
+        SessionImpl.openSpawnMenu(sender.get());
     }
 
     @CommandMethod("destroy")
@@ -204,12 +206,12 @@ public class SessionCommands {
     public void setAngleSnapIncrement(
             EasPlayer sender,
             @Argument(value = "value") @Range(min = "0", max = "90") Double value) {
-        Session session = getSessionOrError(sender);
+        SessionImpl session = getSessionOrError(sender);
         if (session == null) {
             return;
         }
         if (value == null) {
-            value = Session.DEFAULT_ANGLE_SNAP_INCREMENT;
+            value = SessionImpl.DEFAULT_ANGLE_SNAP_INCREMENT;
             if (value == session.getAngleSnapIncrement()) {
                 value = 0.0;
             }
@@ -224,12 +226,12 @@ public class SessionCommands {
     public void setSnapIncrement(
             EasPlayer sender,
             @Argument(value = "value") @Range(min = "0", max = "10") Double value) {
-        Session session = getSessionOrError(sender);
+        SessionImpl session = getSessionOrError(sender);
         if (session == null) {
             return;
         }
         if (value == null) {
-            value = Session.DEFAULT_SNAP_INCREMENT;
+            value = SessionImpl.DEFAULT_SNAP_INCREMENT;
             if (value == session.getSnapIncrement()) {
                 value = 0.0;
             }
@@ -251,7 +253,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
         Vector3d offsetVector = new Vector3d();
         if (value == null) {
@@ -282,7 +284,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
         Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
@@ -303,7 +305,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
         Location location = property.getValue();
         location.setYaw(yaw);
@@ -323,7 +325,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
         Location location = property.getValue();
         location.setPitch(pitch);
@@ -360,7 +362,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Component> nameProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -388,7 +390,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Component> nameProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -414,7 +416,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Boolean> property = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -436,7 +438,7 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = PropertyContainer.tracked(sender, element);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Boolean> property = properties.getOrNull(PropertyTypes.ARMOR_STAND_CAN_TICK);
         if (property == null) {
             if (ArmorStandCanTickProperty.isSupported()) {

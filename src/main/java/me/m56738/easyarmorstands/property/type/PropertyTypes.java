@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.util.ArmorStandPart;
 import me.m56738.easyarmorstands.util.ArmorStandSize;
 import net.kyori.adventure.text.Component;

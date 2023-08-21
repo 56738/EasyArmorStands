@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Display.Brightness;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DisplayBrightnessProperty implements Property<@Nullable Brightness> {
@@ -14,7 +15,7 @@ public class DisplayBrightnessProperty implements Property<@Nullable Brightness>
     }
 
     @Override
-    public PropertyType<@Nullable Brightness> getType() {
+    public @NotNull PropertyType<@Nullable Brightness> getType() {
         return DisplayPropertyTypes.DISPLAY_BRIGHTNESS;
     }
 

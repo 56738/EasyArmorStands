@@ -1,23 +1,31 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EntityElementReference;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.node.Button;
-import me.m56738.easyarmorstands.node.Node;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
 import me.m56738.easyarmorstands.node.SimpleEntityNode;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.PropertyRegistry;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -37,13 +45,13 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public SimpleEntityElementType<E> getType() {
+    public @NotNull SimpleEntityElementType<E> getType() {
         return type;
     }
 
     @Override
-    public EntityElementReference<E> getReference() {
-        return new EntityElementReference<>(type, entity.getUniqueId());
+    public @NotNull EntityElementReference<E> getReference() {
+        return new EntityElementReferenceImpl<>(type, entity.getUniqueId());
     }
 
     @Override
@@ -52,7 +60,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public PropertyRegistry getProperties() {
+    public @NotNull PropertyRegistry getProperties() {
         return properties;
     }
 
@@ -67,14 +75,15 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public void openMenu(EasPlayer player) {
-        Locale locale = player.pointers().getOrDefault(Identity.LOCALE, Locale.US);
+    public void openMenu(Player player) {
+        EasPlayer easPlayer = new EasPlayer(player);
+        Locale locale = easPlayer.pointers().getOrDefault(Identity.LOCALE, Locale.US);
         SplitMenuBuilder builder = new SplitMenuBuilder();
-        PropertyContainer container = PropertyContainer.tracked(player, this);
+        PropertyContainer container = new TrackedPropertyContainer(this, easPlayer);
         Component title = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
-        populateMenu(player, builder, container);
-        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player.get(), locale, this, builder, container, title));
-        player.get().openInventory(builder.build(title, locale).getInventory());
+        populateMenu(easPlayer, builder, container);
+        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player, locale, this, builder, container, title));
+        player.openInventory(builder.build(title, locale).getInventory());
     }
 
     @Override

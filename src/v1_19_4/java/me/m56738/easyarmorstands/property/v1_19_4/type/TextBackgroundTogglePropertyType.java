@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.v1_19_4.type;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.button.PropertyButton;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.button.TextBackgroundToggleButton;
 import me.m56738.easyarmorstands.util.ConfigUtil;

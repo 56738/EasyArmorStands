@@ -1,20 +1,30 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.PositionAndYawBone;
-import me.m56738.easyarmorstands.bone.PositionBone;
-import me.m56738.easyarmorstands.bone.RotationBone;
-import me.m56738.easyarmorstands.bone.RotationProvider;
-import me.m56738.easyarmorstands.bone.ScaleBone;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
+import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
+import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.joml.Vector3dc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +36,7 @@ public abstract class MenuNode implements Node {
     private final Map<MenuButton, Button> buttons = new HashMap<>();
     private boolean root;
     private MenuButton targetButton;
+    private Vector3dc targetCursor;
     private Node nextNode;
     private boolean visible;
 
@@ -150,7 +161,7 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onEnter() {
+    public void onEnter(EnterContext context) {
         targetButton = null;
         visible = true;
         for (Button button : buttons.values()) {
@@ -161,7 +172,7 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onExit() {
+    public void onExit(ExitContext context) {
         targetButton = null;
         visible = false;
         for (Button button : buttons.values()) {
@@ -170,31 +181,35 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onUpdate(Vector3dc eyes, Vector3dc target) {
+    public void onUpdate(UpdateContext context) {
+        EyeRay ray = context.eyeRay();
         Button bestButton = null;
         MenuButton bestMenuButton = null;
+        Vector3dc bestCursor = null;
         int bestPriority = Integer.MIN_VALUE;
         double bestDistance = Double.POSITIVE_INFINITY;
+        List<ButtonResult> results = new ArrayList<>();
         for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
             MenuButton menuButton = entry.getKey();
             Button button = entry.getValue();
             button.update();
-            button.updateLookTarget(eyes, target);
-            Vector3dc position = button.getLookTarget();
-            if (position == null) {
-                continue;
+            button.intersect(ray, results::add);
+            for (ButtonResult result : results) {
+                Vector3dc position = result.position();
+                int priority = result.priority();
+                if (priority < bestPriority) {
+                    continue;
+                }
+                double distance = position.distanceSquared(ray.origin());
+                if (priority > bestPriority || distance < bestDistance) {
+                    bestButton = button;
+                    bestMenuButton = menuButton;
+                    bestCursor = position;
+                    bestPriority = priority;
+                    bestDistance = distance;
+                }
             }
-            int priority = button.getLookPriority();
-            if (priority < bestPriority) {
-                continue;
-            }
-            double distance = position.distanceSquared(eyes);
-            if (priority > bestPriority || distance < bestDistance) {
-                bestButton = button;
-                bestMenuButton = menuButton;
-                bestPriority = priority;
-                bestDistance = distance;
-            }
+            results.clear();
         }
         for (Button button : buttons.values()) {
             button.updatePreview(button == bestButton);
@@ -209,20 +224,21 @@ public abstract class MenuNode implements Node {
         session.setTitle(Component.empty());
         session.setSubtitle(targetName);
         targetButton = bestMenuButton;
+        targetCursor = bestCursor;
     }
 
     @Override
-    public boolean onClick(Vector3dc eyes, Vector3dc target, ClickContext context) {
-        if (context.getType() == ClickType.RIGHT_CLICK) {
+    public boolean onClick(ClickContext context) {
+        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
             if (targetButton != null) {
-                targetButton.onClick(session);
+                targetButton.onClick(session, targetCursor);
                 return true;
             }
             if (nextNode != null) {
                 session.replaceNode(nextNode);
                 return true;
             }
-        } else if (context.getType() == ClickType.LEFT_CLICK) {
+        } else if (context.type() == ClickContext.Type.LEFT_CLICK) {
             if (!root) {
                 session.popNode();
                 return true;

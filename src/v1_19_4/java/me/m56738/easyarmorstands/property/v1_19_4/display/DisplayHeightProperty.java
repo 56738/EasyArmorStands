@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Display;
+import org.jetbrains.annotations.NotNull;
 
 public class DisplayHeightProperty implements Property<Float> {
     private final Display entity;
@@ -12,7 +13,7 @@ public class DisplayHeightProperty implements Property<Float> {
     }
 
     @Override
-    public PropertyType<Float> getType() {
+    public @NotNull PropertyType<Float> getType() {
         return DisplayPropertyTypes.DISPLAY_BOX_HEIGHT;
     }
 

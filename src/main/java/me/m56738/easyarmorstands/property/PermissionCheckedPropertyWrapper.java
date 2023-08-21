@@ -1,20 +1,26 @@
 package me.m56738.easyarmorstands.property;
 
-import me.m56738.easyarmorstands.property.type.PropertyType;
-import net.kyori.adventure.permission.PermissionChecker;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.PendingChange;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.context.ChangeContext;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     private final Property<T> property;
-    private final PermissionChecker permissionChecker;
+    private final Element element;
+    private final ChangeContext context;
     private Boolean hasPermissionCache;
 
-    PermissionCheckedPropertyWrapper(Property<T> property, PermissionChecker permissionChecker) {
+    PermissionCheckedPropertyWrapper(Property<T> property, Element element, ChangeContext context) {
         this.property = property;
-        this.permissionChecker = permissionChecker;
+        this.element = element;
+        this.context = context;
     }
 
-    public boolean hasPermission() {
+    private boolean hasPermission() {
         if (hasPermissionCache != null) {
             return hasPermissionCache;
         }
@@ -22,7 +28,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
         String permission = property.getType().getPermission();
         boolean result;
         if (permission != null) {
-            result = permissionChecker.test(permission);
+            result = context.permissions().test(permission);
         } else {
             result = true;
         }
@@ -31,7 +37,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public PropertyType<T> getType() {
+    public @NotNull PropertyType<T> getType() {
         return property.getType();
     }
 
@@ -40,9 +46,16 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
         return property.getValue();
     }
 
+    private boolean isAllowed(T value) {
+        if (!hasPermission()) {
+            return false;
+        }
+        return context.canChangeProperty(element, property, value);
+    }
+
     @Override
     public boolean setValue(T value) {
-        if (!hasPermission()) {
+        if (!isAllowed(value)) {
             return false;
         }
         return property.setValue(value);
@@ -50,12 +63,9 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
 
     @Override
     public @Nullable PendingChange prepareChange(T value) {
-        if (!hasPermission()) {
+        if (!isAllowed(value)) {
             return null;
         }
-        if (property.prepareChange(value) == null) {
-            return null;
-        }
-        return PendingChange.of(this, value);
+        return property.prepareChange(value);
     }
 }

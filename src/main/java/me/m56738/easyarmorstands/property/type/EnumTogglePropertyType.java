@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.property.type;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.EnumToggleButton;
-import me.m56738.easyarmorstands.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.property.button.PropertyButton;
 import me.m56738.easyarmorstands.util.ConfigUtil;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import org.bukkit.configuration.ConfigurationSection;

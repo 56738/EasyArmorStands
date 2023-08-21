@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;

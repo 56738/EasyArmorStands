@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
 import me.m56738.easyarmorstands.bone.EntityLocationBone;
-import me.m56738.easyarmorstands.bone.RotationBone;
-import me.m56738.easyarmorstands.bone.ScaleBone;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
+import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;

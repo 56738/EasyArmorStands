@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display;
 
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Display.Billboard;
+import org.jetbrains.annotations.NotNull;
 
 public class DisplayBillboardProperty implements Property<Billboard> {
     private final Display entity;
@@ -13,7 +14,7 @@ public class DisplayBillboardProperty implements Property<Billboard> {
     }
 
     @Override
-    public PropertyType<Billboard> getType() {
+    public @NotNull PropertyType<Billboard> getType() {
         return DisplayPropertyTypes.DISPLAY_BILLBOARD;
     }
 

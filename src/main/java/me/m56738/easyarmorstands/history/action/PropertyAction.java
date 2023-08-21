@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementReference;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.element.Element;
-import me.m56738.easyarmorstands.element.ElementReference;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.PermissionCheckedPropertyContainer;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class PropertyAction<T> implements Action {
         if (element == null) {
             return false;
         }
-        PropertyContainer properties = PropertyContainer.identified(context, element.getProperties());
+        PropertyContainer properties = new PermissionCheckedPropertyContainer(element, context);
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;

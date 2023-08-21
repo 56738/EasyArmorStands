@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;

@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
+import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.CircleParticle;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import me.m56738.easyarmorstands.particle.AxisAlignedBoxParticle;
-import me.m56738.easyarmorstands.particle.CircleParticle;
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.particle.PointParticle;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.World;
 import org.bukkit.entity.BlockDisplay;
@@ -34,7 +34,6 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
             BlockDisplay.class.getMethod("setVisibleByDefault", boolean.class);
             return true;
         } catch (Throwable e) {
-            e.printStackTrace();
             return false;
         }
     }

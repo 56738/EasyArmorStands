@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import me.m56738.easyarmorstands.menu.MenuClick;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +34,7 @@ public class ItemPropertySlot implements MenuSlot {
     @Override
     public void onClick(MenuClick click) {
         String permission = property.getType().getPermission();
-        if (permission != null && !click.player().permissions().test(permission)) {
+        if (permission != null && !click.player().hasPermission(permission)) {
             return;
         }
         click.allow();

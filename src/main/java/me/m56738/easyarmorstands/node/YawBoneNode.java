@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.bone.PositionAndYawBone;
-import me.m56738.easyarmorstands.particle.ParticleColor;
-import me.m56738.easyarmorstands.session.Session;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.bone.PositionAndYawBone;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import net.kyori.adventure.text.Component;
 
 public class YawBoneNode extends RotationNode {
@@ -18,8 +19,8 @@ public class YawBoneNode extends RotationNode {
     }
 
     @Override
-    public void onEnter() {
-        super.onEnter();
+    public void onEnter(EnterContext context) {
+        super.onEnter(context);
         initialYaw = bone.getYaw();
     }
 

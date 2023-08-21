@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
-import me.m56738.easyarmorstands.particle.LineParticle;
-import me.m56738.easyarmorstands.util.Axis;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.Location;

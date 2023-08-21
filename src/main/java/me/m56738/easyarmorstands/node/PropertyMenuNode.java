@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.session.Session;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.text.Component;
 
 public class PropertyMenuNode extends MenuNode {

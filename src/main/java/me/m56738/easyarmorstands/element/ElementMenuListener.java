@@ -1,18 +1,20 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.event.EntityElementMenuInitializeEvent;
-import me.m56738.easyarmorstands.menu.builder.MenuBuilder;
+import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlot;
 import me.m56738.easyarmorstands.menu.slot.DestroySlot;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.button.PropertyButton;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.entity.Player;
@@ -71,7 +73,7 @@ public class ElementMenuListener implements Listener {
         PropertyType<T> type = property.getType();
         PropertyButton button = type.createButton(property, container);
         if (button != null) {
-            ButtonPropertySlot<T> slot = new ButtonPropertySlot<>(button, locale);
+            ButtonPropertySlot slot = new ButtonPropertySlot(button, locale);
             builder.addButton(slot);
         }
     }

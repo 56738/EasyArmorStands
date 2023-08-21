@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.property.entity;
 
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.property.Property;
-import me.m56738.easyarmorstands.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityCustomNameProperty implements Property<@Nullable Component> {
@@ -18,7 +19,7 @@ public class EntityCustomNameProperty implements Property<@Nullable Component> {
     }
 
     @Override
-    public PropertyType<Component> getType() {
+    public @NotNull PropertyType<@Nullable Component> getType() {
         return PropertyTypes.ENTITY_CUSTOM_NAME;
     }
 
