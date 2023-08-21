@@ -15,7 +15,7 @@ public class BackgroundSlot implements MenuSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return EasyArmorStands.getInstance().getBackgroundTemplate().render(locale);
+        return EasyArmorStands.getInstance().getConfiguration().getBackgroundTemplate().render(locale);
     }
 
     @Override

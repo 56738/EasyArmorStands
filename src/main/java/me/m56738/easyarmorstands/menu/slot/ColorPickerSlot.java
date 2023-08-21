@@ -26,7 +26,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        ItemStack item = EasyArmorStands.getInstance().getColorPickerButtonTemplate(active).render(locale);
+        ItemStack item = EasyArmorStands.getInstance().getConfiguration().getColorPickerButtonTemplate(active).render(locale);
         if (active) {
             ItemMeta meta = item.getItemMeta();
             LeatherArmorMeta armorMeta = (LeatherArmorMeta) meta;

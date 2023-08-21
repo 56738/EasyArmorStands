@@ -13,7 +13,6 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
@@ -29,26 +28,16 @@ import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
-import me.m56738.easyarmorstands.item.ItemRenderer;
-import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
-import me.m56738.easyarmorstands.util.ConfigUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,13 +45,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -71,20 +53,13 @@ public class EasyArmorStands extends JavaPlugin {
     private static EasyArmorStands instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
+    private EasConfig config;
     private MessageManager messageManager;
     private EntityElementProviderRegistry entityElementProviderRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
-    private ItemTemplate toolTemplate;
-    private ItemTemplate backgroundTemplate;
-    private ItemTemplate destroyButtonTemplate;
-    private ItemTemplate colorPickerButtonTemplate;
-    private ItemTemplate colorPickerActiveButtonTemplate;
-    private ItemTemplate armorStandButtonTemplate;
-    private ItemTemplate armorStandPositionButtonTemplate;
-    private EnumMap<ArmorStandPart, ItemTemplate> armorStandPartButtonTemplates;
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
@@ -100,11 +75,14 @@ public class EasyArmorStands extends JavaPlugin {
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
+        loader.load();
         adventure = BukkitAudiences.create(this);
 
+        config = new EasConfig(this);
+        config.load();
+
         messageManager = new MessageManager(this);
-        loader.load();
-        load();
+        config.subscribe(messageManager::load);
 
         entityElementProviderRegistry = new EntityElementProviderRegistry();
         sessionManager = new SessionManager();
@@ -168,6 +146,21 @@ public class EasyArmorStands extends JavaPlugin {
         annotationParser.parse(new HistoryCommands());
 
         addonLoader.load();
+
+        if (!getDescription().getVersion().endsWith("-SNAPSHOT")) {
+            config.subscribe(cfg -> {
+                if (cfg.isUpdateCheck()) {
+                    if (updateManager == null) {
+                        updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
+                    }
+                } else {
+                    if (updateManager != null) {
+                        updateManager.unregister();
+                        updateManager = null;
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -177,71 +170,9 @@ public class EasyArmorStands extends JavaPlugin {
         }
     }
 
-    private void load() {
-        FileConfiguration config = getConfig();
-
-        messageManager.load(getDataFolder().toPath(), config);
-
-        toolTemplate = ConfigUtil.getItem(config, "tool", ItemRenderer.item()).editMeta(this::configureTool);
-        backgroundTemplate = ConfigUtil.getButton(config, "menu.background");
-        destroyButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.destroy");
-        colorPickerButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.color-picker");
-        colorPickerActiveButtonTemplate = colorPickerButtonTemplate.appendLore(config.getStringList("menu.element.buttons.color-picker.active-description"));
-        armorStandButtonTemplate = ConfigUtil.getButton(config, "menu.spawn.buttons.armor-stand").addResolver(TagResolver.resolver("type", Tag.selfClosingInserting(getCapability(EntityTypeCapability.class).getName(EntityType.ARMOR_STAND))));
-        armorStandPositionButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone.position");
-        armorStandPartButtonTemplates = new EnumMap<>(ArmorStandPart.class);
-        for (ArmorStandPart part : ArmorStandPart.values()) {
-            armorStandPartButtonTemplates.put(part, ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone." + part.getName()));
-        }
-
-        boolean isSnapshot = getDescription().getVersion().endsWith("-SNAPSHOT");
-        if (config.getBoolean("update-check") && !isSnapshot) {
-            if (updateManager == null) {
-                updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
-            }
-        } else {
-            if (updateManager != null) {
-                updateManager.unregister();
-                updateManager = null;
-            }
-        }
-
-        loadProperties();
-    }
-
-    private void configureTool(ItemMeta meta) {
-        ToolCapability toolCapability = getCapability(ToolCapability.class);
-        if (toolCapability != null) {
-            toolCapability.configureTool(meta);
-        }
-    }
-
-    private void loadProperties() {
-        YamlConfiguration defaultConfig = new YamlConfiguration();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("properties.yml"), StandardCharsets.UTF_8))) {
-            defaultConfig.load(reader);
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Failed to load default property definitions", e);
-            return;
-        }
-
-        YamlConfiguration config = new YamlConfiguration();
-        try (BufferedReader reader = Files.newBufferedReader(new File(getDataFolder(), "properties.yml").toPath())) {
-            config.load(reader);
-        } catch (NoSuchFileException ignored) {
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Failed to load property definitions", e);
-            return;
-        }
-
-        config.setDefaults(defaultConfig);
-
-        PropertyTypes.load(config);
-    }
-
     public void reload() {
         reloadConfig();
-        load();
+        config.load();
         addonLoader.reload();
     }
 
@@ -296,7 +227,7 @@ public class EasyArmorStands extends JavaPlugin {
     }
 
     public ItemStack createTool(Locale locale) {
-        return toolTemplate.render(locale);
+        return config.getToolTemplate().render(locale);
     }
 
     public boolean isTool(ItemStack item) {
@@ -311,7 +242,7 @@ public class EasyArmorStands extends JavaPlugin {
         // Tool capability is not supported
         // Match any item with the right material and any customized display name
         // TODO Add NBT implementation for tool capability to avoid this
-        if (!Objects.equals(toolTemplate.getType(), item.getType())) {
+        if (!Objects.equals(config.getToolTemplate().getType(), item.getType())) {
             return false;
         }
         ItemMeta meta = item.getItemMeta();
@@ -321,27 +252,7 @@ public class EasyArmorStands extends JavaPlugin {
         return meta.hasDisplayName();
     }
 
-    public ItemTemplate getBackgroundTemplate() {
-        return backgroundTemplate;
-    }
-
-    public ItemTemplate getDestroyButtonTemplate() {
-        return destroyButtonTemplate;
-    }
-
-    public ItemTemplate getColorPickerButtonTemplate(boolean active) {
-        return active ? colorPickerActiveButtonTemplate : colorPickerButtonTemplate;
-    }
-
-    public ItemTemplate getArmorStandButtonTemplate() {
-        return armorStandButtonTemplate;
-    }
-
-    public ItemTemplate getArmorStandPositionButtonTemplate() {
-        return armorStandPositionButtonTemplate;
-    }
-
-    public ItemTemplate getArmorStandPartButtonTemplate(ArmorStandPart part) {
-        return armorStandPartButtonTemplates.get(part);
+    public EasConfig getConfiguration() {
+        return config;
     }
 }

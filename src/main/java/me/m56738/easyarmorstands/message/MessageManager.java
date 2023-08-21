@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.message;
 
+import me.m56738.easyarmorstands.EasConfig;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -12,7 +13,6 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.translation.Translator;
 import net.kyori.adventure.util.UTF8ResourceBundleControl;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,19 +48,15 @@ public class MessageManager {
         Message.messageManager = this;
     }
 
-    public void load(Path path, ConfigurationSection config) {
+    public void load(EasConfig config) {
+        styleTemplates.putAll(config.getMessageFormats());
+
         GlobalTranslator.translator().removeSource(registry);
 
         registry = TranslationRegistry.create(key);
 
-        // Load message styles
-        for (MessageStyle style : MessageStyle.values()) {
-            String name = style.name().toLowerCase(Locale.ROOT).replace('_', '-');
-            String format = config.getString("format." + name);
-            styleTemplates.put(style, format);
-        }
-
         // Load default locale from included or custom messages.properties
+        Path path = plugin.getDataFolder().toPath();
         Path defaultLocalePath = path.resolve("messages.properties");
         if (Files.exists(defaultLocalePath)) {
             registry.registerAll(Locale.US, defaultLocalePath, false);
@@ -76,7 +72,7 @@ public class MessageManager {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }
 
-        if (config.getBoolean("server-side-translation")) {
+        if (config.isServerSideTranslation()) {
             GlobalTranslator.translator().addSource(registry);
         }
     }

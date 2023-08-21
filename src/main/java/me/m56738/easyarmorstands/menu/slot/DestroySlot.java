@@ -18,7 +18,7 @@ public class DestroySlot implements MenuSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return EasyArmorStands.getInstance().getDestroyButtonTemplate().render(locale);
+        return EasyArmorStands.getInstance().getConfiguration().getDestroyButtonTemplate().render(locale);
     }
 
     @Override

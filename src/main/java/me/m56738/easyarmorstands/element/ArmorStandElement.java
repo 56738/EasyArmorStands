@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasConfig;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.menu.Menu;
@@ -53,55 +54,56 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
             return;
         }
 
+        EasConfig config = EasyArmorStands.getInstance().getConfiguration();
         builder.setSlot(
                 Menu.index(3, 7),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.HEAD),
                         getResetAction(ArmorStandPart.HEAD, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.HEAD)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.HEAD)));
         builder.setSlot(
                 Menu.index(4, 6),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.LEFT_ARM),
                         getResetAction(ArmorStandPart.LEFT_ARM, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.LEFT_ARM)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.LEFT_ARM)));
         builder.setSlot(
                 Menu.index(4, 7),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.BODY),
                         getResetAction(ArmorStandPart.BODY, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.BODY)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.BODY)));
         builder.setSlot(
                 Menu.index(4, 8),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.RIGHT_ARM),
                         getResetAction(ArmorStandPart.RIGHT_ARM, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.RIGHT_ARM)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.RIGHT_ARM)));
         builder.setSlot(
                 Menu.index(5, 6),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.LEFT_LEG),
                         getResetAction(ArmorStandPart.LEFT_LEG, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.LEFT_LEG)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.LEFT_LEG)));
         builder.setSlot(
                 Menu.index(5, 7),
                 new NodeSlot(
                         session,
                         root.getPositionButton(),
                         new YawResetAction(container.get(PropertyTypes.ENTITY_LOCATION), container),
-                        EasyArmorStands.getInstance().getArmorStandPositionButtonTemplate()));
+                        config.getArmorStandPositionButtonTemplate()));
         builder.setSlot(
                 Menu.index(5, 8),
                 new NodeSlot(
                         session,
                         root.getPartButton(ArmorStandPart.RIGHT_LEG),
                         getResetAction(ArmorStandPart.RIGHT_LEG, container),
-                        EasyArmorStands.getInstance().getArmorStandPartButtonTemplate(ArmorStandPart.RIGHT_LEG)));
+                        config.getArmorStandPartButtonTemplate(ArmorStandPart.RIGHT_LEG)));
     }
 
     private Consumer<MenuClick> getResetAction(ArmorStandPart part, PropertyContainer container) {

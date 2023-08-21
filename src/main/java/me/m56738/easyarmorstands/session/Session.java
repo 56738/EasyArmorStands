@@ -66,7 +66,7 @@ public final class Session {
         SimpleMenuBuilder builder = new SimpleMenuBuilder();
         if (player.permissions().test("easyarmorstands.spawn.armorstand")) {
             ArmorStandElementType type = new ArmorStandElementType();
-            builder.addButton(new SpawnSlot(type, EasyArmorStands.getInstance().getArmorStandButtonTemplate()));
+            builder.addButton(new SpawnSlot(type, EasyArmorStands.getInstance().getConfiguration().getArmorStandButtonTemplate()));
         }
         Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player.get(), locale, builder));
         int size = builder.getSize();
