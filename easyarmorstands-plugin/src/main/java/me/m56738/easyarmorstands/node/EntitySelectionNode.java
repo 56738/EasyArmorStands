@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -25,10 +25,10 @@ import java.util.Set;
 
 public class EntitySelectionNode extends MenuNode {
     private final Session session;
-    private final EntityElementProviderRegistry providerRegistry;
+    private final EntityElementProviderRegistryImpl providerRegistry;
     private final Map<Entity, ElementButton> buttons = new HashMap<>();
 
-    public EntitySelectionNode(Session session, Component name, EntityElementProviderRegistry providerRegistry) {
+    public EntitySelectionNode(Session session, Component name, EntityElementProviderRegistryImpl providerRegistry) {
         super(session, name);
         this.session = session;
         this.providerRegistry = providerRegistry;
@@ -111,7 +111,7 @@ public class EntitySelectionNode extends MenuNode {
             return false;
         }
 
-        me.m56738.easyarmorstands.api.editor.node.Node node = ((SelectableElement) element).createNode(session);
+        Node node = ((SelectableElement) element).createNode(session);
         if (node == null) {
             return false;
         }
@@ -149,6 +149,11 @@ public class EntitySelectionNode extends MenuNode {
             if (node != null) {
                 session.pushNode(node, cursor);
             }
+        }
+
+        @Override
+        public Component getName() {
+            return element.getName();
         }
     }
 }

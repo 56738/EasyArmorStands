@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.node;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.joml.Vector3d;
@@ -44,8 +43,4 @@ public class ArmorStandButton extends AxisAlignedBoxButton {
         return new Vector3d(width, height, width);
     }
 
-    @Override
-    public Component getName() {
-        return Component.text(Util.getId(entity.getUniqueId()));
-    }
 }

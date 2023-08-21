@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.api.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
-import net.kyori.adventure.text.Component;
 
 import java.util.function.Consumer;
 
@@ -42,6 +41,4 @@ public interface Button {
      * Makes the preview invisible.
      */
     void hidePreview();
-
-    Component getName();
 }

@@ -14,7 +14,7 @@ import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.util.ConfigUtil;
 import org.bukkit.block.data.BlockData;

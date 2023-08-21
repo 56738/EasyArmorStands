@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 
-public interface SelectableElement extends Element {
+public interface SelectableElement extends NamedElement {
     Button createButton(Session session);
 
     Node createNode(Session session);

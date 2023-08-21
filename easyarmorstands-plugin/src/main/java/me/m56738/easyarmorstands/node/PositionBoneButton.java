@@ -10,10 +10,10 @@ import org.joml.Vector3dc;
 
 public class PositionBoneButton extends SimpleButton implements NodeButton {
     private final PositionBone bone;
-    private final me.m56738.easyarmorstands.api.editor.node.Node node;
+    private final Node node;
     private final Component name;
 
-    public PositionBoneButton(Session session, PositionBone bone, me.m56738.easyarmorstands.api.editor.node.Node node, Component name, ParticleColor color) {
+    public PositionBoneButton(Session session, PositionBone bone, Node node, Component name, ParticleColor color) {
         super(session, color);
         this.bone = bone;
         this.node = node;

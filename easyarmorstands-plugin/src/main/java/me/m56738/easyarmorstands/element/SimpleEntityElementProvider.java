@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;

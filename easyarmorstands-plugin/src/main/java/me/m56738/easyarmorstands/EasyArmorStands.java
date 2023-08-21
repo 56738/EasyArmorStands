@@ -25,7 +25,8 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ElementMenuListener;
 import me.m56738.easyarmorstands.element.EntityElementListener;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
@@ -59,7 +60,7 @@ public class EasyArmorStands extends JavaPlugin {
     private EasConfig config;
     private MessageManager messageManager;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
-    private EntityElementProviderRegistry entityElementProviderRegistry;
+    private EntityElementProviderRegistryImpl entityElementProviderRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
@@ -94,7 +95,9 @@ public class EasyArmorStands extends JavaPlugin {
 
         new DefaultPropertyTypes(propertyTypeRegistry);
 
-        entityElementProviderRegistry = new EntityElementProviderRegistry();
+        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
+        EntityElementProviderRegistry.Holder.instance = entityElementProviderRegistry;
+
         sessionManager = new SessionManager();
         historyManager = new HistoryManager();
 
@@ -212,7 +215,7 @@ public class EasyArmorStands extends JavaPlugin {
         return propertyTypeRegistry;
     }
 
-    public EntityElementProviderRegistry getEntityElementProviderRegistry() {
+    public EntityElementProviderRegistryImpl getEntityElementProviderRegistry() {
         return entityElementProviderRegistry;
     }
 

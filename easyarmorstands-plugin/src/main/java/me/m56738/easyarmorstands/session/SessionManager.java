@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
@@ -28,7 +28,7 @@ public class SessionManager {
 
     public SessionImpl start(Player player) {
         SessionImpl session = new SessionImpl(new EasPlayer(player));
-        EntityElementProviderRegistry registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
+        EntityElementProviderRegistryImpl registry = EasyArmorStands.getInstance().getEntityElementProviderRegistry();
         EntitySelectionNode node = new EntitySelectionNode(session, Message.component("easyarmorstands.node.select-entity"), registry);
         node.setRoot(true);
         session.pushNode(node);

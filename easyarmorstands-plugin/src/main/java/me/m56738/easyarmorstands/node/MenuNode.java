@@ -216,7 +216,7 @@ public abstract class MenuNode implements Node {
         }
         Component targetName;
         if (bestButton != null) {
-            targetName = bestButton.getName();
+            targetName = bestMenuButton.getName();
         } else {
             targetName = Component.empty();
         }

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.display.element;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.element.EntityElementProvider;
+import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;

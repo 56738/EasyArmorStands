@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.display.editor.button;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.node.AxisAlignedBoxButton;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.joml.Vector3d;
@@ -35,8 +34,4 @@ public class DisplayButton<T extends Display> extends AxisAlignedBoxButton {
         return new Vector3d(width, height, width);
     }
 
-    @Override
-    public Component getName() {
-        return Component.text(Util.getId(entity.getUniqueId()));
-    }
 }

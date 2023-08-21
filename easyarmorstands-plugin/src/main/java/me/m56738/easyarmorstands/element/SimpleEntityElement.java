@@ -19,6 +19,7 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
 import me.m56738.easyarmorstands.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -97,6 +98,11 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public void destroy() {
         entity.remove();
+    }
+
+    @Override
+    public @NotNull Component getName() {
+        return Component.text(Util.getId(entity.getUniqueId()));
     }
 
     private class Properties extends PropertyRegistry {
