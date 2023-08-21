@@ -12,13 +12,13 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import net.kyori.adventure.identity.Identity;
@@ -169,6 +169,9 @@ public class GlobalCommands {
         PropertyType<T> type = property.getType();
 
         TextComponent.Builder hover = Component.text();
+        hover.append(Component.text(type.key().namespace() + ':', NamedTextColor.YELLOW)
+                .append(Component.text(type.key().value(), NamedTextColor.GOLD)));
+        hover.appendNewline();
         hover.append(debugLine(Component.text("Type"), Component.text(type.getClass().getName())));
         hover.appendNewline();
         hover.append(debugLine(Component.text("Value"), type.getValueComponent(property.getValue())));

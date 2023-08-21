@@ -7,14 +7,15 @@ import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.node.v1_19_4.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayElementProvider;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayElementType;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayRootNode;
 import me.m56738.easyarmorstands.node.v1_19_4.TextDisplayElementType;
+import me.m56738.easyarmorstands.property.v1_19_4.display.DefaultDisplayPropertyTypes;
 import me.m56738.easyarmorstands.session.v1_19_4.DisplaySessionListener;
 import me.m56738.easyarmorstands.util.ConfigUtil;
-import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
@@ -49,6 +50,8 @@ public class DisplayAddon implements Addon {
 
     @Override
     public void enable(EasyArmorStands plugin) {
+        new DefaultDisplayPropertyTypes(plugin.getPropertyTypeRegistry());
+
         DisplaySessionListener listener = new DisplaySessionListener(this);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);

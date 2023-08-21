@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.property.v1_19_4.type;
 
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -9,13 +10,14 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display.Brightness;
+import org.jetbrains.annotations.NotNull;
 
 public class BrightnessPropertyType extends ConfigurablePropertyType<Brightness> {
     private String valueTemplate;
     private Component none;
 
-    public BrightnessPropertyType(String key) {
-        super(key);
+    public BrightnessPropertyType(@NotNull Key key) {
+        super(key, Brightness.class);
     }
 
     @Override

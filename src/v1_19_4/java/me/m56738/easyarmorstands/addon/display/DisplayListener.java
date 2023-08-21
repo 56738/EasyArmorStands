@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.addon.display;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
+import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayHeightProperty;

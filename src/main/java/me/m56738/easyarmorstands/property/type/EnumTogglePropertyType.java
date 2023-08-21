@@ -2,17 +2,19 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.button.EnumToggleButton;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
-import me.m56738.easyarmorstands.util.ConfigUtil;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.property.button.EnumToggleButton;
+import me.m56738.easyarmorstands.util.ConfigUtil;
+import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EnumTogglePropertyType<T extends Enum<T>> extends EnumPropertyType<T> {
     protected ItemTemplate buttonTemplate;
 
-    public EnumTogglePropertyType(String key, Class<T> type) {
+    public EnumTogglePropertyType(@NotNull Key key, Class<T> type) {
         super(key, type);
     }
 

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;

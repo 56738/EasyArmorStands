@@ -1,16 +1,18 @@
 package me.m56738.easyarmorstands.property.type;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     private Component enabled;
     private Component disabled;
     private Component none;
 
-    public BooleanPropertyType(String key) {
-        super(key);
+    public BooleanPropertyType(@NotNull Key key) {
+        super(key, Boolean.class);
     }
 
     @Override

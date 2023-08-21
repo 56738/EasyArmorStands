@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
+import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;

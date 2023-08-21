@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandVisibilityProperty implements Property<Boolean> {
-    public static final PropertyType<Boolean> TYPE = PropertyTypes.ARMOR_STAND_VISIBILITY;
+    public static final PropertyType<Boolean> TYPE = PropertyTypes.ENTITY_VISIBILITY;
     private final ArmorStand entity;
 
     public ArmorStandVisibilityProperty(ArmorStand entity) {

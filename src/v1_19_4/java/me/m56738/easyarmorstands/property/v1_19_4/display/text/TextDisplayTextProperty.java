@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.v1_19_4.display.text;
 
-import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.capability.textdisplay.TextDisplayCapability;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;

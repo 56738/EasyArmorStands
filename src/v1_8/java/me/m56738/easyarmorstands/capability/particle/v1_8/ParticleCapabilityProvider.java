@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.CapabilityProvider;
-import me.m56738.easyarmorstands.capability.Priority;
-import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
+import me.m56738.easyarmorstands.capability.CapabilityProvider;
+import me.m56738.easyarmorstands.capability.Priority;
+import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
+import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 

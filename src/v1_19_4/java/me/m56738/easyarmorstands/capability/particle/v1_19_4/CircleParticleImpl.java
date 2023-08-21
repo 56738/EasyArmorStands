@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.util.v1_19_4.JOMLMapper;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

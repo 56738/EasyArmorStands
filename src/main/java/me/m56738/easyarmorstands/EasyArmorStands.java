@@ -12,6 +12,7 @@ import cloud.commandframework.paper.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.addon.AddonLoader;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.command.GlobalCommands;
@@ -32,6 +33,8 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
+import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManager;
 import me.m56738.easyarmorstands.update.UpdateManager;
@@ -55,6 +58,7 @@ public class EasyArmorStands extends JavaPlugin {
     private final AddonLoader addonLoader = new AddonLoader(this, getClassLoader());
     private EasConfig config;
     private MessageManager messageManager;
+    private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistry entityElementProviderRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
@@ -83,6 +87,12 @@ public class EasyArmorStands extends JavaPlugin {
 
         messageManager = new MessageManager(this);
         config.subscribe(messageManager::load);
+
+        propertyTypeRegistry = new PropertyTypeRegistryImpl();
+        config.subscribe(propertyTypeRegistry::load);
+        PropertyTypeRegistry.Holder.instance = propertyTypeRegistry;
+
+        new DefaultPropertyTypes(propertyTypeRegistry);
 
         entityElementProviderRegistry = new EntityElementProviderRegistry();
         sessionManager = new SessionManager();
@@ -196,6 +206,10 @@ public class EasyArmorStands extends JavaPlugin {
 
     public MessageManager getMessageManager() {
         return messageManager;
+    }
+
+    public PropertyTypeRegistry getPropertyTypeRegistry() {
+        return propertyTypeRegistry;
     }
 
     public EntityElementProviderRegistry getEntityElementProviderRegistry() {

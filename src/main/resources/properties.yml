@@ -1,4 +1,4 @@
-armor-stand-arms:
+easyarmorstands:armor_stand_arms:
   permission: easyarmorstands.property.armorstand.arms
   name: <lang:easyarmorstands.property.armor-stand.arms.name>
   value:
@@ -10,7 +10,7 @@ armor-stand-arms:
     description:
       - <value>
 
-armor-stand-base-plate:
+easyarmorstands:armor_stand_base_plate:
   permission: easyarmorstands.property.armorstand.baseplate
   name: <lang:easyarmorstands.property.armor-stand.base-plate.name>
   value:
@@ -24,14 +24,14 @@ armor-stand-base-plate:
     description:
       - <value>
 
-armor-stand-can-tick:
+easyarmorstands:armor_stand_can_tick:
   permission: easyarmorstands.property.armorstand.cantick
   name: <lang:easyarmorstands.property.armor-stand.can-tick.name>
   value:
     enabled: <green><lang:easyarmorstands.property.common.enabled>
     disabled: <red><lang:easyarmorstands.property.common.disabled>
 
-armor-stand-gravity:
+easyarmorstands:armor_stand_gravity:
   permission: easyarmorstands.property.gravity
   name: <lang:easyarmorstands.property.gravity.name>
   value:
@@ -46,7 +46,7 @@ armor-stand-gravity:
   can-tick-warning:
     - <yellow><lang:easyarmorstands.property.gravity.can-tick-warning>
 
-armor-stand-invulnerability:
+easyarmorstands:armor_stand_invulnerability:
   permission: easyarmorstands.property.invulnerable
   name: <lang:easyarmorstands.property.invulnerability.name>
   value:
@@ -59,7 +59,7 @@ armor-stand-invulnerability:
     description:
       - <value>
 
-armor-stand-lock:
+easyarmorstands:armor_stand_lock:
   permission: easyarmorstands.property.armorstand.lock
   name: <lang:easyarmorstands.property.armor-stand.lock.name>
   value:
@@ -74,7 +74,7 @@ armor-stand-lock:
       - <value>
       - <lang:easyarmorstands.property.armor-stand.lock.description>
 
-armor-stand-marker:
+easyarmorstands:armor_stand_marker:
   permission: easyarmorstands.property.armorstand.marker
   name: <lang:easyarmorstands.property.armor-stand.marker.name>
   value:
@@ -89,27 +89,26 @@ armor-stand-marker:
       - <value>
       - <lang:easyarmorstands.property.armor-stand.marker.description>
 
-armor-stand-pose:
-  head:
-    permission: easyarmorstands.property.armorstand.pose.head
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.head>'>
-  body:
-    permission: easyarmorstands.property.armorstand.pose.body
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.body>'>
-  left-arm:
-    permission: easyarmorstands.property.armorstand.pose.leftarm
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-arm>'>
-  right-arm:
-    permission: easyarmorstands.property.armorstand.pose.rightarm
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-arm>'>
-  left-leg:
-    permission: easyarmorstands.property.armorstand.pose.leftleg
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-leg>'>
-  right-leg:
-    permission: easyarmorstands.property.armorstand.pose.rightleg
-    name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-leg>'>
+easyarmorstands:armor_stand_pose/head:
+  permission: easyarmorstands.property.armorstand.pose.head
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.head>'>
+easyarmorstands:armor_stand_pose/body:
+  permission: easyarmorstands.property.armorstand.pose.body
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.body>'>
+easyarmorstands:armor_stand_pose/left_arm:
+  permission: easyarmorstands.property.armorstand.pose.leftarm
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-arm>'>
+easyarmorstands:armor_stand_pose/right_arm:
+  permission: easyarmorstands.property.armorstand.pose.rightarm
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-arm>'>
+easyarmorstands:armor_stand_pose/left_leg:
+  permission: easyarmorstands.property.armorstand.pose.leftleg
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-leg>'>
+easyarmorstands:armor_stand_pose/right_leg:
+  permission: easyarmorstands.property.armorstand.pose.rightleg
+  name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-leg>'>
 
-armor-stand-size:
+easyarmorstands:armor_stand_size:
   permission: easyarmorstands.property.armorstand.size
   name: <lang:easyarmorstands.property.armor-stand.size.name>
   value:
@@ -123,7 +122,7 @@ armor-stand-size:
     description:
       - <value>
 
-armor-stand-visibility:
+easyarmorstands:armor_stand_visibility:
   permission: easyarmorstands.property.visible
   name: <lang:easyarmorstands.property.visibility.name>
   value:
@@ -136,7 +135,7 @@ armor-stand-visibility:
     description:
       - <value>
 
-entity-custom-name:
+easyarmorstands:entity_custom_name:
   permission: easyarmorstands.property.name
   name: <lang:easyarmorstands.property.custom-name.name>
   value:
@@ -147,34 +146,33 @@ entity-custom-name:
     description:
       - <value>
 
-entity-custom-name-visible:
+easyarmorstands:entity_custom_name_visible:
   permission: easyarmorstands.property.name.visible
   name: <lang:easyarmorstands.property.custom-name-visible.name>
   value:
     enabled: <green><lang:easyarmorstands.property.common.visible>
     disabled: <red><lang:easyarmorstands.property.common.invisible>
 
-entity-equipment:
-  hand:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.hand.name>
-  off-hand:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.off-hand.name>
-  feet:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.feet.name>
-  legs:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.legs.name>
-  chest:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.chest.name>
-  head:
-    permission: easyarmorstands.property.equipment
-    name: <lang:easyarmorstands.property.equipment.head.name>
+easyarmorstands:entity_equipment/hand:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.hand.name>
+easyarmorstands:entity_equipment/off_hand:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.off-hand.name>
+easyarmorstands:entity_equipment/feet:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.feet.name>
+easyarmorstands:entity_equipment/legs:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.legs.name>
+easyarmorstands:entity_equipment/chest:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.chest.name>
+easyarmorstands:entity_equipment/head:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.head.name>
 
-entity-glowing:
+easyarmorstands:entity_glowing:
   permission: easyarmorstands.property.glow
   name: <lang:easyarmorstands.property.glow.name>
   value:
@@ -187,7 +185,7 @@ entity-glowing:
       - <value>
       - <lang:easyarmorstands.property.glow.description>
 
-entity-location:
+easyarmorstands:entity_location:
   permission: easyarmorstands.property.location
   name: <lang:easyarmorstands.property.location.name>
   value:
@@ -200,11 +198,11 @@ entity-location:
       - <value>
       - <lang:easyarmorstands.property.glow.description>
 
-block-display-block:
+easyarmorstands:block_display_block:
   permission: easyarmorstands.property.display.block
   name: <lang:easyarmorstands.property.block-display.block.name>
 
-display-billboard:
+easyarmorstands:display_billboard:
   permission: easyarmorstands.property.display.billboard
   name: <lang:easyarmorstands.property.display.billboard.name>
   value:
@@ -221,46 +219,46 @@ display-billboard:
       - <value>
       - <lang:easyarmorstands.property.display.billboard.description>
 
-display-brightness:
+easyarmorstands:display_brightness:
   permission: easyarmorstands.property.display.brightness
   name: <lang:easyarmorstands.property.display.brightness.name>
   value:
     template: <gold><lang:easyarmorstands.property.display.brightness.sky:'<sky>'></gold>, <yellow><lang:easyarmorstands.property.display.brightness.block:'<block>'>
     none: <i><gray>Default brightness
 
-display-box-height:
+easyarmorstands:display_box_height:
   permission: easyarmorstands.property.display.size
   name: <lang:easyarmorstands.property.display.box.height.name>
   value:
     format: 0.0000
 
-display-box-width:
+easyarmorstands:display_box_width:
   permission: easyarmorstands.property.display.size
   name: <lang:easyarmorstands.property.display.box.width.name>
   value:
     format: 0.0000
 
-display-left-rotation:
+easyarmorstands:display_left_rotation:
   permission: easyarmorstands.property.display.rotation
   name: <lang:easyarmorstands.property.display.rotation.name>
 
-display-right-rotation:
+easyarmorstands:display_right_rotation:
   permission: easyarmorstands.property.display.shearing
   name: <lang:easyarmorstands.property.display.shearing.name>
 
-display-scale:
+easyarmorstands:display_scale:
   permission: easyarmorstands.property.display.scale
   name: <lang:easyarmorstands.property.display.scale.name>
 
-display-translation:
+easyarmorstands:display_translation:
   permission: easyarmorstands.property.display.translation
   name: <lang:easyarmorstands.property.display.translation.name>
 
-item-display-item:
+easyarmorstands:item_display_item:
   permission: easyarmorstands.property.display.item
   name: <lang:easyarmorstands.property.item-display.item.name>
 
-item-display-transform:
+easyarmorstands:item_display_transform:
   permission: easyarmorstands.property.display.item.transform
   name: <lang:easyarmorstands.property.item-display.transform.name>
   value:
@@ -280,7 +278,7 @@ item-display-transform:
       - <value>
       - <lang:easyarmorstands.property.item-display.transform.description>
 
-text-display-alignment:
+easyarmorstands:text_display_alignment:
   permission: easyarmorstands.property.display.text.alignment
   name: <lang:easyarmorstands.property.text-display.alignment.name>
   value:
@@ -293,7 +291,7 @@ text-display-alignment:
     description:
       - <value>
 
-text-display-background:
+easyarmorstands:text_display_background:
   permission: easyarmorstands.property.display.text.background
   name: <lang:easyarmorstands.property.text-display.background.name>
   button:
@@ -304,11 +302,11 @@ text-display-background:
     description:
       - <value>
 
-text-display-line-width:
+easyarmorstands:text_display_line_width:
   permission: easyarmorstands.property.display.text.linewidth
   name: <lang:easyarmorstands.property.text-display.line-width.name>
 
-text-display-see-through:
+easyarmorstands:text_display_see_through:
   permission: easyarmorstands.property.display.text.seethrough
   name: <lang:easyarmorstands.property.text-display.see-through.name>
   value:
@@ -320,7 +318,7 @@ text-display-see-through:
     description:
       - <value>
 
-text-display-shadow:
+easyarmorstands:text_display_shadow:
   permission: easyarmorstands.property.display.text.shadow
   name: <lang:easyarmorstands.property.text-display.shadow.name>
   value:
@@ -332,7 +330,7 @@ text-display-shadow:
     description:
       - <value>
 
-text-display-text:
+easyarmorstands:text_display_text:
   permission: easyarmorstands.property.display.text
   name: <lang:easyarmorstands.property.text-display.text.name>
   value:

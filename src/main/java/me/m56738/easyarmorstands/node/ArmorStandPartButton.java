@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.api.ArmorStandPart;
+import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -9,9 +11,8 @@ import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
-import me.m56738.easyarmorstands.util.ArmorStandSize;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.joml.Math;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
 
 public class ArmorStandPartButton implements NodeButton {
     private final Session session;
-    private final ArmorStandPart part;
+    private final ArmorStandPartInfo part;
     private final Node node;
     private final Vector3d start = new Vector3d();
     private final Vector3d end = new Vector3d();
@@ -37,7 +38,7 @@ public class ArmorStandPartButton implements NodeButton {
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, Node node) {
         this.session = session;
-        this.part = part;
+        this.part = ArmorStandPartInfo.of(part);
         this.node = node;
         this.particle = session.particleFactory().createLine();
         this.particle.setAxis(Axis.Y);

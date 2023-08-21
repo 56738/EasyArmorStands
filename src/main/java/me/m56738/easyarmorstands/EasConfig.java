@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands;
 
+import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.item.ItemRenderer;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.message.MessageStyle;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.ConfigUtil;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -44,6 +44,7 @@ public class EasConfig {
     private ItemTemplate armorStandButtonTemplate;
     private ItemTemplate armorStandPositionButtonTemplate;
     private EnumMap<ArmorStandPart, ItemTemplate> armorStandPartButtonTemplates;
+    private ConfigurationSection propertyConfig;
 
     public EasConfig(EasyArmorStands plugin) {
         this.plugin = plugin;
@@ -68,10 +69,9 @@ public class EasConfig {
         armorStandPositionButtonTemplate = ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone.position");
         armorStandPartButtonTemplates = new EnumMap<>(ArmorStandPart.class);
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            armorStandPartButtonTemplates.put(part, ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone." + part.getName()));
+            armorStandPartButtonTemplates.put(part, ConfigUtil.getButton(config, "menu.element.buttons.armor-stand-bone." + ArmorStandPartInfo.of(part).getName()));
         }
-
-        PropertyTypes.load(getConfig("properties.yml"));
+        propertyConfig = getConfig("properties.yml");
 
         loaded = true;
         for (Consumer<EasConfig> subscription : subscriptions) {
@@ -151,5 +151,9 @@ public class EasConfig {
 
     public ItemTemplate getArmorStandPartButtonTemplate(ArmorStandPart part) {
         return armorStandPartButtonTemplates.get(part);
+    }
+
+    public ConfigurationSection getPropertyConfig() {
+        return propertyConfig;
     }
 }

@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
-import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
-import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.particle.LineParticle;
+import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import org.bukkit.Color;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;

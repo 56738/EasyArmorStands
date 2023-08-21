@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 
 /**
  * A node which edits a property.

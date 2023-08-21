@@ -2,12 +2,14 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
-    public ItemPropertyType(String key) {
-        super(key);
+    public ItemPropertyType(@NotNull Key key) {
+        super(key, ItemStack.class);
     }
 
     @Override

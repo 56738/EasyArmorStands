@@ -3,10 +3,14 @@ package me.m56738.easyarmorstands.api.property.type;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface PropertyType<T> {
+public interface PropertyType<T> extends Keyed {
+    @NotNull Class<T> getValueType();
+
     @Nullable String getPermission();
 
     /**

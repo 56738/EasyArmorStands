@@ -2,9 +2,11 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.button.GravityToggleButton;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
+import me.m56738.easyarmorstands.property.button.GravityToggleButton;
+import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -13,7 +15,7 @@ import java.util.List;
 public class GravityPropertyType extends BooleanTogglePropertyType {
     private List<String> canTickWarning = Collections.emptyList();
 
-    public GravityPropertyType(String key) {
+    public GravityPropertyType(@NotNull Key key) {
         super(key);
     }
 

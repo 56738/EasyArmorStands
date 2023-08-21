@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.capability.item.ItemCapability;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

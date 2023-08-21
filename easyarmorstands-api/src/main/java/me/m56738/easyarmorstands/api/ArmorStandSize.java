@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.util;
+package me.m56738.easyarmorstands.api;
 
 import org.bukkit.entity.ArmorStand;
 

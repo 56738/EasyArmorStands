@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node.v1_19_4;
 
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.node.ElementNode;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;

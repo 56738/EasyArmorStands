@@ -1,10 +1,12 @@
 package me.m56738.easyarmorstands.property.type;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class IntegerPropertyType extends ConfigurablePropertyType<Integer> {
-    public IntegerPropertyType(String key) {
-        super(key);
+    public IntegerPropertyType(@NotNull Key key) {
+        super(key, Integer.class);
     }
 
     @Override

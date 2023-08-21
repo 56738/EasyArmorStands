@@ -1,8 +1,10 @@
 package me.m56738.easyarmorstands.property.type;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
@@ -10,8 +12,8 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     protected final T[] values;
     private final EnumMap<T, Component> valueNames;
 
-    public EnumPropertyType(String key, Class<T> type) {
-        super(key);
+    public EnumPropertyType(@NotNull Key key, Class<T> type) {
+        super(key, type);
         this.valueNames = new EnumMap<>(type);
         this.values = type.getEnumConstants();
     }

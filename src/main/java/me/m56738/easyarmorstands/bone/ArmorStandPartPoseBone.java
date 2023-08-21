@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.bone;
 
+import me.m56738.easyarmorstands.api.ArmorStandPart;
+import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
-import me.m56738.easyarmorstands.util.ArmorStandSize;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Location;
 import org.joml.Math;
 import org.joml.Quaterniond;
@@ -15,14 +16,14 @@ import org.joml.Vector3dc;
 
 public class ArmorStandPartPoseBone implements RotationBone {
     private final PropertyContainer container;
-    private final ArmorStandPart part;
+    private final ArmorStandPartInfo part;
     private final Property<Quaterniondc> poseProperty;
     private final Property<Location> locationProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
     public ArmorStandPartPoseBone(PropertyContainer container, ArmorStandPart part) {
         this.container = container;
-        this.part = part;
+        this.part = ArmorStandPartInfo.of(part);
         this.poseProperty = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
         this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
         this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);

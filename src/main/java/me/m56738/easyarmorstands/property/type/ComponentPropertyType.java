@@ -2,15 +2,17 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.button.ComponentButton;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
-import me.m56738.easyarmorstands.util.ConfigUtil;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.property.button.ComponentButton;
+import me.m56738.easyarmorstands.util.ConfigUtil;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
@@ -18,8 +20,8 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     private Component none;
     private ItemTemplate buttonTemplate;
 
-    public ComponentPropertyType(String key, String command) {
-        super(key);
+    public ComponentPropertyType(@NotNull Key key, String command) {
+        super(key, Component.class);
         this.command = command;
     }
 

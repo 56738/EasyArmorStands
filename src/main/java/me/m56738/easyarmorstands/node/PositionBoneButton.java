@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
 import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
-import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import net.kyori.adventure.text.Component;

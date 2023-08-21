@@ -6,6 +6,8 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
+import me.m56738.easyarmorstands.api.ArmorStandPart;
+import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
@@ -14,6 +16,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyException;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.bone.v1_19_4.DisplayBone;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -25,11 +28,9 @@ import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayBoxNode;
 import me.m56738.easyarmorstands.node.v1_19_4.DisplayMenuNode;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.session.SessionImpl;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
-import me.m56738.easyarmorstands.util.ArmorStandSize;
+import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -590,8 +591,9 @@ public class DisplayCommands {
             return;
         }
 
+        ArmorStandPartInfo info = ArmorStandPartInfo.of(part);
         Location location = entity.getLocation();
-        Vector3d offset = part.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
+        Vector3d offset = info.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);

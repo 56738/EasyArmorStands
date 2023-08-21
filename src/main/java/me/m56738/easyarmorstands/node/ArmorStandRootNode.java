@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.api.ArmorStandPart;
+import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.AddContext;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
-import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
@@ -19,7 +20,7 @@ import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.util.ArmorStandPart;
+import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -44,14 +45,15 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
         setRoot(true);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
+            ArmorStandPartInfo info = ArmorStandPartInfo.of(part);
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
-            MenuNode localNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.local", part.getDisplayName()), container);
+            MenuNode localNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.local", info.getDisplayName()), container);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.global", part.getDisplayName()), container);
+            MenuNode globalNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.global", info.getDisplayName()), container);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 

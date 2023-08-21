@@ -1,12 +1,14 @@
 package me.m56738.easyarmorstands.property.v1_19_4.type;
 
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockDataPropertyType extends ConfigurablePropertyType<BlockData> {
-    public BlockDataPropertyType(String key) {
-        super(key);
+    public BlockDataPropertyType(@NotNull Key key) {
+        super(key, BlockData.class);
     }
 
     @Override

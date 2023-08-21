@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;

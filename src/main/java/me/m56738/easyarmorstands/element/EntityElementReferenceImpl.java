@@ -39,7 +39,8 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
         }
     }
 
-    @Override public UUID getId() {
+    @Override
+    public UUID getId() {
         return id;
     }
 }

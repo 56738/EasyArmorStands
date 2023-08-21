@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 

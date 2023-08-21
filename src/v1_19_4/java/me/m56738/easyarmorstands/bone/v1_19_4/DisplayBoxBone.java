@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.bone.v1_19_4;
 
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.bone.PositionBone;
 import me.m56738.easyarmorstands.api.editor.bone.RotationProvider;
 import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.property.v1_19_4.display.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.joml.Quaterniondc;
