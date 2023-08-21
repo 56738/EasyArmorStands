@@ -7,12 +7,12 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     @SuppressWarnings("rawtypes")
-    private final Map<Key, PropertyType> types = new LinkedHashMap<>();
+    private final Map<Key, PropertyType> types = new TreeMap<>();
     private ConfigurationSection currentConfig;
 
     @Override

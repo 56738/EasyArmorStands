@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ButtonPropertySlot;
@@ -39,7 +39,7 @@ public class ElementMenuListener implements Listener {
         if (equipmentSlot == null) {
             return;
         }
-        Property<ItemStack> property = container.getOrNull(PropertyTypes.ENTITY_EQUIPMENT.get(equipmentSlot));
+        Property<ItemStack> property = container.getOrNull(EntityPropertyTypes.EQUIPMENT.get(equipmentSlot));
         if (property == null) {
             return;
         }

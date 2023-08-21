@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.text;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import org.bukkit.Color;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
 
     @Override
     public @NotNull PropertyType<@Nullable Color> getType() {
-        return DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND;
+        return TextDisplayPropertyTypes.BACKGROUND;
     }
 
     @Override

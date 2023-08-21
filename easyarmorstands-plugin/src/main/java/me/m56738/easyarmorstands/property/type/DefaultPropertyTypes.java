@@ -12,24 +12,24 @@ import java.util.Locale;
 public class DefaultPropertyTypes {
     @SuppressWarnings("PatternValidation")
     public DefaultPropertyTypes(PropertyTypeRegistry registry) {
-        registry.register(new BooleanTogglePropertyType(key("armor_stand_arms")));
-        registry.register(new BooleanTogglePropertyType(key("armor_stand_base_plate")));
-        registry.register(new BooleanPropertyType(key("armor_stand_can_tick")));
-        registry.register(new GravityPropertyType(key("armor_stand_gravity")));
-        registry.register(new BooleanTogglePropertyType(key("armor_stand_invulnerability")));
-        registry.register(new BooleanTogglePropertyType(key("armor_stand_lock")));
-        registry.register(new BooleanTogglePropertyType(key("armor_stand_marker")));
-        registry.register(new EnumTogglePropertyType<>(key("armor_stand_size"), ArmorStandSize.class));
-        registry.register(new ComponentPropertyType(key("entity_custom_name"), "/eas name set"));
-        registry.register(new BooleanPropertyType(key("entity_custom_name_visible")));
-        registry.register(new BooleanTogglePropertyType(key("entity_glowing")));
-        registry.register(new LocationPropertyType(key("entity_location")));
-        registry.register(new BooleanTogglePropertyType(key("entity_visibility")));
+        registry.register(new BooleanTogglePropertyType(key("armor_stand/arms")));
+        registry.register(new BooleanTogglePropertyType(key("armor_stand/base_plate")));
+        registry.register(new BooleanPropertyType(key("armor_stand/can_tick")));
+        registry.register(new GravityPropertyType(key("armor_stand/gravity")));
+        registry.register(new BooleanTogglePropertyType(key("armor_stand/invulnerable")));
+        registry.register(new BooleanTogglePropertyType(key("armor_stand/lock")));
+        registry.register(new BooleanTogglePropertyType(key("armor_stand/marker")));
+        registry.register(new EnumTogglePropertyType<>(key("armor_stand/size"), ArmorStandSize.class));
+        registry.register(new ComponentPropertyType(key("entity/custom_name"), "/eas name set"));
+        registry.register(new BooleanPropertyType(key("entity/custom_name/visible")));
+        registry.register(new BooleanTogglePropertyType(key("entity/glowing")));
+        registry.register(new LocationPropertyType(key("entity/location")));
+        registry.register(new BooleanTogglePropertyType(key("entity/visible")));
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            registry.register(new QuaterniondcPropertyType(key("armor_stand_pose/" + part.name().toLowerCase(Locale.ROOT))));
+            registry.register(new QuaterniondcPropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            registry.register(new ItemPropertyType(key("entity_equipment/" + slot.name().toLowerCase(Locale.ROOT))));
+            registry.register(new ItemPropertyType(key("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT))));
         }
     }
 

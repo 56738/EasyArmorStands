@@ -4,8 +4,9 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
  */
 public final class PropertyMap implements PropertyContainer {
     @SuppressWarnings("rawtypes")
-    private final Map<PropertyType, PropertyImpl> properties = new LinkedHashMap<>();
+    private final Map<PropertyType, PropertyImpl> properties = new TreeMap<>(Comparator.comparing(PropertyType::key));
 
     public PropertyMap() {
     }

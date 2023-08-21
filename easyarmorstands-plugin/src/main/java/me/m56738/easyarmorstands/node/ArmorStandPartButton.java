@@ -11,7 +11,8 @@ import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -42,9 +43,9 @@ public class ArmorStandPartButton implements NodeButton {
         this.node = node;
         this.particle = session.particleFactory().createLine();
         this.particle.setAxis(Axis.Y);
-        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
-        this.poseProperty = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
-        this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.poseProperty = container.get(ArmorStandPropertyTypes.POSE.get(part));
+        this.sizeProperty = container.get(ArmorStandPropertyTypes.SIZE);
     }
 
     @Override

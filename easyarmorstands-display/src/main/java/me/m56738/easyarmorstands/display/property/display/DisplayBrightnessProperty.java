@@ -17,7 +17,7 @@ public class DisplayBrightnessProperty implements Property<@Nullable Brightness>
 
     @Override
     public @NotNull PropertyType<@Nullable Brightness> getType() {
-        return DisplayPropertyTypes.DISPLAY_BRIGHTNESS;
+        return DisplayPropertyTypes.BRIGHTNESS;
     }
 
     @Override

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.text;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.entity.TextDisplay.TextAlignment;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
 
     @Override
     public @NotNull PropertyType<TextAlignment> getType() {
-        return DisplayPropertyTypes.TEXT_DISPLAY_ALIGNMENT;
+        return TextDisplayPropertyTypes.ALIGNMENT;
     }
 
     @Override

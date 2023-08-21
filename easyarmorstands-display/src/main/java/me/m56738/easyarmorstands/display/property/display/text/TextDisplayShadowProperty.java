@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.text;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class TextDisplayShadowProperty implements Property<Boolean> {
 
     @Override
     public @NotNull PropertyType<Boolean> getType() {
-        return DisplayPropertyTypes.TEXT_DISPLAY_SHADOW;
+        return TextDisplayPropertyTypes.SHADOW;
     }
 
     @Override

@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.util.Util;
@@ -35,9 +35,9 @@ public class DisplayMenuNode extends MenuNode {
         this.session = session;
         this.container = container;
         this.boxParticle = session.particleFactory().createAxisAlignedBox();
-        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
-        this.widthProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
-        this.heightProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
+        this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);
     }
 
     @Override

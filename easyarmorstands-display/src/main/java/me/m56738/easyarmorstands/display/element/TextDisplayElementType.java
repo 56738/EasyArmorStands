@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.display.DisplayAddon;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNodeFactory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.EntityType;
@@ -22,6 +22,6 @@ public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     @Override
     public void applyDefaultProperties(PropertyMap properties) {
         super.applyDefaultProperties(properties);
-        properties.put(DisplayPropertyTypes.TEXT_DISPLAY_TEXT, Component.text("Text"));
+        properties.put(TextDisplayPropertyTypes.TEXT, Component.text("Text"));
     }
 }

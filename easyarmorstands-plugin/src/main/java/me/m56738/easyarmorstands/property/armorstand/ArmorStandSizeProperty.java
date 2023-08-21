@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
 
     @Override
     public @NotNull PropertyType<ArmorStandSize> getType() {
-        return PropertyTypes.ARMOR_STAND_SIZE;
+        return ArmorStandPropertyTypes.SIZE;
     }
 
     @Override

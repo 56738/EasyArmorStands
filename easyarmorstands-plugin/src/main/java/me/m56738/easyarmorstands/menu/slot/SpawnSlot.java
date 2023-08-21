@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
@@ -52,7 +52,7 @@ public class SpawnSlot implements MenuSlot {
             }
 
             PropertyMap properties = new PropertyMap();
-            properties.put(PropertyTypes.ENTITY_LOCATION, location);
+            properties.put(EntityPropertyTypes.LOCATION, location);
             type.applyDefaultProperties(properties);
 
             EasPlayer context = new EasPlayer(player);

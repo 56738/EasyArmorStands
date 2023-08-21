@@ -25,9 +25,9 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     public DisplayBone(PropertyContainer container, PropertyType<Quaternionfc> rotationType) {
         super(container);
-        this.translationProperty = container.get(DisplayPropertyTypes.DISPLAY_TRANSLATION);
+        this.translationProperty = container.get(DisplayPropertyTypes.TRANSLATION);
         this.rotationProperty = container.get(rotationType);
-        this.scaleProperty = container.get(DisplayPropertyTypes.DISPLAY_SCALE);
+        this.scaleProperty = container.get(DisplayPropertyTypes.SCALE);
     }
 
     @Override

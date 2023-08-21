@@ -15,7 +15,7 @@ public class DisplayHeightProperty implements Property<Float> {
 
     @Override
     public @NotNull PropertyType<Float> getType() {
-        return DisplayPropertyTypes.DISPLAY_BOX_HEIGHT;
+        return DisplayPropertyTypes.BOX_HEIGHT;
     }
 
     @Override

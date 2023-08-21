@@ -16,7 +16,7 @@ public class DisplayBillboardProperty implements Property<Billboard> {
 
     @Override
     public @NotNull PropertyType<Billboard> getType() {
-        return DisplayPropertyTypes.DISPLAY_BILLBOARD;
+        return DisplayPropertyTypes.BILLBOARD;
     }
 
     @Override

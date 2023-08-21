@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.entity;
 
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
@@ -18,7 +18,7 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, EquipmentCapability equipmentCapability) {
         this.entity = entity;
         this.slot = slot;
-        this.type = PropertyTypes.ENTITY_EQUIPMENT.get(slot);
+        this.type = EntityPropertyTypes.EQUIPMENT.get(slot);
         this.equipmentCapability = equipmentCapability;
     }
 

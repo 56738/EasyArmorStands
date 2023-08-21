@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
@@ -27,10 +27,10 @@ public class DisplayBoxBone implements PositionBone, ScaleBone, RotationProvider
 
     public DisplayBoxBone(PropertyContainer container) {
         this.container = container;
-        this.entityLocationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
-        this.displayTranslationProperty = container.get(DisplayPropertyTypes.DISPLAY_TRANSLATION);
-        this.displayWidthProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
-        this.displayHeightProperty = container.get(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+        this.entityLocationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.displayTranslationProperty = container.get(DisplayPropertyTypes.TRANSLATION);
+        this.displayWidthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
+        this.displayHeightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);
     }
 
     @Override

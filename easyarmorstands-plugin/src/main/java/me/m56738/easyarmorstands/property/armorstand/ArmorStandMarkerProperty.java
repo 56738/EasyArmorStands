@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class ArmorStandMarkerProperty implements Property<Boolean> {
 
     @Override
     public @NotNull PropertyType<Boolean> getType() {
-        return PropertyTypes.ARMOR_STAND_MARKER;
+        return ArmorStandPropertyTypes.MARKER;
     }
 
     @Override

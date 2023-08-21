@@ -9,7 +9,8 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
@@ -95,7 +96,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
                 new NodeSlot(
                         session,
                         root.getPositionButton(),
-                        new YawResetAction(container.get(PropertyTypes.ENTITY_LOCATION), container),
+                        new YawResetAction(container.get(EntityPropertyTypes.LOCATION), container),
                         config.getArmorStandPositionButtonTemplate()));
         builder.setSlot(
                 Menu.index(5, 8),
@@ -107,7 +108,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     private Consumer<MenuClick> getResetAction(ArmorStandPart part, PropertyContainer container) {
-        Property<Quaterniondc> property = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
+        Property<Quaterniondc> property = container.get(ArmorStandPropertyTypes.POSE.get(part));
         return new ResetAction<>(property, container, Util.IDENTITY);
     }
 

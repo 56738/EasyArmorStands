@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.text;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.capability.textdisplay.TextDisplayCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
@@ -19,7 +19,7 @@ public class TextDisplayTextProperty implements Property<Component> {
 
     @Override
     public @NotNull PropertyType<Component> getType() {
-        return DisplayPropertyTypes.TEXT_DISPLAY_TEXT;
+        return TextDisplayPropertyTypes.TEXT;
     }
 
     @Override

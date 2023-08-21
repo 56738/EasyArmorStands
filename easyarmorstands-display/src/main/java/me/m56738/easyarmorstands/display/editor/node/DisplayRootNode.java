@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.display.editor.node;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.node.ElementNode;
 import net.kyori.adventure.text.Component;
@@ -20,7 +20,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
         super(session, name, session.properties(element));
         this.session = session;
         this.element = element;
-        this.blockDataProperty = container.getOrNull(DisplayPropertyTypes.BLOCK_DISPLAY_BLOCK);
+        this.blockDataProperty = container.getOrNull(BlockDisplayPropertyTypes.BLOCK);
     }
 
     @Override

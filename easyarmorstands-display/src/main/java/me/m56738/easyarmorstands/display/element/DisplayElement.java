@@ -9,7 +9,9 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.display.DisplayAddon;
+import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.bone.DisplayBone;
 import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
@@ -56,7 +58,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     public ElementNode createNode(Session session) {
         PropertyContainer container = session.properties(this);
 
-        DisplayBone bone = new DisplayBone(container, DisplayPropertyTypes.DISPLAY_LEFT_ROTATION);
+        DisplayBone bone = new DisplayBone(container, DisplayPropertyTypes.LEFT_ROTATION);
 
         DisplayRootNode localNode = factory.createRootNode(session, Component.text("Local"), this);
         localNode.setRoot(true);
@@ -79,12 +81,12 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     private MenuSlot getContentSlot(PropertyContainer properties) {
-        Property<ItemStack> itemProperty = properties.getOrNull(DisplayPropertyTypes.ITEM_DISPLAY_ITEM);
+        Property<ItemStack> itemProperty = properties.getOrNull(ItemDisplayPropertyTypes.ITEM);
         if (itemProperty != null) {
             return new ItemPropertySlot(itemProperty, properties);
         }
 
-        Property<BlockData> blockProperty = properties.getOrNull(DisplayPropertyTypes.BLOCK_DISPLAY_BLOCK);
+        Property<BlockData> blockProperty = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
         if (blockProperty != null) {
             return new BlockDisplaySlot(blockProperty);
         }
@@ -117,8 +119,8 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
                 new NodeSlot(
                         session,
                         () -> {
-                            Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
-                            Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+                            Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
+                            Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
                             if (widthProperty != null && widthProperty.getValue() == 0f) {
                                 widthProperty.setValue(1f);
                             }
@@ -139,8 +141,8 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
         private BoxResetAction(PropertyContainer container) {
             this.container = container;
-            this.widthProperty = container.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
-            this.heightProperty = container.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+            this.widthProperty = container.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
+            this.heightProperty = container.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         }
 
         @Override

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -21,6 +21,6 @@ public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
     @Override
     public void applyDefaultProperties(PropertyMap properties) {
         super.applyDefaultProperties(properties);
-        properties.put(PropertyTypes.ARMOR_STAND_GRAVITY, false);
+        properties.put(ArmorStandPropertyTypes.GRAVITY, false);
     }
 }

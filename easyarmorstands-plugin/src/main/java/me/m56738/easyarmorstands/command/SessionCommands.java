@@ -15,7 +15,8 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
@@ -254,7 +255,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
+        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Vector3d offsetVector = new Vector3d();
         if (value == null) {
             // None specified: Snap to the middle of the bottom of a block
@@ -285,7 +286,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
+        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location oldLocation = property.getValue();
         location.setYaw(oldLocation.getYaw());
         location.setPitch(oldLocation.getPitch());
@@ -306,7 +307,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
+        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location location = property.getValue();
         location.setYaw(yaw);
         if (!property.setValue(location)) {
@@ -326,7 +327,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(PropertyTypes.ENTITY_LOCATION);
+        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location location = property.getValue();
         location.setPitch(pitch);
         if (!property.setValue(location)) {
@@ -345,13 +346,13 @@ public class SessionCommands {
         if (element == null) {
             return;
         }
-        Property<Component> property = element.getProperties().getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME);
+        Property<Component> property = element.getProperties().getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Component text = property.getValue();
-        showText(sender, PropertyTypes.ENTITY_CUSTOM_NAME.getName(), text, "/eas name set");
+        showText(sender, EntityPropertyTypes.CUSTOM_NAME.getName(), text, "/eas name set");
     }
 
     @CommandMethod("name set <value>")
@@ -363,12 +364,12 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Component> nameProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME);
+        Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
-        Property<Boolean> nameVisibleProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE);
+        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         Component name = MiniMessage.miniMessage().deserialize(input);
         boolean hadName = nameProperty.getValue() != null;
         if (!nameProperty.setValue(name)) {
@@ -391,12 +392,12 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Component> nameProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME);
+        Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
-        Property<Boolean> nameVisibleProperty = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE);
+        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         if (!nameProperty.setValue(null)) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
@@ -417,7 +418,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Boolean> property = properties.getOrNull(PropertyTypes.ENTITY_CUSTOM_NAME_VISIBLE);
+        Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
@@ -439,7 +440,7 @@ public class SessionCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Boolean> property = properties.getOrNull(PropertyTypes.ARMOR_STAND_CAN_TICK);
+        Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         if (property == null) {
             if (ArmorStandCanTickProperty.isSupported()) {
                 sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));

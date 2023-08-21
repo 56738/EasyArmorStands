@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.block;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
 
     @Override
     public @NotNull PropertyType<BlockData> getType() {
-        return DisplayPropertyTypes.BLOCK_DISPLAY_BLOCK;
+        return BlockDisplayPropertyTypes.BLOCK;
     }
 
     @Override

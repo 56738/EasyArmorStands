@@ -16,12 +16,15 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyException;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.display.DisplayAddon;
+import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.bone.DisplayBone;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
@@ -80,7 +83,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<BlockData> property = properties.getOrNull(DisplayPropertyTypes.BLOCK_DISPLAY_BLOCK);
+        Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the displayed block of this entity."));
             return;
@@ -103,8 +106,8 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Location location = properties.get(PropertyTypes.ENTITY_LOCATION).getValue();
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BRIGHTNESS);
+        Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
+        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
             return;
@@ -133,8 +136,8 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Location location = properties.get(PropertyTypes.ENTITY_LOCATION).getValue();
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BRIGHTNESS);
+        Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
+        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
             return;
@@ -163,7 +166,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BRIGHTNESS);
+        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
             return;
@@ -189,7 +192,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BRIGHTNESS);
+        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
             return;
@@ -211,13 +214,13 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
+        Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
         if (widthProperty == null) {
             sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
             return;
         }
         if (widthProperty.setValue(value)) {
-            Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+            Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
             if (heightProperty != null && heightProperty.getValue() == 0f) {
                 heightProperty.setValue(value);
             }
@@ -238,13 +241,13 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+        Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         if (heightProperty == null) {
             sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
             return;
         }
         if (heightProperty.setValue(value)) {
-            Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
+            Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
             if (widthProperty != null && widthProperty.getValue() == 0f) {
                 widthProperty.setValue(value);
             }
@@ -267,8 +270,8 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
 
         int success = 0;
-        Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_WIDTH);
-        Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.DISPLAY_BOX_HEIGHT);
+        Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
+        Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         if (widthProperty == null && heightProperty == null) {
             sender.sendMessage(Component.text("Cannot remove the bounding box of this entity.", NamedTextColor.RED));
         }
@@ -316,13 +319,13 @@ public class DisplayCommands {
         if (element == null) {
             return;
         }
-        Property<Component> property = element.getProperties().getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_TEXT);
+        Property<Component> property = element.getProperties().getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
             return;
         }
         Component text = property.getValue();
-        SessionCommands.showText(sender, DisplayPropertyTypes.TEXT_DISPLAY_TEXT.getName(), text, "/eas text set");
+        SessionCommands.showText(sender, TextDisplayPropertyTypes.TEXT.getName(), text, "/eas text set");
     }
 
     @CommandMethod("text set <value>")
@@ -334,7 +337,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Component> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_TEXT);
+        Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
             return;
@@ -358,7 +361,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Integer> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_LINE_WIDTH);
+        Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the line width of this entity.", NamedTextColor.RED));
             return;
@@ -381,7 +384,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Color> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND);
+        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
             return;
@@ -405,7 +408,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Color> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND);
+        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
             return;
@@ -427,7 +430,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Color> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND);
+        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
             return;
@@ -450,7 +453,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Color> property = properties.getOrNull(DisplayPropertyTypes.TEXT_DISPLAY_BACKGROUND);
+        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
             return;
@@ -480,7 +483,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Vector3fc> property = properties.getOrNull(DisplayPropertyTypes.DISPLAY_SCALE);
+        Property<Vector3fc> property = properties.getOrNull(DisplayPropertyTypes.SCALE);
         if (property == null) {
             sender.sendMessage(Component.text("Cannot change the scale of this entity.", NamedTextColor.RED));
             return;
@@ -508,7 +511,7 @@ public class DisplayCommands {
         DisplayBone bone;
         DisplayMenuNode node;
         try {
-            bone = new DisplayBone(properties, DisplayPropertyTypes.DISPLAY_RIGHT_ROTATION);
+            bone = new DisplayBone(properties, DisplayPropertyTypes.RIGHT_ROTATION);
             node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), properties);
         } catch (UnknownPropertyException e) {
             sender.sendMessage(Component.text("Cannot edit the shearing of this entity.", NamedTextColor.RED));
@@ -607,12 +610,12 @@ public class DisplayCommands {
         location.setPitch(0);
 
         PropertyMap properties = new PropertyMap();
-        properties.put(PropertyTypes.ENTITY_LOCATION, location);
-        properties.put(DisplayPropertyTypes.ITEM_DISPLAY_ITEM, item);
-        properties.put(DisplayPropertyTypes.ITEM_DISPLAY_TRANSFORM, itemTransform);
-        properties.put(DisplayPropertyTypes.DISPLAY_TRANSLATION, transform.getTranslation(new Vector3d()).get(new Vector3f()));
-        properties.put(DisplayPropertyTypes.DISPLAY_LEFT_ROTATION, transform.getUnnormalizedRotation(new Quaternionf()));
-        properties.put(DisplayPropertyTypes.DISPLAY_SCALE, transform.getScale(new Vector3d()).get(new Vector3f()));
+        properties.put(EntityPropertyTypes.LOCATION, location);
+        properties.put(ItemDisplayPropertyTypes.ITEM, item);
+        properties.put(ItemDisplayPropertyTypes.TRANSFORM, itemTransform);
+        properties.put(DisplayPropertyTypes.TRANSLATION, transform.getTranslation(new Vector3d()).get(new Vector3f()));
+        properties.put(DisplayPropertyTypes.LEFT_ROTATION, transform.getUnnormalizedRotation(new Quaternionf()));
+        properties.put(DisplayPropertyTypes.SCALE, transform.getScale(new Vector3d()).get(new Vector3f()));
 
         EntityElementType<ItemDisplay> type = addon.getItemDisplayType();
 

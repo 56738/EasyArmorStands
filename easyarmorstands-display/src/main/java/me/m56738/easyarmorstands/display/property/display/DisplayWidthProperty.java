@@ -15,7 +15,7 @@ public class DisplayWidthProperty implements Property<Float> {
 
     @Override
     public @NotNull PropertyType<Float> getType() {
-        return DisplayPropertyTypes.DISPLAY_BOX_WIDTH;
+        return DisplayPropertyTypes.BOX_WIDTH;
     }
 
     @Override

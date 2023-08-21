@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.property.armorstand;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public class ArmorStandPoseProperty implements Property<Quaterniondc> {
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
         this.entity = entity;
         this.part = part;
-        this.type = PropertyTypes.ARMOR_STAND_POSE.get(part);
+        this.type = ArmorStandPropertyTypes.POSE.get(part);
     }
 
     @Override

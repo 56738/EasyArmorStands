@@ -3,8 +3,9 @@ package me.m56738.easyarmorstands.api.property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 /**
@@ -15,7 +16,7 @@ import java.util.function.Consumer;
  */
 public abstract class PropertyRegistry implements PropertyContainer {
     @SuppressWarnings("rawtypes")
-    private final Map<PropertyType, Property> properties = new LinkedHashMap<>();
+    private final Map<PropertyType, Property> properties = new TreeMap<>(Comparator.comparing(PropertyType::key));
 
     public <T> void register(Property<T> property) {
         properties.put(property.getType(), property);

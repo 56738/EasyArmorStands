@@ -20,7 +20,7 @@ public class DisplayRightRotationProperty implements Property<Quaternionfc> {
 
     @Override
     public @NotNull PropertyType<Quaternionfc> getType() {
-        return DisplayPropertyTypes.DISPLAY_RIGHT_ROTATION;
+        return DisplayPropertyTypes.RIGHT_ROTATION;
     }
 
     @Override

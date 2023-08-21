@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.element;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.DisplayAddon;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNodeFactory;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
@@ -40,7 +40,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
     @Override
     public void applyDefaultProperties(PropertyMap properties) {
         super.applyDefaultProperties(properties);
-        Property<Location> locationProperty = properties.get(PropertyTypes.ENTITY_LOCATION);
+        Property<Location> locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         Location location = locationProperty.getValue().clone();
         location.setYaw(0);
         location.setPitch(0);

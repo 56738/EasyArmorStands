@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.bone;
 import me.m56738.easyarmorstands.api.editor.bone.PositionAndYawBone;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.joml.Vector3dc;
@@ -14,7 +14,7 @@ public class EntityLocationBone implements PositionAndYawBone {
 
     public EntityLocationBone(PropertyContainer container) {
         this.container = container;
-        this.property = container.get(PropertyTypes.ENTITY_LOCATION);
+        this.property = container.get(EntityPropertyTypes.LOCATION);
     }
 
     public Vector3dc getOffset() {

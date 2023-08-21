@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.property.display.item;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
 
     @Override
     public @NotNull PropertyType<ItemDisplayTransform> getType() {
-        return DisplayPropertyTypes.ITEM_DISPLAY_TRANSFORM;
+        return ItemDisplayPropertyTypes.TRANSFORM;
     }
 
     @Override

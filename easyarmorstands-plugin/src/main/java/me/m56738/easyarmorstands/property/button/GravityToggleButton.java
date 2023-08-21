@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class GravityToggleButton extends BooleanToggleButton {
 
     public GravityToggleButton(Property<Boolean> property, PropertyContainer container, ItemTemplate item, List<String> canTickWarning) {
         super(property, container, item);
-        this.canTickProperty = container.getOrNull(PropertyTypes.ARMOR_STAND_CAN_TICK);
+        this.canTickProperty = container.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         this.canTickWarning = canTickWarning;
     }
 

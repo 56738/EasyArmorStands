@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
     @Override
     public SimpleEntityElement<E> createElement(PropertyContainer properties) {
-        Location location = properties.get(PropertyTypes.ENTITY_LOCATION).getValue();
+        Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
         E entity = EasyArmorStands.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
         entity.teleport(location);
@@ -74,7 +74,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
         private <T> void copyProperty(Property<T> sourceProperty, PropertyContainer target) {
             PropertyType<T> type = sourceProperty.getType();
-            if (type == PropertyTypes.ENTITY_LOCATION) {
+            if (type == EntityPropertyTypes.LOCATION) {
                 // Ignore the location property, we spawned the entity at that location
                 return;
             }

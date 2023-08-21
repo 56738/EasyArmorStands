@@ -20,7 +20,7 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
 
     @Override
     public @NotNull PropertyType<Vector3fc> getType() {
-        return DisplayPropertyTypes.DISPLAY_SCALE;
+        return DisplayPropertyTypes.SCALE;
     }
 
     @Override

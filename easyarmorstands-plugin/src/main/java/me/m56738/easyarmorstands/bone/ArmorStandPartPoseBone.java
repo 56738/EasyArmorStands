@@ -5,7 +5,8 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Location;
 import org.joml.Math;
@@ -24,9 +25,9 @@ public class ArmorStandPartPoseBone implements RotationBone {
     public ArmorStandPartPoseBone(PropertyContainer container, ArmorStandPart part) {
         this.container = container;
         this.part = ArmorStandPartInfo.of(part);
-        this.poseProperty = container.get(PropertyTypes.ARMOR_STAND_POSE.get(part));
-        this.locationProperty = container.get(PropertyTypes.ENTITY_LOCATION);
-        this.sizeProperty = container.get(PropertyTypes.ARMOR_STAND_SIZE);
+        this.poseProperty = container.get(ArmorStandPropertyTypes.POSE.get(part));
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.sizeProperty = container.get(ArmorStandPropertyTypes.SIZE);
     }
 
     @Override
