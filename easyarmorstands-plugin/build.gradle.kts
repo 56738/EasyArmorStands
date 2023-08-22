@@ -21,6 +21,9 @@ dependencies {
     api(libs.joml)
     "addon"(project(":easyarmorstands-display"))
     "addon"(project(":easyarmorstands-headdatabase"))
+    "addon"(project(":easyarmorstands-region:easyarmorstands-plotsquared"))
+    "addon"(project(":easyarmorstands-region:easyarmorstands-worldguard-v6"))
+    "addon"(project(":easyarmorstands-region:easyarmorstands-worldguard-v7"))
     "addon"(project(":easyarmorstands-traincarts"))
 }
 
@@ -85,13 +88,6 @@ fun registerVersion(name: String, api: String) {
     }
 }
 
-fun registerAddon(name: String, api: Any = libs.bukkit) {
-    registerSourceSet(name)
-    dependencies {
-        "${name}CompileOnly"(api)
-    }
-}
-
 registerVersion("v1_8", "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_8_spigot", "org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_9", "org.bukkit:bukkit:1.9-R0.1-SNAPSHOT")
@@ -106,11 +102,3 @@ registerVersion("v1_16_paper", "com.destroystokyo.paper:paper-api:1.16.5-R0.1-SN
 registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
-
-registerAddon("worldguard_v6")
-registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
-
-dependencies {
-    "worldguard_v6CompileOnly"(libs.worldguard.v6)
-    "worldguard_v7CompileOnly"(libs.worldguard.v7)
-}

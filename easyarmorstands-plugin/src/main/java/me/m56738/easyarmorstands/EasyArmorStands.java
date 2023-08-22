@@ -45,6 +45,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Contract;
 
 import java.lang.reflect.InvocationTargetException;
@@ -159,9 +160,9 @@ public class EasyArmorStands extends JavaPlugin {
         if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
             getLogger().info("Enabling WorldGuard integration");
             if (hasClass("com.sk89q.worldguard.protection.regions.RegionContainer")) {
-                loadAddon("me.m56738.easyarmorstands.addon.worldguard.v7.WorldGuardAddon");
+                loadAddon("me.m56738.easyarmorstands.worldguard.v7.WorldGuardAddon");
             } else if (hasClass("com.sk89q.worldguard.bukkit.WGBukkit")) {
-                loadAddon("me.m56738.easyarmorstands.addon.worldguard.v6.WorldGuardAddon");
+                loadAddon("me.m56738.easyarmorstands.worldguard.v6.WorldGuardAddon");
             } else {
                 getLogger().warning("Unsupported WorldGuard version");
             }
@@ -202,7 +203,7 @@ public class EasyArmorStands extends JavaPlugin {
         }
     }
 
-    private boolean hasClass(String name) {
+    private boolean hasClass(@Language("jvm-class-name") String name) {
         try {
             Class.forName(name);
             return true;
@@ -211,7 +212,7 @@ public class EasyArmorStands extends JavaPlugin {
         }
     }
 
-    private void loadAddon(String name) {
+    private void loadAddon(@Language("jvm-class-name") String name) {
         try {
             Class.forName(name).getDeclaredConstructor(EasyArmorStands.class).newInstance(this);
         } catch (InvocationTargetException e) {
