@@ -7,6 +7,7 @@ pluginManagement {
 include("easyarmorstands-api")
 include("easyarmorstands-display")
 include("easyarmorstands-display-api")
+include("easyarmorstands-headdatabase")
 include("easyarmorstands-plotsquared")
 include("easyarmorstands-plugin")
 include("easyarmorstands-traincarts")

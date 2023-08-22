@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.headdatabase;
+package me.m56738.easyarmorstands.headdatabase;
 
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
 import me.m56738.easyarmorstands.EasyArmorStands;

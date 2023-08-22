@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.headdatabase;
+package me.m56738.easyarmorstands.headdatabase;
 
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;

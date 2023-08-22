@@ -174,7 +174,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
             getLogger().info("Enabling HeadDatabase integration");
-            loadAddon("me.m56738.easyarmorstands.addon.headdatabase.HeadDatabaseAddon");
+            loadAddon("me.m56738.easyarmorstands.headdatabase.HeadDatabaseAddon");
         }
 
         if (hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {

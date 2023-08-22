@@ -20,6 +20,7 @@ dependencies {
     api(libs.cloud.paper)
     api(libs.joml)
     "addon"(project(":easyarmorstands-display"))
+    "addon"(project(":easyarmorstands-headdatabase"))
     "addon"(project(":easyarmorstands-traincarts"))
 }
 
@@ -106,12 +107,10 @@ registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 
-registerAddon("headdatabase")
 registerAddon("worldguard_v6")
 registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
 dependencies {
-    "headdatabaseCompileOnly"(libs.headdatabase.api)
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
 }
