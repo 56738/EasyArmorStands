@@ -5,10 +5,12 @@ import me.m56738.easyarmorstands.api.editor.bone.RotationBone;
 import me.m56738.easyarmorstands.api.editor.bone.ScaleBone;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.bone.EntityLocationBone;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import org.joml.Math;
+import me.m56738.easyarmorstands.util.Util;
+import org.bukkit.Location;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -19,21 +21,27 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayBone extends EntityLocationBone implements RotationBone, ScaleBone {
+    private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
     private final Property<Vector3fc> scaleProperty;
 
     public DisplayBone(PropertyContainer container, PropertyType<Quaternionfc> rotationType) {
         super(container);
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = container.get(DisplayPropertyTypes.TRANSLATION);
         this.rotationProperty = container.get(rotationType);
         this.scaleProperty = container.get(DisplayPropertyTypes.SCALE);
     }
 
+    private Quaterniond getLocationRotation() {
+        return Util.getRoundedYawPitchRotation(locationProperty.getValue(), new Quaterniond());
+    }
+
     @Override
     public Vector3dc getOffset() {
         return new Vector3d(translationProperty.getValue())
-                .rotateY(-Math.toRadians(getYaw()));
+                .rotate(getLocationRotation());
     }
 
     @Override
@@ -48,14 +56,12 @@ public class DisplayBone extends EntityLocationBone implements RotationBone, Sca
 
     @Override
     public Quaterniondc getRotation() {
-        return new Quaterniond(rotationProperty.getValue())
-                .rotateLocalY(-Math.toRadians(getYaw()));
+        return getLocationRotation().mul(new Quaterniond(rotationProperty.getValue()));
     }
 
     @Override
     public void setRotation(Quaterniondc rotation) {
-        rotationProperty.setValue(new Quaternionf(rotation)
-                .rotateLocalY(Math.toRadians(getYaw())));
+        rotationProperty.setValue(new Quaternionf(getLocationRotation().conjugate().mul(rotation)));
     }
 
     @Override
