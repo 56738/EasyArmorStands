@@ -32,6 +32,7 @@ import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
@@ -85,15 +86,15 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the displayed block of this entity."));
+            sender.sendMessage(Message.error("easyarmorstands.error.block-unsupported"));
             return;
         }
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed block to ", NamedTextColor.GREEN)
-                    .append(property.getType().getValueComponent(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-block",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change block", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -109,7 +110,7 @@ public class DisplayCommands {
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
         Display.Brightness brightness = property.getValue();
@@ -120,10 +121,10 @@ public class DisplayCommands {
         }
         if (property.setValue(brightness)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed block brightness to ", NamedTextColor.GREEN)
-                    .append(Component.text(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
+                    property.getType().getValueComponent(brightness)));
         } else {
-            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -139,7 +140,7 @@ public class DisplayCommands {
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
         Display.Brightness brightness = property.getValue();
@@ -150,10 +151,10 @@ public class DisplayCommands {
         }
         if (property.setValue(brightness)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed sky brightness to ", NamedTextColor.GREEN)
-                    .append(Component.text(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
+                    property.getType().getValueComponent(brightness)));
         } else {
-            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -168,18 +169,17 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
         Block block = sender.get().getLocation().getBlock();
         Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
         if (property.setValue(brightness)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed entity brightness to the light level at your location", NamedTextColor.GREEN));
-            sender.sendMessage(Component.text("Block light: ", NamedTextColor.GRAY).append(Component.text(brightness.getBlockLight())));
-            sender.sendMessage(Component.text("Sky light: ", NamedTextColor.GRAY).append(Component.text(brightness.getSkyLight())));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
+                    property.getType().getValueComponent(brightness)));
         } else {
-            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -194,14 +194,15 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the brightness of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
         if (property.setValue(null)) {
             properties.commit();
-            sender.sendMessage(Component.text("Removed custom brightness settings", NamedTextColor.GREEN));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
+                    property.getType().getValueComponent(null)));
         } else {
-            sender.sendMessage(Component.text("Unable to change brightness", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -216,7 +217,7 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
         if (widthProperty == null) {
-            sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
         if (widthProperty.setValue(value)) {
@@ -225,10 +226,10 @@ public class DisplayCommands {
                 heightProperty.setValue(value);
             }
             properties.commit();
-            sender.sendMessage(Component.text("Changed bounding box width to ", NamedTextColor.GREEN)
-                    .append(Component.text(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-box-width",
+                    widthProperty.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -243,7 +244,7 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         if (heightProperty == null) {
-            sender.sendMessage(Component.text("Cannot change the bounding box size of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
         if (heightProperty.setValue(value)) {
@@ -252,10 +253,10 @@ public class DisplayCommands {
                 widthProperty.setValue(value);
             }
             properties.commit();
-            sender.sendMessage(Component.text("Changed bounding box height to ", NamedTextColor.GREEN)
-                    .append(Component.text(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-box-height",
+                    heightProperty.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -273,7 +274,8 @@ public class DisplayCommands {
         Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
         Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         if (widthProperty == null && heightProperty == null) {
-            sender.sendMessage(Component.text("Cannot remove the bounding box of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
+            return;
         }
 
         if (widthProperty != null && widthProperty.setValue(0f)) {
@@ -285,9 +287,9 @@ public class DisplayCommands {
 
         if (success > 0) {
             properties.commit();
-            sender.sendMessage(Component.text("Removed the bounding box", NamedTextColor.GREEN));
+            sender.sendMessage(Message.success("easyarmorstands.success.removed-box"));
         } else {
-            sender.sendMessage(Component.text("Unable to change bounding box size", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -305,7 +307,7 @@ public class DisplayCommands {
         try {
             node = new DisplayBoxNode(session, properties);
         } catch (UnknownPropertyException e) {
-            sender.sendMessage(Component.text("Cannot move the bounding box of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
         session.pushNode(node);
@@ -321,7 +323,7 @@ public class DisplayCommands {
         }
         Property<Component> property = element.getProperties().getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-unsupported"));
             return;
         }
         Component text = property.getValue();
@@ -339,16 +341,16 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-unsupported"));
             return;
         }
         Component value = MiniMessage.miniMessage().deserialize(input);
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed the text to ", NamedTextColor.GREEN)
-                    .append(value));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the text", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -363,15 +365,15 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the line width of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-line-width-unsupported"));
             return;
         }
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed the line width to ", NamedTextColor.GREEN)
-                    .append(Component.text(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text-line-width",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the line width", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -386,16 +388,16 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
         Color value = Color.fromRGB(color.value());
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed the background color to ", NamedTextColor.GREEN)
-                    .append(property.getType().getValueComponent(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -410,14 +412,15 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
         if (property.setValue(null)) {
             properties.commit();
-            sender.sendMessage(Component.text("Reset the background color", NamedTextColor.GREEN));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
+                    property.getType().getValueComponent(null)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -432,15 +435,16 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
         Color value = Color.fromARGB(0);
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Made the background invisible", NamedTextColor.GREEN));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -455,22 +459,22 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the text background color of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
         Color oldValue = property.getValue();
         if (oldValue == null) {
-            sender.sendMessage(Component.text("No background color configured", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
 
         Color value = oldValue.setAlpha(alpha);
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed the background transparency to ", NamedTextColor.GREEN)
-                    .append(Component.text(alpha)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background-alpha",
+                    Component.text(alpha)));
         } else {
-            sender.sendMessage(Component.text("Unable to change the background color", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -485,16 +489,16 @@ public class DisplayCommands {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Vector3fc> property = properties.getOrNull(DisplayPropertyTypes.SCALE);
         if (property == null) {
-            sender.sendMessage(Component.text("Cannot change the scale of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
             return;
         }
         Vector3f value = new Vector3f(scale);
         if (property.setValue(value)) {
             properties.commit();
-            sender.sendMessage(Component.text("Changed scale to ", NamedTextColor.GREEN)
-                    .append(property.getType().getValueComponent(value)));
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-scale",
+                    property.getType().getValueComponent(value)));
         } else {
-            sender.sendMessage(Component.text("Unable to change scale", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 
@@ -512,9 +516,9 @@ public class DisplayCommands {
         DisplayMenuNode node;
         try {
             bone = new DisplayBone(properties, DisplayPropertyTypes.RIGHT_ROTATION);
-            node = new DisplayMenuNode(session, Component.text("Shearing", NamedTextColor.GOLD), properties);
+            node = new DisplayMenuNode(session, DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD), properties);
         } catch (UnknownPropertyException e) {
-            sender.sendMessage(Component.text("Cannot edit the shearing of this entity.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
         node.addRotationButtons(session, bone, 1, null);
@@ -531,7 +535,7 @@ public class DisplayCommands {
             return;
         }
         if (!(element instanceof ArmorStandElement)) {
-            sender.sendMessage(Component.text("Only armor stands can be converted.", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.convert-unsupported"));
             return;
         }
         ArmorStand entity = ((ArmorStandElement) element).getEntity();
@@ -576,7 +580,7 @@ public class DisplayCommands {
         convert(sender, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
         convert(sender, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
         if (actions.isEmpty()) {
-            sender.sendMessage(Component.text("Unable to convert", NamedTextColor.RED));
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-convert"));
             return;
         }
 

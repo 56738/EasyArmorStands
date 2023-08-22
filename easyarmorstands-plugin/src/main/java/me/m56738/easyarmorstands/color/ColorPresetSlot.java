@@ -20,13 +20,14 @@ import java.util.Locale;
 public class ColorPresetSlot implements MenuSlot {
     private final ColorPickerContext context;
     private final DyeColor color;
-    private final String name;
+    private final Component name;
 
     public ColorPresetSlot(ColorPickerContext context, DyeColor color) {
+        String colorName = color.name().toLowerCase(Locale.ROOT).replace('_', '-');
         this.context = context;
         this.color = color;
-        String name = color.name().replace('_', ' ').toLowerCase(Locale.ROOT);
-        this.name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        this.name = Message.component("easyarmorstands.color.preset." + colorName)
+                .color(TextColor.color(color.getColor().asRGB()));
     }
 
     @Override
@@ -36,7 +37,7 @@ public class ColorPresetSlot implements MenuSlot {
         ComponentCapability componentCapability = plugin.getCapability(ComponentCapability.class);
         ItemStack item = itemCapability.createColor(color);
         ItemMeta meta = item.getItemMeta();
-        componentCapability.setDisplayName(meta, Component.text(name, TextColor.color(color.getColor().asRGB())));
+        componentCapability.setDisplayName(meta, name);
         componentCapability.setLore(meta, Arrays.asList(
                 GlobalTranslator.render(Message.hint("easyarmorstands.menu.color-picker.left-click-to-select"), locale),
                 GlobalTranslator.render(Message.hint("easyarmorstands.menu.color-picker.right-click-to-mix"), locale)));

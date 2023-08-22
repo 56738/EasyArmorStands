@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.button.PropertyButton;
 import me.m56738.easyarmorstands.display.property.button.TextBackgroundToggleButton;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import me.m56738.easyarmorstands.util.ConfigUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
@@ -32,19 +32,14 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<C
 
     @Override
     public Component getValueComponent(Color value) {
-        // TODO translate
         if (value != null) {
             if (value.getAlpha() == 0) {
-                return Component.text("none", NamedTextColor.WHITE);
+                return Message.component("easyarmorstands.property.text-display.background.none");
             }
             TextColor textColor = TextColor.color(value.asRGB());
-            TextComponent hex = Component.text(textColor.asHexString(), textColor);
-            if (textColor instanceof NamedTextColor) {
-                return hex.append(Component.text(" (" + textColor + ")"));
-            }
-            return hex;
+            return Component.text(textColor.asHexString(), textColor);
         } else {
-            return Component.text("default", NamedTextColor.DARK_GRAY);
+            return Message.component("easyarmorstands.property.text-display.background.default").color(NamedTextColor.DARK_GRAY);
         }
     }
 

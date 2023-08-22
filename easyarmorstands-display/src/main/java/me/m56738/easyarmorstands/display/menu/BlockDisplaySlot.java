@@ -5,8 +5,10 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +25,7 @@ public class BlockDisplaySlot implements MenuSlot {
         this.property = property;
     }
 
-    private ItemStack getItem(BlockData blockData, Material material) {
+    private ItemStack getItem(BlockData blockData, Material material, Locale locale) {
         if (!material.isItem()) {
             return null;
         }
@@ -41,9 +43,9 @@ public class BlockDisplaySlot implements MenuSlot {
                 first = false;
             }
         }
-        description.add(Component.text("Sneak and left click a block to", NamedTextColor.GRAY));
-        description.add(Component.text("place it in this block display.", NamedTextColor.GRAY));
-        componentCapability.setDisplayName(meta, Component.text("Block", NamedTextColor.BLUE));
+        // TODO Move to menu config
+        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.property.block-display.block.pick"), locale));
+        componentCapability.setDisplayName(meta, GlobalTranslator.render(Message.buttonName("easyarmorstands.property.block-display.block.name"), locale));
         componentCapability.setLore(meta, description);
         item.setItemMeta(meta);
         return item;
@@ -53,9 +55,9 @@ public class BlockDisplaySlot implements MenuSlot {
     public ItemStack getItem(Locale locale) {
         BlockData blockData = property.getValue();
         Material material = blockData.getMaterial();
-        ItemStack item = getItem(blockData, material);
+        ItemStack item = getItem(blockData, material, locale);
         if (item == null) {
-            item = getItem(blockData, Material.OAK_STAIRS);
+            item = getItem(blockData, Material.OAK_STAIRS, locale);
         }
         return item;
     }

@@ -23,8 +23,8 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ElementNode;
-import net.kyori.adventure.text.Component;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
@@ -60,14 +60,14 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
         DisplayBone bone = new DisplayBone(container, DisplayPropertyTypes.LEFT_ROTATION);
 
-        DisplayRootNode localNode = factory.createRootNode(session, Component.text("Local"), this);
+        DisplayRootNode localNode = factory.createRootNode(session, Message.component("easyarmorstands.node.local"), this);
         localNode.setRoot(true);
         localNode.addMoveButtons(session, bone, bone, 2);
         localNode.addCarryButtonWithYaw(session, bone);
         localNode.addRotationButtons(session, bone, 1, bone);
         localNode.addScaleButtons(session, bone, 2);
 
-        DisplayRootNode globalNode = factory.createRootNode(session, Component.text("Global"), this);
+        DisplayRootNode globalNode = factory.createRootNode(session, Message.component("easyarmorstands.node.global"), this);
         globalNode.setRoot(true);
         globalNode.addPositionButtons(session, bone, 3);
         globalNode.addCarryButtonWithYaw(session, bone);

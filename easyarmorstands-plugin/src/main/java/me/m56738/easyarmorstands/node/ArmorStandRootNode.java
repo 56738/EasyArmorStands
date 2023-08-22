@@ -56,11 +56,11 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
-            MenuNode localNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.local", info.getDisplayName()), container, part);
+            MenuNode localNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.local-part", info.getDisplayName()), container, part);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.global", info.getDisplayName()), container, part);
+            MenuNode globalNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.global-part", info.getDisplayName()), container, part);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 

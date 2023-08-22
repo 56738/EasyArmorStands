@@ -18,12 +18,12 @@ import java.util.Locale;
 public class ColorAxisSlot implements ColorSlot {
     private final ColorPickerContext context;
     private final ColorAxis axis;
-    private final String name;
+    private final Component name;
 
     public ColorAxisSlot(ColorPickerContext context, ColorAxis axis) {
         this.context = context;
         this.axis = axis;
-        this.name = Util.capitalize(axis.name().toLowerCase(Locale.ROOT));
+        this.name = axis.getDisplayName();
     }
 
     protected DyeColor getItemColor() {
@@ -32,11 +32,11 @@ public class ColorAxisSlot implements ColorSlot {
 
     protected Component getDisplayName() {
         Color color = context.getColor();
-        String result = name;
+        Component result = name;
         if (color != null) {
-            result += ": " + axis.get(color);
+            result = result.append(Component.text(": " + axis.get(color)));
         }
-        return Component.text(result, axis.getTextColor());
+        return result;
     }
 
     protected List<Component> getDescription(Locale locale) {

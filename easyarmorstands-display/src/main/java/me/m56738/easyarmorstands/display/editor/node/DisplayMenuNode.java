@@ -17,13 +17,9 @@ import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 public class DisplayMenuNode extends MenuNode implements ResettableNode {
     protected final PropertyContainer container;
@@ -128,7 +124,7 @@ public class DisplayMenuNode extends MenuNode implements ResettableNode {
     public void reset() {
         container.get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
         container.get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
-        container.get(DisplayPropertyTypes.SCALE).setValue(new Vector3f());
+        container.get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
         container.get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
 
         Location location = locationProperty.getValue();
