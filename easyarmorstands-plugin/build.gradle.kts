@@ -107,19 +107,11 @@ registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 
 registerAddon("headdatabase")
-registerAddon("plotsquared")
 registerAddon("worldguard_v6")
 registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
 dependencies {
     "headdatabaseCompileOnly"(libs.headdatabase.api)
-    "plotsquaredImplementation"(platform("com.intellectualsites.bom:bom-1.18.x:1.30"))
-    "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Core") {
-        exclude("net.kyori", "adventure-api")
-    }
-    "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Bukkit") {
-        isTransitive = false
-    }
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
 }

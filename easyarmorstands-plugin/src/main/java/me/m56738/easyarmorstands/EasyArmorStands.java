@@ -169,7 +169,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlotSquared")) {
             getLogger().info("Enabling PlotSquared integration");
-            loadAddon("me.m56738.easyarmorstands.addon.plotsquared.v6.PlotSquaredAddon");
+            loadAddon("me.m56738.easyarmorstands.plotsquared.v6.PlotSquaredAddon");
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {

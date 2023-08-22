@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.plotsquared.v6;
+package me.m56738.easyarmorstands.plotsquared.v6;
 
 import com.plotsquared.bukkit.util.BukkitUtil;
 import com.plotsquared.core.PlotAPI;
