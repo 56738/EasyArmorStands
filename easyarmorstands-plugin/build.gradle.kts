@@ -3,9 +3,12 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
+configurations {
+    register("addon")
+}
+
 dependencies {
     compileOnly(libs.bukkit)
-    api(project(":easyarmorstands-addon"))
     api(project(":easyarmorstands-api"))
     api(libs.adventure.platform.bukkit)
     api(libs.adventure.text.minimessage)
@@ -16,7 +19,8 @@ dependencies {
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
     api(libs.joml)
-    runtimeOnly(project(":easyarmorstands-display"))
+    "addon"(project(":easyarmorstands-display"))
+    "addon"(project(":easyarmorstands-traincarts"))
 }
 
 tasks {
@@ -42,6 +46,7 @@ tasks {
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }
+        configurations += project.configurations.getByName("addon")
         mergeServiceFiles()
     }
 }
@@ -103,7 +108,6 @@ registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 
 registerAddon("headdatabase")
 registerAddon("plotsquared")
-registerAddon("traincarts")
 registerAddon("worldguard_v6")
 registerAddon("worldguard_v7", "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
 
@@ -116,7 +120,6 @@ dependencies {
     "plotsquaredCompileOnly"("com.plotsquared:PlotSquared-Bukkit") {
         isTransitive = false
     }
-    "traincartsCompileOnly"(libs.traincarts)
     "worldguard_v6CompileOnly"(libs.worldguard.v6)
     "worldguard_v7CompileOnly"(libs.worldguard.v7)
 }

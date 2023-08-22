@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.traincarts;
+package me.m56738.easyarmorstands.traincarts;
 
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;

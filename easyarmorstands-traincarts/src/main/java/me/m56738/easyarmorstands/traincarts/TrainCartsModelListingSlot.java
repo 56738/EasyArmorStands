@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.traincarts;
+package me.m56738.easyarmorstands.traincarts;
 
 import com.bergerkiller.bukkit.tc.TrainCarts;
 import me.m56738.easyarmorstands.EasyArmorStands;

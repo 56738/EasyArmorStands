@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.addon.traincarts;
+package me.m56738.easyarmorstands.traincarts;
 
 import me.m56738.easyarmorstands.EasConfig;
 import me.m56738.easyarmorstands.EasyArmorStands;

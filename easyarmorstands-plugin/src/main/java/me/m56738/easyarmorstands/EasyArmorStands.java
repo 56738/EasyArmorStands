@@ -179,7 +179,7 @@ public class EasyArmorStands extends JavaPlugin {
 
         if (hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {
             getLogger().info("Enabling TrainCarts integration");
-            loadAddon("me.m56738.easyarmorstands.addon.traincarts.TrainCartsAddon");
+            loadAddon("me.m56738.easyarmorstands.traincarts.TrainCartsAddon");
         }
 
         if (hasClass("org.bukkit.entity.ItemDisplay")) {
