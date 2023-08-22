@@ -38,10 +38,4 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
                 mapper.getRightRotation(transformation)));
         return true;
     }
-
-    // TODO /eas reset
-//        @Override
-//        public Quaternionfc getResetValue() {
-//            return new Quaternionf();
-//        }
 }

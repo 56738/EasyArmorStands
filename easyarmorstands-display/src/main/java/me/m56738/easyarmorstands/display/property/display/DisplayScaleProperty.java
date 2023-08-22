@@ -38,10 +38,4 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
                 mapper.getRightRotation(transformation)));
         return true;
     }
-
-    // TODO /eas reset
-//        @Override
-//        public Vector3fc getResetValue() {
-//            return new Vector3f(1);
-//        }
 }

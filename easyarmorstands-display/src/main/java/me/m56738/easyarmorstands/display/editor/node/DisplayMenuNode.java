@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -16,9 +17,15 @@ import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniondc;
+import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
-public class DisplayMenuNode extends MenuNode {
+public class DisplayMenuNode extends MenuNode implements ResettableNode {
     protected final PropertyContainer container;
     private final Session session;
     private final AxisAlignedBoxParticle boxParticle;
@@ -115,5 +122,20 @@ public class DisplayMenuNode extends MenuNode {
 
     public void setShowBoundingBoxIfInactive(boolean showBoundingBoxIfInactive) {
         this.showBoundingBoxIfInactive = showBoundingBoxIfInactive;
+    }
+
+    @Override
+    public void reset() {
+        container.get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
+        container.get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
+        container.get(DisplayPropertyTypes.SCALE).setValue(new Vector3f());
+        container.get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
+
+        Location location = locationProperty.getValue();
+        location.setYaw(0);
+        location.setPitch(0);
+        locationProperty.setValue(location);
+
+        container.commit();
     }
 }

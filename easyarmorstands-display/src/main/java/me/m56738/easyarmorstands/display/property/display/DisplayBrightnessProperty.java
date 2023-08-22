@@ -30,10 +30,4 @@ public class DisplayBrightnessProperty implements Property<@Nullable Brightness>
         entity.setBrightness(value);
         return true;
     }
-
-    // TODO /eas reset
-//        @Override
-//        public Optional<Brightness> getResetValue() {
-//            return Optional.empty();
-//        }
 }

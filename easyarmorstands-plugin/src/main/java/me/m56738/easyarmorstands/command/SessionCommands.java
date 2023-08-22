@@ -9,6 +9,8 @@ import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
@@ -458,23 +460,23 @@ public class SessionCommands {
                 property.getType().getValueComponent(canTick)));
     }
 
-    // TODO Restore /eas reset?
-//    @SuppressWarnings({"rawtypes", "unchecked"})
-//    @CommandMethod("reset <property>")
-//    @CommandPermission("easyarmorstands.edit")
-//    @CommandDescription("Reset a property of the selected entity")
-//    @RequireSession
-//    @RequireEntity
-//    public void resetProperty(EasCommandSender sender, Session session, Entity entity, @Argument("property") ResettableEntityProperty property) {
-//        Object value = property.getResetValue();
-//        if (!session.tryChange(property.bind(entity), value)) {
-//            sender.sendMessage(Component.text("Unable to change the property", NamedTextColor.RED));
-//            return;
-//        }
-//        session.commit();
-//        sender.sendMessage(Component.text("Reset ", NamedTextColor.GREEN)
-//                .append(property.getDisplayName()));
-//    }
+    @CommandMethod("reset")
+    @CommandPermission("easyarmorstands.edit")
+    @CommandDescription("Reset the value of the selected tool")
+    public void setCanTick(EasPlayer sender) {
+        Session session = getSessionOrError(sender);
+        if (session == null) {
+            return;
+        }
+        Node node = session.getNode();
+        if (!(node instanceof ResettableNode)) {
+            sender.sendMessage(Message.error("easyarmorstands.error.reset-unsupported"));
+            return;
+        }
+        ResettableNode resettableNode = (ResettableNode) node;
+        resettableNode.reset();
+        sender.sendMessage(Message.success("easyarmorstands.success.reset-value"));
+    }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @CommandMethod("set <value>")

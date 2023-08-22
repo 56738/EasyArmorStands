@@ -72,6 +72,14 @@ public class DisplayBoxBone implements PositionBone, ScaleBone, RotationProvider
         }
     }
 
+    public void resetPosition() {
+        Location location = entityLocationProperty.getValue();
+        Vector3dc delta = displayTranslationProperty.getValue()
+                .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()), new Vector3f())
+                .get(new Vector3d());
+        setPosition(Util.toVector3d(location).add(delta));
+    }
+
     @Override
     public Vector3dc getOrigin() {
         return getPosition();

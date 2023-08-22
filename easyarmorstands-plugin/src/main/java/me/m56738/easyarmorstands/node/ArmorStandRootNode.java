@@ -7,8 +7,12 @@ import me.m56738.easyarmorstands.api.editor.context.AddContext;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPoseBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPartPositionBone;
 import me.m56738.easyarmorstands.bone.ArmorStandPositionBone;
@@ -22,17 +26,20 @@ import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.util.EulerAngle;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends MenuNode implements ElementNode {
+public class ArmorStandRootNode extends MenuNode implements ElementNode, ResettableNode {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandElement element;
     private final PositionBoneButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
+    private final PropertyContainer container;
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
@@ -40,7 +47,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
         this.session = session;
         this.entity = entity;
         this.element = element;
-        PropertyContainer container = session.properties(element);
+        this.container = session.properties(element);
 
         setRoot(true);
 
@@ -49,11 +56,11 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
             ArmorStandPartPositionBone positionBone = new ArmorStandPartPositionBone(container, part);
             ArmorStandPartPoseBone poseBone = new ArmorStandPartPoseBone(container, part);
 
-            MenuNode localNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.local", info.getDisplayName()), container);
+            MenuNode localNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.local", info.getDisplayName()), container, part);
             localNode.addMoveButtons(session, positionBone, poseBone, 3);
             localNode.addRotationButtons(session, poseBone, 1, poseBone);
 
-            MenuNode globalNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.global", info.getDisplayName()), container);
+            MenuNode globalNode = new ArmorStandPartNode(session, Message.component("easyarmorstands.node.global", info.getDisplayName()), container, part);
             globalNode.addPositionButtons(session, positionBone, 3);
             globalNode.addRotationButtons(session, poseBone, 1, null);
 
@@ -67,7 +74,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
 
         ArmorStandPositionBone positionBone = new ArmorStandPositionBone(container);
 
-        MenuNode positionNode = new PropertyMenuNode(session, Message.component("easyarmorstands.node.select-axis"), container);
+        MenuNode positionNode = new ArmorStandPositionNode(session, Message.component("easyarmorstands.node.select-axis"), container);
         positionNode.addYawButton(session, positionBone, 1);
         positionNode.addPositionButtons(session, positionBone, 3);
         positionNode.addCarryButtonWithYaw(session, positionBone);
@@ -185,5 +192,18 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode {
     @Override
     public ArmorStandElement getElement() {
         return element;
+    }
+
+    @Override
+    public void reset() {
+        Property<Location> locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        Location location = locationProperty.getValue();
+        location.setYaw(0);
+        location.setPitch(0);
+        locationProperty.setValue(location);
+        for (ArmorStandPart part : ArmorStandPart.values()) {
+            container.get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+        }
+        container.commit();
     }
 }

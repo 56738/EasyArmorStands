@@ -21,6 +21,7 @@ public interface PropertyContainer {
     @Contract(pure = true)
     <T> @Nullable Property<T> getOrNull(@NotNull PropertyType<T> type);
 
+    @Contract(pure = true)
     default <T> @NotNull Property<T> get(@NotNull PropertyType<T> type) {
         Property<T> property = getOrNull(type);
         if (property == null) {

@@ -34,10 +34,4 @@ public class ArmorStandPoseProperty implements Property<EulerAngle> {
         part.setPose(entity, value);
         return true;
     }
-
-    // TODO /eas reset
-//    @Override
-//    public Quaterniondc getResetValue() {
-//        return new Quaterniond();
-//    }
 }
