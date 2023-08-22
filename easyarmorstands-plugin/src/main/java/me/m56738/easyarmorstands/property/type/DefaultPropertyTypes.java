@@ -26,7 +26,7 @@ public class DefaultPropertyTypes {
         registry.register(new LocationPropertyType(key("entity/location")));
         registry.register(new BooleanTogglePropertyType(key("entity/visible")));
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            registry.register(new QuaterniondcPropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));
+            registry.register(new EulerAnglePropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             registry.register(new ItemPropertyType(key("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT))));

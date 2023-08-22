@@ -8,7 +8,9 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
+import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
+import org.bukkit.util.EulerAngle;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
@@ -18,7 +20,7 @@ import org.joml.Vector3dc;
 public class ArmorStandPartPoseBone implements RotationBone {
     private final PropertyContainer container;
     private final ArmorStandPartInfo part;
-    private final Property<Quaterniondc> poseProperty;
+    private final Property<EulerAngle> poseProperty;
     private final Property<Location> locationProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
@@ -52,7 +54,7 @@ public class ArmorStandPartPoseBone implements RotationBone {
     @Override
     public Quaterniondc getRotation() {
         Location location = locationProperty.getValue();
-        Quaterniondc pose = poseProperty.getValue();
+        Quaterniondc pose = Util.fromEuler(poseProperty.getValue(), new Quaterniond());
         return new Quaterniond()
                 .rotationY(-Math.toRadians(location.getYaw()))
                 .mul(pose);
@@ -62,6 +64,6 @@ public class ArmorStandPartPoseBone implements RotationBone {
     public void setRotation(Quaterniondc rotation) {
         Location location = locationProperty.getValue();
         float rotY = -Math.toRadians(location.getYaw());
-        poseProperty.setValue(rotation.rotateLocalY(-rotY, new Quaterniond()));
+        poseProperty.setValue(Util.toEuler(rotation.rotateLocalY(-rotY, new Quaterniond())));
     }
 }

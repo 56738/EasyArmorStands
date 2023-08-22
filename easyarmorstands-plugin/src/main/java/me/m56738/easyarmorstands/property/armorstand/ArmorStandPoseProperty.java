@@ -4,16 +4,14 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 
-public class ArmorStandPoseProperty implements Property<Quaterniondc> {
+public class ArmorStandPoseProperty implements Property<EulerAngle> {
     private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final PropertyType<Quaterniondc> type;
+    private final PropertyType<EulerAngle> type;
 
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
         this.entity = entity;
@@ -22,18 +20,18 @@ public class ArmorStandPoseProperty implements Property<Quaterniondc> {
     }
 
     @Override
-    public @NotNull PropertyType<Quaterniondc> getType() {
+    public @NotNull PropertyType<EulerAngle> getType() {
         return type;
     }
 
     @Override
-    public Quaterniondc getValue() {
-        return Util.fromEuler(part.getPose(entity), new Quaterniond());
+    public EulerAngle getValue() {
+        return part.getPose(entity);
     }
 
     @Override
-    public boolean setValue(Quaterniondc value) {
-        part.setPose(entity, Util.toEuler(value));
+    public boolean setValue(EulerAngle value) {
+        part.setPose(entity, value);
         return true;
     }
 

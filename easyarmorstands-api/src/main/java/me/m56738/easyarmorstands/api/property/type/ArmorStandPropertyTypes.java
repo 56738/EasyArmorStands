@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
-import org.joml.Quaterniondc;
+import org.bukkit.util.EulerAngle;
 
 import java.util.EnumMap;
 import java.util.Locale;
@@ -19,12 +19,12 @@ public class ArmorStandPropertyTypes {
     public static final PropertyType<Boolean> INVULNERABLE = get("armor_stand/invulnerable", Boolean.class);
     public static final PropertyType<Boolean> LOCK = get("armor_stand/lock", Boolean.class);
     public static final PropertyType<Boolean> MARKER = get("armor_stand/marker", Boolean.class);
-    public static final Map<ArmorStandPart, PropertyType<Quaterniondc>> POSE = new EnumMap<>(ArmorStandPart.class);
+    public static final Map<ArmorStandPart, PropertyType<EulerAngle>> POSE = new EnumMap<>(ArmorStandPart.class);
     public static final PropertyType<ArmorStandSize> SIZE = get("armor_stand/size", ArmorStandSize.class);
 
     static {
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            POSE.put(part, get("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT), Quaterniondc.class));
+            POSE.put(part, get("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT), EulerAngle.class));
         }
     }
 

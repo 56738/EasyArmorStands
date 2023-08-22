@@ -17,10 +17,9 @@ import me.m56738.easyarmorstands.menu.slot.NodeSlot;
 import me.m56738.easyarmorstands.node.ArmorStandButton;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.node.ElementNode;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.joml.Quaterniondc;
+import org.bukkit.util.EulerAngle;
 
 import java.util.function.Consumer;
 
@@ -108,8 +107,8 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     private Consumer<MenuClick> getResetAction(ArmorStandPart part, PropertyContainer container) {
-        Property<Quaterniondc> property = container.get(ArmorStandPropertyTypes.POSE.get(part));
-        return new ResetAction<>(property, container, Util.IDENTITY);
+        Property<EulerAngle> property = container.get(ArmorStandPropertyTypes.POSE.get(part));
+        return new ResetAction<>(property, container, EulerAngle.ZERO);
     }
 
     private static class ResetAction<T> implements Consumer<MenuClick> {

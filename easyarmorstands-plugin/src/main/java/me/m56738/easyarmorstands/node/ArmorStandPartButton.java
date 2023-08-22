@@ -14,11 +14,12 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.util.EulerAngle;
 import org.joml.Math;
 import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -34,7 +35,7 @@ public class ArmorStandPartButton implements NodeButton {
     private final Quaterniond rotation = new Quaterniond();
     private final LineParticle particle;
     private final Property<Location> locationProperty;
-    private final Property<Quaterniondc> poseProperty;
+    private final Property<EulerAngle> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, Node node) {
@@ -53,7 +54,7 @@ public class ArmorStandPartButton implements NodeButton {
         Location location = locationProperty.getValue();
         ArmorStandSize size = sizeProperty.getValue();
         // rotation = combination of yaw and pose
-        poseProperty.getValue().rotateLocalY(-Math.toRadians(location.getYaw()), rotation);
+        Util.fromEuler(poseProperty.getValue(), rotation).rotateLocalY(-Math.toRadians(location.getYaw()));
         // start = where the bone is attached to the armor stand, depends on yaw
         part.getOffset(size)
                 .rotateY(-Math.toRadians(location.getYaw()), start)
