@@ -1,23 +1,16 @@
 package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.EasyArmorStands;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.item.ItemCapability;
-import me.m56738.easyarmorstands.capability.item.ItemType;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Intersectiond;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
@@ -30,9 +23,6 @@ import org.joml.Vector3dc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class Util {
@@ -149,45 +139,6 @@ public class Util {
             return null;
         }
         return (T) entity;
-    }
-
-    @Deprecated
-    public static ItemStack createItem(ItemType type, Component title, List<Component> lore, Locale locale) {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
-        ItemCapability itemCapability = plugin.getCapability(ItemCapability.class);
-        ComponentCapability componentCapability = plugin.getCapability(ComponentCapability.class);
-        ItemStack item = itemCapability.createItem(type);
-        ItemMeta meta = item.getItemMeta();
-        if (title != null) {
-            componentCapability.setDisplayName(meta, GlobalTranslator.render(title, locale));
-        }
-        List<Component> translatedLore = new ArrayList<>(lore.size());
-        for (Component line : lore) {
-            translatedLore.add(GlobalTranslator.render(line, locale));
-        }
-        componentCapability.setLore(meta, translatedLore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    @Deprecated
-    public static double intersectRayDoubleSidedPlane(
-            Vector3dc origin, Vector3dc direction, Vector3dc point, Vector3dc normal) {
-        double ox = origin.x(), oy = origin.y(), oz = origin.z();
-        double dx = direction.x(), dy = direction.y(), dz = direction.z();
-        double px = point.x(), py = point.y(), pz = point.z();
-        double nx = normal.x(), ny = normal.y(), nz = normal.z();
-        double t = Intersectiond.intersectRayPlane(
-                ox, oy, oz, dx, dy, dz,
-                px, py, pz, nx, ny, nz,
-                0.1);
-        if (t < 0) {
-            t = Intersectiond.intersectRayPlane(
-                    ox, oy, oz, dx, dy, dz,
-                    px, py, pz, -nx, -ny, -nz,
-                    0.1);
-        }
-        return t;
     }
 
     public static double snap(double value, double increment) {

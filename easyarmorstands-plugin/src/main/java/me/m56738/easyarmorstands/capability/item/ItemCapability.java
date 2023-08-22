@@ -6,7 +6,5 @@ import org.bukkit.inventory.ItemStack;
 
 @Capability(name = "Items")
 public interface ItemCapability {
-    ItemStack createItem(ItemType type);
-
     ItemStack createColor(DyeColor color);
 }
