@@ -88,6 +88,10 @@ public class ItemTemplate {
                 resolver), renderer);
     }
 
+    public ItemTemplate withTemplate(ItemStack template) {
+        return new ItemTemplate(template, displayName, lore, resolver, renderer);
+    }
+
     public ItemTemplate withRenderer(ItemRenderer renderer) {
         return new ItemTemplate(template, displayName, lore, resolver, renderer);
     }

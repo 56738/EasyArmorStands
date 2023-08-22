@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
@@ -92,7 +93,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         return entity instanceof LivingEntity;
     }
 
-    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer container) {
+    protected void populateMenu(EasPlayer player, MenuBuilder builder, PropertyContainer container) {
     }
 
     @Override

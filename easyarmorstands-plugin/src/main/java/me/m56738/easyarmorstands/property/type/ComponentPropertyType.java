@@ -1,11 +1,9 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.button.PropertyButton;
-import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.property.button.ComponentButton;
-import me.m56738.easyarmorstands.util.ConfigUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -18,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     private final String command;
     private Component none;
-    private ItemTemplate buttonTemplate;
 
     public ComponentPropertyType(@NotNull Key key, String command) {
         super(key, Component.class);
@@ -30,7 +27,6 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
         super.load(config);
         none = MiniMessage.miniMessage().deserializeOr(config.getString("value.none"),
                 Component.text("none", NamedTextColor.GRAY, TextDecoration.ITALIC));
-        buttonTemplate = ConfigUtil.getButton(config, "button");
     }
 
     @Override
@@ -42,7 +38,7 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     }
 
     @Override
-    public @Nullable PropertyButton createButton(Property<Component> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(Property<Component> property, PropertyContainer container) {
         return new ComponentButton(property, container, buttonTemplate, command);
     }
 }

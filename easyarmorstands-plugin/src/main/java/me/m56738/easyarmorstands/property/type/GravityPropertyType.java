@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.button.PropertyButton;
 import me.m56738.easyarmorstands.property.button.GravityToggleButton;
 import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,7 +26,7 @@ public class GravityPropertyType extends BooleanTogglePropertyType {
     }
 
     @Override
-    public @Nullable PropertyButton createButton(Property<Boolean> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(Property<Boolean> property, PropertyContainer container) {
         return new GravityToggleButton(property, container, buttonTemplate, canTickWarning);
     }
 }

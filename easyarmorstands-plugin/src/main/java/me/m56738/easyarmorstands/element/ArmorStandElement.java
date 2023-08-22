@@ -6,13 +6,13 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
 import me.m56738.easyarmorstands.node.ArmorStandButton;
 import me.m56738.easyarmorstands.node.ArmorStandRootNode;
@@ -42,7 +42,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     @Override
-    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer container) {
+    protected void populateMenu(EasPlayer player, MenuBuilder builder, PropertyContainer container) {
         super.populateMenu(player, builder, container);
 
         Session session = player.session();

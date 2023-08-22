@@ -43,6 +43,7 @@ public class SimpleMenuBuilder implements MenuBuilder {
         addButton(slot);
     }
 
+    @Override
     public void setSlot(int index, MenuSlot slot) {
         ensureRow(index / 9);
         slots.set(index, slot);

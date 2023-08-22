@@ -30,6 +30,7 @@ public abstract class ToggleButton<T> extends SimpleButton<T> {
         }
         if (changed) {
             container.commit();
+            click.updateItem();
         }
     }
 }

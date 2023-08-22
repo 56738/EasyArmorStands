@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.item.ItemRenderer;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.menu.position.MenuSlotPosition;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -80,5 +81,28 @@ public class ConfigUtil {
             item.setDurability(durability);
         }
         return true;
+    }
+
+    public static MenuSlotPosition getMenuSlotPosition(ConfigurationSection config, String path) {
+        if (config.isString(path)) {
+            if ("utility".equals(config.getString(path))) {
+                return MenuSlotPosition.utility();
+            } else {
+                return MenuSlotPosition.button();
+            }
+        }
+
+        if (config.isInt(path)) {
+            return MenuSlotPosition.of(config.getInt(path));
+        }
+
+        if (config.isConfigurationSection(path)) {
+            ConfigurationSection section = config.getConfigurationSection(path);
+            return MenuSlotPosition.of(
+                    section.getInt("row"),
+                    section.getInt("column"));
+        }
+
+        return MenuSlotPosition.button();
     }
 }

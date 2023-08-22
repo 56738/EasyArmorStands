@@ -3,33 +3,26 @@ package me.m56738.easyarmorstands.display.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.display.DisplayAddon;
-import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.bone.DisplayBone;
 import me.m56738.easyarmorstands.display.bone.DisplayBoxBone;
 import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNodeFactory;
-import me.m56738.easyarmorstands.display.menu.BlockDisplaySlot;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
-import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ElementNode;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -81,29 +74,9 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
         return localNode;
     }
 
-    private MenuSlot getContentSlot(PropertyContainer properties) {
-        Property<ItemStack> itemProperty = properties.getOrNull(ItemDisplayPropertyTypes.ITEM);
-        if (itemProperty != null) {
-            return new ItemPropertySlot(itemProperty, properties);
-        }
-
-        Property<BlockData> blockProperty = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
-        if (blockProperty != null) {
-            return new BlockDisplaySlot(blockProperty);
-        }
-
-        return null;
-    }
-
     @Override
-    protected void populateMenu(EasPlayer player, SplitMenuBuilder builder, PropertyContainer properties) {
+    protected void populateMenu(EasPlayer player, MenuBuilder builder, PropertyContainer properties) {
         super.populateMenu(player, builder, properties);
-
-        MenuSlot contentSlot = getContentSlot(properties);
-        if (contentSlot != null) {
-            builder.ensureRow(3);
-            builder.setSlot(Menu.index(2, 1), contentSlot);
-        }
 
         Session session = player.session();
         DisplayRootNode root = null;

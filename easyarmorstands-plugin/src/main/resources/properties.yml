@@ -143,21 +143,39 @@ easyarmorstands:entity/custom_name/visible:
 easyarmorstands:entity/equipment/hand:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.hand.name>
+  position:
+    row: 3
+    column: 2
 easyarmorstands:entity/equipment/off_hand:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.off-hand.name>
+  position:
+    row: 3
+    column: 0
 easyarmorstands:entity/equipment/feet:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.feet.name>
+  position:
+    row: 5
+    column: 1
 easyarmorstands:entity/equipment/legs:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.legs.name>
+  position:
+    row: 4
+    column: 1
 easyarmorstands:entity/equipment/chest:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.chest.name>
+  position:
+    row: 3
+    column: 1
 easyarmorstands:entity/equipment/head:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.head.name>
+  position:
+    row: 2
+    column: 1
 
 easyarmorstands:entity/glowing:
   permission: easyarmorstands.property.glow
@@ -201,6 +219,17 @@ easyarmorstands:entity/visible:
 easyarmorstands:block_display/block:
   permission: easyarmorstands.property.display.block
   name: <lang:easyarmorstands.property.block-display.block.name>
+  position:
+    row: 2
+    column: 1
+  button:
+    type:
+      - oak_stairs
+      - stone
+    name: <name>
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.block-display.block.pick>
 
 easyarmorstands:display/billboard:
   permission: easyarmorstands.property.display.billboard
