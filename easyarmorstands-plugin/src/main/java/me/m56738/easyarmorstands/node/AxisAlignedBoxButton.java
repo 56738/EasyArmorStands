@@ -7,6 +7,9 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
+import me.m56738.easyarmorstands.util.Util;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -15,6 +18,7 @@ import java.util.function.Consumer;
 public abstract class AxisAlignedBoxButton implements Button {
     private final Session session;
     private final Vector3d position = new Vector3d();
+    private final Quaterniond rotation = new Quaterniond();
     private final Vector3d center = new Vector3d();
     private final Vector3d size = new Vector3d();
     private final PointParticle pointParticle;
@@ -31,6 +35,10 @@ public abstract class AxisAlignedBoxButton implements Button {
 
     protected abstract Vector3dc getPosition();
 
+    protected Quaterniondc getRotation() {
+        return Util.IDENTITY;
+    }
+
     protected Vector3dc getCenter() {
         return getPosition();
     }
@@ -40,6 +48,7 @@ public abstract class AxisAlignedBoxButton implements Button {
     @Override
     public void update() {
         position.set(getPosition());
+        rotation.set(getRotation());
         center.set(getCenter());
         size.set(getSize());
     }
@@ -61,6 +70,7 @@ public abstract class AxisAlignedBoxButton implements Button {
     @Override
     public void updatePreview(boolean focused) {
         pointParticle.setPosition(position);
+        pointParticle.setRotation(rotation);
         pointParticle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
         boxParticle.setCenter(center);
         boxParticle.setSize(size);

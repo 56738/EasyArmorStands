@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyT
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.bone.DisplayBone;
+import me.m56738.easyarmorstands.display.bone.DisplayBoxBone;
 import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
@@ -51,7 +52,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public Button createButton(Session session) {
-        return new DisplayButton<>(session, entity);
+        return new DisplayButton(session, getProperties());
     }
 
     @Override
@@ -153,6 +154,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
             if (heightProperty != null) {
                 heightProperty.setValue(0f);
             }
+            new DisplayBoxBone(container).resetPosition();
             container.commit();
         }
     }
