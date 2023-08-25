@@ -154,3 +154,131 @@ slots:
         left: 10
         right: 1
         shift: 100
+  easyarmorstands:color_picker/preset/white:
+    row: 0
+    column: 5
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#FFFFFF'
+      item:
+        type: white_wool
+  easyarmorstands:color_picker/preset/orange:
+    row: 0
+    column: 6
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#D87F33'
+      item:
+        type: orange_wool
+  easyarmorstands:color_picker/preset/magenta:
+    row: 0
+    column: 7
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#B24CD8'
+      item:
+        type: magenta_wool
+  easyarmorstands:color_picker/preset/light_blue:
+    row: 0
+    column: 8
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#6699D8'
+      item:
+        type: light_blue_wool
+  easyarmorstands:color_picker/preset/yellow:
+    row: 1
+    column: 5
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#E5E533'
+      item:
+        type: yellow_wool
+  easyarmorstands:color_picker/preset/lime:
+    row: 1
+    column: 6
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#7FCC19'
+      item:
+        type: lime_wool
+  easyarmorstands:color_picker/preset/pink:
+    row: 1
+    column: 7
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#F27FA5'
+      item:
+        type: pink_wool
+  easyarmorstands:color_picker/preset/gray:
+    row: 1
+    column: 8
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#4C4C4C'
+      item:
+        type: gray_wool
+  easyarmorstands:color_picker/preset/silver:
+    row: 2
+    column: 5
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#999999'
+      item:
+        type: light_gray_wool
+  easyarmorstands:color_picker/preset/cyan:
+    row: 2
+    column: 6
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#4C7F99'
+      item:
+        type: cyan_wool
+  easyarmorstands:color_picker/preset/purple:
+    row: 2
+    column: 7
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#7F3FB2'
+      item:
+        type: purple_wool
+  easyarmorstands:color_picker/preset/blue:
+    row: 2
+    column: 8
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#334CB2'
+      item:
+        type: blue_wool
+  easyarmorstands:color_picker/preset/brown:
+    row: 3
+    column: 5
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#664C33'
+      item:
+        type: brown_wool
+  easyarmorstands:color_picker/preset/green:
+    row: 3
+    column: 6
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#667F33'
+      item:
+        type: green_wool
+  easyarmorstands:color_picker/preset/red:
+    row: 3
+    column: 7
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#993333'
+      item:
+        type: red_wool
+  easyarmorstands:color_picker/preset/black:
+    row: 3
+    column: 8
+    type: easyarmorstands:color_picker/preset
+    config:
+      color: '#191919'
+      item:
+        type: black_wool
