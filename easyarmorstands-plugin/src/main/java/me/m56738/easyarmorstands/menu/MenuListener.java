@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 
-import java.util.function.Consumer;
-
 public class MenuListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -135,11 +133,6 @@ public class MenuListener implements Listener {
         @Override
         public void queueTask(Runnable task) {
             menu.queueTask(task);
-        }
-
-        @Override
-        public void queueTask(Consumer<ItemStack> task) {
-            queueTask(() -> task.accept(menu.getInventory().getItem(index)));
         }
 
         @Override

@@ -7,26 +7,38 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
+import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import java.util.function.Consumer;
 
 public class SimpleEntityElementType<E extends Entity> implements EntityElementType<E> {
-    private final Class<E> entityType;
+    private final EntityType entityType;
+    private final Class<E> entityClass;
     private final Component displayName;
 
-    public SimpleEntityElementType(Class<E> entityType, Component displayName) {
+    public SimpleEntityElementType(EntityType entityType, Class<E> entityClass) {
+        EntityTypeCapability entityTypeCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTypeCapability.class);
         this.entityType = entityType;
-        this.displayName = displayName;
+        this.entityClass = entityClass;
+        this.displayName = entityTypeCapability.getName(entityType);
     }
 
     @Override
-    public Class<E> getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
+    }
+
+    @Override
+    public Class<E> getEntityClass() {
+        return entityClass;
     }
 
     protected SimpleEntityElement<E> createInstance(E entity) {
@@ -44,7 +56,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     public SimpleEntityElement<E> createElement(PropertyContainer properties) {
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
+        E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityClass, configurator);
         entity.teleport(location);
         return configurator.getElement();
     }
@@ -52,6 +64,11 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     @Override
     public Component getDisplayName() {
         return displayName;
+    }
+
+    @Override
+    public boolean canSpawn(Player player) {
+        return player.hasPermission(Permissions.entityType(Permissions.SPAWN, entityType));
     }
 
     private class SpawnedEntityConfigurator implements Consumer<E> {

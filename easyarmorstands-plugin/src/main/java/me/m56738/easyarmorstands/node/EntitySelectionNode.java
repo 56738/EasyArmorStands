@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -11,6 +12,7 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -55,8 +57,11 @@ public class EntitySelectionNode extends MenuNode {
             Element element = providerRegistry.getElement(entity);
             ElementButton button = null;
             if (element instanceof SelectableElement) {
-                button = new ElementButton(session, (SelectableElement) element);
-                addButton(button);
+                SelectableElement selectableElement = (SelectableElement) element;
+                if (selectableElement.canEdit(session.player())) {
+                    button = new ElementButton(session, selectableElement);
+                    addButton(button);
+                }
             }
 
             buttons.put(entity, button);
@@ -68,6 +73,15 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         super.onUpdate(context);
+    }
+
+    @Override
+    public void onExit(ExitContext context) {
+        super.onExit(context);
+        for (ElementButton button : buttons.values()) {
+            removeButton(button);
+        }
+        buttons.clear();
     }
 
     @Override
@@ -87,7 +101,7 @@ public class EntitySelectionNode extends MenuNode {
             }
 
             Player player = session.player();
-            if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
+            if (player.isSneaking() && player.hasPermission(Permissions.SPAWN)) {
                 Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
                 player.openInventory(menu.getInventory());
                 return true;
@@ -104,6 +118,10 @@ public class EntitySelectionNode extends MenuNode {
 
     public boolean selectElement(Element element) {
         if (!(element instanceof SelectableElement)) {
+            return false;
+        }
+
+        if (!((SelectableElement) element).canEdit(session.player())) {
             return false;
         }
 
@@ -141,6 +159,10 @@ public class EntitySelectionNode extends MenuNode {
 
         @Override
         public void onClick(Session session, @Nullable Vector3dc cursor) {
+            if (!element.canEdit(session.player())) {
+                return;
+            }
+
             SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {

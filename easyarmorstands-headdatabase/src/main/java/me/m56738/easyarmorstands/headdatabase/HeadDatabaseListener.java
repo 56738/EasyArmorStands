@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,7 @@ public class HeadDatabaseListener implements Listener {
     @EventHandler
     public void onClickHead(PlayerClickHeadEvent event) {
         Player player = event.getPlayer();
-        if (event.isEconomy() || !player.hasPermission("easyarmorstands.open")) {
+        if (event.isEconomy() || !player.hasPermission(Permissions.OPEN)) {
             return;
         }
         SessionManager sessionManager = plugin.getSessionManager();

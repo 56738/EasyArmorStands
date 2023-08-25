@@ -21,10 +21,14 @@ public class SpawnSlotFactory implements MenuSlotFactory {
 
     @Override
     public @Nullable MenuSlot createSlot(@NotNull MenuSlotContext context) {
-        return new SpawnSlot(type, buttonTemplate,
-                TagResolver.builder()
-                        .resolver(context.resolver())
-                        .tag("type", Tag.selfClosingInserting(type.getDisplayName()))
-                        .build());
+        if (type.canSpawn(context.player())) {
+            return new SpawnSlot(type, buttonTemplate,
+                    TagResolver.builder()
+                            .resolver(context.resolver())
+                            .tag("type", Tag.selfClosingInserting(type.getDisplayName()))
+                            .build());
+        } else {
+            return null;
+        }
     }
 }

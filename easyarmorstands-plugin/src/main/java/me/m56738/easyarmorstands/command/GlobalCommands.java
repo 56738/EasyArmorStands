@@ -19,6 +19,7 @@ import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import net.kyori.adventure.text.Component;
@@ -44,23 +45,23 @@ public class GlobalCommands {
     }
 
     @CommandMethod("")
-    @CommandPermission("easyarmorstands.help")
+    @CommandPermission(Permissions.HELP)
     @CommandDescription("Shows an overview")
     public void showOverview(EasCommandSender sender) {
-        if (sender.get().hasPermission("easyarmorstands.version")) {
+        if (sender.get().hasPermission(Permissions.VERSION)) {
             String version = EasyArmorStandsPlugin.getInstance().getDescription().getVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
         }
-        if (sender.get().hasPermission("easyarmorstands.give")) {
+        if (sender.get().hasPermission(Permissions.GIVE)) {
             sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
         }
         sender.sendMessage(Message.hint("easyarmorstands.hint.show-help", Message.command("/eas help")));
     }
 
     @CommandMethod("help [query]")
-    @CommandPermission("easyarmorstands.help")
+    @CommandPermission(Permissions.HELP)
     @CommandDescription("Shows the command help")
     public void help(EasCommandSender sender,
                      @Argument(value = "query", suggestions = "help_queries") @Greedy String query) {
@@ -75,7 +76,7 @@ public class GlobalCommands {
     }
 
     @CommandMethod("give")
-    @CommandPermission("easyarmorstands.give")
+    @CommandPermission(Permissions.GIVE)
     @CommandDescription("Gives you the editor tool")
     public void give(EasPlayer sender) {
         sender.get().getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
@@ -87,7 +88,7 @@ public class GlobalCommands {
     }
 
     @CommandMethod("reload")
-    @CommandPermission("easyarmorstands.reload")
+    @CommandPermission(Permissions.RELOAD)
     @CommandDescription("Reloads the configuration")
     public void reloadConfig(EasCommandSender sender) {
         EasyArmorStandsPlugin.getInstance().reload();
@@ -95,7 +96,7 @@ public class GlobalCommands {
     }
 
     @CommandMethod("version")
-    @CommandPermission("easyarmorstands.version")
+    @CommandPermission(Permissions.VERSION)
     @CommandDescription("Displays the plugin version")
     public void version(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
@@ -106,7 +107,7 @@ public class GlobalCommands {
     }
 
     @CommandMethod("debug")
-    @CommandPermission("easyarmorstands.debug")
+    @CommandPermission(Permissions.DEBUG)
     @CommandDescription("Displays debug information")
     public void debug(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();

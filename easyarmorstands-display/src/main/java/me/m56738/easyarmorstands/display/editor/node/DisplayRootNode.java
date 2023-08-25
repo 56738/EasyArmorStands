@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.node.ElementNode;
+import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -35,7 +36,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
                 }
             }
         }
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
+        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
             element.openMenu(player);
             return true;
         }

@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -17,7 +18,7 @@ import java.util.Iterator;
 @CommandMethod("eas")
 public class HistoryCommands {
     @CommandMethod("history")
-    @CommandPermission("easyarmorstands.history")
+    @CommandPermission(Permissions.HISTORY)
     @CommandDescription("View your history")
     public void history(EasPlayer sender) {
         History history = sender.history();
@@ -36,7 +37,7 @@ public class HistoryCommands {
     }
 
     @CommandMethod("redo [count]")
-    @CommandPermission("easyarmorstands.redo")
+    @CommandPermission(Permissions.REDO)
     @CommandDescription("Redo a change")
     public void redo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
@@ -57,7 +58,7 @@ public class HistoryCommands {
     }
 
     @CommandMethod("undo [count]")
-    @CommandPermission("easyarmorstands.undo")
+    @CommandPermission(Permissions.UNDO)
     @CommandDescription("Undo a change")
     public void undo(EasPlayer sender,
                      @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {

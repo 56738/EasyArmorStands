@@ -2,8 +2,10 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -15,6 +17,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     protected ItemTemplate buttonTemplate;
     private @Nullable String permission;
     private Component name;
+    private Permission registeredPermission;
 
     public ConfigurablePropertyType(@NotNull Key key, @NotNull Class<T> valueType) {
         this.key = key;
@@ -36,6 +39,17 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
         permission = config.node("permission").getString();
         name = config.node("name").get(Component.class);
         buttonTemplate = config.node("button").get(ItemTemplate.class);
+
+        if (registeredPermission != null) {
+            Permissions.unregister(registeredPermission);
+        }
+        if (permission != null) {
+            registeredPermission = Permissions.register(new Permission(
+                    permission,
+                    "Allow editing " + key.asString()));
+        } else {
+            registeredPermission = null;
+        }
     }
 
     @Override

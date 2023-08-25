@@ -6,15 +6,15 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNodeFactory;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.EntityType;
 
 public class DisplayElementType<E extends Display> extends SimpleEntityElementType<E> {
     private final DisplayRootNodeFactory<E> factory;
 
-    public DisplayElementType(Class<E> entityType, Component displayName, DisplayRootNodeFactory<E> factory) {
-        super(entityType, displayName);
+    public DisplayElementType(EntityType entityType, Class<E> entityClass, DisplayRootNodeFactory<E> factory) {
+        super(entityType, entityClass);
         this.factory = factory;
     }
 

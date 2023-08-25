@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -47,7 +48,7 @@ public class SessionListener implements Listener {
     }
 
     private boolean isHoldingTool(Player player) {
-        if (!player.hasPermission("easyarmorstands.edit")) {
+        if (!player.hasPermission(Permissions.EDIT)) {
             return false;
         }
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
@@ -93,7 +94,7 @@ public class SessionListener implements Listener {
             return false;
         }
         session = manager.start(player);
-        if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
+        if (player.isSneaking() && player.hasPermission(Permissions.SPAWN)) {
             Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
             player.openInventory(menu.getInventory());
         }

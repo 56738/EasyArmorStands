@@ -24,6 +24,7 @@ import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -177,7 +178,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     @Override
     public boolean onClick(ClickContext context) {
         Player player = session.player();
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission("easyarmorstands.open")) {
+        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
             element.openMenu(player);
             return true;
         }

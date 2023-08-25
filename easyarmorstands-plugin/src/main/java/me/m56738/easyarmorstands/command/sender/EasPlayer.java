@@ -56,6 +56,9 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
 
     @Override
     public boolean canCreateElement(ElementType type, PropertyContainer properties) {
+        if (!type.canSpawn(player)) {
+            return false;
+        }
         PlayerCreateElementEvent event = new PlayerCreateElementEvent(player, type, properties);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
@@ -63,6 +66,9 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
 
     @Override
     public boolean canDestroyElement(DestroyableElement element) {
+        if (!element.canDestroy(player)) {
+            return false;
+        }
         PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();

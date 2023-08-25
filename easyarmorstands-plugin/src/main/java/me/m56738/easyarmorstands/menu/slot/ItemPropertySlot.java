@@ -4,7 +4,8 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import org.bukkit.Material;
+import me.m56738.easyarmorstands.util.Util;
+import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -28,7 +29,7 @@ public class ItemPropertySlot implements MenuSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return property.getValue();
+        return Util.wrapItem(property.getValue());
     }
 
     @Override
@@ -37,13 +38,35 @@ public class ItemPropertySlot implements MenuSlot {
         if (permission != null && !click.player().hasPermission(permission)) {
             return;
         }
-        click.allow();
-        click.queueTask(item -> {
-            if (item == null) {
-                item = new ItemStack(Material.AIR);
+
+        if (click.player().getGameMode() == GameMode.CREATIVE) {
+            // Allow the click event and set the property later
+            // Might duplicate items if two players interact in the same tick, so only do this in creative mode
+            click.allow();
+            click.queueTask(() -> {
+                ItemStack item = click.menu().getInventory().getItem(click.index());
+                if (property.setValue(Util.wrapItem(item))) {
+                    container.commit();
+                } else {
+                    // Failed to change the property, revert changes
+                    // Put the placed item back into the cursor
+                    click.player().setItemOnCursor(item);
+                    // Refresh the item in the menu
+                    click.menu().updateItem(click.index());
+                }
+            });
+            return;
+        }
+
+        click.queueTask(() -> {
+            // Event is still cancelled, swap the items ourselves to prevent duplication
+            ItemStack itemInCursor = click.cursor();
+            ItemStack itemInProperty = property.getValue();
+            if (property.setValue(Util.wrapItem(itemInCursor))) {
+                click.player().setItemOnCursor(itemInProperty);
+                container.commit();
+                click.menu().updateItem(click.index());
             }
-            property.setValue(item);
-            container.commit();
         });
     }
 }

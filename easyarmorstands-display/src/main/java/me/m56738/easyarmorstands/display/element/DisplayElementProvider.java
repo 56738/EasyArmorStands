@@ -15,8 +15,8 @@ public class DisplayElementProvider<T extends Display> implements EntityElementP
 
     @Override
     public @Nullable Element getElement(Entity entity) {
-        if (type.getEntityType().isInstance(entity)) {
-            return type.getElement(type.getEntityType().cast(entity));
+        if (type.getEntityClass().isInstance(entity)) {
+            return type.getElement(type.getEntityClass().cast(entity));
         }
         return null;
     }

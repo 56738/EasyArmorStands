@@ -1,11 +1,8 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
-import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -15,8 +12,7 @@ public class SimpleEntityElementProvider implements EntityElementProvider {
         if (entity instanceof Player && !entity.hasMetadata("NPC")) {
             return null;
         }
-        Component name = EasyArmorStandsPlugin.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
-        return new SimpleEntityElementType<>(Util.getEntityClass(entity), name).getElement(entity);
+        return new SimpleEntityElementType<>(entity.getType(), Util.getEntityClass(entity)).getElement(entity);
     }
 
     @Override

@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
 import me.m56738.easyarmorstands.node.SimpleEntityNode;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -73,6 +74,16 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public void destroy() {
         entity.remove();
+    }
+
+    @Override
+    public boolean canEdit(Player player) {
+        return player.hasPermission(Permissions.entityType(Permissions.EDIT, type.getEntityType()));
+    }
+
+    @Override
+    public boolean canDestroy(Player player) {
+        return player.hasPermission(Permissions.entityType(Permissions.DESTROY, type.getEntityType()));
     }
 
     @Override

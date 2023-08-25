@@ -20,12 +20,14 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.session.SessionImpl;
@@ -69,7 +71,7 @@ public class SessionCommands {
 
     public static void sendNoSessionError(EasCommandSender sender) {
         sender.sendMessage(Message.error("easyarmorstands.error.not-using-editor"));
-        if (sender.get().hasPermission("easyarmorstands.give")) {
+        if (sender.get().hasPermission(Permissions.GIVE)) {
             sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
         }
     }
@@ -123,7 +125,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("open")
-    @CommandPermission("easyarmorstands.open")
+    @CommandPermission(Permissions.OPEN)
     @CommandDescription("Open the menu")
     public void open(EasPlayer sender) {
         Element element = getElementOrError(sender);
@@ -139,7 +141,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("open <entity>")
-    @CommandPermission("easyarmorstands.open")
+    @CommandPermission(Permissions.OPEN)
     @CommandDescription("Open the menu of an entity")
     public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
         Entity entity = selector.getEntity();
@@ -152,11 +154,15 @@ public class SessionCommands {
             return;
         }
         MenuElement menuElement = (MenuElement) element;
+        if (!menuElement.canEdit(sender.get())) {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-edit"));
+            return;
+        }
         menuElement.openMenu(sender.get());
     }
 
     @CommandMethod("clone")
-    @CommandPermission("easyarmorstands.clone")
+    @CommandPermission(Permissions.CLONE)
     @CommandDescription("Spawn a copy of the selected entity")
     public void clone(EasPlayer sender) {
         Element element = getElementOrError(sender);
@@ -176,7 +182,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("spawn")
-    @CommandPermission("easyarmorstands.spawn")
+    @CommandPermission(Permissions.SPAWN)
     @CommandDescription("Open the spawn menu")
     public void spawn(EasPlayer sender) {
         Player player = sender.get();
@@ -185,7 +191,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("destroy")
-    @CommandPermission("easyarmorstands.destroy")
+    @CommandPermission(Permissions.DESTROY)
     @CommandDescription("Destroy the selected entity")
     public void destroy(EasPlayer sender) {
         Element element = getElementOrError(sender);
@@ -208,7 +214,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("snap angle [value]")
-    @CommandPermission("easyarmorstands.snap")
+    @CommandPermission(Permissions.SNAP)
     @CommandDescription("Change the angle snapping increment")
     public void setAngleSnapIncrement(
             EasPlayer sender,
@@ -228,7 +234,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("snap move [value]")
-    @CommandPermission("easyarmorstands.snap")
+    @CommandPermission(Permissions.SNAP)
     @CommandDescription("Change the position snapping increment")
     public void setSnapIncrement(
             EasPlayer sender,
@@ -248,7 +254,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("align [axis] [value] [offset]")
-    @CommandPermission("easyarmorstands.align")
+    @CommandPermission(Permissions.ALIGN)
     @CommandDescription("Move the selected entity to the middle of the block")
     public void align(
             EasPlayer sender,
@@ -284,7 +290,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("position <position>")
-    @CommandPermission("easyarmorstands.property.location")
+    @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("Teleport the selected entity")
     public void position(EasPlayer sender, @Argument("position") Location location) {
         Element element = getElementOrError(sender);
@@ -305,7 +311,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("yaw <yaw>")
-    @CommandPermission("easyarmorstands.property.location")
+    @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("Set the yaw of the selected entity")
     public void setYaw(EasPlayer sender, @Argument("yaw") float yaw) {
         Element element = getElementOrError(sender);
@@ -325,7 +331,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("pitch <pitch>")
-    @CommandPermission("easyarmorstands.property.location")
+    @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("Set the pitch of the selected entity")
     public void setPitch(EasPlayer sender, @Argument("pitch") float pitch) {
         Element element = getElementOrError(sender);
@@ -345,7 +351,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("name")
-    @CommandPermission("easyarmorstands.property.name")
+    @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Show the custom name of the selected entity")
     public void showName(EasPlayer sender) {
         Element element = getElementOrError(sender);
@@ -362,7 +368,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("name set <value>")
-    @CommandPermission("easyarmorstands.property.name")
+    @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Set the custom name of the selected entity")
     public void setName(EasPlayer sender, @Argument("value") @Greedy String input) {
         Element element = getElementOrError(sender);
@@ -390,7 +396,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("name clear")
-    @CommandPermission("easyarmorstands.property.name")
+    @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Remove the custom name of the selected entity")
     public void clearName(EasPlayer sender) {
         Element element = getElementOrError(sender);
@@ -416,7 +422,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("name visible <value>")
-    @CommandPermission("easyarmorstands.property.name.visible")
+    @PropertyPermission("easyarmorstands:entity/custom_name/visible")
     @CommandDescription("Change the custom name visibility of the selected entity")
     public void setNameVisible(EasPlayer sender, @Argument("value") boolean visible) {
         Element element = getElementOrError(sender);
@@ -438,7 +444,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("cantick <value>")
-    @CommandPermission("easyarmorstands.property.armorstand.cantick")
+    @PropertyPermission("easyarmorstands:armor_stand/can_tick")
     @CommandDescription("Toggle whether the selected armor stand should be ticked")
     public void setCanTick(EasPlayer sender, @Argument("value") boolean canTick) {
         Element element = getElementOrError(sender);
@@ -465,9 +471,9 @@ public class SessionCommands {
     }
 
     @CommandMethod("reset")
-    @CommandPermission("easyarmorstands.edit")
+    @CommandPermission(Permissions.EDIT)
     @CommandDescription("Reset the value of the selected tool")
-    public void setCanTick(EasPlayer sender) {
+    public void reset(EasPlayer sender) {
         Session session = getSessionOrError(sender);
         if (session == null) {
             return;
@@ -484,7 +490,7 @@ public class SessionCommands {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @CommandMethod("set <value>")
-    @CommandPermission("easyarmorstands.edit")
+    @CommandPermission(Permissions.EDIT)
     @CommandDescription("Set the value of the selected tool")
     public void set(
             EasCommandSender sender,

@@ -30,7 +30,9 @@ import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
+import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
+import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
 import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
@@ -60,6 +62,7 @@ import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -129,6 +132,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
+        Permissions.registerAll();
+
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
         loader.load();
@@ -219,6 +224,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                         .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
                         .build());
 
+        annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
@@ -303,6 +309,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (sessionManager != null) {
             sessionManager.stopAllSessions();
         }
+        Permissions.unregisterAll();
     }
 
     public void reload() {
@@ -341,7 +348,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
         if (config.updateCheck) {
             if (updateManager == null) {
-                updateManager = new UpdateManager(this, adventure, "easyarmorstands.update.notify", 108349);
+                updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY, 108349);
             }
         } else {
             if (updateManager != null) {
@@ -507,7 +514,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public void openEntityMenu(Player player, Session session, EntityElement<?> element) {
-        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityType());
+        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityClass());
         if (factory == null) {
             return;
         }

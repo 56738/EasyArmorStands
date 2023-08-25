@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,8 @@ import java.util.Locale;
 
 @ApiStatus.NonExtendable
 public interface MenuSlotContext {
+    @NotNull Player player();
+
     @Nullable Session session();
 
     @Nullable Element element();

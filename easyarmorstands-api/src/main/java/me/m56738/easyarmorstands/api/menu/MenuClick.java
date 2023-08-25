@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 
 import java.util.Locale;
-import java.util.function.Consumer;
 
 @ApiStatus.NonExtendable
 public interface MenuClick extends ForwardingAudience.Single {
@@ -44,8 +43,6 @@ public interface MenuClick extends ForwardingAudience.Single {
     void updateItem(MenuSlot slot);
 
     void queueTask(Runnable task);
-
-    void queueTask(Consumer<ItemStack> task);
 
     void interceptNextClick(MenuClickInterceptor interceptor);
 

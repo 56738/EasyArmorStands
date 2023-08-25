@@ -29,7 +29,7 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
         if (entity == null) {
             return null;
         }
-        return type.getElement(type.getEntityType().cast(entity));
+        return type.getElement(type.getEntityClass().cast(entity));
     }
 
     @Override

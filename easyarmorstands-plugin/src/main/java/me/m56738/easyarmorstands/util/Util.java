@@ -7,7 +7,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
@@ -222,5 +224,12 @@ public class Util {
                 .append(Component.text(green, NamedTextColor.GREEN))
                 .append(Component.text(blue, NamedTextColor.BLUE))
                 .build();
+    }
+
+    public static ItemStack wrapItem(ItemStack item) {
+        if (item == null) {
+            return new ItemStack(Material.AIR);
+        }
+        return item;
     }
 }

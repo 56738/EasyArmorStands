@@ -5,7 +5,6 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
-import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.display.command.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.display.command.DisplayCommands;
@@ -45,8 +44,8 @@ public class DisplayAddon {
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
 
-        itemDisplayType = new DisplayElementType<>(ItemDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.ITEM_DISPLAY), DisplayRootNode::new);
-        blockDisplayType = new DisplayElementType<>(BlockDisplay.class, plugin.getCapability(EntityTypeCapability.class).getName(EntityType.BLOCK_DISPLAY), DisplayRootNode::new);
+        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class, DisplayRootNode::new);
+        blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class, DisplayRootNode::new);
         textDisplayType = new TextDisplayElementType(DisplayRootNode::new);
 
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
