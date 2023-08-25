@@ -10,9 +10,11 @@ import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.TextColorArgument;
 import cloud.commandframework.paper.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
+import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.EntityElement;
-import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
@@ -74,6 +76,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -98,10 +101,8 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry.menuSlotTypeRegistry;
-
-public class EasyArmorStands extends JavaPlugin {
-    private static EasyArmorStands instance;
+public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
+    private static EasyArmorStandsPlugin instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
     private EasConfig config;
@@ -110,6 +111,7 @@ public class EasyArmorStands extends JavaPlugin {
     private MessageManager messageManager;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistryImpl entityElementProviderRegistry;
+    private MenuSlotTypeRegistryImpl menuSlotTypeRegistry;
     private SessionManager sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
@@ -117,7 +119,7 @@ public class EasyArmorStands extends JavaPlugin {
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
-    public static EasyArmorStands getInstance() {
+    public static EasyArmorStandsPlugin getInstance() {
         return instance;
     }
 
@@ -128,27 +130,34 @@ public class EasyArmorStands extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        propertyTypeRegistry = new PropertyTypeRegistryImpl();
-        PropertyTypeRegistry.Holder.instance = propertyTypeRegistry;
-        MenuSlotTypeRegistry.Holder.instance = new MenuSlotTypeRegistryImpl();
+        EasyArmorStandsInitializer.initialize(this);
+        loader.load();
 
-        menuSlotTypeRegistry().register(new ArmorStandPartSlotType());
-        menuSlotTypeRegistry().register(new ArmorStandPositionSlotType());
-        menuSlotTypeRegistry().register(new BackgroundSlotType());
-        menuSlotTypeRegistry().register(new ColorAxisSlotType());
-        menuSlotTypeRegistry().register(new ColorAxisChangeSlotType());
-        menuSlotTypeRegistry().register(new ColorIndicatorSlotType());
-        menuSlotTypeRegistry().register(new ColorPickerSlotType());
-        menuSlotTypeRegistry().register(new ColorPresetSlotType());
-        menuSlotTypeRegistry().register(new DestroySlotType());
-        menuSlotTypeRegistry().register(new PropertySlotType());
+        propertyTypeRegistry = new PropertyTypeRegistryImpl();
+        new DefaultPropertyTypes(propertyTypeRegistry);
+
+        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
+        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
+        entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider());
+
+        menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
+        menuSlotTypeRegistry.register(new ArmorStandPartSlotType());
+        menuSlotTypeRegistry.register(new ArmorStandPositionSlotType());
+        menuSlotTypeRegistry.register(new ArmorStandSpawnSlotType(armorStandElementType));
+        menuSlotTypeRegistry.register(new BackgroundSlotType());
+        menuSlotTypeRegistry.register(new ColorAxisSlotType());
+        menuSlotTypeRegistry.register(new ColorAxisChangeSlotType());
+        menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
+        menuSlotTypeRegistry.register(new ColorPickerSlotType());
+        menuSlotTypeRegistry.register(new ColorPresetSlotType());
+        menuSlotTypeRegistry.register(new DestroySlotType());
+        menuSlotTypeRegistry.register(new PropertySlotType());
     }
 
     @Override
     public void onEnable() {
-
         new Metrics(this, 17911);
-        loader.load();
         adventure = BukkitAudiences.create(this);
 
         loadConfig();
@@ -158,18 +167,8 @@ public class EasyArmorStands extends JavaPlugin {
 
         loadProperties();
 
-        new DefaultPropertyTypes(propertyTypeRegistry);
-
-        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
-        EntityElementProviderRegistry.Holder.instance = entityElementProviderRegistry;
-
         sessionManager = new SessionManager();
         historyManager = new HistoryManager();
-
-        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
-        entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
-        entityElementProviderRegistry.register(new SimpleEntityElementProvider());
-        menuSlotTypeRegistry().register(new ArmorStandSpawnSlotType(armorStandElementType));
 
         SessionListener sessionListener = new SessionListener(this, sessionManager);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -256,6 +255,14 @@ public class EasyArmorStands extends JavaPlugin {
 
         if (hasClass("org.bukkit.entity.ItemDisplay")) {
             loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
+        }
+
+        if (hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
+            try {
+                EntityPlaceAdapter.enable(this, sessionListener);
+            } catch (ReflectiveOperationException e) {
+                getLogger().log(Level.WARNING, "Failed to listen to entity place event", e);
+            }
         }
 
         loadUpdateChecker();
@@ -433,28 +440,12 @@ public class EasyArmorStands extends JavaPlugin {
         return loader;
     }
 
-    public MessageManager getMessageManager() {
-        return messageManager;
-    }
-
-    public PropertyTypeRegistry getPropertyTypeRegistry() {
-        return propertyTypeRegistry;
-    }
-
-    public EntityElementProviderRegistryImpl getEntityElementProviderRegistry() {
-        return entityElementProviderRegistry;
-    }
-
     public SessionManager getSessionManager() {
         return sessionManager;
     }
 
     public HistoryManager getHistoryManager() {
         return historyManager;
-    }
-
-    public UpdateManager getUpdateManager() {
-        return updateManager;
     }
 
     public BukkitAudiences getAdventure() {
@@ -484,7 +475,7 @@ public class EasyArmorStands extends JavaPlugin {
         if (item == null) {
             return false;
         }
-        ToolCapability toolCapability = EasyArmorStands.getInstance().getCapability(ToolCapability.class);
+        ToolCapability toolCapability = EasyArmorStandsPlugin.getInstance().getCapability(ToolCapability.class);
         if (toolCapability != null) {
             return toolCapability.isTool(item);
         }
@@ -522,6 +513,21 @@ public class EasyArmorStands extends JavaPlugin {
         }
         Menu menu = factory.createMenu(new ElementMenuContext(new EasPlayer(player), session, element));
         player.openInventory(menu.getInventory());
+    }
+
+    @Override
+    public @NotNull EntityElementProviderRegistryImpl entityElementProviderRegistry() {
+        return entityElementProviderRegistry;
+    }
+
+    @Override
+    public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
+        return menuSlotTypeRegistry;
+    }
+
+    @Override
+    public @NotNull PropertyTypeRegistry propertyTypeRegistry() {
+        return propertyTypeRegistry;
     }
 
     private interface Loader {

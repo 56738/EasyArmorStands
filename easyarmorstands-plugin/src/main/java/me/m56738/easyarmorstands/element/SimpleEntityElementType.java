@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -44,7 +44,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     public SimpleEntityElement<E> createElement(PropertyContainer properties) {
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        E entity = EasyArmorStands.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
+        E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityType, configurator);
         entity.teleport(location);
         return configurator.getElement();
     }

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.traincarts;
 
-import static me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry.menuSlotTypeRegistry;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 
 public class TrainCartsAddon {
     public TrainCartsAddon() {
-        menuSlotTypeRegistry().register(new TrainCartsModelListingSlotType());
+        EasyArmorStands.get().menuSlotTypeRegistry().register(new TrainCartsModelListingSlotType());
     }
 }

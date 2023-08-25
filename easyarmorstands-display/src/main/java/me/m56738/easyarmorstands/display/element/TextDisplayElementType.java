@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.display.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
@@ -13,7 +13,7 @@ public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     public TextDisplayElementType(DisplayRootNodeFactory<TextDisplay> factory) {
         super(
                 TextDisplay.class,
-                EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).
+                EasyArmorStandsPlugin.getInstance().getCapability(EntityTypeCapability.class).
                         getName(EntityType.TEXT_DISPLAY),
                 factory);
     }

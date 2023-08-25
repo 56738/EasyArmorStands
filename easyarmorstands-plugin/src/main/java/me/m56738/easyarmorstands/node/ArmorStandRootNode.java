@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.AddContext;
@@ -114,7 +114,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
             skeleton.remove();
         }
 
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
         ParticleCapability particleCapability = plugin.getCapability(ParticleCapability.class);
         if (glowCapability != null && !particleCapability.isVisibleThroughWalls()) {
@@ -160,7 +160,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     }
 
     public void hideSkeleton(Player player) {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         VisibilityCapability visibilityCapability = plugin.getCapability(VisibilityCapability.class);
         if (skeleton != null && visibilityCapability != null) {
             visibilityCapability.hideEntity(player, plugin, skeleton);

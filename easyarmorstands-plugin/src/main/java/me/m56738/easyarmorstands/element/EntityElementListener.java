@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
@@ -52,8 +52,8 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry) {
-        ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
-        GlowCapability glowCapability = EasyArmorStands.getInstance().getCapability(GlowCapability.class);
+        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
+        GlowCapability glowCapability = EasyArmorStandsPlugin.getInstance().getCapability(GlowCapability.class);
         if (glowCapability != null) {
             registry.register(new EntityGlowingProperty(entity, glowCapability));
         }
@@ -63,7 +63,7 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
-        EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
+        EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             registry.register(new EntityEquipmentProperty(entity, slot, equipmentCapability));
         }
@@ -75,16 +75,16 @@ public class EntityElementListener implements Listener {
         registry.register(new ArmorStandMarkerProperty(entity));
         registry.register(new ArmorStandSizeProperty(entity));
         registry.register(new ArmorStandVisibilityProperty(entity));
-        TickCapability tickCapability = EasyArmorStands.getInstance().getCapability(TickCapability.class);
+        TickCapability tickCapability = EasyArmorStandsPlugin.getInstance().getCapability(TickCapability.class);
         if (tickCapability != null) {
             registry.register(new ArmorStandCanTickProperty(entity, tickCapability));
         }
         registry.register(new ArmorStandGravityProperty(entity));
-        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStands.getInstance().getCapability(InvulnerabilityCapability.class);
+        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStandsPlugin.getInstance().getCapability(InvulnerabilityCapability.class);
         if (invulnerabilityCapability != null) {
             registry.register(new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
         }
-        LockCapability lockCapability = EasyArmorStands.getInstance().getCapability(LockCapability.class);
+        LockCapability lockCapability = EasyArmorStandsPlugin.getInstance().getCapability(LockCapability.class);
         if (lockCapability != null) {
             registry.register(new ArmorStandLockProperty(entity, lockCapability));
         }

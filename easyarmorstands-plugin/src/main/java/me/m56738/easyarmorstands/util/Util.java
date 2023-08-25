@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -134,7 +134,7 @@ public class Util {
 
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getEntity(UUID uuid, Class<T> type) {
-        Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
+        Entity entity = EasyArmorStandsPlugin.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
         if (entity == null || !type.isAssignableFrom(entity.getClass())) {
             return null;
         }

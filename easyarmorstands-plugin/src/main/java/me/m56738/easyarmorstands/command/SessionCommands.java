@@ -7,7 +7,7 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
@@ -115,7 +115,7 @@ public class SessionCommands {
             sendNoEntityError(sender);
             return null;
         }
-        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
         if (element == null) {
             sendUnsupportedEntityError(sender);
         }
@@ -180,7 +180,7 @@ public class SessionCommands {
     @CommandDescription("Open the spawn menu")
     public void spawn(EasPlayer sender) {
         Player player = sender.get();
-        Menu menu = EasyArmorStands.getInstance().createSpawnMenu(player);
+        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
         player.openInventory(menu.getInventory());
     }
 

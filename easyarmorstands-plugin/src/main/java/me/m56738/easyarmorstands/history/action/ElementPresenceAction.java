@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
@@ -37,7 +37,7 @@ abstract class ElementPresenceAction implements Action {
         reference = element.getReference();
         UUID newId = getId(reference);
         if (oldId != null && newId != null) {
-            EasyArmorStands.getInstance().getHistoryManager().onEntityReplaced(oldId, newId);
+            EasyArmorStandsPlugin.getInstance().getHistoryManager().onEntityReplaced(oldId, newId);
         }
 
         return true;

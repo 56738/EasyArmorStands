@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
@@ -31,25 +31,25 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
     private static class ParticleCapabilityImpl implements ParticleCapability {
         @Override
         public PointParticle createPoint(World world) {
-            DustParticleCapability capability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
+            DustParticleCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(DustParticleCapability.class);
             return new PointDustParticle(capability);
         }
 
         @Override
         public LineParticle createLine(World world) {
-            DustParticleCapability capability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
+            DustParticleCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(DustParticleCapability.class);
             return new LineDustParticle(capability);
         }
 
         @Override
         public CircleParticle createCircle(World world) {
-            DustParticleCapability capability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
+            DustParticleCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(DustParticleCapability.class);
             return new CircleDustParticle(capability);
         }
 
         @Override
         public AxisAlignedBoxParticle createAxisAlignedBox(World world) {
-            DustParticleCapability capability = EasyArmorStands.getInstance().getCapability(DustParticleCapability.class);
+            DustParticleCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(DustParticleCapability.class);
             return new AxisAlignedBoxDustParticle(capability);
         }
 

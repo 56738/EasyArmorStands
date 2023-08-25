@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.command.sender;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
@@ -28,11 +28,11 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     public EasPlayer(@NotNull Player player, @NotNull Audience audience) {
         super(player, audience);
         this.player = player;
-        this.history = EasyArmorStands.getInstance().getHistory(player);
+        this.history = EasyArmorStandsPlugin.getInstance().getHistory(player);
     }
 
     public EasPlayer(@NotNull Player player) {
-        this(player, EasyArmorStands.getInstance().getAdventure().player(player));
+        this(player, EasyArmorStandsPlugin.getInstance().getAdventure().player(player));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     }
 
     public @Nullable SessionImpl session() {
-        return EasyArmorStands.getInstance().getSessionManager().getSession(player);
+        return EasyArmorStandsPlugin.getInstance().getSessionManager().getSession(player);
     }
 
     @Override

@@ -10,7 +10,7 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -48,7 +48,7 @@ public class GlobalCommands {
     @CommandDescription("Shows an overview")
     public void showOverview(EasCommandSender sender) {
         if (sender.get().hasPermission("easyarmorstands.version")) {
-            String version = EasyArmorStands.getInstance().getDescription().getVersion();
+            String version = EasyArmorStandsPlugin.getInstance().getDescription().getVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
@@ -78,7 +78,7 @@ public class GlobalCommands {
     @CommandPermission("easyarmorstands.give")
     @CommandDescription("Gives you the editor tool")
     public void give(EasPlayer sender) {
-        sender.get().getInventory().addItem(EasyArmorStands.getInstance().createTool(sender.locale()));
+        sender.get().getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
@@ -90,7 +90,7 @@ public class GlobalCommands {
     @CommandPermission("easyarmorstands.reload")
     @CommandDescription("Reloads the configuration")
     public void reloadConfig(EasCommandSender sender) {
-        EasyArmorStands.getInstance().reload();
+        EasyArmorStandsPlugin.getInstance().reload();
         sender.sendMessage(Message.success("easyarmorstands.success.reloaded-config"));
     }
 
@@ -98,7 +98,7 @@ public class GlobalCommands {
     @CommandPermission("easyarmorstands.version")
     @CommandDescription("Displays the plugin version")
     public void version(EasCommandSender sender) {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         String version = plugin.getDescription().getVersion();
         String url = "https://github.com/56738/EasyArmorStands";
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
@@ -109,7 +109,7 @@ public class GlobalCommands {
     @CommandPermission("easyarmorstands.debug")
     @CommandDescription("Displays debug information")
     public void debug(EasCommandSender sender) {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         CapabilityLoader loader = plugin.getCapabilityLoader();
         String version = plugin.getDescription().getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));

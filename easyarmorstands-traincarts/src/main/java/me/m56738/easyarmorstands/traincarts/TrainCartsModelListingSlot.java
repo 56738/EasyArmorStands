@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.traincarts;
 
 import com.bergerkiller.bukkit.tc.TrainCarts;
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
@@ -36,7 +36,7 @@ public class TrainCartsModelListingSlot implements MenuSlot {
         Player player = click.player();
         click.queueTask(() -> {
             player.setItemOnCursor(null);
-            TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStands.getInstance())
+            TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStandsPlugin.getInstance())
                     .cancelOnRootRightClick()
                     .show()
                     .thenAccept(result -> {

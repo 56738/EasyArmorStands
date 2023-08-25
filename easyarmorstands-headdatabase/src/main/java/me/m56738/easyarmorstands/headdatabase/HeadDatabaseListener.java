@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.headdatabase;
 
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -11,9 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class HeadDatabaseListener implements Listener {
-    private final EasyArmorStands plugin;
+    private final EasyArmorStandsPlugin plugin;
 
-    public HeadDatabaseListener(EasyArmorStands plugin) {
+    public HeadDatabaseListener(EasyArmorStandsPlugin plugin) {
         this.plugin = plugin;
     }
 

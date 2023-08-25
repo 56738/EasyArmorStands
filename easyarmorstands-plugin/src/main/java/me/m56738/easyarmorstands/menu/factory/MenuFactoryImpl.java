@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.menu.factory;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuContext;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
@@ -42,7 +42,7 @@ class MenuFactoryImpl implements MenuFactory {
         if (background != null) {
             return background;
         } else {
-            return EasyArmorStands.getInstance().getConfiguration().menuBackground;
+            return EasyArmorStandsPlugin.getInstance().getConfiguration().menuBackground;
         }
     }
 }

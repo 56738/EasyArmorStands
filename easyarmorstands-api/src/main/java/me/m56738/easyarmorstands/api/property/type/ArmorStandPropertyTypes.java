@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.util.EulerAngle;
@@ -32,6 +33,6 @@ public class ArmorStandPropertyTypes {
     }
 
     private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return PropertyTypeRegistry.Holder.instance.get(Key.key("easyarmorstands", name), type);
+        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
     }
 }

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.region;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
@@ -38,7 +38,7 @@ public class RegionListener implements Listener {
     }
 
     private static Audience audience(Player player) {
-        return EasyArmorStands.getInstance().getAdventure().player(player);
+        return EasyArmorStandsPlugin.getInstance().getAdventure().player(player);
     }
 
     private boolean isAllowed(Player player, Location location) {

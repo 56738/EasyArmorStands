@@ -1,11 +1,9 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
-import me.m56738.easyarmorstands.capability.entityplace.EntityPlaceEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -23,6 +21,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -40,24 +40,18 @@ import org.bukkit.plugin.Plugin;
 public class SessionListener implements Listener {
     private final Plugin plugin;
     private final SessionManager manager;
-    private final EquipmentCapability equipmentCapability;
 
     public SessionListener(Plugin plugin, SessionManager manager) {
         this.plugin = plugin;
         this.manager = manager;
-        this.equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
-    }
-
-    private boolean isTool(Player player, ItemStack item) {
-        return EasyArmorStands.getInstance().isTool(item) && player.hasPermission("easyarmorstands.edit");
     }
 
     private boolean isHoldingTool(Player player) {
         if (!player.hasPermission("easyarmorstands.edit")) {
             return false;
         }
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
-        EquipmentCapability equipmentCapability = EasyArmorStands.getInstance().getCapability(EquipmentCapability.class);
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+        EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
         EntityEquipment equipment = player.getEquipment();
         for (EquipmentSlot hand : equipmentCapability.getHands()) {
             ItemStack item = equipmentCapability.getItem(equipment, hand);
@@ -68,48 +62,54 @@ public class SessionListener implements Listener {
         return false;
     }
 
-    public boolean onLeftClick(Player player, ItemStack item, Block block) {
+    public boolean handleLeftClick(Player player, Entity entity, Block block) {
         SessionImpl session = manager.getSession(player);
-        if (session != null) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, null, block));
-            return true;
+        if (session == null) {
+            return false;
         }
-        return isTool(player, item);
+        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
+        return true;
     }
 
-    public boolean onLeftClickEntity(Player player, Entity entity, ItemStack item) {
-        SessionImpl session = manager.getSession(player);
-        if (session != null) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, null));
-            return true;
-        }
-        return onLeftClick(player, item, null);
+    public boolean handleLeftClick(Player player) {
+        return handleLeftClick(player, null, null);
     }
 
-    public boolean onRightClick(Player player, ItemStack item, Block block) {
+    public boolean handleLeftClick(Player player, Block block) {
+        return handleLeftClick(player, null, block);
+    }
+
+    public boolean handleLeftClick(Player player, Entity entity) {
+        return handleLeftClick(player, entity, null);
+    }
+
+    private boolean handleRightClick(Player player, Entity entity, Block block) {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, null, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
             return true;
         }
-        if (!isTool(player, item)) {
+        if (!isHoldingTool(player)) {
             return false;
         }
         session = manager.start(player);
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            Menu menu = EasyArmorStands.getInstance().createSpawnMenu(session.player());
+            Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
             player.openInventory(menu.getInventory());
         }
         return true;
     }
 
-    public boolean onRightClickEntity(Player player, Entity entity, ItemStack item) {
-        SessionImpl session = manager.getSession(player);
-        if (session != null) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, null));
-            return true;
-        }
-        return onRightClick(player, item, null);
+    public boolean handleRightClick(Player player) {
+        return handleRightClick(player, null, null);
+    }
+
+    public boolean handleRightClick(Player player, Block block) {
+        return handleRightClick(player, null, block);
+    }
+
+    public boolean handleRightClick(Player player, Entity entity) {
+        return handleRightClick(player, entity, null);
     }
 
     @EventHandler
@@ -119,35 +119,33 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (onLeftClick(event.getPlayer(), event.getItem(), event.getClickedBlock())) {
+        if (handleLeftClick(event.getPlayer(), event.getClickedBlock())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onLeftClick(ArmSwingEvent event) {
+    public void onLeftClick(PlayerAnimationEvent event) {
+        if (event.getAnimationType() != PlayerAnimationType.ARM_SWING) {
+            return;
+        }
+
         Player player = event.getPlayer();
-        EntityEquipment equipment = player.getEquipment();
-        ItemStack item = equipmentCapability.getItem(equipment, event.getHand());
-        if (onLeftClick(player, item, null)) {
+        if (handleLeftClick(player)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onLeftClickEntity(EntityDamageByEntityEvent event) {
+    public void onLeftClick(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
         if (!(attacker instanceof Player)) {
             return;
         }
         Player player = (Player) attacker;
-        EntityEquipment equipment = player.getEquipment();
         Entity entity = event.getEntity();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (onLeftClickEntity(player, entity, item)) {
-                event.setCancelled(true);
-            }
+        if (handleLeftClick(player, entity)) {
+            event.setCancelled(true);
         }
     }
 
@@ -189,37 +187,30 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (onRightClick(event.getPlayer(), event.getItem(), event.getClickedBlock())) {
+        if (handleRightClick(event.getPlayer(), event.getClickedBlock())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onRightClickEntity(PlayerInteractEntityEvent event) {
+    public void onRightClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        EntityEquipment equipment = player.getEquipment();
         Entity entity = event.getRightClicked();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (onRightClickEntity(player, entity, item)) {
-                event.setCancelled(true);
-            }
+        if (handleRightClick(player, entity)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onRightClickAtEntity(PlayerInteractAtEntityEvent event) {
-        onRightClickEntity(event);
+        onRightClick(event);
     }
 
-    @EventHandler
-    public void onPlaceEntity(EntityPlaceEvent event) {
-        Entity entity = event.getEntity();
-        Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(EasyArmorStands.getInstance(), () -> {
-            Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+    public void onPlaceEntity(Player player, Entity entity) {
+        Bukkit.getScheduler().runTask(EasyArmorStandsPlugin.getInstance(), () -> {
+            Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
             if (element != null) {
-                EasyArmorStands.getInstance().getHistory(player).push(new ElementCreateAction(element));
+                EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(element));
             }
         });
     }
@@ -233,7 +224,7 @@ public class SessionListener implements Listener {
         Player player = (Player) damager;
         Entity entity = event.getEntity();
 
-        Element element = EasyArmorStands.getInstance().getEntityElementProviderRegistry().getElement(entity);
+        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
         if (element == null) {
             return;
         }
@@ -241,7 +232,7 @@ public class SessionListener implements Listener {
         ElementDestroyAction action = new ElementDestroyAction(element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
-                EasyArmorStands.getInstance().getHistory(player).push(action);
+                EasyArmorStandsPlugin.getInstance().getHistory(player).push(action);
             }
         });
     }
@@ -263,7 +254,7 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (EasyArmorStands.getInstance().isTool(item)) {
+            if (EasyArmorStandsPlugin.getInstance().isTool(item)) {
                 event.getInventory().setResult(null);
                 break;
             }

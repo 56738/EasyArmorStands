@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.property.armorstand;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
@@ -18,7 +18,7 @@ public class ArmorStandCanTickProperty implements Property<Boolean> {
     }
 
     public static boolean isSupported() {
-        return EasyArmorStands.getInstance().getCapability(TickCapability.class) != null;
+        return EasyArmorStandsPlugin.getInstance().getCapability(TickCapability.class) != null;
     }
 
     @Override

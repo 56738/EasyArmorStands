@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -66,8 +66,8 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(Player player) {
-        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(player);
-        EasyArmorStands.getInstance().openEntityMenu(player, session, this);
+        Session session = EasyArmorStandsPlugin.getInstance().getSessionManager().getSession(player);
+        EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
     }
 
     @Override

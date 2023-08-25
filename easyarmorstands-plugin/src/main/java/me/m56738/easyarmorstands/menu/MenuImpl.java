@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
@@ -103,7 +103,7 @@ public class MenuImpl implements InventoryHolder, Menu {
 
     @Override
     public void queueTask(@NotNull Runnable task) {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         plugin.getServer().getScheduler().runTask(plugin, task);
     }
 

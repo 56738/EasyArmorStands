@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,8 +27,8 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
     protected void configure(T entity) {
         entity.setPersistent(false);
         entity.setVisibleByDefault(false);
-        entity.setMetadata("easyarmorstands_ignore", new FixedMetadataValue(EasyArmorStands.getInstance(), true));
-        entity.setMetadata("easyarmorstands_force", new FixedMetadataValue(EasyArmorStands.getInstance(), true));
+        entity.setMetadata("easyarmorstands_ignore", new FixedMetadataValue(EasyArmorStandsPlugin.getInstance(), true));
+        entity.setMetadata("easyarmorstands_force", new FixedMetadataValue(EasyArmorStandsPlugin.getInstance(), true));
         entity.setGlowing(true);
     }
 
@@ -66,7 +66,7 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
             if (players.size() == 1) {
                 create();
             }
-            player.showEntity(EasyArmorStands.getInstance(), entity);
+            player.showEntity(EasyArmorStandsPlugin.getInstance(), entity);
         }
     }
 
@@ -75,8 +75,8 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
     public void hide(Player player) {
         boolean removed = players.remove(player);
         if (removed) {
-            if (EasyArmorStands.getInstance().isEnabled()) {
-                player.hideEntity(EasyArmorStands.getInstance(), entity);
+            if (EasyArmorStandsPlugin.getInstance().isEnabled()) {
+                player.hideEntity(EasyArmorStandsPlugin.getInstance(), entity);
             }
             if (players.isEmpty()) {
                 entity.remove();

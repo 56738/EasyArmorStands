@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.config.serializer;
 
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import net.kyori.adventure.key.Key;
@@ -10,13 +11,11 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 
-import static me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry.menuSlotTypeRegistry;
-
 public class MenuSlotTypeSerializer implements TypeSerializer<MenuSlotType> {
     private final MenuSlotTypeRegistry registry;
 
     public MenuSlotTypeSerializer() {
-        this(menuSlotTypeRegistry());
+        this(EasyArmorStands.get().menuSlotTypeRegistry());
     }
 
     public MenuSlotTypeSerializer(MenuSlotTypeRegistry registry) {

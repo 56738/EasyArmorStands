@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
@@ -25,7 +25,7 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
 
     @Override
     public EntityElement<E> getElement() {
-        Entity entity = EasyArmorStands.getInstance().getCapability(LookupCapability.class).getEntity(id);
+        Entity entity = EasyArmorStandsPlugin.getInstance().getCapability(LookupCapability.class).getEntity(id);
         if (entity == null) {
             return null;
         }

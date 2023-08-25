@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -23,7 +23,7 @@ public class ColorPickerContextImpl implements ColorPickerContext {
     public ColorPickerContextImpl(Property<ItemStack> property, PropertyContainer container) {
         this.property = property;
         this.container = container;
-        this.itemColorCapability = EasyArmorStands.getInstance().getCapability(ItemColorCapability.class);
+        this.itemColorCapability = EasyArmorStandsPlugin.getInstance().getCapability(ItemColorCapability.class);
     }
 
     public ColorPickerContextImpl(ItemPropertySlot slot) {

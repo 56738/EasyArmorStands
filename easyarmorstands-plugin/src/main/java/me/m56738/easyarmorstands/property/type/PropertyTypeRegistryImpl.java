@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.property.type;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import net.kyori.adventure.key.Key;
@@ -57,9 +57,9 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
         try {
             type.load(currentConfig.node(key.asString()));
         } catch (SerializationException e) {
-            EasyArmorStands.getInstance().getLogger().severe("Failed to load property " + type.key() + ": " + e.getMessage());
+            EasyArmorStandsPlugin.getInstance().getLogger().severe("Failed to load property " + type.key() + ": " + e.getMessage());
         } catch (Exception e) {
-            EasyArmorStands.getInstance().getLogger().log(Level.SEVERE, "Failed to load property " + type.key(), e);
+            EasyArmorStandsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load property " + type.key(), e);
         }
     }
 }

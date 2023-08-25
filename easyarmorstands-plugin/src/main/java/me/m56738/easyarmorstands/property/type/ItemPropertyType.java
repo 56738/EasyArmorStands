@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.property.type;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -19,7 +19,7 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
 
     @Override
     public Component getValueComponent(ItemStack value) {
-        return EasyArmorStands.getInstance().getCapability(ComponentCapability.class).getItemDisplayName(value);
+        return EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class).getItemDisplayName(value);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.display.api.property.type;
 
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
@@ -20,6 +20,6 @@ public class TextDisplayPropertyTypes {
     }
 
     private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return PropertyTypeRegistry.Holder.instance.get(Key.key("easyarmorstands", name), type);
+        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
     }
 }

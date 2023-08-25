@@ -1,13 +1,12 @@
 package me.m56738.easyarmorstands.headdatabase;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
-
-import static me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry.menuSlotTypeRegistry;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 
 public class HeadDatabaseAddon {
     public HeadDatabaseAddon() {
-        EasyArmorStands plugin = EasyArmorStands.getInstance();
-        menuSlotTypeRegistry().register(new HeadDatabaseSlotType());
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+        EasyArmorStands.get().menuSlotTypeRegistry().register(new HeadDatabaseSlotType());
         plugin.getServer().getPluginManager().registerEvents(new HeadDatabaseListener(plugin), plugin);
     }
 }

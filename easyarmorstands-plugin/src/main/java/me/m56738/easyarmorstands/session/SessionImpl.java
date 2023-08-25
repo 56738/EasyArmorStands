@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -420,7 +420,7 @@ public final class SessionImpl implements Session {
         private final ParticleCapability particleCapability;
 
         private ParticleFactoryImpl() {
-            this.particleCapability = EasyArmorStands.getInstance().getCapability(ParticleCapability.class);
+            this.particleCapability = EasyArmorStandsPlugin.getInstance().getCapability(ParticleCapability.class);
         }
 
         @Override

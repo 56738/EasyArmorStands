@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -52,7 +52,7 @@ public class ItemTemplate {
                 .resolver(resolver)
                 .build();
 
-        ComponentCapability componentCapability = EasyArmorStands.getInstance().getCapability(ComponentCapability.class);
+        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
 
         ItemStack item = template.clone();
         ItemMeta meta = item.getItemMeta();

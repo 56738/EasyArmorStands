@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
@@ -108,7 +108,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStands.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot));
+        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot));
         menu.addCloseListener((p, m) -> element.openMenu(p));
         player.openInventory(menu.getInventory());
     }
@@ -122,6 +122,6 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         if (meta == null) {
             return false;
         }
-        return EasyArmorStands.getInstance().getCapability(ItemColorCapability.class).hasColor(meta);
+        return EasyArmorStandsPlugin.getInstance().getCapability(ItemColorCapability.class).hasColor(meta);
     }
 }

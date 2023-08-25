@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
@@ -15,7 +15,7 @@ public class SimpleEntityElementProvider implements EntityElementProvider {
         if (entity instanceof Player && !entity.hasMetadata("NPC")) {
             return null;
         }
-        Component name = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
+        Component name = EasyArmorStandsPlugin.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
         return new SimpleEntityElementType<>(Util.getEntityClass(entity), name).getElement(entity);
     }
 
