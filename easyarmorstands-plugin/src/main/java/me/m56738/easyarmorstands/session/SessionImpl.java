@@ -5,9 +5,6 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.event.menu.SpawnMenuInitializeEvent;
-import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
@@ -18,10 +15,6 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.element.ArmorStandElementType;
-import me.m56738.easyarmorstands.menu.FakeLeftClick;
-import me.m56738.easyarmorstands.menu.builder.SimpleMenuBuilder;
-import me.m56738.easyarmorstands.menu.slot.SpawnSlot;
 import me.m56738.easyarmorstands.node.ElementNode;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
@@ -32,13 +25,10 @@ import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -55,7 +45,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -85,32 +74,6 @@ public final class SessionImpl implements Session {
         this.player = context.get();
         this.audience = context;
         this.context = context;
-    }
-
-    public static void openSpawnMenu(Player player) {
-        EasPlayer context = new EasPlayer(player);
-        Locale locale = context.pointers().getOrDefault(Identity.LOCALE, Locale.US);
-        SimpleMenuBuilder builder = new SimpleMenuBuilder();
-        if (player.hasPermission("easyarmorstands.spawn.armorstand")) {
-            ArmorStandElementType type = new ArmorStandElementType();
-            builder.addButton(new SpawnSlot(type, EasyArmorStands.getInstance().getConfiguration().getArmorStandButtonTemplate()));
-        }
-        Bukkit.getPluginManager().callEvent(new SpawnMenuInitializeEvent(player, locale, builder));
-        int size = builder.getSize();
-        if (size == 0) {
-            return;
-        }
-        Component title = MiniMessage.miniMessage().deserialize(EasyArmorStands.getInstance().getConfig().getString("menu.spawn.title"));
-        Menu menu = builder.build(title, locale);
-        if (size == 1) {
-            // Only one button, click it immediately
-            MenuSlot slot = menu.getSlot(0);
-            if (slot != null) {
-                slot.onClick(new FakeLeftClick(menu, 0, player));
-                return;
-            }
-        }
-        player.openInventory(menu.getInventory());
     }
 
     @Override

@@ -148,13 +148,6 @@ public class Util {
         return Math.round(value / increment) * increment;
     }
 
-    public static String capitalize(String value) {
-        if (value.isEmpty()) {
-            return value;
-        }
-        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
-    }
-
     public static float roundEntityAngle(float angle) {
         return Math.floor(angle * 256f / 360f) * 360f / 256f;
     }
@@ -228,7 +221,6 @@ public class Util {
                 .append(Component.text(red, NamedTextColor.RED))
                 .append(Component.text(green, NamedTextColor.GREEN))
                 .append(Component.text(blue, NamedTextColor.BLUE))
-                .color(NamedTextColor.GRAY)
                 .build();
     }
 }

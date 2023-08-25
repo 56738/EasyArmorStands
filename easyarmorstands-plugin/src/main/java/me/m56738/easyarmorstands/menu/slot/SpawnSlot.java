@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,15 +22,17 @@ import java.util.Locale;
 public class SpawnSlot implements MenuSlot {
     private final ElementType type;
     private final ItemTemplate template;
+    private final TagResolver resolver;
 
-    public SpawnSlot(ElementType type, ItemTemplate template) {
+    public SpawnSlot(ElementType type, ItemTemplate template, TagResolver resolver) {
         this.type = type;
         this.template = template;
+        this.resolver = resolver;
     }
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return template.render(locale);
+        return template.render(locale, resolver);
     }
 
     @Override

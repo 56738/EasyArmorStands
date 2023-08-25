@@ -6,7 +6,8 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.region.RegionListener;
 
 public class PlotSquaredAddon {
-    public PlotSquaredAddon(EasyArmorStands plugin) {
+    public PlotSquaredAddon() {
+        EasyArmorStands plugin = EasyArmorStands.getInstance();
         plugin.getServer().getPluginManager().registerEvents(new RegionListener(
                 "easyarmorstands.plotsquared.bypass",
                 new PlotSquaredPrivilegeChecker(new PlotAPI()),

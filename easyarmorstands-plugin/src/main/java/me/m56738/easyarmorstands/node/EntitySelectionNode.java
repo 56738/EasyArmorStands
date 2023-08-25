@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.node;
 
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
@@ -8,8 +9,8 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
+import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
-import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -87,7 +88,8 @@ public class EntitySelectionNode extends MenuNode {
 
             Player player = session.player();
             if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-                SessionImpl.openSpawnMenu(session.player());
+                Menu menu = EasyArmorStands.getInstance().createSpawnMenu(session.player());
+                player.openInventory(menu.getInventory());
                 return true;
             }
         }

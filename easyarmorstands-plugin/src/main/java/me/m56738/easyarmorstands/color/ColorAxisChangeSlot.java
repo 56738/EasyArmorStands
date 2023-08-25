@@ -1,46 +1,25 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.translation.GlobalTranslator;
+import me.m56738.easyarmorstands.item.ItemTemplate;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
-import org.bukkit.DyeColor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class ColorAxisChangeSlot extends ColorAxisSlot {
     private final ColorPickerContext context;
     private final ColorAxis axis;
-    private final DyeColor displayColor;
     private final int leftChange;
     private final int rightChange;
     private final int shiftChange;
 
-    public ColorAxisChangeSlot(ColorPickerContext context, ColorAxis axis, DyeColor displayColor, int leftChange, int rightChange, int shiftChange) {
-        super(context, axis);
+    public ColorAxisChangeSlot(ColorPickerContext context, ColorAxis axis, ItemTemplate itemTemplate, TagResolver resolver, int leftChange, int rightChange, int shiftChange) {
+        super(context, axis, itemTemplate, resolver);
         this.context = context;
         this.axis = axis;
-        this.displayColor = displayColor;
         this.leftChange = leftChange;
         this.rightChange = rightChange;
         this.shiftChange = shiftChange;
-    }
-
-    @Override
-    protected DyeColor getItemColor() {
-        return displayColor;
-    }
-
-    @Override
-    protected List<Component> getDescription(Locale locale) {
-        List<Component> description = new ArrayList<>(super.getDescription(locale));
-        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change"), locale));
-        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change.right-click"), locale));
-        description.add(GlobalTranslator.render(Message.buttonDescription("easyarmorstands.menu.color-picker.change.shift-click"), locale));
-        return description;
     }
 
     @Override
@@ -56,11 +35,9 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
             return;
         }
         Color color = context.getColor();
-        if (color != null) {
-            int value = axis.get(color);
-            int newValue = Math.max(0, Math.min(255, value + change));
-            Color newColor = axis.set(color, newValue);
-            context.setColor(newColor, click.menu());
-        }
+        int value = axis.get(color);
+        int newValue = Math.max(0, Math.min(255, value + change));
+        Color newColor = axis.set(color, newValue);
+        context.setColor(newColor);
     }
 }

@@ -33,5 +33,7 @@ public interface Menu extends InventoryHolder {
 
     void interceptNextClick(@NotNull MenuClickInterceptor interceptor);
 
+    void addCloseListener(@NotNull MenuCloseListener listener);
+
     void onClick(@NotNull MenuClick click);
 }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +15,7 @@ public class ColorIndicatorSlot implements ColorSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return context.getItem();
+        return context.item();
     }
 
     @Override

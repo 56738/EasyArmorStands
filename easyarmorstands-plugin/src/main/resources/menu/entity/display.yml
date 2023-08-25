@@ -1,0 +1,17 @@
+parent: entity/default
+height: 4
+slots:
+  easyarmorstands:display/content:
+    row: 2
+    column: 1
+    type: easyarmorstands:property
+  easyarmorstands:display/billboard:
+    row: 1
+    column: 4
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:display/billboard
+  easyarmorstands:entity/glowing:
+    enabled: false
+  easyarmorstands:entity/custom_name:
+    enabled: false

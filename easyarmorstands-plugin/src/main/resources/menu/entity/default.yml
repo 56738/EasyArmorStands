@@ -1,0 +1,30 @@
+title: <type>
+slots:
+  easyarmorstands:entity/custom_name:
+    row: 0
+    column: 4
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/custom_name
+  easyarmorstands:entity/glowing:
+    row: 0
+    column: 5
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/glowing
+  easyarmorstands:entity/visible:
+    row: 0
+    column: 6
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/visible
+  easyarmorstands:destroy:
+    type: easyarmorstands:destroy
+    row: 0
+    column: 8
+    config:
+      item:
+        type: tnt
+        name: <lang:easyarmorstands.menu.destroy>
+        description:
+          - <lang:easyarmorstands.menu.destroy.description>

@@ -10,12 +10,17 @@ import net.kyori.adventure.permission.PermissionChecker;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 public interface ChangeContext {
     @Contract(pure = true)
     @NotNull PermissionChecker permissions();
 
     @Contract(pure = true)
     @NotNull History history();
+
+    @Contract(pure = true)
+    @NotNull Locale locale();
 
     boolean canCreateElement(ElementType type, PropertyContainer properties);
 

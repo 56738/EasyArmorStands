@@ -1,0 +1,34 @@
+title: <lang:easyarmorstands.menu.spawn.title>
+slots:
+  'easyarmorstands:spawn/armor_stand':
+    row: 0
+    column: 0
+    type: easyarmorstands:spawn/armor_stand
+    config:
+      item:
+        type: armor_stand
+        name: <type>
+  'easyarmorstands:spawn/item_display':
+    row: 0
+    column: 1
+    type: easyarmorstands:spawn/item_display
+    config:
+      item:
+        type: stick
+        name: <type>
+  'easyarmorstands:spawn/block_display':
+    row: 0
+    column: 2
+    type: easyarmorstands:spawn/block_display
+    config:
+      item:
+        type: stone
+        name: <type>
+  'easyarmorstands:spawn/text_display':
+    row: 0
+    column: 3
+    type: easyarmorstands:spawn/text_display
+    config:
+      item:
+        type: name_tag
+        name: <type>

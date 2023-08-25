@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":easyarmorstands-region"))
+    implementation(project(":easyarmorstands-region"))
     compileOnly("org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
     compileOnly(libs.worldguard.v7)
 }

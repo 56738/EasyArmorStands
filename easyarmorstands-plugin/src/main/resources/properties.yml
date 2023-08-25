@@ -17,9 +17,7 @@ easyarmorstands:armor_stand/base_plate:
     enabled: <green><lang:easyarmorstands.property.common.visible>
     disabled: <red><lang:easyarmorstands.property.common.invisible>
   button:
-    type:
-      - stone_slab
-      - step
+    type: stone_slab
     name: <name>
     description:
       - <value>
@@ -38,8 +36,7 @@ easyarmorstands:armor_stand/gravity:
     enabled: <green><lang:easyarmorstands.property.common.enabled>
     disabled: <yellow><lang:easyarmorstands.property.common.disabled>
   button:
-    type:
-      - feather
+    type: feather
     name: <name>
     description:
       - <value>
@@ -53,8 +50,7 @@ easyarmorstands:armor_stand/invulnerable:
     enabled: <green><lang:easyarmorstands.property.invulnerability.enabled>
     disabled: <yellow><lang:easyarmorstands.property.invulnerability.disabled>
   button:
-    type:
-      - golden_apple
+    type: golden_apple
     name: <name>
     description:
       - <value>
@@ -66,9 +62,7 @@ easyarmorstands:armor_stand/lock:
     enabled: <green><lang:easyarmorstands.property.armor-stand.lock.enabled>
     disabled: <yellow><lang:easyarmorstands.property.armor-stand.lock.disabled>
   button:
-    type:
-      - iron_bars
-      - iron_fence
+    type: iron_bars
     name: <name>
     description:
       - <value>
@@ -81,9 +75,7 @@ easyarmorstands:armor_stand/marker:
     enabled: <green><lang:easyarmorstands.property.common.enabled>
     disabled: <yellow><lang:easyarmorstands.property.common.disabled>
   button:
-    type:
-      - sunflower
-      - double_plant
+    type: sunflower
     name: <name>
     description:
       - <value>
@@ -92,18 +84,23 @@ easyarmorstands:armor_stand/marker:
 easyarmorstands:armor_stand/pose/head:
   permission: easyarmorstands.property.armorstand.pose.head
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.head>'>
+
 easyarmorstands:armor_stand/pose/body:
   permission: easyarmorstands.property.armorstand.pose.body
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.body>'>
+
 easyarmorstands:armor_stand/pose/left_arm:
   permission: easyarmorstands.property.armorstand.pose.leftarm
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-arm>'>
+
 easyarmorstands:armor_stand/pose/right_arm:
   permission: easyarmorstands.property.armorstand.pose.rightarm
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-arm>'>
+
 easyarmorstands:armor_stand/pose/left_leg:
   permission: easyarmorstands.property.armorstand.pose.leftleg
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.left-leg>'>
+
 easyarmorstands:armor_stand/pose/right_leg:
   permission: easyarmorstands.property.armorstand.pose.rightleg
   name: <lang:easyarmorstands.property.armor-stand.pose.name:'<lang:easyarmorstands.armor-stand-part.right-leg>'>
@@ -115,9 +112,7 @@ easyarmorstands:armor_stand/size:
     NORMAL: <green><lang:easyarmorstands.property.armor-stand.size.normal>
     SMALL: <yellow><lang:easyarmorstands.property.armor-stand.size.small>
   button:
-    type:
-      - bone_meal
-      - ink_sack:15
+    type: bone_meal
     name: <name>
     description:
       - <value>
@@ -143,39 +138,26 @@ easyarmorstands:entity/custom_name/visible:
 easyarmorstands:entity/equipment/hand:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.hand.name>
-  position:
-    row: 3
-    column: 2
+
 easyarmorstands:entity/equipment/off_hand:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.off-hand.name>
-  position:
-    row: 3
-    column: 0
+
 easyarmorstands:entity/equipment/feet:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.feet.name>
-  position:
-    row: 5
-    column: 1
+
 easyarmorstands:entity/equipment/legs:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.legs.name>
-  position:
-    row: 4
-    column: 1
+
 easyarmorstands:entity/equipment/chest:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.chest.name>
-  position:
-    row: 3
-    column: 1
+
 easyarmorstands:entity/equipment/head:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.head.name>
-  position:
-    row: 2
-    column: 1
 
 easyarmorstands:entity/glowing:
   permission: easyarmorstands.property.glow
@@ -223,9 +205,7 @@ easyarmorstands:block_display/block:
     row: 2
     column: 1
   button:
-    type:
-      - oak_stairs
-      - stone
+    type: oak_stairs
     name: <name>
     description:
       - <value>
@@ -240,9 +220,7 @@ easyarmorstands:display/billboard:
     HORIZONTAL: <lang:easyarmorstands.property.display.billboard.horizontal>
     CENTER: <lang:easyarmorstands.property.display.billboard.center>
   button:
-    type:
-      - iron_bars
-      - iron_fence
+    type: iron_bars
     name: <name>
     description:
       - <value>
@@ -324,9 +302,7 @@ easyarmorstands:text_display/background:
   permission: easyarmorstands.property.display.text.background
   name: <lang:easyarmorstands.property.text-display.background.name>
   button:
-    type:
-      - stone_slab
-      - step
+    type: stone_slab
     name: <name>
     description:
       - <value>

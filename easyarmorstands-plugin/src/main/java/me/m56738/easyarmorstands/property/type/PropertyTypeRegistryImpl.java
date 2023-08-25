@@ -1,19 +1,21 @@
 package me.m56738.easyarmorstands.property.type;
 
-import me.m56738.easyarmorstands.EasConfig;
+import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import net.kyori.adventure.key.Key;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     @SuppressWarnings("rawtypes")
     private final Map<Key, PropertyType> types = new TreeMap<>();
-    private ConfigurationSection currentConfig;
+    private CommentedConfigurationNode currentConfig;
 
     @Override
     public void register(PropertyType<?> type) {
@@ -21,6 +23,11 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
         if (type instanceof ConfigurablePropertyType) {
             load((ConfigurablePropertyType<?>) type);
         }
+    }
+
+    @Override
+    public @Nullable PropertyType<?> getOrNull(Key key) {
+        return types.get(key);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -33,8 +40,8 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
         return propertyType;
     }
 
-    public void load(EasConfig config) {
-        currentConfig = config.getPropertyConfig();
+    public void load(CommentedConfigurationNode config) {
+        currentConfig = config;
         for (PropertyType<?> type : types.values()) {
             if (type instanceof ConfigurablePropertyType) {
                 load((ConfigurablePropertyType<?>) type);
@@ -47,9 +54,12 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
             return;
         }
         Key key = type.key();
-        ConfigurationSection section = currentConfig.getConfigurationSection(key.asString());
-        if (section != null) {
-            type.load(section);
+        try {
+            type.load(currentConfig.node(key.asString()));
+        } catch (SerializationException e) {
+            EasyArmorStands.getInstance().getLogger().severe("Failed to load property " + type.key() + ": " + e.getMessage());
+        } catch (Exception e) {
+            EasyArmorStands.getInstance().getLogger().log(Level.SEVERE, "Failed to load property " + type.key(), e);
         }
     }
 }

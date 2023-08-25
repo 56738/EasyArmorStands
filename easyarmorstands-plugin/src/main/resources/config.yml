@@ -2,87 +2,27 @@ update-check: true
 
 server-side-translation: true
 
-format:
-  title: '<gold><message>:'
-  success: <green><message>
-  warning: <yellow><message>
-  error: <red><message>
-  hint: <gray><message>
-  chat-button: <gray>[<message>]
-  hover: <gray><message>
-  button-name: <blue><message>
-  button-description: <gray><message>
+message-formats:
+  TITLE: '<gold><message>:'
+  SUCCESS: <green><message>
+  WARNING: <yellow><message>
+  ERROR: <red><message>
+  HINT: <gray><message>
+  CHAT_BUTTON: <gray>[<message>]
+  HOVER: <gray><message>
+  BUTTON_NAME: <blue><message>
+  BUTTON_DESCRIPTION: <gray><message>
+
+menu-background:
+  type: easyarmorstands:background
+  config:
+    item:
+      type: light_blue_stained_glass_pane
+      name: ''
 
 menu:
-  background:
-    type:
-      - light_blue_stained_glass_pane
-      - stained_glass_pane:3
-    name: ''
-  spawn:
-    title: <lang:easyarmorstands.menu.spawn.title>
-    buttons:
-      armor-stand:
-        type: armor_stand
-        name: <type>
-      item-display:
-        type: stick
-        name: <type>
-      block-display:
-        type: stone
-        name: <type>
-      text-display:
-        type: name_tag
-        name: <type>
-  color-picker:
-    title: <lang:easyarmorstands.menu.color-picker.title>
   element:
     buttons:
-      armor-stand-bone:
-        head:
-          type:
-            - player_head
-            - skull_item:3
-          name: <lang:easyarmorstands.armor-stand-part.head>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        body:
-          type: leather_chestplate
-          name: <lang:easyarmorstands.armor-stand-part.body>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        left-arm:
-          type: lever
-          name: <lang:easyarmorstands.armor-stand-part.left-arm>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        right-arm:
-          type: lever
-          name: <lang:easyarmorstands.armor-stand-part.right-arm>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        left-leg:
-          type: lever
-          name: <lang:easyarmorstands.armor-stand-part.left-leg>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        right-leg:
-          type: lever
-          name: <lang:easyarmorstands.armor-stand-part.right-leg>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-        position:
-          type: bucket
-          name: <lang:easyarmorstands.node.position>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
       display-bone:
         bounding-box:
           type: glass
@@ -91,30 +31,3 @@ menu:
             - <lang:easyarmorstands.menu.node.left-click-to-select>
             - <lang:easyarmorstands.menu.node.right-click-to-reset>
             - <lang:easyarmorstands.node.display.box.description>
-      destroy:
-        type: tnt
-        name: <lang:easyarmorstands.menu.destroy>
-        description:
-          - <lang:easyarmorstands.menu.destroy.description>
-      color-picker:
-        type: leather_chestplate
-        name: <lang:easyarmorstands.menu.color-picker.open>
-        active-description:
-          - <lang:easyarmorstands.menu.color-picker.click-target>
-      headdb:
-        name: <lang:easyarmorstands.menu.headdb.open>
-        description:
-          - <lang:easyarmorstands.menu.headdb.description>
-      traincarts-model-browser:
-        type: book
-        name: <lang:easyarmorstands.menu.traincarts.model-browser.open>
-        description:
-          - <lang:easyarmorstands.menu.traincarts.model-browser.description>
-
-tool:
-  type: blaze_rod
-  name: <gold><lang:easyarmorstands.tool-name>
-  description:
-    - <gray><lang:easyarmorstands.hint.select-entity>
-    - <gray><lang:easyarmorstands.hint.spawn-entity>
-    - <gray><lang:easyarmorstands.hint.deselect-entity>

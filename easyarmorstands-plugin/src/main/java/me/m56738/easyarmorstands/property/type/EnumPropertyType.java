@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.property.type;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.EnumMap;
 
@@ -19,11 +19,11 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     }
 
     @Override
-    public void load(ConfigurationSection config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         for (T value : values) {
-            String input = config.getString("value." + value.name());
-            valueNames.put(value, MiniMessage.miniMessage().deserializeOr(input, Component.text(value.name())));
+            valueNames.put(value, config.node("value", value.name())
+                    .get(Component.class, Component.text(value.name())));
         }
     }
 

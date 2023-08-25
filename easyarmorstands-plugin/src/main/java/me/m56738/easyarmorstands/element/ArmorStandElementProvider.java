@@ -7,7 +7,11 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public class ArmorStandElementProvider implements EntityElementProvider {
-    private final ArmorStandElementType type = new ArmorStandElementType();
+    private final ArmorStandElementType type;
+
+    public ArmorStandElementProvider(ArmorStandElementType type) {
+        this.type = type;
+    }
 
     @Override
     public @Nullable Element getElement(Entity entity) {

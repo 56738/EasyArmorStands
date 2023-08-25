@@ -3,14 +3,13 @@ package me.m56738.easyarmorstands.display.property.type;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display.Brightness;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class BrightnessPropertyType extends ConfigurablePropertyType<Brightness> {
     private String valueTemplate;
@@ -21,11 +20,10 @@ public class BrightnessPropertyType extends ConfigurablePropertyType<Brightness>
     }
 
     @Override
-    public void load(ConfigurationSection config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
-        valueTemplate = config.getString("value.template");
-        none = MiniMessage.miniMessage().deserializeOr(config.getString("value.none"),
-                Component.text("none", NamedTextColor.GRAY, TextDecoration.ITALIC));
+        valueTemplate = config.node("value", "template").getString();
+        none = config.node("value", "none").get(Component.class);
     }
 
     @Override

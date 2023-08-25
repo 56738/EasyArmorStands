@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.capability.armswing.ArmSwingEvent;
 import me.m56738.easyarmorstands.capability.entityplace.EntityPlaceEvent;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
@@ -96,7 +97,8 @@ public class SessionListener implements Listener {
         }
         session = manager.start(player);
         if (player.isSneaking() && player.hasPermission("easyarmorstands.spawn")) {
-            SessionImpl.openSpawnMenu(session.player());
+            Menu menu = EasyArmorStands.getInstance().createSpawnMenu(session.player());
+            player.openInventory(menu.getInventory());
         }
         return true;
     }

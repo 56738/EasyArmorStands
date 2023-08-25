@@ -9,27 +9,15 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.event.menu.EntityElementMenuInitializeEvent;
-import me.m56738.easyarmorstands.api.menu.MenuBuilder;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.menu.builder.SplitMenuBuilder;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
 import me.m56738.easyarmorstands.node.SimpleEntityNode;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Locale;
 
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement {
     private final E entity;
@@ -78,22 +66,8 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(Player player) {
-        EasPlayer easPlayer = new EasPlayer(player);
-        Locale locale = easPlayer.pointers().getOrDefault(Identity.LOCALE, Locale.US);
-        SplitMenuBuilder builder = new SplitMenuBuilder();
-        PropertyContainer container = new TrackedPropertyContainer(this, easPlayer);
-        Component title = EasyArmorStands.getInstance().getCapability(EntityTypeCapability.class).getName(entity.getType());
-        populateMenu(easPlayer, builder, container);
-        Bukkit.getPluginManager().callEvent(new EntityElementMenuInitializeEvent(player, locale, this, builder, container, title));
-        player.openInventory(builder.build(title, locale).getInventory());
-    }
-
-    @Override
-    public boolean hasItemSlots() {
-        return entity instanceof LivingEntity;
-    }
-
-    protected void populateMenu(EasPlayer player, MenuBuilder builder, PropertyContainer container) {
+        Session session = EasyArmorStands.getInstance().getSessionManager().getSession(player);
+        EasyArmorStands.getInstance().openEntityMenu(player, session, this);
     }
 
     @Override

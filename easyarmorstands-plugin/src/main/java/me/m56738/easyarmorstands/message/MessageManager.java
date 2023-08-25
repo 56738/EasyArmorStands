@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.message;
 
-import me.m56738.easyarmorstands.EasConfig;
+import me.m56738.easyarmorstands.config.EasConfig;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -50,7 +50,7 @@ public class MessageManager {
     }
 
     public void load(EasConfig config) {
-        styleTemplates.putAll(config.getMessageFormats());
+        styleTemplates.putAll(config.messageFormats);
 
         GlobalTranslator.translator().removeSource(registry);
 
@@ -74,7 +74,7 @@ public class MessageManager {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }
 
-        if (config.isServerSideTranslation()) {
+        if (config.serverSideTranslation) {
             GlobalTranslator.translator().addSource(registry);
         }
     }

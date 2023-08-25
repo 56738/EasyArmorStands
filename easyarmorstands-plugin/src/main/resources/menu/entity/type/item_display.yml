@@ -1,0 +1,13 @@
+parent:
+  - entity/display
+  - entity/item_holder
+slots:
+  easyarmorstands:display/content:
+    config:
+      property: easyarmorstands:item_display/item
+  easyarmorstands:item_display/transform:
+    row: 1
+    column: 5
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:item_display/transform

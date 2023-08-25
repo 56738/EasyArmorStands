@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.property.type;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     private Component enabled;
@@ -16,11 +16,11 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     }
 
     @Override
-    public void load(ConfigurationSection config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
-        enabled = MiniMessage.miniMessage().deserializeOrNull(config.getString("value.enabled"));
-        disabled = MiniMessage.miniMessage().deserializeOrNull(config.getString("value.disabled"));
-        none = MiniMessage.miniMessage().deserializeOrNull(config.getString("value.none"));
+        enabled = config.node("value", "enabled").get(Component.class);
+        disabled = config.node("value", "disabled").get(Component.class);
+        none = config.node("value", "none").get(Component.class);
     }
 
     @Override

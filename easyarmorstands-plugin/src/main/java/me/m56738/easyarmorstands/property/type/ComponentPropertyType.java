@@ -6,12 +6,10 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.ComponentButton;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     private final String command;
@@ -23,10 +21,9 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     }
 
     @Override
-    public void load(ConfigurationSection config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
-        none = MiniMessage.miniMessage().deserializeOr(config.getString("value.none"),
-                Component.text("none", NamedTextColor.GRAY, TextDecoration.ITALIC));
+        none = config.node("value", "none").get(Component.class);
     }
 
     @Override

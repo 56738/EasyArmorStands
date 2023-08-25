@@ -1,0 +1,156 @@
+title: <lang:easyarmorstands.menu.color-picker.title>
+slots:
+  easyarmorstands:color_picker/indicator:
+    row: 0
+    column: 2
+    type: easyarmorstands:color_picker/indicator
+  easyarmorstands:color_picker/red/decrement:
+    row: 1
+    column: 1
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: RED
+      item:
+        type: gray_concrete
+        name: <lang:easyarmorstands.color.red>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: -10
+        right: -1
+        shift: -100
+  easyarmorstands:color_picker/red:
+    row: 1
+    column: 2
+    type: easyarmorstands:color_picker/axis
+    config:
+      axis: RED
+      item:
+        type: red_concrete
+        name: <lang:easyarmorstands.color.red>
+        description:
+          - <value>
+          - <color>
+  easyarmorstands:color_picker/red/increment:
+    row: 1
+    column: 3
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: RED
+      item:
+        type: light_gray_concrete
+        name: <lang:easyarmorstands.color.red>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: 10
+        right: 1
+        shift: 100
+  easyarmorstands:color_picker/green/decrement:
+    row: 2
+    column: 1
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: GREEN
+      item:
+        type: gray_concrete
+        name: <lang:easyarmorstands.color.green>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: -10
+        right: -1
+        shift: -100
+  easyarmorstands:color_picker/green:
+    row: 2
+    column: 2
+    type: easyarmorstands:color_picker/axis
+    config:
+      axis: GREEN
+      item:
+        type: lime_concrete
+        name: <lang:easyarmorstands.color.green>
+        description:
+          - <value>
+          - <color>
+  easyarmorstands:color_picker/green/increment:
+    row: 2
+    column: 3
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: GREEN
+      item:
+        type: light_gray_concrete
+        name: <lang:easyarmorstands.color.green>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: 10
+        right: 1
+        shift: 100
+  easyarmorstands:color_picker/blue/decrement:
+    row: 3
+    column: 1
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: BLUE
+      item:
+        type: gray_concrete
+        name: <lang:easyarmorstands.color.blue>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: -10
+        right: -1
+        shift: -100
+  easyarmorstands:color_picker/blue:
+    row: 3
+    column: 2
+    type: easyarmorstands:color_picker/axis
+    config:
+      axis: BLUE
+      item:
+        type: blue_concrete
+        name: <lang:easyarmorstands.color.blue>
+        description:
+          - <value>
+          - <color>
+  easyarmorstands:color_picker/blue/increment:
+    row: 3
+    column: 3
+    type: easyarmorstands:color_picker/change
+    config:
+      axis: BLUE
+      item:
+        type: light_gray_concrete
+        name: <lang:easyarmorstands.color.blue>
+        description:
+          - <value>
+          - <color>
+          - <lang:easyarmorstands.menu.color-picker.change>
+          - <lang:easyarmorstands.menu.color-picker.change.right-click>
+          - <lang:easyarmorstands.menu.color-picker.change.shift-click>
+      change:
+        left: 10
+        right: 1
+        shift: 100

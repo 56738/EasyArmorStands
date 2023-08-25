@@ -1,0 +1,5 @@
+parent: entity/display
+slots:
+  easyarmorstands:display/content:
+    config:
+      property: easyarmorstands:block_display/block

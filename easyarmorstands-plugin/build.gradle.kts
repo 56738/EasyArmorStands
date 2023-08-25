@@ -18,6 +18,8 @@ dependencies {
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
+    api(libs.commodore)
+    api(libs.configurate.yaml)
     api(libs.joml)
     "addon"(project(":easyarmorstands-display"))
     "addon"(project(":easyarmorstands-headdatabase"))
@@ -41,12 +43,13 @@ tasks {
 
     shadowJar {
         val prefix = "me.m56738.easyarmorstands.lib"
-        relocate("org.joml", "$prefix.joml")
-        relocate("net.kyori", "$prefix.kyori")
         relocate("cloud.commandframework", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
+        relocate("net.kyori", "$prefix.kyori")
         relocate("org.bstats", "$prefix.bstats")
+        relocate("org.joml", "$prefix.joml")
+        relocate("org.spongepowered.configurate", "$prefix.configurate")
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }

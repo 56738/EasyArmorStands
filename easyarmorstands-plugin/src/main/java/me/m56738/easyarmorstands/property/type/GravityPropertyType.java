@@ -5,9 +5,10 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.GravityToggleButton;
 import net.kyori.adventure.key.Key;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,9 +21,9 @@ public class GravityPropertyType extends BooleanTogglePropertyType {
     }
 
     @Override
-    public void load(ConfigurationSection config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
-        canTickWarning = config.getStringList("can-tick-warning");
+        canTickWarning = config.node("can-tick-warning").getList(String.class);
     }
 
     @Override

@@ -13,10 +13,13 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 public class EasPlayer extends EasCommandSender implements ChangeContext {
     private final @NotNull Player player;
@@ -40,6 +43,11 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     @Override
     public @NotNull History history() {
         return history;
+    }
+
+    @Override
+    public @NotNull Locale locale() {
+        return getOrDefault(Identity.LOCALE, Locale.US);
     }
 
     public @Nullable SessionImpl session() {

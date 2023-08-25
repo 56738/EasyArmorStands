@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.node.NodeFactory;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -15,17 +16,19 @@ public class NodeSlot implements MenuSlot {
     private final NodeFactory nodeFactory;
     private final Consumer<MenuClick> resetAction;
     private final ItemTemplate itemTemplate;
+    private final TagResolver resolver;
 
-    public NodeSlot(Session session, NodeFactory nodeFactory, Consumer<MenuClick> resetAction, ItemTemplate itemTemplate) {
+    public NodeSlot(Session session, NodeFactory nodeFactory, Consumer<MenuClick> resetAction, ItemTemplate itemTemplate, TagResolver resolver) {
         this.session = session;
         this.nodeFactory = nodeFactory;
         this.resetAction = resetAction;
         this.itemTemplate = itemTemplate;
+        this.resolver = resolver;
     }
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return itemTemplate.render(locale);
+        return itemTemplate.render(locale, resolver);
     }
 
     @Override

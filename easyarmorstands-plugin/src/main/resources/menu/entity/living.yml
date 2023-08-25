@@ -1,0 +1,38 @@
+parent: entity/item_holder
+slots:
+  easyarmorstands:entity/equipment/hand:
+    row: 3
+    column: 2
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/hand
+  easyarmorstands:entity/equipment/off_hand:
+    row: 3
+    column: 0
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/off_hand
+  easyarmorstands:entity/equipment/feet:
+    row: 5
+    column: 1
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/feet
+  easyarmorstands:entity/equipment/legs:
+    row: 4
+    column: 1
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/legs
+  easyarmorstands:entity/equipment/chest:
+    row: 3
+    column: 1
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/chest
+  easyarmorstands:entity/equipment/head:
+    row: 2
+    column: 1
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/equipment/head

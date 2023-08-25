@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStands;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
+import me.m56738.easyarmorstands.api.menu.MenuCloseListener;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -15,6 +16,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
@@ -22,6 +25,7 @@ public class MenuImpl implements InventoryHolder, Menu {
     private final Inventory inventory;
     private final MenuSlot[] slots;
     private final Locale locale;
+    private final List<MenuCloseListener> closeListeners = new ArrayList<>();
     private MenuClickInterceptor currentInterceptor;
 
     public MenuImpl(Component title, MenuSlot[] slots, Locale locale) {
@@ -114,7 +118,15 @@ public class MenuImpl implements InventoryHolder, Menu {
     }
 
     @Override
+    public void addCloseListener(@NotNull MenuCloseListener listener) {
+        closeListeners.add(listener);
+    }
+
+    @Override
     public void close(@NotNull Player player) {
+        for (MenuCloseListener listener : closeListeners) {
+            listener.onClose(player, this);
+        }
         if (inventory.equals(player.getOpenInventory().getTopInventory())) {
             player.closeInventory();
         }

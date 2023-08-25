@@ -13,7 +13,24 @@ public interface PropertyTypeRegistry {
 
     void register(PropertyType<?> type);
 
-    @Nullable <T> PropertyType<T> getOrNull(Key key, Class<T> type);
+    @Nullable PropertyType<?> getOrNull(Key key);
+
+    default @NotNull PropertyType<?> get(Key key) {
+        PropertyType<?> propertyType = getOrNull(key);
+        if (propertyType == null) {
+            throw new UnknownPropertyTypeException(key, null);
+        }
+        return propertyType;
+    }
+
+    @SuppressWarnings("unchecked")
+    default @Nullable <T> PropertyType<T> getOrNull(Key key, Class<T> type) {
+        PropertyType<?> propertyType = getOrNull(key);
+        if (propertyType == null || type != propertyType.getValueType()) {
+            return null;
+        }
+        return (PropertyType<T>) propertyType;
+    }
 
     default @NotNull <T> PropertyType<T> get(Key key, Class<T> type) {
         PropertyType<T> propertyType = getOrNull(key, type);

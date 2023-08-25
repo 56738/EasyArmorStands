@@ -1,12 +1,14 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public interface PropertyType<T> extends Keyed {
     @NotNull Class<T> getValueType();
@@ -28,10 +30,14 @@ public interface PropertyType<T> extends Keyed {
      */
     Component getValueComponent(T value);
 
+    default void load(CommentedConfigurationNode config) throws SerializationException {
+    }
+
     default T cloneValue(T value) {
         return value;
     }
 
-    default void populateMenu(MenuBuilder builder, Property<T> property, PropertyContainer container) {
+    default @Nullable MenuSlot createSlot(Property<T> property, PropertyContainer container) {
+        return null;
     }
 }
