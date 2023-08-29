@@ -2,6 +2,14 @@ update-check: true
 
 server-side-translation: true
 
+tool:
+  type: blaze_rod
+  name: <gold><lang:easyarmorstands.tool-name>
+  description:
+    - <gray><lang:easyarmorstands.hint.select-entity>
+    - <gray><lang:easyarmorstands.hint.spawn-entity>
+    - <gray><lang:easyarmorstands.hint.deselect-entity>
+
 message-formats:
   TITLE: '<gold><message>:'
   SUCCESS: <green><message>

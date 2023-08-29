@@ -18,7 +18,8 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
     public ItemTemplate deserialize(Type type, ConfigurationNode node) throws SerializationException {
         ItemStack template = new ItemStack(
                 node.node("type").get(Material.class, Material.AIR),
-                node.node("amount").getInt(1));
+                node.node("amount").getInt(1),
+                (short) node.node("data").getInt());
         String name = node.node("name").getString();
         List<String> description = node.node("description").getList(String.class);
         return new ItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());

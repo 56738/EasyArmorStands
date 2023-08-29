@@ -38,7 +38,9 @@ import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
+import me.m56738.easyarmorstands.config.VersionOverrideLoader;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
+import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.EntityElementListener;
@@ -61,7 +63,6 @@ import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
@@ -108,6 +109,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
+    private VersionOverrideLoader versionOverrideLoader;
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -165,6 +167,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         new Metrics(this, 17911);
         adventure = BukkitAudiences.create(this);
 
+        versionOverrideLoader = new VersionOverrideLoader();
+        versionOverrideLoader.load(this);
         loadConfig();
 
         messageManager = new MessageManager(this);
@@ -435,7 +439,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .source(getConfigSource(name))
                 .build();
 
-        return defaultLoader.load();
+        CommentedConfigurationNode node = defaultLoader.load();
+
+        return versionOverrideLoader.apply(name, node, defaultLoader);
     }
 
     public History getHistory(Player player) {

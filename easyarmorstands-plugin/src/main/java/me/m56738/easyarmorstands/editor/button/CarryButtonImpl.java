@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.axis.CarryAxis;
-import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.button.CarryButton;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.editor.node.CarryNode;
 import net.kyori.adventure.text.Component;

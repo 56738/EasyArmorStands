@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.axis.CarryAxis;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.editor.node.EditorAxisNode;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import net.kyori.adventure.text.Component;
 

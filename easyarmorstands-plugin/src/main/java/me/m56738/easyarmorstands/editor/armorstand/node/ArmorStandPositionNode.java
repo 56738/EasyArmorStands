@@ -12,8 +12,8 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.axis.LocationCarryAxis;
 import me.m56738.easyarmorstands.editor.axis.LocationMoveAxis;
 import me.m56738.easyarmorstands.editor.axis.LocationYawRotateAxis;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 

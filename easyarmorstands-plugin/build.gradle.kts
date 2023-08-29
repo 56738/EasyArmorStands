@@ -8,7 +8,9 @@ configurations {
 }
 
 dependencies {
-    compileOnly(libs.bukkit)
+    compileOnly(libs.bukkit) {
+        exclude("org.yaml", "snakeyaml")
+    }
     api(project(":easyarmorstands-api"))
     api(libs.adventure.platform.bukkit)
     api(libs.adventure.text.minimessage)
@@ -50,6 +52,7 @@ tasks {
         relocate("org.bstats", "$prefix.bstats")
         relocate("org.joml", "$prefix.joml")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
+        relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }
