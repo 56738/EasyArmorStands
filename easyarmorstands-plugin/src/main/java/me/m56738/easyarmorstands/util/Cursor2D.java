@@ -19,7 +19,7 @@ public class Cursor2D {
 
     public Cursor2D(Session session) {
         this.session = session;
-        this.particle = session.particleFactory().createPoint();
+        this.particle = session.particleProvider().createPoint();
     }
 
     public void start(Vector3dc origin, Vector3dc cursor, Vector3dc normal) {
@@ -34,7 +34,7 @@ public class Cursor2D {
 
     private void refresh() {
         Vector3d cursor = new Vector3d();
-        session.eyeMatrix().invertAffine(new Matrix4d()).transformPosition(current, cursor);
+        session.eyeMatrix().invert(new Matrix4d()).transformPosition(current, cursor);
         this.cursor.x = cursor.x;
         this.cursor.y = cursor.y;
     }

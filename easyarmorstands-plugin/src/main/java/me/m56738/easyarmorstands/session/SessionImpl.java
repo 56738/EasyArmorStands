@@ -4,18 +4,25 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.menu.CarryButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.node.menu.MenuButtonProvider;
+import me.m56738.easyarmorstands.api.editor.node.menu.MoveButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.node.menu.RotateButtonBuilder;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.Particle;
-import me.m56738.easyarmorstands.api.particle.ParticleFactory;
+import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.node.ElementNode;
+import me.m56738.easyarmorstands.node.carry.CarryButtonBuilderImpl;
+import me.m56738.easyarmorstands.node.move.MoveButtonBuilderImpl;
+import me.m56738.easyarmorstands.node.rotate.RotateButtonBuilderImpl;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -57,7 +64,8 @@ public final class SessionImpl implements Session {
     private final Audience audience;
     private final ChangeContext context;
     private final Set<Particle> particles = new HashSet<>();
-    private final ParticleFactory particleFactory = new ParticleFactoryImpl();
+    private final ParticleProvider particleProvider = new ParticleProviderImpl(this);
+    private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private int clickTicks = 5;
     private double snapIncrement = DEFAULT_SNAP_INCREMENT;
     private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
@@ -112,19 +120,6 @@ public final class SessionImpl implements Session {
         nodeStack.push(node);
         node.onAdd(AddContextImpl.INSTANCE);
         node.onEnter(new EnterContextImpl(cursor));
-    }
-
-    @Override
-    public void replaceNode(@NotNull Node node) {
-        if (!valid) {
-            return;
-        }
-        Node removed = nodeStack.pop();
-        removed.onExit(ExitContextImpl.INSTANCE);
-        removed.onRemove(RemoveContextImpl.INSTANCE);
-        nodeStack.push(node);
-        node.onAdd(AddContextImpl.INSTANCE);
-        node.onEnter(new EnterContextImpl(null));
     }
 
     @Override
@@ -350,31 +345,46 @@ public final class SessionImpl implements Session {
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
+        Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3dc origin = Util.toVector3d(eyeLocation);
         Vector3dc target = origin.fma(length, Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
         double threshold = getLookThreshold();
-        return new EyeRayImpl(origin, target, length, threshold);
+        float yaw = eyeLocation.getYaw();
+        float pitch = eyeLocation.getPitch();
+        return new EyeRayImpl(origin, target, length, threshold, yaw, pitch, eyeMatrix);
     }
 
     @Override
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
         double length = getRange();
-        Matrix4dc eyeMatrix = eyeMatrix();
+        Location eyeLocation = player.getEyeLocation();
+        Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
         Vector3d target = eyeMatrix.transformDirection(0, 0, 1, new Vector3d())
                 .mulAdd(length, origin);
         double threshold = getLookThreshold();
-        return new EyeRayImpl(origin, target, length, threshold);
+        float yaw = eyeLocation.getYaw();
+        float pitch = eyeLocation.getPitch();
+        return new EyeRayImpl(origin, target, length, threshold, yaw, pitch, eyeMatrix);
+    }
+
+    private Matrix4dc eyeMatrix(Location eyeLocation) {
+        return Util.toMatrix4d(eyeLocation);
     }
 
     @Override
     public @NotNull Matrix4dc eyeMatrix() {
-        return Util.toMatrix4d(player.getEyeLocation());
+        return eyeMatrix(player.getEyeLocation());
     }
 
     @Override
-    public @NotNull ParticleFactory particleFactory() {
-        return particleFactory;
+    public @NotNull ParticleProvider particleProvider() {
+        return particleProvider;
+    }
+
+    @Override
+    public @NotNull MenuButtonProvider menuEntryProvider() {
+        return menuButtonProvider;
     }
 
     @Override
@@ -387,12 +397,18 @@ public final class SessionImpl implements Session {
         private final Vector3dc target;
         private final double length;
         private final double threshold;
+        private final float yaw;
+        private final float pitch;
+        private final Matrix4dc matrix;
 
-        public EyeRayImpl(Vector3dc origin, Vector3dc target, double length, double threshold) {
+        public EyeRayImpl(Vector3dc origin, Vector3dc target, double length, double threshold, float yaw, float pitch, Matrix4dc matrix) {
             this.origin = origin;
             this.target = target;
             this.length = length;
             this.threshold = threshold;
+            this.yaw = yaw;
+            this.pitch = pitch;
+            this.matrix = matrix;
         }
 
         @Override
@@ -414,33 +430,73 @@ public final class SessionImpl implements Session {
         public double threshold() {
             return threshold;
         }
+
+        @Override
+        public float yaw() {
+            return yaw;
+        }
+
+        @Override
+        public float pitch() {
+            return pitch;
+        }
+
+        @Override
+        public Matrix4dc matrix() {
+            return matrix;
+        }
     }
 
-    private class ParticleFactoryImpl implements ParticleFactory {
+    private static class ParticleProviderImpl implements ParticleProvider {
+        private final SessionImpl session;
         private final ParticleCapability particleCapability;
 
-        private ParticleFactoryImpl() {
+        private ParticleProviderImpl(SessionImpl session) {
+            this.session = session;
             this.particleCapability = EasyArmorStandsPlugin.getInstance().getCapability(ParticleCapability.class);
         }
 
         @Override
         public PointParticle createPoint() {
-            return particleCapability.createPoint(getWorld());
+            return particleCapability.createPoint(session.getWorld());
         }
 
         @Override
         public LineParticle createLine() {
-            return particleCapability.createLine(getWorld());
+            return particleCapability.createLine(session.getWorld());
         }
 
         @Override
         public CircleParticle createCircle() {
-            return particleCapability.createCircle(getWorld());
+            return particleCapability.createCircle(session.getWorld());
         }
 
         @Override
         public AxisAlignedBoxParticle createAxisAlignedBox() {
-            return particleCapability.createAxisAlignedBox(getWorld());
+            return particleCapability.createAxisAlignedBox(session.getWorld());
+        }
+    }
+
+    private static class MenuButtonProviderImpl implements MenuButtonProvider {
+        private final Session session;
+
+        private MenuButtonProviderImpl(Session session) {
+            this.session = session;
+        }
+
+        @Override
+        public MoveButtonBuilder move() {
+            return new MoveButtonBuilderImpl(session);
+        }
+
+        @Override
+        public RotateButtonBuilder rotate() {
+            return new RotateButtonBuilderImpl(session);
+        }
+
+        @Override
+        public CarryButtonBuilder carry() {
+            return new CarryButtonBuilderImpl(session);
         }
     }
 }

@@ -15,7 +15,6 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.node.MenuNode;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
@@ -33,11 +32,11 @@ public class DisplayMenuNode extends MenuNode implements ResettableNode {
     private boolean isVisible;
     private boolean isActive;
 
-    public DisplayMenuNode(Session session, Component name, PropertyContainer container) {
-        super(session, name);
+    public DisplayMenuNode(Session session, PropertyContainer container) {
+        super(session);
         this.session = session;
         this.container = container;
-        this.boxParticle = session.particleFactory().createAxisAlignedBox();
+        this.boxParticle = session.particleProvider().createAxisAlignedBox();
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);

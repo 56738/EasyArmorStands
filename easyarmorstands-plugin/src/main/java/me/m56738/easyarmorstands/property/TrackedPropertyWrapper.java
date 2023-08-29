@@ -45,9 +45,10 @@ class TrackedPropertyWrapper<T> implements Property<T> {
 
     @Override
     public @Nullable PendingChange prepareChange(T value) {
-        if (property.prepareChange(value) == null) {
+        PendingChange change = property.prepareChange(value);
+        if (change == null) {
             return null;
         }
-        return PendingChange.of(this, value);
+        return new TrackedPendingChangeWrapper<>(container, element, property, value, change);
     }
 }

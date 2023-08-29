@@ -7,12 +7,13 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.util.Util;
+import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
 public abstract class SimpleButton implements Button {
-    protected final PointParticle particle;
+    private final PointParticle particle;
     private final Session session;
     private final ParticleColor color;
     private int priority = 0;
@@ -20,11 +21,19 @@ public abstract class SimpleButton implements Button {
     public SimpleButton(Session session, ParticleColor color) {
         this.session = session;
         this.color = color;
-        this.particle = session.particleFactory().createPoint();
+        this.particle = session.particleProvider().createPoint();
         this.particle.setSize(Util.PIXEL);
     }
 
     protected abstract Vector3dc getPosition();
+
+    protected Quaterniondc getRotation() {
+        return Util.IDENTITY;
+    }
+
+    protected boolean isBillboard() {
+        return true;
+    }
 
     public void setPriority(int priority) {
         this.priority = priority;
@@ -45,6 +54,8 @@ public abstract class SimpleButton implements Button {
     @Override
     public void updatePreview(boolean focused) {
         particle.setPosition(getPosition());
+        particle.setRotation(getRotation());
+        particle.setBillboard(isBillboard());
         particle.setColor(focused ? ParticleColor.YELLOW : color);
     }
 

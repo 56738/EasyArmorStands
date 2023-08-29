@@ -7,11 +7,13 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.menu.MenuButton;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -30,11 +32,13 @@ public class EntitySelectionNode extends MenuNode {
     private final Session session;
     private final EntityElementProviderRegistryImpl providerRegistry;
     private final Map<Entity, ElementButton> buttons = new HashMap<>();
+    private final Component name;
 
-    public EntitySelectionNode(Session session, Component name, EntityElementProviderRegistryImpl providerRegistry) {
-        super(session, name);
+    public EntitySelectionNode(Session session, EntityElementProviderRegistryImpl providerRegistry) {
+        super(session);
         this.session = session;
         this.providerRegistry = providerRegistry;
+        this.name = Message.component("easyarmorstands.node.select-entity");
     }
 
     @Override
@@ -73,6 +77,8 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         super.onUpdate(context);
+
+        session.setActionBar(name);
     }
 
     @Override
@@ -144,17 +150,17 @@ public class EntitySelectionNode extends MenuNode {
     }
 
     private static class ElementButton implements MenuButton {
-        private final Session session;
         private final SelectableElement element;
+        private final Button button;
 
         private ElementButton(Session session, SelectableElement element) {
-            this.session = session;
             this.element = element;
+            this.button = element.createButton(session);
         }
 
         @Override
-        public Button createButton() {
-            return element.createButton(session);
+        public Button getButton() {
+            return button;
         }
 
         @Override

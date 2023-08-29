@@ -9,7 +9,6 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.display.command.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.display.command.DisplayCommands;
 import me.m56738.easyarmorstands.display.editor.DisplaySessionListener;
-import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
 import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
@@ -44,9 +43,9 @@ public class DisplayAddon {
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
 
-        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class, DisplayRootNode::new);
-        blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class, DisplayRootNode::new);
-        textDisplayType = new TextDisplayElementType(DisplayRootNode::new);
+        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
+        blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
+        textDisplayType = new TextDisplayElementType();
 
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));

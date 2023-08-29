@@ -16,7 +16,7 @@ public class Cursor3D {
 
     public Cursor3D(Session session) {
         this.session = session;
-        this.particle = session.particleFactory().createPoint();
+        this.particle = session.particleProvider().createPoint();
     }
 
     public void start(Vector3dc cursor) {
@@ -28,7 +28,7 @@ public class Cursor3D {
     }
 
     private void refresh() {
-        session.eyeMatrix().invertAffine(new Matrix4d()).transformPosition(current, cursor);
+        session.eyeMatrix().invert(new Matrix4d()).transformPosition(current, cursor);
     }
 
     public void update(boolean freeLook) {

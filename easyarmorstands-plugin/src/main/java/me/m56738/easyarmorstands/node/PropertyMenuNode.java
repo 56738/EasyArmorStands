@@ -2,22 +2,24 @@ package me.m56738.easyarmorstands.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class PropertyMenuNode extends MenuNode {
-    private final PropertyContainer container;
+    private final PropertyContainer properties;
 
-    public PropertyMenuNode(Session session, Component name, PropertyContainer container) {
-        super(session, name);
-        this.container = container;
+    public PropertyMenuNode(Session session, PropertyContainer properties) {
+        super(session);
+        this.properties = properties;
     }
 
     @Override
     public boolean isValid() {
-        return container.isValid();
+        return properties.isValid();
     }
 
-    public PropertyContainer properties() {
-        return container;
+    @Contract(pure = true)
+    public @NotNull PropertyContainer properties() {
+        return properties;
     }
 }

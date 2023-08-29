@@ -25,10 +25,11 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public class ArmorStandPartButton implements NodeButton {
+public class ArmorStandPartButton implements NodeMenuButton {
     private final Session session;
-    private final ArmorStandPartInfo part;
-    private final Node node;
+    private final PropertyContainer container;
+    private final ArmorStandPart part;
+    private final ArmorStandPartInfo partInfo;
     private final Vector3d start = new Vector3d();
     private final Vector3d end = new Vector3d();
     private final Vector3d center = new Vector3d();
@@ -38,11 +39,12 @@ public class ArmorStandPartButton implements NodeButton {
     private final Property<EulerAngle> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
-    public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, Node node) {
+    public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part) {
         this.session = session;
-        this.part = ArmorStandPartInfo.of(part);
-        this.node = node;
-        this.particle = session.particleFactory().createLine();
+        this.container = container;
+        this.part = part;
+        this.partInfo = ArmorStandPartInfo.of(part);
+        this.particle = session.particleProvider().createLine();
         this.particle.setAxis(Axis.Y);
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.poseProperty = container.get(ArmorStandPropertyTypes.POSE.get(part));
@@ -56,11 +58,11 @@ public class ArmorStandPartButton implements NodeButton {
         // rotation = combination of yaw and pose
         Util.fromEuler(poseProperty.getValue(), rotation).rotateLocalY(-Math.toRadians(location.getYaw()));
         // start = where the bone is attached to the armor stand, depends on yaw
-        part.getOffset(size)
+        partInfo.getOffset(size)
                 .rotateY(-Math.toRadians(location.getYaw()), start)
                 .add(location.getX(), location.getY(), location.getZ());
         // end = where the bone ends, depends on yaw and pose
-        part.getLength(size)
+        partInfo.getLength(size)
                 .rotate(rotation, end)
                 .add(start);
         // move start down, start-end will be the lower 2/3 of the bone
@@ -96,11 +98,11 @@ public class ArmorStandPartButton implements NodeButton {
 
     @Override
     public Component getName() {
-        return part.getDisplayName();
+        return partInfo.getDisplayName();
     }
 
     @Override
     public Node createNode() {
-        return node;
+        return new ArmorStandPartNode(session, container, part);
     }
 }

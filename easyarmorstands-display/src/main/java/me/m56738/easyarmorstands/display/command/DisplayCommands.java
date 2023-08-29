@@ -8,6 +8,7 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
@@ -26,9 +27,10 @@ import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyT
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.bone.DisplayBone;
+import me.m56738.easyarmorstands.display.editor.axis.DisplayShearRotateAxis;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
+import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
@@ -40,7 +42,6 @@ import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -514,16 +515,19 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        DisplayBone bone;
         DisplayMenuNode node;
         try {
-            bone = new DisplayBone(properties, DisplayPropertyTypes.RIGHT_ROTATION);
-            node = new DisplayMenuNode(session, DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD), properties);
+            node = new DisplayShearNode(session, properties);
         } catch (UnknownPropertyException e) {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
-        node.addRotationButtons(session, bone, 1, null);
+        for (Axis axis : Axis.values()) {
+            node.addButton(session.menuEntryProvider()
+                    .rotate()
+                    .setAxis(new DisplayShearRotateAxis(properties, axis))
+                    .build());
+        }
         session.pushNode(node);
     }
 

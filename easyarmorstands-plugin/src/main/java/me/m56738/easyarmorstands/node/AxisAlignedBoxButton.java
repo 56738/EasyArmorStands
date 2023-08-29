@@ -28,9 +28,9 @@ public abstract class AxisAlignedBoxButton implements Button {
 
     public AxisAlignedBoxButton(Session session) {
         this.session = session;
-        this.pointParticle = session.particleFactory().createPoint();
+        this.pointParticle = session.particleProvider().createPoint();
         this.pointParticle.setBillboard(false);
-        this.boxParticle = session.particleFactory().createAxisAlignedBox();
+        this.boxParticle = session.particleProvider().createAxisAlignedBox();
     }
 
     protected abstract Vector3dc getPosition();

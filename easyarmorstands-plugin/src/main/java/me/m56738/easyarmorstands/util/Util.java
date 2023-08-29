@@ -108,6 +108,10 @@ public class Util {
         return new Vector3d(location.getX(), location.getY(), location.getZ());
     }
 
+    public static Vector3d toVector3d(Location location, Vector3d dest) {
+        return dest.set(location.getX(), location.getY(), location.getZ());
+    }
+
     public static Vector3d toVector3d(Vector vector) {
         return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
     }

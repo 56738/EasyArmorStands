@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.api.editor;
 
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.menu.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
-import me.m56738.easyarmorstands.api.particle.ParticleFactory;
+import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.entity.Player;
@@ -20,8 +21,6 @@ public interface Session {
     void pushNode(@NotNull Node node);
 
     void pushNode(@NotNull Node node, @Nullable Vector3dc cursor);
-
-    void replaceNode(@NotNull Node node);
 
     void popNode();
 
@@ -65,5 +64,8 @@ public interface Session {
     @NotNull Matrix4dc eyeMatrix();
 
     @Contract(pure = true)
-    @NotNull ParticleFactory particleFactory();
+    @NotNull ParticleProvider particleProvider();
+
+    @Contract(pure = true)
+    @NotNull MenuButtonProvider menuEntryProvider();
 }

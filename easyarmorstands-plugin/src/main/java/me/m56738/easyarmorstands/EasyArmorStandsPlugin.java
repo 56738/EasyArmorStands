@@ -259,8 +259,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         }
 
-        if (hasClass("org.bukkit.entity.ItemDisplay")) {
+        if (hasClass("org.bukkit.entity.ItemDisplay") && hasClass("me.m56738.easyarmorstands.display.DisplayAddon")) {
             loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
+        } else {
+            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
+            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
+            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
         }
 
         if (hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
@@ -386,7 +390,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         try {
             return loadMenuTemplate(name, true);
         } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\"", e);
+            getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\": " + e.getMessage());
         }
 
         return null;

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -11,6 +12,10 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 public interface PropertyType<T> extends Keyed {
+    static TypeToken<PropertyType<?>> type() {
+        return PropertyTypeTypeToken.INSTANCE;
+    }
+
     @NotNull Class<T> getValueType();
 
     @Nullable String getPermission();

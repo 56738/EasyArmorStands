@@ -32,8 +32,8 @@ public interface Button {
     /**
      * Makes the preview visible.
      * <p>
-     * Called after {@link #updatePreview(boolean)}.
-     * The preview should remain visible until {@link #hidePreview()} is called.
+     * Called after {@link #updatePreview}.
+     * The preview should remain visible until {@link #hidePreview} is called.
      */
     void showPreview();
 

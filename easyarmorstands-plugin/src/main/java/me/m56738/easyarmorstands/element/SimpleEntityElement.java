@@ -10,7 +10,6 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.node.SimpleEntityButton;
 import me.m56738.easyarmorstands.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -62,7 +61,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public Node createNode(Session session) {
-        return new SimpleEntityNode(session, Message.component("easyarmorstands.node.select-axis"), this);
+        return new SimpleEntityNode(session, this);
     }
 
     @Override

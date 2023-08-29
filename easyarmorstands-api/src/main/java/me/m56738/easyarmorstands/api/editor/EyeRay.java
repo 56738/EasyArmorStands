@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.editor;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Intersectiond;
+import org.joml.Matrix4dc;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -15,6 +16,12 @@ public interface EyeRay {
     double length();
 
     double threshold();
+
+    float yaw();
+
+    float pitch();
+
+    Matrix4dc matrix();
 
     default Vector3dc intersectPoint(Vector3dc position) {
         Vector3dc origin = origin();

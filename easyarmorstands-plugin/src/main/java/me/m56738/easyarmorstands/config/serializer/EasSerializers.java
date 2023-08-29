@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.config.serializer;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -24,6 +25,7 @@ public class EasSerializers {
             .register(MenuFactory.class, new MenuFactorySerializer())
             .register(MenuSlotFactory.class, new MenuSlotFactorySerializer())
             .register(MenuSlotType.class, new MenuSlotTypeSerializer())
+            .register(PropertyType.type(), new PropertyTypeSerializer())
             .build();
 
     public static TypeSerializerCollection serializers() {
