@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import org.bukkit.entity.Display;
 
 public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {

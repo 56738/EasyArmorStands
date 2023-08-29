@@ -26,7 +26,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
@@ -500,6 +500,6 @@ public class SessionCommands {
         node.setValue(value);
         sender.sendMessage(Message.success("easyarmorstands.success.changed-value",
                 node.getName(),
-                node.getValueComponent(value)));
+                node.formatValue(value)));
     }
 }

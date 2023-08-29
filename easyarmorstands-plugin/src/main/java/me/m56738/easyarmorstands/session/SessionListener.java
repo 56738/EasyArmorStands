@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.Bukkit;

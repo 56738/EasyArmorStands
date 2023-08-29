@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 
-public abstract class ToggleButton<T> extends SimpleButton<T> {
+public abstract class ToggleButton<T> extends PropertyButton<T> {
     public ToggleButton(Property<T> property, PropertyContainer container, ItemTemplate item) {
         super(property, container, item);
     }

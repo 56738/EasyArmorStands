@@ -61,7 +61,7 @@ import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
-import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;

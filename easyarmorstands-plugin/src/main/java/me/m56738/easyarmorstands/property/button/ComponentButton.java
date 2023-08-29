@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.Component;
 
-public class ComponentButton extends SimpleButton<Component> {
+public class ComponentButton extends PropertyButton<Component> {
     private final String command;
 
     public ComponentButton(Property<Component> property, PropertyContainer container, ItemTemplate item, String command) {

@@ -13,7 +13,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.joml.Quaternionf;

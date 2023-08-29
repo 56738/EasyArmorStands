@@ -4,7 +4,7 @@ import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.parser.ArgumentParser;
 import cloud.commandframework.context.CommandContext;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.node.ValueNode;
+import me.m56738.easyarmorstands.editor.node.ValueNode;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;

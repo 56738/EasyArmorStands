@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.item.ItemTemplate;
-import me.m56738.easyarmorstands.node.ArmorStandRootNode;
+import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
-import me.m56738.easyarmorstands.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
