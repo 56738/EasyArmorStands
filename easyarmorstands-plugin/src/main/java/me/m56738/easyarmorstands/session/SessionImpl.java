@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.CarryButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.RotateButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.button.ScaleButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -23,6 +24,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.editor.button.CarryButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.MoveButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.RotateButtonBuilderImpl;
+import me.m56738.easyarmorstands.editor.button.ScaleButtonBuilderImpl;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -497,6 +499,11 @@ public final class SessionImpl implements Session {
         @Override
         public MoveButtonBuilder move() {
             return new MoveButtonBuilderImpl(session);
+        }
+
+        @Override
+        public ScaleButtonBuilder scale() {
+            return new ScaleButtonBuilderImpl(session);
         }
 
         @Override

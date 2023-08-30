@@ -62,4 +62,9 @@ public class DisplayBoxMoveAxis implements MoveAxis {
     public boolean isValid() {
         return container.isValid();
     }
+
+    @Override
+    public boolean isRelative() {
+        return false;
+    }
 }

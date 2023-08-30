@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.editor.node;
 
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import cloud.commandframework.arguments.standard.DoubleArgument;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.axis.RotateAxis;
@@ -13,12 +15,13 @@ import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.joml.Math;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class RotateNode extends EditorAxisNode {
+public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
     private final Session session;
     private final RotateAxis rotateAxis;
     private final Component name;
@@ -32,6 +35,7 @@ public class RotateNode extends EditorAxisNode {
     private final Vector3d currentOffset = new Vector3d();
     private final Vector3d snappedCursor = new Vector3d();
     private boolean valid;
+    private Double manualValue;
     private double initialValue;
 
     public RotateNode(Session session, RotateAxis rotateAxis, ParticleColor color, double radius, double length, Component name) {
@@ -51,6 +55,7 @@ public class RotateNode extends EditorAxisNode {
 
     @Override
     public void onEnter(EnterContext context) {
+        manualValue = null;
         initialValue = rotateAxis.start();
 
         position.set(rotateAxis.getPosition());
@@ -94,7 +99,9 @@ public class RotateNode extends EditorAxisNode {
         cursorPosition.sub(position, currentOffset);
 
         double degrees;
-        if (valid) {
+        if (manualValue != null) {
+            degrees = manualValue;
+        } else if (valid) {
             double offset = initialOffset.angleSigned(currentOffset, direction);
             degrees = session.snapAngle(Math.toDegrees(initialValue + offset));
         } else {
@@ -118,5 +125,25 @@ public class RotateNode extends EditorAxisNode {
                 .append(name)
                 .append(Component.text(": "))
                 .append(Component.text(Util.ANGLE_FORMAT.format(EasMath.wrapDegrees(degrees)))));
+    }
+
+    @Override
+    public Component getName() {
+        return name;
+    }
+
+    @Override
+    public Component formatValue(Double value) {
+        return Component.text(Util.ANGLE_FORMAT.format(value));
+    }
+
+    @Override
+    public ArgumentParser<CommandSender, Double> getParser() {
+        return new DoubleArgument.DoubleParser<>(-360, 360);
+    }
+
+    @Override
+    public void setValue(Double value) {
+        manualValue = value;
     }
 }

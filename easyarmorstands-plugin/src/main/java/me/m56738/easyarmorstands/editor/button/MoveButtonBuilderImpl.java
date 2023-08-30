@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.axis.MoveAxis;
 import me.m56738.easyarmorstands.api.editor.button.MoveButton;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +55,14 @@ public class MoveButtonBuilderImpl implements MoveButtonBuilder {
         Component name = this.name;
         if (name == null) {
             TextColor textColor = TextColor.color(axis.getColor());
-            name = Component.text(axis.getName(), textColor);
+            if (moveAxis.isRelative()) {
+                name = Message.component(
+                        "easyarmorstands.node.move-along-axis",
+                        Component.text(axis.getName())
+                ).color(textColor);
+            } else {
+                name = Component.text(axis.getName(), textColor);
+            }
         }
         ParticleColor color = this.color;
         if (color == null) {

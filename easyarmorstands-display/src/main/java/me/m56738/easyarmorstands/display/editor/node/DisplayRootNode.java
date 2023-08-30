@@ -17,6 +17,7 @@ import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.display.editor.DisplayRotationProvider;
 import me.m56738.easyarmorstands.display.editor.axis.DisplayGlobalRotateAxis;
 import me.m56738.easyarmorstands.display.editor.axis.DisplayLocalRotateAxis;
+import me.m56738.easyarmorstands.display.editor.axis.DisplayScaleAxis;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.axis.LocationMoveAxis;
 import me.m56738.easyarmorstands.editor.axis.LocationRelativeMoveAxis;
@@ -41,8 +42,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     private final DisplayOffsetProvider offsetProvider;
     private final DisplayRotationProvider rotationProvider;
     private final List<MenuButton> buttons = new ArrayList<>();
-    private boolean local;
-    private Component name;
+    private Mode mode;
 
     public DisplayRootNode(Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
@@ -52,17 +52,11 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
         this.offsetProvider = new DisplayOffsetProvider(properties());
         this.rotationProvider = new DisplayRotationProvider(properties());
-        setLocal(true);
+        setMode(Mode.LOCAL);
     }
 
-    public void setLocal(boolean local) {
-        this.local = local;
-
-        if (local) {
-            name = Message.component("easyarmorstands.node.local");
-        } else {
-            name = Message.component("easyarmorstands.node.global");
-        }
+    public void setMode(Mode mode) {
+        this.mode = mode;
 
         for (MenuButton button : buttons) {
             removeButton(button);
@@ -73,12 +67,18 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         for (Axis axis : Axis.values()) {
             MoveAxis moveAxis;
             RotateAxis rotateAxis;
-            if (local) {
+            if (mode == Mode.LOCAL) {
                 moveAxis = new LocationRelativeMoveAxis(properties(), axis, offsetProvider, rotationProvider);
                 rotateAxis = new DisplayLocalRotateAxis(properties(), axis);
-            } else {
+            } else if (mode == Mode.GLOBAL) {
                 moveAxis = new LocationMoveAxis(properties(), axis, offsetProvider);
                 rotateAxis = new DisplayGlobalRotateAxis(properties(), axis);
+            } else {
+                buttons.add(session.menuEntryProvider()
+                        .scale()
+                        .setAxis(new DisplayScaleAxis(properties(), axis, offsetProvider, rotationProvider))
+                        .build());
+                continue;
             }
             buttons.add(session.menuEntryProvider()
                     .move()
@@ -88,7 +88,6 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
                     .rotate()
                     .setAxis(rotateAxis)
                     .build());
-            // TODO scale
         }
 
         for (MenuButton button : buttons) {
@@ -116,7 +115,8 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
             return true;
         }
         if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            setLocal(!local);
+            Mode[] modes = Mode.values();
+            setMode(modes[(mode.ordinal() + 1) % modes.length]);
             return true;
         }
         return false;
@@ -125,7 +125,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     @Override
     public void onUpdate(UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(name);
+        session.setActionBar(mode.name);
     }
 
     @Override
@@ -146,5 +146,17 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         locationProperty.setValue(location);
 
         properties().commit();
+    }
+
+    public enum Mode {
+        LOCAL(Message.component("easyarmorstands.node.local")),
+        GLOBAL(Message.component("easyarmorstands.node.global")),
+        SCALE(Message.component("easyarmorstands.node.scale"));
+
+        private final Component name;
+
+        Mode(Component name) {
+            this.name = name;
+        }
     }
 }

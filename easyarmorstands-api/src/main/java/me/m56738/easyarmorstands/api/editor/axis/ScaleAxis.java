@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.Axis;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
-public interface MoveAxis extends EditorAxis {
+public interface ScaleAxis extends EditorAxis {
     Vector3dc getPosition();
 
     Quaterniondc getRotation();
@@ -21,13 +21,5 @@ public interface MoveAxis extends EditorAxis {
 
     default double getMaxValue() {
         return Double.POSITIVE_INFINITY;
-    }
-
-    default boolean isRelative() {
-        return true;
-    }
-
-    default boolean isInverted() {
-        return false;
     }
 }

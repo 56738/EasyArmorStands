@@ -68,4 +68,9 @@ public class LocationMoveAxis implements MoveAxis {
     public boolean isValid() {
         return container.isValid();
     }
+
+    @Override
+    public boolean isRelative() {
+        return false;
+    }
 }

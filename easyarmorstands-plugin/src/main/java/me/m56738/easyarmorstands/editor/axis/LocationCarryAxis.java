@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.joml.Matrix4d;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;

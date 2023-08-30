@@ -8,7 +8,6 @@ import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
@@ -27,7 +26,6 @@ import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyT
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayShearRotateAxis;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
