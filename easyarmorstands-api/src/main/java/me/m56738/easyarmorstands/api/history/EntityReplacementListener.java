@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.api.history;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public interface EntityReplacementListener {
@@ -11,5 +13,5 @@ public interface EntityReplacementListener {
      * @param oldId The UUID of the entity which was replaced.
      * @param newId The UUID of the replacement.
      */
-    void onEntityReplaced(UUID oldId, UUID newId);
+    void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId);
 }

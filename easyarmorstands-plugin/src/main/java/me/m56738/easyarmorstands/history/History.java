@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.history;
 
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.GroupAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -51,7 +52,7 @@ public class History {
         return action;
     }
 
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         for (Action action : past) {
             action.onEntityReplaced(oldId, newId);
         }

@@ -1,6 +1,9 @@
 package me.m56738.easyarmorstands.api.editor;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Intersectiond;
 import org.joml.Matrix4dc;
 import org.joml.Vector2d;
@@ -9,23 +12,32 @@ import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface EyeRay {
-    Vector3dc origin();
+    @Contract(pure = true)
+    @NotNull Vector3dc origin();
 
-    Vector3dc target();
+    @Contract(pure = true)
+    @NotNull Vector3dc target();
 
+    @Contract(pure = true)
     double length();
 
+    @Contract(pure = true)
     double threshold();
 
+    @Contract(pure = true)
     float yaw();
 
+    @Contract(pure = true)
     float pitch();
 
-    Matrix4dc matrix();
+    @Contract(pure = true)
+    @NotNull Matrix4dc matrix();
 
-    Matrix4dc inverseMatrix();
+    @Contract(pure = true)
+    @NotNull Matrix4dc inverseMatrix();
 
-    default Vector3dc intersectPoint(Vector3dc position) {
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectPoint(Vector3dc position) {
         Vector3dc origin = origin();
         Vector3dc target = target();
         double threshold = threshold();
@@ -41,7 +53,8 @@ public interface EyeRay {
         }
     }
 
-    default Vector3dc intersectLine(Vector3dc start, Vector3dc end) {
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectLine(Vector3dc start, Vector3dc end) {
         Vector3dc eyes = origin();
         Vector3dc target = target();
         Vector3d closestOnLookRay = new Vector3d();
@@ -63,7 +76,8 @@ public interface EyeRay {
         }
     }
 
-    default Vector3dc intersectPlane(Vector3dc point, Vector3dc normal) {
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectPlane(Vector3dc point, Vector3dc normal) {
         Vector3dc origin = origin();
         Vector3dc direction = target().sub(origin, new Vector3d());
         double ox = origin.x(), oy = origin.y(), oz = origin.z();
@@ -88,7 +102,8 @@ public interface EyeRay {
         }
     }
 
-    default Vector3dc intersectCircle(Vector3dc point, Vector3dc normal, double radius) {
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectCircle(Vector3dc point, Vector3dc normal, double radius) {
         Vector3dc intersection = intersectPlane(point, normal);
         double threshold = threshold();
         if (intersection != null) {
@@ -104,7 +119,8 @@ public interface EyeRay {
         return null;
     }
 
-    default Vector3dc intersectBox(Vector3dc center, Vector3dc size) {
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectBox(Vector3dc center, Vector3dc size) {
         Vector3dc origin = origin();
         Vector3d min = center.fma(-0.5, size, new Vector3d());
         Vector3d max = center.fma(0.5, size, new Vector3d());

@@ -20,7 +20,7 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<C
     }
 
     @Override
-    public Component getValueComponent(Color value) {
+    public @NotNull Component getValueComponent(Color value) {
         if (value != null) {
             if (value.getAlpha() == 0) {
                 return Message.component("easyarmorstands.property.text-display.background.none");
@@ -33,7 +33,7 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<C
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<Color> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<Color> property, @NotNull PropertyContainer container) {
         return new TextBackgroundToggleButton(property, container, buttonTemplate);
     }
 }

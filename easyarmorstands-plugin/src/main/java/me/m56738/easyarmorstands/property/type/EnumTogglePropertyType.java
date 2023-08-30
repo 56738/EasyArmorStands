@@ -14,7 +14,7 @@ public class EnumTogglePropertyType<T extends Enum<T>> extends EnumPropertyType<
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<T> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<T> property, @NotNull PropertyContainer container) {
         return new EnumToggleButton<>(property, container, buttonTemplate, values);
     }
 }

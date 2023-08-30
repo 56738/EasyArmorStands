@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -96,7 +97,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }
@@ -123,9 +124,9 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(mode.name);
+        context.setActionBar(mode.name);
     }
 
     @Override

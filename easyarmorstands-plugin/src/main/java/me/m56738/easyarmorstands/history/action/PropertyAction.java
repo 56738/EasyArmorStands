@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.PermissionCheckedPropertyContainer;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ public class PropertyAction<T> implements Action {
     }
 
     @Override
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         elementReference.onEntityReplaced(oldId, newId);
     }
 }

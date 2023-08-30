@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api;
 
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -40,11 +41,11 @@ public enum ArmorStandPart {
         this.poseSetter = poseSetter;
     }
 
-    public EulerAngle getPose(ArmorStand armorStand) {
+    public @NotNull EulerAngle getPose(@NotNull ArmorStand armorStand) {
         return poseGetter.apply(armorStand);
     }
 
-    public void setPose(ArmorStand armorStand, EulerAngle pose) {
+    public void setPose(@NotNull ArmorStand armorStand, @NotNull EulerAngle pose) {
         poseSetter.accept(armorStand, pose);
     }
 }

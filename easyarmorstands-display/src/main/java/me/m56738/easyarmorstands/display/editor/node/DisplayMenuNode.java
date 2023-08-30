@@ -15,6 +15,7 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 public class DisplayMenuNode extends PropertyMenuNode {
@@ -38,14 +39,14 @@ public class DisplayMenuNode extends PropertyMenuNode {
     }
 
     @Override
-    public void onAdd(AddContext context) {
+    public void onAdd(@NotNull AddContext context) {
         canShow = true;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
     }
 
     @Override
-    public void onRemove(RemoveContext context) {
+    public void onRemove(@NotNull RemoveContext context) {
         canShow = false;
         if (isVisible) {
             session.removeParticle(boxParticle);
@@ -54,7 +55,7 @@ public class DisplayMenuNode extends PropertyMenuNode {
     }
 
     @Override
-    public void onEnter(EnterContext context) {
+    public void onEnter(@NotNull EnterContext context) {
         isActive = true;
         boxParticle.setColor(ParticleColor.WHITE);
         updateBoundingBox();
@@ -62,7 +63,7 @@ public class DisplayMenuNode extends PropertyMenuNode {
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         isActive = false;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
@@ -70,13 +71,13 @@ public class DisplayMenuNode extends PropertyMenuNode {
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         updateBoundingBox();
         super.onUpdate(context);
     }
 
     @Override
-    public void onInactiveUpdate(UpdateContext context) {
+    public void onInactiveUpdate(@NotNull UpdateContext context) {
         updateBoundingBox();
         super.onInactiveUpdate(context);
     }

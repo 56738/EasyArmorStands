@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
 import java.util.ArrayList;
@@ -27,15 +28,15 @@ public abstract class MenuNode implements Node {
     private Vector3dc targetCursor;
     private boolean visible;
 
-    public MenuNode(Session session) {
+    public MenuNode(@NotNull Session session) {
         this.session = session;
     }
 
-    public final void addButton(MenuButton menuButton) {
+    public final void addButton(@NotNull MenuButton menuButton) {
         setButton(menuButton, menuButton.getButton());
     }
 
-    public final void removeButton(MenuButton menuButton) {
+    public final void removeButton(@NotNull MenuButton menuButton) {
         setButton(menuButton, null);
     }
 
@@ -59,7 +60,7 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onEnter(EnterContext context) {
+    public void onEnter(@NotNull EnterContext context) {
         targetButton = null;
         visible = true;
         for (Button button : buttons.values()) {
@@ -70,7 +71,7 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         targetButton = null;
         visible = false;
         for (Button button : buttons.values()) {
@@ -79,7 +80,7 @@ public abstract class MenuNode implements Node {
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         EyeRay ray = context.eyeRay();
         Button bestButton = null;
         MenuButton bestMenuButton = null;
@@ -118,13 +119,13 @@ public abstract class MenuNode implements Node {
         } else {
             targetName = Component.empty();
         }
-        session.setSubtitle(targetName);
+        context.setSubtitle(targetName);
         targetButton = bestMenuButton;
         targetCursor = bestCursor;
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (context.type() == ClickContext.Type.RIGHT_CLICK) {
             if (targetButton != null) {
                 targetButton.onClick(session, targetCursor);

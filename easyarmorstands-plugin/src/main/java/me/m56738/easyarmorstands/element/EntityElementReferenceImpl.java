@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
     }
 
     @Override
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         if (id.equals(oldId)) {
             id = newId;
         }

@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaternionfc;
 
@@ -16,7 +17,7 @@ public class DisplayShearRotateAxis extends DisplayLocalRotateAxis {
     }
 
     @Override
-    public Quaterniond getRotation() {
+    public @NotNull Quaterniond getRotation() {
         return super.getRotation()
                 .mul(new Quaterniond(shearingProperty.getValue()));
     }

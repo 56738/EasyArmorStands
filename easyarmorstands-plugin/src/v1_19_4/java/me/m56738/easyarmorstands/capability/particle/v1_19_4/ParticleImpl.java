@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +61,7 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public void show(Player player) {
+    public void show(@NotNull Player player) {
         boolean added = players.add(player);
         if (added) {
             if (players.size() == 1) {
@@ -72,7 +73,7 @@ public abstract class ParticleImpl<T extends Entity> implements Particle {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public void hide(Player player) {
+    public void hide(@NotNull Player player) {
         boolean removed = players.remove(player);
         if (removed) {
             if (EasyArmorStandsPlugin.getInstance().isEnabled()) {

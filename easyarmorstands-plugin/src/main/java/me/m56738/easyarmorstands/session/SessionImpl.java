@@ -35,7 +35,6 @@ import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Location;
@@ -76,9 +75,6 @@ public final class SessionImpl implements Session {
     private Component currentTitle = Component.empty();
     private Component currentSubtitle = Component.empty();
     private Component currentActionBar = Component.empty();
-    private Component pendingTitle = Component.empty();
-    private Component pendingSubtitle = Component.empty();
-    private Component pendingActionBar = Component.empty();
     private int overlayTicks;
 
     public SessionImpl(EasPlayer context) {
@@ -98,7 +94,7 @@ public final class SessionImpl implements Session {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends Node> @Nullable T findNode(Class<T> type) {
+    public <T extends Node> @Nullable T findNode(@NotNull Class<T> type) {
         for (Node node : nodeStack) {
             if (type.isAssignableFrom(node.getClass())) {
                 return (T) node;
@@ -122,7 +118,7 @@ public final class SessionImpl implements Session {
         }
         nodeStack.push(node);
         node.onAdd(AddContextImpl.INSTANCE);
-        node.onEnter(new EnterContextImpl(cursor));
+        node.onEnter(new EnterContextImpl(this, cursor));
     }
 
     @Override
@@ -134,7 +130,7 @@ public final class SessionImpl implements Session {
         removed.onExit(ExitContextImpl.INSTANCE);
         removed.onRemove(RemoveContextImpl.INSTANCE);
         if (!nodeStack.isEmpty()) {
-            nodeStack.peek().onEnter(new EnterContextImpl(null));
+            nodeStack.peek().onEnter(new EnterContextImpl(this, null));
         }
     }
 
@@ -194,10 +190,6 @@ public final class SessionImpl implements Session {
     }
 
     boolean update() {
-        pendingTitle = Component.empty();
-        pendingSubtitle = Component.empty();
-        pendingActionBar = Component.empty();
-
         if (clickTicks > 0) {
             clickTicks--;
         }
@@ -206,7 +198,7 @@ public final class SessionImpl implements Session {
             popNode();
         }
 
-        UpdateContextImpl context = new UpdateContextImpl(eyeRay());
+        UpdateContextImpl context = new UpdateContextImpl(this);
         Node currentNode = nodeStack.peek();
         if (currentNode != null) {
             currentNode.onUpdate(context);
@@ -221,14 +213,18 @@ public final class SessionImpl implements Session {
             particle.update();
         }
 
-        updateOverlay();
+        updateOverlay(context);
 
         return player.isValid();
     }
 
-    private void updateOverlay() {
+    private void updateOverlay(UpdateContextImpl context) {
         // Resend everything once per second
         // Send changes immediately
+
+        Component pendingActionBar = context.getActionBar();
+        Component pendingTitle = context.getTitle();
+        Component pendingSubtitle = context.getSubtitle();
 
         boolean resendOverlay = overlayTicks >= 20;
         if (resendOverlay) {
@@ -301,7 +297,7 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public void addParticle(Particle particle) {
+    public void addParticle(@NotNull Particle particle) {
         if (!valid) {
             return;
         }
@@ -311,7 +307,7 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public void removeParticle(Particle particle) {
+    public void removeParticle(@NotNull Particle particle) {
         if (!valid) {
             return;
         }
@@ -325,16 +321,6 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public void setTitle(ComponentLike title) {
-        pendingTitle = title.asComponent();
-    }
-
-    @Override
-    public void setSubtitle(ComponentLike subtitle) {
-        pendingSubtitle = subtitle.asComponent();
-    }
-
-    @Override
     public @NotNull Player player() {
         return player;
     }
@@ -344,7 +330,6 @@ public final class SessionImpl implements Session {
         return new TrackedPropertyContainer(element, context);
     }
 
-    @Override
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
@@ -357,7 +342,6 @@ public final class SessionImpl implements Session {
         return new EyeRayImpl(origin, target, length, threshold, yaw, pitch, eyeMatrix);
     }
 
-    @Override
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
@@ -376,11 +360,6 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public @NotNull Matrix4dc eyeMatrix() {
-        return eyeMatrix(player.getEyeLocation());
-    }
-
-    @Override
     public @NotNull ParticleProvider particleProvider() {
         return particleProvider;
     }
@@ -388,11 +367,6 @@ public final class SessionImpl implements Session {
     @Override
     public @NotNull MenuButtonProvider menuEntryProvider() {
         return menuButtonProvider;
-    }
-
-    @Override
-    public void setActionBar(ComponentLike actionBar) {
-        pendingActionBar = actionBar.asComponent();
     }
 
     public static class EyeRayImpl implements EyeRay {
@@ -416,12 +390,12 @@ public final class SessionImpl implements Session {
         }
 
         @Override
-        public Vector3dc origin() {
+        public @NotNull Vector3dc origin() {
             return origin;
         }
 
         @Override
-        public Vector3dc target() {
+        public @NotNull Vector3dc target() {
             return target;
         }
 
@@ -446,12 +420,12 @@ public final class SessionImpl implements Session {
         }
 
         @Override
-        public Matrix4dc matrix() {
+        public @NotNull Matrix4dc matrix() {
             return matrix;
         }
 
         @Override
-        public Matrix4dc inverseMatrix() {
+        public @NotNull Matrix4dc inverseMatrix() {
             if (inverseMatrix == null) {
                 inverseMatrix = matrix.invert(new Matrix4d());
             }
@@ -469,22 +443,22 @@ public final class SessionImpl implements Session {
         }
 
         @Override
-        public PointParticle createPoint() {
+        public @NotNull PointParticle createPoint() {
             return particleCapability.createPoint(session.getWorld());
         }
 
         @Override
-        public LineParticle createLine() {
+        public @NotNull LineParticle createLine() {
             return particleCapability.createLine(session.getWorld());
         }
 
         @Override
-        public CircleParticle createCircle() {
+        public @NotNull CircleParticle createCircle() {
             return particleCapability.createCircle(session.getWorld());
         }
 
         @Override
-        public AxisAlignedBoxParticle createAxisAlignedBox() {
+        public @NotNull AxisAlignedBoxParticle createAxisAlignedBox() {
             return particleCapability.createAxisAlignedBox(session.getWorld());
         }
     }

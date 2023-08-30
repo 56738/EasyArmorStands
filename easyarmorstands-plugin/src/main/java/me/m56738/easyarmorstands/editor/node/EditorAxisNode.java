@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.axis.EditorAxis;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class EditorAxisNode implements Node {
     private final Session session;
@@ -16,12 +17,12 @@ public abstract class EditorAxisNode implements Node {
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         editorAxis.commit();
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (context.type() == ClickContext.Type.LEFT_CLICK) {
             editorAxis.revert();
             session.popNode();

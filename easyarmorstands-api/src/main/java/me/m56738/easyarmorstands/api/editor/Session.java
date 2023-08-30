@@ -6,14 +6,11 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4dc;
-import org.joml.Vector2dc;
 import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
@@ -26,21 +23,18 @@ public interface Session {
 
     void clearNode();
 
+    @Contract(pure = true)
     @Nullable Node getNode();
 
+    @Contract(pure = true)
     @Nullable Element getElement();
 
-    <T extends Node> @Nullable T findNode(Class<T> type);
+    @Contract(pure = true)
+    <T extends Node> @Nullable T findNode(@NotNull Class<T> type);
 
-    void setActionBar(ComponentLike actionBar);
+    void addParticle(@NotNull Particle particle);
 
-    void setTitle(ComponentLike title);
-
-    void setSubtitle(ComponentLike subtitle);
-
-    void addParticle(Particle particle);
-
-    void removeParticle(Particle particle);
+    void removeParticle(@NotNull Particle particle);
 
     @Contract(pure = true)
     double snapPosition(double value);
@@ -53,15 +47,6 @@ public interface Session {
 
     @Contract(pure = true)
     @NotNull PropertyContainer properties(@NotNull Element element);
-
-    @Contract(pure = true)
-    @NotNull EyeRay eyeRay();
-
-    @Contract(pure = true)
-    @NotNull EyeRay eyeRay(Vector2dc cursor);
-
-    @Contract(pure = true)
-    @NotNull Matrix4dc eyeMatrix();
 
     @Contract(pure = true)
     @NotNull ParticleProvider particleProvider();

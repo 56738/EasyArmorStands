@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -35,22 +36,22 @@ public class PointDustParticle extends DustParticle implements PointParticle {
     }
 
     @Override
-    public Vector3dc getPosition() {
+    public @NotNull Vector3dc getPosition() {
         return position;
     }
 
     @Override
-    public void setPosition(Vector3dc position) {
+    public void setPosition(@NotNull Vector3dc position) {
         this.position.set(position);
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return Util.IDENTITY;
     }
 
     @Override
-    public void setRotation(Quaterniondc rotation) {
+    public void setRotation(@NotNull Quaterniondc rotation) {
     }
 
     @Override

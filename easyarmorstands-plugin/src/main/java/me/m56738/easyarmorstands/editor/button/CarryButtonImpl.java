@@ -39,7 +39,7 @@ public class CarryButtonImpl extends SimpleButton implements CarryButton, NodeFa
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return name;
     }
 

@@ -17,12 +17,12 @@ public class BlockDataPropertyType extends ConfigurablePropertyType<BlockData> {
     }
 
     @Override
-    public Component getValueComponent(BlockData value) {
+    public @NotNull Component getValueComponent(BlockData value) {
         return Component.text(value.getAsString());
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<BlockData> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<BlockData> property, @NotNull PropertyContainer container) {
         return new BlockDisplaySlot(property, container, buttonTemplate);
     }
 }

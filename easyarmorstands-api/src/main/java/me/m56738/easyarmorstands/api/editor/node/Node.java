@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import org.jetbrains.annotations.NotNull;
 
 public interface Node {
     /**
@@ -15,7 +16,7 @@ public interface Node {
      *
      * @param context Contains accessors for relevant data.
      */
-    void onEnter(EnterContext context);
+    void onEnter(@NotNull EnterContext context);
 
     /**
      * Called when the node is exited (deactivated).
@@ -24,14 +25,14 @@ public interface Node {
      *
      * @param context Contains accessors for relevant data.
      */
-    void onExit(ExitContext context);
+    void onExit(@NotNull ExitContext context);
 
     /**
      * Called when the node is added to the stack.
      *
      * @param context Contains accessors for relevant data.
      */
-    default void onAdd(AddContext context) {
+    default void onAdd(@NotNull AddContext context) {
     }
 
     /**
@@ -39,7 +40,7 @@ public interface Node {
      *
      * @param context Contains accessors for relevant data.
      */
-    default void onRemove(RemoveContext context) {
+    default void onRemove(@NotNull RemoveContext context) {
     }
 
     /**
@@ -47,14 +48,14 @@ public interface Node {
      *
      * @param context Contains accessors for relevant data.
      */
-    void onUpdate(UpdateContext context);
+    void onUpdate(@NotNull UpdateContext context);
 
     /**
      * Called every tick while this node is inactive (not on the top of the stack).
      *
      * @param context Contains accessors for relevant data.
      */
-    default void onInactiveUpdate(UpdateContext context) {
+    default void onInactiveUpdate(@NotNull UpdateContext context) {
     }
 
     /**
@@ -63,7 +64,7 @@ public interface Node {
      * @param context Contains accessors for relevant data.
      * @return Whether the click was handled.
      */
-    boolean onClick(ClickContext context);
+    boolean onClick(@NotNull ClickContext context);
 
     boolean isValid();
 }

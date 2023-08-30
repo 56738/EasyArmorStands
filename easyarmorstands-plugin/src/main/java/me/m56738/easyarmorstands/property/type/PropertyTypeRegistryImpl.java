@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -18,7 +19,7 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     private CommentedConfigurationNode currentConfig;
 
     @Override
-    public void register(PropertyType<?> type) {
+    public void register(@NotNull PropertyType<?> type) {
         types.put(type.key(), type);
         if (type instanceof ConfigurablePropertyType) {
             load((ConfigurablePropertyType<?>) type);
@@ -26,18 +27,8 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     }
 
     @Override
-    public @Nullable PropertyType<?> getOrNull(Key key) {
+    public @Nullable PropertyType<?> getOrNull(@NotNull Key key) {
         return types.get(key);
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Override
-    public @Nullable <T> PropertyType<T> getOrNull(Key key, Class<T> type) {
-        PropertyType propertyType = types.get(key);
-        if (propertyType == null || propertyType.getValueType() != type) {
-            return null;
-        }
-        return propertyType;
     }
 
     public void load(CommentedConfigurationNode config) {

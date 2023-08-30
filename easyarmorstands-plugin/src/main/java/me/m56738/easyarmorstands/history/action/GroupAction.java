@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -46,7 +47,7 @@ public class GroupAction implements Action {
     }
 
     @Override
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         for (Action action : actions) {
             action.onEntityReplaced(oldId, newId);
         }

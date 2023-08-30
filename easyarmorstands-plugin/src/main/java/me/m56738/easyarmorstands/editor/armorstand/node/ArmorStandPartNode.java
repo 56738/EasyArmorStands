@@ -22,6 +22,7 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
@@ -85,13 +86,13 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(local ? localName : globalName);
+        context.setActionBar(local ? localName : globalName);
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }

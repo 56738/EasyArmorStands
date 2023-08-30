@@ -53,7 +53,7 @@ public class MoveButtonImpl implements MoveButton, NodeFactoryButton {
     }
 
     @Override
-    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+    public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
         Vector3dc intersection = ray.intersectLine(negativeEnd, positiveEnd);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
@@ -79,7 +79,7 @@ public class MoveButtonImpl implements MoveButton, NodeFactoryButton {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return name;
     }
 

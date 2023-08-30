@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -54,7 +55,7 @@ public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
     }
 
     @Override
-    public void onEnter(EnterContext context) {
+    public void onEnter(@NotNull EnterContext context) {
         manualValue = null;
         initialValue = rotateAxis.start();
 
@@ -66,7 +67,7 @@ public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
             direction.negate();
         }
 
-        cursor.start(position, context.cursorOrDefault(position), direction);
+        cursor.start(context, position, context.cursorOrDefault(position), direction);
 
         circleParticle.setCenter(position);
         circleParticle.setRotation(rotation);
@@ -84,7 +85,7 @@ public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
         cursor.stop();
         session.removeParticle(cursorLineParticle);
@@ -93,8 +94,8 @@ public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
-        cursor.update(false);
+    public void onUpdate(@NotNull UpdateContext context) {
+        cursor.update(context);
         Vector3dc cursorPosition = cursor.get();
         cursorPosition.sub(position, currentOffset);
 
@@ -121,7 +122,7 @@ public class RotateNode extends EditorAxisNode implements ValueNode<Double> {
         rotateAxis.set(value);
         cursorLineParticle.setFromTo(position, snappedCursor);
 
-        session.setActionBar(Component.text()
+        context.setActionBar(Component.text()
                 .append(name)
                 .append(Component.text(": "))
                 .append(Component.text(Util.ANGLE_FORMAT.format(EasMath.wrapDegrees(degrees)))));

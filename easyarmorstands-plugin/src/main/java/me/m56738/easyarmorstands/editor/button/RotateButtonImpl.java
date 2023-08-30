@@ -51,7 +51,7 @@ public class RotateButtonImpl implements RotateButton, NodeFactoryButton {
     }
 
     @Override
-    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+    public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
         Vector3dc intersection = ray.intersectCircle(position, direction, radius);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
@@ -77,7 +77,7 @@ public class RotateButtonImpl implements RotateButton, NodeFactoryButton {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return name;
     }
 

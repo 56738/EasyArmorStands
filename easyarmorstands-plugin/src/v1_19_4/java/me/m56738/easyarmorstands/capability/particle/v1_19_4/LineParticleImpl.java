@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.util.Transformation;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -33,12 +34,12 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     }
 
     @Override
-    public Vector3dc getCenter() {
+    public @NotNull Vector3dc getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(Vector3dc center) {
+    public void setCenter(@NotNull Vector3dc center) {
         if (!this.center.equals(center, 1e-6)) {
             this.center.set(center);
             markDirty();
@@ -46,12 +47,12 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 
     @Override
-    public void setAxis(Axis axis) {
+    public void setAxis(@NotNull Axis axis) {
         if (this.axis != axis) {
             this.axis = axis;
             markDirty();
@@ -72,12 +73,12 @@ public class LineParticleImpl extends BlockDisplayParticleImpl implements LinePa
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return new Quaterniond(rotation);
     }
 
     @Override
-    public void setRotation(Quaterniondc rotation) {
+    public void setRotation(@NotNull Quaterniondc rotation) {
         Quaternionf rot = new Quaternionf(rotation);
         if (!this.rotation.equals(rot, 1e-6f)) {
             this.rotation.set(rot);

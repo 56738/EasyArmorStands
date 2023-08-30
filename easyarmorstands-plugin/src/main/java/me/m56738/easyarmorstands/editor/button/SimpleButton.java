@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.util.Util;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -44,7 +45,7 @@ public abstract class SimpleButton implements Button {
     }
 
     @Override
-    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+    public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
         Vector3dc intersection = ray.intersectPoint(getPosition());
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection, priority));

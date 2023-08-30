@@ -12,7 +12,7 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 public interface PropertyType<T> extends Keyed {
-    static TypeToken<PropertyType<?>> type() {
+    static @NotNull TypeToken<PropertyType<?>> type() {
         return PropertyTypeTypeToken.INSTANCE;
     }
 
@@ -25,7 +25,7 @@ public interface PropertyType<T> extends Keyed {
      *
      * @return Display name.
      */
-    Component getName();
+    @NotNull Component getName();
 
     /**
      * Format a value for display in a chat message.
@@ -33,16 +33,16 @@ public interface PropertyType<T> extends Keyed {
      * @param value The value to format.
      * @return The formatted value.
      */
-    Component getValueComponent(T value);
+    @NotNull Component getValueComponent(T value);
 
-    default void load(CommentedConfigurationNode config) throws SerializationException {
+    default void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
     }
 
     default T cloneValue(T value) {
         return value;
     }
 
-    default @Nullable MenuSlot createSlot(Property<T> property, PropertyContainer container) {
+    default @Nullable MenuSlot createSlot(@NotNull Property<T> property, @NotNull PropertyContainer container) {
         return null;
     }
 }

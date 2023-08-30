@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 import org.joml.Vector3f;
@@ -34,18 +35,18 @@ public class DisplayScaleAxis implements ScaleAxis {
     }
 
     @Override
-    public Vector3dc getPosition() {
+    public @NotNull Vector3dc getPosition() {
         return Util.toVector3d(locationProperty.getValue())
                 .add(offsetProvider.getOffset());
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return rotationProvider.getRotation();
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 

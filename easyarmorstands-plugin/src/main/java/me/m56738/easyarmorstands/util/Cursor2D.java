@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.util;
 
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import org.joml.Vector2d;
@@ -21,31 +23,23 @@ public class Cursor2D {
         this.particle = session.particleProvider().createPoint();
     }
 
-    public void start(Vector3dc origin, Vector3dc cursor, Vector3dc normal) {
+    public void start(EnterContext context, Vector3dc origin, Vector3dc cursor, Vector3dc normal) {
         this.origin.set(origin);
         this.current.set(cursor);
         this.normal.set(normal);
         particle.setPosition(current);
         particle.setColor(ParticleColor.YELLOW);
         session.addParticle(particle);
-        refresh();
+        Vector3d cursor3 = new Vector3d();
+        context.eyeRay().inverseMatrix().transformPosition(cursor, cursor3);
+        this.cursor.x = cursor3.x;
+        this.cursor.y = cursor3.y;
     }
 
-    private void refresh() {
-        Vector3d cursor = new Vector3d();
-        session.eyeRay().inverseMatrix().transformPosition(current, cursor);
-        this.cursor.x = cursor.x;
-        this.cursor.y = cursor.y;
-    }
-
-    public void update(boolean freeLook) {
-        if (freeLook) {
-            refresh();
-        } else {
-            Vector3dc intersection = session.eyeRay(cursor).intersectPlane(origin, normal);
-            if (intersection != null) {
-                current.set(intersection);
-            }
+    public void update(UpdateContext context) {
+        Vector3dc intersection = context.eyeRay(cursor).intersectPlane(origin, normal);
+        if (intersection != null) {
+            current.set(intersection);
         }
         particle.setPosition(current);
     }

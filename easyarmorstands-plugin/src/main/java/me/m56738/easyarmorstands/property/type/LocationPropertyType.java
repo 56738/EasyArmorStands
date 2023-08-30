@@ -12,7 +12,7 @@ public class LocationPropertyType extends ConfigurablePropertyType<Location> {
     }
 
     @Override
-    public Component getValueComponent(Location value) {
+    public @NotNull Component getValueComponent(Location value) {
         return Util.formatLocation(value);
     }
 

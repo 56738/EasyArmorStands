@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 
 import java.util.HashSet;
@@ -44,22 +45,22 @@ public abstract class DustParticle implements ColoredParticle {
     }
 
     @Override
-    public void show(Player player) {
+    public void show(@NotNull Player player) {
         players.add(player);
     }
 
     @Override
-    public void hide(Player player) {
+    public void hide(@NotNull Player player) {
         players.remove(player);
     }
 
     @Override
-    public ParticleColor getColor() {
+    public @NotNull ParticleColor getColor() {
         return color;
     }
 
     @Override
-    public void setColor(ParticleColor color) {
+    public void setColor(@NotNull ParticleColor color) {
         this.color = color;
     }
 }

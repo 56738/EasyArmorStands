@@ -21,13 +21,13 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         none = config.node("value", "none").get(Component.class);
     }
 
     @Override
-    public Component getValueComponent(Component value) {
+    public @NotNull Component getValueComponent(Component value) {
         if (value == null) {
             return none;
         }
@@ -35,7 +35,7 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<Component> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<Component> property, @NotNull PropertyContainer container) {
         return new ComponentButton(property, container, buttonTemplate, command);
     }
 }

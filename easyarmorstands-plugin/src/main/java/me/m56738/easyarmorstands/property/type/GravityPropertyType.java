@@ -21,13 +21,13 @@ public class GravityPropertyType extends BooleanTogglePropertyType {
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         canTickWarning = config.node("can-tick-warning").getList(String.class);
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<Boolean> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<Boolean> property, @NotNull PropertyContainer container) {
         return new GravityToggleButton(property, container, buttonTemplate, canTickWarning);
     }
 }

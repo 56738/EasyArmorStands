@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -39,23 +40,23 @@ public class AxisAlignedBoxParticleImpl implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public Vector3dc getCenter() {
+    public @NotNull Vector3dc getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(Vector3dc center) {
+    public void setCenter(@NotNull Vector3dc center) {
         this.center.set(center);
         refresh();
     }
 
     @Override
-    public Vector3dc getSize() {
+    public @NotNull Vector3dc getSize() {
         return size;
     }
 
     @Override
-    public void setSize(Vector3dc size) {
+    public void setSize(@NotNull Vector3dc size) {
         this.size.set(size);
         refresh();
     }
@@ -73,12 +74,12 @@ public class AxisAlignedBoxParticleImpl implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public ParticleColor getColor() {
+    public @NotNull ParticleColor getColor() {
         return color;
     }
 
     @Override
-    public void setColor(ParticleColor color) {
+    public void setColor(@NotNull ParticleColor color) {
         this.color = color;
         for (Line line : lines) {
             line.particle.setColor(color);
@@ -92,7 +93,7 @@ public class AxisAlignedBoxParticleImpl implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public void show(Player player) {
+    public void show(@NotNull Player player) {
         for (Line line : lines) {
             line.particle.show(player);
         }
@@ -106,7 +107,7 @@ public class AxisAlignedBoxParticleImpl implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public void hide(Player player) {
+    public void hide(@NotNull Player player) {
         for (Line line : lines) {
             line.particle.hide(player);
         }

@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class CarryNode extends EditorAxisNode {
     protected final Session session;
@@ -23,20 +24,20 @@ public class CarryNode extends EditorAxisNode {
     }
 
     @Override
-    public void onEnter(EnterContext context) {
-        carryAxis.start(session.eyeRay());
-        cursor.start(carryAxis.getPosition());
+    public void onEnter(@NotNull EnterContext context) {
+        carryAxis.start(context.eyeRay());
+        cursor.start(context, carryAxis.getPosition());
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
-        cursor.update(false);
-        carryAxis.update(session.eyeRay());
-        session.setActionBar(name);
+    public void onUpdate(@NotNull UpdateContext context) {
+        cursor.update(context);
+        carryAxis.update(context.eyeRay());
+        context.setActionBar(name);
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
         cursor.stop();
     }

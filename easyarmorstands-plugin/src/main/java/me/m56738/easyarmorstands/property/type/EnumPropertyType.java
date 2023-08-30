@@ -19,7 +19,7 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         for (T value : values) {
             valueNames.put(value, config.node("value", value.name())
@@ -28,7 +28,7 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     }
 
     @Override
-    public Component getValueComponent(T value) {
+    public @NotNull Component getValueComponent(T value) {
         return valueNames.get(value);
     }
 }

@@ -18,13 +18,13 @@ public class FloatPropertyType extends ConfigurablePropertyType<Float> {
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         format = config.node("value", "format").get(DecimalFormat.class);
     }
 
     @Override
-    public Component getValueComponent(Float value) {
+    public @NotNull Component getValueComponent(Float value) {
         return Component.text(format.format((float) value));
     }
 }

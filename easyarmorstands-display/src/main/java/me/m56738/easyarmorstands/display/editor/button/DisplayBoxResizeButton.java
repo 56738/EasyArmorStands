@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
 import me.m56738.easyarmorstands.editor.button.SimpleButton;
 import me.m56738.easyarmorstands.editor.node.MoveNode;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
 public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryButton {
@@ -26,7 +27,7 @@ public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryB
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return name;
     }
 

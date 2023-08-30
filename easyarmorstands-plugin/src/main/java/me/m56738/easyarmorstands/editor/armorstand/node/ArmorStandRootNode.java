@@ -33,6 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
@@ -70,16 +71,16 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         if (skeleton != null) {
             updateSkeleton(skeleton);
         }
-        session.setActionBar(name);
+        context.setActionBar(name);
     }
 
     @Override
-    public void onInactiveUpdate(UpdateContext context) {
+    public void onInactiveUpdate(@NotNull UpdateContext context) {
         super.onInactiveUpdate(context);
         if (skeleton != null) {
             updateSkeleton(skeleton);
@@ -95,7 +96,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     }
 
     @Override
-    public void onAdd(AddContext context) {
+    public void onAdd(@NotNull AddContext context) {
         if (skeleton != null) {
             skeleton.remove();
         }
@@ -154,14 +155,14 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     }
 
     @Override
-    public void onRemove(RemoveContext context) {
+    public void onRemove(@NotNull RemoveContext context) {
         if (skeleton != null) {
             skeleton.remove();
         }
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         Player player = session.player();
         if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
             element.openMenu(player);

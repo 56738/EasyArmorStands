@@ -14,7 +14,7 @@ public class BooleanTogglePropertyType extends BooleanPropertyType {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<Boolean> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<Boolean> property, @NotNull PropertyContainer container) {
         return new BooleanToggleButton(property, container, buttonTemplate);
     }
 }

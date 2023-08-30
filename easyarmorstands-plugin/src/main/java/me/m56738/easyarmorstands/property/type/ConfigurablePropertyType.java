@@ -35,7 +35,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         permission = config.node("permission").getString();
         name = config.node("name").get(Component.class);
         buttonTemplate = config.node("button").get(ItemTemplate.class);
@@ -58,7 +58,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         if (name == null) {
             throw new IllegalStateException("Property not configured: " + key);
         }

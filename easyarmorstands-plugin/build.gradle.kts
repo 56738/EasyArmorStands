@@ -20,7 +20,9 @@ dependencies {
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
-    api(libs.commodore)
+    api(libs.commodore) {
+        isTransitive = false
+    }
     api(libs.configurate.yaml)
     api(libs.joml)
     "addon"(project(":easyarmorstands-display"))

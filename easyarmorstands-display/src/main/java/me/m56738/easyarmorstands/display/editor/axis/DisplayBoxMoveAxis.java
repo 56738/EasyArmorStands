@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.axis.MoveAxis;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.DisplayBox;
 import me.m56738.easyarmorstands.util.Util;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -22,17 +23,17 @@ public class DisplayBoxMoveAxis implements MoveAxis {
     }
 
     @Override
-    public Vector3dc getPosition() {
+    public @NotNull Vector3dc getPosition() {
         return box.getPosition();
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return Util.IDENTITY;
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 
@@ -61,10 +62,5 @@ public class DisplayBoxMoveAxis implements MoveAxis {
     @Override
     public boolean isValid() {
         return container.isValid();
-    }
-
-    @Override
-    public boolean isRelative() {
-        return false;
     }
 }

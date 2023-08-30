@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
@@ -43,7 +44,7 @@ public class EntitySelectionNode extends MenuNode {
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         Set<Entity> notSeen = new HashSet<>(buttons.keySet());
         double range = context.eyeRay().length();
         Player player = session.player();
@@ -79,11 +80,11 @@ public class EntitySelectionNode extends MenuNode {
 
         super.onUpdate(context);
 
-        session.setActionBar(name);
+        context.setActionBar(name);
     }
 
     @Override
-    public void onExit(ExitContext context) {
+    public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
         for (ElementButton button : buttons.values()) {
             removeButton(button);
@@ -92,7 +93,7 @@ public class EntitySelectionNode extends MenuNode {
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }
@@ -160,12 +161,12 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         @Override
-        public Button getButton() {
+        public @NotNull Button getButton() {
             return button;
         }
 
         @Override
-        public void onClick(Session session, @Nullable Vector3dc cursor) {
+        public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
             if (!element.canEdit(session.player())) {
                 return;
             }
@@ -183,7 +184,7 @@ public class EntitySelectionNode extends MenuNode {
         }
 
         @Override
-        public Component getName() {
+        public @NotNull Component getName() {
             return element.getName();
         }
     }

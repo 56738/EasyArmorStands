@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import org.bukkit.Color;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -39,22 +40,22 @@ public class LineDustParticle extends DustParticle implements LineParticle {
     }
 
     @Override
-    public Vector3dc getCenter() {
+    public @NotNull Vector3dc getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(Vector3dc center) {
+    public void setCenter(@NotNull Vector3dc center) {
         this.center.set(center);
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 
     @Override
-    public void setAxis(Axis axis) {
+    public void setAxis(@NotNull Axis axis) {
         this.axis = axis;
     }
 
@@ -68,12 +69,12 @@ public class LineDustParticle extends DustParticle implements LineParticle {
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return rotation;
     }
 
     @Override
-    public void setRotation(Quaterniondc rotation) {
+    public void setRotation(@NotNull Quaterniondc rotation) {
         this.rotation.set(rotation);
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class HistoryManager implements Listener {
         history.remove(event.getPlayer());
     }
 
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         for (History history : history.values()) {
             history.onEntityReplaced(oldId, newId);
         }

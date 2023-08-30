@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.capability.particle.DustParticleCapability;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -24,22 +25,22 @@ public class AxisAlignedBoxDustParticle implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public Vector3dc getCenter() {
+    public @NotNull Vector3dc getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(Vector3dc center) {
+    public void setCenter(@NotNull Vector3dc center) {
         this.center.set(center);
     }
 
     @Override
-    public Vector3dc getSize() {
+    public @NotNull Vector3dc getSize() {
         return size;
     }
 
     @Override
-    public void setSize(Vector3dc size) {
+    public void setSize(@NotNull Vector3dc size) {
         this.size.set(size);
     }
 
@@ -53,17 +54,17 @@ public class AxisAlignedBoxDustParticle implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public ParticleColor getColor() {
+    public @NotNull ParticleColor getColor() {
         return color;
     }
 
     @Override
-    public void setColor(ParticleColor color) {
+    public void setColor(@NotNull ParticleColor color) {
         this.color = color;
     }
 
     @Override
-    public void show(Player player) {
+    public void show(@NotNull Player player) {
         players.add(player);
     }
 
@@ -107,7 +108,7 @@ public class AxisAlignedBoxDustParticle implements AxisAlignedBoxParticle {
     }
 
     @Override
-    public void hide(Player player) {
+    public void hide(@NotNull Player player) {
         players.remove(player);
     }
 }

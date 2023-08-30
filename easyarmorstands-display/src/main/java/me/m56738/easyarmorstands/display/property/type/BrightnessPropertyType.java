@@ -20,14 +20,14 @@ public class BrightnessPropertyType extends ConfigurablePropertyType<Brightness>
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         valueTemplate = config.node("value", "template").getString();
         none = config.node("value", "none").get(Component.class);
     }
 
     @Override
-    public Component getValueComponent(Brightness value) {
+    public @NotNull Component getValueComponent(Brightness value) {
         if (value == null) {
             return none;
         }

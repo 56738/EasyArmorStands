@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.editor.axis.DisplayShearRotateAxis;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
@@ -33,13 +34,13 @@ public class DisplayShearNode extends DisplayMenuNode implements ResettableNode 
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(name);
+        context.setActionBar(name);
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }

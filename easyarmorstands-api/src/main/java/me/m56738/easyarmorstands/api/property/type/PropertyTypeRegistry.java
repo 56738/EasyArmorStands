@@ -6,11 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface PropertyTypeRegistry {
-    void register(PropertyType<?> type);
+    void register(@NotNull PropertyType<?> type);
 
-    @Nullable PropertyType<?> getOrNull(Key key);
+    @Nullable PropertyType<?> getOrNull(@NotNull Key key);
 
-    default @NotNull PropertyType<?> get(Key key) {
+    default @NotNull PropertyType<?> get(@NotNull Key key) {
         PropertyType<?> propertyType = getOrNull(key);
         if (propertyType == null) {
             throw new UnknownPropertyTypeException(key, null);
@@ -19,7 +19,7 @@ public interface PropertyTypeRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    default @Nullable <T> PropertyType<T> getOrNull(Key key, Class<T> type) {
+    default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull Class<T> type) {
         PropertyType<?> propertyType = getOrNull(key);
         if (propertyType == null || type != propertyType.getValueType()) {
             return null;
@@ -27,7 +27,7 @@ public interface PropertyTypeRegistry {
         return (PropertyType<T>) propertyType;
     }
 
-    default @NotNull <T> PropertyType<T> get(Key key, Class<T> type) {
+    default @NotNull <T> PropertyType<T> get(@NotNull Key key, @NotNull Class<T> type) {
         PropertyType<T> propertyType = getOrNull(key, type);
         if (propertyType == null) {
             throw new UnknownPropertyTypeException(key, type);

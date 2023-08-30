@@ -10,7 +10,7 @@ public class IntegerPropertyType extends ConfigurablePropertyType<Integer> {
     }
 
     @Override
-    public Component getValueComponent(Integer value) {
+    public @NotNull Component getValueComponent(Integer value) {
         return Component.text(value);
     }
 }

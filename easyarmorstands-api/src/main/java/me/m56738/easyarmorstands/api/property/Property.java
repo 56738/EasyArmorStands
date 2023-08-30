@@ -38,6 +38,6 @@ public interface Property<T> {
      * @return The pending change, or null.
      */
     default @Nullable PendingChange prepareChange(T value) {
-        return PendingChange.of(this, value);
+        return new PendingChangeImpl<>(this, value);
     }
 }

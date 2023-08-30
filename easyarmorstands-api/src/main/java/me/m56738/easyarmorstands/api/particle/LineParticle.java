@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -15,7 +16,7 @@ public interface LineParticle extends ColoredParticle {
      * @param from The first point of the line.
      * @param to   The second point of the line.
      */
-    default void setFromTo(Vector3dc from, Vector3dc to) {
+    default void setFromTo(@NotNull Vector3dc from, @NotNull Vector3dc to) {
         Vector3dc delta = to.sub(from, new Vector3d());
         if (delta.lengthSquared() < 1e-4) {
             setCenter(from);
@@ -32,21 +33,21 @@ public interface LineParticle extends ColoredParticle {
         setOffset(length / 2);
     }
 
-    Vector3dc getCenter();
+    @NotNull Vector3dc getCenter();
 
-    void setCenter(Vector3dc center);
+    void setCenter(@NotNull Vector3dc center);
 
-    Axis getAxis();
+    @NotNull Axis getAxis();
 
-    void setAxis(Axis axis);
+    void setAxis(@NotNull Axis axis);
 
     double getWidth();
 
     void setWidth(double width);
 
-    Quaterniondc getRotation();
+    @NotNull Quaterniondc getRotation();
 
-    void setRotation(Quaterniondc rotation);
+    void setRotation(@NotNull Quaterniondc rotation);
 
     double getLength();
 

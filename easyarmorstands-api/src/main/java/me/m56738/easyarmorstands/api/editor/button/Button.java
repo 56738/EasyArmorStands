@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -18,7 +19,7 @@ public interface Button {
      * @param ray     The eye ray.
      * @param results A consumer which should be called with each intersection.
      */
-    void intersect(EyeRay ray, Consumer<ButtonResult> results);
+    void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results);
 
     /**
      * Updates the preview.

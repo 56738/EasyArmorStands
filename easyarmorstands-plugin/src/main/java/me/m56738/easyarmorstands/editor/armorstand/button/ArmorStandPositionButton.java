@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
 public class ArmorStandPositionButton extends SimpleButton implements NodeFactoryButton {
@@ -39,7 +40,7 @@ public class ArmorStandPositionButton extends SimpleButton implements NodeFactor
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return name;
     }
 

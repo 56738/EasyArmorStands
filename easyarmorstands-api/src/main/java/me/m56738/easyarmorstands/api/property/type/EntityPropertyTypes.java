@@ -8,24 +8,17 @@ import org.bukkit.Location;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.EnumMap;
 import java.util.Locale;
-import java.util.Map;
 
 @SuppressWarnings("PatternValidation")
 public class EntityPropertyTypes {
     public static final PropertyType<Component> CUSTOM_NAME = get("entity/custom_name", Component.class);
     public static final PropertyType<Boolean> CUSTOM_NAME_VISIBLE = get("entity/custom_name/visible", Boolean.class);
-    public static final Map<EquipmentSlot, PropertyType<ItemStack>> EQUIPMENT = new EnumMap<>(EquipmentSlot.class);
+    public static final KeyedPropertyType<EquipmentSlot, ItemStack> EQUIPMENT = new EnumKeyedPropertyType<>(EquipmentSlot.class,
+            slot -> get("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT), ItemStack.class));
     public static final PropertyType<Boolean> GLOWING = get("entity/glowing", Boolean.class);
     public static final PropertyType<Location> LOCATION = get("entity/location", Location.class);
     public static final PropertyType<Boolean> VISIBLE = get("entity/visible", Boolean.class);
-
-    static {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            EQUIPMENT.put(slot, get("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT), ItemStack.class));
-        }
-    }
 
     private EntityPropertyTypes() {
     }

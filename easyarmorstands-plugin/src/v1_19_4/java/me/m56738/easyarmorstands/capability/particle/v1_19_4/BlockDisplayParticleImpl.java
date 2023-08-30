@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.BlockDisplay;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class BlockDisplayParticleImpl extends DisplayParticleImpl<BlockDisplay> implements ColoredParticle {
     private ParticleColor color = ParticleColor.WHITE;
@@ -16,12 +17,12 @@ public abstract class BlockDisplayParticleImpl extends DisplayParticleImpl<Block
     }
 
     @Override
-    public ParticleColor getColor() {
+    public @NotNull ParticleColor getColor() {
         return color;
     }
 
     @Override
-    public void setColor(ParticleColor color) {
+    public void setColor(@NotNull ParticleColor color) {
         if (this.color == color) {
             return;
         }

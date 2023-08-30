@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandPositionNode extends PropertyMenuNode implements ResettableNode {
     private final Session session;
@@ -54,13 +55,13 @@ public class ArmorStandPositionNode extends PropertyMenuNode implements Resettab
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(name);
+        context.setActionBar(name);
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }

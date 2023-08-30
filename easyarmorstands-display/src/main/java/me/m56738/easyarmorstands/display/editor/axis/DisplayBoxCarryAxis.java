@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.axis.CarryAxis;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.DisplayBox;
 import me.m56738.easyarmorstands.util.Util;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -31,13 +32,13 @@ public class DisplayBoxCarryAxis implements CarryAxis {
     }
 
     @Override
-    public void start(EyeRay eyeRay) {
+    public void start(@NotNull EyeRay eyeRay) {
         box.saveOriginal();
         eyeRay.inverseMatrix().transformPosition(box.getPosition(), relativePosition);
     }
 
     @Override
-    public void update(EyeRay eyeRay) {
+    public void update(@NotNull EyeRay eyeRay) {
         box.setPosition(eyeRay.matrix().transformPosition(relativePosition, temp));
     }
 

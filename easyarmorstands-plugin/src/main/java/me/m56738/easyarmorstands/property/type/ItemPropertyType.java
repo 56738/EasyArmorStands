@@ -18,7 +18,7 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
     }
 
     @Override
-    public Component getValueComponent(ItemStack value) {
+    public @NotNull Component getValueComponent(ItemStack value) {
         return EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class).getItemDisplayName(value);
     }
 
@@ -28,7 +28,7 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(Property<ItemStack> property, PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<ItemStack> property, @NotNull PropertyContainer container) {
         return new ItemPropertySlot(property, container);
     }
 }

@@ -1,125 +1,32 @@
 package me.m56738.easyarmorstands.editor.node;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.DoubleArgument;
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.axis.MoveAxis;
-import me.m56738.easyarmorstands.api.editor.context.EnterContext;
-import me.m56738.easyarmorstands.api.editor.context.ExitContext;
-import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.util.Cursor3D;
-import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.command.CommandSender;
-import org.joml.Math;
-import org.joml.Quaterniondc;
-import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class MoveNode extends EditorAxisNode implements ValueNode<Double> {
+public class MoveNode extends LineNode implements ValueNode<Double> {
     private final Session session;
-    private final MoveAxis moveAxis;
-    private final Component name;
-    private final LineParticle particle;
-    private final LineParticle cursorLineParticle;
-    private final Cursor3D cursor;
-    private final Vector3d direction = new Vector3d();
-    private final Vector3d initialCursor = new Vector3d();
-    private final Vector3d temp = new Vector3d();
-    private Double manualValue;
-    private double initialValue;
 
     public MoveNode(Session session, MoveAxis moveAxis, double length, ParticleColor color, Component name) {
-        super(session, moveAxis);
+        super(session, moveAxis, length, color, name);
         this.session = session;
-        this.moveAxis = moveAxis;
-        this.name = name;
-        this.particle = session.particleProvider().createLine();
-        this.particle.setColor(color);
-        this.particle.setLength(length);
-        this.cursorLineParticle = session.particleProvider().createLine();
-        this.cursor = new Cursor3D(session);
     }
 
     @Override
-    public void onEnter(EnterContext context) {
-        manualValue = null;
-        initialValue = moveAxis.start();
-
-        Vector3dc position = moveAxis.getPosition();
-        Quaterniondc rotation = moveAxis.getRotation();
-        Axis axis = moveAxis.getAxis();
-        axis.getDirection().rotate(rotation, direction);
-        if (moveAxis.isInverted()) {
-            direction.negate();
-        }
-
-        initialCursor.set(context.cursorOrDefault(position));
-        cursor.start(initialCursor);
-
-        particle.setCenter(position);
-        particle.setRotation(rotation);
-        particle.setAxis(axis);
-        cursorLineParticle.setFromTo(EasMath.getClosestPointOnLine(position, direction, initialCursor, temp), initialCursor);
-
-        session.addParticle(particle);
-        session.addParticle(cursorLineParticle);
+    protected Vector3dc getDefaultCursor() {
+        return getPosition();
     }
 
     @Override
-    public void onExit(ExitContext context) {
-        super.onExit(context);
-        cursor.stop();
-        session.removeParticle(cursorLineParticle);
-        session.removeParticle(particle);
-    }
-
-    @Override
-    public void onUpdate(UpdateContext context) {
-        cursor.update(false);
-        Vector3dc cursorPosition = cursor.get();
-        double offset = EasMath.getOffsetAlongLine(initialCursor, direction, cursorPosition);
-        double value = Math.clamp(moveAxis.getMinValue(), moveAxis.getMaxValue(),
-                session.snapPosition(initialValue + offset));
-        if (manualValue != null) {
-            value = manualValue;
-        }
-        moveAxis.set(value);
-        Vector3dc position = moveAxis.getPosition();
-        particle.setCenter(position);
-        cursorLineParticle.setFromTo(EasMath.getClosestPointOnLine(position, direction, cursorPosition, temp), cursorPosition);
-
-        session.setActionBar(Component.text()
-                .append(name)
-                .append(Component.text(": "))
-                .append(Component.text(Util.POSITION_FORMAT.format(value))));
-    }
-
-    @Override
-    public Component getName() {
-        return name;
+    protected double getValue(double offset) {
+        return session.snapPosition(offset - getInitialOffset() + getInitialValue());
     }
 
     @Override
     public Component formatValue(Double value) {
-        if (moveAxis.isRelative()) {
-            return Component.text(Util.OFFSET_FORMAT.format(value));
-        } else {
-            return Component.text(Util.POSITION_FORMAT.format(value));
-        }
-    }
-
-    @Override
-    public ArgumentParser<CommandSender, Double> getParser() {
-        return new DoubleArgument.DoubleParser<>(moveAxis.getMinValue(), moveAxis.getMaxValue());
-    }
-
-    @Override
-    public void setValue(Double value) {
-        manualValue = value;
+        return Component.text(Util.OFFSET_FORMAT.format(value));
     }
 }

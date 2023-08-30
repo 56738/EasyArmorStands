@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3fc;
 
 public class DisplayBoxNode extends DisplayMenuNode implements ResettableNode {
@@ -71,13 +72,13 @@ public class DisplayBoxNode extends DisplayMenuNode implements ResettableNode {
     }
 
     @Override
-    public void onUpdate(UpdateContext context) {
+    public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        session.setActionBar(name);
+        context.setActionBar(name);
     }
 
     @Override
-    public boolean onClick(ClickContext context) {
+    public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
             return true;
         }

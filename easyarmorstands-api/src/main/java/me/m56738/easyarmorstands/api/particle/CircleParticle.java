@@ -2,26 +2,27 @@ package me.m56738.easyarmorstands.api.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface CircleParticle extends ColoredParticle {
-    Vector3dc getCenter();
+    @NotNull Vector3dc getCenter();
 
-    void setCenter(Vector3dc center);
+    void setCenter(@NotNull Vector3dc center);
 
-    Axis getAxis();
+    @NotNull Axis getAxis();
 
-    void setAxis(Axis axis);
+    void setAxis(@NotNull Axis axis);
 
     double getWidth();
 
     void setWidth(double width);
 
-    Quaterniondc getRotation();
+    @NotNull Quaterniondc getRotation();
 
-    void setRotation(Quaterniondc rotation);
+    void setRotation(@NotNull Quaterniondc rotation);
 
     double getRadius();
 

@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
@@ -36,20 +37,20 @@ public class DisplayLocalRotateAxis implements RotateAxis {
     }
 
     @Override
-    public Vector3dc getPosition() {
+    public @NotNull Vector3dc getPosition() {
         return Util.toVector3d(locationProperty.getValue())
                 .add(offsetProvider.getOffset());
     }
 
     @Override
-    public Quaterniond getRotation() {
+    public @NotNull Quaterniond getRotation() {
         Location location = locationProperty.getValue();
         return EasMath.getEntityRotation(location.getYaw(), location.getPitch(), new Quaterniond())
                 .mul(new Quaterniond(rotationProperty.getValue()));
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 

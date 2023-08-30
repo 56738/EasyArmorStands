@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -38,14 +39,14 @@ public class LocationCarryAxis implements CarryAxis {
     }
 
     @Override
-    public void start(EyeRay eyeRay) {
+    public void start(@NotNull EyeRay eyeRay) {
         originalLocation = locationProperty.getValue().clone();
         Util.toVector3d(originalLocation, position);
         eyeRay.inverseMatrix().transformPosition(position, relativePosition);
     }
 
     @Override
-    public void update(EyeRay eyeRay) {
+    public void update(@NotNull EyeRay eyeRay) {
         eyeRay.matrix().transformPosition(relativePosition, position);
         Location location = locationProperty.getValue().clone();
         location.setX(position.x);

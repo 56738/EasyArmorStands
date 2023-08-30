@@ -1,17 +1,18 @@
 package me.m56738.easyarmorstands.api.particle;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface AxisAlignedBoxParticle extends ColoredParticle {
-    Vector3dc getCenter();
+    @NotNull Vector3dc getCenter();
 
-    void setCenter(Vector3dc center);
+    void setCenter(@NotNull Vector3dc center);
 
-    Vector3dc getSize();
+    @NotNull Vector3dc getSize();
 
-    void setSize(Vector3dc size);
+    void setSize(@NotNull Vector3dc size);
 
     double getLineWidth();
 

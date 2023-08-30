@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -63,7 +64,7 @@ abstract class ElementPresenceAction implements Action {
     }
 
     @Override
-    public void onEntityReplaced(UUID oldId, UUID newId) {
+    public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         if (reference != null) {
             reference.onEntityReplaced(oldId, newId);
         }

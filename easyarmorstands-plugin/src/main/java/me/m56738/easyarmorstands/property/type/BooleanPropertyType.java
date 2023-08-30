@@ -16,7 +16,7 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     }
 
     @Override
-    public void load(CommentedConfigurationNode config) throws SerializationException {
+    public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
         enabled = config.node("value", "enabled").get(Component.class);
         disabled = config.node("value", "disabled").get(Component.class);
@@ -24,7 +24,7 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     }
 
     @Override
-    public Component getValueComponent(Boolean value) {
+    public @NotNull Component getValueComponent(Boolean value) {
         if (value == null) {
             return none;
         } else if (value) {

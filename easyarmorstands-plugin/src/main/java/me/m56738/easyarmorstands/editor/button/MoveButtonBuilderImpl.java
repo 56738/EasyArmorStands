@@ -55,14 +55,10 @@ public class MoveButtonBuilderImpl implements MoveButtonBuilder {
         Component name = this.name;
         if (name == null) {
             TextColor textColor = TextColor.color(axis.getColor());
-            if (moveAxis.isRelative()) {
-                name = Message.component(
-                        "easyarmorstands.node.move-along-axis",
-                        Component.text(axis.getName())
-                ).color(textColor);
-            } else {
-                name = Component.text(axis.getName(), textColor);
-            }
+            name = Message.component(
+                    "easyarmorstands.node.move-along-axis",
+                    Component.text(axis.getName())
+            ).color(textColor);
         }
         ParticleColor color = this.color;
         if (color == null) {

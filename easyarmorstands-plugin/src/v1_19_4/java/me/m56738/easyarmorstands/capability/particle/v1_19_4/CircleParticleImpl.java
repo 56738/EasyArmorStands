@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
@@ -29,24 +30,24 @@ public class CircleParticleImpl implements CircleParticle {
     }
 
     @Override
-    public ParticleColor getColor() {
+    public @NotNull ParticleColor getColor() {
         return lines[0].getColor();
     }
 
     @Override
-    public void setColor(ParticleColor color) {
+    public void setColor(@NotNull ParticleColor color) {
         for (LineParticle line : lines) {
             line.setColor(color);
         }
     }
 
     @Override
-    public Vector3dc getCenter() {
+    public @NotNull Vector3dc getCenter() {
         return center;
     }
 
     @Override
-    public void setCenter(Vector3dc center) {
+    public void setCenter(@NotNull Vector3dc center) {
         if (!this.center.equals(center, 1e-6)) {
             this.center.set(center);
             dirty = true;
@@ -54,12 +55,12 @@ public class CircleParticleImpl implements CircleParticle {
     }
 
     @Override
-    public Axis getAxis() {
+    public @NotNull Axis getAxis() {
         return axis;
     }
 
     @Override
-    public void setAxis(Axis axis) {
+    public void setAxis(@NotNull Axis axis) {
         if (this.axis != axis) {
             this.axis = axis;
             dirty = true;
@@ -82,12 +83,12 @@ public class CircleParticleImpl implements CircleParticle {
     }
 
     @Override
-    public Quaterniondc getRotation() {
+    public @NotNull Quaterniondc getRotation() {
         return rotation;
     }
 
     @Override
-    public void setRotation(Quaterniondc rotation) {
+    public void setRotation(@NotNull Quaterniondc rotation) {
         if (!this.rotation.equals(rotation, 1e-6)) {
             this.rotation.set(rotation);
             dirty = true;
@@ -130,7 +131,7 @@ public class CircleParticleImpl implements CircleParticle {
     }
 
     @Override
-    public void show(Player player) {
+    public void show(@NotNull Player player) {
         updateCircle();
         for (LineParticle line : lines) {
             line.show(player);
@@ -148,7 +149,7 @@ public class CircleParticleImpl implements CircleParticle {
     }
 
     @Override
-    public void hide(Player player) {
+    public void hide(@NotNull Player player) {
         for (LineParticle line : lines) {
             line.hide(player);
         }

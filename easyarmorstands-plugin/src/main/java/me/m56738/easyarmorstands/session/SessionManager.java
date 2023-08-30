@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
+import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
@@ -11,8 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class SessionManager {
     private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
@@ -21,6 +24,7 @@ public class SessionManager {
         final SessionImpl old = sessions.put(session.player(), session);
         if (old != null) {
             old.stop();
+            Bukkit.getPluginManager().callEvent(new SessionStopEvent(old));
         }
         Bukkit.getPluginManager().callEvent(new SessionStartEvent(session));
     }
@@ -38,6 +42,7 @@ public class SessionManager {
         SessionImpl session = sessions.remove(player);
         if (session != null) {
             session.stop();
+            Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
             return true;
         }
         return false;
@@ -50,6 +55,7 @@ public class SessionManager {
             if (!valid) {
                 iterator.remove();
                 session.stop();
+                Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
             }
         }
     }
@@ -65,10 +71,14 @@ public class SessionManager {
     }
 
     public void stopAllSessions() {
-        for (SessionImpl session : sessions.values()) {
+        List<SessionImpl> sessions = new ArrayList<>(this.sessions.values());
+        this.sessions.clear();
+        for (SessionImpl session : sessions) {
             session.stop();
         }
-        sessions.clear();
+        for (SessionImpl session : sessions) {
+            Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
+        }
     }
 
     public @Nullable SessionImpl getSession(Player player) {

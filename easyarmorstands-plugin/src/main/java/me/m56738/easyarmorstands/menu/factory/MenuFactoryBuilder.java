@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.menu.factory;
 
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 
 import java.util.Map;

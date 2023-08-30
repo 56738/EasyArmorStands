@@ -2,13 +2,14 @@ package me.m56738.easyarmorstands.api.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
 public interface MenuButton {
-    Button getButton();
+    @NotNull Button getButton();
 
-    Component getName();
+    @NotNull Component getName();
 
-    void onClick(Session session, @Nullable Vector3dc cursor);
+    void onClick(@NotNull Session session, @Nullable Vector3dc cursor);
 }

@@ -2,18 +2,19 @@ package me.m56738.easyarmorstands.api.particle;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.NonExtendable
 public interface ParticleProvider {
     @Contract(value = "-> new", pure = true)
-    PointParticle createPoint();
+    @NotNull PointParticle createPoint();
 
     @Contract(value = "-> new", pure = true)
-    LineParticle createLine();
+    @NotNull LineParticle createLine();
 
     @Contract(value = "-> new", pure = true)
-    CircleParticle createCircle();
+    @NotNull CircleParticle createCircle();
 
     @Contract(value = "-> new", pure = true)
-    AxisAlignedBoxParticle createAxisAlignedBox();
+    @NotNull AxisAlignedBoxParticle createAxisAlignedBox();
 }

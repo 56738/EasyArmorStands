@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.particle;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -10,13 +11,13 @@ public interface PointParticle extends ColoredParticle {
 
     void setSize(double size);
 
-    Vector3dc getPosition();
+    @NotNull Vector3dc getPosition();
 
-    void setPosition(Vector3dc position);
+    void setPosition(@NotNull Vector3dc position);
 
-    Quaterniondc getRotation();
+    @NotNull Quaterniondc getRotation();
 
-    void setRotation(Quaterniondc rotation);
+    void setRotation(@NotNull Quaterniondc rotation);
 
     boolean isBillboard();
 

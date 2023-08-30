@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -73,7 +74,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     }
 
     @Override
-    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
+    public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
         Vector3dc intersection = ray.intersectLine(start, end);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
@@ -99,7 +100,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     }
 
     @Override
-    public Component getName() {
+    public @NotNull Component getName() {
         return partInfo.getDisplayName();
     }
 
