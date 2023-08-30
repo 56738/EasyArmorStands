@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.util;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
-import org.joml.Matrix4d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -28,7 +27,7 @@ public class Cursor3D {
     }
 
     private void refresh() {
-        session.eyeMatrix().invert(new Matrix4d()).transformPosition(current, cursor);
+        session.eyeRay().inverseMatrix().transformPosition(current, cursor);
     }
 
     public void update(boolean freeLook) {

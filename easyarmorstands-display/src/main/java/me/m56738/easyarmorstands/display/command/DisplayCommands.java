@@ -522,12 +522,6 @@ public class DisplayCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
-        for (Axis axis : Axis.values()) {
-            node.addButton(session.menuEntryProvider()
-                    .rotate()
-                    .setAxis(new DisplayShearRotateAxis(properties, axis))
-                    .build());
-        }
         session.pushNode(node);
     }
 

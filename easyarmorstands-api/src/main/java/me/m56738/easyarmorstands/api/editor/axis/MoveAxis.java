@@ -14,4 +14,16 @@ public interface MoveAxis extends EditorAxis {
     double start();
 
     void set(double value);
+
+    default double getMinValue() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    default double getMaxValue() {
+        return Double.POSITIVE_INFINITY;
+    }
+
+    default boolean isInverted() {
+        return false;
+    }
 }

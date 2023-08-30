@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import org.joml.Math;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -48,6 +49,9 @@ public class MoveNode extends EditorAxisNode {
         Quaterniondc rotation = moveAxis.getRotation();
         Axis axis = moveAxis.getAxis();
         axis.getDirection().rotate(rotation, direction);
+        if (moveAxis.isInverted()) {
+            direction.negate();
+        }
 
         initialCursor.set(context.cursorOrDefault(position));
         cursor.start(initialCursor);
@@ -74,7 +78,8 @@ public class MoveNode extends EditorAxisNode {
         cursor.update(false);
         Vector3dc cursorPosition = cursor.get();
         double offset = EasMath.getOffsetAlongLine(initialCursor, direction, cursorPosition);
-        double value = initialValue + offset;
+        double value = Math.clamp(moveAxis.getMinValue(), moveAxis.getMaxValue(),
+                session.snapPosition(initialValue + offset));
         moveAxis.set(value);
         Vector3dc position = moveAxis.getPosition();
         particle.setCenter(position);

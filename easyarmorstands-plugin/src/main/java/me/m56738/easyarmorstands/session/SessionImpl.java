@@ -42,6 +42,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
 import org.joml.Vector2dc;
 import org.joml.Vector3d;
@@ -400,6 +401,7 @@ public final class SessionImpl implements Session {
         private final float yaw;
         private final float pitch;
         private final Matrix4dc matrix;
+        private Matrix4dc inverseMatrix;
 
         public EyeRayImpl(Vector3dc origin, Vector3dc target, double length, double threshold, float yaw, float pitch, Matrix4dc matrix) {
             this.origin = origin;
@@ -444,6 +446,14 @@ public final class SessionImpl implements Session {
         @Override
         public Matrix4dc matrix() {
             return matrix;
+        }
+
+        @Override
+        public Matrix4dc inverseMatrix() {
+            if (inverseMatrix == null) {
+                inverseMatrix = matrix.invert(new Matrix4d());
+            }
+            return inverseMatrix;
         }
     }
 

@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.util;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
-import org.joml.Matrix4d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -34,7 +33,7 @@ public class Cursor2D {
 
     private void refresh() {
         Vector3d cursor = new Vector3d();
-        session.eyeMatrix().invert(new Matrix4d()).transformPosition(current, cursor);
+        session.eyeRay().inverseMatrix().transformPosition(current, cursor);
         this.cursor.x = cursor.x;
         this.cursor.y = cursor.y;
     }

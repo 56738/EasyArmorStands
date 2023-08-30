@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.display.editor.DisplaySessionListener;
 import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
+import me.m56738.easyarmorstands.display.menu.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.display.menu.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
 import me.m56738.easyarmorstands.util.JOMLMapper;
@@ -50,6 +51,7 @@ public class DisplayAddon {
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/text_display"), textDisplayType));
+        EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplayBoxSlotType());
 
         EntityElementProviderRegistry registry = plugin.entityElementProviderRegistry();
         registry.register(new DisplayElementProvider<>(itemDisplayType));

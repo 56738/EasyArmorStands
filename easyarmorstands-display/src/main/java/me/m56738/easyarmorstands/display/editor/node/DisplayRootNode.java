@@ -8,8 +8,11 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.display.editor.DisplayRotationProvider;
 import me.m56738.easyarmorstands.display.editor.axis.DisplayGlobalRotateAxis;
@@ -20,16 +23,20 @@ import me.m56738.easyarmorstands.editor.axis.LocationRelativeMoveAxis;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
+public class DisplayRootNode extends DisplayMenuNode implements ElementNode, ResettableNode {
     private final Session session;
     private final DisplayElement<?> element;
+    private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
     private final DisplayOffsetProvider offsetProvider;
     private final DisplayRotationProvider rotationProvider;
@@ -41,9 +48,10 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
         super(session, session.properties(element));
         this.session = session;
         this.element = element;
-        this.blockDataProperty = container.getOrNull(BlockDisplayPropertyTypes.BLOCK);
-        this.offsetProvider = new DisplayOffsetProvider(container);
-        this.rotationProvider = new DisplayRotationProvider(container);
+        this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
+        this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
+        this.offsetProvider = new DisplayOffsetProvider(properties());
+        this.rotationProvider = new DisplayRotationProvider(properties());
         setLocal(true);
     }
 
@@ -66,11 +74,11 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
             MoveAxis moveAxis;
             RotateAxis rotateAxis;
             if (local) {
-                moveAxis = new LocationRelativeMoveAxis(container, axis, offsetProvider, rotationProvider);
-                rotateAxis = new DisplayLocalRotateAxis(container, axis);
+                moveAxis = new LocationRelativeMoveAxis(properties(), axis, offsetProvider, rotationProvider);
+                rotateAxis = new DisplayLocalRotateAxis(properties(), axis);
             } else {
-                moveAxis = new LocationMoveAxis(container, axis, offsetProvider);
-                rotateAxis = new DisplayGlobalRotateAxis(container, axis);
+                moveAxis = new LocationMoveAxis(properties(), axis, offsetProvider);
+                rotateAxis = new DisplayGlobalRotateAxis(properties(), axis);
             }
             buttons.add(session.menuEntryProvider()
                     .move()
@@ -98,7 +106,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
             Block block = context.block();
             if (block != null) {
                 if (blockDataProperty.setValue(block.getBlockData())) {
-                    container.commit();
+                    properties().commit();
                     return true;
                 }
             }
@@ -123,5 +131,20 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode {
     @Override
     public DisplayElement<?> getElement() {
         return element;
+    }
+
+    @Override
+    public void reset() {
+        properties().get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
+        properties().get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
+        properties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
+        properties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
+
+        Location location = locationProperty.getValue();
+        location.setYaw(0);
+        location.setPitch(0);
+        locationProperty.setValue(location);
+
+        properties().commit();
     }
 }

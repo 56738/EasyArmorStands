@@ -23,6 +23,8 @@ public interface EyeRay {
 
     Matrix4dc matrix();
 
+    Matrix4dc inverseMatrix();
+
     default Vector3dc intersectPoint(Vector3dc position) {
         Vector3dc origin = origin();
         Vector3dc target = target();

@@ -6,22 +6,18 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
-import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.joml.Quaternionf;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
-public class DisplayMenuNode extends MenuNode implements ResettableNode {
-    protected final PropertyContainer container;
+public class DisplayMenuNode extends PropertyMenuNode {
     private final Session session;
     private final AxisAlignedBoxParticle boxParticle;
     private final Property<Location> locationProperty;
@@ -33,9 +29,8 @@ public class DisplayMenuNode extends MenuNode implements ResettableNode {
     private boolean isActive;
 
     public DisplayMenuNode(Session session, PropertyContainer container) {
-        super(session);
+        super(session, container);
         this.session = session;
-        this.container = container;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
@@ -86,11 +81,6 @@ public class DisplayMenuNode extends MenuNode implements ResettableNode {
         super.onInactiveUpdate(context);
     }
 
-    @Override
-    public boolean isValid() {
-        return container.isValid();
-    }
-
     private void updateBoundingBox() {
         float width = widthProperty.getValue();
         float height = heightProperty.getValue();
@@ -117,20 +107,5 @@ public class DisplayMenuNode extends MenuNode implements ResettableNode {
 
     public void setShowBoundingBoxIfInactive(boolean showBoundingBoxIfInactive) {
         this.showBoundingBoxIfInactive = showBoundingBoxIfInactive;
-    }
-
-    @Override
-    public void reset() {
-        container.get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
-        container.get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
-        container.get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
-        container.get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
-
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
-
-        container.commit();
     }
 }

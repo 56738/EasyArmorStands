@@ -5,6 +5,17 @@ slots:
     row: 2
     column: 1
     type: easyarmorstands:property
+  easyarmorstands:display/box:
+    row: 3
+    column: 8
+    type: easyarmorstands:display/box
+    config:
+      item:
+        type: black_stained_glass
+        name: <lang:easyarmorstands.node.display.box>
+        description:
+          - <lang:easyarmorstands.node.display.box.description>
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
   easyarmorstands:display/billboard:
     row: 1
     column: 4

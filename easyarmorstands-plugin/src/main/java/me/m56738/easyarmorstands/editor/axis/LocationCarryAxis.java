@@ -42,7 +42,7 @@ public class LocationCarryAxis implements CarryAxis {
     public void start(EyeRay eyeRay) {
         originalLocation = locationProperty.getValue().clone();
         Util.toVector3d(originalLocation, position);
-        eyeRay.matrix().invert(new Matrix4d()).transformPosition(position, relativePosition);
+        eyeRay.inverseMatrix().transformPosition(position, relativePosition);
     }
 
     @Override
