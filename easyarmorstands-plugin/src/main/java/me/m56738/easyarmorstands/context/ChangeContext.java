@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
 import net.kyori.adventure.permission.PermissionChecker;
 import org.jetbrains.annotations.Contract;
@@ -18,6 +19,9 @@ public interface ChangeContext {
 
     @Contract(pure = true)
     @NotNull History history();
+
+    @Contract(pure = true)
+    @NotNull ChangeTracker tracker();
 
     @Contract(pure = true)
     @NotNull Locale locale();

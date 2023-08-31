@@ -1,13 +1,12 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
-import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +30,8 @@ public class SessionManager {
 
     public SessionImpl start(Player player) {
         SessionImpl session = new SessionImpl(new EasPlayer(player));
-        EntityElementProviderRegistryImpl registry = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry();
-        EntitySelectionNode node = new EntitySelectionNode(session, registry);
+        ElementSelectionNode node = new ElementSelectionNode(session);
+        node.addSource(new EntityElementDiscoverySource());
         session.pushNode(node);
         start(session);
         return session;

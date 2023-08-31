@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -243,7 +243,7 @@ public class SessionListener implements Listener {
         Player player = event.getPlayer();
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            EntitySelectionNode node = session.findNode(EntitySelectionNode.class);
+            ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
             if (node != null) {
                 session.clearNode();
                 session.pushNode(node);

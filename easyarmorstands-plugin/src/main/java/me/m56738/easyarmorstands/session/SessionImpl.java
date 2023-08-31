@@ -339,7 +339,7 @@ public final class SessionImpl implements Session {
         double threshold = getLookThreshold();
         float yaw = eyeLocation.getYaw();
         float pitch = eyeLocation.getPitch();
-        return new EyeRayImpl(origin, target, length, threshold, yaw, pitch, eyeMatrix);
+        return new EyeRayImpl(eyeLocation.getWorld(), origin, target, length, threshold, yaw, pitch, eyeMatrix);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
@@ -352,7 +352,7 @@ public final class SessionImpl implements Session {
         double threshold = getLookThreshold();
         float yaw = eyeLocation.getYaw();
         float pitch = eyeLocation.getPitch();
-        return new EyeRayImpl(origin, target, length, threshold, yaw, pitch, eyeMatrix);
+        return new EyeRayImpl(eyeLocation.getWorld(), origin, target, length, threshold, yaw, pitch, eyeMatrix);
     }
 
     private Matrix4dc eyeMatrix(Location eyeLocation) {
@@ -370,6 +370,7 @@ public final class SessionImpl implements Session {
     }
 
     public static class EyeRayImpl implements EyeRay {
+        private final World world;
         private final Vector3dc origin;
         private final Vector3dc target;
         private final double length;
@@ -379,7 +380,8 @@ public final class SessionImpl implements Session {
         private final Matrix4dc matrix;
         private Matrix4dc inverseMatrix;
 
-        public EyeRayImpl(Vector3dc origin, Vector3dc target, double length, double threshold, float yaw, float pitch, Matrix4dc matrix) {
+        public EyeRayImpl(World world, Vector3dc origin, Vector3dc target, double length, double threshold, float yaw, float pitch, Matrix4dc matrix) {
+            this.world = world;
             this.origin = origin;
             this.target = target;
             this.length = length;
@@ -387,6 +389,11 @@ public final class SessionImpl implements Session {
             this.yaw = yaw;
             this.pitch = pitch;
             this.matrix = matrix;
+        }
+
+        @Override
+        public @NotNull World world() {
+            return world;
         }
 
         @Override

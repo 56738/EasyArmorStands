@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.audience.Audience;
@@ -43,6 +44,11 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     @Override
     public @NotNull History history() {
         return history;
+    }
+
+    @Override
+    public @NotNull ChangeTracker tracker() {
+        return history.getTracker();
     }
 
     @Override

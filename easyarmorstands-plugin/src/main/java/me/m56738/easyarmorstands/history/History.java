@@ -11,6 +11,7 @@ import java.util.UUID;
 public class History {
     private final ArrayDeque<Action> past = new ArrayDeque<>();
     private final ArrayDeque<Action> future = new ArrayDeque<>();
+    private final ChangeTracker tracker = new ChangeTracker(this);
 
     public ArrayDeque<Action> getPast() {
         return past;
@@ -18,6 +19,10 @@ public class History {
 
     public ArrayDeque<Action> getFuture() {
         return future;
+    }
+
+    public ChangeTracker getTracker() {
+        return tracker;
     }
 
     public void push(Action action) {

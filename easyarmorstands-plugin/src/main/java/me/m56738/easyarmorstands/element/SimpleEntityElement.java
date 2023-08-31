@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
+import me.m56738.easyarmorstands.api.element.GroupEditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
@@ -19,7 +20,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement {
+public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, GroupEditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = new Properties();
@@ -62,6 +63,11 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public Node createNode(Session session) {
         return new SimpleEntityNode(session, this);
+    }
+
+    @Override
+    public SimpleEntityGroupMember<E> createGroupMember(@NotNull Session session) {
+        return new SimpleEntityGroupMember<>(this, session.properties(this));
     }
 
     @Override

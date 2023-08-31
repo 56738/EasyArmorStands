@@ -4,18 +4,19 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.history.ChangeTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 class TrackedPropertyWrapper<T> implements Property<T> {
-    private final TrackedPropertyContainer container;
+    private final ChangeTracker tracker;
     private final Element element;
     private final Property<T> property;
 
-    TrackedPropertyWrapper(TrackedPropertyContainer container, Element element, Property<T> property) {
-        this.container = container;
+    TrackedPropertyWrapper(ChangeTracker tracker, Element element, Property<T> property) {
+        this.tracker = tracker;
         this.element = element;
         this.property = property;
     }
@@ -39,7 +40,7 @@ class TrackedPropertyWrapper<T> implements Property<T> {
         if (!property.setValue(value)) {
             return false;
         }
-        container.recordChange(element, property, oldValue, value);
+        tracker.recordChange(element, property, oldValue, value);
         return true;
     }
 
@@ -49,6 +50,6 @@ class TrackedPropertyWrapper<T> implements Property<T> {
         if (change == null) {
             return null;
         }
-        return new TrackedPendingChangeWrapper<>(container, element, property, value, change);
+        return new TrackedPendingChangeWrapper<>(tracker, element, property, value, change);
     }
 }

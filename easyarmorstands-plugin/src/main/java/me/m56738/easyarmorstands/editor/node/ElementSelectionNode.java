@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.editor.node;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
@@ -10,15 +11,15 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
+import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,60 +28,63 @@ import org.joml.Vector3dc;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class EntitySelectionNode extends MenuNode {
+public class ElementSelectionNode extends MenuNode {
     private final Session session;
-    private final EntityElementProviderRegistryImpl providerRegistry;
-    private final Map<Entity, ElementButton> buttons = new HashMap<>();
+    private final Map<ElementDiscoveryEntry, ElementButton> buttons = new HashMap<>();
     private final Component name;
+    private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
 
-    public EntitySelectionNode(Session session, EntityElementProviderRegistryImpl providerRegistry) {
+    public ElementSelectionNode(Session session) {
         super(session);
         this.session = session;
-        this.providerRegistry = providerRegistry;
         this.name = Message.component("easyarmorstands.node.select-entity");
+    }
+
+    public void addSource(ElementDiscoverySource source) {
+        sources.add(source);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        Set<Entity> notSeen = new HashSet<>(buttons.keySet());
-        double range = context.eyeRay().length();
-        Player player = session.player();
-        Location location = player.getLocation();
-        for (Entity entity : location.getWorld().getNearbyEntities(location, range, range, range)) {
-            if (entity.getLocation().distanceSquared(location) > range * range) {
-                continue;
-            }
+        EyeRay eyeRay = context.eyeRay();
 
-            if (notSeen.remove(entity)) {
-                // entity already existed
-                continue;
-            }
-
-            // entity is new, create a button for it
-            Element element = providerRegistry.getElement(entity);
-            ElementButton button = null;
-            if (element instanceof SelectableElement) {
-                SelectableElement selectableElement = (SelectableElement) element;
-                if (selectableElement.canEdit(session.player())) {
-                    button = new ElementButton(session, selectableElement);
-                    addButton(button);
-                }
-            }
-
-            buttons.put(entity, button);
+        Set<ElementDiscoveryEntry> foundEntries = new HashSet<>();
+        for (ElementDiscoverySource source : sources) {
+            source.discover(eyeRay, foundEntries::add);
         }
 
-        // remove buttons of entities which no longer exist
-        for (Entity entity : notSeen) {
-            removeButton(buttons.remove(entity));
+        // Process removed entries
+        for (Iterator<Map.Entry<ElementDiscoveryEntry, ElementButton>> iterator = buttons.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<ElementDiscoveryEntry, ElementButton> entry = iterator.next();
+            if (!foundEntries.contains(entry.getKey())) {
+                removeButton(entry.getValue());
+                iterator.remove();
+            }
+        }
+
+        // Process added entries
+        for (ElementDiscoveryEntry entry : foundEntries) {
+            buttons.computeIfAbsent(entry, this::addEntry);
         }
 
         super.onUpdate(context);
 
         context.setActionBar(name);
+    }
+
+    private ElementButton addEntry(ElementDiscoveryEntry entry) {
+        SelectableElement element = entry.getElement();
+        if (element == null || !element.canEdit(session.player())) {
+            return null;
+        }
+        ElementButton button = new ElementButton(session, element);
+        addButton(button);
+        return button;
     }
 
     @Override
@@ -92,6 +96,18 @@ public class EntitySelectionNode extends MenuNode {
         buttons.clear();
     }
 
+    private ElementButton findButton(Entity entity) {
+        for (ElementDiscoverySource source : sources) {
+            if (source instanceof EntityElementDiscoverySource) {
+                ElementButton button = buttons.get(((EntityElementDiscoverySource) source).getEntry(entity));
+                if (button != null) {
+                    return button;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean onClick(@NotNull ClickContext context) {
         if (super.onClick(context)) {
@@ -101,7 +117,7 @@ public class EntitySelectionNode extends MenuNode {
         if (context.type() == ClickContext.Type.RIGHT_CLICK) {
             Entity entity = context.entity();
             if (entity != null) {
-                ElementButton button = buttons.get(entity);
+                ElementButton button = findButton(entity);
                 if (button != null) {
                     button.onClick(session, null);
                     return true;

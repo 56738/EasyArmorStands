@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.api.editor;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +14,9 @@ import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface EyeRay {
+    @Contract(pure = true)
+    @NotNull World world();
+
     @Contract(pure = true)
     @NotNull Vector3dc origin();
 
@@ -35,6 +40,19 @@ public interface EyeRay {
 
     @Contract(pure = true)
     @NotNull Matrix4dc inverseMatrix();
+
+    default boolean isInRange(Location location) {
+        return world().equals(location.getWorld()) && isInRange(location.getX(), location.getY(), location.getZ());
+    }
+
+    default boolean isInRange(Vector3dc position) {
+        return isInRange(position.x(), position.y(), position.z());
+    }
+
+    default boolean isInRange(double x, double y, double z) {
+        double range = length();
+        return origin().distanceSquared(x, y, z) <= range * range;
+    }
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectPoint(Vector3dc position) {

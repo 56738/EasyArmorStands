@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandButton;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
 import org.bukkit.entity.ArmorStand;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     private final ArmorStand entity;
@@ -23,5 +24,10 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     @Override
     public ElementNode createNode(Session session) {
         return new ArmorStandRootNode(session, entity, this);
+    }
+
+    @Override
+    public ArmorStandGroupMember createGroupMember(@NotNull Session session) {
+        return new ArmorStandGroupMember(this, session.properties(this));
     }
 }

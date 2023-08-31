@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import org.bukkit.entity.Display;
+import org.jetbrains.annotations.NotNull;
 
 public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     public DisplayElement(T entity, SimpleEntityElementType<T> type) {
@@ -22,5 +23,10 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     @Override
     public ElementNode createNode(Session session) {
         return new DisplayRootNode(session, this);
+    }
+
+    @Override
+    public DisplayGroupMember<T> createGroupMember(@NotNull Session session) {
+        return new DisplayGroupMember<>(this, session.properties(this));
     }
 }

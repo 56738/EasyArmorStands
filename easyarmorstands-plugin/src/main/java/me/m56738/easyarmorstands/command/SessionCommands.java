@@ -6,6 +6,7 @@ import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.specifier.Range;
+import cloud.commandframework.bukkit.arguments.selector.MultipleEntitySelector;
 import cloud.commandframework.bukkit.arguments.selector.SingleEntitySelector;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -14,7 +15,9 @@ import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.GroupEditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.group.GroupMember;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -24,6 +27,8 @@ import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.group.Group;
+import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
@@ -43,6 +48,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @CommandMethod("eas")
 public class SessionCommands {
@@ -101,15 +112,55 @@ public class SessionCommands {
         if (session == null) {
             return null;
         }
+
         Element element = session.getElement();
-        if (element == null) {
-            sendNoSessionElementError(sender);
+        if (element != null) {
+            return element;
         }
-        return element;
+
+        GroupRootNode groupNode = session.findNode(GroupRootNode.class);
+        if (groupNode != null) {
+            Set<GroupMember> members = groupNode.getGroup().getMembers();
+            if (members.size() == 1) {
+                for (GroupMember member : members) {
+                    return member.getElement();
+                }
+            }
+        }
+
+        sendNoSessionElementError(sender);
+        return null;
+    }
+
+    public static Collection<Element> getElementsOrError(EasPlayer sender, Session session) {
+        if (session == null) {
+            return null;
+        }
+
+        Element element = session.getElement();
+        if (element != null) {
+            return Collections.singleton(element);
+        }
+
+        GroupRootNode groupNode = session.findNode(GroupRootNode.class);
+        if (groupNode != null) {
+            List<Element> elements = new ArrayList<>();
+            for (GroupMember member : groupNode.getGroup().getMembers()) {
+                elements.add(member.getElement());
+            }
+            return elements;
+        }
+
+        sendNoSessionElementError(sender);
+        return null;
     }
 
     public static Element getElementOrError(EasPlayer sender) {
         return getElementOrError(sender, getSessionOrError(sender));
+    }
+
+    public static Collection<Element> getElementsOrError(EasPlayer sender) {
+        return getElementsOrError(sender, getSessionOrError(sender));
     }
 
     public static Element getElementOrError(EasPlayer sender, Entity entity) {
@@ -161,6 +212,35 @@ public class SessionCommands {
         menuElement.openMenu(sender.get());
     }
 
+    @CommandMethod("group <entities>")
+    @CommandPermission(Permissions.EDIT)
+    @CommandDescription("Edit a group of entities")
+    public void group(EasPlayer sender, @Argument("entities") MultipleEntitySelector selector) {
+        Session session = getSessionOrError(sender);
+        if (session == null) {
+            return;
+        }
+        Player player = sender.get();
+        Group group = new Group(session);
+        for (Entity entity : selector.getEntities()) {
+            Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
+            if (element instanceof GroupEditableElement) {
+                GroupEditableElement groupEditableElement = (GroupEditableElement) element;
+                if (groupEditableElement.canEdit(player)) {
+                    GroupMember member = groupEditableElement.createGroupMember(session);
+                    if (member != null) {
+                        group.addMember(member);
+                    }
+                }
+            }
+        }
+        if (group.getMembers().isEmpty()) {
+            return;
+        }
+        GroupRootNode node = new GroupRootNode(group);
+        session.pushNode(node);
+    }
+
     @CommandMethod("clone")
     @CommandPermission(Permissions.CLONE)
     @CommandDescription("Spawn a copy of the selected entity")
@@ -194,23 +274,36 @@ public class SessionCommands {
     @CommandPermission(Permissions.DESTROY)
     @CommandDescription("Destroy the selected entity")
     public void destroy(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        Collection<Element> elements = getElementsOrError(sender);
+        if (elements.isEmpty()) {
             return;
         }
-        if (!(element instanceof DestroyableElement)) {
+
+        List<ElementDestroyAction> actions = new ArrayList<>();
+        for (Element element : elements) {
+            if (!(element instanceof DestroyableElement)) {
+                continue;
+            }
+
+            DestroyableElement destroyableElement = (DestroyableElement) element;
+            if (!sender.canDestroyElement(destroyableElement)) {
+                continue;
+            }
+
+            actions.add(new ElementDestroyAction(element));
+            destroyableElement.destroy();
+        }
+
+        sender.history().push(actions);
+
+        int count = actions.size();
+        if (count > 1) {
+            sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed.multiple", Component.text(count)));
+        } else if (count == 1) {
+            sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed"));
+        } else {
             sender.sendMessage(Message.error("easyarmorstands.error.destroy-unsupported"));
-            return;
         }
-
-        DestroyableElement destroyableElement = (DestroyableElement) element;
-        if (!sender.canDestroyElement(destroyableElement)) {
-            return;
-        }
-
-        sender.history().push(new ElementDestroyAction(element));
-        destroyableElement.destroy();
-        sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed"));
     }
 
     @CommandMethod("snap angle [value]")

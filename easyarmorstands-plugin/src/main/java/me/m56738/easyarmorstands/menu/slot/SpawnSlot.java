@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.node.EntitySelectionNode;
+import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -67,7 +67,7 @@ public class SpawnSlot implements MenuSlot {
             context.history().push(new ElementCreateAction(element));
 
             if (session != null) {
-                EntitySelectionNode selectionNode = session.findNode(EntitySelectionNode.class);
+                ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
                 if (selectionNode != null) {
                     selectionNode.selectElement(element);
                 }

@@ -3,18 +3,19 @@ package me.m56738.easyarmorstands.property;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.history.ChangeTracker;
 
 import java.util.Objects;
 
 class TrackedPendingChangeWrapper<T> implements PendingChange {
-    private final TrackedPropertyContainer container;
+    private final ChangeTracker tracker;
     private final Element element;
     private final Property<T> property;
     private final T value;
     private final PendingChange pendingChange;
 
-    TrackedPendingChangeWrapper(TrackedPropertyContainer container, Element element, Property<T> property, T value, PendingChange pendingChange) {
-        this.container = container;
+    TrackedPendingChangeWrapper(ChangeTracker tracker, Element element, Property<T> property, T value, PendingChange pendingChange) {
+        this.tracker = tracker;
         this.element = element;
         this.property = property;
         this.value = value;
@@ -30,7 +31,7 @@ class TrackedPendingChangeWrapper<T> implements PendingChange {
         if (!pendingChange.execute()) {
             return false;
         }
-        container.recordChange(element, property, oldValue, value);
+        tracker.recordChange(element, property, oldValue, value);
         return true;
     }
 }
