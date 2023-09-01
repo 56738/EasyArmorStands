@@ -110,8 +110,10 @@ public abstract class MenuNode implements Node {
             }
             results.clear();
         }
-        for (Button button : buttons.values()) {
-            button.updatePreview(button == bestButton);
+        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
+            MenuButton menuButton = entry.getKey();
+            Button button = entry.getValue();
+            button.updatePreview(button == bestButton || menuButton.isHighlighted());
         }
         Component targetName;
         if (bestButton != null) {

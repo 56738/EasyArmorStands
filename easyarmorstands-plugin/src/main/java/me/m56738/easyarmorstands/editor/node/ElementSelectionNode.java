@@ -16,6 +16,8 @@ import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.group.Group;
+import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
@@ -38,6 +40,7 @@ public class ElementSelectionNode extends MenuNode {
     private final Map<ElementDiscoveryEntry, ElementButton> buttons = new HashMap<>();
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
+    private final Set<SelectableElement> groupMembers = new LinkedHashSet<>();
 
     public ElementSelectionNode(Session session) {
         super(session);
@@ -74,7 +77,16 @@ public class ElementSelectionNode extends MenuNode {
 
         super.onUpdate(context);
 
-        context.setActionBar(name);
+        groupMembers.removeIf(e -> !e.isValid());
+
+        int groupSize = groupMembers.size();
+        if (groupSize == 0) {
+            context.setActionBar(name);
+        } else if (groupSize == 1) {
+            context.setActionBar(Message.component("easyarmorstands.node.group-selected.single"));
+        } else {
+            context.setActionBar(Message.component("easyarmorstands.node.group-selected", Component.text(groupSize)));
+        }
     }
 
     private ElementButton addEntry(ElementDiscoveryEntry entry) {
@@ -94,6 +106,7 @@ public class ElementSelectionNode extends MenuNode {
             removeButton(button);
         }
         buttons.clear();
+        groupMembers.clear();
     }
 
     private ElementButton findButton(Entity entity) {
@@ -110,6 +123,25 @@ public class ElementSelectionNode extends MenuNode {
 
     @Override
     public boolean onClick(@NotNull ClickContext context) {
+        if (context.type() == ClickContext.Type.RIGHT_CLICK && !groupMembers.isEmpty() && !session.player().isSneaking()) {
+            int groupSize = groupMembers.size();
+            if (groupSize > 1) {
+                Group group = new Group(session);
+                for (SelectableElement element : groupMembers) {
+                    group.addMember(element);
+                }
+                session.pushNode(new GroupRootNode(group));
+            } else {
+                SelectableElement element = groupMembers.iterator().next();
+                Node node = element.createNode(session);
+                if (node != null) {
+                    session.pushNode(node);
+                }
+            }
+            groupMembers.clear();
+            return true;
+        }
+
         if (super.onClick(context)) {
             return true;
         }
@@ -167,7 +199,7 @@ public class ElementSelectionNode extends MenuNode {
 
     }
 
-    private static class ElementButton implements MenuButton {
+    private class ElementButton implements MenuButton {
         private final SelectableElement element;
         private final Button button;
 
@@ -193,6 +225,13 @@ public class ElementSelectionNode extends MenuNode {
                 return;
             }
 
+            if (session.player().isSneaking()) {
+                if (!groupMembers.add(element)) {
+                    groupMembers.remove(element);
+                }
+                return;
+            }
+
             Node node = element.createNode(session);
             if (node != null) {
                 session.pushNode(node, cursor);
@@ -202,6 +241,11 @@ public class ElementSelectionNode extends MenuNode {
         @Override
         public @NotNull Component getName() {
             return element.getName();
+        }
+
+        @Override
+        public boolean isHighlighted() {
+            return groupMembers.contains(element);
         }
     }
 }

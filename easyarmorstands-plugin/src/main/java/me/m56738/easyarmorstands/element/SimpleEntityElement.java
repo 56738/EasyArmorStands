@@ -22,6 +22,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
@@ -96,6 +98,19 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public @NotNull Component getName() {
         return Component.text(Util.getId(entity.getUniqueId()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleEntityElement<?> that = (SimpleEntityElement<?>) o;
+        return Objects.equals(entity, that.entity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entity);
     }
 
     private class Properties extends PropertyRegistry {
