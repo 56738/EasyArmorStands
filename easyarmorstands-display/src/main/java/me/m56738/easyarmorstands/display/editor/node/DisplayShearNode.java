@@ -8,7 +8,8 @@ import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayShearRotateAxis;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
@@ -20,15 +21,16 @@ public class DisplayShearNode extends DisplayMenuNode implements ResettableNode 
     private final Component name;
     private final Property<Quaternionfc> rightRotationProperty;
 
-    public DisplayShearNode(Session session, PropertyContainer properties) {
+    public DisplayShearNode(Session session, PropertyContainer properties, DisplayElement<?> element) {
         super(session, properties);
         this.session = session;
         this.name = DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD);
         this.rightRotationProperty = properties.get(DisplayPropertyTypes.RIGHT_ROTATION);
+        DisplayToolProvider tools = element.getTools(properties);
         for (Axis axis : Axis.values()) {
             addButton(session.menuEntryProvider()
-                    .rotate()
-                    .setAxis(new DisplayShearRotateAxis(properties, axis))
+                    .axisRotate()
+                    .setTool(tools.shear(tools.position(), tools.rotation(), axis))
                     .build());
         }
     }

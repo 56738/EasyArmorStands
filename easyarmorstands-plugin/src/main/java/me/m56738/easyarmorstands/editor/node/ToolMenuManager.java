@@ -6,14 +6,16 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
+import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.editor.button.AxisMoveToolButton;
-import me.m56738.easyarmorstands.editor.button.AxisRotateToolButton;
-import me.m56738.easyarmorstands.editor.button.MoveToolButton;
+import me.m56738.easyarmorstands.editor.button.AxisMoveButtonImpl;
+import me.m56738.easyarmorstands.editor.button.AxisRotateButtonImpl;
+import me.m56738.easyarmorstands.editor.button.AxisScaleButtonImpl;
+import me.m56738.easyarmorstands.editor.button.MoveButtonImpl;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -70,16 +72,30 @@ public class ToolMenuManager {
     private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {
         PositionProvider positionProvider = toolProvider.position();
         RotationProvider rotationProvider;
-        if (mode == ToolMenuMode.LOCAL) {
-            rotationProvider = toolProvider.rotation();
-        } else {
+        if (mode == ToolMenuMode.GLOBAL) {
             rotationProvider = RotationProvider.identity();
+        } else {
+            rotationProvider = toolProvider.rotation();
+        }
+
+        if (mode == ToolMenuMode.SCALE) {
+            for (Axis axis : Axis.values()) {
+                AxisScaleTool axisScaleTool = toolProvider.scale(positionProvider, rotationProvider, axis);
+                if (axisScaleTool != null) {
+                    ParticleColor axisColor = axis.getColor();
+                    TextComponent axisName = Component.text(axis.getName());
+                    Component toolName = Message.component("easyarmorstands.node.scale-along-axis", axisName)
+                            .color(TextColor.color(axisColor));
+                    buttons.add(new AxisScaleButtonImpl(session, axisScaleTool, 3, toolName, axisColor));
+                }
+            }
+            return;
         }
 
         MoveTool moveTool = toolProvider.move(positionProvider, rotationProvider);
         if (moveTool != null) {
             Component name = Message.component("easyarmorstands.node.pick-up");
-            buttons.add(new MoveToolButton(session, moveTool, name, ParticleColor.WHITE));
+            buttons.add(new MoveButtonImpl(session, moveTool, name, ParticleColor.WHITE));
         }
         for (Axis axis : Axis.values()) {
             AxisMoveTool axisMoveTool = toolProvider.move(positionProvider, rotationProvider, axis);
@@ -88,7 +104,7 @@ public class ToolMenuManager {
                 TextComponent axisName = Component.text(axis.getName());
                 Component toolName = Message.component("easyarmorstands.node.move-along-axis", axisName)
                         .color(TextColor.color(axisColor));
-                buttons.add(new AxisMoveToolButton(session, axisMoveTool, 3, toolName, axisColor));
+                buttons.add(new AxisMoveButtonImpl(session, axisMoveTool, 3, toolName, axisColor));
             }
             AxisRotateTool axisRotateTool = toolProvider.rotate(positionProvider, rotationProvider, axis);
             if (axisRotateTool != null) {
@@ -96,7 +112,7 @@ public class ToolMenuManager {
                 TextComponent axisName = Component.text(axis.getName());
                 Component toolName = Message.component("easyarmorstands.node.rotate-around-axis", axisName)
                         .color(TextColor.color(axisColor));
-                buttons.add(new AxisRotateToolButton(session, axisRotateTool, 1, 3, toolName, axisColor));
+                buttons.add(new AxisRotateButtonImpl(session, axisRotateTool, 1, 3, toolName, axisColor));
             }
         }
     }

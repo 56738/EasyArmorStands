@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.display.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
@@ -28,7 +27,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+    public @NotNull DisplayToolProvider getTools(PropertyContainer properties) {
         return new DisplayToolProvider(properties);
     }
 }

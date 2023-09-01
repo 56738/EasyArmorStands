@@ -1,17 +1,13 @@
 package me.m56738.easyarmorstands.editor.node;
 
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.editor.OffsetProvider;
-import me.m56738.easyarmorstands.editor.axis.LocationCarryAxis;
-import me.m56738.easyarmorstands.editor.axis.LocationMoveAxis;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
@@ -23,25 +19,13 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
     private final Element element;
     private final Component name;
 
-    public SimpleEntityNode(Session session, Element element) {
+    public SimpleEntityNode(Session session, EditableElement element) {
         super(session);
         this.session = session;
         this.element = element;
         this.name = Message.component("easyarmorstands.node.select-axis");
-
-        PropertyContainer properties = session.properties(element);
-        for (Axis axis : Axis.values()) {
-            addButton(session.menuEntryProvider()
-                    .move()
-                    .setAxis(new LocationMoveAxis(properties, axis, OffsetProvider.zero()))
-                    .build());
-        }
-
-        addButton(session.menuEntryProvider()
-                .carry()
-                .setAxis(new LocationCarryAxis(properties, OffsetProvider.zero()))
-                .setPriority(1)
-                .build());
+        new ToolMenuManager(session, this, element.getTools(session.properties(element)))
+                .setMode(ToolMenuMode.GLOBAL);
     }
 
     @Override

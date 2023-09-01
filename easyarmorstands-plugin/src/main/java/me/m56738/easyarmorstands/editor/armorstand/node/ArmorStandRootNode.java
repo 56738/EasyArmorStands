@@ -56,7 +56,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
         this.name = Message.component("easyarmorstands.node.select-bone");
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part);
+            ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part, element);
             addButton(partButton);
             partButtons.put(part, partButton);
         }
@@ -66,7 +66,8 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
                 ParticleColor.WHITE,
                 Message.component("easyarmorstands.node.position"),
                 container,
-                new ArmorStandOffsetProvider(container));
+                new ArmorStandOffsetProvider(container),
+                element);
         addButton(positionButton);
     }
 

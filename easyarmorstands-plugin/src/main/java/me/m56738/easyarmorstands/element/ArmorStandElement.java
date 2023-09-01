@@ -3,9 +3,12 @@ package me.m56738.easyarmorstands.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandButton;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
 import org.bukkit.entity.ArmorStand;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     private final ArmorStand entity;
@@ -23,5 +26,10 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     @Override
     public ElementNode createNode(Session session) {
         return new ArmorStandRootNode(session, entity, this);
+    }
+
+    @Override
+    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+        return new ArmorStandToolProvider(properties);
     }
 }

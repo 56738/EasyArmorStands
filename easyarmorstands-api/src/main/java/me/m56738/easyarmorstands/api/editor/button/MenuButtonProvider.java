@@ -6,9 +6,9 @@ import org.jetbrains.annotations.ApiStatus;
 public interface MenuButtonProvider {
     MoveButtonBuilder move();
 
-    ScaleButtonBuilder scale();
+    AxisMoveButtonBuilder axisMove();
 
-    RotateButtonBuilder rotate();
+    AxisScaleButtonBuilder axisScale();
 
-    CarryButtonBuilder carry();
+    AxisRotateButtonBuilder axisRotate();
 }

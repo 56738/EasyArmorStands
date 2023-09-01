@@ -15,6 +15,7 @@ import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPartNode;
 import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
+import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -33,6 +34,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     private final PropertyContainer container;
     private final ArmorStandPart part;
     private final ArmorStandPartInfo partInfo;
+    private final ArmorStandElement element;
     private final Vector3d start = new Vector3d();
     private final Vector3d end = new Vector3d();
     private final Vector3d center = new Vector3d();
@@ -42,11 +44,12 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     private final Property<EulerAngle> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
 
-    public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part) {
+    public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         this.session = session;
         this.container = container;
         this.part = part;
         this.partInfo = ArmorStandPartInfo.of(part);
+        this.element = element;
         this.particle = session.particleProvider().createLine();
         this.particle.setAxis(Axis.Y);
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
@@ -106,6 +109,6 @@ public class ArmorStandPartButton implements NodeFactoryButton {
 
     @Override
     public Node createNode() {
-        return new ArmorStandPartNode(session, container, part);
+        return new ArmorStandPartNode(session, container, part, element);
     }
 }

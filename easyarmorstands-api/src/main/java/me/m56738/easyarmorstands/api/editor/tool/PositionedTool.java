@@ -1,10 +1,6 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3dc;
+import me.m56738.easyarmorstands.api.util.PositionProvider;
 
-public interface PositionedTool<S extends ToolSession> extends Tool<S> {
-    @Contract(pure = true)
-    @NotNull Vector3dc getPosition();
+public interface PositionedTool<S extends ToolSession> extends Tool<S>, PositionProvider {
 }

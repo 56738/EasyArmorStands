@@ -3,26 +3,27 @@ package me.m56738.easyarmorstands.display.editor.button;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayBoxResizeAxis;
+import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxResizeTool;
 import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
 import me.m56738.easyarmorstands.editor.button.SimpleButton;
-import me.m56738.easyarmorstands.editor.node.MoveNode;
+import me.m56738.easyarmorstands.editor.node.AxisMoveToolNode;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryButton {
     private final Session session;
     private final Component name;
     private final ParticleColor color;
-    private final DisplayBoxResizeAxis resizeAxis;
+    private final DisplayBoxResizeTool tool;
 
-    public DisplayBoxResizeButton(Session session, Component name, ParticleColor color, DisplayBoxResizeAxis resizeAxis) {
+    public DisplayBoxResizeButton(Session session, Component name, ParticleColor color, DisplayBoxResizeTool tool) {
         super(session, color);
         this.session = session;
         this.name = name;
         this.color = color;
-        this.resizeAxis = resizeAxis;
+        this.tool = tool;
         setPriority(2);
     }
 
@@ -33,7 +34,12 @@ public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryB
 
     @Override
     protected Vector3dc getPosition() {
-        return resizeAxis.getPosition();
+        return tool.getPosition();
+    }
+
+    @Override
+    protected Quaterniondc getRotation() {
+        return tool.getRotation();
     }
 
     @Override
@@ -43,6 +49,6 @@ public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryB
 
     @Override
     public Node createNode() {
-        return new MoveNode(session, resizeAxis, 3, color, name);
+        return new AxisMoveToolNode(session, tool.start(), color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis());
     }
 }

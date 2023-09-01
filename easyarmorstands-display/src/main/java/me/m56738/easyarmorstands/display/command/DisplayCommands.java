@@ -15,7 +15,6 @@ import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
-import me.m56738.easyarmorstands.api.property.UnknownPropertyException;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
@@ -29,6 +28,7 @@ import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTy
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
@@ -303,15 +303,12 @@ public class DisplayCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        DisplayBoxNode node;
-        try {
-            node = new DisplayBoxNode(session, properties);
-        } catch (UnknownPropertyException e) {
+        if (!(element instanceof DisplayElement<?>)) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
-        session.pushNode(node);
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+        session.pushNode(new DisplayBoxNode(session, properties));
     }
 
     @CommandMethod("text")
@@ -512,14 +509,12 @@ public class DisplayCommands {
         if (element == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        DisplayMenuNode node;
-        try {
-            node = new DisplayShearNode(session, properties);
-        } catch (UnknownPropertyException e) {
+        if (!(element instanceof DisplayElement<?>)) {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
+        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+        DisplayMenuNode node = new DisplayShearNode(session, properties, (DisplayElement<?>) element);
         session.pushNode(node);
     }
 

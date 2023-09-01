@@ -9,12 +9,17 @@ import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.DisplayBox;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayBoxCarryAxis;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayBoxMoveAxis;
-import me.m56738.easyarmorstands.display.editor.axis.DisplayBoxResizeAxis;
+import me.m56738.easyarmorstands.display.editor.DisplayBoxPositionProvider;
+import me.m56738.easyarmorstands.display.editor.DisplaySidePositionProvider;
 import me.m56738.easyarmorstands.display.editor.button.DisplayBoxResizeButton;
+import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxResizeTool;
+import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxToolProvider;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
+import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -38,23 +43,12 @@ public class DisplayBoxNode extends DisplayMenuNode implements ResettableNode {
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
+        new ToolMenuManager(session, this, new DisplayBoxToolProvider(properties, new DisplayBoxPositionProvider(properties)))
+                .setMode(ToolMenuMode.GLOBAL);
         for (Axis axis : Axis.values()) {
-            addAxis(axis);
+            addAxisEnd(axis, false);
+            addAxisEnd(axis, true);
         }
-        addButton(session.menuEntryProvider()
-                .carry()
-                .setAxis(new DisplayBoxCarryAxis(properties))
-                .setPriority(1)
-                .build());
-    }
-
-    private void addAxis(Axis axis) {
-        addButton(session.menuEntryProvider()
-                .move()
-                .setAxis(new DisplayBoxMoveAxis(properties, axis))
-                .build());
-        addAxisEnd(axis, false);
-        addAxisEnd(axis, true);
     }
 
     private void addAxisEnd(Axis axis, boolean end) {
@@ -68,7 +62,12 @@ public class DisplayBoxNode extends DisplayMenuNode implements ResettableNode {
                 session,
                 name.color(NamedTextColor.AQUA),
                 ParticleColor.AQUA,
-                new DisplayBoxResizeAxis(properties, axis, end)));
+                new DisplayBoxResizeTool(
+                        properties,
+                        new DisplaySidePositionProvider(properties, axis, end),
+                        RotationProvider.identity(),
+                        axis,
+                        end)));
     }
 
     @Override

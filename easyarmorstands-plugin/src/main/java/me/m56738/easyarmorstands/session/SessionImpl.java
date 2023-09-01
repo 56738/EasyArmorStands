@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.CarryButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.button.AxisMoveButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.button.AxisRotateButtonBuilder;
+import me.m56738.easyarmorstands.api.editor.button.AxisScaleButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
-import me.m56738.easyarmorstands.api.editor.button.RotateButtonBuilder;
-import me.m56738.easyarmorstands.api.editor.button.ScaleButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -21,10 +21,10 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.editor.button.CarryButtonBuilderImpl;
+import me.m56738.easyarmorstands.editor.button.AxisMoveButtonBuilderImpl;
+import me.m56738.easyarmorstands.editor.button.AxisRotateButtonBuilderImpl;
+import me.m56738.easyarmorstands.editor.button.AxisScaleButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.MoveButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.button.RotateButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.button.ScaleButtonBuilderImpl;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -478,23 +478,23 @@ public final class SessionImpl implements Session {
         }
 
         @Override
+        public AxisMoveButtonBuilder axisMove() {
+            return new AxisMoveButtonBuilderImpl(session);
+        }
+
+        @Override
+        public AxisScaleButtonBuilder axisScale() {
+            return new AxisScaleButtonBuilderImpl(session);
+        }
+
+        @Override
+        public AxisRotateButtonBuilder axisRotate() {
+            return new AxisRotateButtonBuilderImpl(session);
+        }
+
+        @Override
         public MoveButtonBuilder move() {
             return new MoveButtonBuilderImpl(session);
-        }
-
-        @Override
-        public ScaleButtonBuilder scale() {
-            return new ScaleButtonBuilderImpl(session);
-        }
-
-        @Override
-        public RotateButtonBuilder rotate() {
-            return new RotateButtonBuilderImpl(session);
-        }
-
-        @Override
-        public CarryButtonBuilder carry() {
-            return new CarryButtonBuilderImpl(session);
         }
     }
 }

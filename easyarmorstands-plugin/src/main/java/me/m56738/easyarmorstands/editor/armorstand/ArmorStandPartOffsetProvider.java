@@ -14,21 +14,19 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandPartOffsetProvider implements OffsetProvider {
-    private final ArmorStandPartInfo part;
     private final Property<Location> locationProperty;
     private final Property<ArmorStandSize> sizeProperty;
-    private final Vector3d currentAnchor = new Vector3d();
+    private final ArmorStandPartInfo partInfo;
 
-    public ArmorStandPartOffsetProvider(PropertyContainer properties, ArmorStandPart part) {
-        this.part = ArmorStandPartInfo.of(part);
-        this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
-        this.sizeProperty = properties.get(ArmorStandPropertyTypes.SIZE);
+    public ArmorStandPartOffsetProvider(PropertyContainer container, ArmorStandPart part) {
+        this.partInfo = ArmorStandPartInfo.of(part);
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.sizeProperty = container.get(ArmorStandPropertyTypes.SIZE);
     }
 
     @Override
     public Vector3dc getOffset() {
-        Location location = locationProperty.getValue();
-        ArmorStandSize size = sizeProperty.getValue();
-        return part.getOffset(size).rotateY(-Math.toRadians(location.getYaw()), currentAnchor);
+        return partInfo.getOffset(sizeProperty.getValue())
+                .rotateY(-Math.toRadians(locationProperty.getValue().getYaw()), new Vector3d());
     }
 }

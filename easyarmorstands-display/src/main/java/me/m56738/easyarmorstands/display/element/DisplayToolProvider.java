@@ -39,7 +39,8 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
 
     @Override
     public @Nullable AxisScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        if (rotationProvider == rotation()) {
+        if (positionProvider == position() && rotationProvider == rotation()) {
+            // TODO Allow arbitrary position/rotation
             return new DisplayAxisScaleTool(properties, axis, positionProvider, rotationProvider);
         }
         return super.scale(positionProvider, rotationProvider, axis);

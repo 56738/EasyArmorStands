@@ -5,7 +5,8 @@ import net.kyori.adventure.text.Component;
 
 public enum ToolMenuMode {
     LOCAL(Message.component("easyarmorstands.node.local")),
-    GLOBAL(Message.component("easyarmorstands.node.global"));
+    GLOBAL(Message.component("easyarmorstands.node.global")),
+    SCALE(Message.component("easyarmorstands.node.scale"));
 
     private final Component name;
 
