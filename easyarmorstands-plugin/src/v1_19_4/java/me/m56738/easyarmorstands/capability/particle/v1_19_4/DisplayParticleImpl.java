@@ -12,12 +12,5 @@ public abstract class DisplayParticleImpl<T extends Display> extends ParticleImp
     protected void configure(T entity) {
         super.configure(entity);
         entity.setBrightness(new Display.Brightness(15, 0));
-        entity.setInterpolationDuration(1);
-    }
-
-    @Override
-    protected void update(T entity) {
-        super.update(entity);
-        entity.setInterpolationDelay(0);
     }
 }

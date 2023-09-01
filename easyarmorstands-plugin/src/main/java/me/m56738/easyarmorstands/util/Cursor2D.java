@@ -37,7 +37,7 @@ public class Cursor2D {
     }
 
     public void update(UpdateContext context) {
-        Vector3dc intersection = context.eyeRay(cursor).intersectPlane(origin, normal);
+        Vector3dc intersection = context.eyeRay(cursor).intersectPlane(origin, normal, Double.POSITIVE_INFINITY);
         if (intersection != null) {
             current.set(intersection);
         }

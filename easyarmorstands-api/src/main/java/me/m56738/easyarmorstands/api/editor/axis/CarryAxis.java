@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
+@Deprecated
 public interface CarryAxis extends EditorAxis {
     Vector3dc getPosition();
 

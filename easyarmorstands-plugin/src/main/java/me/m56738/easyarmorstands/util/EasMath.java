@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
+import org.bukkit.Location;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -32,6 +33,10 @@ public class EasMath {
     public static Quaterniond getEntityRotation(float yaw, float pitch, Quaterniond dest) {
         return getEntityYawRotation(yaw, dest)
                 .rotateX(Math.toRadians(pitch));
+    }
+
+    public static Quaterniond getEntityRotation(Location location, Quaterniond dest) {
+        return getEntityRotation(location.getYaw(), location.getPitch(), dest);
     }
 
     public static Quaterniond getInverseEntityRotation(float yaw, float pitch, Quaterniond dest) {

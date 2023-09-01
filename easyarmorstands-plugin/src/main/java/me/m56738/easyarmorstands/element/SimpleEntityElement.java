@@ -4,12 +4,14 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
-import me.m56738.easyarmorstands.api.element.GroupEditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.editor.button.SimpleEntityButton;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
@@ -20,7 +22,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, GroupEditableElement {
+public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = new Properties();
@@ -56,6 +58,11 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
+    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+        return new SimpleEntityToolProvider(properties);
+    }
+
+    @Override
     public Button createButton(Session session) {
         return new SimpleEntityButton(session, entity);
     }
@@ -63,11 +70,6 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public Node createNode(Session session) {
         return new SimpleEntityNode(session, this);
-    }
-
-    @Override
-    public SimpleEntityGroupMember<E> createGroupMember(@NotNull Session session) {
-        return new SimpleEntityGroupMember<>(this, session.properties(this));
     }
 
     @Override

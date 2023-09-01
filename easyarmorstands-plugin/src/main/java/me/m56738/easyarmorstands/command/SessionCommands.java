@@ -13,11 +13,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.element.GroupEditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.api.group.GroupMember;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -28,6 +27,7 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.group.Group;
+import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -224,13 +224,10 @@ public class SessionCommands {
         Group group = new Group(session);
         for (Entity entity : selector.getEntities()) {
             Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
-            if (element instanceof GroupEditableElement) {
-                GroupEditableElement groupEditableElement = (GroupEditableElement) element;
-                if (groupEditableElement.canEdit(player)) {
-                    GroupMember member = groupEditableElement.createGroupMember(session);
-                    if (member != null) {
-                        group.addMember(member);
-                    }
+            if (element instanceof EditableElement) {
+                EditableElement editableElement = (EditableElement) element;
+                if (editableElement.canEdit(player)) {
+                    group.addMember(editableElement);
                 }
             }
         }

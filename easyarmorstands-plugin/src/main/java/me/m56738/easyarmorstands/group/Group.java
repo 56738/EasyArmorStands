@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.group;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.group.GroupMember;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -17,6 +17,10 @@ public class Group {
 
     public Group(Session session) {
         this.session = session;
+    }
+
+    public void addMember(EditableElement element) {
+        addMember(new GroupMember(session, element));
     }
 
     public void addMember(GroupMember member) {
@@ -38,16 +42,10 @@ public class Group {
     public Vector3dc getAveragePosition() {
         Vector3d position = new Vector3d();
         for (GroupMember member : members) {
-            position.add(member.getPosition());
+            position.add(member.getTools().position().getPosition());
         }
         position.div(members.size());
         return position;
-    }
-
-    public void commit() {
-        for (GroupMember member : members) {
-            member.commit();
-        }
     }
 
     public boolean isValid() {

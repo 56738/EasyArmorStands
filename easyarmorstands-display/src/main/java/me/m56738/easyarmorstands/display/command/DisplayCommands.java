@@ -294,9 +294,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("box move")
+    @CommandMethod("box")
     @PropertyPermission("easyarmorstands:display/translation")
-    @CommandDescription("Select a tool to move the bounding box of the selected display")
+    @CommandDescription("Edit the bounding box of the selected display")
     public void moveBox(EasPlayer sender) {
         Session session = getSessionOrError(sender);
         Element element = getElementOrError(sender, session);

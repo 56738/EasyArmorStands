@@ -7,7 +7,7 @@ public class UnknownPropertyException extends RuntimeException {
     private final @NotNull PropertyType<?> type;
 
     public UnknownPropertyException(@NotNull PropertyType<?> type) {
-        super(type.toString());
+        super(type.key().asString());
         this.type = type;
     }
 

@@ -96,8 +96,13 @@ public interface EyeRay {
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectPlane(Vector3dc point, Vector3dc normal) {
+        return intersectPlane(point, normal, length());
+    }
+
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectPlane(Vector3dc point, Vector3dc normal, double range) {
         Vector3dc origin = origin();
-        Vector3dc direction = target().sub(origin, new Vector3d());
+        Vector3dc direction = target().sub(origin, new Vector3d()).normalize();
         double ox = origin.x(), oy = origin.y(), oz = origin.z();
         double dx = direction.x(), dy = direction.y(), dz = direction.z();
         double px = point.x(), py = point.y(), pz = point.z();
@@ -113,7 +118,7 @@ public interface EyeRay {
                     px, py, pz, -nx, -ny, -nz,
                     0.1);
         }
-        if (t >= 0 && t < 1) {
+        if (t >= 0 && t <= range) {
             return origin.fma(t, direction, new Vector3d());
         } else {
             return null;

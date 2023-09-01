@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.api.group;
 import me.m56738.easyarmorstands.api.Axis;
 import org.joml.Vector3d;
 
+@Deprecated
 class SimpleMoveAxisTool implements GroupMoveAxisTool {
     private final GroupMoveTool moveTool;
     private final Axis axis;
