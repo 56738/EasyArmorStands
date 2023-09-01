@@ -230,9 +230,13 @@ public class Util {
                 .build();
     }
 
+    public static ItemStack getEmptyItem() {
+        return new ItemStack(Material.AIR, 0);
+    }
+
     public static ItemStack wrapItem(ItemStack item) {
-        if (item == null) {
-            return new ItemStack(Material.AIR);
+        if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) {
+            return getEmptyItem();
         }
         return item;
     }

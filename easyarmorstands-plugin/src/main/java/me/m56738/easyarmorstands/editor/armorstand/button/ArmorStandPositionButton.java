@@ -51,6 +51,11 @@ public class ArmorStandPositionButton extends SimpleButton implements NodeFactor
     }
 
     @Override
+    protected boolean isBillboard() {
+        return false;
+    }
+
+    @Override
     public @NotNull Component getName() {
         return name;
     }

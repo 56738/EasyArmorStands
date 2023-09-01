@@ -18,14 +18,15 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
     private final Session session;
     private final Element element;
     private final Component name;
+    private final ToolMenuManager toolManager;
 
     public SimpleEntityNode(Session session, EditableElement element) {
         super(session);
         this.session = session;
         this.element = element;
         this.name = Message.component("easyarmorstands.node.select-axis");
-        new ToolMenuManager(session, this, element.getTools(session.properties(element)))
-                .setMode(ToolMenuMode.GLOBAL);
+        this.toolManager = new ToolMenuManager(session, this, element.getTools(session.properties(element)));
+        this.toolManager.setMode(ToolMenuMode.GLOBAL);
     }
 
     @Override
@@ -43,6 +44,14 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
             Player player = session.player();
             if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
                 ((MenuElement) element).openMenu(player);
+                return true;
+            }
+        }
+        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
+            ToolMenuMode mode = toolManager.getMode();
+            ToolMenuMode nextMode = toolManager.getNextMode();
+            if (nextMode != mode) {
+                toolManager.setMode(nextMode);
                 return true;
             }
         }

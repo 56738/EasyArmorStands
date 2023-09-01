@@ -134,7 +134,7 @@ public class SessionCommands {
 
     public static Collection<Element> getElementsOrError(EasPlayer sender, Session session) {
         if (session == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         Element element = session.getElement();
@@ -152,7 +152,7 @@ public class SessionCommands {
         }
 
         sendNoSessionElementError(sender);
-        return null;
+        return Collections.emptyList();
     }
 
     public static Element getElementOrError(EasPlayer sender) {

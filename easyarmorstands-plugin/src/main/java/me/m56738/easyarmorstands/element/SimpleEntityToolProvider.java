@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
 import me.m56738.easyarmorstands.editor.tool.EntityMoveTool;
+import me.m56738.easyarmorstands.editor.tool.EntityPitchTool;
 import me.m56738.easyarmorstands.editor.tool.EntityYawTool;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +52,7 @@ public class SimpleEntityToolProvider implements ToolProvider {
             return new EntityYawTool(properties, positionProvider, rotationProvider);
         }
         if (axis == Axis.X && rotationProvider == rotation()) {
-            // TODO Pitch
+            return new EntityPitchTool(properties, positionProvider, rotationProvider);
         }
         return ToolProvider.super.rotate(positionProvider, rotationProvider, axis);
     }

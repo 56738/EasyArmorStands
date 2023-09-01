@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,7 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
 
     @Override
     public ItemStack getValue() {
-        return equipmentCapability.getItem(entity.getEquipment(), slot);
+        return Util.wrapItem(equipmentCapability.getItem(entity.getEquipment(), slot));
     }
 
     @Override

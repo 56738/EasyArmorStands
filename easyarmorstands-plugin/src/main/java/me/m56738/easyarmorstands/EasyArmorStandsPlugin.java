@@ -388,13 +388,17 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         try {
             return loadMenuTemplate(name, false);
         } catch (ConfigurateException e) {
-            getLogger().severe("Failed to load menu \"" + name + "\": " + e.getMessage());
+            getLogger().log(Level.SEVERE, "Failed to load menu \"" + name + "\": " + e.getMessage());
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Failed to load menu \"" + name + "\"", e);
         }
 
         try {
             return loadMenuTemplate(name, true);
         } catch (ConfigurateException e) {
             getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\": " + e.getMessage());
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\"", e);
         }
 
         return null;
@@ -413,10 +417,13 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         String configName = "menu/" + name + ".yml";
         CommentedConfigurationNode node = fallback ? getDefaultConfig(configName) : getConfig(configName);
-        List<String> parents = node.node("parent").getList(String.class);
-        if (parents != null) {
-            for (String parent : parents) {
-                node.mergeFrom(loadMenuTemplate(parent, new LinkedHashSet<>(seen), fallback));
+        CommentedConfigurationNode parentsNode = node.node("parent");
+        if (!parentsNode.virtual()) {
+            List<String> parents = parentsNode.getList(String.class);
+            if (parents != null) {
+                for (String parent : parents) {
+                    node.mergeFrom(loadMenuTemplate(parent, new LinkedHashSet<>(seen), fallback));
+                }
             }
         }
         return node;

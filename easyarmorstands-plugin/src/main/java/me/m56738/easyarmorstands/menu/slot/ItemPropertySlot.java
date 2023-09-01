@@ -58,6 +58,10 @@ public class ItemPropertySlot implements MenuSlot {
             return;
         }
 
+        if (!click.isLeftClick()) {
+            return;
+        }
+
         click.queueTask(() -> {
             // Event is still cancelled, swap the items ourselves to prevent duplication
             ItemStack itemInCursor = click.cursor();

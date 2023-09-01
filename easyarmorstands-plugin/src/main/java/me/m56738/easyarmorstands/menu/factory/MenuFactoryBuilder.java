@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.menu.factory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class MenuFactoryBuilder {
@@ -30,6 +31,7 @@ public class MenuFactoryBuilder {
     }
 
     public MenuFactory build() {
+        Objects.requireNonNull(titleTemplate, "Title not set");
         MenuSlotFactory[] slots = new MenuSlotFactory[height * 9];
         for (Map.Entry<Integer, MenuSlotFactory> entry : slotFactories.entrySet()) {
             slots[entry.getKey()] = entry.getValue();

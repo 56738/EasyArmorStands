@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -96,6 +95,11 @@ public class MenuListener implements Listener {
         }
 
         @Override
+        public ItemStack cursor() {
+            return Util.wrapItem(event.getView().getCursor());
+        }
+
+        @Override
         public @Nullable Session session() {
             return player.session();
         }
@@ -155,15 +159,6 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public ItemStack cursor() {
-            ItemStack item = event.getCursor();
-            if (item == null) {
-                return new ItemStack(Material.AIR);
-            }
-            return item;
-        }
-
-        @Override
         public boolean isLeftClick() {
             return event.isLeftClick();
         }
@@ -185,15 +180,6 @@ public class MenuListener implements Listener {
         private DragClick(Menu menu, InventoryDragEvent event, int slot) {
             super(menu, event, slot);
             this.event = event;
-        }
-
-        @Override
-        public ItemStack cursor() {
-            ItemStack item = event.getCursor();
-            if (item == null) {
-                return new ItemStack(Material.AIR);
-            }
-            return item;
         }
 
         @Override
