@@ -9,8 +9,10 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -83,6 +85,12 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(Util.SCALE_FORMAT.format(axis.getValue(scaleProperty.getValue())));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            Component axisName = Component.text(axis.getName(), TextColor.color(axis.getColor()));
+            return Message.component("easyarmorstands.history.scale-axis", axisName);
         }
     }
 }

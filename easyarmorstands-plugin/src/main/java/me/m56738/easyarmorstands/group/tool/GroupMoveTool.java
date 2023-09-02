@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -72,6 +73,13 @@ public class GroupMoveTool implements MoveTool {
         @Override
         public @Nullable Component getStatus() {
             return Util.formatOffset(offset);
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            Component count = Component.text(sessions.size());
+            Component value = Util.formatOffset(offset);
+            return Message.component("easyarmorstands.history.group.move", count, value);
         }
     }
 }

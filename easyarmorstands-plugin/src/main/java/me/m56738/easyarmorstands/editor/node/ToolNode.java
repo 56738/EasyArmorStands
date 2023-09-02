@@ -23,7 +23,7 @@ public abstract class ToolNode implements Node {
 
     @Override
     public void onExit(@NotNull ExitContext context) {
-        toolSession.commit();
+        toolSession.commit(toolSession.getDescription());
     }
 
     @Override

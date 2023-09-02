@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -168,6 +169,11 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
                 value = widthProperty.getValue();
             }
             return Component.text(Util.SCALE_FORMAT.format(value));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return Message.component("easyarmorstands.history.resize-box");
         }
     }
 }

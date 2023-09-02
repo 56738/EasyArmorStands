@@ -5,14 +5,17 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
 
 public class GroupAction implements Action {
     private final Action[] actions;
+    private Component description;
 
-    public GroupAction(List<? extends Action> actions) {
+    public GroupAction(List<? extends Action> actions, @Nullable Component description) {
+        this.description = description;
         this.actions = actions.toArray(new Action[0]);
     }
 
@@ -36,14 +39,17 @@ public class GroupAction implements Action {
 
     @Override
     public Component describe() {
-        TextComponent.Builder builder = Component.text();
-        for (int i = 0; i < actions.length; i++) {
-            if (i != 0) {
-                builder.append(Component.text(", ", NamedTextColor.DARK_GRAY));
+        if (description == null) {
+            TextComponent.Builder builder = Component.text();
+            for (int i = 0; i < actions.length; i++) {
+                if (i != 0) {
+                    builder.append(Component.text(", ", NamedTextColor.DARK_GRAY));
+                }
+                builder.append(actions[i].describe());
             }
-            builder.append(actions[i].describe());
+            description = builder.build();
         }
-        return builder.build();
+        return description;
     }
 
     @Override

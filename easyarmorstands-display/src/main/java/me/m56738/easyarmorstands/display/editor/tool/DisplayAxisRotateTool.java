@@ -12,8 +12,10 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -143,6 +145,12 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            Component axisName = Component.text(axis.getName(), TextColor.color(axis.getColor()));
+            return Message.component("easyarmorstands.history.rotate-axis", axisName);
         }
     }
 }

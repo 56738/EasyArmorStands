@@ -580,7 +580,7 @@ public class DisplayCommands {
         actions.add(new ElementDestroyAction(element));
         entity.remove();
 
-        session.context().history().push(actions);
+        session.context().history().push(actions, Message.component("easyarmorstands.history.converted-armor-stand"));
     }
 
     private boolean isSkull(ItemStack item) {

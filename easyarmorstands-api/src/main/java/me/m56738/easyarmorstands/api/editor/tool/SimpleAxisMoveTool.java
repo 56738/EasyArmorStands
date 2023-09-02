@@ -63,8 +63,8 @@ class SimpleAxisMoveTool implements AxisMoveTool {
         }
 
         @Override
-        public void commit() {
-            moveToolSession.commit();
+        public void commit(@Nullable Component description) {
+            moveToolSession.commit(description);
         }
 
         @Override
@@ -75,6 +75,11 @@ class SimpleAxisMoveTool implements AxisMoveTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(OFFSET_FORMAT.format(change));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return moveToolSession.getDescription();
         }
     }
 }

@@ -4,6 +4,8 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.history.action.Action;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class ChangeTracker {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void commit() {
+    public void commit(@Nullable Component description) {
         List<Action> actions = new ArrayList<>();
         for (Map.Entry<ChangeKey<?>, Object> entry : pendingValues.entrySet()) {
             ChangeKey key = entry.getKey();
@@ -31,7 +33,7 @@ public class ChangeTracker {
                 actions.add(key.createChangeAction(oldValue, value));
             }
         }
-        history.push(actions);
+        history.push(actions, description);
         originalValues.clear();
         pendingValues.clear();
     }

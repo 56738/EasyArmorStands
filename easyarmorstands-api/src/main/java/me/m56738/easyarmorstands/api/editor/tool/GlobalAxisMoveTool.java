@@ -66,8 +66,8 @@ class GlobalAxisMoveTool implements AxisMoveTool {
         }
 
         @Override
-        public void commit() {
-            moveToolSession.commit();
+        public void commit(@Nullable Component description) {
+            moveToolSession.commit(description);
         }
 
         @Override
@@ -78,6 +78,11 @@ class GlobalAxisMoveTool implements AxisMoveTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(POSITION_FORMAT.format(axis.getValue(moveToolSession.getPosition())));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return moveToolSession.getDescription();
         }
     }
 }

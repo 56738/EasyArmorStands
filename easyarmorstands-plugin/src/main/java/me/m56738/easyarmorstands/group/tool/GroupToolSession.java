@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.editor.tool.Tool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ public abstract class GroupToolSession<S extends ToolSession> implements ToolSes
     }
 
     @Override
-    public void commit() {
+    public void commit(@Nullable Component description) {
         for (S session : sessions) {
-            session.commit();
+            session.commit(description);
         }
     }
 

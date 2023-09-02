@@ -20,4 +20,5 @@ public class AxisMoveToolNode extends AxisLineToolNode {
     protected double getChange(double currentOffset, double initialOffset) {
         return session.snapPosition(currentOffset - initialOffset);
     }
+
 }

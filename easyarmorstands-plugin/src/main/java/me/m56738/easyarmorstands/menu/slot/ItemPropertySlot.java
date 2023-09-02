@@ -66,7 +66,7 @@ public class ItemPropertySlot implements MenuSlot {
             // Event is still cancelled, swap the items ourselves to prevent duplication
             ItemStack itemInCursor = click.cursor();
             ItemStack itemInProperty = property.getValue();
-            if (property.setValue(Util.wrapItem(itemInCursor))) {
+            if (property.setValue(itemInCursor)) {
                 click.player().setItemOnCursor(itemInProperty);
                 container.commit();
                 click.menu().updateItem(click.index());

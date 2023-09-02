@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +45,7 @@ public abstract class PropertyWrapperContainer implements PropertyContainer {
     }
 
     @Override
-    public void commit() {
-        container.commit();
+    public void commit(@Nullable Component description) {
+        container.commit(description);
     }
 }

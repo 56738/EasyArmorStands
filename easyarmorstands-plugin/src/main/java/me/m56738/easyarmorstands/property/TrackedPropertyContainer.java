@@ -5,6 +5,8 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A property container which collects changes into a single history action.
@@ -28,8 +30,8 @@ public class TrackedPropertyContainer extends PropertyWrapperContainer {
     }
 
     @Override
-    public void commit() {
-        tracker.commit();
-        super.commit();
+    public void commit(@Nullable Component description) {
+        tracker.commit(description);
+        super.commit(description);
     }
 }

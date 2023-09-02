@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -84,6 +85,12 @@ public class EntityMoveTool implements MoveTool {
         @Override
         public @Nullable Component getStatus() {
             return Util.formatOffset(offset);
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            Component value = Util.formatOffset(offset);
+            return Message.component("easyarmorstands.history.move", value);
         }
     }
 }

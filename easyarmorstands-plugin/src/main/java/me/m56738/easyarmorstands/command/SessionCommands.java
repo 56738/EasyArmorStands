@@ -291,9 +291,9 @@ public class SessionCommands {
             destroyableElement.destroy();
         }
 
-        sender.history().push(actions);
-
         int count = actions.size();
+        sender.history().push(actions, Message.component("easyarmorstands.history.destroy-elements", Component.text(count)));
+
         if (count > 1) {
             sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed.multiple", Component.text(count)));
         } else if (count == 1) {

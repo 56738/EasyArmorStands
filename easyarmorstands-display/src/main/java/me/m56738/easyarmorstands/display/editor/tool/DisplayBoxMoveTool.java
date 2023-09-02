@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.display.editor.DisplayBoxPositionProvider;
 import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -119,6 +120,11 @@ public class DisplayBoxMoveTool implements MoveTool {
         @Override
         public @Nullable Component getStatus() {
             return Util.formatOffset(offset);
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return Message.component("easyarmorstands.history.move-box", Util.formatOffset(offset));
         }
     }
 }

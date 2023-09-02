@@ -94,5 +94,10 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         public @Nullable Component getStatus() {
             return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
         }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return null;
+        }
     }
 }

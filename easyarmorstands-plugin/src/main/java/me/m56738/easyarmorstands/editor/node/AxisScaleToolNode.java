@@ -25,4 +25,5 @@ public class AxisScaleToolNode extends AxisLineToolNode {
         }
         return session.snapPosition(currentOffset / initialOffset);
     }
+
 }

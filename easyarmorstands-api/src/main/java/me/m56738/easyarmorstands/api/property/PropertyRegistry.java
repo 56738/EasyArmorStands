@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -36,6 +38,6 @@ public abstract class PropertyRegistry implements PropertyContainer {
     }
 
     @Override
-    public void commit() {
+    public void commit(@Nullable Component description) {
     }
 }

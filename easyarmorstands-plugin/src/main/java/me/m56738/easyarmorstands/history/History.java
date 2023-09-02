@@ -2,7 +2,9 @@ package me.m56738.easyarmorstands.history;
 
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.GroupAction;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -33,11 +35,11 @@ public class History {
         }
     }
 
-    public void push(List<? extends Action> actions) {
+    public void push(List<? extends Action> actions, @Nullable Component description) {
         if (actions.size() == 1) {
             push(actions.get(0));
         } else if (actions.size() > 1) {
-            push(new GroupAction(actions));
+            push(new GroupAction(actions, description));
         }
     }
 

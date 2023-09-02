@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands.editor.tool;
 
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractToolSession implements ToolSession {
     private final PropertyContainer properties;
@@ -11,8 +13,8 @@ public abstract class AbstractToolSession implements ToolSession {
     }
 
     @Override
-    public void commit() {
-        properties.commit();
+    public void commit(@Nullable Component description) {
+        properties.commit(description);
     }
 
     @Override

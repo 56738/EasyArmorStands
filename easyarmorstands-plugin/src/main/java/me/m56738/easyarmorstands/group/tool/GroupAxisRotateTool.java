@@ -5,8 +5,10 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -65,6 +67,13 @@ public class GroupAxisRotateTool implements AxisRotateTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            Component count = Component.text(sessions.size());
+            Component axisName = Component.text(axis.getName(), TextColor.color(axis.getColor()));
+            return Message.component("easyarmorstands.history.group.rotate-axis", count, axisName);
         }
     }
 }

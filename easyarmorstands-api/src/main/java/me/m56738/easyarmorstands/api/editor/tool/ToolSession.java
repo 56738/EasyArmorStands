@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 public interface ToolSession {
     void revert();
 
-    void commit();
+    void commit(@Nullable Component description);
 
     @Contract(pure = true)
     boolean isValid();
@@ -16,4 +16,7 @@ public interface ToolSession {
     default @Nullable Component getStatus() {
         return null;
     }
+
+    @Contract(pure = true)
+    @Nullable Component getDescription();
 }

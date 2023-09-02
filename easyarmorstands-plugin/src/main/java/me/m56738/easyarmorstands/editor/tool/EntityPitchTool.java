@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -90,6 +91,11 @@ public class EntityPitchTool implements AxisRotateTool {
         @Override
         public @Nullable Component getStatus() {
             return Component.text(Util.ANGLE_FORMAT.format(locationProperty.getValue().getPitch()));
+        }
+
+        @Override
+        public @Nullable Component getDescription() {
+            return Message.component("easyarmorstands.history.rotate-pitch");
         }
     }
 }
