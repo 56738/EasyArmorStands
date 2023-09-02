@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,11 +46,6 @@ public class EntityPitchTool implements AxisRotateTool {
     }
 
     @Override
-    public @Nullable Double getInitialValue() {
-        return Math.toRadians(locationProperty.getValue().getPitch());
-    }
-
-    @Override
     public @NotNull AxisRotateToolSession start() {
         return new SessionImpl();
     }
@@ -68,8 +64,8 @@ public class EntityPitchTool implements AxisRotateTool {
         }
 
         @Override
-        public void setAngle(double angle) {
-            originalOffset.rotateAxis(angle,
+        public void setChange(double change) {
+            originalOffset.rotateAxis(change,
                             direction.x(),
                             direction.y(),
                             direction.z(), offsetChange)
@@ -77,13 +73,23 @@ public class EntityPitchTool implements AxisRotateTool {
 
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setPitch(location.getPitch() + (float) Math.toDegrees(angle));
+            location.setPitch(location.getPitch() + (float) Math.toDegrees(change));
             locationProperty.setValue(location);
+        }
+
+        @Override
+        public void setValue(double value) {
+            setChange(value - Math.toRadians(originalLocation.getPitch()));
         }
 
         @Override
         public void revert() {
             locationProperty.setValue(originalLocation);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.ANGLE_FORMAT.format(locationProperty.getValue().getPitch()));
         }
     }
 }

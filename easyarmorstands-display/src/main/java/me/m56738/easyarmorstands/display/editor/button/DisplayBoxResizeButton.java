@@ -49,6 +49,6 @@ public class DisplayBoxResizeButton extends SimpleButton implements NodeFactoryB
 
     @Override
     public Node createNode() {
-        return new AxisMoveToolNode(session, tool.start(), name, color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis(), tool.getInitialValue(), tool.isInverted());
+        return new AxisMoveToolNode(session, tool.start(), name, color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis());
     }
 }

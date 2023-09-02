@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,16 +46,6 @@ public class EntityYawTool implements AxisRotateTool {
     }
 
     @Override
-    public @Nullable Double getInitialValue() {
-        return Math.toRadians(locationProperty.getValue().getYaw());
-    }
-
-    @Override
-    public boolean isInverted() {
-        return true;
-    }
-
-    @Override
     public @NotNull AxisRotateToolSession start() {
         return new SessionImpl();
     }
@@ -71,18 +62,28 @@ public class EntityYawTool implements AxisRotateTool {
         }
 
         @Override
-        public void setAngle(double angle) {
-            originalOffset.rotateY(angle, offsetChange).sub(originalOffset);
+        public void setChange(double change) {
+            originalOffset.rotateY(change, offsetChange).sub(originalOffset);
 
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setYaw(location.getYaw() + (float) Math.toDegrees(angle));
+            location.setYaw(location.getYaw() - (float) Math.toDegrees(change));
             locationProperty.setValue(location);
+        }
+
+        @Override
+        public void setValue(double value) {
+            setChange(Math.toRadians(originalLocation.getYaw()) - value);
         }
 
         @Override
         public void revert() {
             locationProperty.setValue(originalLocation);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.ANGLE_FORMAT.format(locationProperty.getValue().getYaw()));
         }
     }
 }

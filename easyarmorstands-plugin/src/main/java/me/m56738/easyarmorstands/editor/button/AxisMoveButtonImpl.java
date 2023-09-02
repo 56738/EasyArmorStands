@@ -20,6 +20,6 @@ public class AxisMoveButtonImpl extends AxisToolButton implements AxisMoveButton
     @Override
     public @NotNull Node createNode() {
         update();
-        return new AxisMoveToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis(), tool.getInitialValue(), tool.isInverted());
+        return new AxisMoveToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
     }
 }

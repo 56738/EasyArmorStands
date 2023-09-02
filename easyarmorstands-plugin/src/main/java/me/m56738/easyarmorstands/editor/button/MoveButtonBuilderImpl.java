@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class MoveButtonBuilderImpl implements MoveButtonBuilder {
     private final Session session;
     private MoveTool tool;
-    private Component name = Message.component("easyarmorstands.node.pick-up");
+    private Component name = Message.component("easyarmorstands.node.move");
     private ParticleColor color = ParticleColor.WHITE;
     private int priority;
 

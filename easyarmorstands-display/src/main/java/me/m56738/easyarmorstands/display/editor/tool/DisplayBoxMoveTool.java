@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,15 +67,20 @@ public class DisplayBoxMoveTool implements MoveTool {
     private class SessionImpl extends AbstractToolSession implements MoveToolSession {
         private final Location originalLocation;
         private final Vector3fc originalTranslation;
+        private final Vector3dc originalBoxPosition;
+        private final Vector3d offset = new Vector3d();
 
         public SessionImpl() {
             super(properties);
             originalLocation = locationProperty.getValue().clone();
             originalTranslation = new Vector3f(translationProperty.getValue());
+            originalBoxPosition = boxPositionProvider.getPosition();
         }
 
         @Override
         public void setOffset(@NotNull Vector3dc offset) {
+            this.offset.set(offset);
+
             // Move box by modifying the location
             Location location = originalLocation.clone();
             location.add(offset.x(), offset.y(), offset.z());
@@ -95,9 +101,24 @@ public class DisplayBoxMoveTool implements MoveTool {
         }
 
         @Override
+        public @NotNull Vector3dc getPosition() {
+            return boxPositionProvider.getPosition();
+        }
+
+        @Override
+        public void setPosition(@NotNull Vector3dc position) {
+            setOffset(position.sub(originalBoxPosition, offset));
+        }
+
+        @Override
         public void revert() {
             locationProperty.setValue(originalLocation);
             translationProperty.setValue(originalTranslation);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Util.formatOffset(offset);
         }
     }
 }

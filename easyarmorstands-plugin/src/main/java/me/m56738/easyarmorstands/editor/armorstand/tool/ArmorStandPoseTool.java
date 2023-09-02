@@ -13,9 +13,11 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -63,6 +65,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         private final EulerAngle originalAngle;
         private final Quaterniondc originalRotation;
         private final Quaterniond currentRotation = new Quaterniond();
+        private double change;
 
         public SessionImpl() {
             super(properties);
@@ -76,14 +79,20 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         }
 
         @Override
-        public void setAngle(double angle) {
-            currentRotation.setAngleAxis(angle, direction).mul(originalRotation);
+        public void setChange(double change) {
+            this.change = change;
+            currentRotation.setAngleAxis(change, direction).mul(originalRotation);
             poseProperty.setValue(Util.toEuler(currentRotation));
         }
 
         @Override
         public void revert() {
             poseProperty.setValue(originalAngle);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
         }
     }
 }

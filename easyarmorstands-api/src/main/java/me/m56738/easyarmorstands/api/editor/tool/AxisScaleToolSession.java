@@ -1,5 +1,4 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
-public interface AxisScaleToolSession extends ToolSession {
-    void setScale(double scale);
+public interface AxisScaleToolSession extends AxisToolSession {
 }

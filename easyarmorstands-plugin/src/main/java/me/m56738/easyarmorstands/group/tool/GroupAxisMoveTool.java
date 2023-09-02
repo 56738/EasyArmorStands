@@ -5,7 +5,10 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -46,15 +49,23 @@ public class GroupAxisMoveTool implements AxisMoveTool {
     }
 
     private class SessionImpl extends GroupToolSession<AxisMoveToolSession> implements AxisMoveToolSession {
+        private double change;
+
         private SessionImpl() {
             super(tools);
         }
 
         @Override
         public void setChange(double change) {
+            this.change = change;
             for (AxisMoveToolSession session : sessions) {
                 session.setChange(change);
             }
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.OFFSET_FORMAT.format(change));
         }
     }
 }

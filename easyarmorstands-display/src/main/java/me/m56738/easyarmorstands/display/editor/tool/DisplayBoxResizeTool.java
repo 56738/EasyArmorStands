@@ -12,8 +12,10 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
@@ -63,20 +65,6 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
     }
 
     @Override
-    public Double getInitialValue() {
-        if (axis == Axis.Y) {
-            return (double) heightProperty.getValue();
-        } else {
-            return (double) widthProperty.getValue();
-        }
-    }
-
-    @Override
-    public boolean isInverted() {
-        return !end;
-    }
-
-    @Override
     public @NotNull AxisMoveToolSession start() {
         return new SessionImpl();
     }
@@ -97,6 +85,10 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
 
         @Override
         public void setChange(double change) {
+            if (!end) {
+                change = -change;
+            }
+
             Vector3d offset = new Vector3d();
 
             List<PendingChange> changes = new ArrayList<>(3);
@@ -145,11 +137,37 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         }
 
         @Override
+        public void setValue(double value) {
+            float original;
+            if (axis == Axis.Y) {
+                original = originalHeight;
+            } else {
+                original = originalWidth;
+            }
+            double change = value - original;
+            if (!end) {
+                change = -change;
+            }
+            setChange(change);
+        }
+
+        @Override
         public void revert() {
             locationProperty.setValue(originalLocation);
             translationProperty.setValue(originalTranslation);
             widthProperty.setValue(originalWidth);
             heightProperty.setValue(originalHeight);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            float value;
+            if (axis == Axis.Y) {
+                value = heightProperty.getValue();
+            } else {
+                value = widthProperty.getValue();
+            }
+            return Component.text(Util.SCALE_FORMAT.format(value));
         }
     }
 }

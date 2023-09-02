@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Cursor2D;
-import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
@@ -24,7 +23,6 @@ import org.joml.Vector3dc;
 public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     private final Session session;
     private final AxisRotateToolSession toolSession;
-    private final Component name;
     private final CircleParticle circleParticle;
     private final LineParticle axisParticle;
     private final LineParticle cursorLineParticle;
@@ -34,17 +32,14 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentOffset = new Vector3d();
     private final Vector3d snappedCursor = new Vector3d();
-    private final Double initialValue;
-    private Double manualAngle;
     private boolean valid;
+    private boolean hasManualInput;
 
-    public AxisRotateToolNode(Session session, AxisRotateToolSession toolSession, double radius, double length, Component name, ParticleColor color, Vector3dc position, Quaterniondc rotation, Axis axis, Double initialValue, boolean inverted) {
-        super(session, toolSession);
+    public AxisRotateToolNode(Session session, AxisRotateToolSession toolSession, double radius, double length, Component name, ParticleColor color, Vector3dc position, Quaterniondc rotation, Axis axis) {
+        super(session, toolSession, name);
         this.session = session;
         this.toolSession = toolSession;
-        this.name = name;
         this.circleParticle = session.particleProvider().createCircle();
-        this.initialValue = initialValue;
         this.circleParticle.setColor(color);
         this.circleParticle.setRadius(radius);
         this.circleParticle.setCenter(position);
@@ -59,11 +54,7 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
         this.cursorLineParticle = session.particleProvider().createLine();
         this.cursor = new Cursor2D(session);
         this.position = new Vector3d(position);
-        Vector3d direction = axis.getDirection().rotate(rotation, new Vector3d());
-        if (inverted) {
-            direction.negate();
-        }
-        this.direction = direction;
+        this.direction = axis.getDirection().rotate(rotation, new Vector3d());
     }
 
     @Override
@@ -73,8 +64,8 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
         session.addParticle(circleParticle);
         session.addParticle(axisParticle);
         session.addParticle(cursorLineParticle);
-        manualAngle = null;
         valid = false;
+        hasManualInput = false;
     }
 
     @Override
@@ -89,49 +80,33 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         cursor.update(context);
-        Vector3dc cursorPosition = cursor.get();
-        cursorPosition.sub(position, currentOffset);
 
-        double angle;
-        if (manualAngle != null) {
-            angle = manualAngle;
-        } else if (valid) {
-            angle = initialOffset.angleSigned(currentOffset, direction);
-            if (initialValue != null) {
-                angle = session.snapAngle(angle + initialValue) - initialValue;
-            } else {
+        if (!hasManualInput) {
+            Vector3dc cursorPosition = cursor.get();
+            cursorPosition.sub(position, currentOffset);
+
+            double angle;
+            if (valid) {
+                angle = initialOffset.angleSigned(currentOffset, direction);
                 angle = session.snapAngle(angle);
+            } else {
+                angle = 0;
+                double minOffset = 0.2;
+                if (currentOffset.lengthSquared() >= minOffset * minOffset) {
+                    initialOffset.set(currentOffset);
+                    valid = true;
+                }
             }
-        } else {
-            angle = 0;
-            double minOffset = 0.2;
-            if (currentOffset.lengthSquared() >= minOffset * minOffset) {
-                initialOffset.set(currentOffset);
-                valid = true;
-            }
+
+            initialOffset.rotateAxis(angle, direction.x(), direction.y(), direction.z(), snappedCursor)
+                    .normalize(currentOffset.length())
+                    .add(position);
+
+            toolSession.setChange(angle);
+            cursorLineParticle.setFromTo(position, snappedCursor);
         }
 
-        initialOffset.rotateAxis(angle, direction.x(), direction.y(), direction.z(), snappedCursor)
-                .normalize(currentOffset.length())
-                .add(position);
-
-        toolSession.setAngle(angle);
-        cursorLineParticle.setFromTo(position, snappedCursor);
-
-        double value = angle;
-        if (initialValue != null) {
-            value += initialValue;
-        }
-
-        context.setActionBar(Component.text()
-                .append(name)
-                .append(Component.text(": "))
-                .append(Component.text(Util.ANGLE_FORMAT.format(EasMath.wrapDegrees(Math.toDegrees(value))))));
-    }
-
-    @Override
-    public Component getName() {
-        return name;
+        super.onUpdate(context);
     }
 
     @Override
@@ -146,9 +121,9 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
 
     @Override
     public void setValue(Double value) {
-        manualAngle = Math.toRadians(value);
-        if (initialValue != null) {
-            manualAngle -= initialValue;
-        }
+        toolSession.setValue(Math.toRadians(value));
+        hasManualInput = true;
+        session.removeParticle(cursorLineParticle);
+        cursor.stop();
     }
 }

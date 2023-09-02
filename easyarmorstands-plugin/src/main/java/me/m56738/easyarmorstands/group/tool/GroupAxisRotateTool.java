@@ -5,7 +5,10 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -45,15 +48,23 @@ public class GroupAxisRotateTool implements AxisRotateTool {
     }
 
     private class SessionImpl extends GroupToolSession<AxisRotateToolSession> implements AxisRotateToolSession {
+        private double change;
+
         private SessionImpl() {
             super(tools);
         }
 
         @Override
-        public void setAngle(double angle) {
+        public void setChange(double change) {
+            this.change = change;
             for (AxisRotateToolSession session : sessions) {
-                session.setAngle(angle);
+                session.setChange(change);
             }
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
         }
     }
 }

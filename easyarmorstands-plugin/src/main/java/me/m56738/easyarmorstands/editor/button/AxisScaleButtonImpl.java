@@ -20,6 +20,6 @@ public class AxisScaleButtonImpl extends AxisToolButton implements AxisScaleButt
     @Override
     public @NotNull Node createNode() {
         update();
-        return new AxisScaleToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis(), tool.getScale());
+        return new AxisScaleToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
     }
 }

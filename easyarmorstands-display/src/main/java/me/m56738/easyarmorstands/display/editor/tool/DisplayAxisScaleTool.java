@@ -9,7 +9,10 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 import org.joml.Vector3f;
@@ -46,11 +49,6 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
     }
 
     @Override
-    public double getScale() {
-        return axis.getValue(scaleProperty.getValue());
-    }
-
-    @Override
     public @NotNull AxisScaleToolSession start() {
         return new SessionImpl();
     }
@@ -64,15 +62,27 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         }
 
         @Override
-        public void setScale(double scale) {
+        public void setChange(double change) {
             Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, axis.getValue(scaleVector) * (float) scale);
+            axis.setValue(scaleVector, axis.getValue(scaleVector) * (float) change);
+            scaleProperty.setValue(scaleVector);
+        }
+
+        @Override
+        public void setValue(double value) {
+            Vector3f scaleVector = new Vector3f(originalScale);
+            axis.setValue(scaleVector, (float) value);
             scaleProperty.setValue(scaleVector);
         }
 
         @Override
         public void revert() {
             scaleProperty.setValue(originalScale);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.SCALE_FORMAT.format(axis.getValue(scaleProperty.getValue())));
         }
     }
 }

@@ -1,12 +1,18 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 class SimpleAxisMoveTool implements AxisMoveTool {
+    public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
     private final MoveTool moveTool;
     private final Axis axis;
 
@@ -38,6 +44,7 @@ class SimpleAxisMoveTool implements AxisMoveTool {
     private class AxisMoveToolSessionImpl implements AxisMoveToolSession {
         private final MoveToolSession moveToolSession;
         private final Vector3dc direction;
+        private double change;
 
         public AxisMoveToolSessionImpl(MoveToolSession moveToolSession) {
             this.moveToolSession = moveToolSession;
@@ -46,6 +53,7 @@ class SimpleAxisMoveTool implements AxisMoveTool {
 
         @Override
         public void setChange(double change) {
+            this.change = change;
             moveToolSession.setOffset(direction.mul(change, new Vector3d()));
         }
 
@@ -62,6 +70,11 @@ class SimpleAxisMoveTool implements AxisMoveTool {
         @Override
         public boolean isValid() {
             return moveToolSession.isValid();
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(OFFSET_FORMAT.format(change));
         }
     }
 }

@@ -17,7 +17,6 @@ import me.m56738.easyarmorstands.display.editor.DisplaySidePositionProvider;
 import me.m56738.easyarmorstands.display.editor.button.DisplayBoxResizeButton;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxResizeTool;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxToolProvider;
-import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
 import me.m56738.easyarmorstands.message.Message;

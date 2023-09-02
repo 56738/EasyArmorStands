@@ -13,8 +13,10 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -75,6 +77,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         private final Quaternionf currentRotation = new Quaternionf();
         private final Vector3f currentTranslation = new Vector3f();
         private final Vector3d offsetChange = new Vector3d();
+        private double change;
 
         public SessionImpl() {
             super(properties);
@@ -90,8 +93,10 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         }
 
         @Override
-        public void setAngle(double angle) {
-            originalOffset.rotateAxis(angle,
+        public void setChange(double change) {
+            this.change = change;
+
+            originalOffset.rotateAxis(change,
                             direction.x(),
                             direction.y(),
                             direction.z(), offsetChange)
@@ -100,13 +105,13 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
 
-            originalTranslation.rotateAxis((float) angle,
+            originalTranslation.rotateAxis((float) change,
                     (float) direction.x(),
                     (float) direction.y(),
                     (float) direction.z(), currentTranslation);
 
             currentRotation.setAngleAxis(
-                            angle,
+                            change,
                             localDirection.x(),
                             localDirection.y(),
                             localDirection.z())
@@ -133,6 +138,11 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             locationProperty.setValue(originalLocation);
             translationProperty.setValue(originalTranslation);
             rotationProperty.setValue(originalRotation);
+        }
+
+        @Override
+        public @Nullable Component getStatus() {
+            return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
         }
     }
 }
