@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
-import me.m56738.easyarmorstands.editor.EntityYawRotationProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
@@ -31,7 +30,7 @@ public class ArmorStandPositionNode extends PropertyMenuNode implements Resettab
         this.toolManager = new ToolMenuManager(session, this,
                 new DelegateToolProvider(element.getTools(properties),
                         new EntityPositionProvider(properties, offsetProvider),
-                        new EntityYawRotationProvider(properties)));
+                        null));
     }
 
     @Override

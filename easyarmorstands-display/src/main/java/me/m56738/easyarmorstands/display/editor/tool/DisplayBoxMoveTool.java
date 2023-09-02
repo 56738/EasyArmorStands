@@ -9,12 +9,17 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.editor.DisplayBoxPositionProvider;
+import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
+import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -25,6 +30,8 @@ public class DisplayBoxMoveTool implements MoveTool {
     private final Property<Vector3fc> translationProperty;
     private final PositionProvider positionProvider;
     private final RotationProvider rotationProvider;
+    private final PositionProvider boxPositionProvider;
+    private final PositionProvider displayPositionProvider;
 
     public DisplayBoxMoveTool(PropertyContainer properties, PositionProvider positionProvider, RotationProvider rotationProvider) {
         this.properties = properties;
@@ -32,6 +39,8 @@ public class DisplayBoxMoveTool implements MoveTool {
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         this.positionProvider = positionProvider;
         this.rotationProvider = rotationProvider;
+        this.boxPositionProvider = new DisplayBoxPositionProvider(properties);
+        this.displayPositionProvider = new EntityPositionProvider(properties, new DisplayOffsetProvider(properties));
     }
 
     @Override
@@ -42,6 +51,11 @@ public class DisplayBoxMoveTool implements MoveTool {
     @Override
     public @NotNull Quaterniondc getRotation() {
         return rotationProvider.getRotation();
+    }
+
+    @Override
+    public @Nullable Vector3dc getInitialValue() {
+        return boxPositionProvider.getPosition().sub(displayPositionProvider.getPosition(), new Vector3d());
     }
 
     @Override

@@ -40,6 +40,9 @@ public interface Session {
     double snapPosition(double value);
 
     @Contract(pure = true)
+    double snapDegrees(double value);
+
+    @Contract(pure = true)
     double snapAngle(double value);
 
     @Contract(pure = true)

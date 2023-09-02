@@ -66,7 +66,7 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         @Override
         public void setScale(double scale) {
             Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, (float) scale);
+            axis.setValue(scaleVector, axis.getValue(scaleVector) * (float) scale);
             scaleProperty.setValue(scaleVector);
         }
 

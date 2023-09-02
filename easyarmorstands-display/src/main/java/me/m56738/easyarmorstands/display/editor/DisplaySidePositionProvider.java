@@ -38,9 +38,7 @@ public class DisplaySidePositionProvider implements PositionProvider {
             // negative end
             offset.mul(-0.5);
         }
-        if (axis == Axis.Y) {
-            offset.y += 0.5;
-        }
+        offset.y += 0.5;
         return offset;
     }
 

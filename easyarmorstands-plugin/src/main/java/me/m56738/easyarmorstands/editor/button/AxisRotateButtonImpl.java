@@ -83,6 +83,6 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
 
     @Override
     public @NotNull Node createNode() {
-        return new AxisRotateToolNode(session, tool.start(), radius, length, name, color, position, rotation, axis);
+        return new AxisRotateToolNode(session, tool.start(), radius, length, name, color, position, rotation, axis, tool.getInitialValue(), tool.isInverted());
     }
 }

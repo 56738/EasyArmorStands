@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.editor.node;
 
+import cloud.commandframework.arguments.parser.ArgumentParser;
+import cloud.commandframework.arguments.standard.DoubleArgument;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
@@ -13,12 +15,13 @@ import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class AxisRotateToolNode extends ToolNode {
+public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     private final Session session;
     private final AxisRotateToolSession toolSession;
     private final Component name;
@@ -31,14 +34,17 @@ public class AxisRotateToolNode extends ToolNode {
     private final Vector3d initialOffset = new Vector3d();
     private final Vector3d currentOffset = new Vector3d();
     private final Vector3d snappedCursor = new Vector3d();
+    private final Double initialValue;
+    private Double manualAngle;
     private boolean valid;
 
-    public AxisRotateToolNode(Session session, AxisRotateToolSession toolSession, double radius, double length, Component name, ParticleColor color, Vector3dc position, Quaterniondc rotation, Axis axis) {
+    public AxisRotateToolNode(Session session, AxisRotateToolSession toolSession, double radius, double length, Component name, ParticleColor color, Vector3dc position, Quaterniondc rotation, Axis axis, Double initialValue, boolean inverted) {
         super(session, toolSession);
         this.session = session;
         this.toolSession = toolSession;
         this.name = name;
         this.circleParticle = session.particleProvider().createCircle();
+        this.initialValue = initialValue;
         this.circleParticle.setColor(color);
         this.circleParticle.setRadius(radius);
         this.circleParticle.setCenter(position);
@@ -53,7 +59,11 @@ public class AxisRotateToolNode extends ToolNode {
         this.cursorLineParticle = session.particleProvider().createLine();
         this.cursor = new Cursor2D(session);
         this.position = new Vector3d(position);
-        this.direction = axis.getDirection().rotate(rotation, new Vector3d());
+        Vector3d direction = axis.getDirection().rotate(rotation, new Vector3d());
+        if (inverted) {
+            direction.negate();
+        }
+        this.direction = direction;
     }
 
     @Override
@@ -63,6 +73,7 @@ public class AxisRotateToolNode extends ToolNode {
         session.addParticle(circleParticle);
         session.addParticle(axisParticle);
         session.addParticle(cursorLineParticle);
+        manualAngle = null;
         valid = false;
     }
 
@@ -82,8 +93,15 @@ public class AxisRotateToolNode extends ToolNode {
         cursorPosition.sub(position, currentOffset);
 
         double angle;
-        if (valid) {
+        if (manualAngle != null) {
+            angle = manualAngle;
+        } else if (valid) {
             angle = initialOffset.angleSigned(currentOffset, direction);
+            if (initialValue != null) {
+                angle = session.snapAngle(angle + initialValue) - initialValue;
+            } else {
+                angle = session.snapAngle(angle);
+            }
         } else {
             angle = 0;
             double minOffset = 0.2;
@@ -100,9 +118,37 @@ public class AxisRotateToolNode extends ToolNode {
         toolSession.setAngle(angle);
         cursorLineParticle.setFromTo(position, snappedCursor);
 
+        double value = angle;
+        if (initialValue != null) {
+            value += initialValue;
+        }
+
         context.setActionBar(Component.text()
                 .append(name)
                 .append(Component.text(": "))
-                .append(Component.text(Util.ANGLE_FORMAT.format(EasMath.wrapDegrees(Math.toDegrees(angle))))));
+                .append(Component.text(Util.ANGLE_FORMAT.format(EasMath.wrapDegrees(Math.toDegrees(value))))));
+    }
+
+    @Override
+    public Component getName() {
+        return name;
+    }
+
+    @Override
+    public Component formatValue(Double value) {
+        return Component.text(Util.ANGLE_FORMAT.format(value));
+    }
+
+    @Override
+    public ArgumentParser<CommandSender, Double> getParser() {
+        return new DoubleArgument.DoubleParser<>(-360, 360);
+    }
+
+    @Override
+    public void setValue(Double value) {
+        manualAngle = Math.toRadians(value);
+        if (initialValue != null) {
+            manualAngle -= initialValue;
+        }
     }
 }

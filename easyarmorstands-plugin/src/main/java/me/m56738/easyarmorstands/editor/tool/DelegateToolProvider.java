@@ -19,8 +19,16 @@ public class DelegateToolProvider implements ToolProvider {
 
     public DelegateToolProvider(ToolProvider toolProvider, PositionProvider positionProvider, RotationProvider rotationProvider) {
         this.toolProvider = toolProvider;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
+        if (positionProvider != null) {
+            this.positionProvider = positionProvider;
+        } else {
+            this.positionProvider = toolProvider.position();
+        }
+        if (rotationProvider != null) {
+            this.rotationProvider = rotationProvider;
+        } else {
+            this.rotationProvider = toolProvider.rotation();
+        }
     }
 
     @Override

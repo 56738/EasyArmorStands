@@ -21,6 +21,9 @@ import org.joml.Vector3dc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DisplayBoxResizeTool implements AxisMoveTool {
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
@@ -59,8 +62,18 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         return axis;
     }
 
-    public boolean getEnd() {
-        return end;
+    @Override
+    public Double getInitialValue() {
+        if (axis == Axis.Y) {
+            return (double) heightProperty.getValue();
+        } else {
+            return (double) widthProperty.getValue();
+        }
+    }
+
+    @Override
+    public boolean isInverted() {
+        return !end;
     }
 
     @Override
@@ -86,15 +99,23 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         public void setChange(double change) {
             Vector3d offset = new Vector3d();
 
+            List<PendingChange> changes = new ArrayList<>(3);
+
             if (axis == Axis.Y) {
-                heightProperty.setValue(originalHeight + (float) change);
-                if (!end) {
-                    // negative end of Y: bottom
-                    // move entity down/up to compensate for increased/decreased height
+                float height = originalHeight + (float) change;
+                changes.add(heightProperty.prepareChange(Math.abs(height)));
+                // move entity down/up to compensate for increased/decreased height
+                if (height < 0) {
+                    if (end) {
+                        offset.y = height;
+                    } else {
+                        offset.y = originalHeight;
+                    }
+                } else if (!end) {
                     offset.y = -change;
                 }
             } else {
-                widthProperty.setValue(originalWidth + (float) change);
+                changes.add(widthProperty.prepareChange(Math.abs(originalWidth + (float) change)));
                 axis.setValue(offset, change / 2);
                 if (!end) {
                     offset.negate();
@@ -104,18 +125,21 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
             // Move box by modifying the location
             Location location = originalLocation.clone();
             location.add(offset.x(), offset.y(), offset.z());
-            PendingChange locationChange = locationProperty.prepareChange(location);
+            changes.add(locationProperty.prepareChange(location));
 
             // Make sure the display stays in the same place by performing the inverse using the translation
             Vector3fc rotatedDelta = offset.get(new Vector3f())
                     .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
             Vector3fc translation = originalTranslation.sub(rotatedDelta, new Vector3f());
-            PendingChange translationChange = translationProperty.prepareChange(translation);
+            changes.add(translationProperty.prepareChange(translation));
 
             // Only execute changes if both are allowed
-            if (locationChange != null && translationChange != null) {
-                if (locationChange.execute()) {
-                    translationChange.execute();
+            if (changes.contains(null)) {
+                return;
+            }
+            for (PendingChange pendingChange : changes) {
+                if (!pendingChange.execute()) {
+                    return;
                 }
             }
         }
@@ -124,6 +148,8 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         public void revert() {
             locationProperty.setValue(originalLocation);
             translationProperty.setValue(originalTranslation);
+            widthProperty.setValue(originalWidth);
+            heightProperty.setValue(originalHeight);
         }
     }
 }

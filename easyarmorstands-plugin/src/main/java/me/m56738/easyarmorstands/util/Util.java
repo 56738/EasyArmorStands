@@ -28,7 +28,7 @@ import java.text.NumberFormat;
 import java.util.UUID;
 
 public class Util {
-    public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.####");
+    public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.0000");
     public static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
     public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
     public static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");

@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -41,6 +42,11 @@ public class EntityPitchTool implements AxisRotateTool {
     @Override
     public @NotNull Axis getAxis() {
         return Axis.X;
+    }
+
+    @Override
+    public @Nullable Double getInitialValue() {
+        return Math.toRadians(locationProperty.getValue().getPitch());
     }
 
     @Override

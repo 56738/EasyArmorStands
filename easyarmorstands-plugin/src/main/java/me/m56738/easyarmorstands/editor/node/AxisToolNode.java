@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.EasMath;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
@@ -18,6 +19,7 @@ import org.joml.Vector3dc;
 
 public abstract class AxisToolNode extends ToolNode {
     private final Session session;
+    private final Component name;
     private final double length;
     private final Vector3dc position;
     private final Quaterniondc rotation;
@@ -30,14 +32,19 @@ public abstract class AxisToolNode extends ToolNode {
     private final Vector3d temp = new Vector3d();
     private double initialOffset;
 
-    public AxisToolNode(Session session, ToolSession toolSession, ParticleColor color, double length, Vector3dc position, Quaterniondc rotation, Axis axis) {
+    public AxisToolNode(Session session, ToolSession toolSession, Component name, ParticleColor color, double length, Vector3dc position, Quaterniondc rotation, Axis axis, boolean inverted) {
         super(session, toolSession);
         this.session = session;
+        this.name = name;
         this.length = length;
         this.position = new Vector3d(position);
         this.rotation = new Quaterniond(rotation);
         this.axis = axis;
-        this.direction = axis.getDirection().rotate(rotation, new Vector3d());
+        Vector3d direction = axis.getDirection().rotate(rotation, new Vector3d());
+        if (inverted) {
+            direction.negate();
+        }
+        this.direction = direction;
         this.particle = session.particleProvider().createLine();
         this.particle.setColor(color);
         this.particle.setLength(length);
@@ -77,7 +84,7 @@ public abstract class AxisToolNode extends ToolNode {
         cursor.update(context);
         Vector3dc cursorPosition = cursor.get();
         double offset = EasMath.getOffsetAlongLine(position, direction, cursorPosition);
-        update(offset, initialOffset);
+        double value = update(offset, initialOffset);
 
         double relativeOffset = offset - initialOffset;
         double min = Math.min(0, relativeOffset) - length / 2;
@@ -85,7 +92,14 @@ public abstract class AxisToolNode extends ToolNode {
         particle.setLength(max - min);
         particle.setOffset((max + min) / 2);
         cursorLineParticle.setFromTo(EasMath.getClosestPointOnLine(position, direction, cursorPosition, temp), cursorPosition);
+
+        context.setActionBar(Component.text()
+                .append(name)
+                .append(Component.text(": "))
+                .append(formatValue(value)));
     }
 
-    protected abstract void update(double currentOffset, double initialOffset);
+    protected abstract double update(double currentOffset, double initialOffset);
+
+    protected abstract Component formatValue(Double value);
 }

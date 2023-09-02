@@ -9,17 +9,8 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
-import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.editor.button.AxisMoveButtonImpl;
-import me.m56738.easyarmorstands.editor.button.AxisRotateButtonImpl;
-import me.m56738.easyarmorstands.editor.button.AxisScaleButtonImpl;
-import me.m56738.easyarmorstands.editor.button.MoveButtonImpl;
-import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,11 +73,10 @@ public class ToolMenuManager {
             for (Axis axis : Axis.values()) {
                 AxisScaleTool axisScaleTool = toolProvider.scale(positionProvider, rotationProvider, axis);
                 if (axisScaleTool != null) {
-                    ParticleColor axisColor = axis.getColor();
-                    TextComponent axisName = Component.text(axis.getName());
-                    Component toolName = Message.component("easyarmorstands.node.scale-along-axis", axisName)
-                            .color(TextColor.color(axisColor));
-                    buttons.add(new AxisScaleButtonImpl(session, axisScaleTool, 3, toolName, axisColor));
+                    buttons.add(session.menuEntryProvider()
+                            .axisScale()
+                            .setTool(axisScaleTool)
+                            .build());
                 }
             }
             return;
@@ -94,25 +84,26 @@ public class ToolMenuManager {
 
         MoveTool moveTool = toolProvider.move(positionProvider, rotationProvider);
         if (moveTool != null) {
-            Component name = Message.component("easyarmorstands.node.pick-up");
-            buttons.add(new MoveButtonImpl(session, moveTool, name, ParticleColor.WHITE));
+            buttons.add(session.menuEntryProvider()
+                    .move()
+                    .setTool(moveTool)
+                    .setPriority(1)
+                    .build());
         }
         for (Axis axis : Axis.values()) {
             AxisMoveTool axisMoveTool = toolProvider.move(positionProvider, rotationProvider, axis);
             if (axisMoveTool != null) {
-                ParticleColor axisColor = axis.getColor();
-                TextComponent axisName = Component.text(axis.getName());
-                Component toolName = Message.component("easyarmorstands.node.move-along-axis", axisName)
-                        .color(TextColor.color(axisColor));
-                buttons.add(new AxisMoveButtonImpl(session, axisMoveTool, 3, toolName, axisColor));
+                buttons.add(session.menuEntryProvider()
+                        .axisMove()
+                        .setTool(axisMoveTool)
+                        .build());
             }
             AxisRotateTool axisRotateTool = toolProvider.rotate(positionProvider, rotationProvider, axis);
             if (axisRotateTool != null) {
-                ParticleColor axisColor = axis.getColor();
-                TextComponent axisName = Component.text(axis.getName());
-                Component toolName = Message.component("easyarmorstands.node.rotate-around-axis", axisName)
-                        .color(TextColor.color(axisColor));
-                buttons.add(new AxisRotateButtonImpl(session, axisRotateTool, 1, 3, toolName, axisColor));
+                buttons.add(session.menuEntryProvider()
+                        .axisRotate()
+                        .setTool(axisRotateTool)
+                        .build());
             }
         }
     }

@@ -169,11 +169,16 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public double snapAngle(double value) {
+    public double snapDegrees(double value) {
         if (player.isSneaking()) {
             return value;
         }
         return Util.snap(value, angleSnapIncrement);
+    }
+
+    @Override
+    public double snapAngle(double value) {
+        return Math.toRadians(snapDegrees(Math.toDegrees(value)));
     }
 
     @Override

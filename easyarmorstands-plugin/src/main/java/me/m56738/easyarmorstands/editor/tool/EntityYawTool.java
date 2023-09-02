@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -44,6 +45,16 @@ public class EntityYawTool implements AxisRotateTool {
     }
 
     @Override
+    public @Nullable Double getInitialValue() {
+        return Math.toRadians(locationProperty.getValue().getYaw());
+    }
+
+    @Override
+    public boolean isInverted() {
+        return true;
+    }
+
+    @Override
     public @NotNull AxisRotateToolSession start() {
         return new SessionImpl();
     }
@@ -65,7 +76,7 @@ public class EntityYawTool implements AxisRotateTool {
 
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setYaw(location.getYaw() - (float) Math.toDegrees(angle));
+            location.setYaw(location.getYaw() + (float) Math.toDegrees(angle));
             locationProperty.setValue(location);
         }
 

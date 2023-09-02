@@ -55,10 +55,14 @@ public class AxisMoveButtonBuilderImpl implements AxisMoveButtonBuilder {
         Component name = this.name;
         if (name == null) {
             TextColor textColor = TextColor.color(axis.getColor());
-            name = Message.component(
-                    "easyarmorstands.node.move-along-axis",
-                    Component.text(axis.getName())
-            ).color(textColor);
+            if (tool.getInitialValue() == null) {
+                name = Message.component(
+                        "easyarmorstands.node.move-along-axis",
+                        Component.text(axis.getName())
+                ).color(textColor);
+            } else {
+                name = Component.text(axis.getName(), textColor);
+            }
         }
         ParticleColor color = this.color;
         if (color == null) {

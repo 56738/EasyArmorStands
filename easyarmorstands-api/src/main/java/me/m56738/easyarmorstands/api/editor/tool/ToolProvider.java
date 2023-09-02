@@ -28,7 +28,11 @@ public interface ToolProvider {
             @NotNull Axis axis) {
         MoveTool moveTool = move(positionProvider, rotationProvider);
         if (moveTool != null) {
-            return new SimpleAxisMoveTool(moveTool, axis);
+            if (rotationProvider == RotationProvider.identity()) {
+                return new GlobalAxisMoveTool(moveTool, axis);
+            } else {
+                return new SimpleAxisMoveTool(moveTool, axis);
+            }
         }
         return null;
     }

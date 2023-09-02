@@ -7,8 +7,10 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
@@ -33,6 +35,11 @@ public class EntityMoveTool implements MoveTool {
     @Override
     public @NotNull Quaterniondc getRotation() {
         return rotationProvider.getRotation();
+    }
+
+    @Override
+    public @Nullable Vector3dc getInitialValue() {
+        return Util.toVector3d(locationProperty.getValue());
     }
 
     @Override

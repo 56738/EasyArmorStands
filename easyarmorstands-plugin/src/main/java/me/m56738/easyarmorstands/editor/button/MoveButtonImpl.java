@@ -21,7 +21,6 @@ public class MoveButtonImpl extends SimpleButton implements NodeFactoryButton, M
         this.session = session;
         this.tool = tool;
         this.name = name;
-        setPriority(1);
     }
 
     @Override
