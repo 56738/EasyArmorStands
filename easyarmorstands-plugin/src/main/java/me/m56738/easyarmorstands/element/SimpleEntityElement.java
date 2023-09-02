@@ -46,7 +46,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public @NotNull EntityElementReference<E> getReference() {
-        return new EntityElementReferenceImpl<>(type, entity.getUniqueId());
+        return new EntityElementReferenceImpl<>(type, entity);
     }
 
     @Override

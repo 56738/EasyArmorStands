@@ -4,8 +4,10 @@ import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -32,7 +34,7 @@ public class LookupCapabilityProvider implements CapabilityProvider<LookupCapabi
 
     private static class LookupCapabilityImpl implements LookupCapability {
         @Override
-        public Entity getEntity(UUID uuid) {
+        public Entity getEntity(UUID uuid, @Nullable Chunk expectedChunk) {
             return Bukkit.getEntity(uuid);
         }
     }

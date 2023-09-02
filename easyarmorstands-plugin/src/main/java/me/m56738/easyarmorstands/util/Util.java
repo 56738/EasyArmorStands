@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
@@ -12,7 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
@@ -136,15 +133,6 @@ public class Util {
 
     public static String getId(UUID uniqueId) {
         return uniqueId.toString().substring(0, 8);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> @Nullable T getEntity(UUID uuid, Class<T> type) {
-        Entity entity = EasyArmorStandsPlugin.getInstance().getCapability(LookupCapability.class).getEntity(uuid);
-        if (entity == null || !type.isAssignableFrom(entity.getClass())) {
-            return null;
-        }
-        return (T) entity;
     }
 
     public static double snap(double value, double increment) {
