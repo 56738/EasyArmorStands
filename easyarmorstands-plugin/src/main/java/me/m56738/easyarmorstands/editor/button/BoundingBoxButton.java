@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.util.Util;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
@@ -16,7 +17,7 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public abstract class AxisAlignedBoxButton implements Button {
+public abstract class BoundingBoxButton implements Button {
     private final Session session;
     private final Vector3d position = new Vector3d();
     private final Quaterniond rotation = new Quaterniond();
@@ -27,7 +28,7 @@ public abstract class AxisAlignedBoxButton implements Button {
     private boolean previewVisible;
     private boolean boxVisible;
 
-    public AxisAlignedBoxButton(Session session) {
+    public BoundingBoxButton(Session session) {
         this.session = session;
         this.pointParticle = session.particleProvider().createPoint();
         this.pointParticle.setBillboard(false);
@@ -40,18 +41,18 @@ public abstract class AxisAlignedBoxButton implements Button {
         return Util.IDENTITY;
     }
 
-    protected Vector3dc getCenter() {
-        return getPosition();
-    }
-
-    protected abstract Vector3dc getSize();
+    protected abstract BoundingBox getBoundingBox();
 
     @Override
     public void update() {
+        BoundingBox box = getBoundingBox();
+        Vector3dc min = box.getMinPosition();
+        Vector3dc max = box.getMaxPosition();
+
         position.set(getPosition());
         rotation.set(getRotation());
-        center.set(getCenter());
-        size.set(getSize());
+        max.lerp(min, 0.5, center);
+        max.sub(min, size);
     }
 
     @Override

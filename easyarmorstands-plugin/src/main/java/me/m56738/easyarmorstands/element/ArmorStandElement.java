@@ -24,7 +24,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
 
     @Override
     public Button createButton(Session session) {
-        return new ArmorStandButton(session, entity);
+        return new ArmorStandButton(session, this);
     }
 
     @Override

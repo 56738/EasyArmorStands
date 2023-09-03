@@ -4,8 +4,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.button.AxisAlignedBoxButton;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.joml.Quaterniond;
@@ -15,20 +17,19 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3fc;
 
-public class DisplayButton extends AxisAlignedBoxButton {
+public class DisplayButton extends BoundingBoxButton {
+    private final DisplayElement<?> element;
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
-    private final Property<Float> widthProperty;
-    private final Property<Float> heightProperty;
 
-    public DisplayButton(Session session, PropertyContainer container) {
+    public DisplayButton(Session session, DisplayElement<?> element) {
         super(session);
+        this.element = element;
+        PropertyContainer container = element.getProperties();
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = container.get(DisplayPropertyTypes.TRANSLATION);
         this.rotationProperty = container.get(DisplayPropertyTypes.LEFT_ROTATION);
-        this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
-        this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);
     }
 
     private Quaterniond getLocationRotation() {
@@ -48,15 +49,7 @@ public class DisplayButton extends AxisAlignedBoxButton {
     }
 
     @Override
-    protected Vector3dc getCenter() {
-        Location location = locationProperty.getValue();
-        return new Vector3d(location.getX(), location.getY() + heightProperty.getValue() / 2, location.getZ());
-    }
-
-    @Override
-    protected Vector3dc getSize() {
-        double width = widthProperty.getValue();
-        double height = heightProperty.getValue();
-        return new Vector3d(width, height, width);
+    protected BoundingBox getBoundingBox() {
+        return element.getBoundingBox();
     }
 }

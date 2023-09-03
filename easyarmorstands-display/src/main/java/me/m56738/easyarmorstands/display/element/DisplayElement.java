@@ -24,7 +24,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public Button createButton(Session session) {
-        return new DisplayButton(session, getProperties());
+        return new DisplayButton(session, this);
     }
 
     @Override

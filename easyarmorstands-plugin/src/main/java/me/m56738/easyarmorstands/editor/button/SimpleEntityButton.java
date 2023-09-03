@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class SimpleEntityButton extends AxisAlignedBoxButton {
+public class SimpleEntityButton extends BoundingBoxButton {
     private final EditableElement element;
 
     public SimpleEntityButton(Session session, EditableElement element) {
@@ -29,16 +29,7 @@ public class SimpleEntityButton extends AxisAlignedBoxButton {
     }
 
     @Override
-    protected Vector3dc getCenter() {
-        BoundingBox box = element.getBoundingBox();
-        return getCenter(box);
-    }
-
-    @Override
-    protected Vector3dc getSize() {
-        BoundingBox box = element.getBoundingBox();
-        Vector3dc min = box.getMinPosition();
-        Vector3dc max = box.getMaxPosition();
-        return max.sub(min, new Vector3d());
+    protected BoundingBox getBoundingBox() {
+        return element.getBoundingBox();
     }
 }
