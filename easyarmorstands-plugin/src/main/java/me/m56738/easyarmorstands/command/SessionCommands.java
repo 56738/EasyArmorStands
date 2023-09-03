@@ -139,7 +139,7 @@ public class SessionCommands {
 
     public static Collection<Element> getElementsOrError(EasPlayer sender, Session session) {
         if (session == null) {
-            return Collections.emptyList();
+            return null;
         }
 
         Element element = session.getElement();
@@ -157,7 +157,7 @@ public class SessionCommands {
         }
 
         sendNoSessionElementError(sender);
-        return Collections.emptyList();
+        return null;
     }
 
     public static Element getElementOrError(EasPlayer sender) {
@@ -252,20 +252,38 @@ public class SessionCommands {
     @CommandPermission(Permissions.CLONE)
     @CommandDescription("Spawn a copy of the selected entity")
     public void clone(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
-        ElementType type = element.getType();
-        PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
-        if (!sender.canCreateElement(type, properties)) {
+        Collection<Element> elements = getElementsOrError(sender);
+        if (elements == null) {
             return;
         }
 
-        Element clone = type.createElement(properties);
-        sender.history().push(new ElementCreateAction(clone));
+        List<Element> clones = new ArrayList<>();
+        for (Element element : elements) {
+            ElementType type = element.getType();
+            PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
+            if (sender.canCreateElement(type, properties)) {
+                clones.add(type.createElement(properties));
+            }
+        }
 
-        sender.sendMessage(Message.success("easyarmorstands.success.entity-cloned"));
+        int count = clones.size();
+        Component description;
+        if (count == 0) {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-clone"));
+            return;
+        } else if (count == 1) {
+            sender.sendMessage(Message.success("easyarmorstands.success.entity-cloned"));
+            description = Message.component("easyarmorstands.history.clone-element");
+        } else {
+            sender.sendMessage(Message.success("easyarmorstands.success.entity-cloned.multiple", Component.text(count)));
+            description = Message.component("easyarmorstands.history.clone-group");
+        }
+
+        List<ElementCreateAction> actions = new ArrayList<>();
+        for (Element clone : clones) {
+            actions.add(new ElementCreateAction(clone));
+        }
+        sender.history().push(actions, description);
     }
 
     @CommandMethod("spawn")
@@ -282,7 +300,7 @@ public class SessionCommands {
     @CommandDescription("Destroy the selected entity")
     public void destroy(EasPlayer sender) {
         Collection<Element> elements = getElementsOrError(sender);
-        if (elements.isEmpty()) {
+        if (elements == null) {
             return;
         }
 
