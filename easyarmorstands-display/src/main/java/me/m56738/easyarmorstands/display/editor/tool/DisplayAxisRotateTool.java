@@ -160,7 +160,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return Component.text(Util.ANGLE_FORMAT.format(Math.toDegrees(change)));
+            return Util.formatAngle(change);
         }
 
         @Override

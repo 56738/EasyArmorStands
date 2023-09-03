@@ -81,7 +81,11 @@ public class EntityPitchTool implements AxisRotateTool {
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            return context.snapAngle(Math.toRadians(originalLocation.getPitch()) + change);
+            double original = Math.toRadians(originalLocation.getPitch());
+            change += original;
+            change = context.snapAngle(change);
+            change -= original;
+            return change;
         }
 
         @Override
@@ -96,7 +100,7 @@ public class EntityPitchTool implements AxisRotateTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return Component.text(Util.ANGLE_FORMAT.format(locationProperty.getValue().getPitch()));
+            return Util.formatDegrees(locationProperty.getValue().getPitch());
         }
 
         @Override

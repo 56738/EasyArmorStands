@@ -75,7 +75,11 @@ public class EntityYawTool implements AxisRotateTool {
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            return context.snapAngle(Math.toRadians(originalLocation.getYaw()) - change);
+            double original = Math.toRadians(originalLocation.getYaw());
+            change -= original;
+            change = context.snapAngle(change);
+            change += original;
+            return change;
         }
 
         @Override
@@ -90,7 +94,7 @@ public class EntityYawTool implements AxisRotateTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return Component.text(Util.ANGLE_FORMAT.format(locationProperty.getValue().getYaw()));
+            return Util.formatDegrees(locationProperty.getValue().getYaw());
         }
 
         @Override

@@ -458,7 +458,7 @@ public class SessionCommands {
             return;
         }
         properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-yaw", Util.formatAngle(yaw)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-yaw", Util.formatDegrees(yaw)));
     }
 
     @CommandMethod("pitch <pitch>")
@@ -478,7 +478,7 @@ public class SessionCommands {
             return;
         }
         properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-pitch", Util.formatAngle(pitch)));
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-pitch", Util.formatDegrees(pitch)));
     }
 
     @CommandMethod("name")

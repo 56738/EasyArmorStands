@@ -111,7 +111,7 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
 
     @Override
     public Component formatValue(Double value) {
-        return Component.text(Util.ANGLE_FORMAT.format(value));
+        return Util.formatDegrees(value);
     }
 
     @Override

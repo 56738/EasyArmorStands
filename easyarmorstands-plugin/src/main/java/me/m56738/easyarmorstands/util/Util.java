@@ -59,8 +59,12 @@ public class Util {
         return format3D(offset, OFFSET_FORMAT);
     }
 
-    public static Component formatAngle(float angle) {
-        return Component.text(ANGLE_FORMAT.format(angle));
+    public static Component formatDegrees(double degrees) {
+        return Component.text(ANGLE_FORMAT.format(EasMath.wrapDegrees(degrees)));
+    }
+
+    public static Component formatAngle(double angle) {
+        return formatDegrees(Math.toDegrees(angle));
     }
 
     public static Component formatAngle(Vector3dc angle) {
