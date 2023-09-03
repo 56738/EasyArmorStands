@@ -219,6 +219,10 @@ public class ElementSelectionNode extends MenuNode {
 
         @Override
         public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
+            if (groupMembers.remove(element)) {
+                return;
+            }
+
             if (!element.canEdit(session.player())) {
                 return;
             }
@@ -229,10 +233,8 @@ public class ElementSelectionNode extends MenuNode {
                 return;
             }
 
-            if (session.player().isSneaking()) {
-                if (!groupMembers.add(element)) {
-                    groupMembers.remove(element);
-                }
+            if (session.player().isSneaking() && session.player().hasPermission(Permissions.GROUP)) {
+                groupMembers.add(element);
                 return;
             }
 

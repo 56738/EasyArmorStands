@@ -33,6 +33,9 @@ public class Permissions {
     @Description("Allow spawning the tool item")
     public static final String GIVE = "easyarmorstands.give";
 
+    @Description("Allow editing groups of entities")
+    public static final String GROUP = "easyarmorstands.group";
+
     @Description("Allow using the help command")
     public static final String HELP = "easyarmorstands.help";
 
@@ -76,6 +79,7 @@ public class Permissions {
     public static final String WORLDGUARD_BYPASS = "easyarmorstands.worldguard.bypass";
 
     @Description("Allow using the editor")
+    @Child(GROUP)
     @Child(HELP)
     @Child(HISTORY)
     @Child(INFO)

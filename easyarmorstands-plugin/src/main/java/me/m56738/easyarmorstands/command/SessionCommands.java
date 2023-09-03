@@ -215,7 +215,7 @@ public class SessionCommands {
     }
 
     @CommandMethod("group <entities>")
-    @CommandPermission(Permissions.EDIT)
+    @CommandPermission(Permissions.GROUP)
     @CommandDescription("Edit a group of entities")
     public void group(EasPlayer sender, @Argument("entities") MultipleEntitySelector selector) {
         Session session = getSessionOrError(sender);
