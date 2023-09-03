@@ -40,9 +40,10 @@ public class Group {
     }
 
     public Vector3dc getAveragePosition() {
+        Vector3d temp = new Vector3d();
         Vector3d position = new Vector3d();
         for (GroupMember member : members) {
-            position.add(member.getTools().position().getPosition());
+            position.add(member.getBoundingBox().getCenter(temp));
         }
         position.div(members.size());
         return position;

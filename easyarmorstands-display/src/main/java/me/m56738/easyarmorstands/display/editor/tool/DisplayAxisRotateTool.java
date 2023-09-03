@@ -33,6 +33,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
+    private final Property<Float> heightProperty;
     private final Axis axis;
     private final PositionProvider positionProvider;
     private final RotationProvider rotationProvider;
@@ -42,6 +43,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         this.properties = properties;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
+        this.heightProperty = properties.get(DisplayPropertyTypes.BOX_HEIGHT);
         this.rotationProperty = properties.get(type);
         this.axis = axis;
         this.positionProvider = positionProvider;
@@ -74,6 +76,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         private final Vector3fc originalTranslation;
         private final Quaternionfc originalRotation;
         private final Vector3dc originalOffset;
+        private final Vector3dc translationOffset;
         private final Vector3dc direction;
         private final Vector3dc localDirection;
         private final Quaternionf currentRotation = new Quaternionf();
@@ -83,13 +86,18 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
 
         public SessionImpl() {
             super(properties);
+            float height = heightProperty.getValue();
             Quaterniondc rotation = getRotation();
             Quaterniondc localRotation = parentRotationProvider.getRotation().conjugate(new Quaterniond())
                     .mul(rotation);
             this.originalLocation = locationProperty.getValue().clone();
             this.originalTranslation = new Vector3f(translationProperty.getValue());
             this.originalRotation = new Quaternionf(rotationProperty.getValue());
-            this.originalOffset = Util.toVector3d(originalLocation).sub(getPosition());
+            this.originalOffset = Util.toVector3d(originalLocation)
+                    .add(0, height / 2, 0)
+                    .sub(getPosition());
+            this.translationOffset = new Vector3d(originalTranslation)
+                    .sub(0, height / 2, 0);
             this.direction = axis.getDirection().rotate(rotation, new Vector3d());
             this.localDirection = axis.getDirection().rotate(localRotation, new Vector3d());
         }
@@ -107,10 +115,12 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
 
-            originalTranslation.rotateAxis((float) change,
-                    (float) direction.x(),
-                    (float) direction.y(),
-                    (float) direction.z(), currentTranslation);
+            translationOffset.rotateAxis(change,
+                            direction.x(),
+                            direction.y(),
+                            direction.z(), offsetChange)
+                    .sub(translationOffset);
+            originalTranslation.add(offsetChange.get(new Vector3f()), currentTranslation);
 
             currentRotation.setAngleAxis(
                             change,
