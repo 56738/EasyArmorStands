@@ -1,0 +1,138 @@
+package me.m56738.easyarmorstands.element;
+
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
+import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EditableElement;
+import me.m56738.easyarmorstands.api.element.EntityElementReference;
+import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.PropertyRegistry;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.capability.entitysize.EntitySizeCapability;
+import me.m56738.easyarmorstands.editor.button.SimpleEntityButton;
+import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
+import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
+
+import java.util.Objects;
+
+public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
+    private final E entity;
+    private final SimpleEntityElementType<E> type;
+    private final PropertyRegistry properties = new Properties();
+    private final EntitySizeCapability sizeCapability;
+
+    public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
+        this.entity = entity;
+        this.type = type;
+        this.sizeCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntitySizeCapability.class);
+    }
+
+    @Override
+    public E getEntity() {
+        return entity;
+    }
+
+    @Override
+    public @NotNull SimpleEntityElementType<E> getType() {
+        return type;
+    }
+
+    @Override
+    public @NotNull EntityElementReference<E> getReference() {
+        return new EntityElementReferenceImpl<>(type, entity);
+    }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
+
+    @Override
+    public @NotNull PropertyRegistry getProperties() {
+        return properties;
+    }
+
+    @Override
+    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+        return new SimpleEntityToolProvider(properties);
+    }
+
+    @Override
+    public @NotNull BoundingBox getBoundingBox() {
+        Vector3d position = Util.toVector3d(entity.getLocation());
+        if (sizeCapability == null) {
+            return BoundingBox.of(position);
+        }
+        double width = sizeCapability.getWidth(entity);
+        double height = sizeCapability.getHeight(entity);
+        return BoundingBox.of(position, width, height);
+    }
+
+    @Override
+    public Button createButton(Session session) {
+        return new SimpleEntityButton(session, this);
+    }
+
+    @Override
+    public Node createNode(Session session) {
+        return new SimpleEntityNode(session, this);
+    }
+
+    @Override
+    public void openMenu(Player player) {
+        Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
+        EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
+    }
+
+    @Override
+    public void destroy() {
+        entity.remove();
+    }
+
+    @Override
+    public boolean canEdit(Player player) {
+        return player.hasPermission(Permissions.entityType(Permissions.EDIT, type.getEntityType()));
+    }
+
+    @Override
+    public boolean canDestroy(Player player) {
+        return player.hasPermission(Permissions.entityType(Permissions.DESTROY, type.getEntityType()));
+    }
+
+    @Override
+    public @NotNull Component getName() {
+        return Component.text(Util.getId(entity.getUniqueId()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleEntityElement<?> that = (SimpleEntityElement<?>) o;
+        return Objects.equals(entity, that.entity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entity);
+    }
+
+    private class Properties extends PropertyRegistry {
+        @Override
+        public boolean isValid() {
+            return entity.isValid();
+        }
+    }
+}

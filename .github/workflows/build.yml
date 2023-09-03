@@ -20,8 +20,8 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_MGDevUsername: ${{ secrets.MAVEN_USERNAME }}
           ORG_GRADLE_PROJECT_MGDevPassword: ${{ secrets.MAVEN_PASSWORD }}
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v2') }}
       - uses: actions/upload-artifact@v3
         with:
           name: Package
-          path: build/libs
+          path: easyarmorstands-plugin/build/EasyArmorStands-*.jar

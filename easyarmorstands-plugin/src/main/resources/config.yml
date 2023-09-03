@@ -1,0 +1,41 @@
+update-check: true
+
+server-side-translation: true
+
+tool:
+  type: blaze_rod
+  name: <gold><lang:easyarmorstands.tool-name>
+  description:
+    - <gray><lang:easyarmorstands.hint.select-entity>
+    - <gray><lang:easyarmorstands.hint.spawn-entity>
+    - <gray><lang:easyarmorstands.hint.deselect-entity>
+
+message-formats:
+  TITLE: '<gold><message>:'
+  SUCCESS: <green><message>
+  WARNING: <yellow><message>
+  ERROR: <red><message>
+  HINT: <gray><message>
+  CHAT_BUTTON: <gray>[<message>]
+  HOVER: <gray><message>
+  BUTTON_NAME: <blue><message>
+  BUTTON_DESCRIPTION: <gray><message>
+
+menu-background:
+  type: easyarmorstands:background
+  config:
+    item:
+      type: light_blue_stained_glass_pane
+      name: ''
+
+menu:
+  element:
+    buttons:
+      display-bone:
+        bounding-box:
+          type: glass
+          name: <lang:easyarmorstands.node.display.box>
+          description:
+            - <lang:easyarmorstands.menu.node.left-click-to-select>
+            - <lang:easyarmorstands.menu.node.right-click-to-reset>
+            - <lang:easyarmorstands.node.display.box.description>

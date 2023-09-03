@@ -145,8 +145,6 @@ Use `/eas help` to see the full list of commands and their full usage.
 
 # Permissions
 
-The full list of permissions is visible in [permissions.yml](src/main/resources/permissions.yml).
-
 There are two permission packs which contain permissions which are recommended for survival or creative mode servers.
 
 | Permission                 | Description                                                  |

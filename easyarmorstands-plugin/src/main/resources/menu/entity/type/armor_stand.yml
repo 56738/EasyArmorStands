@@ -1,0 +1,128 @@
+parent: entity/living
+height: 6
+slots:
+  easyarmorstands:armor_stand/arms:
+    row: 1
+    column: 4
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/arms
+  easyarmorstands:armor_stand/marker:
+    row: 1
+    column: 5
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/marker
+  easyarmorstands:armor_stand/gravity:
+    row: 1
+    column: 6
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/gravity
+  easyarmorstands:armor_stand/invulnerable:
+    row: 1
+    column: 7
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/invulnerable
+  easyarmorstands:armor_stand/lock:
+    row: 1
+    column: 8
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/lock
+  easyarmorstands:armor_stand/base_plate:
+    row: 2
+    column: 4
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/base_plate
+  easyarmorstands:armor_stand/size:
+    row: 2
+    column: 5
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:armor_stand/size
+  easyarmorstands:armor_stand/part/head:
+    row: 3
+    column: 7
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: HEAD
+      item:
+        type: player_head
+        name: <lang:easyarmorstands.armor-stand-part.head>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/part/left_arm:
+    row: 4
+    column: 6
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: LEFT_ARM
+      item:
+        type: lever
+        name: <lang:easyarmorstands.armor-stand-part.left-arm>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/part/body:
+    row: 4
+    column: 7
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: BODY
+      item:
+        type: leather_chestplate
+        name: <lang:easyarmorstands.armor-stand-part.body>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/part/right_arm:
+    row: 4
+    column: 8
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: RIGHT_ARM
+      item:
+        type: lever
+        name: <lang:easyarmorstands.armor-stand-part.right-arm>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/part/left_leg:
+    row: 5
+    column: 6
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: LEFT_LEG
+      item:
+        type: lever
+        name: <lang:easyarmorstands.armor-stand-part.left-leg>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/position:
+    row: 5
+    column: 7
+    type: easyarmorstands:armor_stand/position
+    config:
+      item:
+        type: bucket
+        name: <lang:easyarmorstands.node.position>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>
+  easyarmorstands:armor_stand/part/right_leg:
+    row: 5
+    column: 8
+    type: easyarmorstands:armor_stand/part
+    config:
+      part: RIGHT_LEG
+      item:
+        type: lever
+        name: <lang:easyarmorstands.armor-stand-part.right-leg>
+        description:
+          - <lang:easyarmorstands.menu.node.left-click-to-select>
+          - <lang:easyarmorstands.menu.node.right-click-to-reset>

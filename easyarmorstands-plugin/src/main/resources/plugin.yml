@@ -1,0 +1,75 @@
+name: EasyArmorStands
+version: '${version}'
+main: me.m56738.easyarmorstands.EasyArmorStandsPlugin
+author: '56738'
+api-version: 1.13
+softdepend:
+  - HeadDatabase
+  - PlotSquared
+  - Train_Carts
+  - WorldGuard
+
+permissions:
+  # Categories
+  easyarmorstands.survival:
+    description: "Allow editing armor stands and their basic properties"
+    children:
+      - easyarmorstands.edit.armorstand
+      - easyarmorstands.give
+      - easyarmorstands.property.armorstand.arms
+      - easyarmorstands.property.armorstand.baseplate
+      - easyarmorstands.property.armorstand.cantick
+      - easyarmorstands.property.armorstand.lock
+      - easyarmorstands.property.armorstand.pose.body
+      - easyarmorstands.property.armorstand.pose.head
+      - easyarmorstands.property.armorstand.pose.leftarm
+      - easyarmorstands.property.armorstand.pose.leftleg
+      - easyarmorstands.property.armorstand.pose.rightarm
+      - easyarmorstands.property.armorstand.pose.rightleg
+      - easyarmorstands.property.armorstand.size
+      - easyarmorstands.property.equipment
+      - easyarmorstands.property.gravity
+      - easyarmorstands.property.location
+      - easyarmorstands.property.visible
+      - easyarmorstands.snap
+  easyarmorstands.creative:
+    description: "Allow spawning and editing armor stands and display entities"
+    children:
+      - easyarmorstands.survival
+      - easyarmorstands.clone
+      - easyarmorstands.color
+      - easyarmorstands.convert
+      - easyarmorstands.destroy.armorstand
+      - easyarmorstands.destroy.blockdisplay
+      - easyarmorstands.destroy.itemdisplay
+      - easyarmorstands.destroy.textdisplay
+      - easyarmorstands.edit.blockdisplay
+      - easyarmorstands.edit.itemdisplay
+      - easyarmorstands.edit.textdisplay
+      - easyarmorstands.property.armorstand.marker
+      - easyarmorstands.property.display.billboard
+      - easyarmorstands.property.display.block
+      - easyarmorstands.property.display.brightness
+      - easyarmorstands.property.display.item
+      - easyarmorstands.property.display.item.transform
+      - easyarmorstands.property.display.rotation
+      - easyarmorstands.property.display.scale
+      - easyarmorstands.property.display.shearing
+      - easyarmorstands.property.display.size
+      - easyarmorstands.property.display.text
+      - easyarmorstands.property.display.text.alignment
+      - easyarmorstands.property.display.text.background
+      - easyarmorstands.property.display.text.linewidth
+      - easyarmorstands.property.display.text.seethrough
+      - easyarmorstands.property.display.text.shadow
+      - easyarmorstands.property.display.translation
+      - easyarmorstands.property.glow
+      - easyarmorstands.property.invulnerable
+      - easyarmorstands.property.name
+      - easyarmorstands.property.name.visible
+      - easyarmorstands.redo
+      - easyarmorstands.spawn.armorstand
+      - easyarmorstands.spawn.blockdisplay
+      - easyarmorstands.spawn.itemdisplay
+      - easyarmorstands.spawn.textdisplay
+      - easyarmorstands.undo
