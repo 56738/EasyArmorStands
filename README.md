@@ -175,3 +175,43 @@ If [WorldGuard](https://enginehub.org/worldguard) is installed, players can only
 build.
 
 Players with the `easyarmorstands.worldguard.bypass` permission bypass this restriction.
+
+# Configuration
+
+## Localization
+
+* Copy the
+  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/v2.0.0/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
+  into `plugins/EasyArmorStands/messages_XX.properties`.
+* Replace `XX` with the language, for example: `messages_de.properties`.
+  This makes the file only apply to players with that language.
+* To replace the default messages (sent if no matching `messages_XX.properties` file exists),
+  simply call the file `messages.properties`.
+
+## Configuration
+
+* Find the config file you want to change
+  in [the resource folder](https://github.com/56738/EasyArmorStands/tree/main/easyarmorstands-plugin/src/main/resources).
+* Create the corresponding file in the plugin folder.
+  For example, to edit the
+  [armor stand menu](https://github.com/56738/EasyArmorStands/blob/main/easyarmorstands-plugin/src/main/resources/menu/entity/type/armor_stand.yml),
+  create `plugins/EasyArmorStands/menu/entity/type/armor_stand.yml`.
+* Copy values which you want to change from the default to that file and change them there.
+
+The following files can be modified using this method:
+
+* The `config.yml` file contains the plugin configuration.
+* The `menu` folder contains the menu layout definitions.
+* The `properties.yml` file contains the property definitions, including the item types used for their buttons.
+
+To prevent issues with plugin updates, keep your custom config files as small as possible.
+The corresponding default config files are merged into them, so if you don't specify a value in your own config,
+it will be taken from the defaults.
+
+Menu layout definitions contain a `parent` key, the specified parent configs are merged into your config,
+just like the defaults (see above).
+
+You can create your own menu for any entity type in `menu/entity/type/TYPE.yml`, where `TYPE` is the lower-case entity
+type name, such as `tnt_minecart`. Otherwise, `menu/entity/living.yml` or `menu/entity/default.yml` are used instead.
+
+Use `/eas reload` to reload all configuration files and messages.

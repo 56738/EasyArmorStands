@@ -27,15 +27,3 @@ menu-background:
     item:
       type: light_blue_stained_glass_pane
       name: ''
-
-menu:
-  element:
-    buttons:
-      display-bone:
-        bounding-box:
-          type: glass
-          name: <lang:easyarmorstands.node.display.box>
-          description:
-            - <lang:easyarmorstands.menu.node.left-click-to-select>
-            - <lang:easyarmorstands.menu.node.right-click-to-reset>
-            - <lang:easyarmorstands.node.display.box.description>
