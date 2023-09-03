@@ -5,6 +5,7 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.util.TriState;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class EasCommandSender implements ForwardingAudience.Single {
@@ -17,6 +18,7 @@ public class EasCommandSender implements ForwardingAudience.Single {
         this.audience = audience;
     }
 
+    @Contract(pure = true)
     public @NotNull CommandSender get() {
         return sender;
     }

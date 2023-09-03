@@ -14,15 +14,15 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ import java.util.Set;
 
 public class ElementSelectionNode extends MenuNode {
     private final Session session;
-    private final Map<ElementDiscoveryEntry, ElementButton> buttons = new HashMap<>();
+    private final Map<ElementDiscoveryEntry, ElementEntry> entries = new HashMap<>();
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
     private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
@@ -75,17 +75,20 @@ public class ElementSelectionNode extends MenuNode {
         }
 
         // Process removed entries
-        for (Iterator<Map.Entry<ElementDiscoveryEntry, ElementButton>> iterator = buttons.entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<ElementDiscoveryEntry, ElementButton> entry = iterator.next();
+        for (Iterator<Map.Entry<ElementDiscoveryEntry, ElementEntry>> iterator = entries.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<ElementDiscoveryEntry, ElementEntry> entry = iterator.next();
             if (!foundEntries.contains(entry.getKey())) {
-                removeButton(entry.getValue());
+                ElementButton button = entry.getValue().button;
+                if (button != null) {
+                    removeButton(button);
+                }
                 iterator.remove();
             }
         }
 
         // Process added entries
         for (ElementDiscoveryEntry entry : foundEntries) {
-            buttons.computeIfAbsent(entry, this::addEntry);
+            entries.computeIfAbsent(entry, this::addEntry);
         }
 
         super.onUpdate(context);
@@ -102,32 +105,35 @@ public class ElementSelectionNode extends MenuNode {
         }
     }
 
-    private ElementButton addEntry(ElementDiscoveryEntry entry) {
+    private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
-        if (element == null || !element.canEdit(session.player())) {
-            return null;
+        ChangeContext context = new EasPlayer(session.player());
+        if (element == null || !context.canEditElement(element)) {
+            return ElementEntry.EMPTY;
         }
         ElementButton button = new ElementButton(entry, session, element);
         addButton(button);
-        return button;
+        return new ElementEntry(button);
     }
 
     @Override
     public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
-        for (ElementButton button : buttons.values()) {
-            removeButton(button);
+        for (ElementEntry entry : entries.values()) {
+            if (entry.button != null) {
+                removeButton(entry.button);
+            }
         }
-        buttons.clear();
+        entries.clear();
         groupMembers.clear();
     }
 
     private ElementButton findButton(Entity entity) {
         for (ElementDiscoverySource source : sources) {
             if (source instanceof EntityElementDiscoverySource) {
-                ElementButton button = buttons.get(((EntityElementDiscoverySource) source).getEntry(entity));
-                if (button != null) {
-                    return button;
+                ElementEntry entry = entries.get(((EntityElementDiscoverySource) source).getEntry(entity));
+                if (entry.button != null) {
+                    return entry.button;
                 }
             }
         }
@@ -197,17 +203,13 @@ public class ElementSelectionNode extends MenuNode {
             return false;
         }
 
-        if (!((SelectableElement) element).canEdit(session.player())) {
+        SelectableElement selectableElement = (SelectableElement) element;
+        ChangeContext context = new EasPlayer(session.player());
+        if (!context.canEditElement(selectableElement)) {
             return false;
         }
 
-        SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
-
-        Node node = ((SelectableElement) element).createNode(session);
+        Node node = selectableElement.createNode(session);
         if (node == null) {
             return false;
         }
@@ -223,13 +225,10 @@ public class ElementSelectionNode extends MenuNode {
         }
 
         Group group = new Group(session);
+        ChangeContext context = new EasPlayer(session.player());
         for (SelectableElement element : elements) {
-            if (element.canEdit(session.player())) {
-                SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    group.addMember(element);
-                }
+            if (context.canEditElement(element)) {
+                group.addMember(element);
             }
         }
         if (!group.isValid()) {
@@ -239,6 +238,16 @@ public class ElementSelectionNode extends MenuNode {
         session.returnToNode(this);
         session.pushNode(new GroupRootNode(group));
         return true;
+    }
+
+    private static class ElementEntry {
+        private static final ElementEntry EMPTY = new ElementEntry(null);
+
+        private final @Nullable ElementButton button;
+
+        private ElementEntry(@Nullable ElementButton button) {
+            this.button = button;
+        }
     }
 
     private class ElementButton implements MenuButton {
@@ -263,9 +272,8 @@ public class ElementSelectionNode extends MenuNode {
                 return;
             }
 
-            SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
-            Bukkit.getPluginManager().callEvent(event);
-            if (event.isCancelled()) {
+            ChangeContext context = new EasPlayer(session.player());
+            if (!context.canEditElement(element)) {
                 return;
             }
 

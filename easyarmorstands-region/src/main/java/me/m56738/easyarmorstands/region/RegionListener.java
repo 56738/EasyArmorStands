@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
-import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import net.kyori.adventure.audience.Audience;
@@ -27,14 +27,12 @@ public class RegionListener implements Listener {
     private final RegionPrivilegeChecker privilegeChecker;
     private final Component createError;
     private final Component destroyError;
-    private final Component selectError;
 
-    public RegionListener(String bypassPermission, RegionPrivilegeChecker privilegeChecker, Component createError, Component destroyError, Component selectError) {
+    public RegionListener(String bypassPermission, RegionPrivilegeChecker privilegeChecker, Component createError, Component destroyError) {
         this.bypassPermission = bypassPermission;
         this.privilegeChecker = privilegeChecker;
         this.createError = createError;
         this.destroyError = destroyError;
-        this.selectError = selectError;
     }
 
     private static Audience audience(Player player) {
@@ -51,7 +49,7 @@ public class RegionListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSelect(SessionSelectElementEvent event) {
+    public void onEdit(PlayerEditElementEvent event) {
         if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
             return;
         }
@@ -59,7 +57,6 @@ public class RegionListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        audience(event.getPlayer()).sendMessage(selectError);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -1,23 +1,25 @@
-package me.m56738.easyarmorstands.api.event.session;
+package me.m56738.easyarmorstands.api.event.player;
 
-import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when an element is selected.
+ * Called to check whether an element can be edited.
  * <p>
  * Can be used to prevent selecting certain elements.
  */
-public class SessionSelectElementEvent extends SessionEvent implements Cancellable {
+public class PlayerEditElementEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
-    private final Element element;
+    private final EditableElement element;
     private boolean cancelled;
 
-    public SessionSelectElementEvent(Session session, Element element) {
-        super(session);
+    public PlayerEditElementEvent(Player player, EditableElement element) {
+        super(player);
         this.element = element;
     }
 

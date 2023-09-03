@@ -12,8 +12,7 @@ public class WorldGuardAddon {
                 Permissions.WORLDGUARD_BYPASS,
                 new WorldGuardPrivilegeChecker(),
                 Message.error("easyarmorstands.error.worldguard.deny-create"),
-                Message.error("easyarmorstands.error.worldguard.deny-destroy"),
-                Message.error("easyarmorstands.error.worldguard.deny-select")
+                Message.error("easyarmorstands.error.worldguard.deny-destroy")
         ), plugin);
     }
 }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node which can contain multiple {@link Button buttons}.
@@ -37,7 +38,7 @@ public abstract class MenuNode implements Node {
     }
 
     public final void removeButton(@NotNull MenuButton menuButton) {
-        setButton(menuButton, null);
+        setButton(Objects.requireNonNull(menuButton), null);
     }
 
     private void setButton(MenuButton menuButton, Button button) {

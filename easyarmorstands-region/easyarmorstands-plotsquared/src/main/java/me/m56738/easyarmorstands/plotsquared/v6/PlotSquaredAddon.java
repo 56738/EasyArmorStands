@@ -13,8 +13,7 @@ public class PlotSquaredAddon {
                 Permissions.PLOTSQUARED_BYPASS,
                 new PlotSquaredPrivilegeChecker(new PlotAPI()),
                 Message.error("easyarmorstands.error.plotsquared.deny-create"),
-                Message.error("easyarmorstands.error.plotsquared.deny-destroy"),
-                Message.error("easyarmorstands.error.plotsquared.deny-select")
+                Message.error("easyarmorstands.error.plotsquared.deny-destroy")
         ), plugin);
     }
 }

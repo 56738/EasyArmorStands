@@ -2,10 +2,12 @@ package me.m56738.easyarmorstands.command.sender;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -76,6 +78,16 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
             return false;
         }
         PlayerDestroyElementEvent event = new PlayerDestroyElementEvent(player, element);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    @Override
+    public boolean canEditElement(EditableElement element) {
+        if (!element.canEdit(player)) {
+            return false;
+        }
+        PlayerEditElementEvent event = new PlayerEditElementEvent(player, element);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

@@ -10,7 +10,6 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
@@ -598,13 +597,10 @@ public class DisplayCommands {
             // Add created entities to the selected group
             Group group = groupRootNode.getGroup();
             session.returnToNode(groupRootNode);
+            ChangeContext context = new EasPlayer(session.player());
             for (SimpleEntityElement<ItemDisplay> element : createdElements) {
-                if (element.canEdit(session.player())) {
-                    SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        group.addMember(element);
-                    }
+                if (context.canEditElement(element)) {
+                    group.addMember(element);
                 }
             }
         } else {

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.context;
 
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -29,6 +30,8 @@ public interface ChangeContext {
     boolean canCreateElement(ElementType type, PropertyContainer properties);
 
     boolean canDestroyElement(DestroyableElement element);
+
+    boolean canEditElement(EditableElement element);
 
     <T> boolean canChangeProperty(Element element, Property<T> property, T value);
 }
