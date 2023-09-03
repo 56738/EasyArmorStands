@@ -41,11 +41,6 @@ public class EntityMoveTool implements MoveTool {
     }
 
     @Override
-    public @Nullable Vector3dc getInitialValue() {
-        return Util.toVector3d(locationProperty.getValue());
-    }
-
-    @Override
     public @NotNull MoveToolSession start() {
         return new SessionImpl();
     }

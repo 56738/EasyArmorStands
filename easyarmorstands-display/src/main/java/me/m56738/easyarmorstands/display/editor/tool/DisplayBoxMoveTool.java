@@ -56,11 +56,6 @@ public class DisplayBoxMoveTool implements MoveTool {
     }
 
     @Override
-    public @Nullable Vector3dc getInitialValue() {
-        return boxPositionProvider.getPosition().sub(displayPositionProvider.getPosition(), new Vector3d());
-    }
-
-    @Override
     public @NotNull MoveToolSession start() {
         return new SessionImpl();
     }
@@ -75,7 +70,7 @@ public class DisplayBoxMoveTool implements MoveTool {
             super(properties);
             originalLocation = locationProperty.getValue().clone();
             originalTranslation = new Vector3f(translationProperty.getValue());
-            originalBoxPosition = boxPositionProvider.getPosition();
+            originalBoxPosition = getPosition();
         }
 
         @Override
@@ -103,7 +98,8 @@ public class DisplayBoxMoveTool implements MoveTool {
 
         @Override
         public @NotNull Vector3dc getPosition() {
-            return boxPositionProvider.getPosition();
+            return boxPositionProvider.getPosition()
+                    .sub(displayPositionProvider.getPosition(), new Vector3d());
         }
 
         @Override
