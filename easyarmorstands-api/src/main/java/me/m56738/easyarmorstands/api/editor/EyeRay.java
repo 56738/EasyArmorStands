@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.editor;
 
+import me.m56738.easyarmorstands.api.util.BoundingBox;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,6 +23,14 @@ public interface EyeRay {
 
     @Contract(pure = true)
     @NotNull Vector3dc target();
+
+    @Contract(pure = true)
+    default @NotNull Vector3dc point(double distance) {
+        Vector3dc origin = origin();
+        return target().sub(origin, new Vector3d())
+                .normalize(distance)
+                .add(origin);
+    }
 
     @Contract(pure = true)
     double length();
@@ -143,10 +152,13 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectBox(Vector3dc center, Vector3dc size) {
+    default @Nullable Vector3dc intersectBox(@NotNull BoundingBox box) {
         Vector3dc origin = origin();
-        Vector3d min = center.fma(-0.5, size, new Vector3d());
-        Vector3d max = center.fma(0.5, size, new Vector3d());
+        Vector3dc min = box.getMinPosition();
+        Vector3dc max = box.getMaxPosition();
+        if (min.equals(max)) {
+            return null;
+        }
         Vector3d direction = target().sub(origin, new Vector3d());
         Vector2d result = new Vector2d();
         if (Intersectiond.intersectRayAab(origin, direction, min, max, result) && result.x <= 1) {

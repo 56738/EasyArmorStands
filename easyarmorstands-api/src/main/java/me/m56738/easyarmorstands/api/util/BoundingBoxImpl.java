@@ -3,6 +3,8 @@ package me.m56738.easyarmorstands.api.util;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
+import java.util.Objects;
+
 class BoundingBoxImpl implements BoundingBox {
     private final Vector3dc min;
     private final Vector3dc max;
@@ -20,5 +22,23 @@ class BoundingBoxImpl implements BoundingBox {
     @Override
     public @NotNull Vector3dc getMaxPosition() {
         return max;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoundingBoxImpl that = (BoundingBoxImpl) o;
+        return Objects.equals(min, that.min) && Objects.equals(max, that.max);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max);
+    }
+
+    @Override
+    public String toString() {
+        return "BoundingBoxImpl{min=" + min + ", max=" + max + '}';
     }
 }

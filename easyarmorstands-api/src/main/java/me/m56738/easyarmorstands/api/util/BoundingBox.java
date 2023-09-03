@@ -9,6 +9,38 @@ import java.util.Arrays;
 
 public interface BoundingBox {
     @Contract(pure = true)
+    static @NotNull BoundingBox of(@NotNull BoundingBox box) {
+        return new BoundingBoxImpl(
+                new Vector3d(box.getMinPosition()),
+                new Vector3d(box.getMaxPosition()));
+    }
+
+    @Contract(pure = true)
+    static @NotNull BoundingBox of(@NotNull BoundingBox a, @NotNull BoundingBox b) {
+        Vector3d min = a.getMinPosition().min(b.getMinPosition(), new Vector3d());
+        Vector3d max = a.getMaxPosition().max(b.getMaxPosition(), new Vector3d());
+        return new BoundingBoxImpl(min, max);
+    }
+
+    @Contract(pure = true)
+    static @NotNull BoundingBox of(@NotNull BoundingBox box, @NotNull Vector3dc position) {
+        Vector3d min = box.getMinPosition().min(position, new Vector3d());
+        Vector3d max = box.getMaxPosition().max(position, new Vector3d());
+        return new BoundingBoxImpl(min, max);
+    }
+
+    @Contract(pure = true)
+    static @NotNull BoundingBox of(@NotNull BoundingBox box, @NotNull Vector3dc @NotNull ... positions) {
+        Vector3d min = new Vector3d(box.getMinPosition());
+        Vector3d max = new Vector3d(box.getMaxPosition());
+        for (Vector3dc position : positions) {
+            min.min(position);
+            max.max(position);
+        }
+        return new BoundingBoxImpl(min, max);
+    }
+
+    @Contract(pure = true)
     static @NotNull BoundingBox of(@NotNull Vector3dc position) {
         Vector3dc v = new Vector3d(position);
         return new BoundingBoxImpl(v, v);
@@ -54,4 +86,24 @@ public interface BoundingBox {
 
     @Contract(pure = true)
     @NotNull Vector3dc getMaxPosition();
+
+    @Contract(pure = true)
+    default boolean contains(@NotNull Vector3dc point) {
+        Vector3dc min = getMinPosition();
+        Vector3dc max = getMaxPosition();
+        return point.x() >= min.x() && point.x() <= max.x()
+                && point.y() >= min.y() && point.y() <= max.y()
+                && point.z() >= min.z() && point.z() <= max.z();
+    }
+
+    @Contract(pure = true)
+    default boolean overlaps(@NotNull BoundingBox box) {
+        Vector3dc min1 = getMinPosition();
+        Vector3dc max1 = getMaxPosition();
+        Vector3dc min2 = box.getMinPosition();
+        Vector3dc max2 = box.getMaxPosition();
+        return min1.x() < max2.x() && max1.x() > min2.x()
+                && min1.y() < max2.y() && max1.y() > min2.y()
+                && min1.z() < max2.z() && max1.z() > min2.z();
+    }
 }

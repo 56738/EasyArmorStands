@@ -16,5 +16,5 @@ public interface ParticleProvider {
     @NotNull CircleParticle createCircle();
 
     @Contract(value = "-> new", pure = true)
-    @NotNull AxisAlignedBoxParticle createAxisAlignedBox();
+    @NotNull BoundingBoxParticle createAxisAlignedBox();
 }

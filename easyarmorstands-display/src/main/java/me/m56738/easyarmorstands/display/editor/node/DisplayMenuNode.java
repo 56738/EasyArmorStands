@@ -6,11 +6,12 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.util.Util;
@@ -20,7 +21,7 @@ import org.joml.Vector3d;
 
 public class DisplayMenuNode extends PropertyMenuNode {
     private final Session session;
-    private final AxisAlignedBoxParticle boxParticle;
+    private final BoundingBoxParticle boxParticle;
     private final Property<Location> locationProperty;
     private final Property<Float> widthProperty;
     private final Property<Float> heightProperty;
@@ -89,8 +90,7 @@ public class DisplayMenuNode extends PropertyMenuNode {
         Vector3d position = Util.toVector3d(location);
         boolean visible = canShow && width != 0 && height != 0 && (isActive || showBoundingBoxIfInactive);
         if (visible) {
-            boxParticle.setCenter(position.add(0, height / 2, 0, new Vector3d()));
-            boxParticle.setSize(new Vector3d(width, height, width));
+            boxParticle.setBoundingBox(BoundingBox.of(position, width, height));
         }
         if (isVisible != visible) {
             isVisible = visible;

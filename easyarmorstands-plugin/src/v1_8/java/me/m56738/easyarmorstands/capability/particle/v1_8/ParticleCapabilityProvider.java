@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.particle.v1_8;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
@@ -48,9 +48,9 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
         }
 
         @Override
-        public AxisAlignedBoxParticle createAxisAlignedBox(World world) {
+        public BoundingBoxParticle createAxisAlignedBox(World world) {
             DustParticleCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(DustParticleCapability.class);
-            return new AxisAlignedBoxDustParticle(capability);
+            return new BoundingBoxDustParticle(capability);
         }
 
         @Override

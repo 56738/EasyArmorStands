@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
@@ -71,8 +71,8 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
         }
 
         @Override
-        public AxisAlignedBoxParticle createAxisAlignedBox(World world) {
-            return new AxisAlignedBoxParticleImpl(world, this);
+        public BoundingBoxParticle createAxisAlignedBox(World world) {
+            return new BoundingBoxParticleImpl(world, this);
         }
 
         @Override

@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.Particle;
@@ -487,7 +487,7 @@ public final class SessionImpl implements Session {
         }
 
         @Override
-        public @NotNull AxisAlignedBoxParticle createAxisAlignedBox() {
+        public @NotNull BoundingBoxParticle createAxisAlignedBox() {
             return particleCapability.createAxisAlignedBox(session.getWorld());
         }
     }

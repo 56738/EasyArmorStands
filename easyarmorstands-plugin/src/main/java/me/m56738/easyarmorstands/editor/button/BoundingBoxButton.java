@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -21,10 +21,9 @@ public abstract class BoundingBoxButton implements Button {
     private final Session session;
     private final Vector3d position = new Vector3d();
     private final Quaterniond rotation = new Quaterniond();
-    private final Vector3d center = new Vector3d();
-    private final Vector3d size = new Vector3d();
     private final PointParticle pointParticle;
-    private final AxisAlignedBoxParticle boxParticle;
+    private final BoundingBoxParticle boxParticle;
+    private BoundingBox box;
     private boolean previewVisible;
     private boolean boxVisible;
 
@@ -45,14 +44,9 @@ public abstract class BoundingBoxButton implements Button {
 
     @Override
     public void update() {
-        BoundingBox box = getBoundingBox();
-        Vector3dc min = box.getMinPosition();
-        Vector3dc max = box.getMaxPosition();
-
+        box = BoundingBox.of(getBoundingBox());
         position.set(getPosition());
         rotation.set(getRotation());
-        max.lerp(min, 0.5, center);
-        max.sub(min, size);
     }
 
     @Override
@@ -61,11 +55,9 @@ public abstract class BoundingBoxButton implements Button {
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
         }
-        if (size.x != 0 && size.y != 0 && size.z != 0) {
-            intersection = ray.intersectBox(center, size);
-            if (intersection != null) {
-                results.accept(ButtonResult.of(intersection, -1));
-            }
+        intersection = ray.intersectBox(box);
+        if (intersection != null) {
+            results.accept(ButtonResult.of(intersection, -1));
         }
     }
 
@@ -74,9 +66,8 @@ public abstract class BoundingBoxButton implements Button {
         pointParticle.setPosition(position);
         pointParticle.setRotation(rotation);
         pointParticle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
-        boxParticle.setCenter(center);
-        boxParticle.setSize(size);
-        boolean showBox = focused && size.x != 0 && size.y != 0;
+        boxParticle.setBoundingBox(box);
+        boolean showBox = focused && !box.getMinPosition().equals(box.getMaxPosition());
         if (previewVisible && showBox != boxVisible) {
             if (showBox) {
                 session.addParticle(boxParticle);

@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
@@ -16,16 +16,11 @@ import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.tool.GroupToolProvider;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
 public class GroupRootNode extends MenuNode {
     private final Session session;
     private final Group group;
-    private final AxisAlignedBoxParticle boxParticle;
-    private final Vector3d minPosition = new Vector3d();
-    private final Vector3d maxPosition = new Vector3d();
-    private final Vector3d boxCenter = new Vector3d();
-    private final Vector3d boxSize = new Vector3d();
+    private final BoundingBoxParticle boxParticle;
     private final ToolMenuManager toolManager;
 
     public GroupRootNode(Group group) {
@@ -38,24 +33,18 @@ public class GroupRootNode extends MenuNode {
     }
 
     private void updateBox() {
-        minPosition.set(Double.POSITIVE_INFINITY);
-        maxPosition.set(Double.NEGATIVE_INFINITY);
-        boolean valid = false;
+        BoundingBox box = null;
         for (GroupMember member : group.getMembers()) {
             BoundingBox boundingBox = member.getBoundingBox();
-            minPosition.min(boundingBox.getMinPosition());
-            maxPosition.max(boundingBox.getMaxPosition());
-            valid = true;
+            if (box == null) {
+                box = boundingBox;
+            } else {
+                box = BoundingBox.of(box, boundingBox);
+            }
         }
-        if (!valid) {
-            return;
+        if (box != null) {
+            boxParticle.setBoundingBox(box);
         }
-
-        maxPosition.add(minPosition, boxCenter).div(2);
-        maxPosition.sub(minPosition, boxSize);
-
-        boxParticle.setCenter(boxCenter);
-        boxParticle.setSize(boxSize);
     }
 
     @Override

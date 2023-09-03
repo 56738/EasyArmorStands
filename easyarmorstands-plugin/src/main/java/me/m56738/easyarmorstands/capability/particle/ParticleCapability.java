@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle;
 
-import me.m56738.easyarmorstands.api.particle.AxisAlignedBoxParticle;
+import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
@@ -15,7 +15,7 @@ public interface ParticleCapability {
 
     CircleParticle createCircle(World world);
 
-    AxisAlignedBoxParticle createAxisAlignedBox(World world);
+    BoundingBoxParticle createAxisAlignedBox(World world);
 
     boolean isVisibleThroughWalls();
 }
