@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.message.Message;
 
 public abstract class ToggleButton<T> extends PropertyButton<T> {
     public ToggleButton(Property<T> property, PropertyContainer container, ItemTemplate item) {
@@ -31,6 +32,8 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
         if (changed) {
             container.commit();
             click.updateItem();
+        } else {
+            click.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 }

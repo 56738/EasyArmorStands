@@ -30,7 +30,8 @@ public class MenuListener implements Listener {
         if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
             if (event.getSlot() != event.getRawSlot()) {
                 // Not the upper inventory
-                if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
+                        || event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
                     event.setCancelled(true);
                 }
                 return;
