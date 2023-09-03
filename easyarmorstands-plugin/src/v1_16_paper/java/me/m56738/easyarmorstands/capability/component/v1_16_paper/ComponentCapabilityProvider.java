@@ -8,7 +8,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +34,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             Entity.class.getMethod("customName", mapper.getComponentClass());
             ItemMeta.class.getMethod("displayName", mapper.getComponentClass());
             ItemMeta.class.getMethod("lore", List.class);
+            Bukkit.class.getMethod("createInventory", InventoryHolder.class, int.class, Component.class);
             return true;
         } catch (Throwable e) {
             return false;
@@ -132,6 +136,11 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        @Override
+        public Inventory createInventory(InventoryHolder holder, int size, Component title) {
+            return Bukkit.createInventory(holder, size, title);
         }
     }
 }
