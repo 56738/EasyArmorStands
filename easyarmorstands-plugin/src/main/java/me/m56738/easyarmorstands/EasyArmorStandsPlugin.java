@@ -67,7 +67,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
-import me.m56738.easyarmorstands.session.SessionManager;
+import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -117,7 +117,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistryImpl entityElementProviderRegistry;
     private MenuSlotTypeRegistryImpl menuSlotTypeRegistry;
-    private SessionManager sessionManager;
+    private SessionManagerImpl sessionManager;
     private HistoryManager historyManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
@@ -176,7 +176,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         loadProperties();
 
-        sessionManager = new SessionManager();
+        sessionManager = new SessionManagerImpl();
         historyManager = new HistoryManager();
 
         SessionListener sessionListener = new SessionListener(this, sessionManager);
@@ -464,10 +464,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return loader;
     }
 
-    public SessionManager getSessionManager() {
-        return sessionManager;
-    }
-
     public HistoryManager getHistoryManager() {
         return historyManager;
     }
@@ -547,6 +543,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
         return menuSlotTypeRegistry;
+    }
+
+    @Override
+    public @NotNull SessionManagerImpl sessionManager() {
+        return sessionManager;
     }
 
     @Override

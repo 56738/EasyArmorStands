@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api;
 
+import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
@@ -22,4 +23,7 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry();
+
+    @Contract(pure = true)
+    @NotNull SessionManager sessionManager();
 }

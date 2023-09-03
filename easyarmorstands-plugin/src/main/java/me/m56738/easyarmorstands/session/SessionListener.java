@@ -40,9 +40,9 @@ import org.bukkit.plugin.Plugin;
 
 public class SessionListener implements Listener {
     private final Plugin plugin;
-    private final SessionManager manager;
+    private final SessionManagerImpl manager;
 
-    public SessionListener(Plugin plugin, SessionManager manager) {
+    public SessionListener(Plugin plugin, SessionManagerImpl manager) {
         this.plugin = plugin;
         this.manager = manager;
     }
@@ -93,7 +93,7 @@ public class SessionListener implements Listener {
         if (!isHoldingTool(player)) {
             return false;
         }
-        session = manager.start(player);
+        session = manager.startSession(player);
         if (player.isSneaking() && player.hasPermission(Permissions.SPAWN)) {
             Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
             player.openInventory(menu.getInventory());
@@ -153,10 +153,10 @@ public class SessionListener implements Listener {
     public void updateHeldItem(Player player) {
         if (isHoldingTool(player)) {
             if (manager.getSession(player) == null) {
-                manager.start(player);
+                manager.startSession(player);
             }
         } else {
-            manager.stop(player);
+            manager.stopSession(player);
         }
     }
 
@@ -245,8 +245,7 @@ public class SessionListener implements Listener {
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
             if (node != null) {
-                session.clearNode();
-                session.pushNode(node);
+                session.returnToNode(node);
             }
             event.setCancelled(true);
         }
@@ -274,6 +273,6 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        manager.stop(event.getPlayer());
+        manager.stopSession(event.getPlayer());
     }
 }

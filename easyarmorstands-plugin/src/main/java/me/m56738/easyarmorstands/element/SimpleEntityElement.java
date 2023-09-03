@@ -92,7 +92,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(Player player) {
-        Session session = EasyArmorStandsPlugin.getInstance().getSessionManager().getSession(player);
+        Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
         EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
     }
 

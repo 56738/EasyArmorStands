@@ -135,7 +135,15 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public void clearNode() {
+    public void returnToNode(@NotNull Node target) {
+        int count = nodeStack.indexOf(target);
+        for (int i = 0; i < count; i++) {
+            popNode();
+        }
+    }
+
+    @Override
+    public void clearNodes() {
         if (!valid) {
             return;
         }

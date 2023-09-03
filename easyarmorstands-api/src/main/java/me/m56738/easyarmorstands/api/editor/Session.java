@@ -21,7 +21,15 @@ public interface Session {
 
     void popNode();
 
-    void clearNode();
+    /**
+     * Pops all nodes above the specified node.
+     * Does nothing if the specified node is not present in this session.
+     *
+     * @param target The node which should be the active node after this method.
+     */
+    void returnToNode(@NotNull Node target);
+
+    void clearNodes();
 
     @Contract(pure = true)
     @Nullable Node getNode();

@@ -57,7 +57,7 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     }
 
     public @Nullable SessionImpl session() {
-        return EasyArmorStandsPlugin.getInstance().getSessionManager().getSession(player);
+        return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
     }
 
     @Override

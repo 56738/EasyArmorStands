@@ -192,8 +192,7 @@ public class ElementSelectionNode extends MenuNode {
             return false;
         }
 
-        session.clearNode();
-        session.pushNode(this);
+        session.returnToNode(this);
         session.pushNode(node);
         return true;
 
