@@ -80,8 +80,9 @@ Format the name using [MiniMessage](https://docs.advntr.dev/minimessage/format.h
 Display entities can be edited just like armor stand bones.
 
 Additionally, they can be scaled.
-Click one of the blue points in local mode to select the **Scale** tool.
-Alternatively, use `/eas scale <value>` to set the scale in all three dimensions at once.
+Enter the **Scale** mode by right-clicking without looking at anything,
+just like switching between local and global mode.
+Alternatively, use `/eas scale <value>` to set the scale in all three directions at once.
 
 Use the menu to place an item into an item display.
 
@@ -92,10 +93,8 @@ This command also has some subcommands such as `/eas text background`, which can
 **Hint:** Set the billboard mode to `center` in the menu and reset the rotation
 (`/eas reset rotation`, `/eas yaw 0`, `/eas pitch 0`) to create a hologram which always looks at the player.
 
-Use `/eas block` to set the block of a block display.
+Place a block in a block display by holding Shift and left-clicking it, or use `/eas block`.
 This command also supports block states like `minecraft:birch_stairs[facing=east]`.
-
-**Hint:** Use `F3+I` to copy the block state of the block you are looking at.
 
 Use `/eas box` to resize or move the bounding box.
 Setting up a bounding box is important for client-side rendering performance.
@@ -104,11 +103,19 @@ By default, display entities do not have a bounding box, so they are always rend
 
 Use `/eas brightness` to set a custom brightness (light level) of a display entity.
 
+## Group selection
+
+Hold Shift while right-clicking an entity to add it to your group selection.
+After selecting the entities you want to edit, right-click anywhere without holding Shift to begin editing the group.
+
+<img alt="Group" src="https://cdn.56738.me/easyarmorstands/group.png" width="50%" />
+
 ## Menu
 
-<img alt="Menu" src="https://cdn.56738.me/easyarmorstands/menu.png" width="50%" align="right" />
+<img alt="Menu" src="https://cdn.56738.me/easyarmorstands/menu2.png" width="50%" align="right" />
 
 The menu can be accessed by left-clicking while no bone or tool is selected.
+Group selections do not support the menu.
 
 On the bottom left, you can edit the entity equipment slots (armor, held items).
 
