@@ -76,6 +76,7 @@ public final class SessionImpl implements Session {
     private Component currentSubtitle = Component.empty();
     private Component currentActionBar = Component.empty();
     private int overlayTicks;
+    private boolean toolRequired;
 
     public SessionImpl(EasPlayer context) {
         this.player = context.get();
@@ -380,6 +381,14 @@ public final class SessionImpl implements Session {
     @Override
     public @NotNull MenuButtonProvider menuEntryProvider() {
         return menuButtonProvider;
+    }
+
+    public boolean isToolRequired() {
+        return toolRequired;
+    }
+
+    public void setToolRequired(boolean toolRequired) {
+        this.toolRequired = toolRequired;
     }
 
     public static class EyeRayImpl implements EyeRay {

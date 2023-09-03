@@ -94,6 +94,7 @@ public class SessionListener implements Listener {
             return false;
         }
         session = manager.startSession(player);
+        session.setToolRequired(true);
         if (player.isSneaking() && player.hasPermission(Permissions.SPAWN)) {
             Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
             player.openInventory(menu.getInventory());
@@ -151,12 +152,14 @@ public class SessionListener implements Listener {
     }
 
     public void updateHeldItem(Player player) {
-        if (isHoldingTool(player)) {
-            if (manager.getSession(player) == null) {
-                manager.startSession(player);
+        SessionImpl session = manager.getSession(player);
+        if (session != null) {
+            if (session.isToolRequired() && !isHoldingTool(player)) {
+                manager.stopSession(player);
             }
-        } else {
-            manager.stopSession(player);
+        } else if (isHoldingTool(player)) {
+            session = manager.startSession(player);
+            session.setToolRequired(true);
         }
     }
 
