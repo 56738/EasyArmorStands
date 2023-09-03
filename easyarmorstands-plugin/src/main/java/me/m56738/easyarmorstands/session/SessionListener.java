@@ -38,13 +38,14 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class SessionListener implements Listener {
     private final Plugin plugin;
     private final SessionManagerImpl manager;
-    private final Set<Player> suppressClick = new HashSet<>();
+    private final Map<Player, Integer> suppressClick = new HashMap<>();
 
     public SessionListener(Plugin plugin, SessionManagerImpl manager) {
         this.plugin = plugin;
@@ -72,7 +73,7 @@ public class SessionListener implements Listener {
         if (session == null) {
             return false;
         }
-        if (!suppressClick.contains(player)) {
+        if (!suppressClick.containsKey(player)) {
             session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
         }
         return true;
@@ -93,7 +94,7 @@ public class SessionListener implements Listener {
     private boolean handleRightClick(Player player, Entity entity, Block block) {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            if (!suppressClick.contains(player)) {
+            if (!suppressClick.containsKey(player)) {
                 session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
             }
             return true;
@@ -252,7 +253,7 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        suppressClick.add(player);
+        suppressClick.put(player, 5);
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
@@ -289,6 +290,14 @@ public class SessionListener implements Listener {
     }
 
     public void update() {
-        suppressClick.clear();
+        for (Iterator<Map.Entry<Player, Integer>> iterator = suppressClick.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<Player, Integer> entry = iterator.next();
+            int value = entry.getValue();
+            if (value > 0) {
+                entry.setValue(value - 1);
+            } else {
+                iterator.remove();
+            }
+        }
     }
 }
