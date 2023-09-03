@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
@@ -26,11 +27,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +43,7 @@ public class ElementSelectionNode extends MenuNode {
     private final Map<ElementDiscoveryEntry, ElementButton> buttons = new HashMap<>();
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
-    private final Set<SelectableElement> groupMembers = new LinkedHashSet<>();
+    private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
 
     public ElementSelectionNode(Session session) {
         super(session);
@@ -52,13 +55,22 @@ public class ElementSelectionNode extends MenuNode {
         sources.add(source);
     }
 
+    private BoundingBox getDiscoveryBox(EyeRay eyeRay) {
+        Vector3dc origin = eyeRay.origin();
+        Vector3dc size = new Vector3d(eyeRay.length());
+        return BoundingBox.of(
+                origin.sub(size, new Vector3d()),
+                origin.add(size, new Vector3d()));
+    }
+
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         EyeRay eyeRay = context.eyeRay();
+        BoundingBox box = getDiscoveryBox(eyeRay);
 
-        Set<ElementDiscoveryEntry> foundEntries = new HashSet<>();
+        Set<ElementDiscoveryEntry> foundEntries = new HashSet<>(groupMembers.keySet());
         for (ElementDiscoverySource source : sources) {
-            source.discover(eyeRay, foundEntries::add);
+            source.discover(eyeRay.world(), box, foundEntries::add);
         }
 
         // Process removed entries
@@ -77,7 +89,7 @@ public class ElementSelectionNode extends MenuNode {
 
         super.onUpdate(context);
 
-        groupMembers.removeIf(e -> !e.isValid());
+        groupMembers.values().removeIf(e -> !e.isValid());
 
         int groupSize = groupMembers.size();
         if (groupSize == 0) {
@@ -94,7 +106,7 @@ public class ElementSelectionNode extends MenuNode {
         if (element == null || !element.canEdit(session.player())) {
             return null;
         }
-        ElementButton button = new ElementButton(session, element);
+        ElementButton button = new ElementButton(entry, session, element);
         addButton(button);
         return button;
     }
@@ -127,12 +139,12 @@ public class ElementSelectionNode extends MenuNode {
             int groupSize = groupMembers.size();
             if (groupSize > 1) {
                 Group group = new Group(session);
-                for (SelectableElement element : groupMembers) {
+                for (SelectableElement element : groupMembers.values()) {
                     group.addMember(element);
                 }
                 session.pushNode(new GroupRootNode(group));
             } else {
-                SelectableElement element = groupMembers.iterator().next();
+                SelectableElement element = groupMembers.values().iterator().next();
                 Node node = element.createNode(session);
                 if (node != null) {
                     session.pushNode(node);
@@ -206,10 +218,12 @@ public class ElementSelectionNode extends MenuNode {
     }
 
     private class ElementButton implements MenuButton {
+        private final ElementDiscoveryEntry entry;
         private final SelectableElement element;
         private final Button button;
 
-        private ElementButton(Session session, SelectableElement element) {
+        private ElementButton(ElementDiscoveryEntry entry, Session session, SelectableElement element) {
+            this.entry = entry;
             this.element = element;
             this.button = element.createButton(session);
         }
@@ -221,11 +235,7 @@ public class ElementSelectionNode extends MenuNode {
 
         @Override
         public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-            if (groupMembers.remove(element)) {
-                return;
-            }
-
-            if (!element.canEdit(session.player())) {
+            if (groupMembers.remove(entry) != null) {
                 return;
             }
 
@@ -236,7 +246,7 @@ public class ElementSelectionNode extends MenuNode {
             }
 
             if (session.player().isSneaking() && session.player().hasPermission(Permissions.GROUP)) {
-                groupMembers.add(element);
+                groupMembers.put(entry, element);
                 return;
             }
 
@@ -253,7 +263,7 @@ public class ElementSelectionNode extends MenuNode {
 
         @Override
         public boolean isHighlighted() {
-            return groupMembers.contains(element);
+            return groupMembers.containsKey(entry);
         }
     }
 }
