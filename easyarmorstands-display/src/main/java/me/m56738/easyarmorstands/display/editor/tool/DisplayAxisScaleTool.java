@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -68,6 +69,15 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
             Vector3f scaleVector = new Vector3f(originalScale);
             axis.setValue(scaleVector, axis.getValue(scaleVector) * (float) change);
             scaleProperty.setValue(scaleVector);
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            float original = axis.getValue(originalScale);
+            change *= original;
+            change = context.snapOffset(change);
+            change /= original;
+            return change;
         }
 
         @Override

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveToolSession;
 import me.m56738.easyarmorstands.api.property.PendingChange;
@@ -75,6 +76,7 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         private final Vector3fc originalTranslation;
         private final float originalWidth;
         private final float originalHeight;
+        private final float originalValue;
 
         public SessionImpl() {
             super(properties);
@@ -82,6 +84,11 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
             originalTranslation = new Vector3f(translationProperty.getValue());
             originalWidth = widthProperty.getValue();
             originalHeight = heightProperty.getValue();
+            if (axis == Axis.Y) {
+                originalValue = originalHeight;
+            } else {
+                originalValue = originalWidth;
+            }
         }
 
         @Override
@@ -138,14 +145,22 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
         }
 
         @Override
-        public void setValue(double value) {
-            float original;
-            if (axis == Axis.Y) {
-                original = originalHeight;
-            } else {
-                original = originalWidth;
+        public double snapChange(double change, @NotNull Snapper context) {
+            if (!end) {
+                change = -change;
             }
-            double change = value - original;
+            change += originalValue;
+            change = context.snapPosition(change);
+            change -= originalValue;
+            if (!end) {
+                change = -change;
+            }
+            return change;
+        }
+
+        @Override
+        public void setValue(double value) {
+            double change = value - originalValue;
             if (!end) {
                 change = -change;
             }

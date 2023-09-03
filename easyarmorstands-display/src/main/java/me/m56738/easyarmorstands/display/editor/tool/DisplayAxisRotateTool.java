@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.property.PendingChange;
@@ -143,6 +144,11 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
                     }
                 }
             }
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            return context.snapAngle(change);
         }
 
         @Override

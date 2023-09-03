@@ -16,7 +16,7 @@ public class MoveToolNode extends ToolNode {
     protected final MoveToolSession toolSession;
     protected final Cursor3D cursor;
     private final Vector3dc initialPosition;
-    private final Vector3d offset = new Vector3d();
+    private final Vector3d change = new Vector3d();
 
     public MoveToolNode(Session session, MoveToolSession toolSession, Component name, Vector3dc position) {
         super(session, toolSession, name);
@@ -34,11 +34,9 @@ public class MoveToolNode extends ToolNode {
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         cursor.update(context);
-        cursor.get().sub(initialPosition, offset);
-        offset.x = session.snapPosition(offset.x);
-        offset.y = session.snapPosition(offset.y);
-        offset.z = session.snapPosition(offset.z);
-        toolSession.setOffset(offset);
+        cursor.get().sub(initialPosition, change);
+        toolSession.snapChange(change, session.snapper());
+        toolSession.setChange(change);
         super.onUpdate(context);
     }
 

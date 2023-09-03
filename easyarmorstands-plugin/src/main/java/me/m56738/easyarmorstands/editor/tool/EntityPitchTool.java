@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -76,6 +77,11 @@ public class EntityPitchTool implements AxisRotateTool {
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
             location.setPitch(location.getPitch() + (float) Math.toDegrees(change));
             locationProperty.setValue(location);
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            return context.snapAngle(Math.toRadians(originalLocation.getPitch()) + change);
         }
 
         @Override

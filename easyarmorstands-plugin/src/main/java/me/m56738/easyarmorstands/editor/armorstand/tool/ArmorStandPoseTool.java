@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.editor.armorstand.tool;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -83,6 +84,11 @@ public class ArmorStandPoseTool implements AxisRotateTool {
             this.change = change;
             currentRotation.setAngleAxis(change, direction).mul(originalRotation);
             poseProperty.setValue(Util.toEuler(currentRotation));
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            return context.snapAngle(change);
         }
 
         @Override

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
@@ -62,6 +63,11 @@ public class GroupAxisRotateTool implements AxisRotateTool {
             for (AxisRotateToolSession session : sessions) {
                 session.setChange(change);
             }
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            return context.snapAngle(change);
         }
 
         @Override

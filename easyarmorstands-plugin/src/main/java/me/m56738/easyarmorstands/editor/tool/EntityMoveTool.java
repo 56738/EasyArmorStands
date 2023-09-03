@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.tool;
 
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -47,19 +48,28 @@ public class EntityMoveTool implements MoveTool {
 
     private class SessionImpl extends AbstractToolSession implements MoveToolSession {
         private final Location originalLocation;
+        private final Vector3dc originalPosition;
         private final Vector3d offset = new Vector3d();
 
         public SessionImpl() {
             super(properties);
             this.originalLocation = locationProperty.getValue().clone();
+            this.originalPosition = Util.toVector3d(originalLocation);
         }
 
         @Override
-        public void setOffset(@NotNull Vector3dc offset) {
-            this.offset.set(offset);
+        public void setChange(@NotNull Vector3dc change) {
+            this.offset.set(change);
             Location location = originalLocation.clone();
-            location.add(offset.x(), offset.y(), offset.z());
+            location.add(change.x(), change.y(), change.z());
             locationProperty.setValue(location);
+        }
+
+        @Override
+        public void snapChange(Vector3d change, @NotNull Snapper context) {
+            change.add(originalPosition);
+            context.snapPosition(change);
+            change.sub(originalPosition);
         }
 
         @Override
@@ -69,7 +79,7 @@ public class EntityMoveTool implements MoveTool {
 
         @Override
         public void setPosition(@NotNull Vector3dc position) {
-            setOffset(position.sub(originalLocation.getX(), originalLocation.getY(), originalLocation.getZ(), offset));
+            setChange(position.sub(originalPosition, offset));
         }
 
         @Override

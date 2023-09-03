@@ -47,11 +47,11 @@ public class SpawnSlot implements MenuSlot {
             location.setYaw(location.getYaw() + 180);
             Session session = click.session();
             if (session != null) {
-                location.setX(session.snapPosition(location.getX()));
-                location.setY(session.snapPosition(location.getY()));
-                location.setZ(session.snapPosition(location.getZ()));
-                location.setYaw((float) session.snapDegrees(location.getYaw()));
-                location.setPitch((float) session.snapDegrees(location.getPitch()));
+                location.setX(session.snapper().snapPosition(location.getX()));
+                location.setY(session.snapper().snapPosition(location.getY()));
+                location.setZ(session.snapper().snapPosition(location.getZ()));
+                location.setYaw((float) session.snapper().snapAngle(location.getYaw()));
+                location.setPitch((float) session.snapper().snapAngle(location.getPitch()));
             }
 
             PropertyMap properties = new PropertyMap();

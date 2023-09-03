@@ -9,11 +9,8 @@ import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 public class AxisScaleToolNode extends AxisLineToolNode {
-    private final Session session;
-
     public AxisScaleToolNode(Session session, AxisScaleToolSession toolSession, Component name, ParticleColor color, double length, Vector3dc position, Quaterniondc rotation, Axis axis) {
         super(session, toolSession, name, color, length, position, rotation, axis);
-        this.session = session;
     }
 
     @Override
@@ -23,7 +20,6 @@ public class AxisScaleToolNode extends AxisLineToolNode {
         } else {
             initialOffset = Math.min(initialOffset, -0.01);
         }
-        return session.snapPosition(currentOffset / initialOffset);
+        return currentOffset / initialOffset;
     }
-
 }

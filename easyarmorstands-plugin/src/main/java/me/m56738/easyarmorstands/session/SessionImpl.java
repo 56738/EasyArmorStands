@@ -58,19 +58,16 @@ import java.util.Objects;
 import java.util.Set;
 
 public final class SessionImpl implements Session {
-    public static final double DEFAULT_SNAP_INCREMENT = 1.0 / 32;
-    public static final double DEFAULT_ANGLE_SNAP_INCREMENT = 360.0 / 256;
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
     private final Player player;
     private final Audience audience;
     private final ChangeContext context;
+    private final SessionSnapper snapper;
     private final Set<Particle> particles = new HashSet<>();
     private final ParticleProvider particleProvider = new ParticleProviderImpl(this);
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private int clickTicks = 5;
-    private double snapIncrement = DEFAULT_SNAP_INCREMENT;
-    private double angleSnapIncrement = DEFAULT_ANGLE_SNAP_INCREMENT;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
     private Component currentSubtitle = Component.empty();
@@ -82,6 +79,7 @@ public final class SessionImpl implements Session {
         this.player = context.get();
         this.audience = context;
         this.context = context;
+        this.snapper = new SessionSnapper(player);
     }
 
     @Override
@@ -167,27 +165,6 @@ public final class SessionImpl implements Session {
         }
         clickTicks = 5;
         return node.onClick(context);
-    }
-
-    @Override
-    public double snapPosition(double value) {
-        if (player.isSneaking()) {
-            return value;
-        }
-        return Util.snap(value, snapIncrement);
-    }
-
-    @Override
-    public double snapDegrees(double value) {
-        if (player.isSneaking()) {
-            return value;
-        }
-        return Util.snap(value, angleSnapIncrement);
-    }
-
-    @Override
-    public double snapAngle(double value) {
-        return Math.toRadians(snapDegrees(Math.toDegrees(value)));
     }
 
     @Override
@@ -294,22 +271,6 @@ public final class SessionImpl implements Session {
         return 0.1;
     }
 
-    public double getSnapIncrement() {
-        return snapIncrement;
-    }
-
-    public void setSnapIncrement(double snapIncrement) {
-        this.snapIncrement = snapIncrement;
-    }
-
-    public double getAngleSnapIncrement() {
-        return angleSnapIncrement;
-    }
-
-    public void setAngleSnapIncrement(double angleSnapIncrement) {
-        this.angleSnapIncrement = angleSnapIncrement;
-    }
-
     @Override
     public void addParticle(@NotNull Particle particle) {
         if (!valid) {
@@ -381,6 +342,11 @@ public final class SessionImpl implements Session {
     @Override
     public @NotNull MenuButtonProvider menuEntryProvider() {
         return menuButtonProvider;
+    }
+
+    @Override
+    public @NotNull SessionSnapper snapper() {
+        return snapper;
     }
 
     public boolean isToolRequired() {

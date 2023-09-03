@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +55,12 @@ class SimpleAxisMoveTool implements AxisMoveTool {
         @Override
         public void setChange(double change) {
             this.change = change;
-            moveToolSession.setOffset(direction.mul(change, new Vector3d()));
+            moveToolSession.setChange(direction.mul(change, new Vector3d()));
+        }
+
+        @Override
+        public double snapChange(double change, @NotNull Snapper context) {
+            return context.snapOffset(change);
         }
 
         @Override

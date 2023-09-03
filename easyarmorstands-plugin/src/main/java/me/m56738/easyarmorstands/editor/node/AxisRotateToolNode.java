@@ -88,7 +88,7 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
             double angle;
             if (valid) {
                 angle = initialOffset.angleSigned(currentOffset, direction);
-                angle = session.snapAngle(angle);
+                angle = toolSession.snapChange(angle, session.snapper());
             } else {
                 angle = 0;
                 double minOffset = 0.2;

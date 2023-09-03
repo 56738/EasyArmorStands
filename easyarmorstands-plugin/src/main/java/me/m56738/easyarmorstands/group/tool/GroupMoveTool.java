@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.group.tool;
 
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
@@ -52,11 +53,16 @@ public class GroupMoveTool implements MoveTool {
         }
 
         @Override
-        public void setOffset(@NotNull Vector3dc offset) {
-            this.offset.set(offset);
+        public void setChange(@NotNull Vector3dc change) {
+            this.offset.set(change);
             for (MoveToolSession session : sessions) {
-                session.setOffset(offset);
+                session.setChange(change);
             }
+        }
+
+        @Override
+        public void snapChange(Vector3d change, @NotNull Snapper context) {
+            context.snapOffset(change);
         }
 
         @Override
@@ -67,7 +73,7 @@ public class GroupMoveTool implements MoveTool {
         @Override
         public void setPosition(@NotNull Vector3dc position) {
             position.sub(originalPosition, offset);
-            setOffset(offset);
+            setChange(offset);
         }
 
         @Override

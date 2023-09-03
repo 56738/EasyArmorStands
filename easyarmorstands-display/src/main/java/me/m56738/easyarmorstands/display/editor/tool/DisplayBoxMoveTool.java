@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
+import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
 import me.m56738.easyarmorstands.api.property.PendingChange;
@@ -74,16 +75,16 @@ public class DisplayBoxMoveTool implements MoveTool {
         }
 
         @Override
-        public void setOffset(@NotNull Vector3dc offset) {
-            this.offset.set(offset);
+        public void setChange(@NotNull Vector3dc change) {
+            this.offset.set(change);
 
             // Move box by modifying the location
             Location location = originalLocation.clone();
-            location.add(offset.x(), offset.y(), offset.z());
+            location.add(change.x(), change.y(), change.z());
             PendingChange locationChange = locationProperty.prepareChange(location);
 
             // Make sure the display stays in the same place by performing the inverse using the translation
-            Vector3fc rotatedDelta = offset.get(new Vector3f())
+            Vector3fc rotatedDelta = change.get(new Vector3f())
                     .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
             Vector3fc translation = originalTranslation.sub(rotatedDelta, new Vector3f());
             PendingChange translationChange = translationProperty.prepareChange(translation);
@@ -97,6 +98,13 @@ public class DisplayBoxMoveTool implements MoveTool {
         }
 
         @Override
+        public void snapChange(Vector3d change, @NotNull Snapper context) {
+            change.add(originalBoxPosition);
+            context.snapPosition(change);
+            change.sub(originalBoxPosition);
+        }
+
+        @Override
         public @NotNull Vector3dc getPosition() {
             return boxPositionProvider.getPosition()
                     .sub(displayPositionProvider.getPosition(), new Vector3d());
@@ -104,7 +112,7 @@ public class DisplayBoxMoveTool implements MoveTool {
 
         @Override
         public void setPosition(@NotNull Vector3dc position) {
-            setOffset(position.sub(originalBoxPosition, offset));
+            setChange(position.sub(originalBoxPosition, offset));
         }
 
         @Override

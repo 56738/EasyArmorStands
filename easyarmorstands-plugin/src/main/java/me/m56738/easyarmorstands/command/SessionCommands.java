@@ -37,6 +37,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.session.SessionImpl;
+import me.m56738.easyarmorstands.session.SessionSnapper;
 import me.m56738.easyarmorstands.util.AlignAxis;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -351,13 +352,15 @@ public class SessionCommands {
             return;
         }
         if (value == null) {
-            value = SessionImpl.DEFAULT_ANGLE_SNAP_INCREMENT;
-            if (value == session.getAngleSnapIncrement()) {
+            value = SessionSnapper.DEFAULT_ANGLE_INCREMENT;
+            if (value == session.snapper().getAngleIncrement()) {
                 value = 0.0;
             }
+        } else {
+            value = Math.toRadians(value);
         }
-        session.setAngleSnapIncrement(value);
-        sender.sendMessage(Message.success("easyarmorstands.success.snap-changed.angle", Component.text(value)));
+        session.snapper().setAngleIncrement(value);
+        sender.sendMessage(Message.success("easyarmorstands.success.snap-changed.angle", Component.text(Math.toDegrees(value))));
     }
 
     @CommandMethod("snap move [value]")
@@ -371,12 +374,13 @@ public class SessionCommands {
             return;
         }
         if (value == null) {
-            value = SessionImpl.DEFAULT_SNAP_INCREMENT;
-            if (value == session.getSnapIncrement()) {
+            value = SessionSnapper.DEFAULT_POSITION_INCREMENT;
+            if (value == session.snapper().getPositionIncrement()) {
                 value = 0.0;
             }
         }
-        session.setSnapIncrement(value);
+        session.snapper().setOffsetIncrement(value);
+        session.snapper().setPositionIncrement(value);
         sender.sendMessage(Message.success("easyarmorstands.success.snap-changed.position", Component.text(value)));
     }
 

@@ -89,7 +89,7 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
         if (!hasManualInput) {
             Vector3dc cursorPosition = cursor.get();
             double offset = EasMath.getOffsetAlongLine(position, direction, cursorPosition);
-            double change = getChange(offset, initialOffset);
+            double change = toolSession.snapChange(getChange(offset, initialOffset), session.snapper());
             toolSession.setChange(change);
 
             double relativeOffset = offset - initialOffset;

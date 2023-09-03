@@ -9,16 +9,12 @@ import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
 public class AxisMoveToolNode extends AxisLineToolNode {
-    private final Session session;
-
     public AxisMoveToolNode(Session session, AxisMoveToolSession toolSession, Component name, ParticleColor color, double length, Vector3dc position, Quaterniondc rotation, Axis axis) {
         super(session, toolSession, name, color, length, position, rotation, axis);
-        this.session = session;
     }
 
     @Override
     protected double getChange(double currentOffset, double initialOffset) {
-        return session.snapPosition(currentOffset - initialOffset);
+        return currentOffset - initialOffset;
     }
-
 }

@@ -45,15 +45,6 @@ public interface Session {
     void removeParticle(@NotNull Particle particle);
 
     @Contract(pure = true)
-    double snapPosition(double value);
-
-    @Contract(pure = true)
-    double snapDegrees(double value);
-
-    @Contract(pure = true)
-    double snapAngle(double value);
-
-    @Contract(pure = true)
     @NotNull Player player();
 
     @Contract(pure = true)
@@ -64,4 +55,7 @@ public interface Session {
 
     @Contract(pure = true)
     @NotNull MenuButtonProvider menuEntryProvider();
+
+    @Contract(pure = true)
+    @NotNull Snapper snapper();
 }
