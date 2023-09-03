@@ -13,6 +13,8 @@ import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
+import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.capability.entitysize.EntitySizeCapability;
 import me.m56738.easyarmorstands.editor.button.SimpleEntityButton;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -21,6 +23,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import java.util.Objects;
 
@@ -28,10 +31,12 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     private final E entity;
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = new Properties();
+    private final EntitySizeCapability sizeCapability;
 
     public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
         this.entity = entity;
         this.type = type;
+        this.sizeCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntitySizeCapability.class);
     }
 
     @Override
@@ -65,8 +70,19 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
+    public @NotNull BoundingBox getBoundingBox() {
+        Vector3d position = Util.toVector3d(entity.getLocation());
+        if (sizeCapability == null) {
+            return BoundingBox.of(position);
+        }
+        double width = sizeCapability.getWidth(entity);
+        double height = sizeCapability.getHeight(entity);
+        return BoundingBox.of(position, width, height);
+    }
+
+    @Override
     public Button createButton(Session session) {
-        return new SimpleEntityButton(session, entity);
+        return new SimpleEntityButton(session, this);
     }
 
     @Override

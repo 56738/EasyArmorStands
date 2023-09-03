@@ -15,6 +15,13 @@ public interface BoundingBox {
     }
 
     @Contract(pure = true)
+    static @NotNull BoundingBox of(@NotNull Vector3dc position, double width, double height) {
+        Vector3dc min = position.sub(width / 2, 0, width / 2, new Vector3d());
+        Vector3dc max = position.add(width / 2, height, width / 2, new Vector3d());
+        return new BoundingBoxImpl(min, max);
+    }
+
+    @Contract(pure = true)
     static @NotNull BoundingBox of(@NotNull Vector3dc a, @NotNull Vector3dc b) {
         Vector3d min = a.min(b, new Vector3d());
         Vector3d max = a.max(b, new Vector3d());

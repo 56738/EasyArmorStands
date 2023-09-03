@@ -27,8 +27,7 @@ public class GroupMember {
     }
 
     public BoundingBox getBoundingBox() {
-        // TODO
-        return BoundingBox.of(tools.position().getPosition());
+        return element.getBoundingBox();
     }
 
     public boolean isValid() {
