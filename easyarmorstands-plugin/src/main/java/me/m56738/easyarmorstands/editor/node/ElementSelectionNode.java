@@ -147,6 +147,15 @@ public class ElementSelectionNode extends MenuNode {
             return true;
         }
 
+        if (context.type() == ClickContext.Type.LEFT_CLICK) {
+            Player player = session.player();
+            if (player.hasPermission(Permissions.SPAWN)) {
+                Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
+                player.openInventory(menu.getInventory());
+                return true;
+            }
+        }
+
         if (super.onClick(context)) {
             return true;
         }
@@ -159,13 +168,6 @@ public class ElementSelectionNode extends MenuNode {
                     button.onClick(session, null);
                     return true;
                 }
-            }
-
-            Player player = session.player();
-            if (player.isSneaking() && player.hasPermission(Permissions.SPAWN)) {
-                Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
-                player.openInventory(menu.getInventory());
-                return true;
             }
         }
 

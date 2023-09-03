@@ -185,6 +185,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
+        getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
 
         CommandSenderWrapper senderWrapper = new CommandSenderWrapper(adventure);
 

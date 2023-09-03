@@ -38,9 +38,13 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class SessionListener implements Listener {
     private final Plugin plugin;
     private final SessionManagerImpl manager;
+    private final Set<Player> suppressClick = new HashSet<>();
 
     public SessionListener(Plugin plugin, SessionManagerImpl manager) {
         this.plugin = plugin;
@@ -68,7 +72,9 @@ public class SessionListener implements Listener {
         if (session == null) {
             return false;
         }
-        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
+        if (!suppressClick.contains(player)) {
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
+        }
         return true;
     }
 
@@ -87,7 +93,9 @@ public class SessionListener implements Listener {
     private boolean handleRightClick(Player player, Entity entity, Block block) {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
+            if (!suppressClick.contains(player)) {
+                session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
+            }
             return true;
         }
         if (!isHoldingTool(player)) {
@@ -244,6 +252,7 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+        suppressClick.add(player);
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
@@ -277,5 +286,9 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         manager.stopSession(event.getPlayer());
+    }
+
+    public void update() {
+        suppressClick.clear();
     }
 }

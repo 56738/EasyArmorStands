@@ -82,7 +82,9 @@ public class GlobalCommands {
         sender.get().getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
-        sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
+        if (sender.get().hasPermission(Permissions.SPAWN)) {
+            sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
+        }
         sender.sendMessage(Message.hint("easyarmorstands.hint.deselect-entity"));
         sessionListener.updateHeldItem(sender.get());
     }
