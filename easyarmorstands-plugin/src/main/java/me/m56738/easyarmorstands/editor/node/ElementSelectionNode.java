@@ -142,6 +142,11 @@ public class ElementSelectionNode extends MenuNode {
             return true;
         }
 
+        if (context.type() == ClickContext.Type.LEFT_CLICK && !groupMembers.isEmpty()) {
+            groupMembers.clear();
+            return true;
+        }
+
         if (super.onClick(context)) {
             return true;
         }
