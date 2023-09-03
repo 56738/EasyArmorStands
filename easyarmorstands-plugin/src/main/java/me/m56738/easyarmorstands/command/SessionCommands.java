@@ -127,6 +127,9 @@ public class SessionCommands {
                 for (GroupMember member : members) {
                     return member.getElement();
                 }
+            } else {
+                sender.sendMessage(Message.error("easyarmorstands.error.group-selected"));
+                return null;
             }
         }
 
