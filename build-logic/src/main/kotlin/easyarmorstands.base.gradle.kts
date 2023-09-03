@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "me.m56738"
-version = "2.0.0-SNAPSHOT"
+version = property("version")!!
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")

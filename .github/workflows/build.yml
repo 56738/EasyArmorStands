@@ -20,7 +20,7 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_MGDevUsername: ${{ secrets.MAVEN_USERNAME }}
           ORG_GRADLE_PROJECT_MGDevPassword: ${{ secrets.MAVEN_PASSWORD }}
-        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v2') }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       - uses: actions/upload-artifact@v3
         with:
           name: Package
