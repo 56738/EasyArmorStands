@@ -30,6 +30,7 @@ import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.property.GroupPropertyContainer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
@@ -48,6 +49,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -178,6 +180,21 @@ public class SessionCommands {
             sendUnsupportedEntityError(sender);
         }
         return element;
+    }
+
+    public static @Nullable PropertyContainer getPropertiesOrError(EasPlayer sender) {
+        Collection<Element> elements = getElementsOrError(sender);
+        if (elements == null) {
+            return null;
+        }
+        if (elements.size() == 1) {
+            return new TrackedPropertyContainer(elements.iterator().next(), sender);
+        }
+        List<PropertyContainer> containers = new ArrayList<>(elements.size());
+        for (Element element : elements) {
+            containers.add(new TrackedPropertyContainer(element, sender));
+        }
+        return new GroupPropertyContainer(containers);
     }
 
     @CommandMethod("open")
@@ -472,11 +489,11 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Show the custom name of the selected entity")
     public void showName(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
             return;
         }
-        Property<Component> property = element.getProperties().getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+        Property<Component> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
@@ -489,11 +506,10 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Set the custom name of the selected entity")
     public void setName(EasPlayer sender, @Argument("value") @Greedy String input) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -517,11 +533,10 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("Remove the custom name of the selected entity")
     public void clearName(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -543,11 +558,10 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name/visible")
     @CommandDescription("Change the custom name visibility of the selected entity")
     public void setNameVisible(EasPlayer sender, @Argument("value") boolean visible) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -565,11 +579,10 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:armor_stand/can_tick")
     @CommandDescription("Toggle whether the selected armor stand should be ticked")
     public void setCanTick(EasPlayer sender, @Argument("value") boolean canTick) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         if (property == null) {
             if (ArmorStandCanTickProperty.isSupported()) {
