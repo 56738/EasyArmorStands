@@ -10,8 +10,7 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.element.EntityElement;
-import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.event.session.SessionSelectElementEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
@@ -29,7 +28,12 @@ import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
+import me.m56738.easyarmorstands.element.SimpleEntityElement;
+import me.m56738.easyarmorstands.element.SimpleEntityElementType;
+import me.m56738.easyarmorstands.group.Group;
+import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -63,9 +67,11 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static me.m56738.easyarmorstands.command.SessionCommands.getElementOrError;
+import static me.m56738.easyarmorstands.command.SessionCommands.getElementsOrError;
 import static me.m56738.easyarmorstands.command.SessionCommands.getPropertiesOrError;
 import static me.m56738.easyarmorstands.command.SessionCommands.getSessionOrError;
 
@@ -509,71 +515,112 @@ public class DisplayCommands {
     @CommandDescription("Convert the selected armor stand to an item display")
     public void convert(EasPlayer sender) {
         SessionImpl session = getSessionOrError(sender);
-        Element element = getElementOrError(sender, session);
-        if (element == null) {
+        Collection<Element> elements = getElementsOrError(sender, session);
+        if (elements == null) {
             return;
         }
-        if (!(element instanceof ArmorStandElement)) {
+
+        List<SimpleEntityElement<ItemDisplay>> createdElements = new ArrayList<>();
+        List<Action> allActions = new ArrayList<>();
+        boolean foundArmorStand = false;
+        int count = 0;
+        boolean isInverted = Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT");
+        for (Element element : elements) {
+            if (!(element instanceof ArmorStandElement)) {
+                continue;
+            }
+            foundArmorStand = true;
+            ArmorStand entity = ((ArmorStandElement) element).getEntity();
+            EntityEquipment equipment = entity.getEquipment();
+            if (equipment == null) {
+                continue;
+            }
+
+            Matrix4d headMatrix = new Matrix4d();
+            Matrix4d rightMatrix = new Matrix4d();
+            Matrix4d leftMatrix = new Matrix4d();
+
+            if (entity.isSmall()) {
+                headMatrix.scale(0.7);
+                rightMatrix.scale(0.5);
+                leftMatrix.scale(0.5);
+            }
+
+            if (isSkull(equipment.getHelmet())) {
+                headMatrix.scale(1.1875);
+                headMatrix.translate(0, 0.5, 0);
+                headMatrix.rotateY(Math.PI);
+            } else {
+                headMatrix.translate(0, 0.25, 0);
+                headMatrix.scale(0.625);
+            }
+
+            rightMatrix.translate(-0.0625, -0.625, 0.125);
+            rightMatrix.rotateX(Math.PI / 2);
+
+            leftMatrix.translate(0.0625, -0.625, 0.125);
+            leftMatrix.rotateX(Math.PI / 2);
+
+            if (isInverted) {
+                headMatrix.rotateY(Math.PI);
+                rightMatrix.rotateY(Math.PI);
+                leftMatrix.rotateY(Math.PI);
+            }
+
+            List<Action> actions = new ArrayList<>();
+            convert(sender, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions, createdElements);
+            convert(sender, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions, createdElements);
+            convert(sender, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions, createdElements);
+            if (!actions.isEmpty()) {
+                actions.add(new ElementDestroyAction(element));
+                entity.remove();
+                count++;
+            }
+            allActions.addAll(actions);
+        }
+
+        session.context().history().push(allActions, Message.component("easyarmorstands.history.converted-armor-stand"));
+
+        if (!foundArmorStand) {
+            // None of the elements are armor stands
             sender.sendMessage(Message.error("easyarmorstands.error.convert-unsupported"));
-            return;
-        }
-        ArmorStand entity = ((ArmorStandElement) element).getEntity();
-        EntityEquipment equipment = entity.getEquipment();
-        if (equipment == null) {
-            return;
-        }
-
-        Matrix4d headMatrix = new Matrix4d();
-        Matrix4d rightMatrix = new Matrix4d();
-        Matrix4d leftMatrix = new Matrix4d();
-
-        if (entity.isSmall()) {
-            headMatrix.scale(0.7);
-            rightMatrix.scale(0.5);
-            leftMatrix.scale(0.5);
-        }
-
-        if (isSkull(equipment.getHelmet())) {
-            headMatrix.scale(1.1875);
-            headMatrix.translate(0, 0.5, 0);
-            headMatrix.rotateY(Math.PI);
-        } else {
-            headMatrix.translate(0, 0.25, 0);
-            headMatrix.scale(0.625);
-        }
-
-        rightMatrix.translate(-0.0625, -0.625, 0.125);
-        rightMatrix.rotateX(Math.PI / 2);
-
-        leftMatrix.translate(0.0625, -0.625, 0.125);
-        leftMatrix.rotateX(Math.PI / 2);
-
-        if (Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT")) {
-            headMatrix.rotateY(Math.PI);
-            rightMatrix.rotateY(Math.PI);
-            leftMatrix.rotateY(Math.PI);
-        }
-
-        List<Action> actions = new ArrayList<>();
-        convert(sender, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions);
-        convert(sender, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions);
-        convert(sender, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions);
-        if (actions.isEmpty()) {
+        } else if (count == 0) {
+            // Nothing happened
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-convert"));
-            return;
+        } else if (count == 1) {
+            sender.sendMessage(Message.success("easyarmorstands.success.armor-stand-converted"));
+        } else {
+            sender.sendMessage(Message.success("easyarmorstands.success.armor-stand-converted.multiple", Component.text(count)));
         }
 
-        actions.add(new ElementDestroyAction(element));
-        entity.remove();
-
-        session.context().history().push(actions, Message.component("easyarmorstands.history.converted-armor-stand"));
+        GroupRootNode groupRootNode = session.findNode(GroupRootNode.class);
+        if (groupRootNode != null) {
+            // Add created entities to the selected group
+            Group group = groupRootNode.getGroup();
+            session.returnToNode(groupRootNode);
+            for (SimpleEntityElement<ItemDisplay> element : createdElements) {
+                if (element.canEdit(session.player())) {
+                    SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        group.addMember(element);
+                    }
+                }
+            }
+        } else {
+            // Select the created elements
+            ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
+            if (selectionNode != null) {
+                selectionNode.selectElements(createdElements);
+            }
+        }
     }
 
     private boolean isSkull(ItemStack item) {
         return item != null && item.getItemMeta() instanceof SkullMeta;
     }
 
-    private void convert(ChangeContext context, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions) {
+    private void convert(ChangeContext context, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement<ItemDisplay>> elements) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -600,13 +647,14 @@ public class DisplayCommands {
         properties.put(DisplayPropertyTypes.LEFT_ROTATION, transform.getUnnormalizedRotation(new Quaternionf()));
         properties.put(DisplayPropertyTypes.SCALE, transform.getScale(new Vector3d()).get(new Vector3f()));
 
-        EntityElementType<ItemDisplay> type = addon.getItemDisplayType();
+        SimpleEntityElementType<ItemDisplay> type = addon.getItemDisplayType();
 
         if (!context.canCreateElement(type, properties)) {
             return;
         }
 
-        EntityElement<ItemDisplay> element = type.createElement(properties);
+        SimpleEntityElement<ItemDisplay> element = type.createElement(properties);
         actions.add(new ElementCreateAction(element));
+        elements.add(element);
     }
 }

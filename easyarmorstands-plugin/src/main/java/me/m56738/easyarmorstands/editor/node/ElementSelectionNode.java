@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -214,7 +215,30 @@ public class ElementSelectionNode extends MenuNode {
         session.returnToNode(this);
         session.pushNode(node);
         return true;
+    }
 
+    public boolean selectElements(List<? extends SelectableElement> elements) {
+        if (elements.size() == 1) {
+            return selectElement(elements.get(0));
+        }
+
+        Group group = new Group(session);
+        for (SelectableElement element : elements) {
+            if (element.canEdit(session.player())) {
+                SessionSelectElementEvent event = new SessionSelectElementEvent(session, element);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    group.addMember(element);
+                }
+            }
+        }
+        if (!group.isValid()) {
+            return false;
+        }
+
+        session.returnToNode(this);
+        session.pushNode(new GroupRootNode(group));
+        return true;
     }
 
     private class ElementButton implements MenuButton {
