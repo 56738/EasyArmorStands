@@ -28,7 +28,7 @@ public class MenuListener implements Listener {
     public void onClick(InventoryClickEvent event) {
         InventoryHolder holder = event.getInventory().getHolder();
         if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
-            if (event.getSlot() != event.getRawSlot()) {
+            if (event.getRawSlot() >= event.getInventory().getSize()) {
                 // Not the upper inventory
                 if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
                         || event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
