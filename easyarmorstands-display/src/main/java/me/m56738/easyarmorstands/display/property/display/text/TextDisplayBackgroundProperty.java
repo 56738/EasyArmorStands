@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
 public class TextDisplayBackgroundProperty implements Property<@Nullable Color> {
+    private static final int DEFAULT_COLOR = 0x40000000;
     private final TextDisplay entity;
 
     public TextDisplayBackgroundProperty(TextDisplay entity) {
@@ -41,6 +42,8 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
         Color color = entity.getBackgroundColor();
         if (color == null) {
             color = Color.WHITE;
+        } else if (color.asARGB() == DEFAULT_COLOR) {
+            return null;
         }
         return color;
     }
