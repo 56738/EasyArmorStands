@@ -15,5 +15,6 @@ public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     public void applyDefaultProperties(PropertyMap properties) {
         super.applyDefaultProperties(properties);
         properties.put(TextDisplayPropertyTypes.TEXT, Component.text("Text"));
+        properties.put(TextDisplayPropertyTypes.BACKGROUND, null);
     }
 }
