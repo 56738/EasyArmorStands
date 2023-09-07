@@ -56,12 +56,14 @@ public class ItemTemplate {
 
         ItemStack item = template.clone();
         ItemMeta meta = item.getItemMeta();
-        if (displayName != null) {
-            componentCapability.setDisplayName(meta, renderName(locale, resolver));
+        if (meta != null) {
+            if (displayName != null) {
+                componentCapability.setDisplayName(meta, renderName(locale, resolver));
+            }
+            componentCapability.setLore(meta, renderLore(locale, resolver));
+            meta.addItemFlags(ItemFlag.values());
+            item.setItemMeta(meta);
         }
-        componentCapability.setLore(meta, renderLore(locale, resolver));
-        meta.addItemFlags(ItemFlag.values());
-        item.setItemMeta(meta);
         return item;
     }
 
