@@ -23,10 +23,43 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
 public class MenuListener implements Listener {
+    private final @Nullable MethodHandle inventoryHolderGetter;
+
+    public MenuListener() {
+        inventoryHolderGetter = findInventoryHolderGetter();
+    }
+
+    @SuppressWarnings("JavaLangInvokeHandleSignature")
+    private static @Nullable MethodHandle findInventoryHolderGetter() {
+        try {
+            // Paper adds getHolder(boolean useSnapshot)
+            return MethodHandles.lookup().findVirtual(Inventory.class, "getHolder",
+                    MethodType.methodType(InventoryHolder.class, boolean.class));
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    private InventoryHolder getHolder(Inventory inventory) {
+        if (inventoryHolderGetter == null) {
+            return inventory.getHolder();
+        }
+        try {
+            // Call with useSnapshot=false
+            return (InventoryHolder) inventoryHolderGetter.invoke(inventory, false);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
+        InventoryHolder holder = getHolder(event.getInventory());
         if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
             if (event.getRawSlot() >= event.getInventory().getSize()) {
                 // Not the upper inventory
@@ -44,7 +77,7 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
+        InventoryHolder holder = getHolder(event.getInventory());
         if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
             if (event.getRawSlots().size() != 1) {
                 event.setCancelled(true);
