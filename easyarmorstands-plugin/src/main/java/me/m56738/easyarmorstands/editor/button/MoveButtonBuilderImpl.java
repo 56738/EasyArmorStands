@@ -49,8 +49,6 @@ public class MoveButtonBuilderImpl implements MoveButtonBuilder {
         if (tool == null) {
             throw new IllegalStateException("Tool not set");
         }
-        MoveButtonImpl button = new MoveButtonImpl(session, tool, name, color);
-        button.setPriority(priority);
-        return button;
+        return new MoveButtonImpl(session, tool, name, color, priority);
     }
 }
