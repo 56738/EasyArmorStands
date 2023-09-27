@@ -19,17 +19,17 @@ class ImmutableProperty<T> implements Property<T> {
     }
 
     @Override
-    public T getValue() {
+    public @NotNull T getValue() {
         return value;
     }
 
     @Override
-    public boolean setValue(T value) {
+    public boolean setValue(@NotNull T value) {
         return false;
     }
 
     @Override
-    public @Nullable PendingChange prepareChange(T value) {
+    public @Nullable PendingChange prepareChange(@NotNull T value) {
         return null;
     }
 }

@@ -20,12 +20,12 @@ public class EntityLocationProperty implements Property<Location> {
     }
 
     @Override
-    public Location getValue() {
+    public @NotNull Location getValue() {
         return entity.getLocation();
     }
 
     @Override
-    public boolean setValue(Location value) {
+    public boolean setValue(@NotNull Location value) {
         return entity.teleport(value);
     }
 }

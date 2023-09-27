@@ -21,12 +21,12 @@ public class TextDisplayTextProperty implements Property<Component> {
     }
 
     @Override
-    public Component getValue() {
+    public @NotNull Component getValue() {
         return TextDisplayAdapter.getInstance().getText(entity);
     }
 
     @Override
-    public boolean setValue(Component value) {
+    public boolean setValue(@NotNull Component value) {
         TextDisplayAdapter.getInstance().setText(entity, value);
         return true;
     }

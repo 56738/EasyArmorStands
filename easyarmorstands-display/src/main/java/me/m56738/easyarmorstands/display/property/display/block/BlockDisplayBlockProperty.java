@@ -20,12 +20,12 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
     }
 
     @Override
-    public BlockData getValue() {
+    public @NotNull BlockData getValue() {
         return entity.getBlock();
     }
 
     @Override
-    public boolean setValue(BlockData value) {
+    public boolean setValue(@NotNull BlockData value) {
         entity.setBlock(value);
         return true;
     }

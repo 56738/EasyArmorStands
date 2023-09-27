@@ -21,12 +21,12 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
     }
 
     @Override
-    public ItemStack getValue() {
+    public @NotNull ItemStack getValue() {
         return Util.wrapItem(entity.getItemStack());
     }
 
     @Override
-    public boolean setValue(ItemStack value) {
+    public boolean setValue(@NotNull ItemStack value) {
         entity.setItemStack(value);
         return true;
     }

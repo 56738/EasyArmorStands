@@ -19,12 +19,12 @@ public class ArmorStandGravityProperty implements Property<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public @NotNull Boolean getValue() {
         return entity.hasGravity();
     }
 
     @Override
-    public boolean setValue(Boolean value) {
+    public boolean setValue(@NotNull Boolean value) {
         entity.setGravity(value);
         return true;
     }

@@ -17,7 +17,7 @@ public class BlockDataPropertyType extends ConfigurablePropertyType<BlockData> {
     }
 
     @Override
-    public @NotNull Component getValueComponent(BlockData value) {
+    public @NotNull Component getValueComponent(@NotNull BlockData value) {
         return Component.text(value.getAsString());
     }
 

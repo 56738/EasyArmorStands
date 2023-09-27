@@ -6,10 +6,11 @@ import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTy
 import org.bukkit.Color;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 @SuppressWarnings("deprecation") // presence checked in isSupported
-public class TextDisplayBackgroundProperty implements Property<@Nullable Color> {
+public class TextDisplayBackgroundProperty implements Property<Optional<Color>> {
     private static final int DEFAULT_COLOR = 0x40000000;
     private final TextDisplay entity;
 
@@ -30,33 +31,28 @@ public class TextDisplayBackgroundProperty implements Property<@Nullable Color> 
     }
 
     @Override
-    public @NotNull PropertyType<@Nullable Color> getType() {
+    public @NotNull PropertyType<Optional<Color>> getType() {
         return TextDisplayPropertyTypes.BACKGROUND;
     }
 
     @Override
-    public @Nullable Color getValue() {
+    public @NotNull Optional<Color> getValue() {
         if (entity.isDefaultBackground()) {
-            return null;
+            return Optional.empty();
         }
         Color color = entity.getBackgroundColor();
         if (color == null) {
             color = Color.WHITE;
         } else if (color.asARGB() == DEFAULT_COLOR) {
-            return null;
+            return Optional.empty();
         }
-        return color;
+        return Optional.of(color);
     }
 
     @Override
-    public boolean setValue(@Nullable Color value) {
-        if (value != null) {
-            entity.setDefaultBackground(false);
-            entity.setBackgroundColor(value);
-        } else {
-            entity.setDefaultBackground(true);
-            entity.setBackgroundColor(null);
-        }
+    public boolean setValue(@NotNull Optional<Color> value) {
+        entity.setDefaultBackground(value.isEmpty());
+        entity.setBackgroundColor(value.orElse(null));
         return true;
     }
 }

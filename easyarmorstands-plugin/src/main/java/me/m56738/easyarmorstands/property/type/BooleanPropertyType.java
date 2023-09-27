@@ -24,7 +24,7 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     }
 
     @Override
-    public @NotNull Component getValueComponent(Boolean value) {
+    public @NotNull Component getValueComponent(@NotNull Boolean value) {
         if (value == null) {
             return none;
         } else if (value) {

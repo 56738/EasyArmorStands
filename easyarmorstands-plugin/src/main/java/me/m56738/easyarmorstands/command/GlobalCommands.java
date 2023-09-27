@@ -30,6 +30,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @CommandMethod("eas")
@@ -174,7 +175,7 @@ public class GlobalCommands {
         hover.appendNewline();
         hover.append(debugLine(Component.text("Type"), Component.text(type.getClass().getName())));
         hover.appendNewline();
-        hover.append(debugLine(Component.text("Value"), type.getValueComponent(property.getValue())));
+        hover.append(debugLine(Component.text("Value"), type.getValueComponent(Objects.requireNonNull(property.getValue()))));
         String permission = type.getPermission();
         if (permission != null) {
             hover.appendNewline();

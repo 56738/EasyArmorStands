@@ -17,7 +17,7 @@ public interface Property<T> {
      *
      * @return The current value.
      */
-    T getValue();
+    @NotNull T getValue();
 
     /**
      * Attempts to set the value of this property.
@@ -25,7 +25,7 @@ public interface Property<T> {
      * @param value The new value.
      * @return Whether changing the property succeeded.
      */
-    boolean setValue(T value);
+    boolean setValue(@NotNull T value);
 
     /**
      * Prepares an action which will change the value of this property in the future.
@@ -37,7 +37,7 @@ public interface Property<T> {
      * @param value The new value.
      * @return The pending change, or null.
      */
-    default @Nullable PendingChange prepareChange(T value) {
+    default @Nullable PendingChange prepareChange(@NotNull T value) {
         return new PendingChangeImpl<>(this, value);
     }
 }

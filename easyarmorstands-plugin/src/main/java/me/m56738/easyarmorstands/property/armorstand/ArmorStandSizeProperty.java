@@ -20,12 +20,12 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
     }
 
     @Override
-    public ArmorStandSize getValue() {
+    public @NotNull ArmorStandSize getValue() {
         return entity.isSmall() ? ArmorStandSize.SMALL : ArmorStandSize.NORMAL;
     }
 
     @Override
-    public boolean setValue(ArmorStandSize value) {
+    public boolean setValue(@NotNull ArmorStandSize value) {
         entity.setSmall(value.isSmall());
         return true;
     }

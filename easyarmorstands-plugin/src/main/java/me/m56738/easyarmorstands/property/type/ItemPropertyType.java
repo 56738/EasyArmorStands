@@ -18,12 +18,12 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
     }
 
     @Override
-    public @NotNull Component getValueComponent(ItemStack value) {
+    public @NotNull Component getValueComponent(@NotNull ItemStack value) {
         return EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class).getItemDisplayName(value);
     }
 
     @Override
-    public ItemStack cloneValue(ItemStack value) {
+    public @NotNull ItemStack cloneValue(@NotNull ItemStack value) {
         return value.clone();
     }
 

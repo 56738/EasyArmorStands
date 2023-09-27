@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.util;
 import com.google.gson.JsonElement;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -52,7 +53,7 @@ public class NativeComponentMapper {
         return componentClass;
     }
 
-    public Object convertToNative(Component component) {
+    public @Nullable Object convertToNative(@Nullable Component component) {
         if (component == null) {
             return null;
         }
@@ -66,7 +67,7 @@ public class NativeComponentMapper {
         }
     }
 
-    public Component convertFromNative(Object component) {
+    public @Nullable Component convertFromNative(@Nullable Object component) {
         if (component == null) {
             return null;
         }

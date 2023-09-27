@@ -42,7 +42,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public T getValue() {
+    public @NotNull T getValue() {
         return property.getValue();
     }
 
@@ -54,7 +54,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public boolean setValue(T value) {
+    public boolean setValue(@NotNull T value) {
         if (!isAllowed(value)) {
             return false;
         }
@@ -62,7 +62,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public @Nullable PendingChange prepareChange(T value) {
+    public @Nullable PendingChange prepareChange(@NotNull T value) {
         if (!isAllowed(value)) {
             return null;
         }

@@ -19,12 +19,12 @@ public class DisplayHeightProperty implements Property<Float> {
     }
 
     @Override
-    public Float getValue() {
+    public @NotNull Float getValue() {
         return entity.getDisplayHeight();
     }
 
     @Override
-    public boolean setValue(Float value) {
+    public boolean setValue(@NotNull Float value) {
         entity.setDisplayHeight(value);
         return true;
     }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -13,15 +14,19 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     private final @NotNull Key key;
-    private final @NotNull Class<T> valueType;
+    private final @NotNull TypeToken<T> valueType;
     protected ItemTemplate buttonTemplate;
     private @Nullable String permission;
     private Component name;
     private Permission registeredPermission;
 
-    public ConfigurablePropertyType(@NotNull Key key, @NotNull Class<T> valueType) {
+    public ConfigurablePropertyType(@NotNull Key key, @NotNull TypeToken<T> valueType) {
         this.key = key;
         this.valueType = valueType;
+    }
+
+    public ConfigurablePropertyType(@NotNull Key key, @NotNull Class<T> valueType) {
+        this(key, TypeToken.get(valueType));
     }
 
     @Override
@@ -30,7 +35,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     }
 
     @Override
-    public @NotNull Class<T> getValueType() {
+    public @NotNull TypeToken<T> getValueType() {
         return valueType;
     }
 

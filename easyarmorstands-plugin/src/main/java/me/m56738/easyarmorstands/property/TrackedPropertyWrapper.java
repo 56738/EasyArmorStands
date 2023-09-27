@@ -27,12 +27,13 @@ class TrackedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public T getValue() {
+    public @NotNull T getValue() {
         return property.getValue();
     }
 
     @Override
-    public boolean setValue(T value) {
+    public boolean setValue(@NotNull T value) {
+        Objects.requireNonNull(value);
         T oldValue = property.getValue();
         if (Objects.equals(oldValue, value)) {
             return true;
@@ -45,7 +46,7 @@ class TrackedPropertyWrapper<T> implements Property<T> {
     }
 
     @Override
-    public @Nullable PendingChange prepareChange(T value) {
+    public @Nullable PendingChange prepareChange(@NotNull T value) {
         PendingChange change = property.prepareChange(value);
         if (change == null) {
             return null;

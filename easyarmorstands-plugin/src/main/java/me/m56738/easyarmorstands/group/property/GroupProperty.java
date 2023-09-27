@@ -33,7 +33,7 @@ public class GroupProperty<T> implements Property<T> {
     }
 
     @Override
-    public T getValue() {
+    public @NotNull T getValue() {
         Map<T, Integer> votes = new HashMap<>();
         for (Property<T> property : properties) {
             votes.merge(property.getValue(), 1, Integer::sum);
@@ -52,7 +52,7 @@ public class GroupProperty<T> implements Property<T> {
     }
 
     @Override
-    public boolean setValue(T value) {
+    public boolean setValue(@NotNull T value) {
         boolean changed = false;
         for (Property<T> property : properties) {
             if (property.setValue(value)) {
@@ -63,7 +63,7 @@ public class GroupProperty<T> implements Property<T> {
     }
 
     @Override
-    public @Nullable PendingChange prepareChange(T value) {
+    public @Nullable PendingChange prepareChange(@NotNull T value) {
         List<PendingChange> changes = new ArrayList<>(properties.size());
         for (Property<T> property : properties) {
             PendingChange change = property.prepareChange(value);

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -26,7 +27,11 @@ public class ArmorStandPropertyTypes {
     private ArmorStandPropertyTypes() {
     }
 
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
+    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
         return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
+    }
+
+    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
+        return get(name, TypeToken.get(type));
     }
 }

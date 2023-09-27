@@ -28,7 +28,7 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     }
 
     @Override
-    public @NotNull Component getValueComponent(T value) {
+    public @NotNull Component getValueComponent(@NotNull T value) {
         return valueNames.get(value);
     }
 }

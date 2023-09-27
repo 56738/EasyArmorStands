@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.api.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.key.Key;
@@ -14,7 +15,11 @@ public class ItemDisplayPropertyTypes {
     private ItemDisplayPropertyTypes() {
     }
 
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
+    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
         return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
+    }
+
+    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
+        return get(name, TypeToken.get(type));
     }
 }

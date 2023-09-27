@@ -15,12 +15,15 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ComponentCapabilityProvider implements CapabilityProvider<ComponentCapability> {
     @Override
@@ -82,7 +85,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
                     MethodType.methodType(mapper.getComponentClass()));
         }
 
-        private static Component style(Component component) {
+        private static @Nullable Component style(@Nullable Component component) {
             if (component == null) {
                 return null;
             }
@@ -90,7 +93,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public Component getCustomName(Entity entity) {
+        public @Nullable Component getCustomName(@NotNull Entity entity) {
             try {
                 return mapper.convertFromNative(getCustomName.invoke(entity));
             } catch (Throwable e) {
@@ -99,7 +102,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public void setCustomName(Entity entity, Component name) {
+        public void setCustomName(@NotNull Entity entity, @Nullable Component name) {
             try {
                 setCustomName.invoke(entity, mapper.convertToNative(name));
             } catch (Throwable e) {
@@ -108,7 +111,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public void setDisplayName(ItemMeta meta, Component displayName) {
+        public void setDisplayName(@NotNull ItemMeta meta, @Nullable Component displayName) {
             try {
                 setDisplayName.invoke(meta, mapper.convertToNative(style(displayName)));
             } catch (Throwable e) {
@@ -117,7 +120,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public void setLore(ItemMeta meta, List<Component> lore) {
+        public void setLore(@NotNull ItemMeta meta, @NotNull List<@NotNull Component> lore) {
             List<Object> nativeLore = new ArrayList<>(lore.size());
             for (Component component : lore) {
                 nativeLore.add(mapper.convertToNative(style(component)));
@@ -130,16 +133,16 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public Component getItemDisplayName(ItemStack item) {
+        public @NotNull Component getItemDisplayName(@NotNull ItemStack item) {
             try {
-                return mapper.convertFromNative(getItemDisplayName.invoke(item));
+                return Objects.requireNonNull(mapper.convertFromNative(getItemDisplayName.invoke(item)));
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public Inventory createInventory(InventoryHolder holder, int size, Component title) {
+        public @NotNull Inventory createInventory(InventoryHolder holder, int size, Component title) {
             return Bukkit.createInventory(holder, size, title);
         }
     }

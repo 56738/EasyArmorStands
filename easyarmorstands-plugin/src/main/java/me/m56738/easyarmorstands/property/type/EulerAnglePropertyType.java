@@ -12,7 +12,7 @@ public class EulerAnglePropertyType extends ConfigurablePropertyType<EulerAngle>
     }
 
     @Override
-    public @NotNull Component getValueComponent(EulerAngle value) {
+    public @NotNull Component getValueComponent(@NotNull EulerAngle value) {
         return Util.formatAngle(value);
     }
 }

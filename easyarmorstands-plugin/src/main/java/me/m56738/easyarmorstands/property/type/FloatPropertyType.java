@@ -24,7 +24,7 @@ public class FloatPropertyType extends ConfigurablePropertyType<Float> {
     }
 
     @Override
-    public @NotNull Component getValueComponent(Float value) {
+    public @NotNull Component getValueComponent(@NotNull Float value) {
         return Component.text(format.format((float) value));
     }
 }

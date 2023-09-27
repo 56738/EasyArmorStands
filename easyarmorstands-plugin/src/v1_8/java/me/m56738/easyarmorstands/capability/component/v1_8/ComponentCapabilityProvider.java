@@ -18,6 +18,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,17 +55,17 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public Component getCustomName(Entity entity) {
+        public @Nullable Component getCustomName(@NotNull Entity entity) {
             return serializer.deserializeOrNull(entity.getCustomName());
         }
 
         @Override
-        public void setCustomName(Entity entity, Component name) {
+        public void setCustomName(@NotNull Entity entity, @Nullable Component name) {
             entity.setCustomName(serializer.serializeOrNull(name));
         }
 
         @Override
-        public void setDisplayName(ItemMeta meta, Component displayName) {
+        public void setDisplayName(@NotNull ItemMeta meta, @Nullable Component displayName) {
             if (displayName instanceof TextComponent && ((TextComponent) displayName).content().isEmpty()) {
                 meta.setDisplayName(ChatColor.RESET.toString());
                 return;
@@ -72,7 +74,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public void setLore(ItemMeta meta, List<Component> lore) {
+        public void setLore(@NotNull ItemMeta meta, @NotNull List<@NotNull Component> lore) {
             List<String> legacyLore = new ArrayList<>(lore.size());
             for (Component component : lore) {
                 legacyLore.add(serializer.serialize(style(component)));
@@ -81,12 +83,12 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         }
 
         @Override
-        public Component getItemDisplayName(ItemStack item) {
+        public @NotNull Component getItemDisplayName(@NotNull ItemStack item) {
             return Component.text(item.getType().name());
         }
 
         @Override
-        public Inventory createInventory(InventoryHolder holder, int size, Component title) {
+        public @NotNull Inventory createInventory(InventoryHolder holder, int size, Component title) {
             return Bukkit.createInventory(holder, size, serializer.serialize(title));
         }
     }

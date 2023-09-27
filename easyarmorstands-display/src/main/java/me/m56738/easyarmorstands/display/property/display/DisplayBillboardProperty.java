@@ -20,12 +20,12 @@ public class DisplayBillboardProperty implements Property<Billboard> {
     }
 
     @Override
-    public Billboard getValue() {
+    public @NotNull Billboard getValue() {
         return entity.getBillboard();
     }
 
     @Override
-    public boolean setValue(Billboard value) {
+    public boolean setValue(@NotNull Billboard value) {
         entity.setBillboard(value);
         return true;
     }

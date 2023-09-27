@@ -19,12 +19,12 @@ public class ArmorStandBasePlateProperty implements Property<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public @NotNull Boolean getValue() {
         return entity.hasBasePlate();
     }
 
     @Override
-    public boolean setValue(Boolean value) {
+    public boolean setValue(@NotNull Boolean value) {
         entity.setBasePlate(value);
         return true;
     }

@@ -6,9 +6,10 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Display.Brightness;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class DisplayBrightnessProperty implements Property<@Nullable Brightness> {
+import java.util.Optional;
+
+public class DisplayBrightnessProperty implements Property<Optional<Brightness>> {
     private final Display entity;
 
     public DisplayBrightnessProperty(Display entity) {
@@ -16,18 +17,18 @@ public class DisplayBrightnessProperty implements Property<@Nullable Brightness>
     }
 
     @Override
-    public @NotNull PropertyType<@Nullable Brightness> getType() {
+    public @NotNull PropertyType<Optional<Brightness>> getType() {
         return DisplayPropertyTypes.BRIGHTNESS;
     }
 
     @Override
-    public @Nullable Brightness getValue() {
-        return entity.getBrightness();
+    public @NotNull Optional<Brightness> getValue() {
+        return Optional.ofNullable(entity.getBrightness());
     }
 
     @Override
-    public boolean setValue(@Nullable Brightness value) {
-        entity.setBrightness(value);
+    public boolean setValue(@NotNull Optional<Brightness> value) {
+        entity.setBrightness(value.orElse(null));
         return true;
     }
 }

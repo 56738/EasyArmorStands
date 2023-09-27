@@ -14,12 +14,12 @@ public class Vector3fcPropertyType extends ConfigurablePropertyType<Vector3fc> {
     }
 
     @Override
-    public @NotNull Component getValueComponent(Vector3fc value) {
+    public @NotNull Component getValueComponent(@NotNull Vector3fc value) {
         return Util.formatOffset(new Vector3d(value));
     }
 
     @Override
-    public Vector3fc cloneValue(Vector3fc value) {
+    public @NotNull Vector3fc cloneValue(@NotNull Vector3fc value) {
         return new Vector3f(value);
     }
 }

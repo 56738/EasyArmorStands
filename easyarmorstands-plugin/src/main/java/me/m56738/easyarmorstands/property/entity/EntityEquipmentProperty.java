@@ -29,12 +29,12 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
     }
 
     @Override
-    public ItemStack getValue() {
+    public @NotNull ItemStack getValue() {
         return Util.wrapItem(equipmentCapability.getItem(entity.getEquipment(), slot));
     }
 
     @Override
-    public boolean setValue(ItemStack value) {
+    public boolean setValue(@NotNull ItemStack value) {
         equipmentCapability.setItem(entity.getEquipment(), slot, value);
         return true;
     }

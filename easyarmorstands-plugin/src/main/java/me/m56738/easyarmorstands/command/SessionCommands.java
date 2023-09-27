@@ -56,11 +56,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @CommandMethod("eas")
 public class SessionCommands {
-    public static void showText(Audience audience, Component type, Component text, String command) {
+    public static void showText(Audience audience, Component type, @Nullable Component text, String command) {
         String serialized = MiniMessage.miniMessage().serializeOr(text, "");
         audience.sendMessage(Component.text()
                 .append(Message.title(type))
@@ -492,12 +493,12 @@ public class SessionCommands {
         if (properties == null) {
             return;
         }
-        Property<Component> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+        Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
-        Component text = property.getValue();
+        Component text = property.getValue().orElse(null);
         showText(sender, EntityPropertyTypes.CUSTOM_NAME.getName(), text, "/eas name set");
     }
 
@@ -509,15 +510,15 @@ public class SessionCommands {
         if (properties == null) {
             return;
         }
-        Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+        Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         Component name = MiniMessage.miniMessage().deserialize(input);
-        boolean hadName = nameProperty.getValue() != null;
-        if (!nameProperty.setValue(name)) {
+        boolean hadName = nameProperty.getValue().isPresent();
+        if (!nameProperty.setValue(Optional.of(name))) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
@@ -536,13 +537,13 @@ public class SessionCommands {
         if (properties == null) {
             return;
         }
-        Property<Component> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+        Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
             return;
         }
         Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
-        if (!nameProperty.setValue(null)) {
+        if (!nameProperty.setValue(Optional.empty())) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }

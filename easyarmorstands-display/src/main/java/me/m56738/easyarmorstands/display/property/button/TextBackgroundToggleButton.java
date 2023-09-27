@@ -6,22 +6,24 @@ import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.property.button.ToggleButton;
 import org.bukkit.Color;
 
-public class TextBackgroundToggleButton extends ToggleButton<Color> {
-    public TextBackgroundToggleButton(Property<Color> property, PropertyContainer container, ItemTemplate item) {
+import java.util.Optional;
+
+public class TextBackgroundToggleButton extends ToggleButton<Optional<Color>> {
+    public TextBackgroundToggleButton(Property<Optional<Color>> property, PropertyContainer container, ItemTemplate item) {
         super(property, container, item);
     }
 
     @Override
-    public Color getNextValue() {
-        if (property.getValue() == null) {
-            return Color.fromARGB(0, 0, 0, 0);
+    public Optional<Color> getNextValue() {
+        if (property.getValue().isEmpty()) {
+            return Optional.of(Color.fromARGB(0, 0, 0, 0));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
-    public Color getPreviousValue() {
+    public Optional<Color> getPreviousValue() {
         return getNextValue();
     }
 }

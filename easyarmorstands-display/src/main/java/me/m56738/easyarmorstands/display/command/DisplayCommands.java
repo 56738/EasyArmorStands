@@ -51,7 +51,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Display;
+import org.bukkit.entity.Display.Brightness;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -68,6 +68,7 @@ import org.joml.Vector3fc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static me.m56738.easyarmorstands.command.SessionCommands.getElementOrError;
 import static me.m56738.easyarmorstands.command.SessionCommands.getElementsOrError;
@@ -107,23 +108,21 @@ public class DisplayCommands {
     @CommandMethod("brightness block <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("Set the block light level of the selected display")
-    public void setBlockBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int value) {
+    public void setBlockBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
             return;
         }
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
+        Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
-        Display.Brightness brightness = property.getValue();
-        if (brightness != null) {
-            brightness = new Display.Brightness(value, brightness.getSkyLight());
-        } else {
-            brightness = new Display.Brightness(value, location.getBlock().getLightFromSky());
-        }
+        int skyLight = property.getValue()
+                .map(Brightness::getSkyLight)
+                .orElseGet(() -> (int) location.getBlock().getLightFromSky());
+        Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
         if (property.setValue(brightness)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -136,23 +135,21 @@ public class DisplayCommands {
     @CommandMethod("brightness sky <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("Set the sky light level of the selected display")
-    public void setSkyBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int value) {
+    public void setSkyBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
             return;
         }
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
+        Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
-        Display.Brightness brightness = property.getValue();
-        if (brightness != null) {
-            brightness = new Display.Brightness(brightness.getBlockLight(), value);
-        } else {
-            brightness = new Display.Brightness(location.getBlock().getLightFromBlocks(), value);
-        }
+        int blockLight = property.getValue()
+                .map(Brightness::getSkyLight)
+                .orElseGet(() -> (int) location.getBlock().getLightFromBlocks());
+        Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
         if (property.setValue(brightness)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -170,13 +167,13 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
+        Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
         Block block = sender.get().getLocation().getBlock();
-        Display.Brightness brightness = new Display.Brightness(block.getLightFromBlocks(), block.getLightFromSky());
+        Optional<Brightness> brightness = Optional.of(new Brightness(block.getLightFromBlocks(), block.getLightFromSky()));
         if (property.setValue(brightness)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -194,15 +191,15 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Display.Brightness> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
+        Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
-        if (property.setValue(null)) {
+        if (property.setValue(Optional.empty())) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
-                    property.getType().getValueComponent(null)));
+                    property.getType().getValueComponent(Optional.empty())));
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
@@ -379,12 +376,12 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Color value = Color.fromRGB(color.value());
+        Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
@@ -402,15 +399,15 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        if (property.setValue(null)) {
+        if (property.setValue(Optional.empty())) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
-                    property.getType().getValueComponent(null)));
+                    property.getType().getValueComponent(Optional.empty())));
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
@@ -424,12 +421,12 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Color value = Color.fromARGB(0);
+        Optional<Color> value = Optional.of(Color.fromARGB(0));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
@@ -447,18 +444,18 @@ public class DisplayCommands {
         if (properties == null) {
             return;
         }
-        Property<Color> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Color oldValue = property.getValue();
-        if (oldValue == null) {
+        Optional<Color> oldValue = property.getValue();
+        if (oldValue.isEmpty()) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
 
-        Color value = oldValue.setAlpha(alpha);
+        Optional<Color> value = oldValue.map(v -> v.setAlpha(alpha));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background-alpha",

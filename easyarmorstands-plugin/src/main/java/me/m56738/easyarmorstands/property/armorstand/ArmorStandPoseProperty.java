@@ -25,12 +25,12 @@ public class ArmorStandPoseProperty implements Property<EulerAngle> {
     }
 
     @Override
-    public EulerAngle getValue() {
+    public @NotNull EulerAngle getValue() {
         return part.getPose(entity);
     }
 
     @Override
-    public boolean setValue(EulerAngle value) {
+    public boolean setValue(@NotNull EulerAngle value) {
         part.setPose(entity, value);
         return true;
     }

@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.PermissionCheckedPropertyContainer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -52,9 +53,9 @@ public class PropertyAction<T> implements Action {
     @Override
     public Component describe() {
         return Message.component("easyarmorstands.history.changed-property",
-                propertyType.getName(),
-                propertyType.getValueComponent(oldValue),
-                propertyType.getValueComponent(newValue));
+                propertyType.getName().colorIfAbsent(NamedTextColor.WHITE),
+                propertyType.getValueComponent(oldValue).colorIfAbsent(NamedTextColor.WHITE),
+                propertyType.getValueComponent(newValue).colorIfAbsent(NamedTextColor.WHITE));
     }
 
     @Override

@@ -19,12 +19,12 @@ public class TextDisplayLineWidthProperty implements Property<Integer> {
     }
 
     @Override
-    public Integer getValue() {
+    public @NotNull Integer getValue() {
         return entity.getLineWidth();
     }
 
     @Override
-    public boolean setValue(Integer value) {
+    public boolean setValue(@NotNull Integer value) {
         entity.setLineWidth(value);
         return true;
     }

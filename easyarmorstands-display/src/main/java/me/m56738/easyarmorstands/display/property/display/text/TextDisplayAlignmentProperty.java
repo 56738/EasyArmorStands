@@ -30,12 +30,12 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
     }
 
     @Override
-    public TextAlignment getValue() {
+    public @NotNull TextAlignment getValue() {
         return entity.getAlignment();
     }
 
     @Override
-    public boolean setValue(TextAlignment value) {
+    public boolean setValue(@NotNull TextAlignment value) {
         entity.setAlignment(value);
         return true;
     }

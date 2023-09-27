@@ -16,7 +16,7 @@ public interface PropertyType<T> extends Keyed {
         return PropertyTypeTypeToken.INSTANCE;
     }
 
-    @NotNull Class<T> getValueType();
+    @NotNull TypeToken<T> getValueType();
 
     @Nullable String getPermission();
 
@@ -33,12 +33,12 @@ public interface PropertyType<T> extends Keyed {
      * @param value The value to format.
      * @return The formatted value.
      */
-    @NotNull Component getValueComponent(T value);
+    @NotNull Component getValueComponent(@NotNull T value);
 
     default void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
     }
 
-    default T cloneValue(T value) {
+    default @NotNull T cloneValue(@NotNull T value) {
         return value;
     }
 

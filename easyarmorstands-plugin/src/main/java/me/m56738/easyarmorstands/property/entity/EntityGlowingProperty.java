@@ -22,12 +22,12 @@ public class EntityGlowingProperty implements Property<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public @NotNull Boolean getValue() {
         return glowCapability.isGlowing(entity);
     }
 
     @Override
-    public boolean setValue(Boolean value) {
+    public boolean setValue(@NotNull Boolean value) {
         glowCapability.setGlowing(entity, value);
         return true;
     }

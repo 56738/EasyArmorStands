@@ -24,12 +24,12 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
     }
 
     @Override
-    public Vector3fc getValue() {
+    public @NotNull Vector3fc getValue() {
         return mapper.getScale(entity.getTransformation());
     }
 
     @Override
-    public boolean setValue(Vector3fc value) {
+    public boolean setValue(@NotNull Vector3fc value) {
         Transformation transformation = entity.getTransformation();
         entity.setTransformation((Transformation) mapper.getTransformation(
                 mapper.getTranslation(transformation),

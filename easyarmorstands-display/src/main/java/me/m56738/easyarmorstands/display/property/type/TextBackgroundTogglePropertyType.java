@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -14,18 +15,22 @@ import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<Color> {
+import java.util.Optional;
+
+public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<Optional<Color>> {
     public TextBackgroundTogglePropertyType(@NotNull Key key) {
-        super(key, Color.class);
+        super(key, new TypeToken<Optional<Color>>() {
+        });
     }
 
     @Override
-    public @NotNull Component getValueComponent(Color value) {
-        if (value != null) {
-            if (value.getAlpha() == 0) {
+    public @NotNull Component getValueComponent(@NotNull Optional<Color> value) {
+        if (value.isPresent()) {
+            Color color = value.get();
+            if (color.getAlpha() == 0) {
                 return Message.component("easyarmorstands.property.text-display.background.none");
             }
-            TextColor textColor = TextColor.color(value.asRGB());
+            TextColor textColor = TextColor.color(color.asRGB());
             return Component.text(textColor.asHexString(), textColor);
         } else {
             return Message.component("easyarmorstands.property.text-display.background.default").color(NamedTextColor.DARK_GRAY);
@@ -33,7 +38,7 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<C
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Color> property, @NotNull PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<Optional<Color>> property, @NotNull PropertyContainer container) {
         return new TextBackgroundToggleButton(property, container, buttonTemplate);
     }
 }

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
@@ -73,12 +74,13 @@ public final class PropertyMap implements PropertyContainer {
         }
 
         @Override
-        public T getValue() {
+        public @NotNull T getValue() {
             return type.cloneValue(value);
         }
 
         @Override
-        public boolean setValue(T value) {
+        public boolean setValue(@NotNull T value) {
+            Objects.requireNonNull(value);
             this.value = type.cloneValue(value);
             return true;
         }

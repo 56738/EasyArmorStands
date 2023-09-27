@@ -20,12 +20,12 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
     }
 
     @Override
-    public ItemDisplayTransform getValue() {
+    public @NotNull ItemDisplayTransform getValue() {
         return entity.getItemDisplayTransform();
     }
 
     @Override
-    public boolean setValue(ItemDisplayTransform value) {
+    public boolean setValue(@NotNull ItemDisplayTransform value) {
         entity.setItemDisplayTransform(value);
         return true;
     }

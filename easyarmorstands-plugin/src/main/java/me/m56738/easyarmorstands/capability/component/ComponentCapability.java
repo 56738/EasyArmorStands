@@ -7,20 +7,22 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 @Capability(name = "Chat components")
 public interface ComponentCapability {
-    Component getCustomName(Entity entity);
+    @Nullable Component getCustomName(@NotNull Entity entity);
 
-    void setCustomName(Entity entity, Component name);
+    void setCustomName(@NotNull Entity entity, @Nullable Component name);
 
-    void setDisplayName(ItemMeta meta, Component displayName);
+    void setDisplayName(@NotNull ItemMeta meta, @Nullable Component displayName);
 
-    void setLore(ItemMeta meta, List<Component> lore);
+    void setLore(@NotNull ItemMeta meta, @NotNull List<@NotNull Component> lore);
 
-    Component getItemDisplayName(ItemStack item);
+    @NotNull Component getItemDisplayName(@NotNull ItemStack item);
 
-    Inventory createInventory(InventoryHolder holder, int size, Component title);
+    @NotNull Inventory createInventory(InventoryHolder holder, int size, Component title);
 }

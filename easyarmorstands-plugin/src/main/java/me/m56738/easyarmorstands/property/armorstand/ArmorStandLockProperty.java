@@ -22,12 +22,12 @@ public class ArmorStandLockProperty implements Property<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public @NotNull Boolean getValue() {
         return lockCapability.isLocked(entity);
     }
 
     @Override
-    public boolean setValue(Boolean value) {
+    public boolean setValue(@NotNull Boolean value) {
         lockCapability.setLocked(entity, value);
         return true;
     }

@@ -8,6 +8,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Called when an element property is modified.
  */
@@ -19,12 +21,12 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
     private final T newValue;
     private boolean cancelled;
 
-    public PlayerEditPropertyEvent(@NotNull Player player, @NotNull Element element, @NotNull Property<T> property, T oldValue, T newValue) {
+    public PlayerEditPropertyEvent(@NotNull Player player, @NotNull Element element, @NotNull Property<T> property, @NotNull T oldValue, @NotNull T newValue) {
         super(player);
         this.element = element;
         this.property = property;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+        this.oldValue = Objects.requireNonNull(oldValue);
+        this.newValue = Objects.requireNonNull(newValue);
     }
 
     public static @NotNull HandlerList getHandlerList() {
@@ -44,11 +46,11 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
         return property;
     }
 
-    public T getOldValue() {
+    public @NotNull T getOldValue() {
         return oldValue;
     }
 
-    public T getNewValue() {
+    public @NotNull T getNewValue() {
         return newValue;
     }
 

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyTypeException;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +20,15 @@ public interface PropertyTypeRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull Class<T> type) {
+    default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull TypeToken<T> type) {
         PropertyType<?> propertyType = getOrNull(key);
-        if (propertyType == null || type != propertyType.getValueType()) {
+        if (propertyType == null || !type.equals(propertyType.getValueType())) {
             return null;
         }
         return (PropertyType<T>) propertyType;
     }
 
-    default @NotNull <T> PropertyType<T> get(@NotNull Key key, @NotNull Class<T> type) {
+    default @NotNull <T> PropertyType<T> get(@NotNull Key key, @NotNull TypeToken<T> type) {
         PropertyType<T> propertyType = getOrNull(key, type);
         if (propertyType == null) {
             throw new UnknownPropertyTypeException(key, type);

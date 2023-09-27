@@ -24,12 +24,12 @@ public class DisplayRightRotationProperty implements Property<Quaternionfc> {
     }
 
     @Override
-    public Quaternionfc getValue() {
+    public @NotNull Quaternionfc getValue() {
         return mapper.getRightRotation(entity.getTransformation());
     }
 
     @Override
-    public boolean setValue(Quaternionfc value) {
+    public boolean setValue(@NotNull Quaternionfc value) {
         Transformation transformation = entity.getTransformation();
         entity.setTransformation((Transformation) mapper.getTransformation(
                 mapper.getTranslation(transformation),

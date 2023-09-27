@@ -18,7 +18,7 @@ public class LegacyTextDisplayAdapter extends TextDisplayAdapter {
 
     @Override
     public Component getText(TextDisplay entity) {
-        return serializer.deserializeOrNull(entity.getText());
+        return serializer.deserializeOr(entity.getText(), Component.empty());
     }
 
     @Override
