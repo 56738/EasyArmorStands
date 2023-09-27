@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
@@ -14,8 +15,9 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.capability.entitysize.EntitySizeCapability;
-import me.m56738.easyarmorstands.editor.button.SimpleEntityButton;
+import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
@@ -82,7 +84,9 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public Button createButton(Session session) {
-        return new SimpleEntityButton(session, this);
+        return new BoundingBoxButton(session, this,
+                new EntityPositionProvider(properties),
+                RotationProvider.identity());
     }
 
     @Override

@@ -1,12 +1,15 @@
 package me.m56738.easyarmorstands.display.element;
 
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.display.editor.button.DisplayButton;
+import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
+import me.m56738.easyarmorstands.display.editor.DisplayRotationProvider;
 import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
+import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.util.Util;
@@ -24,7 +27,10 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public Button createButton(Session session) {
-        return new DisplayButton(session, this);
+        PropertyContainer properties = getProperties();
+        return new BoundingBoxButton(session, this,
+                new EntityPositionProvider(properties, new DisplayOffsetProvider(properties)),
+                new DisplayRotationProvider(properties));
     }
 
     @Override

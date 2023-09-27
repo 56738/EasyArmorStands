@@ -1,24 +1,26 @@
-package me.m56738.easyarmorstands.editor.button;
+package me.m56738.easyarmorstands.api.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.api.util.BoundingBoxProvider;
+import me.m56738.easyarmorstands.api.util.PositionProvider;
+import me.m56738.easyarmorstands.api.util.RotationProvider;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public abstract class BoundingBoxButton implements Button {
+public final class BoundingBoxButton implements Button {
     private final Session session;
+    private final BoundingBoxProvider boxProvider;
+    private final PositionProvider positionProvider;
+    private final RotationProvider rotationProvider;
     private final Vector3d position = new Vector3d();
     private final Quaterniond rotation = new Quaterniond();
     private final PointParticle pointParticle;
@@ -27,26 +29,21 @@ public abstract class BoundingBoxButton implements Button {
     private boolean previewVisible;
     private boolean boxVisible;
 
-    public BoundingBoxButton(Session session) {
+    public BoundingBoxButton(Session session, BoundingBoxProvider boxProvider, PositionProvider positionProvider, RotationProvider rotationProvider) {
         this.session = session;
         this.pointParticle = session.particleProvider().createPoint();
+        this.boxProvider = boxProvider;
+        this.positionProvider = positionProvider;
+        this.rotationProvider = rotationProvider;
         this.pointParticle.setBillboard(false);
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
     }
 
-    protected abstract Vector3dc getPosition();
-
-    protected Quaterniondc getRotation() {
-        return Util.IDENTITY;
-    }
-
-    protected abstract BoundingBox getBoundingBox();
-
     @Override
     public void update() {
-        box = BoundingBox.of(getBoundingBox());
-        position.set(getPosition());
-        rotation.set(getRotation());
+        box = BoundingBox.of(boxProvider.getBoundingBox());
+        position.set(positionProvider.getPosition());
+        rotation.set(rotationProvider.getRotation());
     }
 
     @Override

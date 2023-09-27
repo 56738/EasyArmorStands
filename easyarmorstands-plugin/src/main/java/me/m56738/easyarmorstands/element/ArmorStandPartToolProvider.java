@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartOffsetProvider;
-import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
+import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.tool.ArmorStandPoseTool;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class ArmorStandPartToolProvider extends DelegateToolProvider {
     public ArmorStandPartToolProvider(PropertyContainer properties, ArmorStandPart part, ToolProvider toolProvider) {
         super(toolProvider,
                 new EntityPositionProvider(properties, new ArmorStandPartOffsetProvider(properties, part)),
-                new ArmorStandRotationProvider(properties, part));
+                new ArmorStandPartRotationProvider(properties, part));
         this.properties = properties;
         this.part = part;
     }
