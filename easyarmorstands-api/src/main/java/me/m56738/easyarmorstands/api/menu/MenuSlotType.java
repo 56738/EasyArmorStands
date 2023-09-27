@@ -6,5 +6,5 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 public interface MenuSlotType extends Keyed {
-    @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException;
+    @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException;
 }

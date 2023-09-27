@@ -18,6 +18,6 @@ public final class EnumKeyedPropertyType<K extends Enum<K>, V> implements KeyedP
 
     @Override
     public @NotNull PropertyType<V> get(@NotNull K key) {
-        return map.get(key);
+        return Objects.requireNonNull(map.get(key));
     }
 }

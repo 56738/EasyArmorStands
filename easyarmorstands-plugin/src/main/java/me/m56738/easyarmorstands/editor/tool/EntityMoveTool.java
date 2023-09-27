@@ -66,7 +66,7 @@ public class EntityMoveTool implements MoveTool {
         }
 
         @Override
-        public void snapChange(Vector3d change, @NotNull Snapper context) {
+        public void snapChange(@NotNull Vector3d change, @NotNull Snapper context) {
             change.add(originalPosition);
             context.snapPosition(change);
             change.sub(originalPosition);

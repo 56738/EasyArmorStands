@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.message.Message;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ToggleButton<T> extends PropertyButton<T> {
     public ToggleButton(Property<T> property, PropertyContainer container, ItemTemplate item) {
@@ -20,7 +21,7 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         boolean changed;
         if (click.isLeftClick()) {
             changed = setValue(getNextValue());

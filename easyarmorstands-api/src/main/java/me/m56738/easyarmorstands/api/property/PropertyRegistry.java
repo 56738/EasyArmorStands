@@ -25,7 +25,7 @@ public abstract class PropertyRegistry implements PropertyContainer {
     }
 
     @Override
-    public void forEach(@NotNull Consumer<Property<?>> consumer) {
+    public void forEach(@NotNull Consumer<@NotNull Property<?>> consumer) {
         for (Property<?> property : properties.values()) {
             consumer.accept(property);
         }

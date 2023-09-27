@@ -49,7 +49,7 @@ public class SimpleMenuContext implements MenuContext {
     }
 
     @Override
-    public @NotNull PropertyContainer properties(Element element) {
+    public @NotNull PropertyContainer properties(@NotNull Element element) {
         return new TrackedPropertyContainer(element, player);
     }
 

@@ -15,6 +15,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import java.util.Locale;
@@ -36,7 +37,7 @@ public class SpawnSlot implements MenuSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         if (click.isLeftClick()) {
             Player player = click.player();
             Vector3d offset = click.eyeMatrix().transformDirection(0, 0, 2, new Vector3d());
@@ -64,6 +65,10 @@ public class SpawnSlot implements MenuSlot {
             }
 
             Element element = type.createElement(properties);
+            if (element == null) {
+                return;
+            }
+
             context.history().push(new ElementCreateAction(element));
 
             if (session != null) {

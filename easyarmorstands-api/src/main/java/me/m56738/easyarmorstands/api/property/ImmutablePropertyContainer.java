@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import org.jetbrains.annotations.NotNull;
 
 class ImmutablePropertyContainer extends PropertyWrapperContainer {
     ImmutablePropertyContainer(PropertyContainer container) {
@@ -8,7 +9,7 @@ class ImmutablePropertyContainer extends PropertyWrapperContainer {
     }
 
     @Override
-    protected <T> Property<T> wrap(Property<T> property) {
+    protected @NotNull <T> Property<T> wrap(@NotNull Property<T> property) {
         PropertyType<T> type = property.getType();
         return new ImmutableProperty<>(type, property.getValue());
     }

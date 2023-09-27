@@ -8,8 +8,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface EditableElement extends Element, BoundingBoxProvider {
-    boolean canEdit(Player player);
+    @Contract(pure = true)
+    boolean canEdit(@NotNull Player player);
 
     @Contract(pure = true)
-    @NotNull ToolProvider getTools(PropertyContainer properties);
+    @NotNull ToolProvider getTools(@NotNull PropertyContainer properties);
 }

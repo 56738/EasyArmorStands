@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 public class DisplayElementType<E extends Display> extends SimpleEntityElementType<E> {
     public DisplayElementType(EntityType entityType, Class<E> entityClass) {
@@ -20,7 +21,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
     }
 
     @Override
-    public void applyDefaultProperties(PropertyMap properties) {
+    public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         Property<Location> locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         Location location = locationProperty.getValue().clone();

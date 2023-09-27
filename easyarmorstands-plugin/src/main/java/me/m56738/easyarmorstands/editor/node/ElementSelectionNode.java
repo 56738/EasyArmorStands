@@ -152,10 +152,7 @@ public class ElementSelectionNode extends MenuNode {
                 session.pushNode(new GroupRootNode(group));
             } else {
                 SelectableElement element = groupMembers.values().iterator().next();
-                Node node = element.createNode(session);
-                if (node != null) {
-                    session.pushNode(node);
-                }
+                session.pushNode(element.createNode(session));
             }
             groupMembers.clear();
             return true;
@@ -210,10 +207,6 @@ public class ElementSelectionNode extends MenuNode {
         }
 
         Node node = selectableElement.createNode(session);
-        if (node == null) {
-            return false;
-        }
-
         session.returnToNode(this);
         session.pushNode(node);
         return true;
@@ -283,9 +276,7 @@ public class ElementSelectionNode extends MenuNode {
             }
 
             Node node = element.createNode(session);
-            if (node != null) {
-                session.pushNode(node, cursor);
-            }
+            session.pushNode(node, cursor);
         }
 
         @Override

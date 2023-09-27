@@ -109,7 +109,7 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public Menu menu() {
+        public @NotNull Menu menu() {
             return menu;
         }
 
@@ -124,12 +124,12 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public Player player() {
+        public @NotNull Player player() {
             return player.get();
         }
 
         @Override
-        public ItemStack cursor() {
+        public @NotNull ItemStack cursor() {
             return Util.wrapItem(event.getView().getCursor());
         }
 
@@ -139,7 +139,7 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public Matrix4dc eyeMatrix() {
+        public @NotNull Matrix4dc eyeMatrix() {
             return Util.toMatrix4d(player.get().getEyeLocation());
         }
 
@@ -149,7 +149,7 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public void open(Inventory inventory) {
+        public void open(@NotNull Inventory inventory) {
             queueTask(() -> player.get().openInventory(inventory));
         }
 
@@ -164,17 +164,17 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public void updateItem(MenuSlot slot) {
+        public void updateItem(@NotNull MenuSlot slot) {
             queueTask(() -> menu.updateItem(slot));
         }
 
         @Override
-        public void queueTask(Runnable task) {
+        public void queueTask(@NotNull Runnable task) {
             menu.queueTask(task);
         }
 
         @Override
-        public void interceptNextClick(MenuClickInterceptor interceptor) {
+        public void interceptNextClick(@NotNull MenuClickInterceptor interceptor) {
             menu.interceptNextClick(interceptor);
         }
 

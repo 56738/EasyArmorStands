@@ -272,7 +272,10 @@ public class SessionCommands {
             ElementType type = element.getType();
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
             if (sender.canCreateElement(type, properties)) {
-                clones.add(type.createElement(properties));
+                Element clone = type.createElement(properties);
+                if (clone != null) {
+                    clones.add(clone);
+                }
             }
         }
 

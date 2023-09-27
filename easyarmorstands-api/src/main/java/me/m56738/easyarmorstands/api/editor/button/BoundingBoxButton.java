@@ -29,7 +29,7 @@ public final class BoundingBoxButton implements Button {
     private boolean previewVisible;
     private boolean boxVisible;
 
-    public BoundingBoxButton(Session session, BoundingBoxProvider boxProvider, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    public BoundingBoxButton(@NotNull Session session, @NotNull BoundingBoxProvider boxProvider, @NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
         this.session = session;
         this.pointParticle = session.particleProvider().createPoint();
         this.boxProvider = boxProvider;

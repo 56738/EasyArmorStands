@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -27,6 +28,6 @@ public class ColorAxisSlot implements ColorSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
     }
 }

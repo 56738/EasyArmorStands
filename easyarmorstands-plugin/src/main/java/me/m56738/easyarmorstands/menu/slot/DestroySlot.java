@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ public class DestroySlot implements MenuSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         if (!click.isLeftClick()) {
             return;
         }

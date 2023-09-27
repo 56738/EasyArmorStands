@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCreateElementEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
@@ -13,26 +14,26 @@ public class PlayerCreateElementEvent extends PlayerEvent implements Cancellable
     private final PropertyContainer properties;
     private boolean cancelled;
 
-    public PlayerCreateElementEvent(Player who, ElementType type, PropertyContainer properties) {
+    public PlayerCreateElementEvent(@NotNull Player who, @NotNull ElementType type, @NotNull PropertyContainer properties) {
         super(who);
         this.type = type;
         this.properties = PropertyContainer.immutable(properties);
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlerList;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlerList;
     }
 
-    public ElementType getType() {
+    public @NotNull ElementType getType() {
         return type;
     }
 
-    public PropertyContainer getProperties() {
+    public @NotNull PropertyContainer getProperties() {
         return properties;
     }
 

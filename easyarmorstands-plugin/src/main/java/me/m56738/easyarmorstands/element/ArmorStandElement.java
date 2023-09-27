@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -26,7 +26,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     @Override
-    public Button createButton(Session session) {
+    public @NotNull Button createButton(@NotNull Session session) {
         PropertyContainer properties = getProperties();
         return new BoundingBoxButton(session, this,
                 new EntityPositionProvider(properties, new ArmorStandOffsetProvider(properties)),
@@ -34,12 +34,12 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     @Override
-    public ElementNode createNode(Session session) {
+    public @NotNull Node createNode(@NotNull Session session) {
         return new ArmorStandRootNode(session, entity, this);
     }
 
     @Override
-    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+    public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
         return new ArmorStandToolProvider(properties);
     }
 

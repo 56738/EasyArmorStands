@@ -18,7 +18,7 @@ public class ColorPresetSlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         return new ColorPresetSlotFactory(
                 node.node("color").get(Color.class),
                 node.node("item").get(ItemTemplate.class));

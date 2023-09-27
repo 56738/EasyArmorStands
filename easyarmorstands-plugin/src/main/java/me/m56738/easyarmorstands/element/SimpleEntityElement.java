@@ -42,7 +42,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public E getEntity() {
+    public @NotNull E getEntity() {
         return entity;
     }
 
@@ -67,7 +67,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public @NotNull ToolProvider getTools(PropertyContainer properties) {
+    public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
         return new SimpleEntityToolProvider(properties);
     }
 
@@ -83,19 +83,19 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public Button createButton(Session session) {
+    public @NotNull Button createButton(@NotNull Session session) {
         return new BoundingBoxButton(session, this,
                 new EntityPositionProvider(properties),
                 RotationProvider.identity());
     }
 
     @Override
-    public Node createNode(Session session) {
+    public @NotNull Node createNode(@NotNull Session session) {
         return new SimpleEntityNode(session, this);
     }
 
     @Override
-    public void openMenu(Player player) {
+    public void openMenu(@NotNull Player player) {
         Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
         EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
     }
@@ -106,12 +106,12 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public boolean canEdit(Player player) {
+    public boolean canEdit(@NotNull Player player) {
         return player.hasPermission(Permissions.entityType(Permissions.EDIT, type.getEntityType()));
     }
 
     @Override
-    public boolean canDestroy(Player player) {
+    public boolean canDestroy(@NotNull Player player) {
         return player.hasPermission(Permissions.entityType(Permissions.DESTROY, type.getEntityType()));
     }
 

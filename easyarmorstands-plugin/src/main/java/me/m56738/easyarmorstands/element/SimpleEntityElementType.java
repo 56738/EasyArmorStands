@@ -16,6 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -32,12 +34,12 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     }
 
     @Override
-    public EntityType getEntityType() {
+    public @NotNull EntityType getEntityType() {
         return entityType;
     }
 
     @Override
-    public Class<E> getEntityClass() {
+    public @NotNull Class<E> getEntityClass() {
         return entityClass;
     }
 
@@ -46,28 +48,33 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     }
 
     @Override
-    public SimpleEntityElement<E> getElement(E entity) {
+    public SimpleEntityElement<E> getElement(@NotNull E entity) {
         SimpleEntityElement<E> element = createInstance(entity);
         Bukkit.getPluginManager().callEvent(new EntityElementInitializeEvent(element));
         return element;
     }
 
     @Override
-    public SimpleEntityElement<E> createElement(PropertyContainer properties) {
+    public @Nullable SimpleEntityElement<E> createElement(@NotNull PropertyContainer properties) {
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
         E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityClass, configurator);
-        entity.teleport(location);
-        return configurator.getElement();
+        SimpleEntityElement<E> element = configurator.getElement();
+        if (element != null) {
+            entity.teleport(location);
+        } else {
+            entity.remove();
+        }
+        return element;
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return displayName;
     }
 
     @Override
-    public boolean canSpawn(Player player) {
+    public boolean canSpawn(@NotNull Player player) {
         return player.hasPermission(Permissions.entityType(Permissions.SPAWN, entityType));
     }
 
@@ -82,7 +89,9 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         @Override
         public void accept(E entity) {
             element = SimpleEntityElementType.this.getElement(entity);
-            copyProperties(properties, element.getProperties());
+            if (element != null) {
+                copyProperties(properties, element.getProperties());
+            }
         }
 
         private void copyProperties(PropertyContainer source, PropertyContainer target) {
@@ -101,7 +110,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
             }
         }
 
-        public SimpleEntityElement<E> getElement() {
+        public @Nullable SimpleEntityElement<E> getElement() {
             return element;
         }
     }

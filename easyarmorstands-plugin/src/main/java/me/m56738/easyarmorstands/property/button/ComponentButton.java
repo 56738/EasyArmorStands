@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class ComponentButton extends PropertyButton<Component> {
     private final String command;
@@ -16,7 +17,7 @@ public class ComponentButton extends PropertyButton<Component> {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         if (click.isLeftClick()) {
             click.close();
             SessionCommands.showText(click, property.getType().getName(), property.getValue(), command);

@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -178,7 +179,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     }
 
     @Override
-    public ArmorStandElement getElement() {
+    public @NotNull Element getElement() {
         return element;
     }
 

@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.display.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
@@ -26,7 +26,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    public Button createButton(Session session) {
+    public @NotNull Button createButton(@NotNull Session session) {
         PropertyContainer properties = getProperties();
         return new BoundingBoxButton(session, this,
                 new EntityPositionProvider(properties, new DisplayOffsetProvider(properties)),
@@ -34,12 +34,12 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    public ElementNode createNode(Session session) {
+    public @NotNull Node createNode(@NotNull Session session) {
         return new DisplayRootNode(session, this);
     }
 
     @Override
-    public @NotNull DisplayToolProvider getTools(PropertyContainer properties) {
+    public @NotNull DisplayToolProvider getTools(@NotNull PropertyContainer properties) {
         return new DisplayToolProvider(properties);
     }
 

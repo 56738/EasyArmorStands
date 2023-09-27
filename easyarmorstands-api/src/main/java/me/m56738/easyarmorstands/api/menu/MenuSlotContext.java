@@ -22,7 +22,7 @@ public interface MenuSlotContext {
 
     @Nullable PropertyContainer properties();
 
-    @NotNull PropertyContainer properties(Element element);
+    @NotNull PropertyContainer properties(@NotNull Element element);
 
     @NotNull PermissionChecker permissions();
 

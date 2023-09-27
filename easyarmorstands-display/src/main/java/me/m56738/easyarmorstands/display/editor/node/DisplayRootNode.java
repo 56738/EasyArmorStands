@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
@@ -74,7 +75,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     }
 
     @Override
-    public DisplayElement<?> getElement() {
+    public @NotNull Element getElement() {
         return element;
     }
 

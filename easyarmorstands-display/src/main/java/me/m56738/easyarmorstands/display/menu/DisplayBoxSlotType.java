@@ -17,7 +17,7 @@ public class DisplayBoxSlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         return new DisplayBoxSlotFactory(
                 node.node("item").get(ItemTemplate.class));
     }

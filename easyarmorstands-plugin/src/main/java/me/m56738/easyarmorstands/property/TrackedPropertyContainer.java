@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,7 +26,7 @@ public class TrackedPropertyContainer extends PropertyWrapperContainer {
     }
 
     @Override
-    protected <T> Property<T> wrap(Property<T> property) {
+    protected @NotNull <T> Property<T> wrap(@NotNull Property<T> property) {
         return new TrackedPropertyWrapper<>(tracker, element, property);
     }
 

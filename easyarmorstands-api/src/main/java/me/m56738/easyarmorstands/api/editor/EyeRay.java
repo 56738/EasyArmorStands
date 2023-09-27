@@ -50,11 +50,11 @@ public interface EyeRay {
     @Contract(pure = true)
     @NotNull Matrix4dc inverseMatrix();
 
-    default boolean isInRange(Location location) {
+    default boolean isInRange(@NotNull Location location) {
         return world().equals(location.getWorld()) && isInRange(location.getX(), location.getY(), location.getZ());
     }
 
-    default boolean isInRange(Vector3dc position) {
+    default boolean isInRange(@NotNull Vector3dc position) {
         return isInRange(position.x(), position.y(), position.z());
     }
 
@@ -64,7 +64,7 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPoint(Vector3dc position) {
+    default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position) {
         Vector3dc origin = origin();
         Vector3dc target = target();
         double threshold = threshold();
@@ -81,7 +81,7 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectLine(Vector3dc start, Vector3dc end) {
+    default @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end) {
         Vector3dc eyes = origin();
         Vector3dc target = target();
         Vector3d closestOnLookRay = new Vector3d();
@@ -104,12 +104,12 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPlane(Vector3dc point, Vector3dc normal) {
+    default @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal) {
         return intersectPlane(point, normal, length());
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPlane(Vector3dc point, Vector3dc normal, double range) {
+    default @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal, double range) {
         Vector3dc origin = origin();
         Vector3dc direction = target().sub(origin, new Vector3d()).normalize();
         double ox = origin.x(), oy = origin.y(), oz = origin.z();
@@ -135,7 +135,7 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectCircle(Vector3dc point, Vector3dc normal, double radius) {
+    default @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius) {
         Vector3dc intersection = intersectPlane(point, normal);
         double threshold = threshold();
         if (intersection != null) {

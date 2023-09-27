@@ -24,16 +24,16 @@ public final class PropertyMap implements PropertyContainer {
     public PropertyMap() {
     }
 
-    public PropertyMap(PropertyContainer container) {
+    public PropertyMap(@NotNull PropertyContainer container) {
         container.forEach(this::importProperty);
     }
 
-    private <T> void importProperty(Property<T> property) {
+    private <T> void importProperty(@NotNull Property<T> property) {
         put(property.getType(), property.getValue());
     }
 
     @Override
-    public void forEach(@NotNull Consumer<Property<?>> consumer) {
+    public void forEach(@NotNull Consumer<@NotNull Property<?>> consumer) {
         for (PropertyImpl<?> property : properties.values()) {
             consumer.accept(property);
         }
@@ -55,7 +55,7 @@ public final class PropertyMap implements PropertyContainer {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> boolean put(PropertyType<T> type, T value) {
+    public <T> boolean put(@NotNull PropertyType<T> type, T value) {
         return properties.computeIfAbsent(type, PropertyImpl::new).setValue(value);
     }
 

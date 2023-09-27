@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -33,7 +34,7 @@ public class ItemPropertySlot implements MenuSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         String permission = property.getType().getPermission();
         if (permission != null && !click.player().hasPermission(permission)) {
             return;

@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTy
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TextDisplay;
+import org.jetbrains.annotations.NotNull;
 
 public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     public TextDisplayElementType() {
@@ -12,7 +13,7 @@ public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     }
 
     @Override
-    public void applyDefaultProperties(PropertyMap properties) {
+    public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         properties.put(TextDisplayPropertyTypes.TEXT, Component.text("Text"));
         properties.put(TextDisplayPropertyTypes.BACKGROUND, null);

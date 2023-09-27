@@ -17,7 +17,7 @@ public class DestroySlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         return new DestroySlotFactory(node.node("item").get(ItemTemplate.class));
     }
 }

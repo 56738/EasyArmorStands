@@ -24,6 +24,7 @@ public class PaperTextDisplayAdapter extends TextDisplayAdapter {
         return instance;
     }
 
+    @SuppressWarnings("JavaLangInvokeHandleSignature")
     private static PaperTextDisplayAdapter initialize() {
         try {
             NativeComponentMapper mapper = NativeComponentMapper.getInstance();

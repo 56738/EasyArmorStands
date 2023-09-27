@@ -27,7 +27,7 @@ public interface Menu extends InventoryHolder {
 
     void updateItem(@NotNull MenuSlot slot);
 
-    void updateItems(Predicate<MenuSlot> predicate);
+    void updateItems(@NotNull Predicate<@NotNull MenuSlot> predicate);
 
     void queueTask(@NotNull Runnable task);
 

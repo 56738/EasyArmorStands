@@ -72,7 +72,7 @@ public class MenuImpl implements InventoryHolder, Menu {
     }
 
     @Override
-    public void updateItems(Predicate<MenuSlot> predicate) {
+    public void updateItems(@NotNull Predicate<@NotNull MenuSlot> predicate) {
         for (int i = 0; i < slots.length; i++) {
             MenuSlot slot = slots[i];
             if (slot != null && predicate.test(slot)) {

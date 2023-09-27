@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.api.element;
 
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface EntityElement<E extends Entity> extends Element {
-    E getEntity();
+    @Contract(pure = true)
+    @NotNull E getEntity();
 
     @Override
-    @NotNull
-    EntityElementType<E> getType();
+    @NotNull EntityElementType<E> getType();
 
     @Override
-    @NotNull
-    EntityElementReference<E> getReference();
+    @NotNull EntityElementReference<E> getReference();
 }

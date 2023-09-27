@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DisplayElementProvider<T extends Display> implements EntityElementProvider {
@@ -14,7 +15,7 @@ public class DisplayElementProvider<T extends Display> implements EntityElementP
     }
 
     @Override
-    public @Nullable Element getElement(Entity entity) {
+    public @Nullable Element getElement(@NotNull Entity entity) {
         if (type.getEntityClass().isInstance(entity)) {
             return type.getElement(type.getEntityClass().cast(entity));
         }

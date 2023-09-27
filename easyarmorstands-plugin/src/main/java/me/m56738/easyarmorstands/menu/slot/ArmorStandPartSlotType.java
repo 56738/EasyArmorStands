@@ -18,7 +18,7 @@ public class ArmorStandPartSlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         return new ArmorStandPartSlotFactory(
                 node.node("part").get(ArmorStandPart.class),
                 node.node("item").get(ItemTemplate.class));

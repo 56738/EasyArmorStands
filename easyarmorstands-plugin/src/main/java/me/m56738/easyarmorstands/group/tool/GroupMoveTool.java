@@ -61,7 +61,7 @@ public class GroupMoveTool implements MoveTool {
         }
 
         @Override
-        public void snapChange(Vector3d change, @NotNull Snapper context) {
+        public void snapChange(@NotNull Vector3d change, @NotNull Snapper context) {
             context.snapOffset(change);
         }
 

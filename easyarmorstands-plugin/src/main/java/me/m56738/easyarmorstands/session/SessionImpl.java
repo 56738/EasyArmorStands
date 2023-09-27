@@ -171,10 +171,7 @@ public final class SessionImpl implements Session {
     public Element getElement() {
         for (Node node : nodeStack) {
             if (node instanceof ElementNode) {
-                Element element = ((ElementNode) node).getElement();
-                if (element != null) {
-                    return element;
-                }
+                return ((ElementNode) node).getElement();
             }
         }
         return null;
@@ -466,22 +463,22 @@ public final class SessionImpl implements Session {
         }
 
         @Override
-        public AxisMoveButtonBuilder axisMove() {
+        public @NotNull AxisMoveButtonBuilder axisMove() {
             return new AxisMoveButtonBuilderImpl(session);
         }
 
         @Override
-        public AxisScaleButtonBuilder axisScale() {
+        public @NotNull AxisScaleButtonBuilder axisScale() {
             return new AxisScaleButtonBuilderImpl(session);
         }
 
         @Override
-        public AxisRotateButtonBuilder axisRotate() {
+        public @NotNull AxisRotateButtonBuilder axisRotate() {
             return new AxisRotateButtonBuilderImpl(session);
         }
 
         @Override
-        public MoveButtonBuilder move() {
+        public @NotNull MoveButtonBuilder move() {
             return new MoveButtonBuilderImpl(session);
         }
     }

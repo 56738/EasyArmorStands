@@ -64,7 +64,7 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
     }
 
     @Override
-    public Element getElement() {
+    public @NotNull Element getElement() {
         return element;
     }
 }

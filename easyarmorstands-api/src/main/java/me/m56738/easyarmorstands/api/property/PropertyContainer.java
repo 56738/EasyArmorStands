@@ -17,7 +17,7 @@ public interface PropertyContainer {
         return new ImmutablePropertyContainer(container);
     }
 
-    void forEach(@NotNull Consumer<Property<?>> consumer);
+    void forEach(@NotNull Consumer<@NotNull Property<?>> consumer);
 
     @Contract(pure = true)
     <T> @Nullable Property<T> getOrNull(@NotNull PropertyType<T> type);

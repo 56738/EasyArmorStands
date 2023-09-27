@@ -6,6 +6,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ConfigurableEntityElement<E extends Entity> extends EntityElement<E> {
     @Override
-    @NotNull
-    PropertyRegistry getProperties();
+    @NotNull PropertyRegistry getProperties();
 }

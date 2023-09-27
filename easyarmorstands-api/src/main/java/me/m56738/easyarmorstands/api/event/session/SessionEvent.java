@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class SessionEvent extends PlayerEvent {
     private final Session session;
 
-    public SessionEvent(Session session) {
+    public SessionEvent(@NotNull Session session) {
         super(session.player());
         this.session = session;
     }

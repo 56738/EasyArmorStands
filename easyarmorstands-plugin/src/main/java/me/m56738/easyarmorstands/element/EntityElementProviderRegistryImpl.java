@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.MetadataValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,7 +22,7 @@ public class EntityElementProviderRegistryImpl implements EntityElementProviderR
     }
 
     @Override
-    public void register(EntityElementProvider provider) {
+    public void register(@NotNull EntityElementProvider provider) {
         providers.get(provider.getPriority()).add(provider);
     }
 

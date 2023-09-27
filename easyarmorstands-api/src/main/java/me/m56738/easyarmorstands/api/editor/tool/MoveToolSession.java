@@ -10,7 +10,7 @@ public interface MoveToolSession extends ToolSession {
     void setChange(@NotNull Vector3dc change);
 
     @Contract(pure = true)
-    void snapChange(Vector3d change, @NotNull Snapper context);
+    void snapChange(@NotNull Vector3d change, @NotNull Snapper context);
 
     @Contract(pure = true)
     @NotNull Vector3dc getPosition();

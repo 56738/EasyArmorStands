@@ -5,27 +5,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerDestroyElementEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final Element element;
     private boolean cancelled;
 
-    public PlayerDestroyElementEvent(Player who, Element element) {
+    public PlayerDestroyElementEvent(@NotNull Player who, @NotNull Element element) {
         super(who);
         this.element = element;
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlerList;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlerList;
     }
 
-    public Element getElement() {
+    public @NotNull Element getElement() {
         return element;
     }
 

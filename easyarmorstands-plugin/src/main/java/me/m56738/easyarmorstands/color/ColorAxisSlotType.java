@@ -17,7 +17,7 @@ public class ColorAxisSlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         return new ColorAxisSlotFactory(
                 node.node("axis").get(ColorAxis.class),
                 node.node("item").get(ItemTemplate.class));

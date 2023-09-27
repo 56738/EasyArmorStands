@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.color;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -19,7 +20,7 @@ public class ColorIndicatorSlot implements ColorSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         click.close();
     }
 }

@@ -18,22 +18,22 @@ public class PlayerEditElementEvent extends PlayerEvent implements Cancellable {
     private final EditableElement element;
     private boolean cancelled;
 
-    public PlayerEditElementEvent(Player player, EditableElement element) {
+    public PlayerEditElementEvent(@NotNull Player player, @NotNull EditableElement element) {
         super(player);
         this.element = element;
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
+        return handlerList;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
         return handlerList;
     }
 
     public @NotNull Element getElement() {
         return element;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
     }
 
     @Override

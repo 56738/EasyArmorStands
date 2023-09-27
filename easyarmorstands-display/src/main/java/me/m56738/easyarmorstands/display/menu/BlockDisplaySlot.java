@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.property.button.PropertyButton;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockDisplaySlot extends PropertyButton<BlockData> {
     public BlockDisplaySlot(Property<BlockData> property, PropertyContainer container, ItemTemplate item) {
@@ -37,6 +38,6 @@ public class BlockDisplaySlot extends PropertyButton<BlockData> {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
     }
 }

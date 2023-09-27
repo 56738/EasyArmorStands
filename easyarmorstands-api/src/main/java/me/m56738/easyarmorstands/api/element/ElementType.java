@@ -4,14 +4,19 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ElementType {
-    Element createElement(PropertyContainer properties);
+    @Nullable Element createElement(@NotNull PropertyContainer properties);
 
-    default void applyDefaultProperties(PropertyMap properties) {
+    default void applyDefaultProperties(@NotNull PropertyMap properties) {
     }
 
-    Component getDisplayName();
+    @Contract(pure = true)
+    @NotNull Component getDisplayName();
 
-    boolean canSpawn(Player player);
+    @Contract(pure = true)
+    boolean canSpawn(@NotNull Player player);
 }

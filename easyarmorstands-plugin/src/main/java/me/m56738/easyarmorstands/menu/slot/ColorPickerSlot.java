@@ -43,15 +43,17 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         ItemStack item = getItemTemplate().render(locale, resolver);
         if (active) {
             ItemMeta meta = item.getItemMeta();
-            LeatherArmorMeta armorMeta = (LeatherArmorMeta) meta;
-            armorMeta.setColor(Color.YELLOW);
-            item.setItemMeta(meta);
+            if (meta != null) {
+                LeatherArmorMeta armorMeta = (LeatherArmorMeta) meta;
+                armorMeta.setColor(Color.YELLOW);
+                item.setItemMeta(meta);
+            }
         }
         return item;
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         if (active) {
             active = false;
             click.updateItem();

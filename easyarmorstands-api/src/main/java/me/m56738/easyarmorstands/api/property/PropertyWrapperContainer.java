@@ -10,13 +10,13 @@ import java.util.function.Consumer;
 public abstract class PropertyWrapperContainer implements PropertyContainer {
     private final PropertyContainer container;
 
-    protected PropertyWrapperContainer(PropertyContainer container) {
+    protected PropertyWrapperContainer(@NotNull PropertyContainer container) {
         this.container = container;
     }
 
-    protected abstract <T> Property<T> wrap(Property<T> property);
+    protected abstract <T> @NotNull Property<T> wrap(@NotNull Property<T> property);
 
-    private <T> Property<T> wrapOrNull(Property<T> property) {
+    private <T> @Nullable Property<T> wrapOrNull(@Nullable Property<T> property) {
         if (property != null) {
             return wrap(property);
         } else {
@@ -25,7 +25,7 @@ public abstract class PropertyWrapperContainer implements PropertyContainer {
     }
 
     @Override
-    public void forEach(@NotNull Consumer<Property<?>> consumer) {
+    public void forEach(@NotNull Consumer<@NotNull Property<?>> consumer) {
         container.forEach(p -> consumer.accept(wrap(p)));
     }
 

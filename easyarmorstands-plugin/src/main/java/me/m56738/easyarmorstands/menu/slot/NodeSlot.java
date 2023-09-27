@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -32,7 +33,7 @@ public class NodeSlot implements MenuSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         if (click.isLeftClick()) {
             session.pushNode(nodeFactory.createNode());
             click.close();

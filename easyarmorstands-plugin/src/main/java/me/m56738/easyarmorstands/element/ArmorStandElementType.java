@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
     public ArmorStandElementType() {
@@ -16,7 +17,7 @@ public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
     }
 
     @Override
-    public void applyDefaultProperties(PropertyMap properties) {
+    public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         properties.put(ArmorStandPropertyTypes.GRAVITY, false);
     }

@@ -19,7 +19,7 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
     private final T newValue;
     private boolean cancelled;
 
-    public PlayerEditPropertyEvent(Player player, Element element, Property<T> property, T oldValue, T newValue) {
+    public PlayerEditPropertyEvent(@NotNull Player player, @NotNull Element element, @NotNull Property<T> property, T oldValue, T newValue) {
         super(player);
         this.element = element;
         this.property = property;
@@ -27,11 +27,16 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
         this.newValue = newValue;
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlerList;
     }
 
-    public Element getElement() {
+    @Override
+    public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public @NotNull Element getElement() {
         return element;
     }
 
@@ -39,17 +44,12 @@ public class PlayerEditPropertyEvent<T> extends PlayerEvent implements Cancellab
         return property;
     }
 
-    public @NotNull T getOldValue() {
+    public T getOldValue() {
         return oldValue;
     }
 
-    public @NotNull T getNewValue() {
+    public T getNewValue() {
         return newValue;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
     }
 
     @Override

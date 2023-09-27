@@ -17,7 +17,7 @@ public class ColorPickerSlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         ConfigurationNode itemNode = node.node("item");
         ConfigurationNode activeItemNode = node.node("active-item");
         activeItemNode.mergeFrom(itemNode);

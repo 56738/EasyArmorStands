@@ -98,7 +98,7 @@ public class DisplayBoxMoveTool implements MoveTool {
         }
 
         @Override
-        public void snapChange(Vector3d change, @NotNull Snapper context) {
+        public void snapChange(@NotNull Vector3d change, @NotNull Snapper context) {
             change.add(originalBoxPosition);
             context.snapPosition(change);
             change.sub(originalBoxPosition);

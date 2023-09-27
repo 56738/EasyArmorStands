@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
@@ -222,11 +224,11 @@ public class Util {
                 .build();
     }
 
-    public static ItemStack getEmptyItem() {
+    public static @NotNull ItemStack getEmptyItem() {
         return new ItemStack(Material.AIR, 0);
     }
 
-    public static ItemStack wrapItem(ItemStack item) {
+    public static @NotNull ItemStack wrapItem(@Nullable ItemStack item) {
         if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) {
             return getEmptyItem();
         }

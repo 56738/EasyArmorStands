@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorAxisChangeSlot extends ColorAxisSlot {
     private final ColorPickerContext context;
@@ -23,7 +24,7 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
     }
 
     @Override
-    public void onClick(MenuClick click) {
+    public void onClick(@NotNull MenuClick click) {
         int change;
         if (click.isShiftClick()) {
             change = shiftChange;

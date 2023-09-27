@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 
@@ -14,37 +15,37 @@ import java.util.Locale;
 
 @ApiStatus.NonExtendable
 public interface MenuClick extends ForwardingAudience.Single {
-    Menu menu();
+    @NotNull Menu menu();
 
-    MenuSlot slot();
+    @Nullable MenuSlot slot();
 
     int index();
 
-    Player player();
+    @NotNull Player player();
 
     @Nullable Session session();
 
-    Matrix4dc eyeMatrix();
+    @NotNull Matrix4dc eyeMatrix();
 
-    default Locale locale() {
+    default @NotNull Locale locale() {
         return getOrDefault(Identity.LOCALE, Locale.US);
     }
 
-    ItemStack cursor();
+    @NotNull ItemStack cursor();
 
     void allow();
 
-    void open(Inventory inventory);
+    void open(@NotNull Inventory inventory);
 
     void close();
 
     void updateItem();
 
-    void updateItem(MenuSlot slot);
+    void updateItem(@NotNull MenuSlot slot);
 
-    void queueTask(Runnable task);
+    void queueTask(@NotNull Runnable task);
 
-    void interceptNextClick(MenuClickInterceptor interceptor);
+    void interceptNextClick(@NotNull MenuClickInterceptor interceptor);
 
     boolean isLeftClick();
 

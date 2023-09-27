@@ -17,7 +17,7 @@ public class PropertySlotType implements MenuSlotType {
     }
 
     @Override
-    public @NotNull MenuSlotFactory load(ConfigurationNode node) throws SerializationException {
+    public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
         PropertyType<?> type = node.node("property").get(PropertyType.type());
         return new PropertySlotFactory<>(type);
     }
