@@ -217,12 +217,12 @@ public final class SessionImpl implements Session {
         Component pendingTitle = context.getTitle();
         Component pendingSubtitle = context.getSubtitle();
 
-        boolean resendOverlay = overlayTicks >= 20;
+        boolean resendOverlay = overlayTicks <= 0;
         if (resendOverlay) {
-            overlayTicks = 0;
+            overlayTicks = 20;
             audience.sendTitlePart(TitlePart.TIMES, titleTimes);
         }
-        overlayTicks++;
+        overlayTicks--;
 
         if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
             currentTitle = pendingTitle;
