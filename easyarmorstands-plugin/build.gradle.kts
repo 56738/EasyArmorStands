@@ -3,10 +3,6 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-configurations {
-    register("addon")
-}
-
 dependencies {
     compileOnly(libs.bukkit) {
         exclude("org.yaml", "snakeyaml")
@@ -25,12 +21,12 @@ dependencies {
     }
     api(libs.configurate.yaml)
     api(libs.joml)
-    "addon"(project(":easyarmorstands-display"))
-    "addon"(project(":easyarmorstands-headdatabase"))
-    "addon"(project(":easyarmorstands-region:easyarmorstands-plotsquared"))
-    "addon"(project(":easyarmorstands-region:easyarmorstands-worldguard-v6"))
-    "addon"(project(":easyarmorstands-region:easyarmorstands-worldguard-v7"))
-    "addon"(project(":easyarmorstands-traincarts"))
+    runtimeOnly(project(":easyarmorstands-display"))
+    runtimeOnly(project(":easyarmorstands-headdatabase"))
+    runtimeOnly(project(":easyarmorstands-region:easyarmorstands-plotsquared"))
+    runtimeOnly(project(":easyarmorstands-region:easyarmorstands-worldguard-v6"))
+    runtimeOnly(project(":easyarmorstands-region:easyarmorstands-worldguard-v7"))
+    runtimeOnly(project(":easyarmorstands-traincarts"))
 }
 
 tasks {
@@ -58,7 +54,6 @@ tasks {
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }
-        configurations += project.configurations.getByName("addon")
         mergeServiceFiles()
     }
 }
