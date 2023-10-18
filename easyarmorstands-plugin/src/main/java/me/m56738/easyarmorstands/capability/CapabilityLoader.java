@@ -78,6 +78,7 @@ public class CapabilityLoader {
         private final EnumMap<Priority, Set<CapabilityProvider<?>>> providers = new EnumMap<>(Priority.class);
         private CapabilityProvider<?> provider;
         private Object instance;
+        private int attempts;
 
         private Entry(Class<?> type) {
             this.type = type;
@@ -106,14 +107,20 @@ public class CapabilityLoader {
             return instance;
         }
 
+        public int getAttempts() {
+            return attempts;
+        }
+
         public synchronized void add(CapabilityProvider<?> provider) {
             providers.get(provider.getPriority()).add(provider);
         }
 
         public synchronized void load(Plugin plugin) {
             instance = null;
+            attempts = 0;
             for (Priority priority : Priority.values()) {
                 for (CapabilityProvider<?> provider : providers.get(priority)) {
+                    attempts++;
                     try {
                         if (provider.isSupported()) {
                             this.provider = provider;

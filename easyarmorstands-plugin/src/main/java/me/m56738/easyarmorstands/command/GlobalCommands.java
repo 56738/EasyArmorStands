@@ -121,6 +121,7 @@ public class GlobalCommands {
         sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
         for (CapabilityLoader.Entry capability : loader.getCapabilities()) {
             Object instance = capability.getInstance();
+            int attempts = capability.getAttempts();
             Component value;
             if (instance != null) {
                 String packageName = capability.getType().getPackage().getName();
@@ -128,7 +129,13 @@ public class GlobalCommands {
                 if (providerName.startsWith(packageName)) {
                     providerName = providerName.substring(packageName.length());
                 }
-                value = Component.text(providerName, NamedTextColor.GREEN)
+                NamedTextColor color;
+                if (attempts > 1) {
+                    color = NamedTextColor.YELLOW;
+                } else {
+                    color = NamedTextColor.GREEN;
+                }
+                value = Component.text(providerName, color)
                         .hoverEvent(Component.text(instance.getClass().getName()));
             } else {
                 value = Component.text("Not supported", NamedTextColor.RED);
