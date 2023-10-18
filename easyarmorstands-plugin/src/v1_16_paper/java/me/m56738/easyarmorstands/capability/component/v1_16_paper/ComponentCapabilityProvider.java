@@ -37,7 +37,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             Entity.class.getMethod("customName", mapper.getComponentClass());
             ItemMeta.class.getMethod("displayName", mapper.getComponentClass());
             ItemMeta.class.getMethod("lore", List.class);
-            Bukkit.class.getMethod("createInventory", InventoryHolder.class, int.class, Component.class);
+            Bukkit.class.getMethod("createInventory", InventoryHolder.class, int.class, mapper.getComponentClass());
             return true;
         } catch (Throwable e) {
             return false;
@@ -69,6 +69,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
         private final MethodHandle setDisplayName;
         private final MethodHandle setLore;
         private final MethodHandle getItemDisplayName;
+        private final MethodHandle createInventory;
 
         public ComponentCapabilityImpl() throws NoSuchMethodException, IllegalAccessException {
             MethodHandles.Lookup lookup = MethodHandles.lookup();
@@ -83,6 +84,8 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
                     MethodType.methodType(void.class, List.class));
             getItemDisplayName = lookup.findVirtual(ItemStack.class, "displayName",
                     MethodType.methodType(mapper.getComponentClass()));
+            createInventory = lookup.findStatic(Bukkit.class, "createInventory",
+                    MethodType.methodType(Inventory.class, InventoryHolder.class, int.class, mapper.getComponentClass()));
         }
 
         private static @Nullable Component style(@Nullable Component component) {
@@ -143,7 +146,12 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
 
         @Override
         public @NotNull Inventory createInventory(InventoryHolder holder, int size, Component title) {
-            return Bukkit.createInventory(holder, size, title);
+            Object nativeTitle = mapper.convertToNative(title);
+            try {
+                return (Inventory) createInventory.invoke(holder, size, nativeTitle);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
