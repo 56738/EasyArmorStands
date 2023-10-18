@@ -18,7 +18,7 @@ abstract class ElementPresenceAction implements Action {
     private final PropertyContainer properties;
     private ElementReference reference;
 
-    public ElementPresenceAction(Element element) {
+    public ElementPresenceAction(@NotNull Element element) {
         this.type = element.getType();
         this.properties = new PropertyMap(element.getProperties());
         this.reference = element.getReference();

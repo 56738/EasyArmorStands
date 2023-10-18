@@ -4,9 +4,10 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class ElementCreateAction extends ElementPresenceAction {
-    public ElementCreateAction(Element element) {
+    public ElementCreateAction(@NotNull Element element) {
         super(element);
     }
 

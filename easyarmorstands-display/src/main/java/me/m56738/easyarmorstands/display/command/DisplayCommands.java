@@ -647,6 +647,10 @@ public class DisplayCommands {
         }
 
         SimpleEntityElement<ItemDisplay> element = type.createElement(properties);
+        if (element == null) {
+            return;
+        }
+
         actions.add(new ElementCreateAction(element));
         elements.add(element);
     }

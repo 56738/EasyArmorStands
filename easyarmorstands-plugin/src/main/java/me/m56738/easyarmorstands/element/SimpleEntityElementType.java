@@ -59,6 +59,9 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
         E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityClass, configurator);
+        if (entity == null) {
+            return null;
+        }
         SimpleEntityElement<E> element = configurator.getElement();
         if (element != null) {
             entity.teleport(location);
