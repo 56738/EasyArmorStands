@@ -40,9 +40,6 @@ public class ColorPickerContextImpl implements ColorPickerContext {
     @Override
     public @NotNull Color getColor() {
         ItemStack item = property.getValue();
-        if (item == null) {
-            return Color.WHITE;
-        }
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return Color.WHITE;

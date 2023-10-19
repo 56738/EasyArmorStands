@@ -117,9 +117,6 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
 
     private boolean isApplicable(ItemPropertySlot slot) {
         ItemStack item = slot.getProperty().getValue();
-        if (item == null) {
-            return false;
-        }
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return false;

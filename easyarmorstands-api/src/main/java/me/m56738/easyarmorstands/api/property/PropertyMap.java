@@ -56,7 +56,7 @@ public final class PropertyMap implements PropertyContainer {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> boolean put(@NotNull PropertyType<T> type, T value) {
+    public <T> boolean put(@NotNull PropertyType<T> type, @NotNull T value) {
         return properties.computeIfAbsent(type, PropertyImpl::new).setValue(value);
     }
 

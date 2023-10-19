@@ -7,6 +7,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     public TextDisplayElementType() {
         super(EntityType.TEXT_DISPLAY, TextDisplay.class);
@@ -16,6 +18,6 @@ public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
     public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         properties.put(TextDisplayPropertyTypes.TEXT, Component.text("Text"));
-        properties.put(TextDisplayPropertyTypes.BACKGROUND, null);
+        properties.put(TextDisplayPropertyTypes.BACKGROUND, Optional.empty());
     }
 }

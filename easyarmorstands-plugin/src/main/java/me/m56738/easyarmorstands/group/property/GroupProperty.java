@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GroupProperty<T> implements Property<T> {
     private final PropertyType<T> type;
@@ -48,7 +49,7 @@ public class GroupProperty<T> implements Property<T> {
                 bestVotes = n;
             }
         }
-        return best;
+        return Objects.requireNonNull(best);
     }
 
     @Override

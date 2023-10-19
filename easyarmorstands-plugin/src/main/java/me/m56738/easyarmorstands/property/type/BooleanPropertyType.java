@@ -9,7 +9,6 @@ import org.spongepowered.configurate.serialize.SerializationException;
 public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     private Component enabled;
     private Component disabled;
-    private Component none;
 
     public BooleanPropertyType(@NotNull Key key) {
         super(key, Boolean.class);
@@ -20,14 +19,11 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
         super.load(config);
         enabled = config.node("value", "enabled").get(Component.class);
         disabled = config.node("value", "disabled").get(Component.class);
-        none = config.node("value", "none").get(Component.class);
     }
 
     @Override
     public @NotNull Component getValueComponent(@NotNull Boolean value) {
-        if (value == null) {
-            return none;
-        } else if (value) {
+        if (value) {
             return enabled;
         } else {
             return disabled;
