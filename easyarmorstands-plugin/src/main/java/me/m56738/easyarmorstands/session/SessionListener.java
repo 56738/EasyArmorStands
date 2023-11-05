@@ -21,8 +21,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -131,18 +129,6 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
-    public void onLeftClick(PlayerAnimationEvent event) {
-        if (event.getAnimationType() != PlayerAnimationType.ARM_SWING) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-        if (handleLeftClick(player)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onLeftClick(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
         if (!(attacker instanceof Player)) {
@@ -180,7 +166,7 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
-    public void onClick(InventoryCloseEvent event) {
+    public void onClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (!(player instanceof Player)) {
             return;
