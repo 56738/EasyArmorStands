@@ -7,6 +7,7 @@ bukkit = "1.8.8-R0.1-SNAPSHOT"
 cloud = "1.8.4"
 commodore = "2.2"
 configurate = "4.1.2"
+hangar-publish-plugin = "0.1.0"
 headdatabase-api = "1.3.1"
 joml = "1.10.5"
 shadow = "8.1.1"
@@ -37,3 +38,4 @@ worldguard-v7 = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref
 
 [plugins]
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish-plugin" }

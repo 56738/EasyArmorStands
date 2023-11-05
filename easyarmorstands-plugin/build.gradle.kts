@@ -1,6 +1,9 @@
+import io.papermc.hangarpublishplugin.model.Platforms
+
 plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.shadow)
+    alias(libs.plugins.hangar.publish)
 }
 
 dependencies {
@@ -105,3 +108,41 @@ registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 registerVersion("v1_20_2", "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
+
+hangarPublish {
+    val versionString = project.version.toString()
+    if (versionString.endsWith("-SNAPSHOT")) {
+        val build = System.getenv("GITHUB_RUN_NUMBER")
+
+        publications.register("plugin") {
+            id.set("EasyArmorStands")
+            apiKey.set(System.getenv("HANGAR_API_TOKEN"))
+            version.set("$versionString+$build")
+            channel.set("Snapshot")
+            platforms {
+                register(Platforms.PAPER) {
+                    jar.set(tasks.shadowJar.flatMap { it.archiveFile })
+                    platformVersions.set(
+                        property("minecraftVersion").toString()
+                            .split(",")
+                            .map { it.trim() }
+                    )
+                    dependencies {
+                        url("HeadDatabase", "https://www.spigotmc.org/resources/head-database.14280/") {
+                            required.set(false)
+                        }
+                        url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
+                            required.set(false)
+                        }
+                        url("WorldGuard", "https://enginehub.org/worldguard") {
+                            required.set(false)
+                        }
+                        url("TrainCarts", "https://www.spigotmc.org/resources/traincarts.39592/") {
+                            required.set(false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
