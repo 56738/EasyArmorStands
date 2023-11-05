@@ -19,12 +19,16 @@ public class PlotSquaredPrivilegeChecker implements RegionPrivilegeChecker {
     public boolean isAllowed(Player player, Location location) {
         com.plotsquared.core.location.Location plotLocation = BukkitUtil.adapt(location);
         PlotArea area = api.getPlotSquared().getPlotAreaManager().getPlotArea(plotLocation);
-        if (area != null) {
-            Plot plot = area.getPlot(plotLocation);
-            if (plot != null) {
-                return plot.isAdded(BukkitUtil.adapt(player).getUUID());
-            }
+        if (area == null) {
+            // Not in a plot area
+            return true;
         }
-        return false;
+        Plot plot = area.getPlot(plotLocation);
+        if (plot == null) {
+            // In a plot area, but not in a plot
+            return false;
+        }
+        // In a plot
+        return plot.isAdded(BukkitUtil.adapt(player).getUUID());
     }
 }
