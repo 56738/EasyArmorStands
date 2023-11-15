@@ -17,7 +17,7 @@ public class EntityTypeCapabilityProvider implements CapabilityProvider<EntityTy
         try {
             Class<?> type = Class.forName(String.join(".", "net", "kyori", "adventure", "translation", "Translatable"));
             MethodHandles.lookup().findVirtual(type, "translationKey", MethodType.methodType(String.class));
-            return true;
+            return type.isAssignableFrom(EntityType.class);
         } catch (Throwable e) {
             return false;
         }
