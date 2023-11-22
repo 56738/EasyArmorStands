@@ -54,7 +54,7 @@ public abstract class MenuNode implements Node {
             }
             if (button != null) {
                 button.update();
-                button.updatePreview(false);
+                button.updatePreview(menuButton.isAlwaysFocused());
                 button.showPreview();
             }
         }
@@ -64,9 +64,11 @@ public abstract class MenuNode implements Node {
     public void onEnter(@NotNull EnterContext context) {
         targetButton = null;
         visible = true;
-        for (Button button : buttons.values()) {
+        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
+            MenuButton menuButton = entry.getKey();
+            Button button = entry.getValue();
             button.update();
-            button.updatePreview(false);
+            button.updatePreview(menuButton.isAlwaysFocused());
             button.showPreview();
         }
     }
@@ -114,7 +116,7 @@ public abstract class MenuNode implements Node {
         for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
             MenuButton menuButton = entry.getKey();
             Button button = entry.getValue();
-            button.updatePreview(button == bestButton || menuButton.isHighlighted());
+            button.updatePreview(button == bestButton || menuButton.isAlwaysFocused());
         }
         Component targetName;
         if (bestButton != null) {

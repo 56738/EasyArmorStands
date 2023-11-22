@@ -3,12 +3,13 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -74,7 +75,9 @@ public class SpawnSlot implements MenuSlot {
             if (session != null) {
                 ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
                 if (selectionNode != null) {
-                    selectionNode.selectElement(element);
+                    if (element instanceof SelectableElement) {
+                        selectionNode.selectElement((SelectableElement) element);
+                    }
                 }
             }
 

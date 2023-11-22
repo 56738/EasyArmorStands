@@ -9,7 +9,9 @@ import me.m56738.easyarmorstands.api.editor.button.AxisScaleButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
@@ -25,6 +27,7 @@ import me.m56738.easyarmorstands.editor.button.AxisMoveButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.AxisRotateButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.AxisScaleButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.MoveButtonBuilderImpl;
+import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -68,6 +71,7 @@ public final class SessionImpl implements Session {
     private final Set<Particle> particles = new HashSet<>();
     private final ParticleProvider particleProvider = new ParticleProviderImpl(this);
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
+    private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private int clickTicks = 5;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
@@ -352,6 +356,11 @@ public final class SessionImpl implements Session {
     }
 
     @Override
+    public @NotNull NodeProvider nodeProvider() {
+        return nodeProvider;
+    }
+
+    @Override
     public @NotNull SessionSnapper snapper() {
         return snapper;
     }
@@ -490,6 +499,19 @@ public final class SessionImpl implements Session {
         @Override
         public @NotNull MoveButtonBuilder move() {
             return new MoveButtonBuilderImpl(session);
+        }
+    }
+
+    private static class NodeProviderImpl implements NodeProvider {
+        private final Session session;
+
+        private NodeProviderImpl(Session session) {
+            this.session = session;
+        }
+
+        @Override
+        public @NotNull ElementSelectionNode elementSelectionNode() {
+            return new ElementSelectionNodeImpl(session);
         }
     }
 }

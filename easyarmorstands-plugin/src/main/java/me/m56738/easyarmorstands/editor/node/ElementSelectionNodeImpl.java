@@ -8,9 +8,9 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
@@ -27,9 +27,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ElementSelectionNode extends MenuNode {
+public class ElementSelectionNodeImpl extends MenuNode implements ElementSelectionNode {
     private final Session session;
     private final Map<ElementDiscoveryEntry, ElementEntry> entries = new HashMap<>();
     private final Component name;
@@ -47,22 +49,35 @@ public class ElementSelectionNode extends MenuNode {
     private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
     private double range = 16;
 
-    public ElementSelectionNode(Session session) {
+    public ElementSelectionNodeImpl(Session session) {
         super(session);
         this.session = session;
         this.name = Message.component("easyarmorstands.node.select-entity");
     }
 
+    @Override
     public double getRange() {
         return range;
     }
 
+    @Override
     public void setRange(double range) {
         this.range = range;
     }
 
-    public void addSource(ElementDiscoverySource source) {
+    @Override
+    public void addSource(@NotNull ElementDiscoverySource source) {
         sources.add(source);
+    }
+
+    @Override
+    public void removeSource(@NotNull ElementDiscoverySource source) {
+        sources.remove(source);
+    }
+
+    @Override
+    public @Unmodifiable @NotNull Iterable<ElementDiscoverySource> getSources() {
+        return Collections.unmodifiableSet(new HashSet<>(sources));
     }
 
     private BoundingBox getDiscoveryBox(EyeRay eyeRay) {
@@ -204,24 +219,21 @@ public class ElementSelectionNode extends MenuNode {
         return true;
     }
 
-    public boolean selectElement(Element element) {
-        if (!(element instanceof SelectableElement)) {
-            return false;
-        }
-
-        SelectableElement selectableElement = (SelectableElement) element;
+    @Override
+    public boolean selectElement(@NotNull SelectableElement element) {
         ChangeContext context = new EasPlayer(session.player());
-        if (!context.canEditElement(selectableElement)) {
+        if (!context.canEditElement(element)) {
             return false;
         }
 
-        Node node = selectableElement.createNode(session);
+        Node node = element.createNode(session);
         session.returnToNode(this);
         session.pushNode(node);
         return true;
     }
 
-    public boolean selectElements(List<? extends SelectableElement> elements) {
+    @Override
+    public boolean selectElements(@NotNull List<? extends SelectableElement> elements) {
         if (elements.size() == 1) {
             return selectElement(elements.get(0));
         }
@@ -294,7 +306,7 @@ public class ElementSelectionNode extends MenuNode {
         }
 
         @Override
-        public boolean isHighlighted() {
+        public boolean isAlwaysFocused() {
             return groupMembers.containsKey(entry);
         }
     }

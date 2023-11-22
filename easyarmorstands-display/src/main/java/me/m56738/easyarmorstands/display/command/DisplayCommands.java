@@ -27,7 +27,7 @@ import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
