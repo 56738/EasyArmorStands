@@ -43,6 +43,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
 import org.joml.Vector2dc;
@@ -100,6 +101,15 @@ public final class SessionImpl implements Session {
             }
         }
         return null;
+    }
+
+    @Override
+    public double getScale(Vector3dc position) {
+        Vector3d eyePosition = Util.toVector3d(player.getEyeLocation());
+        double minDistance = 5;
+        double maxDistance = getRange();
+        double distance = Math.clamp(minDistance, maxDistance, eyePosition.distance(position));
+        return distance / minDistance;
     }
 
     @Override
@@ -261,7 +271,7 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return 10;
+        return 64;
     }
 
     public double getLookThreshold() {

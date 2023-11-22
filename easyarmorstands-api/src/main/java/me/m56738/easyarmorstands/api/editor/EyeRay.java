@@ -65,9 +65,14 @@ public interface EyeRay {
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position) {
+        return intersectPoint(position, 1);
+    }
+
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position, double scale) {
         Vector3dc origin = origin();
         Vector3dc target = target();
-        double threshold = threshold();
+        double threshold = scale * threshold();
         Vector3d closestOnEyeRay = Intersectiond.findClosestPointOnLineSegment(
                 origin.x(), origin.y(), origin.z(),
                 target.x(), target.y(), target.z(),
@@ -82,6 +87,11 @@ public interface EyeRay {
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end) {
+        return intersectLine(start, end, 1);
+    }
+
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end, double scale) {
         Vector3dc eyes = origin();
         Vector3dc target = target();
         Vector3d closestOnLookRay = new Vector3d();
@@ -95,7 +105,7 @@ public interface EyeRay {
                 closestOnLine
         );
 
-        double threshold = threshold();
+        double threshold = scale * threshold();
         if (distanceSquared < threshold * threshold) {
             return closestOnLine;
         } else {
@@ -136,8 +146,13 @@ public interface EyeRay {
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius) {
+        return intersectCircle(point, normal, radius, 1);
+    }
+
+    @Contract(pure = true)
+    default @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius, double scale) {
         Vector3dc intersection = intersectPlane(point, normal);
-        double threshold = threshold();
+        double threshold = scale * threshold();
         if (intersection != null) {
             // Looking at the plane
             double d = intersection.distanceSquared(point);

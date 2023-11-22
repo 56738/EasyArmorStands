@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.editor.node.AxisRotateToolNode;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
@@ -29,13 +30,13 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
     private final double length;
     private final Component name;
     private final ParticleColor color;
+    private double scale;
     private Axis axis;
 
     public AxisRotateButtonImpl(Session session, AxisRotateTool tool, double radius, double length, Component name, ParticleColor color) {
         this.session = session;
         this.tool = tool;
         this.particle = session.particleProvider().createCircle();
-        this.particle.setRadius(radius);
         this.radius = radius;
         this.length = length;
         this.name = name;
@@ -46,13 +47,14 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
     public void update() {
         position.set(tool.getPosition());
         rotation.set(tool.getRotation());
+        scale = session.getScale(position);
         axis = tool.getAxis();
         axis.getDirection().rotate(rotation, direction);
     }
 
     @Override
     public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
-        Vector3dc intersection = ray.intersectCircle(position, direction, radius);
+        Vector3dc intersection = ray.intersectCircle(position, direction, radius * scale, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
         }
@@ -64,6 +66,8 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
         particle.setRotation(rotation);
         particle.setAxis(axis);
         particle.setColor(focused ? ParticleColor.YELLOW : color);
+        particle.setRadius(radius * scale);
+        particle.setWidth(Util.LINE_WIDTH * scale);
     }
 
     @Override

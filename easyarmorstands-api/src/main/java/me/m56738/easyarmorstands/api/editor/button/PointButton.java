@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.Objects;
@@ -18,6 +19,8 @@ public final class PointButton implements Button {
     private final Session session;
     private final PositionProvider positionProvider;
     private final @Nullable RotationProvider rotationProvider;
+    private final Vector3d position = new Vector3d();
+    private double scale;
     private ParticleColor color = ParticleColor.WHITE;
     private int priority = 0;
 
@@ -46,11 +49,13 @@ public final class PointButton implements Button {
 
     @Override
     public void update() {
+        position.set(positionProvider.getPosition());
+        scale = session.getScale(position);
     }
 
     @Override
     public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
-        Vector3dc intersection = ray.intersectPoint(positionProvider.getPosition());
+        Vector3dc intersection = ray.intersectPoint(position, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection, priority));
         }
@@ -58,7 +63,8 @@ public final class PointButton implements Button {
 
     @Override
     public void updatePreview(boolean focused) {
-        particle.setPosition(positionProvider.getPosition());
+        particle.setPosition(position);
+        particle.setSize(scale / 16);
         if (rotationProvider != null) {
             particle.setRotation(rotationProvider.getRotation());
             particle.setBillboard(false);

@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.editor.tool.AxisTool;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
@@ -28,6 +29,7 @@ public abstract class AxisToolButton implements NodeFactoryButton {
     private final double length;
     private final Component name;
     private final ParticleColor color;
+    private double scale;
     private Axis axis;
 
     public AxisToolButton(Session session, AxisTool<?> tool, double length, Component name, ParticleColor color) {
@@ -36,7 +38,6 @@ public abstract class AxisToolButton implements NodeFactoryButton {
         this.tool = tool;
         this.length = length;
         this.particle = session.particleProvider().createLine();
-        this.particle.setLength(length);
         this.color = color;
     }
 
@@ -46,13 +47,14 @@ public abstract class AxisToolButton implements NodeFactoryButton {
         rotation.set(tool.getRotation());
         axis = tool.getAxis();
         axis.getDirection().rotate(rotation, direction);
-        position.fma(-length / 2, direction, negativeEnd);
-        position.fma(length / 2, direction, positiveEnd);
+        scale = session.getScale(position);
+        position.fma(-length / 2 * scale, direction, negativeEnd);
+        position.fma(length / 2 * scale, direction, positiveEnd);
     }
 
     @Override
     public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
-        Vector3dc intersection = ray.intersectLine(negativeEnd, positiveEnd);
+        Vector3dc intersection = ray.intersectLine(negativeEnd, positiveEnd, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
         }
@@ -64,6 +66,8 @@ public abstract class AxisToolButton implements NodeFactoryButton {
         particle.setRotation(rotation);
         particle.setAxis(axis);
         particle.setColor(focused ? ParticleColor.YELLOW : color);
+        particle.setLength(length * scale);
+        particle.setWidth(Util.LINE_WIDTH * scale);
     }
 
     @Override

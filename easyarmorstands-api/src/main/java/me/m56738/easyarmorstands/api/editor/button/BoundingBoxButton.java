@@ -25,6 +25,7 @@ public final class BoundingBoxButton implements Button {
     private final Quaterniond rotation = new Quaterniond();
     private final PointParticle pointParticle;
     private final BoundingBoxParticle boxParticle;
+    private double scale;
     private BoundingBox box;
     private boolean previewVisible;
     private boolean boxVisible;
@@ -44,11 +45,12 @@ public final class BoundingBoxButton implements Button {
         box = BoundingBox.of(boxProvider.getBoundingBox());
         position.set(positionProvider.getPosition());
         rotation.set(rotationProvider.getRotation());
+        scale = session.getScale(position);
     }
 
     @Override
     public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
-        Vector3dc intersection = ray.intersectPoint(position);
+        Vector3dc intersection = ray.intersectPoint(position, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
         }
@@ -63,6 +65,7 @@ public final class BoundingBoxButton implements Button {
         pointParticle.setPosition(position);
         pointParticle.setRotation(rotation);
         pointParticle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
+        pointParticle.setSize(scale / 16);
         boxParticle.setBoundingBox(box);
         boolean showBox = focused && !box.getMinPosition().equals(box.getMaxPosition());
         if (previewVisible && showBox != boxVisible) {

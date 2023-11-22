@@ -23,6 +23,8 @@ import org.joml.Vector3dc;
 public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     private final Session session;
     private final AxisRotateToolSession toolSession;
+    private final double radius;
+    private final double length;
     private final CircleParticle circleParticle;
     private final LineParticle axisParticle;
     private final LineParticle cursorLineParticle;
@@ -39,18 +41,23 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
         super(session, toolSession, name);
         this.session = session;
         this.toolSession = toolSession;
+        this.radius = radius;
+        this.length = length;
+        double scale = session.getScale(position);
         this.circleParticle = session.particleProvider().createCircle();
         this.circleParticle.setColor(color);
-        this.circleParticle.setRadius(radius);
+        this.circleParticle.setRadius(radius * scale);
         this.circleParticle.setCenter(position);
         this.circleParticle.setRotation(rotation);
         this.circleParticle.setAxis(axis);
+        this.circleParticle.setWidth(Util.LINE_WIDTH * scale);
         this.axisParticle = session.particleProvider().createLine();
         this.axisParticle.setColor(color);
-        this.axisParticle.setLength(length);
+        this.axisParticle.setLength(length * scale);
         this.axisParticle.setCenter(position);
         this.axisParticle.setRotation(rotation);
         this.axisParticle.setAxis(axis);
+        this.axisParticle.setWidth(Util.LINE_WIDTH * scale);
         this.cursorLineParticle = session.particleProvider().createLine();
         this.cursor = new Cursor2D(session);
         this.position = new Vector3d(position);
@@ -80,6 +87,13 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         cursor.update(context);
+
+        double scale = session.getScale(position);
+        circleParticle.setRadius(radius * scale);
+        circleParticle.setWidth(Util.LINE_WIDTH * scale);
+        axisParticle.setLength(length * scale);
+        axisParticle.setWidth(Util.LINE_WIDTH * scale);
+        cursorLineParticle.setWidth(Util.LINE_WIDTH * scale);
 
         if (!hasManualInput) {
             Vector3dc cursorPosition = cursor.get();

@@ -48,7 +48,6 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
         this.direction = axis.getDirection().rotate(rotation, new Vector3d());
         this.particle = session.particleProvider().createLine();
         this.particle.setColor(color);
-        this.particle.setLength(length);
         this.cursorLineParticle = session.particleProvider().createLine();
         this.cursor = new Cursor3D(session);
     }
@@ -62,11 +61,15 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
         initialCursor.set(context.cursorOrDefault(this::getDefaultCursor));
         cursor.start(context, initialCursor);
 
+        double scale = session.getScale(position);
         particle.setCenter(position);
         particle.setRotation(rotation);
         particle.setAxis(axis);
+        particle.setLength(length * scale);
+        particle.setWidth(Util.LINE_WIDTH * scale);
         initialOffset = EasMath.getOffsetAlongLine(position, direction, initialCursor);
         cursorLineParticle.setFromTo(position.fma(initialOffset, direction, temp), initialCursor);
+        cursorLineParticle.setWidth(Util.LINE_WIDTH * scale);
 
         session.addParticle(particle);
         session.addParticle(cursorLineParticle);
@@ -86,6 +89,8 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
     public void onUpdate(@NotNull UpdateContext context) {
         cursor.update(context);
 
+        double scale = session.getScale(EasMath.getClosestPointOnLine(position, direction, context.eyeRay().origin(), temp));
+
         if (!hasManualInput) {
             Vector3dc cursorPosition = cursor.get();
             double offset = EasMath.getOffsetAlongLine(position, direction, cursorPosition);
@@ -93,13 +98,15 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
             toolSession.setChange(change);
 
             double relativeOffset = offset - initialOffset;
-            double min = Math.min(0, relativeOffset) - length / 2;
-            double max = Math.max(0, relativeOffset) + length / 2;
+            double min = Math.min(0, relativeOffset) - length / 2 * scale;
+            double max = Math.max(0, relativeOffset) + length / 2 * scale;
+            particle.setCenter(position.fma(relativeOffset, direction, temp));
             particle.setLength(max - min);
-            particle.setOffset((max + min) / 2);
+            particle.setOffset(min - relativeOffset + (max - min) / 2);
             cursorLineParticle.setFromTo(EasMath.getClosestPointOnLine(position, direction, cursorPosition, temp), cursorPosition);
         }
-
+        particle.setWidth(Util.LINE_WIDTH * scale);
+        cursorLineParticle.setWidth(Util.LINE_WIDTH * scale);
         super.onUpdate(context);
     }
 

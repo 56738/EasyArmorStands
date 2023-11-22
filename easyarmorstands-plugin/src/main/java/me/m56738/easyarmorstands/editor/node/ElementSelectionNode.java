@@ -45,11 +45,20 @@ public class ElementSelectionNode extends MenuNode {
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
     private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
+    private double range = 16;
 
     public ElementSelectionNode(Session session) {
         super(session);
         this.session = session;
         this.name = Message.component("easyarmorstands.node.select-entity");
+    }
+
+    public double getRange() {
+        return range;
+    }
+
+    public void setRange(double range) {
+        this.range = range;
     }
 
     public void addSource(ElementDiscoverySource source) {
@@ -58,10 +67,10 @@ public class ElementSelectionNode extends MenuNode {
 
     private BoundingBox getDiscoveryBox(EyeRay eyeRay) {
         Vector3dc origin = eyeRay.origin();
-        Vector3dc size = new Vector3d(eyeRay.length());
+        Vector3dc halfSize = new Vector3d(range);
         return BoundingBox.of(
-                origin.sub(size, new Vector3d()),
-                origin.add(size, new Vector3d()));
+                origin.sub(halfSize, new Vector3d()),
+                origin.add(halfSize, new Vector3d()));
     }
 
     @Override

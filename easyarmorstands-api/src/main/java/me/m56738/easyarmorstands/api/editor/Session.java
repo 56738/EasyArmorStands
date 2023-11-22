@@ -40,6 +40,9 @@ public interface Session {
     @Contract(pure = true)
     <T extends Node> @Nullable T findNode(@NotNull Class<T> type);
 
+    @Contract(pure = true)
+    double getScale(Vector3dc position);
+
     void addParticle(@NotNull Particle particle);
 
     void removeParticle(@NotNull Particle particle);
