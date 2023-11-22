@@ -27,3 +27,5 @@ slots:
     type: easyarmorstands:property
     config:
       property: easyarmorstands:text_display/shadow
+  easyarmorstands:entity/glowing:
+    enabled: false

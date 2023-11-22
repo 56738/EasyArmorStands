@@ -22,7 +22,5 @@ slots:
     type: easyarmorstands:property
     config:
       property: easyarmorstands:display/billboard
-  easyarmorstands:entity/glowing:
-    enabled: false
   easyarmorstands:entity/custom_name:
     enabled: false
