@@ -47,7 +47,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
     private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
-    private double range = 16;
+    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionRange;
 
     public ElementSelectionNodeImpl(Session session) {
         super(session);

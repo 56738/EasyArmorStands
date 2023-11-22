@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.capability.particle.v1_19_4;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
 
@@ -28,10 +29,11 @@ public abstract class DisplayParticleImpl<T extends Display> extends ParticleImp
     protected void configure(T entity) {
         super.configure(entity);
         entity.setBrightness(new Display.Brightness(15, 0));
+        int interpolationTicks = EasyArmorStandsPlugin.getInstance().getConfiguration().interpolationTicks;
         if (setTeleportDuration != null) {
-            entity.setInterpolationDuration(1);
+            entity.setInterpolationDuration(interpolationTicks);
             try {
-                setTeleportDuration.invoke(entity, 1);
+                setTeleportDuration.invoke(entity, interpolationTicks);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

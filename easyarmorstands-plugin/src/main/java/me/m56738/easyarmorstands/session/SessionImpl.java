@@ -22,6 +22,7 @@ import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.editor.button.AxisMoveButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.AxisRotateButtonBuilderImpl;
@@ -109,9 +110,13 @@ public final class SessionImpl implements Session {
 
     @Override
     public double getScale(Vector3dc position) {
+        EasConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration();
         Vector3d eyePosition = Util.toVector3d(player.getEyeLocation());
-        double minDistance = 5;
-        double maxDistance = getRange();
+        double minDistance = config.editorScaleMinDistance;
+        double maxDistance = config.editorScaleMaxDistance;
+        if (maxDistance <= minDistance) {
+            return 1;
+        }
         double distance = Math.clamp(minDistance, maxDistance, eyePosition.distance(position));
         return distance / minDistance;
     }
@@ -275,11 +280,11 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return 64;
+        return EasyArmorStandsPlugin.getInstance().getConfiguration().editorRange;
     }
 
     public double getLookThreshold() {
-        return 0.1;
+        return EasyArmorStandsPlugin.getInstance().getConfiguration().editorLookThreshold;
     }
 
     @Override

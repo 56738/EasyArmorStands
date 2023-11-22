@@ -14,4 +14,10 @@ public class EasConfig {
     public ItemTemplate tool;
     public Map<MessageStyle, String> messageFormats;
     public MenuSlotFactory menuBackground;
+    public double editorScaleMinDistance = 5;
+    public double editorScaleMaxDistance = 64;
+    public double editorRange = 64;
+    public double editorSelectionRange = 10;
+    public double editorLookThreshold = 0.1;
+    public int interpolationTicks = 1;
 }

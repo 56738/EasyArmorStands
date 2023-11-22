@@ -27,3 +27,11 @@ menu-background:
     item:
       type: light_blue_stained_glass_pane
       name: ''
+
+editor-scale-min-distance: 5
+editor-scale-max-distance: 64
+editor-range: 64
+editor-selection-range: 10
+editor-look-threshold: 0.1
+
+interpolation-ticks: 1
