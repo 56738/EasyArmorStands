@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 # Installation
 
-**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.20.2
+**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.20.4
 
 Download the `.jar` file from [Spigot](https://www.spigotmc.org/resources/easyarmorstands.108349/)
 or [Hangar](https://hangar.papermc.io/56738/EasyArmorStands) and place it in your `plugins` folder.
