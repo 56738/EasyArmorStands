@@ -15,7 +15,7 @@ public class EntityTypeCapabilityProvider implements CapabilityProvider<EntityTy
 
     @Override
     public Priority getPriority() {
-        return Priority.NORMAL;
+        return Priority.LOW;
     }
 
     @Override
