@@ -97,6 +97,7 @@ fun registerVersion(name: String, api: String) {
 registerVersion("v1_8", "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_8_spigot", "org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 registerVersion("v1_9", "org.bukkit:bukkit:1.9-R0.1-SNAPSHOT")
+registerVersion("v1_9_spigot", "org.spigotmc:spigot-api:1.9.4-R0.1-SNAPSHOT")
 registerVersion("v1_11", "org.bukkit:bukkit:1.11-R0.1-SNAPSHOT")
 registerVersion("v1_12", "org.bukkit:bukkit:1.12-R0.1-SNAPSHOT")
 registerVersion("v1_12_paper", "com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")

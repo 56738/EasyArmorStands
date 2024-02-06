@@ -185,6 +185,19 @@ easyarmorstands:entity/location:
       - <value>
       - <lang:easyarmorstands.property.glow.description>
 
+easyarmorstands:entity/silent:
+  permission: easyarmorstands.property.silent
+  name: <lang:easyarmorstands.property.silent.name>
+  value:
+    enabled: <green><lang:easyarmorstands.property.common.enabled>
+    disabled: <red><lang:easyarmorstands.property.common.disabled>
+  button:
+    type: note_block
+    name: <name>
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.silent.description>
+
 easyarmorstands:entity/visible:
   permission: easyarmorstands.property.visible
   name: <lang:easyarmorstands.property.visibility.name>

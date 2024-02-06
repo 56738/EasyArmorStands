@@ -24,3 +24,5 @@ slots:
       property: easyarmorstands:display/billboard
   easyarmorstands:entity/custom_name:
     enabled: false
+  easyarmorstands:entity/silent:
+    enabled: false

@@ -67,6 +67,7 @@ permissions:
       - easyarmorstands.property.invulnerable
       - easyarmorstands.property.name
       - easyarmorstands.property.name.visible
+      - easyarmorstands.property.silent
       - easyarmorstands.redo
       - easyarmorstands.spawn.armorstand
       - easyarmorstands.spawn.blockdisplay

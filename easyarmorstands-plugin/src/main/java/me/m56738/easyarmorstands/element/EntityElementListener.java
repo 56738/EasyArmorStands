@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
+import me.m56738.easyarmorstands.capability.silent.SilentCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
@@ -26,6 +27,7 @@ import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.entity.EntitySilentProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -58,6 +60,10 @@ public class EntityElementListener implements Listener {
             registry.register(new EntityGlowingProperty(entity, glowCapability));
         }
         registry.register(new EntityLocationProperty(entity));
+        SilentCapability silentCapability = EasyArmorStandsPlugin.getInstance().getCapability(SilentCapability.class);
+        if (silentCapability != null) {
+            registry.register(new EntitySilentProperty(entity, silentCapability));
+        }
         registry.register(new EntityCustomNameProperty(entity, componentCapability));
         registry.register(new EntityCustomNameVisibleProperty(entity));
     }

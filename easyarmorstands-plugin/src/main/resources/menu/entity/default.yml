@@ -18,6 +18,12 @@ slots:
     type: easyarmorstands:property
     config:
       property: easyarmorstands:entity/visible
+  easyarmorstands:entity/silent:
+    row: 0
+    column: 7
+    type: easyarmorstands:property
+    config:
+      property: easyarmorstands:entity/silent
   easyarmorstands:destroy:
     type: easyarmorstands:destroy
     row: 0
