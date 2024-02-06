@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(project(":easyarmorstands-region"))
     compileOnly(libs.bukkit)
-    implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.30"))
+    implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.31"))
     compileOnly("com.plotsquared:PlotSquared-Core") {
         exclude("net.kyori", "adventure-api")
     }
