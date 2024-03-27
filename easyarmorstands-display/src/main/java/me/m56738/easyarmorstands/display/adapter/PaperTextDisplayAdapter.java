@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.display.adapter;
 import me.m56738.easyarmorstands.util.NativeComponentMapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -20,7 +21,7 @@ public class PaperTextDisplayAdapter extends TextDisplayAdapter {
         this.setText = setText;
     }
 
-    public static PaperTextDisplayAdapter getInstance() {
+    public static @Nullable PaperTextDisplayAdapter getInstance() {
         return instance;
     }
 
@@ -28,6 +29,9 @@ public class PaperTextDisplayAdapter extends TextDisplayAdapter {
     private static PaperTextDisplayAdapter initialize() {
         try {
             NativeComponentMapper mapper = NativeComponentMapper.getInstance();
+            if (mapper == null) {
+                return null;
+            }
             MethodHandles.Lookup lookup = MethodHandles.lookup();
             MethodHandle getText = lookup.findVirtual(TextDisplay.class, "text",
                     MethodType.methodType(mapper.getComponentClass()));

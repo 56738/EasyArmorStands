@@ -73,7 +73,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
 
         public ComponentCapabilityImpl() throws NoSuchMethodException, IllegalAccessException {
             MethodHandles.Lookup lookup = MethodHandles.lookup();
-            mapper = NativeComponentMapper.getInstance();
+            mapper = Objects.requireNonNull(NativeComponentMapper.getInstance());
             getCustomName = lookup.findVirtual(Entity.class, "customName",
                     MethodType.methodType(mapper.getComponentClass()));
             setCustomName = lookup.findVirtual(Entity.class, "customName",

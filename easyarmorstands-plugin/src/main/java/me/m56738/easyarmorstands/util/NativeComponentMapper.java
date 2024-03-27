@@ -45,7 +45,7 @@ public class NativeComponentMapper {
         return new NativeComponentMapper(nativeComponentClass, serialize, deserialize);
     }
 
-    public static NativeComponentMapper getInstance() {
+    public static @Nullable NativeComponentMapper getInstance() {
         return instance;
     }
 
