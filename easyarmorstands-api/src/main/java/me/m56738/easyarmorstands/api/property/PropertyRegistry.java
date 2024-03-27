@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,11 @@ public abstract class PropertyRegistry implements PropertyContainer {
     @SuppressWarnings("rawtypes")
     private final Map<PropertyType, Property> properties = new TreeMap<>(Comparator.comparing(PropertyType::key));
 
-    public <T> void register(Property<T> property) {
+    public static @NotNull PropertyRegistry create(@NotNull Element element) {
+        return new ElementPropertyRegistry(element);
+    }
+
+    public <T> void register(@NotNull Property<T> property) {
         properties.put(property.getType(), property);
     }
 

@@ -32,7 +32,7 @@ import java.util.Objects;
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
-    private final PropertyRegistry properties = new Properties();
+    private final PropertyRegistry properties = PropertyRegistry.create(this);
     private final EntitySizeCapability sizeCapability;
 
     public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
@@ -131,12 +131,5 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public int hashCode() {
         return Objects.hash(entity);
-    }
-
-    private class Properties extends PropertyRegistry {
-        @Override
-        public boolean isValid() {
-            return entity.isValid();
-        }
     }
 }
