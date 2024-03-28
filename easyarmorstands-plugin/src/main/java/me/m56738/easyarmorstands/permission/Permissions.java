@@ -42,7 +42,7 @@ public class Permissions {
     @Description("Allow showing the history")
     public static final String HISTORY = "easyarmorstands.history";
 
-    @Description("Allow viewing entity properties")
+    @Description("Allow viewing details of the selected entity")
     public static final String INFO = "easyarmorstands.info";
 
     @Description("Allow opening the menu")

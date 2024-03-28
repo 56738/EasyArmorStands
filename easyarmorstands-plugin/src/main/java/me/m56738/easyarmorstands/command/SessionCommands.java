@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -632,5 +633,29 @@ public class SessionCommands {
         sender.sendMessage(Message.success("easyarmorstands.success.changed-value",
                 node.getName(),
                 node.formatValue(value)));
+    }
+
+    @CommandMethod("info")
+    @CommandPermission(Permissions.INFO)
+    @CommandDescription("View details of the selected entity")
+    public void info(EasPlayer sender) {
+        Element element = getElementOrError(sender);
+        if (element == null) {
+            return;
+        }
+        sender.sendMessage(Message.title("easyarmorstands.info.title"));
+        sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)));
+        if (element instanceof EntityElement) {
+            Entity entity = ((EntityElement<?>) element).getEntity();
+            sender.sendMessage(Component.text()
+                    .append(Message.hint("easyarmorstands.info.uuid",
+                            Component.text(entity.getUniqueId().toString(), NamedTextColor.WHITE)))
+                    .appendSpace()
+                    .append(Message.chatButton("easyarmorstands.button.text.copy")
+                            .hoverEvent(Message.hover("easyarmorstands.click-to-copy"))
+                            .clickEvent(ClickEvent.copyToClipboard(entity.getUniqueId().toString()))));
+            sender.sendMessage(Message.hint("easyarmorstands.info.id",
+                    Component.text(entity.getEntityId(), NamedTextColor.WHITE)));
+        }
     }
 }
