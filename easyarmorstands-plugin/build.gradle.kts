@@ -15,6 +15,7 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.adventure.text.serializer.gson)
     api(libs.adventure.text.serializer.legacy)
+    api(libs.adventure.text.serializer.plain)
     api(libs.bstats)
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
@@ -46,7 +47,7 @@ tasks {
 
     shadowJar {
         val prefix = "me.m56738.easyarmorstands.lib"
-        relocate("cloud.commandframework", "$prefix.cloud")
+        relocate("org.incendo.cloud", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("net.kyori", "$prefix.kyori")

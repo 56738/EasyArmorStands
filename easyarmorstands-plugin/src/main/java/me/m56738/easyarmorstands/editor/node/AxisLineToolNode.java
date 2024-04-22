@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.editor.node;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.DoubleArgument;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
@@ -15,6 +13,8 @@ import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.incendo.cloud.parser.ArgumentParser;
+import org.incendo.cloud.parser.standard.DoubleParser;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
@@ -119,7 +119,7 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
 
     @Override
     public ArgumentParser<CommandSender, Double> getParser() {
-        return new DoubleArgument.DoubleParser<>(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        return new DoubleParser<>(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     @Override

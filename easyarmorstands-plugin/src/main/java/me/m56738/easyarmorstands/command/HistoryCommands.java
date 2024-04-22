@@ -1,10 +1,5 @@
 package me.m56738.easyarmorstands.command;
 
-import cloud.commandframework.annotations.Argument;
-import cloud.commandframework.annotations.CommandDescription;
-import cloud.commandframework.annotations.CommandMethod;
-import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
@@ -12,14 +7,20 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.incendo.cloud.annotation.specifier.Range;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Default;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.Iterator;
 
-@CommandMethod("eas")
+@Command("eas")
 public class HistoryCommands {
-    @CommandMethod("history")
-    @CommandPermission(Permissions.HISTORY)
-    @CommandDescription("View your history")
+    @Command("history")
+    @Permission(Permissions.HISTORY)
+    @CommandDescription("easyarmorstands.command.description.history")
     public void history(EasPlayer sender) {
         History history = sender.history();
         if (history.getPast().isEmpty()) {
@@ -36,11 +37,11 @@ public class HistoryCommands {
         }
     }
 
-    @CommandMethod("redo [count]")
-    @CommandPermission(Permissions.REDO)
-    @CommandDescription("Redo a change")
+    @Command("redo [count]")
+    @Permission(Permissions.REDO)
+    @CommandDescription("easyarmorstands.command.description.redo")
     public void redo(EasPlayer sender,
-                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+                     @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         History history = sender.history();
         for (int i = 0; i < count; i++) {
             Action action = history.takeRedoAction();
@@ -57,11 +58,11 @@ public class HistoryCommands {
         }
     }
 
-    @CommandMethod("undo [count]")
-    @CommandPermission(Permissions.UNDO)
-    @CommandDescription("Undo a change")
+    @Command("undo [count]")
+    @Permission(Permissions.UNDO)
+    @CommandDescription("easyarmorstands.command.description.undo")
     public void undo(EasPlayer sender,
-                     @Range(min = "1", max = "10") @Argument(value = "count", defaultValue = "1") int count) {
+                     @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         History history = sender.history();
         for (int i = 0; i < count; i++) {
             Action action = history.takeUndoAction();

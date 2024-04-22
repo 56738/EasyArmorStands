@@ -22,7 +22,7 @@ public interface PropertyTypeRegistry {
     @SuppressWarnings("unchecked")
     default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull TypeToken<T> type) {
         PropertyType<?> propertyType = getOrNull(key);
-        if (propertyType == null || !type.equals(propertyType.getValueType())) {
+        if (propertyType == null || !type.getAnnotatedType().equals(propertyType.getValueType().getAnnotatedType())) {
             return null;
         }
         return (PropertyType<T>) propertyType;

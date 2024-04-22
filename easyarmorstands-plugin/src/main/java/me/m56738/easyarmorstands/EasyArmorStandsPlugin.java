@@ -1,14 +1,5 @@
 package me.m56738.easyarmorstands;
 
-import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.arguments.parser.StandardParameters;
-import cloud.commandframework.bukkit.BukkitCommandManager;
-import cloud.commandframework.bukkit.CloudBukkitCapabilities;
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.meta.CommandMeta;
-import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
-import cloud.commandframework.minecraft.extras.TextColorArgument;
-import cloud.commandframework.paper.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -33,7 +24,7 @@ import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
-import me.m56738.easyarmorstands.command.sender.CommandSenderWrapper;
+import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
@@ -79,6 +70,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.bukkit.BukkitCommandManager;
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
+import org.incendo.cloud.exception.InvalidCommandSenderException;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -187,14 +187,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
 
-        CommandSenderWrapper senderWrapper = new CommandSenderWrapper(adventure);
-
         try {
             commandManager = new PaperCommandManager<>(
                     this,
-                    CommandExecutionCoordinator.simpleCoordinator(),
-                    senderWrapper::wrap,
-                    EasCommandSender::get);
+                    ExecutionCoordinator.simpleCoordinator(),
+                    new CommandSenderMapper(adventure));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -202,19 +199,20 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
             try {
                 commandManager.registerBrigadier();
-            } catch (BukkitCommandManager.BrigadierFailureException e) {
+            } catch (BukkitCommandManager.BrigadierInitializationException e) {
                 getLogger().log(Level.WARNING, "Failed to register Brigadier mappings");
             }
         }
 
-        new MinecraftExceptionHandler<EasCommandSender>()
-                .withArgumentParsingHandler()
-                .withInvalidSyntaxHandler()
-                .withNoPermissionHandler()
-                .withCommandExecutionHandler()
-                .withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER,
+        MinecraftExceptionHandler.<EasCommandSender>createNative()
+                .defaultArgumentParsingHandler()
+                .defaultInvalidSyntaxHandler()
+                .defaultNoPermissionHandler()
+                .defaultCommandExecutionHandler()
+                .defaultInvalidSenderHandler()
+                .handler(InvalidCommandSenderException.class,
                         (sender, e) -> Message.error("easyarmorstands.error.not-a-player"))
-                .apply(commandManager, s -> s);
+                .registerTo(commandManager);
 
         commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector());
 
@@ -222,12 +220,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 p -> new NodeValueArgumentParser<>());
 
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
-                p -> new TextColorArgument.TextColorParser<>());
+                p -> new TextColorParser<>());
 
-        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class,
-                p -> CommandMeta.simple()
-                        .with(CommandMeta.DESCRIPTION, p.get(StandardParameters.DESCRIPTION, "No description"))
-                        .build());
+        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
+        annotationParser.descriptionMapper(RichDescription::translatable);
 
         annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));

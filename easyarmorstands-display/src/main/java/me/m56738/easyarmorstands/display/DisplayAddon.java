@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.display;
 
-import cloud.commandframework.brigadier.CloudBrigadierManager;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -22,6 +21,7 @@ import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
+import org.incendo.cloud.brigadier.CloudBrigadierManager;
 
 public class DisplayAddon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
@@ -61,8 +61,8 @@ public class DisplayAddon {
         plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
 
-        CloudBrigadierManager<EasCommandSender, ?> brigadierManager = plugin.getCommandManager().brigadierManager();
-        if (brigadierManager != null) {
+        if (plugin.getCommandManager().hasBrigadierManager()) {
+            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = plugin.getCommandManager().brigadierManager();
             try {
                 BlockDataArgumentParser.registerBrigadier(brigadierManager);
             } catch (Throwable e) {
