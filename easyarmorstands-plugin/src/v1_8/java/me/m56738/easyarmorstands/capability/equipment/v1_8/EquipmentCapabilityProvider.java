@@ -11,7 +11,12 @@ import org.bukkit.plugin.Plugin;
 public class EquipmentCapabilityProvider implements CapabilityProvider<EquipmentCapability> {
     @Override
     public boolean isSupported() {
-        return true;
+        EquipmentSlot.valueOf("HAND");
+        EquipmentSlot.valueOf("FEET");
+        EquipmentSlot.valueOf("LEGS");
+        EquipmentSlot.valueOf("CHEST");
+        EquipmentSlot.valueOf("HEAD");
+        return EquipmentSlot.values().length == 5;
     }
 
     @Override

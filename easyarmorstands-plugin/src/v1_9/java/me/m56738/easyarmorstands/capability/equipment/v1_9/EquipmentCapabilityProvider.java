@@ -12,8 +12,13 @@ public class EquipmentCapabilityProvider implements CapabilityProvider<Equipment
     @Override
     public boolean isSupported() {
         try {
+            EquipmentSlot.valueOf("HAND");
             EquipmentSlot.valueOf("OFF_HAND");
-            return true;
+            EquipmentSlot.valueOf("FEET");
+            EquipmentSlot.valueOf("LEGS");
+            EquipmentSlot.valueOf("CHEST");
+            EquipmentSlot.valueOf("HEAD");
+            return EquipmentSlot.values().length == 6;
         } catch (Throwable e) {
             return false;
         }
@@ -57,7 +62,7 @@ public class EquipmentCapabilityProvider implements CapabilityProvider<Equipment
                 case HEAD:
                     return equipment.getHelmet();
                 default:
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException(String.valueOf(slot));
             }
         }
 
@@ -83,7 +88,7 @@ public class EquipmentCapabilityProvider implements CapabilityProvider<Equipment
                     equipment.setHelmet(item);
                     break;
                 default:
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException(String.valueOf(slot));
             }
         }
     }
