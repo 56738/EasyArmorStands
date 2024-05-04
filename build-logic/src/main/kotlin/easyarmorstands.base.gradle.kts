@@ -6,9 +6,11 @@ group = "me.m56738"
 version = property("version")!!
 
 repositories {
+    mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://ci.mg-dev.eu/plugin/repository/everything/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 tasks {

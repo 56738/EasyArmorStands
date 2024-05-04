@@ -1,10 +1,10 @@
 [versions]
-adventure-api = "4.15.0"
+adventure-api = "4.16.0"
 adventure-platform = "4.3.2"
 brigadier = "1.0.17"
 bstats = "3.0.2"
 bukkit = "1.8.8-R0.1-SNAPSHOT"
-cloud = "1.8.4"
+cloud = "2.0.0-beta.2"
 commodore = "2.2"
 configurate = "4.1.2"
 hangar-publish-plugin = "0.1.2"
@@ -21,12 +21,13 @@ adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", ve
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-api" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
+adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure-api" }
 brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
-cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
-cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
-cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud" }
+cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
+cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud" }
+cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud" }
 commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }

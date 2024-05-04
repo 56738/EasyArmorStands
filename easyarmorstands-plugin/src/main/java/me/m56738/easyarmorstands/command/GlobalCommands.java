@@ -1,15 +1,5 @@
 package me.m56738.easyarmorstands.command;
 
-import cloud.commandframework.CommandHelpHandler;
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.annotations.Argument;
-import cloud.commandframework.annotations.CommandDescription;
-import cloud.commandframework.annotations.CommandMethod;
-import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.annotations.specifier.Greedy;
-import cloud.commandframework.annotations.suggestions.Suggestions;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -28,12 +18,22 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.annotation.specifier.Greedy;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.help.result.CommandEntry;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@CommandMethod("eas")
+@Command("eas")
 public class GlobalCommands {
     private final CommandManager<EasCommandSender> commandManager;
     private final MinecraftHelp<EasCommandSender> help;
@@ -41,13 +41,13 @@ public class GlobalCommands {
 
     public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionListener sessionListener) {
         this.commandManager = commandManager;
-        this.help = new MinecraftHelp<>("/eas help", s -> s, commandManager);
+        this.help = MinecraftHelp.createNative("/eas help", commandManager);
         this.sessionListener = sessionListener;
     }
 
-    @CommandMethod("")
-    @CommandPermission(Permissions.HELP)
-    @CommandDescription("Shows an overview")
+    @Command("")
+    @Permission(Permissions.HELP)
+    @CommandDescription("easyarmorstands.command.description")
     public void showOverview(EasCommandSender sender) {
         if (sender.get().hasPermission(Permissions.VERSION)) {
             String version = EasyArmorStandsPlugin.getInstance().getDescription().getVersion();
@@ -61,9 +61,9 @@ public class GlobalCommands {
         sender.sendMessage(Message.hint("easyarmorstands.hint.show-help", Message.command("/eas help")));
     }
 
-    @CommandMethod("help [query]")
-    @CommandPermission(Permissions.HELP)
-    @CommandDescription("Shows the command help")
+    @Command("help [query]")
+    @Permission(Permissions.HELP)
+    @CommandDescription("easyarmorstands.command.description.help")
     public void help(EasCommandSender sender,
                      @Argument(value = "query", suggestions = "help_queries") @Greedy String query) {
         help.queryCommands(query != null ? query : "", sender);
@@ -71,14 +71,14 @@ public class GlobalCommands {
 
     @Suggestions("help_queries")
     public List<String> suggestHelpQueries(CommandContext<EasCommandSender> ctx, String input) {
-        return commandManager.createCommandHelpHandler().queryRootIndex(ctx.getSender()).getEntries().stream()
-                .map(CommandHelpHandler.VerboseHelpEntry::getSyntaxString)
+        return commandManager.createHelpHandler().queryRootIndex(ctx.sender()).entries().stream()
+                .map(CommandEntry::syntax)
                 .collect(Collectors.toList());
     }
 
-    @CommandMethod("give")
-    @CommandPermission(Permissions.GIVE)
-    @CommandDescription("Gives you the editor tool")
+    @Command("give")
+    @Permission(Permissions.GIVE)
+    @CommandDescription("easyarmorstands.command.description.give")
     public void give(EasPlayer sender) {
         sender.get().getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
@@ -90,17 +90,17 @@ public class GlobalCommands {
         sessionListener.updateHeldItem(sender.get());
     }
 
-    @CommandMethod("reload")
-    @CommandPermission(Permissions.RELOAD)
-    @CommandDescription("Reloads the configuration")
+    @Command("reload")
+    @Permission(Permissions.RELOAD)
+    @CommandDescription("easyarmorstands.command.description.reload")
     public void reloadConfig(EasCommandSender sender) {
         EasyArmorStandsPlugin.getInstance().reload();
         sender.sendMessage(Message.success("easyarmorstands.success.reloaded-config"));
     }
 
-    @CommandMethod("version")
-    @CommandPermission(Permissions.VERSION)
-    @CommandDescription("Displays the plugin version")
+    @Command("version")
+    @Permission(Permissions.VERSION)
+    @CommandDescription("easyarmorstands.command.description.version")
     public void version(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         String version = plugin.getDescription().getVersion();
@@ -109,9 +109,9 @@ public class GlobalCommands {
         sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
     }
 
-    @CommandMethod("debug")
-    @CommandPermission(Permissions.DEBUG)
-    @CommandDescription("Displays debug information")
+    @Command("debug")
+    @Permission(Permissions.DEBUG)
+    @CommandDescription("easyarmorstands.command.description.debug")
     public void debug(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         CapabilityLoader loader = plugin.getCapabilityLoader();

@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.editor.node;
 
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.arguments.standard.DoubleArgument;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
@@ -15,6 +13,8 @@ import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.incendo.cloud.parser.ArgumentParser;
+import org.incendo.cloud.parser.standard.DoubleParser;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -130,7 +130,7 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
 
     @Override
     public ArgumentParser<CommandSender, Double> getParser() {
-        return new DoubleArgument.DoubleParser<>(-360, 360);
+        return new DoubleParser<>(-360, 360);
     }
 
     @Override

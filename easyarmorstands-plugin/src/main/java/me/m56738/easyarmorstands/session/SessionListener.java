@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;

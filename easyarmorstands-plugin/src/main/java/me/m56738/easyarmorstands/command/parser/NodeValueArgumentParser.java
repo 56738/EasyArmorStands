@@ -1,41 +1,43 @@
 package me.m56738.easyarmorstands.command.parser;
 
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.context.CommandContext;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.parser.ArgumentParseResult;
+import org.incendo.cloud.parser.ArgumentParser;
+import org.incendo.cloud.suggestion.Suggestion;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
-public class NodeValueArgumentParser<C> implements ArgumentParser<C, Object> {
+public class NodeValueArgumentParser<C> implements ArgumentParser<C, Object>, SuggestionProvider<C> {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public @NonNull ArgumentParseResult<@NonNull Object> parse(@NonNull CommandContext<@NonNull C> commandContext, @NonNull Queue<@NonNull String> inputQueue) {
-        Optional<ValueNode> optionalNode = commandContext.inject(ValueNode.class);
+    public @NonNull ArgumentParseResult<@NonNull Object> parse(@NonNull CommandContext<@NonNull C> context, @NonNull CommandInput input) {
+        Optional<ValueNode> optionalNode = context.inject(ValueNode.class);
         if (!optionalNode.isPresent()) {
             return ArgumentParseResult.failure(new UnsupportedToolException());
         }
         ValueNode node = optionalNode.get();
-        return node.getParser().parse(commandContext, inputQueue);
+        return node.getParser().parse(context, input);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public @NonNull List<@NonNull String> suggestions(@NonNull CommandContext<C> commandContext, @NonNull String input) {
-        Optional<ValueNode> optionalNode = commandContext.inject(ValueNode.class);
+    public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<C> context, @NonNull CommandInput input) {
+        Optional<ValueNode> optionalNode = context.inject(ValueNode.class);
         if (!optionalNode.isPresent()) {
-            return Collections.emptyList();
+            return CompletableFuture.completedFuture(Collections.emptyList());
         }
         ValueNode node = optionalNode.get();
-        return node.getParser().suggestions(commandContext, input);
+        return node.getParser().suggestionProvider().suggestionsFuture(context, input);
     }
 
     private static class UnsupportedToolException extends IllegalStateException implements ComponentMessageThrowable {

@@ -1,24 +1,22 @@
 package me.m56738.easyarmorstands.display.command;
 
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.parser.ArgumentParser;
-import cloud.commandframework.brigadier.CloudBrigadierManager;
-import cloud.commandframework.bukkit.internal.CommandBuildContextSupplier;
-import cloud.commandframework.bukkit.internal.MinecraftArgumentTypes;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.exceptions.parsing.NoInputProvidedException;
 import com.mojang.brigadier.arguments.ArgumentType;
 import io.leangen.geantyref.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.brigadier.CloudBrigadierManager;
+import org.incendo.cloud.bukkit.internal.CommandBuildContextSupplier;
+import org.incendo.cloud.bukkit.internal.MinecraftArgumentTypes;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.parser.ArgumentParseResult;
+import org.incendo.cloud.parser.ArgumentParser;
 
 import java.lang.reflect.Constructor;
-import java.util.Queue;
 
 public class BlockDataArgumentParser<C> implements ArgumentParser<C, BlockData> {
-    @SuppressWarnings("UnstableApiUsage")
     public static <C> void registerBrigadier(CloudBrigadierManager<C, ?> brigadierManager) {
         Constructor<?> ctr = MinecraftArgumentTypes.getClassByKey(NamespacedKey.minecraft("block_state"))
                 .getDeclaredConstructors()[0];
@@ -39,12 +37,8 @@ public class BlockDataArgumentParser<C> implements ArgumentParser<C, BlockData> 
     }
 
     @Override
-    public @NonNull ArgumentParseResult<@NonNull BlockData> parse(@NonNull CommandContext<@NonNull C> ctx, @NonNull Queue<@NonNull String> inputQueue) {
-        String input = inputQueue.peek();
-        if (input == null) {
-            return ArgumentParseResult.failure(new NoInputProvidedException(getClass(), ctx));
-        }
-
+    public @NonNull ArgumentParseResult<@NonNull BlockData> parse(@NonNull CommandContext<@NonNull C> ctx, @NonNull CommandInput commandInput) {
+        String input = commandInput.peekString();
         BlockData data;
         try {
             data = Bukkit.createBlockData(input);
@@ -52,7 +46,7 @@ public class BlockDataArgumentParser<C> implements ArgumentParser<C, BlockData> 
             return ArgumentParseResult.failure(e);
         }
 
-        inputQueue.remove();
+        commandInput.readString();
         return ArgumentParseResult.success(data);
     }
 }

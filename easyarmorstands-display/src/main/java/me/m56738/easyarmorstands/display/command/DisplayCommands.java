@@ -1,14 +1,9 @@
 package me.m56738.easyarmorstands.display.command;
 
-import cloud.commandframework.annotations.Argument;
-import cloud.commandframework.annotations.CommandDescription;
-import cloud.commandframework.annotations.CommandMethod;
-import cloud.commandframework.annotations.CommandPermission;
-import cloud.commandframework.annotations.specifier.Greedy;
-import cloud.commandframework.annotations.specifier.Range;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -27,7 +22,6 @@ import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayMenuNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
@@ -57,6 +51,12 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
+import org.incendo.cloud.annotation.specifier.Greedy;
+import org.incendo.cloud.annotation.specifier.Range;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
 import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
@@ -75,7 +75,7 @@ import static me.m56738.easyarmorstands.command.SessionCommands.getElementsOrErr
 import static me.m56738.easyarmorstands.command.SessionCommands.getPropertiesOrError;
 import static me.m56738.easyarmorstands.command.SessionCommands.getSessionOrError;
 
-@CommandMethod("eas")
+@Command("eas")
 public class DisplayCommands {
     private final DisplayAddon addon;
 
@@ -83,9 +83,9 @@ public class DisplayCommands {
         this.addon = addon;
     }
 
-    @CommandMethod("block <value>")
+    @Command("block <value>")
     @PropertyPermission("easyarmorstands:block_display/block")
-    @CommandDescription("Set the block of the selected block display")
+    @CommandDescription("easyarmorstands.command.description.block")
     public void setBlock(EasPlayer sender, @Argument("value") BlockData value) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -105,9 +105,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("brightness block <value>")
+    @Command("brightness block <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
-    @CommandDescription("Set the block light level of the selected display")
+    @CommandDescription("easyarmorstands.command.description.brightness.block")
     public void setBlockBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -132,9 +132,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("brightness sky <value>")
+    @Command("brightness sky <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
-    @CommandDescription("Set the sky light level of the selected display")
+    @CommandDescription("easyarmorstands.command.description.brightness.sky")
     public void setSkyBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -159,9 +159,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("brightness here")
+    @Command("brightness here")
     @PropertyPermission("easyarmorstands:display/brightness")
-    @CommandDescription("Apply the light level at your location to the selected display")
+    @CommandDescription("easyarmorstands.command.description.brightness.here")
     public void setLocalBrightness(EasPlayer sender) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -183,9 +183,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("brightness reset")
+    @Command("brightness reset")
     @PropertyPermission("easyarmorstands:display/brightness")
-    @CommandDescription("Remove the custom light level from the selected display")
+    @CommandDescription("easyarmorstands.command.description.brightness.reset")
     public void setDefaultBrightness(EasPlayer sender) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -205,9 +205,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("box width <width>")
+    @Command("box width <width>")
     @PropertyPermission("easyarmorstands:display/box/width")
-    @CommandDescription("Set the bounding box width of the selected display")
+    @CommandDescription("easyarmorstands.command.description.box.width")
     public void setBoxWidth(EasPlayer sender, @Argument("width") float value) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -231,9 +231,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("box height <height>")
+    @Command("box height <height>")
     @PropertyPermission("easyarmorstands:display/box/height")
-    @CommandDescription("Set the bounding box height of the selected display")
+    @CommandDescription("easyarmorstands.command.description.box.height")
     public void setBoxHeight(EasPlayer sender, @Argument("height") float value) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -257,9 +257,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("box remove")
+    @Command("box remove")
     @PropertyPermission("easyarmorstands:display/box/height")
-    @CommandDescription("Remove the bounding box from the selected display")
+    @CommandDescription("easyarmorstands.command.description.box.remove")
     public void removeBox(EasPlayer sender) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -289,9 +289,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("box")
+    @Command("box")
     @PropertyPermission("easyarmorstands:display/translation")
-    @CommandDescription("Edit the bounding box of the selected display")
+    @CommandDescription("easyarmorstands.command.description.box")
     public void moveBox(EasPlayer sender) {
         Session session = getSessionOrError(sender);
         Element element = getElementOrError(sender, session);
@@ -306,9 +306,9 @@ public class DisplayCommands {
         session.pushNode(new DisplayBoxNode(session, properties));
     }
 
-    @CommandMethod("text")
+    @Command("text")
     @PropertyPermission("easyarmorstands:text_display/text")
-    @CommandDescription("Show the text of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text")
     public void showText(EasPlayer sender) {
         Element element = getElementOrError(sender);
         if (element == null) {
@@ -323,9 +323,9 @@ public class DisplayCommands {
         SessionCommands.showText(sender, TextDisplayPropertyTypes.TEXT.getName(), text, "/eas text set");
     }
 
-    @CommandMethod("text set <value>")
+    @Command("text set <value>")
     @PropertyPermission("easyarmorstands:text_display/text")
-    @CommandDescription("Set the text of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.set")
     public void setText(EasPlayer sender, @Argument("value") @Greedy String input) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -346,9 +346,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("text width <value>")
+    @Command("text width <value>")
     @PropertyPermission("easyarmorstands:text_display/line_width")
-    @CommandDescription("Set the line width of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.width")
     public void setTextWidth(EasPlayer sender, @Argument("value") int value) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -368,9 +368,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("text background color <value>")
+    @Command("text background color <value>")
     @PropertyPermission("easyarmorstands:text_display/background")
-    @CommandDescription("Set the background color of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.background.color")
     public void setTextBackground(EasPlayer sender, @Argument("value") TextColor color) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -391,9 +391,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("text background reset")
+    @Command("text background reset")
     @PropertyPermission("easyarmorstands:text_display/background")
-    @CommandDescription("Restore the default background color of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.background.reset")
     public void resetTextBackground(EasPlayer sender) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -413,9 +413,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("text background none")
+    @Command("text background none")
     @PropertyPermission("easyarmorstands:text_display/background")
-    @CommandDescription("Hide the background of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.background.none")
     public void hideTextBackground(EasPlayer sender) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -436,9 +436,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("text background alpha <value>")
+    @Command("text background alpha <value>")
     @PropertyPermission("easyarmorstands:text_display/background")
-    @CommandDescription("Set the background transparency of the selected text display")
+    @CommandDescription("easyarmorstands.command.description.text.background.alpha")
     public void hideTextBackground(EasPlayer sender, @Argument("value") @Range(min = "0", max = "255") int alpha) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -465,9 +465,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("scale <scale>")
+    @Command("scale <scale>")
     @PropertyPermission("easyarmorstands:display/scale")
-    @CommandDescription("Set the scale of the selected display")
+    @CommandDescription("easyarmorstands.command.description.scale")
     public void editScale(EasPlayer sender, @Argument("scale") float scale) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
@@ -488,9 +488,9 @@ public class DisplayCommands {
         }
     }
 
-    @CommandMethod("shear")
+    @Command("shear")
     @PropertyPermission("easyarmorstands:display/right_rotation")
-    @CommandDescription("Modify the shearing of the selected display")
+    @CommandDescription("easyarmorstands.command.description.shear")
     public void editRightRotation(EasPlayer sender) {
         Session session = getSessionOrError(sender);
         Element element = getElementOrError(sender, session);
@@ -506,9 +506,9 @@ public class DisplayCommands {
         session.pushNode(node);
     }
 
-    @CommandMethod("convert")
-    @CommandPermission(Permissions.CONVERT)
-    @CommandDescription("Convert the selected armor stand to an item display")
+    @Command("convert")
+    @Permission(Permissions.CONVERT)
+    @CommandDescription("easyarmorstands.command.description.convert")
     public void convert(EasPlayer sender) {
         SessionImpl session = getSessionOrError(sender);
         Collection<Element> elements = getElementsOrError(sender, session);

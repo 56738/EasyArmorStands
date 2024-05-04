@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import org.bukkit.Bukkit;
