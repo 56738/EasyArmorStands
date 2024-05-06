@@ -3,32 +3,17 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.AxisMoveButtonBuilder;
-import me.m56738.easyarmorstands.api.editor.button.AxisRotateButtonBuilder;
-import me.m56738.easyarmorstands.api.editor.button.AxisScaleButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
-import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
-import me.m56738.easyarmorstands.api.particle.CircleParticle;
-import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
-import me.m56738.easyarmorstands.api.particle.PointParticle;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.editor.button.AxisMoveButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.button.AxisRotateButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.button.AxisScaleButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.button.MoveButtonBuilderImpl;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -48,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Math;
-import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
 import org.joml.Vector2dc;
 import org.joml.Vector3d;
@@ -376,147 +360,5 @@ public final class SessionImpl implements Session {
 
     public void setToolRequired(boolean toolRequired) {
         this.toolRequired = toolRequired;
-    }
-
-    public static class EyeRayImpl implements EyeRay {
-        private final World world;
-        private final Vector3dc origin;
-        private final Vector3dc target;
-        private final double length;
-        private final double threshold;
-        private final float yaw;
-        private final float pitch;
-        private final Matrix4dc matrix;
-        private Matrix4dc inverseMatrix;
-
-        public EyeRayImpl(World world, Vector3dc origin, Vector3dc target, double length, double threshold, float yaw, float pitch, Matrix4dc matrix) {
-            this.world = world;
-            this.origin = origin;
-            this.target = target;
-            this.length = length;
-            this.threshold = threshold;
-            this.yaw = yaw;
-            this.pitch = pitch;
-            this.matrix = matrix;
-        }
-
-        @Override
-        public @NotNull World world() {
-            return world;
-        }
-
-        @Override
-        public @NotNull Vector3dc origin() {
-            return origin;
-        }
-
-        @Override
-        public @NotNull Vector3dc target() {
-            return target;
-        }
-
-        @Override
-        public double length() {
-            return length;
-        }
-
-        @Override
-        public double threshold() {
-            return threshold;
-        }
-
-        @Override
-        public float yaw() {
-            return yaw;
-        }
-
-        @Override
-        public float pitch() {
-            return pitch;
-        }
-
-        @Override
-        public @NotNull Matrix4dc matrix() {
-            return matrix;
-        }
-
-        @Override
-        public @NotNull Matrix4dc inverseMatrix() {
-            if (inverseMatrix == null) {
-                inverseMatrix = matrix.invert(new Matrix4d());
-            }
-            return inverseMatrix;
-        }
-    }
-
-    private static class ParticleProviderImpl implements ParticleProvider {
-        private final SessionImpl session;
-        private final ParticleCapability particleCapability;
-
-        private ParticleProviderImpl(SessionImpl session) {
-            this.session = session;
-            this.particleCapability = EasyArmorStandsPlugin.getInstance().getCapability(ParticleCapability.class);
-        }
-
-        @Override
-        public @NotNull PointParticle createPoint() {
-            return particleCapability.createPoint(session.getWorld());
-        }
-
-        @Override
-        public @NotNull LineParticle createLine() {
-            return particleCapability.createLine(session.getWorld());
-        }
-
-        @Override
-        public @NotNull CircleParticle createCircle() {
-            return particleCapability.createCircle(session.getWorld());
-        }
-
-        @Override
-        public @NotNull BoundingBoxParticle createAxisAlignedBox() {
-            return particleCapability.createAxisAlignedBox(session.getWorld());
-        }
-    }
-
-    private static class MenuButtonProviderImpl implements MenuButtonProvider {
-        private final Session session;
-
-        private MenuButtonProviderImpl(Session session) {
-            this.session = session;
-        }
-
-        @Override
-        public @NotNull AxisMoveButtonBuilder axisMove() {
-            return new AxisMoveButtonBuilderImpl(session);
-        }
-
-        @Override
-        public @NotNull AxisScaleButtonBuilder axisScale() {
-            return new AxisScaleButtonBuilderImpl(session);
-        }
-
-        @Override
-        public @NotNull AxisRotateButtonBuilder axisRotate() {
-            return new AxisRotateButtonBuilderImpl(session);
-        }
-
-        @Override
-        public @NotNull MoveButtonBuilder move() {
-            return new MoveButtonBuilderImpl(session);
-        }
-    }
-
-    private static class NodeProviderImpl implements NodeProvider {
-        private final Session session;
-
-        private NodeProviderImpl(Session session) {
-            this.session = session;
-        }
-
-        @Override
-        public @NotNull ElementSelectionNode elementSelectionNode() {
-            return new ElementSelectionNodeImpl(session);
-        }
     }
 }
