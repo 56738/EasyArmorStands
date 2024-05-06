@@ -8,11 +8,13 @@ import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
+import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -47,8 +49,11 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         if (blockDataProperty != null && context.type() == ClickContext.Type.LEFT_CLICK && player.isSneaking()) {
             Block block = context.block();
             if (block != null) {
-                if (blockDataProperty.setValue(block.getBlockData())) {
+                BlockData blockData = block.getBlockData();
+                if (blockDataProperty.setValue(blockData)) {
                     properties().commit();
+                    new EasPlayer(player).sendMessage(Message.success("easyarmorstands.success.changed-block",
+                            blockDataProperty.getType().getValueComponent(blockData)));
                     return true;
                 }
             }
