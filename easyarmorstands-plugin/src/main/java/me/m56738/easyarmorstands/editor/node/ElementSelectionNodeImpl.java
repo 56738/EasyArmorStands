@@ -40,6 +40,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ElementSelectionNodeImpl extends MenuNode implements ElementSelectionNode {
     private final Session session;
@@ -129,6 +130,14 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         }
     }
 
+    private SelectableElement getElement(ElementDiscoveryEntry entry) {
+        ElementEntry elementEntry = entries.get(entry);
+        if (elementEntry == null || elementEntry.button == null) {
+            return entry.getElement();
+        }
+        return elementEntry.button.element;
+    }
+
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
         ChangeContext context = new EasPlayer(session.player());
@@ -152,12 +161,13 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         groupMembers.clear();
     }
 
-    private ElementButton findButton(Entity entity) {
+    private Consumer<Vector3dc> getEntityClickHandler(Entity entity) {
         for (ElementDiscoverySource source : sources) {
             if (source instanceof EntityElementDiscoverySource) {
-                ElementEntry entry = entries.get(((EntityElementDiscoverySource) source).getEntry(entity));
-                if (entry.button != null) {
-                    return entry.button;
+                ElementDiscoveryEntry entry = ((EntityElementDiscoverySource) source).getEntry(entity);
+                SelectableElement element = getElement(entry);
+                if (element != null) {
+                    return cursor -> onClickElement(entry, element, cursor);
                 }
             }
         }
@@ -203,9 +213,9 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         if (context.type() == ClickContext.Type.RIGHT_CLICK) {
             Entity entity = context.entity();
             if (entity != null) {
-                ElementButton button = findButton(entity);
-                if (button != null) {
-                    button.onClick(session, null);
+                Consumer<Vector3dc> entityClickHandler = getEntityClickHandler(entity);
+                if (entityClickHandler != null) {
+                    entityClickHandler.accept(null);
                     return true;
                 }
             }
@@ -254,6 +264,25 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         return true;
     }
 
+    private void onClickElement(ElementDiscoveryEntry entry, SelectableElement element, @Nullable Vector3dc cursor) {
+        if (groupMembers.remove(entry) != null) {
+            return;
+        }
+
+        ChangeContext context = new EasPlayer(session.player());
+        if (!context.canEditElement(element)) {
+            return;
+        }
+
+        if (session.player().isSneaking() && session.player().hasPermission(Permissions.GROUP)) {
+            groupMembers.put(entry, element);
+            return;
+        }
+
+        Node node = element.createNode(session);
+        session.pushNode(node, cursor);
+    }
+
     private static class ElementEntry {
         private static final ElementEntry EMPTY = new ElementEntry(null);
 
@@ -282,22 +311,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
         @Override
         public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-            if (groupMembers.remove(entry) != null) {
-                return;
-            }
-
-            ChangeContext context = new EasPlayer(session.player());
-            if (!context.canEditElement(element)) {
-                return;
-            }
-
-            if (session.player().isSneaking() && session.player().hasPermission(Permissions.GROUP)) {
-                groupMembers.put(entry, element);
-                return;
-            }
-
-            Node node = element.createNode(session);
-            session.pushNode(node, cursor);
+            onClickElement(entry, element, cursor);
         }
 
         @Override
