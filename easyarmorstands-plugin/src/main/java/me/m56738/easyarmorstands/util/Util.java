@@ -21,6 +21,7 @@ import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+import org.joml.Vector3fc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -78,6 +79,17 @@ public class Util {
                 Math.toDegrees(angle.getX()),
                 Math.toDegrees(angle.getY()),
                 Math.toDegrees(angle.getZ())));
+    }
+
+    public static Component formatScale(Vector3dc scale) {
+        if (scale.x() == scale.y() && scale.y() == scale.z()) {
+            return Component.text(SCALE_FORMAT.format(scale.x()));
+        }
+        return format3D(scale, SCALE_FORMAT);
+    }
+
+    public static Component formatScale(Vector3fc scale) {
+        return formatScale(new Vector3d(scale));
     }
 
     public static Component formatYawPitch(float yaw, float pitch) {

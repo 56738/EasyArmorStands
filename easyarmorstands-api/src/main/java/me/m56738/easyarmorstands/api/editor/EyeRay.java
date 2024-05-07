@@ -64,20 +64,25 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
+    default @NotNull Vector3dc projectPoint(@NotNull Vector3dc position) {
+        Vector3dc origin = origin();
+        Vector3dc target = target();
+        return Intersectiond.findClosestPointOnLineSegment(
+                origin.x(), origin.y(), origin.z(),
+                target.x(), target.y(), target.z(),
+                position.x(), position.y(), position.z(),
+                new Vector3d());
+    }
+
+    @Contract(pure = true)
     default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position) {
         return intersectPoint(position, 1);
     }
 
     @Contract(pure = true)
     default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position, double scale) {
-        Vector3dc origin = origin();
-        Vector3dc target = target();
         double threshold = scale * threshold();
-        Vector3d closestOnEyeRay = Intersectiond.findClosestPointOnLineSegment(
-                origin.x(), origin.y(), origin.z(),
-                target.x(), target.y(), target.z(),
-                position.x(), position.y(), position.z(),
-                new Vector3d());
+        Vector3dc closestOnEyeRay = projectPoint(position);
         if (position.distanceSquared(closestOnEyeRay) < threshold * threshold) {
             return position;
         } else {

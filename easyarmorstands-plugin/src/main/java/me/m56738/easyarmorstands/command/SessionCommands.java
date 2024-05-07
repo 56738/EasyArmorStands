@@ -2,8 +2,11 @@ package me.m56738.easyarmorstands.command;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.ScaleButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -603,26 +606,29 @@ public class SessionCommands {
                 property.getType().getValueComponent(canTick)));
     }
 
-    @Command("rescale <value>")
+    @Command("scale")
     @PropertyPermission("easyarmorstands:entity/scale")
     @CommandDescription("easyarmorstands.command.description.scale")
-    public void rescale(EasPlayer sender, @Argument("value") double scale) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
+    public void editScale(EasPlayer sender) {
+        Session session = getSessionOrError(sender);
+        Element element = getElementOrError(sender, session);
+        if (element == null) {
             return;
         }
-        Property<Double> property = properties.getOrNull(EntityPropertyTypes.SCALE);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.rescale-unsupported-entity"));
+        ScaleTool scaleTool = null;
+        if (element instanceof EditableElement) {
+            PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+            ToolProvider tools = ((EditableElement) element).getTools(properties);
+            scaleTool = tools.scale(tools.position(), tools.rotation());
+        }
+        if (scaleTool == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
             return;
         }
-        if (!property.setValue(scale)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.rescaled-entity",
-                property.getType().getValueComponent(scale)));
+        ScaleButton scaleButton = session.menuEntryProvider().scale()
+                .setTool(scaleTool)
+                .build();
+        session.pushNode(scaleButton.createNode());
     }
 
     @Command("reset")

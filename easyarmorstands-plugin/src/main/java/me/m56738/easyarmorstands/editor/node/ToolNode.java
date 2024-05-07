@@ -28,6 +28,10 @@ public abstract class ToolNode implements Node {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
+        updateActionBar(context);
+    }
+
+    protected void updateActionBar(@NotNull UpdateContext context) {
         TextComponent.Builder builder = Component.text();
         builder.append(name);
         Component state = toolSession.getStatus();

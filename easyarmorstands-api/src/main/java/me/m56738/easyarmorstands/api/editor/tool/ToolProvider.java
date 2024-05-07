@@ -9,10 +9,12 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ToolProvider {
     @Contract(pure = true)
-    @NotNull PositionProvider position();
+    @NotNull
+    PositionProvider position();
 
     @Contract(pure = true)
-    @NotNull RotationProvider rotation();
+    @NotNull
+    RotationProvider rotation();
 
     @Contract(pure = true)
     default @Nullable MoveTool move(
@@ -42,6 +44,13 @@ public interface ToolProvider {
             @NotNull PositionProvider positionProvider,
             @NotNull RotationProvider rotationProvider,
             @NotNull Axis axis) {
+        return null;
+    }
+
+    @Contract(pure = true)
+    default @Nullable ScaleTool scale(
+            @NotNull PositionProvider positionProvider,
+            @NotNull RotationProvider rotationProvider) {
         return null;
     }
 

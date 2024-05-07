@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
+import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
@@ -70,6 +71,14 @@ public class ToolMenuManager {
         }
 
         if (mode == ToolMenuMode.SCALE) {
+            ScaleTool scaleTool = toolProvider.scale(positionProvider, rotationProvider);
+            if (scaleTool != null) {
+                buttons.add(session.menuEntryProvider()
+                        .scale()
+                        .setTool(scaleTool)
+                        .setPriority(1)
+                        .build());
+            }
             for (Axis axis : Axis.values()) {
                 AxisScaleTool axisScaleTool = toolProvider.scale(positionProvider, rotationProvider, axis);
                 if (axisScaleTool != null) {

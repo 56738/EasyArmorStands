@@ -13,6 +13,9 @@ public interface MenuButtonProvider {
     @NotNull AxisMoveButtonBuilder axisMove();
 
     @Contract(pure = true)
+    @NotNull ScaleButtonBuilder scale();
+
+    @Contract(pure = true)
     @NotNull AxisScaleButtonBuilder axisScale();
 
     @Contract(pure = true)

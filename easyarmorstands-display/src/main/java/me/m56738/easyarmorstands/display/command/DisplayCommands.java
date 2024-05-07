@@ -63,7 +63,6 @@ import org.joml.Matrix4dc;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -459,29 +458,6 @@ public class DisplayCommands {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background-alpha",
                     Component.text(alpha)));
-        } else {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-        }
-    }
-
-    @Command("scale <scale>")
-    @PropertyPermission("easyarmorstands:display/scale")
-    @CommandDescription("easyarmorstands.command.description.scale")
-    public void editScale(EasPlayer sender, @Argument("scale") float scale) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
-        Property<Vector3fc> property = properties.getOrNull(DisplayPropertyTypes.SCALE);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
-            return;
-        }
-        Vector3f value = new Vector3f(scale);
-        if (property.setValue(value)) {
-            properties.commit();
-            sender.sendMessage(Message.success("easyarmorstands.success.changed-scale",
-                    property.getType().getValueComponent(value)));
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }

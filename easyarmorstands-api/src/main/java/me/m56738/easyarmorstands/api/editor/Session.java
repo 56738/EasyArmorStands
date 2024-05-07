@@ -52,6 +52,9 @@ public interface Session {
     @NotNull Player player();
 
     @Contract(pure = true)
+    @NotNull EyeRay eyeRay();
+
+    @Contract(pure = true)
     @NotNull PropertyContainer properties(@NotNull Element element);
 
     @Contract(pure = true)

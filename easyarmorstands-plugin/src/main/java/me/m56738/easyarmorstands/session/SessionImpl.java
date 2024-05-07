@@ -305,6 +305,7 @@ public final class SessionImpl implements Session {
         return new TrackedPropertyContainer(element, context);
     }
 
+    @Override
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();

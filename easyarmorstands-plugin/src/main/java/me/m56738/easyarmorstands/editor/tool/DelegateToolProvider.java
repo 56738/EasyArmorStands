@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
+import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
@@ -57,6 +58,12 @@ public class DelegateToolProvider implements ToolProvider {
     @Contract(pure = true)
     public @Nullable AxisRotateTool rotate(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
         return toolProvider.rotate(positionProvider, rotationProvider, axis);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @Nullable ScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
+        return toolProvider.scale(positionProvider, rotationProvider);
     }
 
     @Override

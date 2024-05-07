@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.display.element;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
@@ -12,6 +13,7 @@ import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.display.editor.DisplayRotationProvider;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayAxisRotateTool;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayAxisScaleTool;
+import me.m56738.easyarmorstands.display.editor.tool.DisplayScaleTool;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityToolProvider;
@@ -35,6 +37,11 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
 
     public @Nullable AxisRotateTool shear(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
         return new DisplayAxisRotateTool(properties, DisplayPropertyTypes.RIGHT_ROTATION, axis, positionProvider, rotationProvider, rotation());
+    }
+
+    @Override
+    public @NotNull ScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
+        return new DisplayScaleTool(properties, positionProvider, rotationProvider);
     }
 
     @Override
