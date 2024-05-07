@@ -603,6 +603,28 @@ public class SessionCommands {
                 property.getType().getValueComponent(canTick)));
     }
 
+    @Command("rescale <value>")
+    @PropertyPermission("easyarmorstands:entity/scale")
+    @CommandDescription("easyarmorstands.command.description.scale")
+    public void rescale(EasPlayer sender, @Argument("value") double scale) {
+        PropertyContainer properties = getPropertiesOrError(sender);
+        if (properties == null) {
+            return;
+        }
+        Property<Double> property = properties.getOrNull(EntityPropertyTypes.SCALE);
+        if (property == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.rescale-unsupported-entity"));
+            return;
+        }
+        if (!property.setValue(scale)) {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+            return;
+        }
+        properties.commit();
+        sender.sendMessage(Message.success("easyarmorstands.success.rescaled-entity",
+                property.getType().getValueComponent(scale)));
+    }
+
     @Command("reset")
     @Permission(Permissions.EDIT)
     @CommandDescription("easyarmorstands.command.description.reset")

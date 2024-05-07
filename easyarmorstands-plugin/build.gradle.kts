@@ -111,6 +111,7 @@ registerVersion("v1_18", "org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_18_paper", "io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
 registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 registerVersion("v1_20_2", "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
+registerVersion("v1_20_6", "org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
 
 hangarPublish {
     val versionString = project.version.toString()

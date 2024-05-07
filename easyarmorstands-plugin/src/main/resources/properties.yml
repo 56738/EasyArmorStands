@@ -185,6 +185,12 @@ easyarmorstands:entity/location:
       - <value>
       - <lang:easyarmorstands.property.glow.description>
 
+easyarmorstands:entity/scale:
+  permission: easyarmorstands.property.scale
+  name: <lang:easyarmorstands.property.scale.name>
+  value:
+    format: 0.0000
+
 easyarmorstands:entity/silent:
   permission: easyarmorstands.property.silent
   name: <lang:easyarmorstands.property.silent.name>

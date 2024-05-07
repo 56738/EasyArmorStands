@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
@@ -27,6 +28,7 @@ import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.entity.EntityScaleProperty;
 import me.m56738.easyarmorstands.property.entity.EntitySilentProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -72,6 +74,10 @@ public class EntityElementListener implements Listener {
         EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             registry.register(new EntityEquipmentProperty(entity, slot, equipmentCapability));
+        }
+        EntityScaleCapability scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
+        if (scaleCapability != null) {
+            registry.register(new EntityScaleProperty(entity, scaleCapability));
         }
     }
 
