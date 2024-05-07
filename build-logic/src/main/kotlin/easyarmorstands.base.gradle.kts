@@ -11,6 +11,7 @@ repositories {
     maven("https://maven.enginehub.org/repo/")
     maven("https://ci.mg-dev.eu/plugin/repository/everything/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 tasks {

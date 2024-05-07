@@ -50,6 +50,7 @@ import org.incendo.cloud.annotations.Default;
 import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.bukkit.data.MultipleEntitySelector;
 import org.incendo.cloud.bukkit.data.SingleEntitySelector;
+import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -507,7 +508,7 @@ public class SessionCommands {
     @Command("name set <value>")
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.set")
-    public void setName(EasPlayer sender, @Argument("value") @Greedy String input) {
+    public void setName(EasPlayer sender, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
             return;
@@ -518,7 +519,6 @@ public class SessionCommands {
             return;
         }
         Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
-        Component name = MiniMessage.miniMessage().deserialize(input);
         boolean hadName = nameProperty.getValue().isPresent();
         if (!nameProperty.setValue(Optional.of(name))) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));

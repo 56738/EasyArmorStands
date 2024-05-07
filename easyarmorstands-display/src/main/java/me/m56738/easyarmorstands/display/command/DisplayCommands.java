@@ -38,7 +38,6 @@ import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -57,6 +56,7 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
 import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
@@ -326,7 +326,7 @@ public class DisplayCommands {
     @Command("text set <value>")
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text.set")
-    public void setText(EasPlayer sender, @Argument("value") @Greedy String input) {
+    public void setText(EasPlayer sender, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
         PropertyContainer properties = getPropertiesOrError(sender);
         if (properties == null) {
             return;
@@ -336,7 +336,6 @@ public class DisplayCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.text-unsupported"));
             return;
         }
-        Component value = MiniMessage.miniMessage().deserialize(input);
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text",
