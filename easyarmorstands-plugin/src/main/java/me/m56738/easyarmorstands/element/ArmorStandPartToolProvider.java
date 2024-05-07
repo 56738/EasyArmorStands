@@ -19,9 +19,9 @@ public class ArmorStandPartToolProvider extends DelegateToolProvider {
     private final PropertyContainer properties;
     private final ArmorStandPart part;
 
-    public ArmorStandPartToolProvider(PropertyContainer properties, ArmorStandPart part, ToolProvider toolProvider) {
+    public ArmorStandPartToolProvider(PropertyContainer properties, ArmorStandPart part, ArmorStandElement element, ToolProvider toolProvider) {
         super(toolProvider,
-                new EntityPositionProvider(properties, new ArmorStandPartOffsetProvider(properties, part)),
+                new EntityPositionProvider(properties, new ArmorStandPartOffsetProvider(properties, part, element)),
                 new ArmorStandPartRotationProvider(properties, part));
         this.properties = properties;
         this.part = part;

@@ -47,8 +47,9 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     public @NotNull BoundingBox getBoundingBox() {
         ArmorStandSize size = ArmorStandSize.get(entity);
         Vector3d position = Util.toVector3d(entity.getLocation());
-        double width = size.getWidth();
-        double height = size.getHeight();
+        double scale = getScale();
+        double width = size.getWidth() * scale;
+        double height = size.getHeight() * scale;
         return BoundingBox.of(position, width, height);
     }
 }

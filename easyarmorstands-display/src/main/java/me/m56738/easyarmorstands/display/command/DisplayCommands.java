@@ -619,7 +619,7 @@ public class DisplayCommands {
 
         ArmorStandPartInfo info = ArmorStandPartInfo.of(part);
         Location location = entity.getLocation();
-        Vector3d offset = info.getOffset(ArmorStandSize.get(entity)).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
+        Vector3d offset = info.getOffset(ArmorStandSize.get(entity), 1).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
         location.add(offset.x, offset.y, offset.z);
 
         EulerAngle angle = part.getPose(entity);

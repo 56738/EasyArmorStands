@@ -43,6 +43,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     private final Property<Location> locationProperty;
     private final Property<EulerAngle> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
+    private double scale = 1;
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         this.session = session;
@@ -61,14 +62,16 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     public void update() {
         Location location = locationProperty.getValue();
         ArmorStandSize size = sizeProperty.getValue();
+        double scale = element.getScale();
+        this.scale = Math.max(1, scale); // make sure the button doesn't get too small
         // rotation = combination of yaw and pose
         Util.fromEuler(poseProperty.getValue(), rotation).rotateLocalY(-Math.toRadians(location.getYaw()));
         // start = where the bone is attached to the armor stand, depends on yaw
-        partInfo.getOffset(size)
+        partInfo.getOffset(size, scale)
                 .rotateY(-Math.toRadians(location.getYaw()), start)
                 .add(location.getX(), location.getY(), location.getZ());
         // end = where the bone ends, depends on yaw and pose
-        partInfo.getLength(size)
+        partInfo.getLength(size, scale)
                 .rotate(rotation, end)
                 .add(start);
         // move start down, start-end will be the lower 2/3 of the bone
@@ -78,7 +81,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
 
     @Override
     public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
-        Vector3dc intersection = ray.intersectLine(start, end);
+        Vector3dc intersection = ray.intersectLine(start, end, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
         }
@@ -89,6 +92,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
         particle.setRotation(rotation);
         particle.setCenter(center);
         particle.setLength(center.distance(end) * 2);
+        particle.setWidth(Util.LINE_WIDTH * scale);
         particle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
     }
 

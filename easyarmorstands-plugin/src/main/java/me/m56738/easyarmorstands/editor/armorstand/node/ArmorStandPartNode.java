@@ -25,7 +25,7 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
         this.session = session;
         this.part = part;
         this.toolManager = new ToolMenuManager(session, this,
-                new ArmorStandPartToolProvider(container, part, element.getTools(container)));
+                new ArmorStandPartToolProvider(container, part, element, element.getTools(container)));
     }
 
     @Override

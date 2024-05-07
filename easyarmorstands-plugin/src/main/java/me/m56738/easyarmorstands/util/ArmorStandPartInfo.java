@@ -84,17 +84,20 @@ public class ArmorStandPartInfo {
         return displayName;
     }
 
-    public Vector3dc getOffset(ArmorStandSize size) {
-        if (size.isSmall()) {
-            return smallOffset;
-        }
-        return offset;
+    public Vector3dc getOffset(ArmorStandSize size, double scale) {
+        Vector3dc offset = size.isSmall() ? smallOffset : this.offset;
+        return mul(offset, scale);
     }
 
-    public Vector3dc getLength(ArmorStandSize size) {
-        if (size.isSmall()) {
-            return smallLength;
+    public Vector3dc getLength(ArmorStandSize size, double scale) {
+        Vector3dc length = size.isSmall() ? smallLength : this.length;
+        return mul(length, scale);
+    }
+
+    private Vector3dc mul(Vector3dc vector, double scale) {
+        if (scale == 1) {
+            return vector;
         }
-        return length;
+        return vector.mul(scale, new Vector3d());
     }
 }

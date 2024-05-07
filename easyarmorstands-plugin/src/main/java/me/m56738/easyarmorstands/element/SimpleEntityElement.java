@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
 import me.m56738.easyarmorstands.capability.entitysize.EntitySizeCapability;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
@@ -23,6 +24,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -34,11 +36,13 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = PropertyRegistry.create(this);
     private final EntitySizeCapability sizeCapability;
+    private final EntityScaleCapability scaleCapability;
 
     public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
         this.entity = entity;
         this.type = type;
         this.sizeCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntitySizeCapability.class);
+        this.scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
     }
 
     @Override
@@ -80,6 +84,13 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         double width = sizeCapability.getWidth(entity);
         double height = sizeCapability.getHeight(entity);
         return BoundingBox.of(position, width, height);
+    }
+
+    public double getScale() {
+        if (scaleCapability != null && entity instanceof LivingEntity) {
+            return scaleCapability.getEffectiveScale((LivingEntity) entity);
+        }
+        return 1;
     }
 
     @Override
