@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.ScaleButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.ScaleSetupNode;
+import me.m56738.easyarmorstands.editor.node.ScaleToolNode;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +48,6 @@ public class ScaleButtonImpl implements ScaleButton {
 
     @Override
     public @NotNull Node createNode() {
-        return new ScaleSetupNode(session, tool.start(), name, color, tool.getPosition()).createNodeOrSetup();
+        return new ScaleToolNode(session, tool.start(), name, color, tool.getPosition());
     }
 }
