@@ -159,6 +159,10 @@ easyarmorstands:entity/equipment/head:
   permission: easyarmorstands.property.equipment
   name: <lang:easyarmorstands.property.equipment.head.name>
 
+easyarmorstands:entity/equipment/body:
+  permission: easyarmorstands.property.equipment
+  name: <lang:easyarmorstands.property.equipment.body.name>
+
 easyarmorstands:entity/glowing:
   permission: easyarmorstands.property.glow
   name: <lang:easyarmorstands.property.glow.name>
