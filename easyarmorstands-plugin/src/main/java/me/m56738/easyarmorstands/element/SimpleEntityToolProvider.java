@@ -16,17 +16,21 @@ import me.m56738.easyarmorstands.editor.tool.EntityMoveTool;
 import me.m56738.easyarmorstands.editor.tool.EntityPitchTool;
 import me.m56738.easyarmorstands.editor.tool.EntityScaleTool;
 import me.m56738.easyarmorstands.editor.tool.EntityYawTool;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3dc;
 
 public class SimpleEntityToolProvider implements ToolProvider {
     protected final PropertyContainer properties;
+    private final Property<Location> positionProperty;
     private final Property<Double> scaleProperty;
     protected PositionProvider positionProvider;
     protected RotationProvider rotationProvider;
 
     public SimpleEntityToolProvider(PropertyContainer properties) {
         this.properties = properties;
+        this.positionProperty = properties.getOrNull(EntityPropertyTypes.LOCATION);
         this.scaleProperty = properties.getOrNull(EntityPropertyTypes.SCALE);
         positionProvider = new EntityPositionProvider(properties);
         rotationProvider = new EntityRotationProvider(properties);
@@ -66,7 +70,7 @@ public class SimpleEntityToolProvider implements ToolProvider {
     @Override
     public @Nullable ScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
         if (scaleProperty != null) {
-            return new EntityScaleTool(properties, scaleProperty, positionProvider, rotationProvider);
+            return new EntityScaleTool(properties, positionProperty, scaleProperty, positionProvider, rotationProvider);
         }
         return ToolProvider.super.scale(positionProvider, rotationProvider);
     }
