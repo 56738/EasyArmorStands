@@ -8,31 +8,29 @@ import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleEntityNode extends MenuNode implements ElementNode {
     private final Session session;
     private final Element element;
-    private final Component name;
     private final ToolMenuManager toolManager;
+    private final ToolMenuModeSwitcher toolSwitcher;
 
     public SimpleEntityNode(Session session, EditableElement element) {
         super(session);
         this.session = session;
         this.element = element;
-        this.name = Message.component("easyarmorstands.node.select-axis");
         this.toolManager = new ToolMenuManager(session, this, element.getTools(session.properties(element)));
         this.toolManager.setMode(ToolMenuMode.GLOBAL);
+        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(name);
+        context.setActionBar(toolSwitcher.getActionBar());
     }
 
     @Override
@@ -47,15 +45,7 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
                 return true;
             }
         }
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            ToolMenuMode mode = toolManager.getMode();
-            ToolMenuMode nextMode = toolManager.getNextMode();
-            if (nextMode != mode) {
-                toolManager.setMode(nextMode);
-                return true;
-            }
-        }
-        return false;
+        return toolSwitcher.onClick(context);
     }
 
     @Override

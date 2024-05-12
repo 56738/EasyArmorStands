@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.color.ColorAxisChangeSlotType;
 import me.m56738.easyarmorstands.color.ColorAxisSlotType;
@@ -186,6 +187,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
+
+        SwapHandItemsCapability swapHandItemsCapability = getCapability(SwapHandItemsCapability.class);
+        if (swapHandItemsCapability != null) {
+            swapHandItemsCapability.addListener(sessionListener);
+        }
 
         try {
             commandManager = new PaperCommandManager<>(

@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
+import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -39,7 +40,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SessionListener implements Listener {
+public class SessionListener implements Listener, SwapHandItemsListener {
     private final Plugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
@@ -114,6 +115,16 @@ public class SessionListener implements Listener {
 
     public boolean handleRightClick(Player player, Entity entity) {
         return handleRightClick(player, entity, null);
+    }
+
+    @Override
+    public boolean handleSwap(Player player) {
+        SessionImpl session = manager.getSession(player);
+        if (session == null) {
+            return false;
+        }
+        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
+        return true;
     }
 
     @EventHandler

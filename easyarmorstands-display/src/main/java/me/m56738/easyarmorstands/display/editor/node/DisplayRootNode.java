@@ -13,7 +13,7 @@ import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyT
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
+import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Location;
@@ -30,6 +30,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
     private final ToolMenuManager toolManager;
+    private final ToolMenuModeSwitcher toolSwitcher;
 
     public DisplayRootNode(Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
@@ -38,6 +39,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
         this.toolManager = new ToolMenuManager(session, this, element.getTools(properties()));
+        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
     }
 
     @Override
@@ -62,21 +64,13 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
             element.openMenu(player);
             return true;
         }
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            ToolMenuMode mode = toolManager.getMode();
-            ToolMenuMode nextMode = toolManager.getNextMode();
-            if (nextMode != mode) {
-                toolManager.setMode(nextMode);
-                return true;
-            }
-        }
-        return false;
+        return toolSwitcher.onClick(context);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolManager.getMode().getName());
+        context.setActionBar(toolSwitcher.getActionBar());
     }
 
     @Override

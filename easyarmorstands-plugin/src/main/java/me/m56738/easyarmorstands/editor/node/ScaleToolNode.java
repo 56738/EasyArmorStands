@@ -21,7 +21,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
-    private static final double ACTIVATION_DISTANCE = 0.5;
+    private static final double ACTIVATION_DISTANCE = 0.2;
     protected final Session session;
     protected final ScaleToolSession toolSession;
     private final Vector3dc position;
@@ -115,6 +115,7 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
     @Override
     public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
+        cursor.stop();
         session.removeParticle(cursorLineParticle);
     }
 

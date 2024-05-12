@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.config;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.item.ItemTemplate;
 import me.m56738.easyarmorstands.message.MessageStyle;
+import net.kyori.adventure.text.Component;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Map;
@@ -20,4 +21,5 @@ public class EasConfig {
     public double editorSelectionRange = 10;
     public double editorLookThreshold = 0.1;
     public int interpolationTicks = 1;
+    public Component swapHandsButton;
 }

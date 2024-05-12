@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
+import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
 import org.bukkit.util.EulerAngle;
@@ -19,6 +19,7 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
     private final Session session;
     private final ArmorStandPart part;
     private final ToolMenuManager toolManager;
+    private final ToolMenuModeSwitcher toolSwitcher;
 
     public ArmorStandPartNode(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         super(session, container);
@@ -26,12 +27,13 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
         this.part = part;
         this.toolManager = new ToolMenuManager(session, this,
                 new ArmorStandPartToolProvider(container, part, element, element.getTools(container)));
+        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolManager.getMode().getName());
+        context.setActionBar(toolSwitcher.getActionBar());
     }
 
     @Override
@@ -43,15 +45,7 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
             session.popNode();
             return true;
         }
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            ToolMenuMode mode = toolManager.getMode();
-            ToolMenuMode nextMode = toolManager.getNextMode();
-            if (nextMode != mode) {
-                toolManager.setMode(nextMode);
-                return true;
-            }
-        }
-        return false;
+        return toolSwitcher.onClick(context);
     }
 
     @Override

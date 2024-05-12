@@ -67,7 +67,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
                 ParticleColor.WHITE,
                 Message.component("easyarmorstands.node.position"),
                 container,
-                new ArmorStandOffsetProvider(container),
+                new ArmorStandOffsetProvider(element, container),
                 element);
         addButton(positionButton);
     }

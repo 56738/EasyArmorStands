@@ -254,7 +254,7 @@ easyarmorstands:display/brightness:
   name: <lang:easyarmorstands.property.display.brightness.name>
   value:
     template: <gold><lang:easyarmorstands.property.display.brightness.sky:'<sky>'></gold>, <yellow><lang:easyarmorstands.property.display.brightness.block:'<block>'>
-    none: <i><gray>Default brightness
+    none: <i><gray><lang:easyarmorstands.property.display.brightness.default>
 
 easyarmorstands:display/box/height:
   permission: easyarmorstands.property.display.size

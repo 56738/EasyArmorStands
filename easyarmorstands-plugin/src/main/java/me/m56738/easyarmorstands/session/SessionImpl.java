@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
@@ -158,15 +159,24 @@ public final class SessionImpl implements Session {
         nodeStack.clear();
     }
 
+    private boolean hasClickCooldown(ClickContext.Type type) {
+        return type != ClickContext.Type.SWAP_HANDS;
+    }
+
     public boolean handleClick(ClickContextImpl context) {
         if (!valid) {
             return false;
         }
         Node node = nodeStack.peek();
-        if (node == null || clickTicks > 0) {
+        if (node == null) {
             return false;
         }
-        clickTicks = 5;
+        if (hasClickCooldown(context.type())) {
+            if (clickTicks > 0) {
+                return false;
+            }
+            clickTicks = 5;
+        }
         return node.onClick(context);
     }
 

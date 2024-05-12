@@ -35,3 +35,5 @@ editor-selection-range: 10
 editor-look-threshold: 0.1
 
 interpolation-ticks: 1
+
+swap-hands-button: '[<key:key.swapOffhand>]'

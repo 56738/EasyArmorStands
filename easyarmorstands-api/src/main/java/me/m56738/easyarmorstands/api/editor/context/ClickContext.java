@@ -24,6 +24,7 @@ public interface ClickContext {
 
     enum Type {
         LEFT_CLICK,
-        RIGHT_CLICK
+        RIGHT_CLICK,
+        SWAP_HANDS
     }
 }

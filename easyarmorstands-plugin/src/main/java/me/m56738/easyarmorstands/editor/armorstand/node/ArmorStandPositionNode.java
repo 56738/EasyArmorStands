@@ -11,26 +11,25 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.node.ToolMenuMode;
+import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandPositionNode extends PropertyMenuNode implements ResettableNode {
     private final Session session;
-    private final Component name;
     private final ToolMenuManager toolManager;
+    private final ToolMenuModeSwitcher toolSwitcher;
 
-    public ArmorStandPositionNode(Session session, Component name, PropertyContainer properties, OffsetProvider offsetProvider, ArmorStandElement element) {
+    public ArmorStandPositionNode(Session session, PropertyContainer properties, OffsetProvider offsetProvider, ArmorStandElement element) {
         super(session, properties);
         this.session = session;
-        this.name = name;
         this.toolManager = new ToolMenuManager(session, this,
                 new DelegateToolProvider(element.getTools(properties),
                         new EntityPositionProvider(properties, offsetProvider),
                         null));
+        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class ArmorStandPositionNode extends PropertyMenuNode implements Resettab
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(name);
+        context.setActionBar(toolSwitcher.getActionBar());
     }
 
     @Override
@@ -58,14 +57,6 @@ public class ArmorStandPositionNode extends PropertyMenuNode implements Resettab
             session.popNode();
             return true;
         }
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            ToolMenuMode mode = toolManager.getMode();
-            ToolMenuMode nextMode = toolManager.getNextMode();
-            if (nextMode != mode) {
-                toolManager.setMode(nextMode);
-                return true;
-            }
-        }
-        return false;
+        return toolSwitcher.onClick(context);
     }
 }

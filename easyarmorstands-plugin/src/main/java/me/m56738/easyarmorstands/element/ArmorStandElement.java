@@ -29,7 +29,7 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     public @NotNull Button createButton(@NotNull Session session) {
         PropertyContainer properties = getProperties();
         return new BoundingBoxButton(session, this,
-                new EntityPositionProvider(properties, new ArmorStandOffsetProvider(properties)),
+                new EntityPositionProvider(properties, new ArmorStandOffsetProvider(this, properties)),
                 new ArmorStandRotationProvider(properties));
     }
 

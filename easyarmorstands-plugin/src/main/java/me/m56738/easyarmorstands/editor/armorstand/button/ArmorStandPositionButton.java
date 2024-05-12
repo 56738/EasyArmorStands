@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPositionNode;
 import me.m56738.easyarmorstands.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,6 +57,6 @@ public class ArmorStandPositionButton implements MenuButton, NodeFactory {
 
     @Override
     public Node createNode() {
-        return new ArmorStandPositionNode(session, Message.component("easyarmorstands.node.select-axis"), container, offsetProvider, element);
+        return new ArmorStandPositionNode(session, container, offsetProvider, element);
     }
 }
