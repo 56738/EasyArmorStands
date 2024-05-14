@@ -79,7 +79,7 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -122,7 +122,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private HistoryManager historyManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
-    private PaperCommandManager<EasCommandSender> commandManager;
+    private LegacyPaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
     public static EasyArmorStandsPlugin getInstance() {
@@ -194,7 +194,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
 
         try {
-            commandManager = new PaperCommandManager<>(
+            commandManager = new LegacyPaperCommandManager<>(
                     this,
                     ExecutionCoordinator.simpleCoordinator(),
                     new CommandSenderMapper(adventure));
@@ -475,7 +475,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return adventure;
     }
 
-    public PaperCommandManager<EasCommandSender> getCommandManager() {
+    public LegacyPaperCommandManager<EasCommandSender> getCommandManager() {
         return commandManager;
     }
 
