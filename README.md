@@ -28,6 +28,7 @@ If you get stuck, refer to the detailed instructions below.
 * Left-click: Open menu
 * Q: Deselect entity
 * Shift: Disable snapping
+* F: Switch between local/global/scale modes
 
 ## Editing entities
 
@@ -42,7 +43,7 @@ You can abort your changes and restore the previous position by left-clicking in
 Right-click a circle to use the **Rotate** tool.
 This works just like the Move tool.
 
-Some entities let you switch between local and global mode by right-clicking anywhere else.
+Some entities let you switch between local and global mode by pressing F.
 Local mode is affected by the rotation, for example, you can use it to move an armor stand along its arms.
 Global mode uses global coordinates.
 
@@ -82,7 +83,6 @@ Display entities can be edited just like armor stand bones.
 Additionally, they can be scaled.
 Enter the **Scale** mode by right-clicking without looking at anything,
 just like switching between local and global mode.
-Alternatively, use `/eas scale <value>` to set the scale in all three directions at once.
 
 Use the menu to place an item into an item display.
 
@@ -91,7 +91,7 @@ Format the text using [MiniMessage](https://docs.advntr.dev/minimessage/format.h
 This command also has some subcommands such as `/eas text background`, which can be used to change the background color.
 
 **Hint:** Set the billboard mode to `center` in the menu and reset the rotation
-(`/eas reset rotation`, `/eas yaw 0`, `/eas pitch 0`) to create a hologram which always looks at the player.
+(`/eas reset`) to create a hologram which always looks at the player.
 
 Place a block in a block display by holding Shift and left-clicking it, or use `/eas block`.
 This command also supports block states like `minecraft:birch_stairs[facing=east]`.
