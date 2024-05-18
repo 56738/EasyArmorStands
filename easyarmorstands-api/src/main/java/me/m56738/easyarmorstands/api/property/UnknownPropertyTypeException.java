@@ -10,7 +10,7 @@ public class UnknownPropertyTypeException extends RuntimeException {
     private final @Nullable TypeToken<?> type;
 
     public UnknownPropertyTypeException(@NotNull Key key, @Nullable TypeToken<?> type) {
-        super(key.asString() + (type != null ? " " + type.getAnnotatedType() : ""));
+        super(key.asString());
         this.key = key;
         this.type = type;
     }

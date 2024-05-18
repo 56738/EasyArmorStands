@@ -229,3 +229,9 @@
     value: 16
   path: [ swap-hands-button ]
   value: '[<key:key.swapHands>]'
+- name: config.yml
+  condition:
+    type: before-minor-version
+    value: 12
+  path: [ swap-hands-button ]
+  value: '[F]'
