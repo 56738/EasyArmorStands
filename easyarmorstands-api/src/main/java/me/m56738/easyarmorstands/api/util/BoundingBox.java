@@ -88,6 +88,13 @@ public interface BoundingBox {
     @NotNull Vector3dc getMaxPosition();
 
     @Contract(pure = true)
+    default @NotNull Vector3d getSize(Vector3d dest) {
+        Vector3dc min = getMinPosition();
+        Vector3dc max = getMaxPosition();
+        return max.sub(min, new Vector3d());
+    }
+
+    @Contract(pure = true)
     default @NotNull Vector3d getCenter(Vector3d dest) {
         Vector3dc min = getMinPosition();
         Vector3dc max = getMaxPosition();

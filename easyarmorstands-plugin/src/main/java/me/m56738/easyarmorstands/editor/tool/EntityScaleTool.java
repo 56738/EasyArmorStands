@@ -60,12 +60,12 @@ public class EntityScaleTool implements ScaleTool {
             this.scale = originalScale;
         }
 
-        private double getEffectiveScale() {
+        private double getEffectiveScale(double scale) {
             return Math.clamp(0.0625, 16.0, scale);
         }
 
         private void updatePosition() {
-            double delta = getEffectiveScale() / originalScale - 1;
+            double delta = getEffectiveScale(scale) / getEffectiveScale(originalScale) - 1;
             positionProperty.setValue(originalLocation.clone()
                     .add(offset.x() * delta, offset.y() * delta, offset.z() * delta));
         }

@@ -20,6 +20,8 @@ public class EasConfig {
     public double editorRange = 64;
     public double editorSelectionRange = 10;
     public double editorLookThreshold = 0.1;
+    public double editorSelectionDistance = 128.0;
+    public int editorSelectionLimit = 64;
     public int interpolationTicks = 1;
     public Component swapHandsButton;
 }

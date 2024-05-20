@@ -254,6 +254,10 @@ public class SessionCommands {
             if (element instanceof EditableElement) {
                 EditableElement editableElement = (EditableElement) element;
                 if (sender.canEditElement(editableElement)) {
+                    if (group.getMembers().size() >= EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionLimit) {
+                        sender.sendMessage(Message.error("easyarmorstands.error.group-too-big"));
+                        return;
+                    }
                     group.addMember(editableElement);
                 }
             }

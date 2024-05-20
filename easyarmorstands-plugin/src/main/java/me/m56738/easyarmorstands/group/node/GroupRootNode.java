@@ -50,6 +50,7 @@ public class GroupRootNode extends MenuNode {
     @Override
     public void onAdd(@NotNull AddContext context) {
         super.onAdd(context);
+        updateBox();
         session.addParticle(boxParticle);
     }
 

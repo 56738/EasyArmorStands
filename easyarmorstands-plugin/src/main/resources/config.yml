@@ -33,6 +33,8 @@ editor-scale-max-distance: 64
 editor-range: 64
 editor-selection-range: 10
 editor-look-threshold: 0.1
+editor-selection-distance: 128
+editor-selection-limit: 64
 
 interpolation-ticks: 1
 
