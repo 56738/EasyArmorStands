@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.button;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ public class GravityToggleButton extends BooleanToggleButton {
     private final Property<Boolean> canTickProperty;
     private final List<String> canTickWarning;
 
-    public GravityToggleButton(Property<Boolean> property, PropertyContainer container, ItemTemplate item, List<String> canTickWarning) {
+    public GravityToggleButton(Property<Boolean> property, PropertyContainer container, SimpleItemTemplate item, List<String> canTickWarning) {
         super(property, container, item);
         this.canTickProperty = container.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         this.canTickWarning = canTickWarning;
     }
 
     @Override
-    protected ItemTemplate prepareTemplate(ItemTemplate template) {
+    protected SimpleItemTemplate prepareTemplate(SimpleItemTemplate template) {
         template = super.prepareTemplate(template);
         if (canTickProperty != null && property.getValue() && !canTickProperty.getValue()) {
             template = template.appendLore(canTickWarning);

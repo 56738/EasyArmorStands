@@ -5,15 +5,15 @@ import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TrainCartsModelListingSlotFactory implements MenuSlotFactory {
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
 
-    public TrainCartsModelListingSlotFactory(ItemTemplate itemTemplate) {
+    public TrainCartsModelListingSlotFactory(SimpleItemTemplate itemTemplate) {
         this.itemTemplate = itemTemplate;
     }
 

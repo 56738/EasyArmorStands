@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.editor.node.NodeFactory;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +16,10 @@ public class NodeSlot implements MenuSlot {
     private final Session session;
     private final NodeFactory nodeFactory;
     private final Consumer<MenuClick> resetAction;
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
     private final TagResolver resolver;
 
-    public NodeSlot(Session session, NodeFactory nodeFactory, Consumer<MenuClick> resetAction, ItemTemplate itemTemplate, TagResolver resolver) {
+    public NodeSlot(Session session, NodeFactory nodeFactory, Consumer<MenuClick> resetAction, SimpleItemTemplate itemTemplate, TagResolver resolver) {
         this.session = session;
         this.nodeFactory = nodeFactory;
         this.resetAction = resetAction;

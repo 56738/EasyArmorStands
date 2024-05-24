@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.property.type;
 
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -15,7 +15,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     private final @NotNull Key key;
     private final @NotNull TypeToken<T> valueType;
-    protected ItemTemplate buttonTemplate;
+    protected SimpleItemTemplate buttonTemplate;
     private @Nullable String permission;
     private Component name;
     private Permission registeredPermission;
@@ -43,7 +43,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         permission = config.node("permission").getString();
         name = config.node("name").get(Component.class);
-        buttonTemplate = config.node("button").get(ItemTemplate.class);
+        buttonTemplate = config.node("button").get(SimpleItemTemplate.class);
 
         if (registeredPermission != null) {
             Permissions.unregister(registeredPermission);

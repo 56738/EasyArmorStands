@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpawnSlotFactory implements MenuSlotFactory {
     private final ElementType type;
-    private final ItemTemplate buttonTemplate;
+    private final SimpleItemTemplate buttonTemplate;
 
-    public SpawnSlotFactory(ElementType type, ItemTemplate buttonTemplate) {
+    public SpawnSlotFactory(ElementType type, SimpleItemTemplate buttonTemplate) {
         this.type = type;
         this.buttonTemplate = buttonTemplate;
     }

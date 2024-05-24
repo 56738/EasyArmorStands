@@ -4,14 +4,14 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class ComponentButton extends PropertyButton<Component> {
     private final String command;
 
-    public ComponentButton(Property<Component> property, PropertyContainer container, ItemTemplate item, String command) {
+    public ComponentButton(Property<Component> property, PropertyContainer container, SimpleItemTemplate item, String command) {
         super(property, container, item);
         this.command = command;
     }

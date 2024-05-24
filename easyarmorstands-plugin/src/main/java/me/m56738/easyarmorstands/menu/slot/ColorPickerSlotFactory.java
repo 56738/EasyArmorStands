@@ -5,16 +5,16 @@ import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ColorPickerSlotFactory implements MenuSlotFactory {
-    private final ItemTemplate itemTemplate;
-    private final ItemTemplate activeItemTemplate;
+    private final SimpleItemTemplate itemTemplate;
+    private final SimpleItemTemplate activeItemTemplate;
 
-    public ColorPickerSlotFactory(ItemTemplate itemTemplate, ItemTemplate activeItemTemplate) {
+    public ColorPickerSlotFactory(SimpleItemTemplate itemTemplate, SimpleItemTemplate activeItemTemplate) {
         this.itemTemplate = itemTemplate;
         this.activeItemTemplate = activeItemTemplate;
     }

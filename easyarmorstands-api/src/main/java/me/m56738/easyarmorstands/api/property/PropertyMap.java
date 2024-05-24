@@ -26,6 +26,10 @@ public final class PropertyMap implements PropertyContainer {
     }
 
     public PropertyMap(@NotNull PropertyContainer container) {
+        putAll(container);
+    }
+
+    public void putAll(@NotNull PropertyContainer container) {
         container.forEach(this::importProperty);
     }
 

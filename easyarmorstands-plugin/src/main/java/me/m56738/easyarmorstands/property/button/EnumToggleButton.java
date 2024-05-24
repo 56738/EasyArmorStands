@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 
 public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     private final T[] values;
 
-    public EnumToggleButton(Property<T> property, PropertyContainer container, ItemTemplate item, T[] values) {
+    public EnumToggleButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item, T[] values) {
         super(property, container, item);
         this.values = values;
     }

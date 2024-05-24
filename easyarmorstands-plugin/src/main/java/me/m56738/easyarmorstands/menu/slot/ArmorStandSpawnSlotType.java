@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -24,6 +24,6 @@ public class ArmorStandSpawnSlotType implements MenuSlotType {
 
     @Override
     public @NotNull MenuSlotFactory load(@NotNull ConfigurationNode node) throws SerializationException {
-        return new SpawnSlotFactory(type, node.node("item").get(ItemTemplate.class));
+        return new SpawnSlotFactory(type, node.node("item").get(SimpleItemTemplate.class));
     }
 }

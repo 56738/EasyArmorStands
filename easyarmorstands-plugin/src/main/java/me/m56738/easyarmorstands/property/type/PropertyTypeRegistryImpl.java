@@ -34,13 +34,11 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     public void load(CommentedConfigurationNode config) {
         currentConfig = config;
         for (PropertyType<?> type : types.values()) {
-            if (type instanceof ConfigurablePropertyType) {
-                load((ConfigurablePropertyType<?>) type);
-            }
+            load(type);
         }
     }
 
-    private void load(ConfigurablePropertyType<?> type) {
+    private void load(PropertyType<?> type) {
         if (currentConfig == null) {
             return;
         }

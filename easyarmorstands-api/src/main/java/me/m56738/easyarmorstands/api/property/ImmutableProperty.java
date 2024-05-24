@@ -4,13 +4,15 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 class ImmutableProperty<T> implements Property<T> {
     private final PropertyType<T> type;
     private final T value;
 
     ImmutableProperty(PropertyType<T> type, T value) {
-        this.type = type;
-        this.value = value;
+        this.type = Objects.requireNonNull(type);
+        this.value = Objects.requireNonNull(value);
     }
 
     @Override

@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.config.serializer;
 
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.menu.factory.MenuFactory;
-import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuFactory;
+import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 public class MenuFactorySerializer implements TypeSerializer<MenuFactory> {
     @Override
     public MenuFactory deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        MenuFactoryBuilder factory = new MenuFactoryBuilder();
+        MenuFactoryBuilderImpl factory = new MenuFactoryBuilderImpl();
         factory.setTitleTemplate(node.node("title").getString());
         factory.setHeight(node.node("height").getInt());
         factory.setBackground(node.node("background").get(MenuSlotFactory.class));

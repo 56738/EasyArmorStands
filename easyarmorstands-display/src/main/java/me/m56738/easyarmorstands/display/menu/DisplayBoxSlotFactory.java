@@ -10,15 +10,15 @@ import me.m56738.easyarmorstands.api.property.UnknownPropertyException;
 import me.m56738.easyarmorstands.display.DisplayBox;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.menu.slot.NodeSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DisplayBoxSlotFactory implements MenuSlotFactory {
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
 
-    public DisplayBoxSlotFactory(ItemTemplate itemTemplate) {
+    public DisplayBoxSlotFactory(SimpleItemTemplate itemTemplate) {
         this.itemTemplate = itemTemplate;
     }
 

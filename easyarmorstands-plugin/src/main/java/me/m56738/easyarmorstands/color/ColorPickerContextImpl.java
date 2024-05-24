@@ -13,14 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ColorPickerContextImpl implements ColorPickerContext {
     private final Property<ItemStack> property;
     private final PropertyContainer container;
     private final ItemColorCapability itemColorCapability;
-    private final List<Runnable> subscriptions = new ArrayList<>();
 
     public ColorPickerContextImpl(Property<ItemStack> property, PropertyContainer container) {
         this.property = property;
@@ -61,13 +57,6 @@ public class ColorPickerContextImpl implements ColorPickerContext {
             item.setItemMeta(meta);
             property.setValue(item);
             container.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
-            for (Runnable subscription : subscriptions) {
-                subscription.run();
-            }
         }
-    }
-
-    public void subscribe(@NotNull Runnable callback) {
-        subscriptions.add(callback);
     }
 }

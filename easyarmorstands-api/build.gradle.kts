@@ -9,6 +9,7 @@ dependencies {
     api(libs.adventure.api)
     api(libs.adventure.text.minimessage)
     api(libs.configurate.core)
+    api(libs.configurate.yaml)
     api(libs.joml)
 }
 
@@ -30,5 +31,6 @@ tasks {
         relocate("net.kyori", "$prefix.kyori")
         relocate("org.joml", "$prefix.joml")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
+        relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
     }
 }

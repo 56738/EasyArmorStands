@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ public class ColorAxisChangeSlot extends ColorAxisSlot {
     private final int rightChange;
     private final int shiftChange;
 
-    public ColorAxisChangeSlot(ColorPickerContext context, ColorAxis axis, ItemTemplate itemTemplate, TagResolver resolver, int leftChange, int rightChange, int shiftChange) {
+    public ColorAxisChangeSlot(ColorPickerContext context, ColorAxis axis, SimpleItemTemplate itemTemplate, TagResolver resolver, int leftChange, int rightChange, int shiftChange) {
         super(context, axis, itemTemplate, resolver);
         this.context = context;
         this.axis = axis;

@@ -1,7 +1,8 @@
 package me.m56738.easyarmorstands.config.serializer;
 
+import me.m56738.easyarmorstands.api.util.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.item.ItemRenderer;
-import me.m56738.easyarmorstands.item.ItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +54,7 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
         }
         String name = node.node("name").getString();
         List<String> description = node.node("description").getList(String.class);
-        return new ItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());
+        return new SimpleItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());
     }
 
     @Override

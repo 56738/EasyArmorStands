@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class TrainCartsModelListingSlot implements MenuSlot {
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
     private final MenuElement element;
     private final TagResolver resolver;
 
-    public TrainCartsModelListingSlot(ItemTemplate itemTemplate, MenuElement element, TagResolver resolver) {
+    public TrainCartsModelListingSlot(SimpleItemTemplate itemTemplate, MenuElement element, TagResolver resolver) {
         this.itemTemplate = itemTemplate;
         this.element = element;
         this.resolver = resolver;

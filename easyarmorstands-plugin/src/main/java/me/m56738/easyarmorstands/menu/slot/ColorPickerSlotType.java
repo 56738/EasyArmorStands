@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -22,7 +22,7 @@ public class ColorPickerSlotType implements MenuSlotType {
         ConfigurationNode activeItemNode = node.node("active-item");
         activeItemNode.mergeFrom(itemNode);
         return new ColorPickerSlotFactory(
-                itemNode.get(ItemTemplate.class),
-                activeItemNode.get(ItemTemplate.class));
+                itemNode.get(SimpleItemTemplate.class),
+                activeItemNode.get(SimpleItemTemplate.class));
     }
 }

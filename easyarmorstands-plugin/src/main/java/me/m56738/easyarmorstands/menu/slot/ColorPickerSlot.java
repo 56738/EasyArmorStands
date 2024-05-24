@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -21,20 +21,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
-    private final ItemTemplate itemTemplate;
-    private final ItemTemplate activeItemTemplate;
+    private final SimpleItemTemplate itemTemplate;
+    private final SimpleItemTemplate activeItemTemplate;
     private final TagResolver resolver;
     private final MenuElement element;
     private boolean active;
 
-    public ColorPickerSlot(ItemTemplate itemTemplate, ItemTemplate activeItemTemplate, TagResolver resolver, MenuElement element) {
+    public ColorPickerSlot(SimpleItemTemplate itemTemplate, SimpleItemTemplate activeItemTemplate, TagResolver resolver, MenuElement element) {
         this.itemTemplate = itemTemplate;
         this.activeItemTemplate = activeItemTemplate;
         this.resolver = resolver;
         this.element = element;
     }
 
-    private ItemTemplate getItemTemplate() {
+    private SimpleItemTemplate getItemTemplate() {
         return active ? activeItemTemplate : itemTemplate;
     }
 

@@ -5,14 +5,14 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ArmorStandPositionSlotFactory implements MenuSlotFactory {
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
 
-    public ArmorStandPositionSlotFactory(ItemTemplate itemTemplate) {
+    public ArmorStandPositionSlotFactory(SimpleItemTemplate itemTemplate) {
         this.itemTemplate = itemTemplate;
     }
 

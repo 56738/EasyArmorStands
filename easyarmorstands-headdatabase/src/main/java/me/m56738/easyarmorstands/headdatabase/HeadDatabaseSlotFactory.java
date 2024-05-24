@@ -3,13 +3,13 @@ package me.m56738.easyarmorstands.headdatabase;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.item.ItemTemplate;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import org.jetbrains.annotations.NotNull;
 
 public class HeadDatabaseSlotFactory implements MenuSlotFactory {
-    private final ItemTemplate itemTemplate;
+    private final SimpleItemTemplate itemTemplate;
 
-    public HeadDatabaseSlotFactory(ItemTemplate itemTemplate) {
+    public HeadDatabaseSlotFactory(SimpleItemTemplate itemTemplate) {
         this.itemTemplate = itemTemplate;
     }
 
