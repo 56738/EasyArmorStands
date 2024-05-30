@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElement;
@@ -27,11 +28,27 @@ import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
+import me.m56738.easyarmorstands.command.processor.ElementInjector;
+import me.m56738.easyarmorstands.command.processor.ElementProcessor;
+import me.m56738.easyarmorstands.command.processor.ElementSelectionInjector;
+import me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor;
+import me.m56738.easyarmorstands.command.processor.GroupProcessor;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
+import me.m56738.easyarmorstands.command.processor.SessionInjector;
+import me.m56738.easyarmorstands.command.processor.SessionProcessor;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
+import me.m56738.easyarmorstands.command.requirement.CommandRequirement;
+import me.m56738.easyarmorstands.command.requirement.CommandRequirementFailureHandler;
+import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
+import me.m56738.easyarmorstands.command.requirement.ElementSelectionRequirement;
+import me.m56738.easyarmorstands.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.command.requirement.RequireSession;
+import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.VersionOverrideLoader;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
@@ -64,6 +81,7 @@ import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
+import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
@@ -86,6 +104,8 @@ import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
+import org.incendo.cloud.processors.requirements.RequirementPostprocessor;
+import org.incendo.cloud.processors.requirements.annotation.RequirementBindings;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -230,7 +250,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                         (sender, e) -> Message.error("easyarmorstands.error.not-a-player"))
                 .registerTo(commandManager);
 
-        commandManager.parameterInjectorRegistry().registerInjector(ValueNode.class, new ValueNodeInjector());
+        commandManager.parameterInjectorRegistry()
+                .registerInjector(ValueNode.class, new ValueNodeInjector())
+                .registerInjector(SessionImpl.class, new SessionInjector())
+                .registerInjector(Element.class, new ElementInjector())
+                .registerInjector(ElementSelection.class, new ElementSelectionInjector());
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
@@ -238,8 +262,20 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorParser<>());
 
+        commandManager.registerCommandPreProcessor(new ElementSelectionProcessor());
+        commandManager.registerCommandPreProcessor(new GroupProcessor());
+        commandManager.registerCommandPreProcessor(new ElementProcessor());
+        commandManager.registerCommandPreProcessor(new SessionProcessor());
+
+        commandManager.registerCommandPostProcessor(RequirementPostprocessor.of(CommandRequirement.KEY, new CommandRequirementFailureHandler()));
+
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
         annotationParser.descriptionMapper(RichDescription::translatable);
+
+        RequirementBindings.create(annotationParser, CommandRequirement.KEY)
+                .register(RequireSession.class, a -> new SessionRequirement())
+                .register(RequireElement.class, a -> new ElementRequirement())
+                .register(RequireElementSelection.class, a -> new ElementSelectionRequirement());
 
         annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));

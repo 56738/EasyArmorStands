@@ -14,6 +14,10 @@ repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
+java {
+    disableAutoTargetJvm()
+}
+
 tasks {
     withType<JavaCompile>().configureEach {
         options.release.set(8)

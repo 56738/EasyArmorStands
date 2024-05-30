@@ -11,7 +11,10 @@ import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.display.DisplayAddon;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
@@ -33,7 +36,6 @@ import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
-import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -65,14 +67,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import static me.m56738.easyarmorstands.command.SessionCommands.getElementOrError;
-import static me.m56738.easyarmorstands.command.SessionCommands.getElementsOrError;
-import static me.m56738.easyarmorstands.command.SessionCommands.getPropertiesOrError;
-import static me.m56738.easyarmorstands.command.SessionCommands.getSessionOrError;
 
 @Command("eas")
 public class DisplayCommands {
@@ -85,11 +81,9 @@ public class DisplayCommands {
     @Command("block <value>")
     @PropertyPermission("easyarmorstands:block_display/block")
     @CommandDescription("easyarmorstands.command.description.block")
-    public void setBlock(EasPlayer sender, @Argument("value") BlockData value) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setBlock(EasPlayer sender, ElementSelection selection, @Argument("value") BlockData value) {
+        PropertyContainer properties = selection.properties(sender);
         Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.block-unsupported"));
@@ -107,11 +101,9 @@ public class DisplayCommands {
     @Command("brightness block <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.block")
-    public void setBlockBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setBlockBrightness(EasPlayer sender, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
+        PropertyContainer properties = selection.properties(sender);
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
@@ -134,11 +126,9 @@ public class DisplayCommands {
     @Command("brightness sky <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.sky")
-    public void setSkyBrightness(EasPlayer sender, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setSkyBrightness(EasPlayer sender, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
+        PropertyContainer properties = selection.properties(sender);
         Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
         Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
@@ -161,11 +151,9 @@ public class DisplayCommands {
     @Command("brightness here")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.here")
-    public void setLocalBrightness(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setLocalBrightness(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
@@ -185,11 +173,9 @@ public class DisplayCommands {
     @Command("brightness reset")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.reset")
-    public void setDefaultBrightness(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setDefaultBrightness(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
@@ -207,11 +193,9 @@ public class DisplayCommands {
     @Command("box width <width>")
     @PropertyPermission("easyarmorstands:display/box/width")
     @CommandDescription("easyarmorstands.command.description.box.width")
-    public void setBoxWidth(EasPlayer sender, @Argument("width") float value) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setBoxWidth(EasPlayer sender, ElementSelection selection, @Argument("width") float value) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
         if (widthProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
@@ -233,11 +217,9 @@ public class DisplayCommands {
     @Command("box height <height>")
     @PropertyPermission("easyarmorstands:display/box/height")
     @CommandDescription("easyarmorstands.command.description.box.height")
-    public void setBoxHeight(EasPlayer sender, @Argument("height") float value) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setBoxHeight(EasPlayer sender, ElementSelection selection, @Argument("height") float value) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
         if (heightProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
@@ -259,11 +241,9 @@ public class DisplayCommands {
     @Command("box remove")
     @PropertyPermission("easyarmorstands:display/box/height")
     @CommandDescription("easyarmorstands.command.description.box.remove")
-    public void removeBox(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void removeBox(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
 
         int success = 0;
         Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
@@ -291,12 +271,8 @@ public class DisplayCommands {
     @Command("box")
     @PropertyPermission("easyarmorstands:display/translation")
     @CommandDescription("easyarmorstands.command.description.box")
-    public void moveBox(EasPlayer sender) {
-        Session session = getSessionOrError(sender);
-        Element element = getElementOrError(sender, session);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void moveBox(EasPlayer sender, Session session, Element element) {
         if (!(element instanceof DisplayElement<?>)) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
@@ -308,11 +284,8 @@ public class DisplayCommands {
     @Command("text")
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text")
-    public void showText(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void showText(EasPlayer sender, Element element) {
         Property<Component> property = element.getProperties().getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-unsupported"));
@@ -325,11 +298,9 @@ public class DisplayCommands {
     @Command("text set <value>")
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text.set")
-    public void setText(EasPlayer sender, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setText(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-unsupported"));
@@ -347,11 +318,9 @@ public class DisplayCommands {
     @Command("text width <value>")
     @PropertyPermission("easyarmorstands:text_display/line_width")
     @CommandDescription("easyarmorstands.command.description.text.width")
-    public void setTextWidth(EasPlayer sender, @Argument("value") int value) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setTextWidth(EasPlayer sender, ElementSelection selection, @Argument("value") int value) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-line-width-unsupported"));
@@ -369,11 +338,9 @@ public class DisplayCommands {
     @Command("text background color <value>")
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.color")
-    public void setTextBackground(EasPlayer sender, @Argument("value") TextColor color) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setTextBackground(EasPlayer sender, ElementSelection selection, @Argument("value") TextColor color) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
@@ -392,11 +359,9 @@ public class DisplayCommands {
     @Command("text background reset")
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.reset")
-    public void resetTextBackground(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void resetTextBackground(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
@@ -414,11 +379,9 @@ public class DisplayCommands {
     @Command("text background none")
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.none")
-    public void hideTextBackground(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void hideTextBackground(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
@@ -437,11 +400,9 @@ public class DisplayCommands {
     @Command("text background alpha <value>")
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.alpha")
-    public void hideTextBackground(EasPlayer sender, @Argument("value") @Range(min = "0", max = "255") int alpha) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void hideTextBackground(EasPlayer sender, ElementSelection selection, @Argument("value") @Range(min = "0", max = "255") int alpha) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
@@ -466,12 +427,8 @@ public class DisplayCommands {
     @Command("shear")
     @PropertyPermission("easyarmorstands:display/right_rotation")
     @CommandDescription("easyarmorstands.command.description.shear")
-    public void editRightRotation(EasPlayer sender) {
-        Session session = getSessionOrError(sender);
-        Element element = getElementOrError(sender, session);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void editRightRotation(EasPlayer sender, Session session, Element element) {
         if (!(element instanceof DisplayElement<?>)) {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
@@ -484,19 +441,14 @@ public class DisplayCommands {
     @Command("convert")
     @Permission(Permissions.CONVERT)
     @CommandDescription("easyarmorstands.command.description.convert")
-    public void convert(EasPlayer sender) {
-        SessionImpl session = getSessionOrError(sender);
-        Collection<Element> elements = getElementsOrError(sender, session);
-        if (elements == null) {
-            return;
-        }
-
+    @RequireElementSelection
+    public void convert(EasPlayer sender, Session session, ElementSelection selection) {
         List<SimpleEntityElement<ItemDisplay>> createdElements = new ArrayList<>();
         List<Action> allActions = new ArrayList<>();
         boolean foundArmorStand = false;
         int count = 0;
         boolean isInverted = Bukkit.getBukkitVersion().equals("1.19.4-R0.1-SNAPSHOT");
-        for (Element element : elements) {
+        for (Element element : selection.elements()) {
             if (!(element instanceof ArmorStandElement)) {
                 continue;
             }
@@ -550,7 +502,7 @@ public class DisplayCommands {
             allActions.addAll(actions);
         }
 
-        session.context().history().push(allActions, Message.component("easyarmorstands.history.converted-armor-stand"));
+        sender.history().push(allActions, Message.component("easyarmorstands.history.converted-armor-stand"));
 
         if (!foundArmorStand) {
             // None of the elements are armor stands

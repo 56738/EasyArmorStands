@@ -19,13 +19,15 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
-import me.m56738.easyarmorstands.group.property.GroupPropertyContainer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
@@ -59,11 +61,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Command("eas")
 public class SessionCommands {
@@ -90,127 +89,11 @@ public class SessionCommands {
         }
     }
 
-    public static void sendNoSessionError(EasCommandSender sender) {
-        sender.sendMessage(Message.error("easyarmorstands.error.not-using-editor"));
-        if (sender.get().hasPermission(Permissions.GIVE)) {
-            sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
-        }
-    }
-
-    public static void sendNoSessionElementError(EasCommandSender sender) {
-        sender.sendMessage(Message.error("easyarmorstands.error.nothing-selected"));
-        sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
-    }
-
-    public static void sendUnsupportedEntityError(EasCommandSender sender) {
-        sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
-    }
-
-    public static void sendNoEntityError(EasCommandSender sender) {
-        sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
-    }
-
-    public static SessionImpl getSessionOrError(EasPlayer sender) {
-        SessionImpl session = sender.session();
-        if (session == null) {
-            sendNoSessionError(sender);
-        }
-        return session;
-    }
-
-    public static Element getElementOrError(EasPlayer sender, Session session) {
-        if (session == null) {
-            return null;
-        }
-
-        Element element = session.getElement();
-        if (element != null) {
-            return element;
-        }
-
-        GroupRootNode groupNode = session.findNode(GroupRootNode.class);
-        if (groupNode != null) {
-            Set<GroupMember> members = groupNode.getGroup().getMembers();
-            if (members.size() == 1) {
-                for (GroupMember member : members) {
-                    return member.getElement();
-                }
-            } else {
-                sender.sendMessage(Message.error("easyarmorstands.error.group-selected"));
-                return null;
-            }
-        }
-
-        sendNoSessionElementError(sender);
-        return null;
-    }
-
-    public static Collection<Element> getElementsOrError(EasPlayer sender, Session session) {
-        if (session == null) {
-            return null;
-        }
-
-        Element element = session.getElement();
-        if (element != null) {
-            return Collections.singleton(element);
-        }
-
-        GroupRootNode groupNode = session.findNode(GroupRootNode.class);
-        if (groupNode != null) {
-            List<Element> elements = new ArrayList<>();
-            for (GroupMember member : groupNode.getGroup().getMembers()) {
-                elements.add(member.getElement());
-            }
-            return elements;
-        }
-
-        sendNoSessionElementError(sender);
-        return null;
-    }
-
-    public static Element getElementOrError(EasPlayer sender) {
-        return getElementOrError(sender, getSessionOrError(sender));
-    }
-
-    public static Collection<Element> getElementsOrError(EasPlayer sender) {
-        return getElementsOrError(sender, getSessionOrError(sender));
-    }
-
-    public static Element getElementOrError(EasPlayer sender, Entity entity) {
-        if (entity == null) {
-            sendNoEntityError(sender);
-            return null;
-        }
-        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
-        if (element == null) {
-            sendUnsupportedEntityError(sender);
-        }
-        return element;
-    }
-
-    public static @Nullable PropertyContainer getPropertiesOrError(EasPlayer sender) {
-        Collection<Element> elements = getElementsOrError(sender);
-        if (elements == null) {
-            return null;
-        }
-        if (elements.size() == 1) {
-            return new TrackedPropertyContainer(elements.iterator().next(), sender);
-        }
-        List<PropertyContainer> containers = new ArrayList<>(elements.size());
-        for (Element element : elements) {
-            containers.add(new TrackedPropertyContainer(element, sender));
-        }
-        return new GroupPropertyContainer(containers);
-    }
-
     @Command("open")
     @Permission(Permissions.OPEN)
     @CommandDescription("easyarmorstands.command.description.open")
-    public void open(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void open(EasPlayer sender, Element element) {
         if (!(element instanceof MenuElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
@@ -224,8 +107,9 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.open.entity")
     public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
         Entity entity = selector.single();
-        Element element = getElementOrError(sender, entity);
+        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
         if (element == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
             return;
         }
         if (!(element instanceof MenuElement)) {
@@ -243,11 +127,8 @@ public class SessionCommands {
     @Command("group <entities>")
     @Permission(Permissions.GROUP)
     @CommandDescription("easyarmorstands.command.description.group")
-    public void group(EasPlayer sender, @Argument("entities") MultipleEntitySelector selector) {
-        Session session = getSessionOrError(sender);
-        if (session == null) {
-            return;
-        }
+    @RequireSession
+    public void group(EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
         Group group = new Group(session);
         for (Entity entity : selector.values()) {
             Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
@@ -272,14 +153,10 @@ public class SessionCommands {
     @Command("clone")
     @Permission(Permissions.CLONE)
     @CommandDescription("easyarmorstands.command.description.clone")
-    public void clone(EasPlayer sender) {
-        Collection<Element> elements = getElementsOrError(sender);
-        if (elements == null) {
-            return;
-        }
-
+    @RequireElementSelection
+    public void clone(EasPlayer sender, ElementSelection selection) {
         List<Element> clones = new ArrayList<>();
-        for (Element element : elements) {
+        for (Element element : selection.elements()) {
             ElementType type = element.getType();
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
             if (sender.canCreateElement(type, properties)) {
@@ -322,14 +199,10 @@ public class SessionCommands {
     @Command("destroy")
     @Permission(Permissions.DESTROY)
     @CommandDescription("easyarmorstands.command.description.destroy")
-    public void destroy(EasPlayer sender) {
-        Collection<Element> elements = getElementsOrError(sender);
-        if (elements == null) {
-            return;
-        }
-
+    @RequireElementSelection
+    public void destroy(EasPlayer sender, ElementSelection selection) {
         List<ElementDestroyAction> actions = new ArrayList<>();
-        for (Element element : elements) {
+        for (Element element : selection.elements()) {
             if (!(element instanceof DestroyableElement)) {
                 continue;
             }
@@ -358,13 +231,11 @@ public class SessionCommands {
     @Command("snap angle [value]")
     @Permission(Permissions.SNAP)
     @CommandDescription("easyarmorstands.command.description.snap.angle")
+    @RequireSession
     public void setAngleSnapIncrement(
             EasPlayer sender,
+            SessionImpl session,
             @Argument(value = "value") @Range(min = "0", max = "90") Double value) {
-        SessionImpl session = getSessionOrError(sender);
-        if (session == null) {
-            return;
-        }
         if (value == null) {
             value = SessionSnapper.DEFAULT_ANGLE_INCREMENT;
             if (value == session.snapper().getAngleIncrement()) {
@@ -380,13 +251,11 @@ public class SessionCommands {
     @Command("snap move [value]")
     @Permission(Permissions.SNAP)
     @CommandDescription("easyarmorstands.command.description.snap.move")
+    @RequireSession
     public void setSnapIncrement(
             EasPlayer sender,
+            SessionImpl session,
             @Argument(value = "value") @Range(min = "0", max = "10") Double value) {
-        SessionImpl session = getSessionOrError(sender);
-        if (session == null) {
-            return;
-        }
         if (value == null) {
             value = SessionSnapper.DEFAULT_POSITION_INCREMENT;
             if (value == session.snapper().getPositionIncrement()) {
@@ -401,16 +270,14 @@ public class SessionCommands {
     @Command("align [axis] [value] [offset]")
     @Permission(Permissions.ALIGN)
     @CommandDescription("easyarmorstands.command.description.align")
+    @RequireElement
     public void align(
             EasPlayer sender,
+            Element element,
             @Argument(value = "axis") @Default("all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
     ) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Vector3d offsetVector = new Vector3d();
@@ -437,11 +304,8 @@ public class SessionCommands {
     @Command("position <position>")
     @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("easyarmorstands.command.description.position")
-    public void position(EasPlayer sender, @Argument("position") Location location) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void position(EasPlayer sender, Element element, @Argument("position") Location location) {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location oldLocation = property.getValue();
@@ -458,11 +322,8 @@ public class SessionCommands {
     @Command("yaw <yaw>")
     @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("easyarmorstands.command.description.yaw")
-    public void setYaw(EasPlayer sender, @Argument("yaw") float yaw) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void setYaw(EasPlayer sender, Element element, @Argument("yaw") float yaw) {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location location = property.getValue();
@@ -478,11 +339,8 @@ public class SessionCommands {
     @Command("pitch <pitch>")
     @PropertyPermission("easyarmorstands:entity/location")
     @CommandDescription("easyarmorstands.command.description.pitch")
-    public void setPitch(EasPlayer sender, @Argument("pitch") float pitch) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void setPitch(EasPlayer sender, Element element, @Argument("pitch") float pitch) {
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
         Location location = property.getValue();
@@ -498,11 +356,9 @@ public class SessionCommands {
     @Command("name")
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name")
-    public void showName(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void showName(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -515,11 +371,9 @@ public class SessionCommands {
     @Command("name set <value>")
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.set")
-    public void setName(EasPlayer sender, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setName(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -541,8 +395,9 @@ public class SessionCommands {
     @Command("name clear")
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.clear")
-    public void clearName(EasPlayer sender) {
-        PropertyContainer properties = getPropertiesOrError(sender);
+    @RequireElementSelection
+    public void clearName(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
         if (properties == null) {
             return;
         }
@@ -566,11 +421,9 @@ public class SessionCommands {
     @Command("name visible <value>")
     @PropertyPermission("easyarmorstands:entity/custom_name/visible")
     @CommandDescription("easyarmorstands.command.description.name.visible")
-    public void setNameVisible(EasPlayer sender, @Argument("value") boolean visible) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setNameVisible(EasPlayer sender, ElementSelection selection, @Argument("value") boolean visible) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
@@ -587,11 +440,9 @@ public class SessionCommands {
     @Command("cantick <value>")
     @PropertyPermission("easyarmorstands:armor_stand/can_tick")
     @CommandDescription("easyarmorstands.command.description.cantick")
-    public void setCanTick(EasPlayer sender, @Argument("value") boolean canTick) {
-        PropertyContainer properties = getPropertiesOrError(sender);
-        if (properties == null) {
-            return;
-        }
+    @RequireElementSelection
+    public void setCanTick(EasPlayer sender, ElementSelection selection, @Argument("value") boolean canTick) {
+        PropertyContainer properties = selection.properties(sender);
         Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         if (property == null) {
             if (ArmorStandCanTickProperty.isSupported()) {
@@ -613,12 +464,8 @@ public class SessionCommands {
     @Command("scale")
     @PropertyPermission("easyarmorstands:entity/scale")
     @CommandDescription("easyarmorstands.command.description.scale")
-    public void editScale(EasPlayer sender) {
-        Session session = getSessionOrError(sender);
-        Element element = getElementOrError(sender, session);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void editScale(EasPlayer sender, Session session, Element element) {
         ScaleTool scaleTool = null;
         if (element instanceof EditableElement) {
             PropertyContainer properties = new TrackedPropertyContainer(element, sender);
@@ -638,11 +485,8 @@ public class SessionCommands {
     @Command("reset")
     @Permission(Permissions.EDIT)
     @CommandDescription("easyarmorstands.command.description.reset")
-    public void reset(EasPlayer sender) {
-        Session session = getSessionOrError(sender);
-        if (session == null) {
-            return;
-        }
+    @RequireSession
+    public void reset(EasPlayer sender, Session session) {
         Node node = session.getNode();
         if (!(node instanceof ResettableNode)) {
             sender.sendMessage(Message.error("easyarmorstands.error.reset-unsupported"));
@@ -671,11 +515,8 @@ public class SessionCommands {
     @Command("info")
     @Permission(Permissions.INFO)
     @CommandDescription("easyarmorstands.command.description.info")
-    public void info(EasPlayer sender) {
-        Element element = getElementOrError(sender);
-        if (element == null) {
-            return;
-        }
+    @RequireElement
+    public void info(EasPlayer sender, Element element) {
         sender.sendMessage(Message.title("easyarmorstands.info.title"));
         sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)));
         if (element instanceof EntityElement) {
