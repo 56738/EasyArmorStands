@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.parser.ArgumentParser;
 import org.incendo.cloud.parser.standard.DoubleParser;
@@ -94,7 +93,7 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
             if (canActivate) {
                 context.setActionBar(Message.component("easyarmorstands.node.scale.right-click"));
             } else {
-                context.setActionBar(Message.component("easyarmorstands.node.scale.too-close").color(NamedTextColor.RED));
+                context.setActionBar(Message.error("easyarmorstands.node.scale.too-close"));
             }
             return;
         }

@@ -23,6 +23,7 @@ import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -201,7 +202,11 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         } else if (groupSize == 1) {
             context.setActionBar(Message.component("easyarmorstands.node.group-selected.single"));
         } else {
-            context.setActionBar(Message.component("easyarmorstands.node.group-selected", Component.text(groupSize)));
+            Component status = Message.component("easyarmorstands.node.group-selected", Component.text(groupSize));
+            if (groupSize >= groupLimit) {
+                status = Message.format(MessageStyle.ERROR, status);
+            }
+            context.setActionBar(status);
         }
     }
 
