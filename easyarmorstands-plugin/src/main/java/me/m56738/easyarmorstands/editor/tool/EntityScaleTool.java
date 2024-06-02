@@ -49,6 +49,7 @@ public class EntityScaleTool implements ScaleTool {
     private class SessionImpl extends AbstractToolSession implements ScaleToolSession {
         private final Location originalLocation;
         private final double originalScale;
+        private final double originalEffectiveScale;
         private final Vector3dc offset;
         private double scale;
 
@@ -56,6 +57,7 @@ public class EntityScaleTool implements ScaleTool {
             super(properties);
             this.originalLocation = positionProperty.getValue();
             this.originalScale = scaleProperty.getValue();
+            this.originalEffectiveScale = getEffectiveScale(originalScale);
             this.offset = Util.toVector3d(originalLocation).sub(getPosition());
             this.scale = originalScale;
         }
@@ -65,23 +67,23 @@ public class EntityScaleTool implements ScaleTool {
         }
 
         private void updatePosition() {
-            double delta = getEffectiveScale(scale) / getEffectiveScale(originalScale) - 1;
+            double delta = getEffectiveScale(scale) / originalEffectiveScale - 1;
             positionProperty.setValue(originalLocation.clone()
                     .add(offset.x() * delta, offset.y() * delta, offset.z() * delta));
         }
 
         @Override
         public void setChange(double change) {
-            scale = originalScale * change;
+            scale = originalEffectiveScale * change;
             scaleProperty.setValue(scale);
             updatePosition();
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            change *= originalScale;
+            change *= originalEffectiveScale;
             change = context.snapOffset(change);
-            change /= originalScale;
+            change /= originalEffectiveScale;
             return change;
         }
 
