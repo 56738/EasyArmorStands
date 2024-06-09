@@ -1,5 +1,16 @@
 title: <type>
 slots:
+  easyarmorstands:copy:
+    row: 1
+    column: 4
+    type: easyarmorstands:copy
+    config:
+      button:
+        name: <lang:easyarmorstands.menu.copy>
+        description:
+          - <lang:easyarmorstands.menu.copy.description>
+      item:
+        name: <gold><lang:easyarmorstands.copy.item.name:'<element>'>
   easyarmorstands:entity/custom_name:
     row: 0
     column: 4

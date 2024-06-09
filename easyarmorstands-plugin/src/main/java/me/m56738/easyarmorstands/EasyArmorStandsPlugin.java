@@ -68,6 +68,7 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.MenuProviderImpl;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.SimpleMenuContext;
+import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPartSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPositionSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandSpawnSlotType;
@@ -178,6 +179,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
+        menuSlotTypeRegistry.register(new EntityCopySlotType());
         menuSlotTypeRegistry.register(new ArmorStandPartSlotType());
         menuSlotTypeRegistry.register(new ArmorStandPositionSlotType());
         menuSlotTypeRegistry.register(new ArmorStandSpawnSlotType(armorStandElementType));

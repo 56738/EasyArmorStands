@@ -22,6 +22,8 @@ slots:
     type: easyarmorstands:property
     config:
       property: easyarmorstands:display/billboard
+  easyarmorstands:copy:
+    enabled: false
   easyarmorstands:entity/custom_name:
     enabled: false
   easyarmorstands:entity/silent:

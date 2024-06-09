@@ -36,3 +36,6 @@ slots:
     type: easyarmorstands:property
     config:
       property: easyarmorstands:entity/equipment/head
+  easyarmorstands:copy:
+    row: 5
+    column: 4

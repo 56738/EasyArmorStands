@@ -24,6 +24,9 @@ public class Permissions {
     @Description("Allow converting armor stands to item displays")
     public static final String CONVERT = "easyarmorstands.convert";
 
+    @Description("Allow copying entities as items")
+    public static final String COPY = "easyarmorstands.copy";
+
     @Description("Allow viewing troubleshooting information")
     public static final String DEBUG = "easyarmorstands.debug";
 

@@ -97,6 +97,14 @@ public class SimpleItemTemplate implements ItemTemplate {
         return new SimpleItemTemplate(template, displayName, lore, resolver, renderer);
     }
 
+    public SimpleItemTemplate withFallbackTemplate(ItemStack template) {
+        if (this.template.getType() != Material.AIR && this.template.getAmount() != 0) {
+            // already have a template
+            return this;
+        }
+        return withTemplate(template);
+    }
+
     public SimpleItemTemplate withRenderer(ItemRenderer renderer) {
         return new SimpleItemTemplate(template, displayName, lore, resolver, renderer);
     }

@@ -39,6 +39,7 @@ permissions:
       - easyarmorstands.clone
       - easyarmorstands.color
       - easyarmorstands.convert
+      - easyarmorstands.copy
       - easyarmorstands.destroy.armorstand
       - easyarmorstands.destroy.blockdisplay
       - easyarmorstands.destroy.itemdisplay
