@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -69,6 +70,19 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
     @Override
     public @NotNull AxisMoveToolSession start() {
         return new SessionImpl();
+    }
+
+    @Override
+    public boolean canUse(@NotNull Player player) {
+        Property<?> property;
+        if (axis == Axis.Y) {
+            property = heightProperty;
+        } else {
+            property = widthProperty;
+        }
+        return property.canChange(player) &&
+                locationProperty.canChange(player) &&
+                translationProperty.canChange(player);
     }
 
     private class SessionImpl extends AbstractToolSession implements AxisMoveToolSession {
@@ -133,7 +147,7 @@ public class DisplayBoxResizeTool implements AxisMoveTool {
             Vector3fc translation = originalTranslation.sub(rotatedDelta, new Vector3f());
             changes.add(translationProperty.prepareChange(translation));
 
-            // Only execute changes if both are allowed
+            // Only execute changes if all of them are allowed
             if (changes.contains(null)) {
                 return;
             }

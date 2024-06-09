@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -19,6 +20,15 @@ public interface PropertyType<T> extends Keyed {
     @NotNull TypeToken<T> getValueType();
 
     @Nullable String getPermission();
+
+    default boolean canChange(@NotNull Player player) {
+        String permission = getPermission();
+        if (permission != null) {
+            return player.hasPermission(permission);
+        } else {
+            return true;
+        }
+    }
 
     /**
      * Display name of this property.

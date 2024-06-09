@@ -72,7 +72,7 @@ public class ToolMenuManager {
 
         if (mode == ToolMenuMode.SCALE) {
             ScaleTool scaleTool = toolProvider.scale(positionProvider, rotationProvider);
-            if (scaleTool != null) {
+            if (scaleTool != null && scaleTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .scale()
                         .setTool(scaleTool)
@@ -81,7 +81,7 @@ public class ToolMenuManager {
             }
             for (Axis axis : Axis.values()) {
                 AxisScaleTool axisScaleTool = toolProvider.scale(positionProvider, rotationProvider, axis);
-                if (axisScaleTool != null) {
+                if (axisScaleTool != null && axisScaleTool.canUse(session.player())) {
                     buttons.add(session.menuEntryProvider()
                             .axisScale()
                             .setTool(axisScaleTool)
@@ -92,7 +92,7 @@ public class ToolMenuManager {
         }
 
         MoveTool moveTool = toolProvider.move(positionProvider, rotationProvider);
-        if (moveTool != null) {
+        if (moveTool != null && moveTool.canUse(session.player())) {
             buttons.add(session.menuEntryProvider()
                     .move()
                     .setTool(moveTool)
@@ -101,14 +101,14 @@ public class ToolMenuManager {
         }
         for (Axis axis : Axis.values()) {
             AxisMoveTool axisMoveTool = toolProvider.move(positionProvider, rotationProvider, axis);
-            if (axisMoveTool != null) {
+            if (axisMoveTool != null && axisMoveTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .axisMove()
                         .setTool(axisMoveTool)
                         .build());
             }
             AxisRotateTool axisRotateTool = toolProvider.rotate(positionProvider, rotationProvider, axis);
-            if (axisRotateTool != null) {
+            if (axisRotateTool != null && axisRotateTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .axisRotate()
                         .setTool(axisRotateTool)

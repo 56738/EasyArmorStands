@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
 import net.kyori.adventure.permission.PermissionChecker;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +27,9 @@ public interface ChangeContext {
 
     @Contract(pure = true)
     @NotNull Locale locale();
+
+    @Contract(pure = true)
+    @NotNull Player player();
 
     boolean canCreateElement(ElementType type, PropertyContainer properties);
 

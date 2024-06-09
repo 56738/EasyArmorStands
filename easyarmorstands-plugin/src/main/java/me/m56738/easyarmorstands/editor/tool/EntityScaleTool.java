@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
@@ -44,6 +45,11 @@ public class EntityScaleTool implements ScaleTool {
     @Override
     public @NotNull ScaleToolSession start() {
         return new SessionImpl();
+    }
+
+    @Override
+    public boolean canUse(@NotNull Player player) {
+        return scaleProperty.canChange(player);
     }
 
     private class SessionImpl extends AbstractToolSession implements ScaleToolSession {

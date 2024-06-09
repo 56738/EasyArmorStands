@@ -18,6 +18,7 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
@@ -70,6 +71,13 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
     @Override
     public @NotNull AxisRotateToolSession start() {
         return new SessionImpl();
+    }
+
+    @Override
+    public boolean canUse(@NotNull Player player) {
+        return rotationProperty.canChange(player) &&
+                locationProperty.canChange(player) &&
+                translationProperty.canChange(player);
     }
 
     private class SessionImpl extends AbstractToolSession implements AxisRotateToolSession {

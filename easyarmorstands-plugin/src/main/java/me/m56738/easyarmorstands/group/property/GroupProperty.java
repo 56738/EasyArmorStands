@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.group.property;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,5 +77,15 @@ public class GroupProperty<T> implements Property<T> {
             return null;
         }
         return new GroupPendingChange(changes);
+    }
+
+    @Override
+    public boolean canChange(@NotNull Player player) {
+        for (Property<T> property : properties) {
+            if (property.canChange(player)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

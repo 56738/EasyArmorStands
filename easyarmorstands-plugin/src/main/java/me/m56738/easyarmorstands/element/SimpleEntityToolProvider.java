@@ -19,7 +19,6 @@ import me.m56738.easyarmorstands.editor.tool.EntityYawTool;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3dc;
 
 public class SimpleEntityToolProvider implements ToolProvider {
     protected final PropertyContainer properties;

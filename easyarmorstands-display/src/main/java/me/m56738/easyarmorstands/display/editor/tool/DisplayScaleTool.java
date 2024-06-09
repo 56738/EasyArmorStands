@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -44,6 +45,11 @@ public class DisplayScaleTool implements ScaleTool {
     @Override
     public @NotNull ScaleToolSession start() {
         return new SessionImpl();
+    }
+
+    @Override
+    public boolean canUse(@NotNull Player player) {
+        return scaleProperty.canChange(player);
     }
 
     private class SessionImpl extends AbstractToolSession implements ScaleToolSession {

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,5 +34,10 @@ class ImmutableProperty<T> implements Property<T> {
     @Override
     public @Nullable PendingChange prepareChange(@NotNull T value) {
         return null;
+    }
+
+    @Override
+    public boolean canChange(@NotNull Player player) {
+        return false;
     }
 }

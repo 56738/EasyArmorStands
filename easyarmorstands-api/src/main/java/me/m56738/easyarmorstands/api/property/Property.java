@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,5 +40,9 @@ public interface Property<T> {
      */
     default @Nullable PendingChange prepareChange(@NotNull T value) {
         return new PendingChangeImpl<>(this, value);
+    }
+
+    default boolean canChange(@NotNull Player player) {
+        return true;
     }
 }

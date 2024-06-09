@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,13 +26,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
             return hasPermissionCache;
         }
 
-        String permission = property.getType().getPermission();
-        boolean result;
-        if (permission != null) {
-            result = context.permissions().test(permission);
-        } else {
-            result = true;
-        }
+        boolean result = property.getType().canChange(context.player());
         hasPermissionCache = result;
         return result;
     }
@@ -67,5 +62,10 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
             return null;
         }
         return property.prepareChange(value);
+    }
+
+    @Override
+    public boolean canChange(@NotNull Player player) {
+        return hasPermission();
     }
 }

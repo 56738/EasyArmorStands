@@ -26,7 +26,7 @@ public class PropertySlotFactory<T> implements MenuSlotFactory {
         if (property == null) {
             return null;
         }
-        if (type.getPermission() != null && !context.permissions().test(type.getPermission())) {
+        if (!type.canChange(context.player())) {
             return null;
         }
         return type.createSlot(property, properties);

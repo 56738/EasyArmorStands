@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -49,6 +50,16 @@ public class GroupAxisMoveTool implements AxisMoveTool {
     @Override
     public @NotNull AxisMoveToolSession start() {
         return new SessionImpl();
+    }
+
+    @Override
+    public boolean canUse(@NotNull Player player) {
+        for (AxisMoveTool tool : tools) {
+            if (tool.canUse(player)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private class SessionImpl extends GroupToolSession<AxisMoveToolSession> implements AxisMoveToolSession {

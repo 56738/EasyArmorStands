@@ -58,6 +58,11 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return getOrDefault(Identity.LOCALE, Locale.US);
     }
 
+    @Override
+    public @NotNull Player player() {
+        return player;
+    }
+
     public @Nullable SessionImpl session() {
         return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
     }

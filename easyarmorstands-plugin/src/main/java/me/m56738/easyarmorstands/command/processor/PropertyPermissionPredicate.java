@@ -2,8 +2,9 @@ package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.function.Predicate;
 
@@ -16,13 +17,10 @@ public class PropertyPermissionPredicate implements Predicate<EasCommandSender> 
 
     @Override
     public boolean test(EasCommandSender sender) {
-        String permission = type.getPermission();
-        if (permission != null) {
-            CommandSender commandSender = sender.get();
-            return commandSender.hasPermission(Permissions.EDIT)
-                    && commandSender.hasPermission(permission);
-        } else {
-            return true;
+        if (sender instanceof EasPlayer) {
+            Player player = ((EasPlayer) sender).player();
+            return player.hasPermission(Permissions.EDIT) && type.canChange(player);
         }
+        return false;
     }
 }
