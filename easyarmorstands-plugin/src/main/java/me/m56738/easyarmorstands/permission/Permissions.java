@@ -36,6 +36,9 @@ public class Permissions {
     @Description("Allow spawning the tool item")
     public static final String GIVE = "easyarmorstands.give";
 
+    @Description("Allow bypassing GriefDefender restrictions")
+    public static final String GRIEFDEFENDER_BYPASS = "easyarmorstands.griefdefender.bypass";
+
     @Description("Allow editing groups of entities")
     public static final String GROUP = "easyarmorstands.group";
 
