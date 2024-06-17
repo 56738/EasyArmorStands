@@ -21,6 +21,9 @@ repositories {
 
 java {
     disableAutoTargetJvm()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 tasks {
