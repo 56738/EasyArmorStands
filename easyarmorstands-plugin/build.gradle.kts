@@ -20,7 +20,6 @@ dependencies {
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
-    api(libs.cloud.processors.requirements)
     api(libs.commodore) {
         isTransitive = false
     }

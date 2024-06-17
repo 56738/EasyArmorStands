@@ -37,8 +37,8 @@ import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModi
 import me.m56738.easyarmorstands.command.processor.SessionInjector;
 import me.m56738.easyarmorstands.command.processor.SessionProcessor;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
-import me.m56738.easyarmorstands.command.requirement.CommandRequirement;
-import me.m56738.easyarmorstands.command.requirement.CommandRequirementFailureHandler;
+import me.m56738.easyarmorstands.command.requirement.CommandRequirementBuilderModifier;
+import me.m56738.easyarmorstands.command.requirement.CommandRequirementPostProcessor;
 import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
 import me.m56738.easyarmorstands.command.requirement.ElementSelectionRequirement;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
@@ -68,13 +68,13 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.MenuProviderImpl;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.SimpleMenuContext;
-import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPartSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPositionSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlotType;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
 import me.m56738.easyarmorstands.menu.slot.DestroySlotType;
+import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
@@ -105,8 +105,6 @@ import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
-import org.incendo.cloud.processors.requirements.RequirementPostprocessor;
-import org.incendo.cloud.processors.requirements.annotation.RequirementBindings;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -271,15 +269,14 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.registerCommandPreProcessor(new ElementProcessor());
         commandManager.registerCommandPreProcessor(new SessionProcessor());
 
-        commandManager.registerCommandPostProcessor(RequirementPostprocessor.of(CommandRequirement.KEY, new CommandRequirementFailureHandler()));
+        commandManager.registerCommandPostProcessor(new CommandRequirementPostProcessor());
 
         annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
         annotationParser.descriptionMapper(RichDescription::translatable);
 
-        RequirementBindings.create(annotationParser, CommandRequirement.KEY)
-                .register(RequireSession.class, a -> new SessionRequirement())
-                .register(RequireElement.class, a -> new ElementRequirement())
-                .register(RequireElementSelection.class, a -> new ElementSelectionRequirement());
+        annotationParser.registerBuilderModifier(RequireSession.class, new CommandRequirementBuilderModifier<>(a -> new SessionRequirement()));
+        annotationParser.registerBuilderModifier(RequireElement.class, new CommandRequirementBuilderModifier<>(a -> new ElementRequirement()));
+        annotationParser.registerBuilderModifier(RequireElementSelection.class, new CommandRequirementBuilderModifier<>(a -> new ElementSelectionRequirement()));
 
         annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
