@@ -239,6 +239,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 commandManager.registerBrigadier();
             } catch (BukkitCommandManager.BrigadierInitializationException e) {
                 getLogger().log(Level.WARNING, "Failed to register Brigadier mappings");
+            } catch (Throwable e) {
+                getLogger().log(Level.SEVERE, "Failed to register Brigadier mappings", e);
             }
         }
 
