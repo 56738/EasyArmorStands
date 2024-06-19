@@ -10,13 +10,17 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class LookupCapabilityProvider implements CapabilityProvider<LookupCapability> {
+    // Paper 1.9 getEntity doesn't seem to work
+    private static final Pattern EXCLUDED_VERSION_PATTERN = Pattern.compile("^1\\.9(\\.\\d)?-.*$");
+
     @Override
     public boolean isSupported() {
         try {
             Bukkit.class.getMethod("getEntity", UUID.class);
-            return true;
+            return !EXCLUDED_VERSION_PATTERN.matcher(Bukkit.getBukkitVersion()).matches();
         } catch (Throwable e) {
             return false;
         }
