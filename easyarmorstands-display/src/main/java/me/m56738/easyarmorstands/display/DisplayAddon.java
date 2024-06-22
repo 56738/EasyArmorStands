@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -22,6 +23,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
+import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 
 public class DisplayAddon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
@@ -68,6 +70,8 @@ public class DisplayAddon {
             } catch (Throwable e) {
                 plugin.getLogger().warning("Failed to register Brigadier mappings for block data arguments");
             }
+            brigadierManager.registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
+            }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
         }
 
         plugin.getAnnotationParser().parse(new DisplayCommands(this));

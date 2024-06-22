@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import org.bukkit.Color;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.Display.Brightness;
 import org.joml.Quaternionfc;
@@ -22,6 +23,8 @@ public class DisplayPropertyTypes {
     public static final PropertyType<Quaternionfc> RIGHT_ROTATION = get("display/right_rotation", Quaternionfc.class);
     public static final PropertyType<Vector3fc> SCALE = get("display/scale", Vector3fc.class);
     public static final PropertyType<Vector3fc> TRANSLATION = get("display/translation", Vector3fc.class);
+    public static final PropertyType<Optional<Color>> GLOW_COLOR = get("display/glowing/color", new TypeToken<Optional<Color>>() {
+    });
 
     private DisplayPropertyTypes() {
     }

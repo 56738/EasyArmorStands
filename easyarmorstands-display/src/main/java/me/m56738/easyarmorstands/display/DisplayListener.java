@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.display.property.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayBrightnessProperty;
+import me.m56738.easyarmorstands.display.property.display.DisplayGlowColorProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayHeightProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayLeftRotationProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayRightRotationProperty;
@@ -66,6 +67,7 @@ public class DisplayListener implements Listener {
         registry.register(new DisplayBrightnessProperty(entity));
         registry.register(new DisplayWidthProperty(entity));
         registry.register(new DisplayHeightProperty(entity));
+        registry.register(new DisplayGlowColorProperty(entity));
     }
 
     private void registerItemDisplayProperties(ItemDisplay entity, PropertyRegistry registry) {

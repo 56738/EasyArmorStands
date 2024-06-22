@@ -51,6 +51,7 @@ permissions:
       - easyarmorstands.property.display.billboard
       - easyarmorstands.property.display.block
       - easyarmorstands.property.display.brightness
+      - easyarmorstands.property.display.glow.color
       - easyarmorstands.property.display.item
       - easyarmorstands.property.display.item.transform
       - easyarmorstands.property.display.rotation

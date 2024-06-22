@@ -424,6 +424,48 @@ public class DisplayCommands {
         }
     }
 
+    @Command("glow color <value>")
+    @PropertyPermission("easyarmorstands:display/glowing/color")
+    @CommandDescription("easyarmorstands.command.description.glow.color")
+    @RequireElementSelection
+    public void setGlowColor(EasPlayer sender, ElementSelection selection, @Argument("value") TextColor color) {
+        PropertyContainer properties = selection.properties(sender);
+        Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
+        if (property == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.glow-color-unsupported"));
+            return;
+        }
+        Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+        if (property.setValue(value)) {
+            properties.commit();
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-glow-color",
+                    property.getType().getValueComponent(value)));
+        } else {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+        }
+    }
+
+    @Command("glow reset")
+    @PropertyPermission("easyarmorstands:display/glowing/color")
+    @CommandDescription("easyarmorstands.command.description.glow.color.reset")
+    @RequireElementSelection
+    public void resetGlowColor(EasPlayer sender, ElementSelection selection) {
+        PropertyContainer properties = selection.properties(sender);
+        Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
+        if (property == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.glow-color-unsupported"));
+            return;
+        }
+        Optional<Color> value = Optional.empty();
+        if (property.setValue(value)) {
+            properties.commit();
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-glow-color",
+                    property.getType().getValueComponent(value)));
+        } else {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+        }
+    }
+
     @Command("shear")
     @PropertyPermission("easyarmorstands:display/right_rotation")
     @CommandDescription("easyarmorstands.command.description.shear")
