@@ -42,9 +42,11 @@ permissions:
       - easyarmorstands.copy
       - easyarmorstands.destroy.armorstand
       - easyarmorstands.destroy.blockdisplay
+      - easyarmorstands.destroy.interaction
       - easyarmorstands.destroy.itemdisplay
       - easyarmorstands.destroy.textdisplay
       - easyarmorstands.edit.blockdisplay
+      - easyarmorstands.edit.interaction
       - easyarmorstands.edit.itemdisplay
       - easyarmorstands.edit.textdisplay
       - easyarmorstands.property.armorstand.marker
@@ -66,6 +68,7 @@ permissions:
       - easyarmorstands.property.display.text.shadow
       - easyarmorstands.property.display.translation
       - easyarmorstands.property.glow
+      - easyarmorstands.property.interaction.responsive
       - easyarmorstands.property.invulnerable
       - easyarmorstands.property.name
       - easyarmorstands.property.name.visible
