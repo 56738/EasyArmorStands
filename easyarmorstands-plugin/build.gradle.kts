@@ -35,10 +35,6 @@ dependencies {
 }
 
 tasks {
-    assemble {
-        dependsOn(shadowJar)
-    }
-
     processResources {
         inputs.property("version", version)
         filesMatching("*.yml") {
@@ -60,6 +56,16 @@ tasks {
             exclude(dependency("com.google.code.gson:gson"))
         }
         mergeServiceFiles()
+    }
+
+    val staticJar by registering(Copy::class) {
+        from(shadowJar)
+        into(layout.buildDirectory.dir("static"))
+        rename { "EasyArmorStands.jar" }
+    }
+
+    assemble {
+        dependsOn(staticJar)
     }
 }
 

@@ -372,3 +372,16 @@ easyarmorstands:text_display/text:
     name: <name>
     description:
       - <value>
+
+easyarmorstands:interaction/responsive:
+  permission: easyarmorstands.property.interaction.responsive
+  name: <lang:easyarmorstands.property.interaction.responsive.name>
+  value:
+    enabled: <green><lang:easyarmorstands.property.common.enabled>
+    disabled: <red><lang:easyarmorstands.property.common.disabled>
+  button:
+    type: oak_pressure_plate
+    name: <name>
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.interaction.responsive.description>

@@ -6,8 +6,6 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.UnknownPropertyException;
-import me.m56738.easyarmorstands.display.DisplayBox;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
@@ -34,11 +32,6 @@ public class DisplayBoxSlotFactory implements MenuSlotFactory {
         }
         PropertyContainer properties = context.properties();
         if (properties == null) {
-            return null;
-        }
-        try {
-            new DisplayBox(properties);
-        } catch (UnknownPropertyException e) {
             return null;
         }
         return new NodeSlot(

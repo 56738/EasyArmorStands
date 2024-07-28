@@ -11,6 +11,8 @@ import me.m56738.easyarmorstands.display.command.DisplayCommands;
 import me.m56738.easyarmorstands.display.editor.DisplaySessionListener;
 import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
+import me.m56738.easyarmorstands.display.element.InteractionElementProvider;
+import me.m56738.easyarmorstands.display.element.InteractionElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.display.menu.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.display.menu.DisplaySpawnSlotType;
@@ -29,6 +31,7 @@ public class DisplayAddon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
     private final DisplayElementType<BlockDisplay> blockDisplayType;
     private final DisplayElementType<TextDisplay> textDisplayType;
+    private final InteractionElementType interactionType;
 
     public DisplayAddon() {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
@@ -49,6 +52,7 @@ public class DisplayAddon {
         itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
         blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
         textDisplayType = new TextDisplayElementType();
+        interactionType = new InteractionElementType();
 
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
@@ -59,6 +63,7 @@ public class DisplayAddon {
         registry.register(new DisplayElementProvider<>(itemDisplayType));
         registry.register(new DisplayElementProvider<>(blockDisplayType));
         registry.register(new DisplayElementProvider<>(textDisplayType));
+        registry.register(new InteractionElementProvider(interactionType));
 
         plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
@@ -87,5 +92,9 @@ public class DisplayAddon {
 
     public DisplayElementType<TextDisplay> getTextDisplayType() {
         return textDisplayType;
+    }
+
+    public InteractionElementType getInteractionType() {
+        return interactionType;
     }
 }

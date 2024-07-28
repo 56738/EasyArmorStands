@@ -13,6 +13,9 @@ import me.m56738.easyarmorstands.display.property.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.display.property.display.block.BlockDisplayBlockProperty;
+import me.m56738.easyarmorstands.display.property.display.interaction.InteractionHeightProperty;
+import me.m56738.easyarmorstands.display.property.display.interaction.InteractionResponsiveProperty;
+import me.m56738.easyarmorstands.display.property.display.interaction.InteractionWidthProperty;
 import me.m56738.easyarmorstands.display.property.display.item.ItemDisplayItemProperty;
 import me.m56738.easyarmorstands.display.property.display.item.ItemDisplayTransformProperty;
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplayAlignmentProperty;
@@ -25,6 +28,7 @@ import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
@@ -55,6 +59,9 @@ public class DisplayListener implements Listener {
         }
         if (entity instanceof TextDisplay) {
             registerTextDisplayProperties((TextDisplay) entity, registry);
+        }
+        if (entity instanceof Interaction) {
+            registerInteractionProperties((Interaction) entity, registry);
         }
     }
 
@@ -90,5 +97,11 @@ public class DisplayListener implements Listener {
         registry.register(new TextDisplaySeeThroughProperty(entity));
         registry.register(new TextDisplayShadowProperty(entity));
         registry.register(new TextDisplayTextProperty(entity));
+    }
+
+    private void registerInteractionProperties(Interaction entity, PropertyRegistry registry) {
+        registry.register(new InteractionWidthProperty(entity));
+        registry.register(new InteractionHeightProperty(entity));
+        registry.register(new InteractionResponsiveProperty(entity));
     }
 }

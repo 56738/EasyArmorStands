@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.property.display;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
+import me.m56738.easyarmorstands.display.property.display.interaction.InteractionWidthProperty;
 import me.m56738.easyarmorstands.display.property.type.BlockDataPropertyType;
 import me.m56738.easyarmorstands.display.property.type.BrightnessPropertyType;
 import me.m56738.easyarmorstands.display.property.type.GlowColorPropertyType;
@@ -31,6 +32,7 @@ public class DefaultDisplayPropertyTypes {
         registry.register(new Vector3fcPropertyType(key("display/scale")));
         registry.register(new Vector3fcPropertyType(key("display/translation")));
         registry.register(new GlowColorPropertyType(key("display/glowing/color")));
+        registry.register(new BooleanTogglePropertyType(key("interaction/responsive")));
         registry.register(new ItemPropertyType(key("item_display/item")));
         registry.register(new EnumTogglePropertyType<>(key("item_display/transform"), ItemDisplay.ItemDisplayTransform.class));
         registry.register(new EnumTogglePropertyType<>(key("text_display/alignment"), TextDisplay.TextAlignment.class));

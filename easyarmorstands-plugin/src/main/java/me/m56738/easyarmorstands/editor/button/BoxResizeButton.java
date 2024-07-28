@@ -1,25 +1,25 @@
-package me.m56738.easyarmorstands.display.editor.button;
+package me.m56738.easyarmorstands.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.display.editor.tool.DisplayBoxResizeTool;
 import me.m56738.easyarmorstands.editor.node.AxisMoveToolNode;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public class DisplayBoxResizeButton implements MenuButton {
+public class BoxResizeButton implements MenuButton {
     private final Session session;
     private final Component name;
     private final ParticleColor color;
-    private final DisplayBoxResizeTool tool;
+    private final AxisMoveTool tool;
 
-    public DisplayBoxResizeButton(Session session, Component name, ParticleColor color, DisplayBoxResizeTool tool) {
+    public BoxResizeButton(Session session, Component name, ParticleColor color, AxisMoveTool tool) {
         this.session = session;
         this.name = name;
         this.color = color;
