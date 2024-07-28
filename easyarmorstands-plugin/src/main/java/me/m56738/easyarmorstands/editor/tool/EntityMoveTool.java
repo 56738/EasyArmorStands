@@ -95,12 +95,12 @@ public class EntityMoveTool implements MoveTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return Util.formatOffset(offset);
+            return Util.formatLocation(locationProperty.getValue());
         }
 
         @Override
         public @Nullable Component getDescription() {
-            Component value = Util.formatOffset(offset);
+            Component value = Util.formatLocation(locationProperty.getValue());
             return Message.component("easyarmorstands.history.move", value);
         }
     }
