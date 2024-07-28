@@ -76,6 +76,7 @@ permissions:
       - easyarmorstands.redo
       - easyarmorstands.spawn.armorstand
       - easyarmorstands.spawn.blockdisplay
+      - easyarmorstands.spawn.interaction
       - easyarmorstands.spawn.itemdisplay
       - easyarmorstands.spawn.textdisplay
       - easyarmorstands.undo

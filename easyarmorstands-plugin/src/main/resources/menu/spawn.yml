@@ -32,3 +32,11 @@ slots:
       item:
         type: name_tag
         name: <type>
+  'easyarmorstands:spawn/interaction':
+    row: 0
+    column: 4
+    type: easyarmorstands:spawn/interaction
+    config:
+      item:
+        type: target
+        name: <type>
