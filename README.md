@@ -164,7 +164,7 @@ the `easyarmorstands.creative` permission.
 
 ## PlotSquared integration
 
-If [PlotSquared v6](https://www.spigotmc.org/resources/plotsquared-v6.77506/) is installed, players can only edit
+If [PlotSquared v6/v7](https://www.spigotmc.org/resources/plotsquared-v6.77506/) is installed, players can only edit
 entities on plots where they are allowed to build.
 
 Players with the `easyarmorstands.plotsquared.bypass` permission bypass this restriction.
@@ -181,7 +181,7 @@ Players with the `easyarmorstands.worldguard.bypass` permission bypass this rest
 ## Localization
 
 * Copy the
-  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/v2.0.0/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
+  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
   into `plugins/EasyArmorStands/messages_XX.properties`.
 * Replace `XX` with the language, for example: `messages_de.properties`.
   This makes the file only apply to players with that language.
