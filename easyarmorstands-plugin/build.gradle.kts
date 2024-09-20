@@ -4,6 +4,7 @@ plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.shadow)
     alias(libs.plugins.hangar.publish)
+    alias(libs.plugins.run.paper)
 }
 
 dependencies {
@@ -35,6 +36,13 @@ dependencies {
 }
 
 tasks {
+    runServer {
+        minecraftVersion("1.21.1")
+        javaLauncher = project.javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
     processResources {
         inputs.property("version", version)
         filesMatching("*.yml") {

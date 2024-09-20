@@ -106,17 +106,9 @@ public class Util {
     }
 
     public static EulerAngle toEuler(Quaterniondc rotation) {
-        // https://github.com/JOML-CI/JOML/pull/326
-        // rotation.getEulerAnglesZYX(dest);
-        // return new EulerAngle(dest.x, -dest.y, -dest.z);
-        double qx = rotation.x();
-        double qy = rotation.y();
-        double qz = rotation.z();
-        double qw = rotation.w();
-        return new EulerAngle(
-                Math.atan2(qy * qz + qw * qx, 0.5 - qx * qx - qy * qy),
-                -Math.safeAsin(-2.0 * (qx * qz - qw * qy)),
-                -Math.atan2(qx * qy + qw * qz, 0.5 - qy * qy - qz * qz));
+        Vector3d dest = new Vector3d();
+        rotation.getEulerAnglesZYX(dest);
+        return new EulerAngle(dest.x, -dest.y, -dest.z);
     }
 
     public static Vector3d toVector3d(Location location) {
