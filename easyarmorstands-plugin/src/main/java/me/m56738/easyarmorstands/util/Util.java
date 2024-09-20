@@ -81,9 +81,13 @@ public class Util {
                 Math.toDegrees(angle.getZ())));
     }
 
+    public static Component formatScale(double scale) {
+        return Component.text(SCALE_FORMAT.format(scale));
+    }
+
     public static Component formatScale(Vector3dc scale) {
         if (scale.x() == scale.y() && scale.y() == scale.z()) {
-            return Component.text(SCALE_FORMAT.format(scale.x()));
+            return formatScale(scale.x());
         }
         return format3D(scale, SCALE_FORMAT);
     }

@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.button.ScaleButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -480,6 +481,27 @@ public class SessionCommands {
                 .setTool(scaleTool)
                 .build();
         session.pushNode(scaleButton.createNode());
+    }
+
+    @Command("scale <value>")
+    @PropertyPermission("easyarmorstands:entity/scale")
+    @CommandDescription("easyarmorstands.command.description.scale")
+    @RequireElement
+    public void setScale(EasPlayer sender, Element element, @Argument("value") double value) {
+        ScaleTool scaleTool = null;
+        if (element instanceof EditableElement) {
+            PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+            ToolProvider tools = ((EditableElement) element).getTools(properties);
+            scaleTool = tools.scale(tools.position(), tools.rotation());
+        }
+        if (scaleTool == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
+            return;
+        }
+        ScaleToolSession toolSession = scaleTool.start();
+        toolSession.setValue(value);
+        toolSession.commit(toolSession.getDescription());
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-scale", Util.formatScale(value)));
     }
 
     @Command("reset")
