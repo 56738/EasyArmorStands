@@ -249,10 +249,10 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
-            if (node != null) {
+            if (node != null && node != session.getNode()) {
                 session.returnToNode(node);
+                event.setCancelled(true);
             }
-            event.setCancelled(true);
         }
     }
 
