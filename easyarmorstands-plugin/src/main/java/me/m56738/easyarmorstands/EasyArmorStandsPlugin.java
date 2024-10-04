@@ -304,6 +304,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             loadAddon("me.m56738.easyarmorstands.griefdefender.GriefDefenderAddon");
         }
 
+        if (Bukkit.getPluginManager().isPluginEnabled("Residence")) {
+            getLogger().info("Enabling Residence integration");
+            loadAddon("me.m56738.easyarmorstands.residence.ResidenceAddon");
+        }
+
         if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
             getLogger().info("Enabling HeadDatabase integration");
             loadAddon("me.m56738.easyarmorstands.headdatabase.HeadDatabaseAddon");

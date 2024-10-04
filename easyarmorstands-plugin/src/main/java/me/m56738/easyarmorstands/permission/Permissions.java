@@ -63,6 +63,9 @@ public class Permissions {
     @Description("Allow redoing the configuration")
     public static final String RELOAD = "easyarmorstands.reload";
 
+    @Description("Allow bypassing Residence restrictions")
+    public static final String RESIDENCE_BYPASS = "easyarmorstands.residence.bypass";
+
     @Description("Allow configuring the snapping increment")
     public static final String SNAP = "easyarmorstands.snap";
 

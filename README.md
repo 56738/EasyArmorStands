@@ -176,6 +176,18 @@ build.
 
 Players with the `easyarmorstands.worldguard.bypass` permission bypass this restriction.
 
+## GriefDefender integration
+
+If GriefDefender is installed, only trusted builders can edit entities in a claim.
+
+Players with the `easyarmorstands.griefdefender.bypass` permission bypass this restriction.
+
+## Residence integration
+
+If Residence is installed, only players with the `build` flag can edit entities in a claim.
+
+Players with the `easyarmorstands.residence.bypass` permission bypass this restriction.
+
 # Configuration
 
 ## Localization

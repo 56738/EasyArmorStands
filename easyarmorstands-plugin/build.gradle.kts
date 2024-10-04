@@ -30,6 +30,7 @@ dependencies {
     runtimeOnly(project(":easyarmorstands-headdatabase"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-griefdefender"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-plotsquared"))
+    runtimeOnly(project(":easyarmorstands-region:easyarmorstands-residence"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-worldguard-v6"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-worldguard-v7"))
     runtimeOnly(project(":easyarmorstands-traincarts"))
