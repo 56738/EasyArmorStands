@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -194,7 +195,7 @@ public class MenuListener implements Listener {
 
         @Override
         public boolean isLeftClick() {
-            return event.isLeftClick();
+            return event.isLeftClick() && event.getClick() != ClickType.DOUBLE_CLICK;
         }
 
         @Override
