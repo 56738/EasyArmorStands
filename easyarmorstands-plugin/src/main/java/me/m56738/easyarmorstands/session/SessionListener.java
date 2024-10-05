@@ -254,6 +254,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
                 event.setCancelled(true);
             }
         }
+        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
     }
 
     @EventHandler
