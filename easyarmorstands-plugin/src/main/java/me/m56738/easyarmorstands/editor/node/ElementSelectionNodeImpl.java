@@ -59,6 +59,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private boolean selectionBoxEditing;
     private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionRange;
     private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionDistance;
+    private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorButtonLimit;
     private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionLimit;
 
     public ElementSelectionNodeImpl(Session session) {
@@ -165,6 +166,9 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
         // Process added entries
         for (ElementDiscoveryEntry entry : foundEntries) {
+            if (buttonLimit > 0 && entries.size() >= buttonLimit) {
+                break;
+            }
             entries.computeIfAbsent(entry, this::addEntry);
         }
 

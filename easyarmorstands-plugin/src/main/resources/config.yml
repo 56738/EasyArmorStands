@@ -35,6 +35,7 @@ editor-selection-range: 10
 editor-look-threshold: 0.1
 editor-selection-distance: 128
 editor-selection-limit: 64
+editor-button-limit: 128
 
 interpolation-ticks: 1
 
