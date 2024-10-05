@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
@@ -27,11 +28,13 @@ import java.util.Locale;
 public class EasPlayer extends EasCommandSender implements ChangeContext {
     private final @NotNull Player player;
     private final @NotNull History history;
+    private final @NotNull Clipboard clipboard;
 
     public EasPlayer(@NotNull Player player, @NotNull Audience audience) {
         super(player, audience);
         this.player = player;
         this.history = EasyArmorStandsPlugin.getInstance().getHistory(player);
+        this.clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
     }
 
     public EasPlayer(@NotNull Player player) {
@@ -46,6 +49,10 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     @Override
     public @NotNull History history() {
         return history;
+    }
+
+    public @NotNull Clipboard clipboard() {
+        return clipboard;
     }
 
     @Override

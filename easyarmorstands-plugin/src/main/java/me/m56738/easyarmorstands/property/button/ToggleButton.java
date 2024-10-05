@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -23,7 +24,11 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
     @Override
     public void onClick(@NotNull MenuClick click) {
         boolean changed;
-        if (click.isLeftClick()) {
+        if (click.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
+                    .handlePropertyShiftClick(property, click);
+            return;
+        } else if (click.isLeftClick()) {
             changed = setValue(getNextValue());
         } else if (click.isRightClick()) {
             changed = setValue(getPreviousValue());

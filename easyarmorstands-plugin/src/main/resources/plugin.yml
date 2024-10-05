@@ -15,6 +15,7 @@ permissions:
   easyarmorstands.survival:
     description: "Allow editing armor stands and their basic properties"
     children:
+      - easyarmorstands.clipboard
       - easyarmorstands.edit.armorstand
       - easyarmorstands.give
       - easyarmorstands.property.armorstand.arms
@@ -40,7 +41,7 @@ permissions:
       - easyarmorstands.clone
       - easyarmorstands.color
       - easyarmorstands.convert
-      - easyarmorstands.copy
+      - easyarmorstands.copy.entity
       - easyarmorstands.destroy.armorstand
       - easyarmorstands.destroy.blockdisplay
       - easyarmorstands.destroy.interaction

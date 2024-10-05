@@ -30,6 +30,10 @@ public interface PropertyType<T> extends Keyed {
         }
     }
 
+    default boolean canCopy(@NotNull Player player) {
+        return true;
+    }
+
     /**
      * Display name of this property.
      *

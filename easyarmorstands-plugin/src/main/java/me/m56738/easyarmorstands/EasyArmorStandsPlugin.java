@@ -18,16 +18,22 @@ import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.clipboard.Clipboard;
+import me.m56738.easyarmorstands.clipboard.ClipboardListener;
+import me.m56738.easyarmorstands.clipboard.ClipboardManager;
 import me.m56738.easyarmorstands.color.ColorAxisChangeSlotType;
 import me.m56738.easyarmorstands.color.ColorAxisSlotType;
 import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
 import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
+import me.m56738.easyarmorstands.command.ClipboardCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
+import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
+import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementInjector;
 import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementSelectionInjector;
@@ -147,6 +153,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private MenuProviderImpl menuProvider;
     private SessionManagerImpl sessionManager;
     private HistoryManager historyManager;
+    private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
     private LegacyPaperCommandManager<EasCommandSender> commandManager;
@@ -209,11 +216,13 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         sessionManager = new SessionManagerImpl();
         historyManager = new HistoryManager();
+        clipboardManager = new ClipboardManager();
 
         SessionListener sessionListener = new SessionListener(this, sessionManager);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(sessionListener, this);
         getServer().getPluginManager().registerEvents(historyManager, this);
+        getServer().getPluginManager().registerEvents(new ClipboardListener(clipboardManager), this);
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
@@ -255,6 +264,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.parameterInjectorRegistry()
                 .registerInjector(ValueNode.class, new ValueNodeInjector())
                 .registerInjector(SessionImpl.class, new SessionInjector())
+                .registerInjector(Clipboard.class, new ClipboardInjector())
                 .registerInjector(Element.class, new ElementInjector())
                 .registerInjector(ElementSelection.class, new ElementSelectionInjector());
 
@@ -268,6 +278,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.registerCommandPreProcessor(new GroupProcessor());
         commandManager.registerCommandPreProcessor(new ElementProcessor());
         commandManager.registerCommandPreProcessor(new SessionProcessor());
+        commandManager.registerCommandPreProcessor(new ClipboardProcessor());
 
         commandManager.registerCommandPostProcessor(new CommandRequirementPostProcessor());
 
@@ -282,6 +293,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
+        annotationParser.parse(new ClipboardCommands());
 
         if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
             getLogger().info("Enabling WorldGuard integration");
@@ -513,6 +525,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public History getHistory(Player player) {
         return historyManager.getHistory(player);
+    }
+
+    public Clipboard getClipboard(Player player) {
+        return clipboardManager.getClipboard(player);
     }
 
     @Contract(pure = true)

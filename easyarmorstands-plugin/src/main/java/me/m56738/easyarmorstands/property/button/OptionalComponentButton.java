@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -20,7 +21,10 @@ public class OptionalComponentButton extends PropertyButton<Optional<Component>>
 
     @Override
     public void onClick(@NotNull MenuClick click) {
-        if (click.isLeftClick()) {
+        if (click.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
+                    .handlePropertyShiftClick(property, click);
+        } else if (click.isLeftClick()) {
             click.close();
             SessionCommands.showText(click, property.getType().getName(), property.getValue().orElse(null), command);
         }

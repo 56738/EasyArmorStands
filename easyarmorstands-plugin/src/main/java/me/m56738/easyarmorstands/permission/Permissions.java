@@ -15,6 +15,9 @@ public class Permissions {
     @Description("Allow aligning entities to the block grid")
     public static final String ALIGN = "easyarmorstands.align";
 
+    @Description("Allow copying properties")
+    public static final String CLIPBOARD = "easyarmorstands.clipboard";
+
     @Description("Allow cloning entities")
     public static final String CLONE = "easyarmorstands.clone";
 
@@ -25,7 +28,7 @@ public class Permissions {
     public static final String CONVERT = "easyarmorstands.convert";
 
     @Description("Allow copying entities as items")
-    public static final String COPY = "easyarmorstands.copy";
+    public static final String COPY_ENTITY = "easyarmorstands.copy.entity";
 
     @Description("Allow viewing troubleshooting information")
     public static final String DEBUG = "easyarmorstands.debug";

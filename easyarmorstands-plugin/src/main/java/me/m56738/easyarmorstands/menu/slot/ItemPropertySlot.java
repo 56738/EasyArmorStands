@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -35,6 +36,12 @@ public class ItemPropertySlot implements MenuSlot {
 
     @Override
     public void onClick(@NotNull MenuClick click) {
+        if (click.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
+                    .handlePropertyShiftClick(property, click);
+            return;
+        }
+
         if (!property.canChange(click.player())) {
             return;
         }

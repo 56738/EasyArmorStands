@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -39,5 +40,9 @@ public class BlockDisplaySlot extends PropertyButton<BlockData> {
 
     @Override
     public void onClick(@NotNull MenuClick click) {
+        if (click.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
+                    .handlePropertyShiftClick(property, click);
+        }
     }
 }

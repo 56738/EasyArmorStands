@@ -64,6 +64,18 @@ public final class PropertyMap implements PropertyContainer {
         return properties.computeIfAbsent(type, PropertyImpl::new).setValue(value);
     }
 
+    public boolean isEmpty() {
+        return properties.isEmpty();
+    }
+
+    public void remove(PropertyType<?> type) {
+        properties.remove(type);
+    }
+
+    public void clear() {
+        properties.clear();
+    }
+
     private static class PropertyImpl<T> implements Property<T> {
         private final PropertyType<T> type;
         private T value;

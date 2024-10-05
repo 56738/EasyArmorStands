@@ -5,6 +5,8 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +31,12 @@ public class ArmorStandPartSlotFactory implements MenuSlotFactory {
         if (root == null) {
             return null;
         }
-        return new NodeSlot(session,
+        PropertyContainer properties = context.properties(root.getElement());
+        return new ArmorStandPartSlot(
+                session,
                 root.getPartButton(part),
-                ArmorStandPartResetAction.pose(part, context.properties(root.getElement())),
+                properties,
+                properties.get(ArmorStandPropertyTypes.POSE.get(part)),
                 itemTemplate,
                 context.resolver());
     }
