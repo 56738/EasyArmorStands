@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.menu;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,8 @@ public interface Menu extends InventoryHolder {
     @Nullable MenuSlot getSlot(int index);
 
     void close(@NotNull Player player);
+
+    @Nullable ItemStack getItem(int index);
 
     void updateItem(int index);
 

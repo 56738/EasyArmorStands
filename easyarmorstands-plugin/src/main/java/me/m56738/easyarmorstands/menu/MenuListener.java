@@ -72,7 +72,11 @@ public class MenuListener implements Listener {
             }
             Menu menu = (Menu) holder;
             event.setCancelled(true);
-            menu.onClick(new SingleClick(menu, event));
+            SingleClick click = new SingleClick(menu, event);
+            menu.onClick(click);
+            if (click.update) {
+                event.setCurrentItem(menu.getItem(event.getSlot()));
+            }
         }
     }
 
@@ -187,6 +191,7 @@ public class MenuListener implements Listener {
 
     private static class SingleClick extends Click {
         private final InventoryClickEvent event;
+        private boolean update;
 
         private SingleClick(Menu menu, InventoryClickEvent event) {
             super(menu, event, event.getSlot());
@@ -206,6 +211,11 @@ public class MenuListener implements Listener {
         @Override
         public boolean isShiftClick() {
             return event.isShiftClick();
+        }
+
+        @Override
+        public void updateItem() {
+            update = true;
         }
     }
 

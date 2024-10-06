@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,15 @@ public class MenuImpl implements InventoryHolder, Menu {
                 inventory.setItem(i, slot.getItem(locale));
             }
         }
+    }
+
+    @Override
+    public @Nullable ItemStack getItem(int index) {
+        MenuSlot slot = slots[index];
+        if (slot != null) {
+            return slot.getItem(locale);
+        }
+        return null;
     }
 
     @Override
