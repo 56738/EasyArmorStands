@@ -30,7 +30,13 @@ permissions:
       - easyarmorstands.property.armorstand.pose.rightarm
       - easyarmorstands.property.armorstand.pose.rightleg
       - easyarmorstands.property.armorstand.size
-      - easyarmorstands.property.equipment
+      - easyarmorstands.property.equipment.hand
+      - easyarmorstands.property.equipment.offhand
+      - easyarmorstands.property.equipment.feet
+      - easyarmorstands.property.equipment.legs
+      - easyarmorstands.property.equipment.chest
+      - easyarmorstands.property.equipment.head
+      - easyarmorstands.property.equipment.body
       - easyarmorstands.property.gravity
       - easyarmorstands.property.location
       - easyarmorstands.property.visible

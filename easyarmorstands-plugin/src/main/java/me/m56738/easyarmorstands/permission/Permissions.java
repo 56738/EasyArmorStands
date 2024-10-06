@@ -27,7 +27,7 @@ public class Permissions {
     @Description("Allow converting armor stands to item displays")
     public static final String CONVERT = "easyarmorstands.convert";
 
-    @Description("Allow copying entities as items")
+    @Description("Allow copying entities as items (armor stands or spawn eggs)")
     public static final String COPY_ENTITY = "easyarmorstands.copy.entity";
 
     @Description("Allow viewing troubleshooting information")
@@ -63,7 +63,7 @@ public class Permissions {
     @Description("Allow redoing changes")
     public static final String REDO = "easyarmorstands.redo";
 
-    @Description("Allow redoing the configuration")
+    @Description("Allow reloading the configuration")
     public static final String RELOAD = "easyarmorstands.reload";
 
     @Description("Allow bypassing Residence restrictions")

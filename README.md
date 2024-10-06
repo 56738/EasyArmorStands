@@ -162,6 +162,8 @@ There are two permission packs which contain permissions which are recommended f
 For example, to allow players to use EasyArmorStands on a creative server, simply give them
 the `easyarmorstands.creative` permission.
 
+The full list of permissions is located [in the wiki](https://github.com/56738/EasyArmorStands/wiki/Permissions).
+
 ## PlotSquared integration
 
 If [PlotSquared v6/v7](https://www.spigotmc.org/resources/plotsquared-v6.77506/) is installed, players can only edit

@@ -136,31 +136,31 @@ easyarmorstands:entity/custom_name/visible:
     disabled: <red><lang:easyarmorstands.property.common.invisible>
 
 easyarmorstands:entity/equipment/hand:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.hand
   name: <lang:easyarmorstands.property.equipment.hand.name>
 
 easyarmorstands:entity/equipment/off_hand:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.offhand
   name: <lang:easyarmorstands.property.equipment.off-hand.name>
 
 easyarmorstands:entity/equipment/feet:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.feet
   name: <lang:easyarmorstands.property.equipment.feet.name>
 
 easyarmorstands:entity/equipment/legs:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.legs
   name: <lang:easyarmorstands.property.equipment.legs.name>
 
 easyarmorstands:entity/equipment/chest:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.chest
   name: <lang:easyarmorstands.property.equipment.chest.name>
 
 easyarmorstands:entity/equipment/head:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.head
   name: <lang:easyarmorstands.property.equipment.head.name>
 
 easyarmorstands:entity/equipment/body:
-  permission: easyarmorstands.property.equipment
+  permission: easyarmorstands.property.equipment.body
   name: <lang:easyarmorstands.property.equipment.body.name>
 
 easyarmorstands:entity/glowing:
