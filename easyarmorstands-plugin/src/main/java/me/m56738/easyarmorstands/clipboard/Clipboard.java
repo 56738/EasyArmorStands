@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Clipboard {
 
     public <T> void handlePropertyShiftClick(Property<T> property, MenuClick click) {
         PropertyType<T> type = property.getType();
-        if (type.canCopy(click.player())) {
+        if (click.player().hasPermission(Permissions.CLIPBOARD) && type.canCopy(click.player())) {
             properties.put(type, property.getValue());
             click.sendMessage(Message.success("easyarmorstands.success.property-copied", type.getName()));
         }
