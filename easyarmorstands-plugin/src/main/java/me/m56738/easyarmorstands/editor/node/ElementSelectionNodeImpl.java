@@ -168,7 +168,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
         // Process added entries
         for (ElementDiscoveryEntry entry : foundEntries) {
-            if (buttonLimit > 0 && buttonCount >= buttonLimit) {
+            if (isButtonLimitReached()) {
                 break;
             }
             entries.computeIfAbsent(entry, this::addEntry);
@@ -204,7 +204,11 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
         int groupSize = groupMembers.size() + selectionBoxMembers.size();
         if (groupSize == 0) {
-            context.setActionBar(name);
+            if (isButtonLimitReached()) {
+                context.setActionBar(Message.error("easyarmorstands.node.select-entity.limit-reached"));
+            } else {
+                context.setActionBar(name);
+            }
         } else if (groupSize == 1) {
             context.setActionBar(Message.component("easyarmorstands.node.group-selected.single"));
         } else {
@@ -214,6 +218,10 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
             }
             context.setActionBar(status);
         }
+    }
+
+    private boolean isButtonLimitReached() {
+        return buttonLimit > 0 && buttonCount >= buttonLimit;
     }
 
     private SelectableElement getElement(ElementDiscoveryEntry entry) {
