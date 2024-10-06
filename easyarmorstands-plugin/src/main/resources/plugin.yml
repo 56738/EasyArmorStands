@@ -15,6 +15,7 @@ permissions:
   easyarmorstands.survival:
     description: "Allow editing armor stands and their basic properties"
     children:
+      - easyarmorstands.align
       - easyarmorstands.clipboard
       - easyarmorstands.edit.armorstand
       - easyarmorstands.give
