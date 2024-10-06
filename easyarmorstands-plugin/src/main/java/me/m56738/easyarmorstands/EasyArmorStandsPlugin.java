@@ -341,6 +341,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
+            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/interaction")));
         }
 
         if (hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
