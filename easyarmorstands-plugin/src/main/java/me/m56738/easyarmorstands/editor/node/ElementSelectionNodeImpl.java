@@ -61,6 +61,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionDistance;
     private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorButtonLimit;
     private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionLimit;
+    private int buttonCount;
 
     public ElementSelectionNodeImpl(Session session) {
         super(session);
@@ -159,6 +160,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
                 ElementButton button = entry.getValue().button;
                 if (button != null) {
                     removeButton(button);
+                    buttonCount--;
                 }
                 iterator.remove();
             }
@@ -166,7 +168,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
         // Process added entries
         for (ElementDiscoveryEntry entry : foundEntries) {
-            if (buttonLimit > 0 && entries.size() >= buttonLimit) {
+            if (buttonLimit > 0 && buttonCount >= buttonLimit) {
                 break;
             }
             entries.computeIfAbsent(entry, this::addEntry);
@@ -230,6 +232,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         }
         ElementButton button = new ElementButton(entry, session, element);
         addButton(button);
+        buttonCount++;
         return new ElementEntry(button);
     }
 
@@ -242,6 +245,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
             }
         }
         entries.clear();
+        buttonCount = 0;
         cancelBoxSelection();
     }
 
