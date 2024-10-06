@@ -13,6 +13,7 @@ public class GriefDefenderAddon {
                 Permissions.GRIEFDEFENDER_BYPASS,
                 new GriefDefenderPrivilegeChecker(GriefDefender.getCore()),
                 Message.error("easyarmorstands.error.griefdefender.deny-create"),
+                Message.error("easyarmorstands.error.griefdefender.deny-select"),
                 Message.error("easyarmorstands.error.griefdefender.deny-destroy")
         ), plugin);
     }

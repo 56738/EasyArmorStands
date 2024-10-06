@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -100,6 +101,16 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
             return false;
         }
         PlayerEditElementEvent event = new PlayerEditElementEvent(player, element);
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    @Override
+    public boolean canDiscoverElement(EditableElement element) {
+        if (!element.canEdit(player)) {
+            return false;
+        }
+        PlayerDiscoverElementEvent event = new PlayerDiscoverElementEvent(player, element);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }

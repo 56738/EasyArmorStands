@@ -13,6 +13,7 @@ public class ResidenceAddon {
                 Permissions.RESIDENCE_BYPASS,
                 new ResidencePrivilegeChecker(Residence.getInstance()),
                 Message.error("easyarmorstands.error.residence.deny-create"),
+                Message.error("easyarmorstands.error.residence.deny-select"),
                 Message.error("easyarmorstands.error.residence.deny-destroy")
         ), plugin);
     }

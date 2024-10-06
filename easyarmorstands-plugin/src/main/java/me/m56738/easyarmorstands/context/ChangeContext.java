@@ -37,5 +37,7 @@ public interface ChangeContext {
 
     boolean canEditElement(EditableElement element);
 
+    boolean canDiscoverElement(EditableElement element);
+
     <T> boolean canChangeProperty(Element element, Property<T> property, T value);
 }

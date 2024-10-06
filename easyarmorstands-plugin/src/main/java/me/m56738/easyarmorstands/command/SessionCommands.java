@@ -141,6 +141,8 @@ public class SessionCommands {
                         return;
                     }
                     group.addMember(editableElement);
+                } else {
+                    return;
                 }
             }
         }

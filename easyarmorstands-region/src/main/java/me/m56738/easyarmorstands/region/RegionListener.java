@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
@@ -26,12 +27,14 @@ public class RegionListener implements Listener {
     private final String bypassPermission;
     private final RegionPrivilegeChecker privilegeChecker;
     private final Component createError;
+    private final Component selectError;
     private final Component destroyError;
 
-    public RegionListener(String bypassPermission, RegionPrivilegeChecker privilegeChecker, Component createError, Component destroyError) {
+    public RegionListener(String bypassPermission, RegionPrivilegeChecker privilegeChecker, Component createError, Component selectError, Component destroyError) {
         this.bypassPermission = bypassPermission;
         this.privilegeChecker = privilegeChecker;
         this.createError = createError;
+        this.selectError = selectError;
         this.destroyError = destroyError;
     }
 
@@ -49,6 +52,17 @@ public class RegionListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDiscover(PlayerDiscoverElementEvent event) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
+            return;
+        }
+        if (event.getPlayer().hasPermission(bypassPermission)) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEdit(PlayerEditElementEvent event) {
         if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
             return;
@@ -57,6 +71,7 @@ public class RegionListener implements Listener {
             return;
         }
         event.setCancelled(true);
+        audience(event.getPlayer()).sendMessage(selectError);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

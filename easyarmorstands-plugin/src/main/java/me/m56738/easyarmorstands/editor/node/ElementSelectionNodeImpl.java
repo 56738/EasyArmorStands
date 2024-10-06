@@ -235,7 +235,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
         ChangeContext context = new EasPlayer(session.player());
-        if (element == null || !context.canEditElement(element)) {
+        if (element == null || !context.canDiscoverElement(element)) {
             return ElementEntry.EMPTY;
         }
         ElementButton button = new ElementButton(entry, session, element);
