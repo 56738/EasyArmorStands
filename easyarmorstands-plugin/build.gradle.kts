@@ -25,7 +25,9 @@ dependencies {
         isTransitive = false
     }
     api(libs.configurate.yaml)
-    api(libs.joml)
+    api(libs.joml) {
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
+    }
     runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-headdatabase"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-griefdefender"))

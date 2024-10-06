@@ -10,7 +10,9 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.configurate.core)
     api(libs.configurate.yaml)
-    api(libs.joml)
+    api(libs.joml) {
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
+    }
 }
 
 tasks {
