@@ -208,6 +208,15 @@ easyarmorstands:entity/silent:
       - <value>
       - <lang:easyarmorstands.property.silent.description>
 
+easyarmorstands:entity/tags:
+  permission: easyarmorstands.property.tags
+  name: <lang:easyarmorstands.property.tags.name>
+  value:
+    separator: ', '
+    empty: <i><lang:easyarmorstands.property.tags.none>
+    threshold: 8
+    multiple: <i><lang:easyarmorstands.property.tags.multiple:'<amount>'>
+
 easyarmorstands:entity/visible:
   permission: easyarmorstands.property.visible
   name: <lang:easyarmorstands.property.visibility.name>

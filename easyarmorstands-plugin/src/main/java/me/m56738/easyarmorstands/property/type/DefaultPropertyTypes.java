@@ -26,6 +26,7 @@ public class DefaultPropertyTypes {
         registry.register(new LocationPropertyType(key("entity/location")));
         registry.register(new DoublePropertyType(key("entity/scale")));
         registry.register(new BooleanTogglePropertyType(key("entity/silent")));
+        registry.register(new StringSetPropertyType(key("entity/tags")));
         registry.register(new BooleanTogglePropertyType(key("entity/visible")));
         for (ArmorStandPart part : ArmorStandPart.values()) {
             registry.register(new EulerAnglePropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));

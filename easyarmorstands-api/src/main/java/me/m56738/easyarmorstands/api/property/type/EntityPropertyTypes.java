@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 @SuppressWarnings("PatternValidation")
 public class EntityPropertyTypes {
@@ -24,6 +25,8 @@ public class EntityPropertyTypes {
     public static final @NotNull PropertyType<Location> LOCATION = get("entity/location", Location.class);
     public static final @NotNull PropertyType<Double> SCALE = get("entity/scale", Double.class);
     public static final @NotNull PropertyType<Boolean> SILENT = get("entity/silent", Boolean.class);
+    public static final @NotNull PropertyType<Set<String>> TAGS = get("entity/tags", new TypeToken<Set<String>>() {
+    });
     public static final @NotNull PropertyType<Boolean> VISIBLE = get("entity/visible", Boolean.class);
 
     private EntityPropertyTypes() {
