@@ -72,6 +72,12 @@ public class Permissions {
     @Description("Allow configuring the snapping increment")
     public static final String SNAP = "easyarmorstands.snap";
 
+    @Description("Allow selecting matching entities using a selector")
+    public static final String SELECT = "easyarmorstands.select";
+
+    @Description("Allow selecting entities with a certain tag")
+    public static final String SELECT_TAG = "easyarmorstands.select.tag";
+
     @Description("Allow spawning entities")
     public static final String SPAWN = "easyarmorstands.spawn";
 

@@ -134,11 +134,11 @@ public class SessionCommands {
         menuElement.openMenu(sender.get());
     }
 
-    @Command("group <entities>")
-    @Permission(Permissions.GROUP)
-    @CommandDescription("easyarmorstands.command.description.group")
+    @Command("select <entities>")
+    @Permission(Permissions.SELECT)
+    @CommandDescription("easyarmorstands.command.description.select")
     @RequireSession
-    public void group(EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
+    public void select(EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
         selectGroup(sender, session, selector.values().stream()
                 .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
                 .filter(element -> element instanceof EditableElement)
@@ -585,8 +585,8 @@ public class SessionCommands {
     }
 
     @Command("tag select <value>")
-    @PropertyPermission("easyarmorstands:entity/tags")
-    @CommandDescription("easyarmorstands.command.description.tag.select")
+    @Permission(Permissions.SELECT_TAG)
+    @CommandDescription("easyarmorstands.command.description.select.tag")
     @RequireSession
     public void selectTag(EasPlayer sender, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
         EntityTagCapability tagCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTagCapability.class);

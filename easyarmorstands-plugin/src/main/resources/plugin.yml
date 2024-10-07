@@ -40,6 +40,7 @@ permissions:
       - easyarmorstands.property.gravity
       - easyarmorstands.property.location
       - easyarmorstands.property.visible
+      - easyarmorstands.select
       - easyarmorstands.snap
   easyarmorstands.creative:
     description: "Allow spawning and editing armor stands and display entities"
