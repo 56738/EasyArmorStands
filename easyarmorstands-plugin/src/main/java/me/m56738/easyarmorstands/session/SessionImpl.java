@@ -15,6 +15,8 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.group.GroupMember;
+import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -46,6 +48,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
@@ -188,6 +191,18 @@ public final class SessionImpl implements Session {
             }
         }
         return null;
+    }
+
+    @Override
+    public @NotNull List<Element> getElements() {
+        for (Node node : nodeStack) {
+            if (node instanceof ElementNode) {
+                return Collections.singletonList(((ElementNode) node).getElement());
+            } else if (node instanceof GroupRootNode) {
+                return ((GroupRootNode) node).getGroup().getMembers().stream().map(GroupMember::getElement).collect(Collectors.toList());
+            }
+        }
+        return Collections.emptyList();
     }
 
     boolean update() {

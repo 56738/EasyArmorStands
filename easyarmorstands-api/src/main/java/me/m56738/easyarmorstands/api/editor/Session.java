@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
+import java.util.Collection;
+
 @ApiStatus.NonExtendable
 public interface Session {
     void pushNode(@NotNull Node node);
@@ -35,8 +37,21 @@ public interface Session {
     @Contract(pure = true)
     @Nullable Node getNode();
 
+    /**
+     * Returns the currently selected element, if exactly one element is selected.
+     *
+     * @return the selected element
+     */
     @Contract(pure = true)
     @Nullable Element getElement();
+
+    /**
+     * Returns all currently selected elements. Empty if no element is selected.
+     *
+     * @return all selected elements
+     */
+    @Contract(pure = true)
+    @NotNull Collection<Element> getElements();
 
     @Contract(pure = true)
     <T extends Node> @Nullable T findNode(@NotNull Class<T> type);
