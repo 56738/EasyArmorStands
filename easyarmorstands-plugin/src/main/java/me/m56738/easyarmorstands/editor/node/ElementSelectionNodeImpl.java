@@ -57,10 +57,10 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private final BoundingBoxParticle selectionBoxParticle;
     private BoundingBox selectionBox;
     private boolean selectionBoxEditing;
-    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionRange;
-    private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionDistance;
-    private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorButtonLimit;
-    private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionLimit;
+    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
+    private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.range;
+    private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.discovery.limit;
+    private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit;
     private int buttonCount;
 
     public ElementSelectionNodeImpl(Session session) {

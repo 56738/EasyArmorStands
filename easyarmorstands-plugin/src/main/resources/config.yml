@@ -1,42 +1,52 @@
-update-check: true
+# EasyArmorStands configuration
+# https://github.com/56738/EasyArmorStands/wiki/Configuration
+#
+# Do not edit the config version or game version, they are used to automatically update your config.
 
-server-side-translation: true
-
-tool:
-  type: blaze_rod
-  name: <gold><lang:easyarmorstands.tool-name>
-  description:
-    - <gray><lang:easyarmorstands.hint.select-entity>
-    - <gray><lang:easyarmorstands.hint.spawn-entity>
-    - <gray><lang:easyarmorstands.hint.deselect-entity>
-
-message-formats:
-  TITLE: '<gold><message>:'
-  SUCCESS: <green><message>
-  WARNING: <yellow><message>
-  ERROR: <red><message>
-  HINT: <gray><message>
-  CHAT_BUTTON: <gray>[<message>]
-  HOVER: <gray><message>
-  BUTTON_NAME: <blue><message>
-  BUTTON_DESCRIPTION: <gray><message>
-
-menu-background:
-  type: easyarmorstands:background
-  config:
-    item:
-      type: light_blue_stained_glass_pane
-      name: ''
-
-editor-scale-min-distance: 5
-editor-scale-max-distance: 64
-editor-range: 64
-editor-selection-range: 10
-editor-look-threshold: 0.1
-editor-selection-distance: 128
-editor-selection-limit: 64
-editor-button-limit: 128
-
-interpolation-ticks: 1
-
-swap-hands-button: '[<key:key.swapOffhand>]'
+editor:
+  discovery:
+    limit: 128
+  menu:
+    background:
+      config:
+        item:
+          type: stained_glass_pane
+          data: 3
+          name: ''
+      type: easyarmorstands:background
+  button:
+    interpolation-ticks: 1
+    range: 64.0
+    threshold: 0.1
+  scale:
+    max-distance: 64.0
+    min-distance: 5.0
+  selection:
+    group:
+      limit: 64
+      range: 128.0
+    range: 10.0
+  tool:
+    description:
+      - <gray><lang:easyarmorstands.hint.select-entity>
+      - <gray><lang:easyarmorstands.hint.spawn-entity>
+      - <gray><lang:easyarmorstands.hint.deselect-entity>
+    name: <gold><lang:easyarmorstands.tool-name>
+    type: blaze_rod
+message:
+  format:
+    button-description: <gray><message>
+    button-name: <blue><message>
+    chat-button: <gray>[<message>]
+    error: <red><message>
+    hint: <gray><message>
+    hover: <gray><message>
+    success: <green><message>
+    title: '<gold><message>:'
+    warning: <yellow><message>
+  server-side-translation: true
+update-check:
+  enabled: true
+version:
+  config: 0
+  game: 1.8.8

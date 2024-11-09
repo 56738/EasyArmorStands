@@ -50,7 +50,7 @@ public class MessageManager {
     }
 
     public void load(EasConfig config) {
-        styleTemplates.putAll(config.messageFormats);
+        styleTemplates.putAll(config.message.format);
 
         GlobalTranslator.translator().removeSource(registry);
 
@@ -74,7 +74,7 @@ public class MessageManager {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }
 
-        if (config.serverSideTranslation) {
+        if (config.message.serverSideTranslation) {
             GlobalTranslator.translator().addSource(registry);
         }
     }

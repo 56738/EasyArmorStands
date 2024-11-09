@@ -100,8 +100,8 @@ public final class SessionImpl implements Session {
     public double getScale(Vector3dc position) {
         EasConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration();
         Vector3d eyePosition = Util.toVector3d(player.getEyeLocation());
-        double minDistance = config.editorScaleMinDistance;
-        double maxDistance = config.editorScaleMaxDistance;
+        double minDistance = config.editor.scale.minDistance;
+        double maxDistance = config.editor.scale.maxDistance;
         if (maxDistance <= minDistance) {
             return 1;
         }
@@ -289,11 +289,11 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().editorRange;
+        return EasyArmorStandsPlugin.getInstance().getConfiguration().editor.button.range;
     }
 
     public double getLookThreshold() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().editorLookThreshold;
+        return EasyArmorStandsPlugin.getInstance().getConfiguration().editor.button.threshold;
     }
 
     @Override

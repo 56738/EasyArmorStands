@@ -1,11 +1,3 @@
-- name: config.yml
-  condition:
-    type: before-minor-version
-    value: 13
-  path: [ menu-background, config, item ]
-  value:
-    type: stained_glass_pane
-    data: 3
 - name: properties.yml
   condition:
     type: before-minor-version
@@ -231,15 +223,3 @@
   path: [ slots, easyarmorstands:entity/equipment/off_hand ]
   value:
     enabled: false
-- name: config.yml
-  condition:
-    type: before-minor-version
-    value: 16
-  path: [ swap-hands-button ]
-  value: '[<key:key.swapHands>]'
-- name: config.yml
-  condition:
-    type: before-minor-version
-    value: 12
-  path: [ swap-hands-button ]
-  value: '[F]'

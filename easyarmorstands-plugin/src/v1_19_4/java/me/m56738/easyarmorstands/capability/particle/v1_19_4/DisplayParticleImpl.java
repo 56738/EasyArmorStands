@@ -29,8 +29,8 @@ public abstract class DisplayParticleImpl<T extends Display> extends ParticleImp
     protected void configure(T entity) {
         super.configure(entity);
         entity.setBrightness(new Display.Brightness(15, 0));
-        int interpolationTicks = EasyArmorStandsPlugin.getInstance().getConfiguration().interpolationTicks;
-        if (setTeleportDuration != null) {
+        int interpolationTicks = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.button.interpolationTicks;
+        if (setTeleportDuration != null && interpolationTicks >= 0) {
             entity.setInterpolationDuration(interpolationTicks);
             try {
                 setTeleportDuration.invoke(entity, interpolationTicks);

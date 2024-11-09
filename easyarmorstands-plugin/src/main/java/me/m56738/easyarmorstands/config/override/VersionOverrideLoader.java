@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.config;
+package me.m56738.easyarmorstands.config.override;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.config.serializer.VersionOverrideConditionSerializer;

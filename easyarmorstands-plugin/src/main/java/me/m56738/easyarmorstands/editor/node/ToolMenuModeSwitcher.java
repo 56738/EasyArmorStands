@@ -20,15 +20,15 @@ public class ToolMenuModeSwitcher {
         TextComponent.Builder builder = Component.text()
                 .append(toolManager.getMode().getName());
         if (swapHandItemsCapability != null) {
-            Component swapHandsButton = EasyArmorStandsPlugin.getInstance().getConfiguration().swapHandsButton;
-            if (swapHandsButton != null) {
-                builder.append(Component.text()
-                        .appendSpace()
-                        .append(swapHandsButton)
-                        .appendSpace()
-                        .append(Message.component("easyarmorstands.node.switch-mode"))
-                        .color(NamedTextColor.GRAY));
-            }
+            Component swapHandsButton = swapHandItemsCapability.key();
+            builder.append(Component.text()
+                    .appendSpace()
+                    .append(Component.text('['))
+                    .append(swapHandsButton)
+                    .append(Component.text(']'))
+                    .appendSpace()
+                    .append(Message.component("easyarmorstands.node.switch-mode"))
+                    .color(NamedTextColor.GRAY));
         }
         return builder.build();
     }

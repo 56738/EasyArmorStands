@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.config.BeforeMinorVersionCondition;
-import me.m56738.easyarmorstands.config.VersionOverrideCondition;
+import me.m56738.easyarmorstands.config.override.BeforeMinorVersionCondition;
+import me.m56738.easyarmorstands.config.override.VersionOverrideCondition;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;

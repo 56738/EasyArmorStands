@@ -655,7 +655,7 @@ public class SessionCommands {
         Group group = new Group(session);
         while (elements.hasNext()) {
             EditableElement element = elements.next();
-            if (group.getMembers().size() >= EasyArmorStandsPlugin.getInstance().getConfiguration().editorSelectionLimit) {
+            if (group.getMembers().size() >= EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit) {
                 sender.sendMessage(Message.error("easyarmorstands.error.group-too-big"));
                 return;
             } else if (group.getMembers().size() == 1 && !sender.get().hasPermission(Permissions.GROUP)) {

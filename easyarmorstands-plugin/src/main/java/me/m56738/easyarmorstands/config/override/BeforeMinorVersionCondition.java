@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.config;
+package me.m56738.easyarmorstands.config.override;
 
 import org.bukkit.Bukkit;
 

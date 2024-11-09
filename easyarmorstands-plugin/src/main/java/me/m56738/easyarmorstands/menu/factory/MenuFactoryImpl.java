@@ -42,7 +42,7 @@ class MenuFactoryImpl implements MenuFactory {
         if (background != null) {
             return background;
         } else {
-            return EasyArmorStandsPlugin.getInstance().getConfiguration().menuBackground;
+            return EasyArmorStandsPlugin.getInstance().getConfiguration().editor.menu.background;
         }
     }
 }

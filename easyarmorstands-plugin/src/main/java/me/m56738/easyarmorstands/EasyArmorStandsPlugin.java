@@ -56,8 +56,10 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.config.EasConfig;
-import me.m56738.easyarmorstands.config.VersionOverrideLoader;
+import me.m56738.easyarmorstands.config.Transformations;
+import me.m56738.easyarmorstands.config.override.VersionOverrideLoader;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
+import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
@@ -115,8 +117,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
+import org.spongepowered.configurate.transformation.ConfigurationTransformation;
+import org.spongepowered.configurate.util.MapFactories;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.BufferedReader;
@@ -401,7 +407,71 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     private void loadConfig() {
-        loadConfig("config.yml", c -> config = c.get(EasConfig.class));
+        GameVersionTransformation gameVersionTransformation = GameVersionTransformation.create();
+
+        YamlConfigurationLoader defaultLoader = YamlConfigurationLoader.builder()
+                .source(getConfigSource("config.yml"))
+                .nodeStyle(NodeStyle.BLOCK)
+                .defaultOptions(o -> o
+                        .serializers(b -> b.registerAll(EasSerializers.serializers()))
+                        .shouldCopyDefaults(true))
+                .build();
+
+        CommentedConfigurationNode defaultNode;
+        try {
+            defaultNode = defaultLoader.load();
+            gameVersionTransformation.apply(defaultNode);
+            config = defaultNode.get(EasConfig.class);
+        } catch (ConfigurateException e) {
+            getLogger().log(Level.SEVERE, "Failed to load default config", e);
+            return;
+        }
+
+        YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+                .path(getConfigFolder().resolve("config.yml"))
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .headerMode(HeaderMode.PRESET)
+                .defaultOptions(o -> o
+                        .serializers(b -> b.registerAll(EasSerializers.serializers()))
+                        .mapFactory(MapFactories.sortedNatural())
+                        .header(defaultNode.options().header())
+                        .shouldCopyDefaults(true))
+                .build();
+
+        CommentedConfigurationNode node;
+        try {
+            node = loader.load();
+        } catch (ConfigurateException e) {
+            getLogger().log(Level.SEVERE, "Failed to load config", e);
+            return;
+        }
+
+        if (!node.virtual()) {
+            ConfigurationTransformation.Versioned transformation = Transformations.create();
+
+            int startVersion = transformation.version(node);
+            try {
+                transformation.apply(node);
+            } catch (ConfigurateException e) {
+                getLogger().log(Level.SEVERE, "Failed to migrate config", e);
+                return;
+            }
+            int endVersion = transformation.version(node);
+
+            if (endVersion != startVersion) {
+                getLogger().info("Migrated config.yml to the latest version");
+            }
+        }
+
+        try {
+            gameVersionTransformation.apply(node);
+            node.mergeFrom(defaultNode);
+            config = node.get(EasConfig.class);
+            loader.save(node);
+        } catch (ConfigurateException e) {
+            getLogger().log(Level.SEVERE, "Failed to get config", e);
+        }
     }
 
     private void loadConfig(String name, Loader loader) {
@@ -427,7 +497,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (getDescription().getVersion().endsWith("-SNAPSHOT")) {
             return;
         }
-        if (config.updateCheck) {
+        if (config.updateCheck.enabled) {
             if (updateManager == null) {
                 updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY, 108349);
             }
@@ -558,7 +628,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public ItemStack createTool(Locale locale) {
-        ItemStack item = config.tool.render(locale);
+        ItemStack item = config.editor.tool.render(locale);
         ToolCapability toolCapability = getCapability(ToolCapability.class);
         if (toolCapability != null) {
             ItemMeta meta = item.getItemMeta();
@@ -579,7 +649,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         // Tool capability is not supported
         // Match any item with the right material and any customized display name
-        if (!Objects.equals(config.tool.getType(), item.getType())) {
+        if (!Objects.equals(config.editor.tool.getType(), item.getType())) {
             return false;
         }
         ItemMeta meta = item.getItemMeta();
