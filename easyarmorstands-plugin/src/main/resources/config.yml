@@ -33,6 +33,19 @@ editor:
     - <gray><lang:easyarmorstands.hint.deselect-entity>
     name: <gold><lang:easyarmorstands.tool-name>
     type: blaze_rod
+integration:
+  GriefDefender:
+    enabled: true
+  HeadDatabase:
+    enabled: true
+  PlotSquared:
+    enabled: true
+  Residence:
+    enabled: true
+  TrainCarts:
+    enabled: true
+  WorldGuard:
+    enabled: true
 message:
   format:
     button-description: <gray><message>

@@ -205,10 +205,10 @@ Players with the `easyarmorstands.residence.bypass` permission bypass this restr
 ## Configuration
 
 * Find the config file you want to change
-  in [the resource folder](https://github.com/56738/EasyArmorStands/tree/main/easyarmorstands-plugin/src/main/resources).
+  in [the resource folder](https://github.com/56738/EasyArmorStands/tree/v2.3.0/easyarmorstands-plugin/src/main/resources).
 * Create the corresponding file in the plugin folder.
   For example, to edit the
-  [armor stand menu](https://github.com/56738/EasyArmorStands/blob/main/easyarmorstands-plugin/src/main/resources/menu/entity/type/armor_stand.yml),
+  [armor stand menu](https://github.com/56738/EasyArmorStands/blob/v2.3.0/easyarmorstands-plugin/src/main/resources/menu/entity/type/armor_stand.yml),
   create `plugins/EasyArmorStands/menu/entity/type/armor_stand.yml`.
 * Copy values which you want to change from the default to that file and change them there.
 

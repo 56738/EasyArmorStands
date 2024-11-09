@@ -296,7 +296,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
 
-        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+        if (config.integration.worldGuard.enabled && Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
             getLogger().info("Enabling WorldGuard integration");
             if (hasClass("com.sk89q.worldguard.protection.regions.RegionContainer")) {
                 loadAddon("me.m56738.easyarmorstands.worldguard.v7.WorldGuardAddon");
@@ -307,29 +307,29 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             }
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlotSquared")) {
+        if (config.integration.plotSquared.enabled && Bukkit.getPluginManager().isPluginEnabled("PlotSquared")) {
             getLogger().info("Enabling PlotSquared integration");
             loadAddon("me.m56738.easyarmorstands.plotsquared.v6.PlotSquaredAddon");
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("GriefDefender")) {
+        if (config.integration.griefDefender.enabled && Bukkit.getPluginManager().isPluginEnabled("GriefDefender")) {
             getLogger().info("Enabling GriefDefender integration");
             loadAddon("me.m56738.easyarmorstands.griefdefender.GriefDefenderAddon");
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("Residence")) {
+        if (config.integration.residence.enabled && Bukkit.getPluginManager().isPluginEnabled("Residence")) {
             getLogger().info("Enabling Residence integration");
             loadAddon("me.m56738.easyarmorstands.residence.ResidenceAddon");
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
+        if (config.integration.headDatabase.enabled && Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
             getLogger().info("Enabling HeadDatabase integration");
             loadAddon("me.m56738.easyarmorstands.headdatabase.HeadDatabaseAddon");
         } else {
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
         }
 
-        if (hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {
+        if (config.integration.trainCarts.enabled && hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {
             getLogger().info("Enabling TrainCarts integration");
             loadAddon("me.m56738.easyarmorstands.traincarts.TrainCartsAddon");
         } else {
