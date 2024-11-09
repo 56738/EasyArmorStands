@@ -1,3 +1,5 @@
+_version:
+  game: 1.19.4
 parent:
 - entity/display
 - entity/item_holder
@@ -11,5 +13,3 @@ slots:
       property: easyarmorstands:item_display/transform
     row: 1
     type: easyarmorstands:property
-version:
-  game: 1.19.4

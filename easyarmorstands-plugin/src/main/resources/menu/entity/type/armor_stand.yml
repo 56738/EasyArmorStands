@@ -1,3 +1,5 @@
+_version:
+  game: 1.8.8
 height: 6
 parent: entity/living
 slots:
@@ -127,5 +129,3 @@ slots:
       property: easyarmorstands:armor_stand/size
     row: 2
     type: easyarmorstands:property
-version:
-  game: 1.8.8

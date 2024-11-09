@@ -1,8 +1,11 @@
 # EasyArmorStands configuration
 # https://github.com/56738/EasyArmorStands/wiki/Configuration
 #
-# Do not edit the config version or game version, they are used to automatically update your config.
+# Do not edit the _version section, this is used to automatically update your config.
 
+_version:
+  config: 0
+  game: 1.8.8
 editor:
   button:
     interpolation-ticks: 1
@@ -60,6 +63,3 @@ message:
   server-side-translation: true
 update-check:
   enabled: true
-version:
-  config: 0
-  game: 1.8.8

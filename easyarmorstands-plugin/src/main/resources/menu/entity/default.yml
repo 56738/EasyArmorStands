@@ -1,3 +1,5 @@
+_version:
+  game: 1.8.8
 slots:
   easyarmorstands:copy:
     column: 4
@@ -45,5 +47,3 @@ slots:
     row: 0
     type: easyarmorstands:property
 title: <type>
-version:
-  game: 1.8.8

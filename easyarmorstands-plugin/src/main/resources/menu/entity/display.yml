@@ -1,3 +1,5 @@
+_version:
+  game: 1.19.4
 height: 4
 parent: entity/default
 slots:
@@ -28,5 +30,3 @@ slots:
     enabled: false
   easyarmorstands:entity/silent:
     enabled: false
-version:
-  game: 1.19.4

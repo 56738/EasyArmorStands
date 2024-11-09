@@ -1,3 +1,5 @@
+_version:
+  game: 1.19.4
 height: 1
 parent: entity/default
 slots:
@@ -15,5 +17,3 @@ slots:
       property: easyarmorstands:interaction/responsive
     row: 0
     type: easyarmorstands:property
-version:
-  game: 1.19.4

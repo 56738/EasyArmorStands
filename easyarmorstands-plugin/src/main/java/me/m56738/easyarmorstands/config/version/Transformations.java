@@ -14,7 +14,7 @@ public class Transformations {
 
     private static ConfigurationTransformation.Versioned create() {
         return ConfigurationTransformation.versionedBuilder()
-                .versionKey("version", "config")
+                .versionKey("_version", "config")
                 .addVersion(0, initialTransform())
                 .build();
     }

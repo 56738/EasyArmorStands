@@ -134,7 +134,7 @@ public class GameVersionTransformation implements ConfigurationTransformation {
 
     @Override
     public void apply(ConfigurationNode node) throws ConfigurateException {
-        ConfigurationNode gameVersionNode = node.node("version", "game");
+        ConfigurationNode gameVersionNode = node.node("_version", "game");
         String gameVersionRaw = gameVersionNode.getString();
         if (gameVersionRaw == null) {
             // assume latest

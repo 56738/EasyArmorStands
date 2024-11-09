@@ -1,3 +1,5 @@
+_version:
+  game: 1.8.8
 parent: entity/item_holder
 slots:
   easyarmorstands:copy:
@@ -40,5 +42,3 @@ slots:
     enabled: false
     row: 3
     type: easyarmorstands:property
-version:
-  game: 1.8.8

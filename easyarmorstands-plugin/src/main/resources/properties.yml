@@ -1,3 +1,5 @@
+_version:
+  game: 1.8.8
 easyarmorstands:armor_stand/arms:
   button:
     description:
@@ -349,5 +351,3 @@ easyarmorstands:text_display/text:
   permission: easyarmorstands.property.display.text
   value:
     none: <i><gray><lang:easyarmorstands.property.common.none>
-version:
-  game: 1.8.8
