@@ -1,33 +1,36 @@
 parent: entity/default
 slots:
   easyarmorstands:color_picker:
-    row: 0
     column: 0
-    type: easyarmorstands:color_picker
     config:
-      item:
-        type: leather_chestplate
-        name: <lang:easyarmorstands.menu.color-picker.open>
       active-item:
         description:
-          - <lang:easyarmorstands.menu.color-picker.click-target>
+        - <lang:easyarmorstands.menu.color-picker.click-target>
+      item:
+        name: <lang:easyarmorstands.menu.color-picker.open>
+        type: leather_chestplate
+    row: 0
+    type: easyarmorstands:color_picker
   easyarmorstands:headdatabase:
-    row: 0
     column: 1
-    type: easyarmorstands:headdatabase
     config:
       item:
-        type: player_head
+        data: 3
+        description:
+        - <lang:easyarmorstands.menu.headdb.description>
         name: <lang:easyarmorstands.menu.headdb.open>
-        description:
-          - <lang:easyarmorstands.menu.headdb.description>
-  easyarmorstands:traincarts/model_browser:
+        type: skull_item
     row: 0
+    type: easyarmorstands:headdatabase
+  easyarmorstands:traincarts/model_browser:
     column: 2
-    type: easyarmorstands:traincarts/model_browser
     config:
       item:
-        type: book
-        name: <lang:easyarmorstands.menu.traincarts.model-browser.open>
         description:
-          - <lang:easyarmorstands.menu.traincarts.model-browser.description>
+        - <lang:easyarmorstands.menu.traincarts.model-browser.description>
+        name: <lang:easyarmorstands.menu.traincarts.model-browser.open>
+        type: book
+    row: 0
+    type: easyarmorstands:traincarts/model_browser
+version:
+  game: 1.8.8

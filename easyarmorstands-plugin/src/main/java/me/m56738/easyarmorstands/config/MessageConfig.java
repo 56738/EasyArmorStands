@@ -11,7 +11,7 @@ public class MessageConfig {
     public Map<MessageStyle, String> format;
     public boolean serverSideTranslation;
 
-    static TypeToken<Map<MessageStyle, String>> formatType() {
+    public static TypeToken<Map<MessageStyle, String>> formatType() {
         return new TypeToken<Map<MessageStyle, String>>() {
         };
     }

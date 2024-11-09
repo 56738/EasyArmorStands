@@ -4,20 +4,20 @@
 # Do not edit the config version or game version, they are used to automatically update your config.
 
 editor:
+  button:
+    interpolation-ticks: 1
+    range: 64.0
+    threshold: 0.1
   discovery:
     limit: 128
   menu:
     background:
       config:
         item:
-          type: stained_glass_pane
           data: 3
           name: ''
+          type: stained_glass_pane
       type: easyarmorstands:background
-  button:
-    interpolation-ticks: 1
-    range: 64.0
-    threshold: 0.1
   scale:
     max-distance: 64.0
     min-distance: 5.0
@@ -28,9 +28,9 @@ editor:
     range: 10.0
   tool:
     description:
-      - <gray><lang:easyarmorstands.hint.select-entity>
-      - <gray><lang:easyarmorstands.hint.spawn-entity>
-      - <gray><lang:easyarmorstands.hint.deselect-entity>
+    - <gray><lang:easyarmorstands.hint.select-entity>
+    - <gray><lang:easyarmorstands.hint.spawn-entity>
+    - <gray><lang:easyarmorstands.hint.deselect-entity>
     name: <gold><lang:easyarmorstands.tool-name>
     type: blaze_rod
 message:

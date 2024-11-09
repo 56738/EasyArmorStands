@@ -1,47 +1,49 @@
-title: <type>
 slots:
   easyarmorstands:copy:
-    row: 1
     column: 4
-    type: easyarmorstands:copy
     config:
       button:
-        name: <lang:easyarmorstands.menu.copy>
         description:
-          - <lang:easyarmorstands.menu.copy.description>
+        - <lang:easyarmorstands.menu.copy.description>
+        name: <lang:easyarmorstands.menu.copy>
       item:
         name: <gold><lang:easyarmorstands.copy.item.name:'<element>'>
-  easyarmorstands:entity/custom_name:
-    row: 0
-    column: 4
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/custom_name
-  easyarmorstands:entity/glowing:
-    row: 0
-    column: 5
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/glowing
-  easyarmorstands:entity/visible:
-    row: 0
-    column: 6
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/visible
-  easyarmorstands:entity/silent:
-    row: 0
-    column: 7
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/silent
+    row: 1
+    type: easyarmorstands:copy
   easyarmorstands:destroy:
-    type: easyarmorstands:destroy
-    row: 0
     column: 8
     config:
       item:
-        type: tnt
-        name: <lang:easyarmorstands.menu.destroy>
         description:
-          - <lang:easyarmorstands.menu.destroy.description>
+        - <lang:easyarmorstands.menu.destroy.description>
+        name: <lang:easyarmorstands.menu.destroy>
+        type: tnt
+    row: 0
+    type: easyarmorstands:destroy
+  easyarmorstands:entity/custom_name:
+    column: 4
+    config:
+      property: easyarmorstands:entity/custom_name
+    row: 0
+    type: easyarmorstands:property
+  easyarmorstands:entity/glowing:
+    column: 5
+    config:
+      property: easyarmorstands:entity/glowing
+    row: 0
+    type: easyarmorstands:property
+  easyarmorstands:entity/silent:
+    column: 7
+    config:
+      property: easyarmorstands:entity/silent
+    row: 0
+    type: easyarmorstands:property
+  easyarmorstands:entity/visible:
+    column: 6
+    config:
+      property: easyarmorstands:entity/visible
+    row: 0
+    type: easyarmorstands:property
+title: <type>
+version:
+  game: 1.8.8

@@ -1,42 +1,44 @@
-title: <lang:easyarmorstands.menu.spawn.title>
 slots:
-  'easyarmorstands:spawn/armor_stand':
-    row: 0
+  easyarmorstands:spawn/armor_stand:
     column: 0
-    type: easyarmorstands:spawn/armor_stand
     config:
       item:
+        name: <type>
         type: armor_stand
-        name: <type>
-  'easyarmorstands:spawn/item_display':
     row: 0
-    column: 1
-    type: easyarmorstands:spawn/item_display
-    config:
-      item:
-        type: stick
-        name: <type>
-  'easyarmorstands:spawn/block_display':
-    row: 0
+    type: easyarmorstands:spawn/armor_stand
+  easyarmorstands:spawn/block_display:
     column: 2
-    type: easyarmorstands:spawn/block_display
     config:
       item:
+        name: <type>
         type: stone
-        name: <type>
-  'easyarmorstands:spawn/text_display':
     row: 0
-    column: 3
-    type: easyarmorstands:spawn/text_display
-    config:
-      item:
-        type: name_tag
-        name: <type>
-  'easyarmorstands:spawn/interaction':
-    row: 0
+    type: easyarmorstands:spawn/block_display
+  easyarmorstands:spawn/interaction:
     column: 4
-    type: easyarmorstands:spawn/interaction
     config:
       item:
-        type: target
         name: <type>
+        type: target
+    row: 0
+    type: easyarmorstands:spawn/interaction
+  easyarmorstands:spawn/item_display:
+    column: 1
+    config:
+      item:
+        name: <type>
+        type: stick
+    row: 0
+    type: easyarmorstands:spawn/item_display
+  easyarmorstands:spawn/text_display:
+    column: 3
+    config:
+      item:
+        name: <type>
+        type: name_tag
+    row: 0
+    type: easyarmorstands:spawn/text_display
+title: <lang:easyarmorstands.menu.spawn.title>
+version:
+  game: 1.8.8

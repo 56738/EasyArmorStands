@@ -3,29 +3,31 @@ slots:
   easyarmorstands:display/content:
     config:
       property: easyarmorstands:text_display/text
-  easyarmorstands:text_display/alignment:
-    row: 1
-    column: 5
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:text_display/alignment
-  easyarmorstands:text_display/background:
-    row: 1
-    column: 6
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:text_display/background
-  easyarmorstands:text_display/see_through:
-    row: 1
-    column: 7
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:text_display/see_through
-  easyarmorstands:text_display/shadow:
-    row: 1
-    column: 8
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:text_display/shadow
   easyarmorstands:entity/glowing:
     enabled: false
+  easyarmorstands:text_display/alignment:
+    column: 5
+    config:
+      property: easyarmorstands:text_display/alignment
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:text_display/background:
+    column: 6
+    config:
+      property: easyarmorstands:text_display/background
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:text_display/see_through:
+    column: 7
+    config:
+      property: easyarmorstands:text_display/see_through
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:text_display/shadow:
+    column: 8
+    config:
+      property: easyarmorstands:text_display/shadow
+    row: 1
+    type: easyarmorstands:property
+version:
+  game: 1.19.4

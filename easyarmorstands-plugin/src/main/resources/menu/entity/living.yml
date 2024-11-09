@@ -1,41 +1,44 @@
 parent: entity/item_holder
 slots:
-  easyarmorstands:entity/equipment/hand:
-    row: 3
-    column: 2
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/equipment/hand
-  easyarmorstands:entity/equipment/off_hand:
-    row: 3
-    column: 0
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/equipment/off_hand
-  easyarmorstands:entity/equipment/feet:
+  easyarmorstands:copy:
+    column: 4
     row: 5
-    column: 1
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/equipment/feet
-  easyarmorstands:entity/equipment/legs:
-    row: 4
-    column: 1
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:entity/equipment/legs
   easyarmorstands:entity/equipment/chest:
-    row: 3
     column: 1
-    type: easyarmorstands:property
     config:
       property: easyarmorstands:entity/equipment/chest
-  easyarmorstands:entity/equipment/head:
-    row: 2
-    column: 1
+    row: 3
     type: easyarmorstands:property
+  easyarmorstands:entity/equipment/feet:
+    column: 1
+    config:
+      property: easyarmorstands:entity/equipment/feet
+    row: 5
+    type: easyarmorstands:property
+  easyarmorstands:entity/equipment/hand:
+    column: 2
+    config:
+      property: easyarmorstands:entity/equipment/hand
+    row: 3
+    type: easyarmorstands:property
+  easyarmorstands:entity/equipment/head:
+    column: 1
     config:
       property: easyarmorstands:entity/equipment/head
-  easyarmorstands:copy:
-    row: 5
-    column: 4
+    row: 2
+    type: easyarmorstands:property
+  easyarmorstands:entity/equipment/legs:
+    column: 1
+    config:
+      property: easyarmorstands:entity/equipment/legs
+    row: 4
+    type: easyarmorstands:property
+  easyarmorstands:entity/equipment/off_hand:
+    column: 0
+    config:
+      property: easyarmorstands:entity/equipment/off_hand
+    enabled: false
+    row: 3
+    type: easyarmorstands:property
+version:
+  game: 1.8.8

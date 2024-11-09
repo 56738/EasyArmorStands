@@ -1,12 +1,6 @@
-parent: entity/default
 height: 1
+parent: entity/default
 slots:
-  easyarmorstands:interaction/responsive:
-    row: 0
-    column: 0
-    type: easyarmorstands:property
-    config:
-      property: easyarmorstands:interaction/responsive
   easyarmorstands:copy:
     enabled: false
   easyarmorstands:entity/custom_name:
@@ -15,3 +9,11 @@ slots:
     enabled: false
   easyarmorstands:entity/silent:
     enabled: false
+  easyarmorstands:interaction/responsive:
+    column: 0
+    config:
+      property: easyarmorstands:interaction/responsive
+    row: 0
+    type: easyarmorstands:property
+version:
+  game: 1.19.4

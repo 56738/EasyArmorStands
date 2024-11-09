@@ -1,11 +1,18 @@
-package me.m56738.easyarmorstands.config;
+package me.m56738.easyarmorstands.config.version;
 
+import me.m56738.easyarmorstands.config.MessageConfig;
 import org.spongepowered.configurate.NodePath;
 import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.transformation.TransformAction;
 
 public class Transformations {
-    public static ConfigurationTransformation.Versioned create() {
+    private static final ConfigurationTransformation.Versioned TRANSFORMATIONS = create();
+
+    public static ConfigurationTransformation.Versioned transformations() {
+        return TRANSFORMATIONS;
+    }
+
+    private static ConfigurationTransformation.Versioned create() {
         return ConfigurationTransformation.versionedBuilder()
                 .versionKey("version", "config")
                 .addVersion(0, initialTransform())
@@ -16,6 +23,8 @@ public class Transformations {
         return ConfigurationTransformation.builder()
                 .addAction(NodePath.path("update-check"),
                         (path, value) -> new Object[]{"update-check", "enabled"})
+                .addAction(NodePath.path("tool"),
+                        (path, value) -> new Object[]{"editor", "tool"})
                 .addAction(NodePath.path("editor-scale-min-distance"),
                         (path, value) -> new Object[]{"editor", "scale", "min-distance"})
                 .addAction(NodePath.path("editor-scale-max-distance"),

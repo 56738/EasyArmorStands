@@ -56,9 +56,8 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.config.EasConfig;
-import me.m56738.easyarmorstands.config.Transformations;
-import me.m56738.easyarmorstands.config.override.VersionOverrideLoader;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
+import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
@@ -120,7 +119,6 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
-import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.util.MapFactories;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -148,7 +146,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
-    private VersionOverrideLoader versionOverrideLoader;
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -211,8 +208,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         new Metrics(this, 17911);
         adventure = BukkitAudiences.create(this);
 
-        versionOverrideLoader = new VersionOverrideLoader();
-        versionOverrideLoader.load(this);
         loadConfig();
 
         messageManager = new MessageManager(this);
@@ -381,7 +376,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
     }
 
-    public Callable<BufferedReader> getConfigSource(String name) {
+    private Callable<BufferedReader> getDefaultConfigSource(String name) {
         return () -> {
             InputStream resource = getResource(name);
             if (resource == null) {
@@ -407,90 +402,47 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     private void loadConfig() {
-        GameVersionTransformation gameVersionTransformation = GameVersionTransformation.create();
-
-        YamlConfigurationLoader defaultLoader = YamlConfigurationLoader.builder()
-                .source(getConfigSource("config.yml"))
-                .nodeStyle(NodeStyle.BLOCK)
-                .defaultOptions(o -> o
-                        .serializers(b -> b.registerAll(EasSerializers.serializers()))
-                        .shouldCopyDefaults(true))
-                .build();
-
-        CommentedConfigurationNode defaultNode;
-        try {
-            defaultNode = defaultLoader.load();
-            gameVersionTransformation.apply(defaultNode);
-            config = defaultNode.get(EasConfig.class);
-        } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to load default config", e);
-            return;
-        }
-
-        YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-                .path(getConfigFolder().resolve("config.yml"))
-                .nodeStyle(NodeStyle.BLOCK)
-                .indent(2)
-                .headerMode(HeaderMode.PRESET)
-                .defaultOptions(o -> o
-                        .serializers(b -> b.registerAll(EasSerializers.serializers()))
-                        .mapFactory(MapFactories.sortedNatural())
-                        .header(defaultNode.options().header())
-                        .shouldCopyDefaults(true))
-                .build();
-
-        CommentedConfigurationNode node;
-        try {
-            node = loader.load();
-        } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to load config", e);
-            return;
-        }
-
-        if (!node.virtual()) {
-            ConfigurationTransformation.Versioned transformation = Transformations.create();
-
-            int startVersion = transformation.version(node);
-            try {
-                transformation.apply(node);
-            } catch (ConfigurateException e) {
-                getLogger().log(Level.SEVERE, "Failed to migrate config", e);
-                return;
+        loadConfig("config.yml", new ConfigProcessor() {
+            @Override
+            public void process(CommentedConfigurationNode node) throws ConfigurateException {
+                GameVersionTransformation.config().apply(node);
+                Transformations.transformations().apply(node);
             }
-            int endVersion = transformation.version(node);
 
-            if (endVersion != startVersion) {
-                getLogger().info("Migrated config.yml to the latest version");
+            @Override
+            public void apply(CommentedConfigurationNode node) throws ConfigurateException {
+                config = node.get(EasConfig.class);
             }
-        }
-
-        try {
-            gameVersionTransformation.apply(node);
-            node.mergeFrom(defaultNode);
-            config = node.get(EasConfig.class);
-            loader.save(node);
-        } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to get config", e);
-        }
+        });
     }
 
-    private void loadConfig(String name, Loader loader) {
+    private void loadProperties() {
+        loadConfig("properties.yml", new ConfigProcessor() {
+            @Override
+            public void process(CommentedConfigurationNode node) throws ConfigurateException {
+                GameVersionTransformation.properties().apply(node);
+            }
+
+            @Override
+            public void apply(CommentedConfigurationNode node) {
+                propertyTypeRegistry.load(node);
+            }
+        });
+    }
+
+    private void loadConfig(String name, ConfigProcessor configProcessor) {
         try {
-            loader.load(getConfig(name));
+            loadMergedConfig(name, configProcessor);
             return;
         } catch (ConfigurateException e) {
             getLogger().severe("Failed to load " + name + ": " + e.getMessage());
         }
 
         try {
-            loader.load(getDefaultConfig(name));
+            loadDefaultConfig(name, configProcessor);
         } catch (ConfigurateException e) {
             getLogger().log(Level.SEVERE, "Failed to load default " + name, e);
         }
-    }
-
-    private void loadProperties() {
-        loadConfig("properties.yml", propertyTypeRegistry::load);
     }
 
     private void loadUpdateChecker() {
@@ -558,8 +510,21 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             throw new SerializationException("Cycle detected: " + description);
         }
 
+        ConfigProcessor processor = new ConfigProcessor() {
+            @Override
+            public void process(CommentedConfigurationNode node) throws ConfigurateException {
+                GameVersionTransformation.menu().apply(node);
+            }
+
+            @Override
+            public void apply(CommentedConfigurationNode node) {
+            }
+        };
+
         String configName = "menu/" + name + ".yml";
-        CommentedConfigurationNode node = fallback ? getDefaultConfig(configName) : getConfig(configName);
+        CommentedConfigurationNode node = fallback
+                ? loadDefaultConfig(configName, processor)
+                : loadMergedConfig(configName, processor);
         CommentedConfigurationNode parentsNode = node.node("parent");
         if (!parentsNode.virtual()) {
             List<String> parents = parentsNode.getList(String.class);
@@ -572,26 +537,61 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return node;
     }
 
-    public CommentedConfigurationNode getConfig(String name) throws ConfigurateException {
+    private CommentedConfigurationNode loadMergedConfig(String name, ConfigProcessor configProcessor) throws ConfigurateException {
+        CommentedConfigurationNode defaultNode = loadDefaultConfig(name, new ConfigProcessor() {
+            @Override
+            public void process(CommentedConfigurationNode node) throws ConfigurateException {
+                configProcessor.process(node);
+            }
+
+            @Override
+            public void apply(CommentedConfigurationNode node) {
+            }
+        });
+
         YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-                .defaultOptions(o -> o.serializers(b -> b.registerAll(EasSerializers.serializers())))
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .headerMode(HeaderMode.PRESET)
+                .defaultOptions(o -> o
+                        .serializers(b -> b.registerAll(EasSerializers.serializers()))
+                        .mapFactory(MapFactories.sortedNatural())
+                        .header(defaultNode.options().header())
+                        .shouldCopyDefaults(false))
                 .path(getConfigFolder().resolve(name))
                 .build();
 
         CommentedConfigurationNode node = loader.load();
-        node.mergeFrom(getDefaultConfig(name));
+
+        if (!node.empty()) {
+            configProcessor.process(node);
+        }
+
+        node.mergeFrom(defaultNode);
+
+        configProcessor.apply(node);
+
+        if (!node.empty()) {
+            loader.save(node);
+        }
+
         return node;
     }
 
-    public CommentedConfigurationNode getDefaultConfig(String name) throws ConfigurateException {
+    private CommentedConfigurationNode loadDefaultConfig(String name, ConfigProcessor configProcessor) throws ConfigurateException {
         YamlConfigurationLoader defaultLoader = YamlConfigurationLoader.builder()
                 .defaultOptions(o -> o.serializers(b -> b.registerAll(EasSerializers.serializers())))
-                .source(getConfigSource(name))
+                .source(getDefaultConfigSource(name))
                 .build();
 
         CommentedConfigurationNode node = defaultLoader.load();
 
-        return versionOverrideLoader.apply(name, node, defaultLoader);
+        if (!node.empty()) {
+            configProcessor.process(node);
+        }
+        configProcessor.apply(node);
+
+        return node;
     }
 
     public History getHistory(Player player) {
@@ -719,7 +719,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return EasSerializers.serializers();
     }
 
-    private interface Loader {
-        void load(CommentedConfigurationNode config) throws SerializationException;
+    private interface ConfigProcessor {
+        void process(CommentedConfigurationNode node) throws ConfigurateException;
+
+        void apply(CommentedConfigurationNode node) throws ConfigurateException;
     }
 }
