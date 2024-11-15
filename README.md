@@ -190,6 +190,13 @@ If Residence is installed, only players with the `build` flag can edit entities 
 
 Players with the `easyarmorstands.residence.bypass` permission bypass this restriction.
 
+## Lands integration
+
+If Lands is installed, the role flag `easyarmorstands_edit` (in the menu: *Edit entities*)
+can be used to restrict editing entities.
+
+Players with the `easyarmorstands.lands.bypass` permission bypass this restriction.
+
 # Configuration
 
 ## Localization

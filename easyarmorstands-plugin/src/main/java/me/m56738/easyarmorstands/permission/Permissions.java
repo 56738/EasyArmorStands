@@ -54,6 +54,9 @@ public class Permissions {
     @Description("Allow viewing details of the selected entity")
     public static final String INFO = "easyarmorstands.info";
 
+    @Description("Allow bypassing Lands restrictions")
+    public static final String LANDS_BYPASS = "easyarmorstands.lands.bypass";
+
     @Description("Allow opening the menu")
     public static final String OPEN = "easyarmorstands.open";
 

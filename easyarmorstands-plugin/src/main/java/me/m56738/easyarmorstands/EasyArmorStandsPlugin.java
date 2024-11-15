@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands;
 
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
+import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -131,6 +132,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -146,6 +148,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
+    private final Set<Addon> addons = new HashSet<>();
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -172,6 +175,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
+        addons.clear();
+
         Permissions.registerAll();
 
         instance = this;
@@ -201,17 +206,20 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new PropertySlotType());
 
         menuProvider = new MenuProviderImpl();
+
+        loadConfig();
+        messageManager = new MessageManager(this);
+        messageManager.load(config);
+
+        if (config.integration.lands.enabled && hasClass("me.angeschossen.lands.api.LandsIntegration")) {
+            loadAddon("me.m56738.easyarmorstands.lands.LandsAddon");
+        }
     }
 
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
         adventure = BukkitAudiences.create(this);
-
-        loadConfig();
-
-        messageManager = new MessageManager(this);
-        messageManager.load(config);
 
         loadProperties();
 
@@ -336,6 +344,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         }
 
+        for (Addon addon : addons) {
+            getLogger().info("Enabling " + addon.name() + " integration");
+            addon.enable();
+        }
+
         if (hasClass("org.bukkit.entity.ItemDisplay") && hasClass("me.m56738.easyarmorstands.display.DisplayAddon")) {
             loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
         } else {
@@ -368,7 +381,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     private void loadAddon(String name) {
         try {
-            Class.forName(name).getDeclaredConstructor().newInstance();
+            Object object = Class.forName(name).getDeclaredConstructor().newInstance();
+            if (object instanceof Addon) {
+                addons.add(((Addon) object));
+            }
         } catch (InvocationTargetException e) {
             getLogger().log(Level.SEVERE, "Failed to enable addon " + name, e.getCause());
         } catch (ReflectiveOperationException e) {

@@ -1,5 +1,6 @@
-package me.m56738.easyarmorstands.config.version;
+package me.m56738.easyarmorstands.config.integration;
 
+import me.m56738.easyarmorstands.config.integration.lands.LandsConfig;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
@@ -11,6 +12,8 @@ public class IntegrationConfig {
     public IntegrationEntryConfig plotSquared;
     @Setting("GriefDefender")
     public IntegrationEntryConfig griefDefender;
+    @Setting("Lands")
+    public LandsConfig lands;
     @Setting("Residence")
     public IntegrationEntryConfig residence;
     @Setting("HeadDatabase")

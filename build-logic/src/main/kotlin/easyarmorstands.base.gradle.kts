@@ -22,6 +22,11 @@ repositories {
             includeGroup("com.bekvon.bukkit.residence")
         }
     }
+    maven("https://jitpack.io") {
+        mavenContent {
+            includeGroup("com.github.angeschossen")
+        }
+    }
 }
 
 java {

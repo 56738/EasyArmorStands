@@ -41,6 +41,14 @@ integration:
     enabled: true
   HeadDatabase:
     enabled: true
+  Lands:
+    enabled: true
+    flag:
+      description: Allow editing entities using EasyArmorStands
+      display: true
+      display-name: Edit entities
+      icon:
+        type: armor_stand
   PlotSquared:
     enabled: true
   Residence:
