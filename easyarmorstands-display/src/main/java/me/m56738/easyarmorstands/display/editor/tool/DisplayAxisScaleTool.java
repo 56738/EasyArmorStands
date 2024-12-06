@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -73,7 +74,7 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         @Override
         public void setChange(double change) {
             Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, axis.getValue(scaleVector) * (float) change);
+            axis.setValue(scaleVector, EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(axis.getValue(scaleVector) * (float) change));
             scaleProperty.setValue(scaleVector);
         }
 
@@ -89,7 +90,7 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         @Override
         public void setValue(double value) {
             Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, (float) value);
+            axis.setValue(scaleVector, EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale((float) value));
             scaleProperty.setValue(scaleVector);
         }
 

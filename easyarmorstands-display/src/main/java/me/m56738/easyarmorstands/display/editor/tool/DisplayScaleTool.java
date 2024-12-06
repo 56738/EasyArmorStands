@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
@@ -67,6 +68,7 @@ public class DisplayScaleTool implements ScaleTool {
         @Override
         public void setChange(double change) {
             originalScale.mul((float) change, scale);
+            EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(scale);
             scaleProperty.setValue(scale);
         }
 
@@ -80,7 +82,7 @@ public class DisplayScaleTool implements ScaleTool {
 
         @Override
         public void setValue(double value) {
-            scale.set(value);
+            scale.set(EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(value));
             scaleProperty.setValue(scale);
         }
 

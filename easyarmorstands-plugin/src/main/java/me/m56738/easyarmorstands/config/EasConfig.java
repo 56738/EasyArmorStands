@@ -9,4 +9,5 @@ public class EasConfig {
     public EditorConfig editor = new EditorConfig();
     public MessageConfig message = new MessageConfig();
     public IntegrationConfig integration = new IntegrationConfig();
+    public LimitConfig limits = new LimitConfig();
 }

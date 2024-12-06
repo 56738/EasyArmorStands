@@ -57,6 +57,13 @@ integration:
     enabled: true
   WorldGuard:
     enabled: true
+limits:
+  display-entity:
+    max-scale: Infinity
+    min-scale: -Infinity
+  entity:
+    max-scale: 16
+    min-scale: 0.0625
 message:
   format:
     button-description: <gray><message>
