@@ -25,6 +25,7 @@ public class DisplayPropertyTypes {
     public static final PropertyType<Vector3fc> TRANSLATION = get("display/translation", Vector3fc.class);
     public static final PropertyType<Optional<Color>> GLOW_COLOR = get("display/glowing/color", new TypeToken<Optional<Color>>() {
     });
+    public static final PropertyType<Float> VIEW_RANGE = get("display/view_range", Float.class);
 
     private DisplayPropertyTypes() {
     }

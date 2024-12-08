@@ -31,6 +31,7 @@ public class DefaultDisplayPropertyTypes {
         registry.register(new QuaternionfcPropertyType(key("display/right_rotation")));
         registry.register(new Vector3fcPropertyType(key("display/scale")));
         registry.register(new Vector3fcPropertyType(key("display/translation")));
+        registry.register(new FloatPropertyType(key("display/view_range")));
         registry.register(new GlowColorPropertyType(key("display/glowing/color")));
         registry.register(new BooleanTogglePropertyType(key("interaction/responsive")));
         registry.register(new ItemPropertyType(key("item_display/item")));

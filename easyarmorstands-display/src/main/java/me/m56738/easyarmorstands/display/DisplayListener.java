@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.display.property.display.DisplayLeftRotationPro
 import me.m56738.easyarmorstands.display.property.display.DisplayRightRotationProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayTranslationProperty;
+import me.m56738.easyarmorstands.display.property.display.DisplayViewRangeProperty;
 import me.m56738.easyarmorstands.display.property.display.DisplayWidthProperty;
 import me.m56738.easyarmorstands.display.property.display.block.BlockDisplayBlockProperty;
 import me.m56738.easyarmorstands.display.property.display.interaction.InteractionHeightProperty;
@@ -75,6 +76,7 @@ public class DisplayListener implements Listener {
         registry.register(new DisplayWidthProperty(entity));
         registry.register(new DisplayHeightProperty(entity));
         registry.register(new DisplayGlowColorProperty(entity));
+        registry.register(new DisplayViewRangeProperty(entity));
     }
 
     private void registerItemDisplayProperties(ItemDisplay entity, PropertyRegistry registry) {

@@ -623,4 +623,24 @@ public class DisplayCommands {
         actions.add(new ElementCreateAction(element));
         elements.add(element);
     }
+
+    @Command("viewrange <value>")
+    @PropertyPermission("easyarmorstands:display/view_range")
+    @CommandDescription("easyarmorstands.command.description.view-range")
+    @RequireElementSelection
+    public void setViewRange(EasPlayer sender, ElementSelection selection, @Argument("value") float value) {
+        PropertyContainer properties = selection.properties(sender);
+        Property<Float> property = properties.getOrNull(DisplayPropertyTypes.VIEW_RANGE);
+        if (property == null) {
+            sender.sendMessage(Message.error("easyarmorstands.error.view-range-unsupported"));
+            return;
+        }
+        if (property.setValue(value)) {
+            properties.commit();
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-view-range",
+                    property.getType().getValueComponent(value)));
+        } else {
+            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+        }
+    }
 }

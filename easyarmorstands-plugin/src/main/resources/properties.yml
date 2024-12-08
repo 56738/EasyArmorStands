@@ -164,6 +164,11 @@ easyarmorstands:display/scale:
 easyarmorstands:display/translation:
   name: <lang:easyarmorstands.property.display.translation.name>
   permission: easyarmorstands.property.display.translation
+easyarmorstands:display/view_range:
+  name: <lang:easyarmorstands.property.display.view-range.name>
+  permission: easyarmorstands.property.display.viewrange
+  value:
+    format: 0.0
 easyarmorstands:entity/custom_name:
   button:
     description:
