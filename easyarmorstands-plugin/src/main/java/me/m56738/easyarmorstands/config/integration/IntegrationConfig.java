@@ -10,6 +10,8 @@ public class IntegrationConfig {
     public IntegrationEntryConfig worldGuard;
     @Setting("PlotSquared")
     public IntegrationEntryConfig plotSquared;
+    @Setting("FancyHolograms")
+    public IntegrationEntryConfig fancyHolograms;
     @Setting("GriefDefender")
     public IntegrationEntryConfig griefDefender;
     @Setting("Lands")

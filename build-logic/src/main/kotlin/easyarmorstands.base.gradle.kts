@@ -22,6 +22,11 @@ repositories {
             includeGroup("com.bekvon.bukkit.residence")
         }
     }
+    maven("https://repo.fancyplugins.de/releases/") {
+        mavenContent {
+            includeModule("de.oliver", "FancyHolograms")
+        }
+    }
     maven("https://jitpack.io") {
         mavenContent {
             includeGroup("com.github.angeschossen")

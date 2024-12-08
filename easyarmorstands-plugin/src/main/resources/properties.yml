@@ -262,6 +262,9 @@ easyarmorstands:entity/visible:
   value:
     disabled: <red><lang:easyarmorstands.property.common.invisible>
     enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:fancyholograms/text:
+  name: <lang:easyarmorstands.property.text-display.text.name>
+  permission: easyarmorstands.property.fancyholograms.text
 easyarmorstands:interaction/responsive:
   button:
     description:

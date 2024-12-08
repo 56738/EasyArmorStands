@@ -4,6 +4,7 @@ main: me.m56738.easyarmorstands.EasyArmorStandsPlugin
 author: '56738'
 api-version: 1.13
 softdepend:
+  - FancyHolograms
   - GriefDefender
   - HeadDatabase
   - Lands

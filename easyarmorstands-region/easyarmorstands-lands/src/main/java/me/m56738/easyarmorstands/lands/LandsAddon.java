@@ -71,4 +71,8 @@ public class LandsAddon implements Addon {
         HandlerList.unregisterAll(listener);
         listener = null;
     }
+
+    @Override
+    public void reload() {
+    }
 }

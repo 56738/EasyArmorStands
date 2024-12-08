@@ -36,6 +36,15 @@ public class Permissions {
     @Description("Allow destroying entities")
     public static final String DESTROY = "easyarmorstands.destroy";
 
+    @Description("Allow destroying FancyHolograms holograms")
+    public static final String FANCYHOLOGRAMS_DESTROY = "easyarmorstands.fancyholograms.destroy";
+
+    @Description("Allow editing FancyHolograms holograms")
+    public static final String FANCYHOLOGRAMS_EDIT = "easyarmorstands.fancyholograms.edit";
+
+    @Description("Allow spawning FancyHolograms holograms")
+    public static final String FANCYHOLOGRAMS_SPAWN = "easyarmorstands.fancyholograms.spawn";
+
     @Description("Allow spawning the tool item")
     public static final String GIVE = "easyarmorstands.give";
 

@@ -6,4 +6,6 @@ public interface Addon {
     void enable();
 
     void disable();
+
+    void reload();
 }

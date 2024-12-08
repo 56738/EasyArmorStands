@@ -10,6 +10,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
 public class JOMLMapper {
+    private final Class<?> vectorClass;
     private final MethodHandle vectorConstructor;
     private final MethodHandle vectorXGetter;
     private final MethodHandle vectorYGetter;
@@ -29,7 +30,7 @@ public class JOMLMapper {
         MethodHandles.Lookup lookup = MethodHandles.publicLookup();
         String joml = String.join(".", "org", "joml");
         Class<?> transformationClass = Class.forName("org.bukkit.util.Transformation");
-        Class<?> vectorClass = Class.forName(joml + ".Vector3f");
+        this.vectorClass = Class.forName(joml + ".Vector3f");
         Class<?> quaternionClass = Class.forName(joml + ".Quaternionf");
         this.vectorConstructor = lookup.findConstructor(vectorClass,
                 MethodType.methodType(void.class, float.class, float.class, float.class));
@@ -52,6 +53,10 @@ public class JOMLMapper {
                 MethodType.methodType(vectorClass));
         this.transformationRightRotationGetter = lookup.findVirtual(transformationClass, "getRightRotation",
                 MethodType.methodType(quaternionClass));
+    }
+
+    public Class<?> getNativeVectorClass() {
+        return vectorClass;
     }
 
     public Object convertToNative(Vector3fc vector) {

@@ -29,6 +29,7 @@ dependencies {
         exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
     }
     runtimeOnly(project(":easyarmorstands-display"))
+    runtimeOnly(project(":easyarmorstands-fancyholograms"))
     runtimeOnly(project(":easyarmorstands-headdatabase"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-griefdefender"))
     runtimeOnly(project(":easyarmorstands-region:easyarmorstands-lands"))

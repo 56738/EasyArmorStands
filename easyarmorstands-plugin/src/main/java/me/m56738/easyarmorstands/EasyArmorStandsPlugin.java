@@ -214,6 +214,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (config.integration.lands.enabled && hasClass("me.angeschossen.lands.api.LandsIntegration")) {
             loadAddon("me.m56738.easyarmorstands.lands.LandsAddon");
         }
+        if (config.integration.fancyHolograms.enabled && hasClass("de.oliver.fancyholograms.api.FancyHologramsPlugin")) {
+            loadAddon("me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon");
+        }
     }
 
     @Override
@@ -344,11 +347,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         }
 
-        for (Addon addon : addons) {
-            getLogger().info("Enabling " + addon.name() + " integration");
-            addon.enable();
-        }
-
         if (hasClass("org.bukkit.entity.ItemDisplay") && hasClass("me.m56738.easyarmorstands.display.DisplayAddon")) {
             loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
         } else {
@@ -368,6 +366,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         loadUpdateChecker();
         loadMenuTemplates();
+
+        for (Addon addon : addons) {
+            getLogger().info("Enabling " + addon.name() + " integration");
+            addon.enable();
+        }
     }
 
     private boolean hasClass(String name) {
@@ -415,6 +418,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadProperties();
         messageManager.load(config);
         loadMenuTemplates();
+        for (Addon addon : addons) {
+            addon.reload();
+        }
     }
 
     private void loadConfig() {
@@ -495,7 +501,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
     }
 
-    private MenuFactory loadMenuTemplate(String name) {
+    public MenuFactory loadMenuTemplate(String name) {
         try {
             return loadMenuTemplate(name, false);
         } catch (ConfigurateException e) {
@@ -691,13 +697,16 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return menu;
     }
 
-    public void openEntityMenu(Player player, Session session, EntityElement<?> element) {
-        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityClass());
-        if (factory == null) {
-            return;
-        }
+    public void openMenu(Player player, Session session, MenuFactory factory, Element element) {
         Menu menu = factory.createMenu(new ElementMenuContext(new EasPlayer(player), session, element));
         player.openInventory(menu.getInventory());
+    }
+
+    public void openEntityMenu(Player player, Session session, EntityElement<?> element) {
+        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityClass());
+        if (factory != null) {
+            openMenu(player, session, factory, element);
+        }
     }
 
     @Override
