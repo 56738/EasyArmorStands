@@ -103,6 +103,10 @@ By default, display entities do not have a bounding box, so they are always rend
 
 Use `/eas brightness` to set a custom brightness (light level) of a display entity.
 
+## FancyHolograms integration
+
+FancyHolograms holograms can be moved and scaled using EasyArmorStands.
+
 ## Group selection
 
 Hold Shift while right-clicking an entity to add it to your group selection.
@@ -199,6 +203,12 @@ Players with the `easyarmorstands.lands.bypass` permission bypass this restricti
 
 # Configuration
 
+Configuration files, including all menu layouts, are automatically generated in the plugin folder.
+
+The most important options are documented [in the wiki](https://github.com/56738/EasyArmorStands/wiki/Configuration).
+
+Use `/eas reload` to reload all configuration files.
+
 ## Localization
 
 * Copy the
@@ -209,30 +219,4 @@ Players with the `easyarmorstands.lands.bypass` permission bypass this restricti
 * To replace the default messages (sent if no matching `messages_XX.properties` file exists),
   simply call the file `messages.properties`.
 
-## Configuration
-
-* Find the config file you want to change
-  in [the resource folder](https://github.com/56738/EasyArmorStands/tree/v2.3.0/easyarmorstands-plugin/src/main/resources).
-* Create the corresponding file in the plugin folder.
-  For example, to edit the
-  [armor stand menu](https://github.com/56738/EasyArmorStands/blob/v2.3.0/easyarmorstands-plugin/src/main/resources/menu/entity/type/armor_stand.yml),
-  create `plugins/EasyArmorStands/menu/entity/type/armor_stand.yml`.
-* Copy values which you want to change from the default to that file and change them there.
-
-The following files can be modified using this method:
-
-* The `config.yml` file contains the plugin configuration.
-* The `menu` folder contains the menu layout definitions.
-* The `properties.yml` file contains the property definitions, including the item types used for their buttons.
-
-To prevent issues with plugin updates, keep your custom config files as small as possible.
-The corresponding default config files are merged into them, so if you don't specify a value in your own config,
-it will be taken from the defaults.
-
-Menu layout definitions contain a `parent` key, the specified parent configs are merged into your config,
-just like the defaults (see above).
-
-You can create your own menu for any entity type in `menu/entity/type/TYPE.yml`, where `TYPE` is the lower-case entity
-type name, such as `tnt_minecart`. Otherwise, `menu/entity/living.yml` or `menu/entity/default.yml` are used instead.
-
-Use `/eas reload` to reload all configuration files and messages.
+Use `/eas reload` to reload all messages.
