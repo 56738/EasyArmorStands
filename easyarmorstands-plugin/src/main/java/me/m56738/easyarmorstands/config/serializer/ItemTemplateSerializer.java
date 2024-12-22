@@ -37,10 +37,15 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
 
     @Override
     public ItemTemplate deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        ConfigurationNode dataNode = node.node("data");
+        short data = (short) dataNode.getInt();
+        if (data < 0) {
+            throw new SerializationException("Data cannot be negative");
+        }
         ItemStack template = new ItemStack(
                 node.node("type").get(Material.class, Material.AIR),
                 node.node("amount").getInt(1),
-                (short) node.node("data").getInt());
+                data);
         ItemMeta meta = template.getItemMeta();
         if (meta != null) {
             if (customModelDataSetter != null) {

@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.Map;
@@ -22,7 +23,13 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     public void register(@NotNull PropertyType<?> type) {
         types.put(type.key(), type);
         if (type instanceof ConfigurablePropertyType) {
-            load((ConfigurablePropertyType<?>) type);
+            try {
+                load(type);
+            } catch (SerializationException e) {
+                EasyArmorStandsPlugin.getInstance().getLogger().severe("Failed to load property " + type.key() + ": " + e.getMessage());
+            } catch (Exception e) {
+                EasyArmorStandsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load property " + type.key(), e);
+            }
         }
     }
 
@@ -31,24 +38,24 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
         return types.get(key);
     }
 
-    public void load(CommentedConfigurationNode config) {
+    public void load(CommentedConfigurationNode config) throws SerializationException {
         currentConfig = config;
         for (PropertyType<?> type : types.values()) {
             load(type);
         }
     }
 
-    private void load(PropertyType<?> type) {
+    private void load(PropertyType<?> type) throws SerializationException {
         if (currentConfig == null) {
             return;
         }
         Key key = type.key();
         try {
             type.load(currentConfig.node(key.asString()));
-        } catch (SerializationException e) {
-            EasyArmorStandsPlugin.getInstance().getLogger().severe("Failed to load property " + type.key() + ": " + e.getMessage());
+        } catch (ConfigurateException e) {
+            throw e;
         } catch (Exception e) {
-            EasyArmorStandsPlugin.getInstance().getLogger().log(Level.SEVERE, "Failed to load property " + type.key(), e);
+            throw new RuntimeException("Failed to load property " + key, e);
         }
     }
 }

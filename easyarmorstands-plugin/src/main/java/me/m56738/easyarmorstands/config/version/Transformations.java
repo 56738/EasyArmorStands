@@ -1,21 +1,36 @@
 package me.m56738.easyarmorstands.config.version;
 
 import me.m56738.easyarmorstands.config.MessageConfig;
+import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
+import me.m56738.easyarmorstands.config.version.game.ReplaceTransformAction;
+import me.m56738.easyarmorstands.config.version.game.v1_13.ItemStackTransformAction_v1_13;
 import org.spongepowered.configurate.NodePath;
 import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.transformation.TransformAction;
 
+import static org.spongepowered.configurate.NodePath.path;
+
 public class Transformations {
-    private static final ConfigurationTransformation.Versioned TRANSFORMATIONS = create();
-
-    public static ConfigurationTransformation.Versioned transformations() {
-        return TRANSFORMATIONS;
-    }
-
-    private static ConfigurationTransformation.Versioned create() {
+    public static ConfigurationTransformation.Versioned config() {
         return ConfigurationTransformation.versionedBuilder()
                 .versionKey("_version", "config")
                 .addVersion(0, initialTransform())
+                .build();
+    }
+
+    public static ConfigurationTransformation.Versioned properties() {
+        return ConfigurationTransformation.versionedBuilder()
+                .versionKey("_version", "config")
+                .addVersion(0, ConfigurationTransformation.builder()
+                        .addAction(path("easyarmorstands:armor_stand/base_plate", "button", "data"),
+                                ReplaceTransformAction.replace(int.class, -1, null))
+                        .addAction(path("easyarmorstands:armor_stand/lock", "button", "data"),
+                                ReplaceTransformAction.replace(int.class, -1, null))
+                        .addAction(path("easyarmorstands:armor_stand/marker", "button", "data"),
+                                ReplaceTransformAction.replace(int.class, -1, null))
+                        .addAction(path("easyarmorstands:armor_stand/size", "button", "data"),
+                                ReplaceTransformAction.replace(int.class, -1, null))
+                        .build())
                 .build();
     }
 

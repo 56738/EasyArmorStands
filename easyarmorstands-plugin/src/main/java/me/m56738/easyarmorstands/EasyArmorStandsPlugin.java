@@ -428,7 +428,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             @Override
             public void process(CommentedConfigurationNode node) throws ConfigurateException {
                 GameVersionTransformation.config().apply(node);
-                Transformations.transformations().apply(node);
+                Transformations.config().apply(node);
             }
 
             @Override
@@ -443,10 +443,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             @Override
             public void process(CommentedConfigurationNode node) throws ConfigurateException {
                 GameVersionTransformation.properties().apply(node);
+                Transformations.properties().apply(node);
             }
 
             @Override
-            public void apply(CommentedConfigurationNode node) {
+            public void apply(CommentedConfigurationNode node) throws ConfigurateException {
                 propertyTypeRegistry.load(node);
             }
         });
@@ -458,6 +459,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             return;
         } catch (ConfigurateException e) {
             getLogger().severe("Failed to load " + name + ": " + e.getMessage());
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Failed to load " + name, e);
         }
 
         try {

@@ -71,7 +71,10 @@ public class ItemStackTransformAction_v1_13 implements TransformAction {
 
     private boolean processColored(ConfigurationNode typeNode, ConfigurationNode dataNode) {
         String type = typeNode.getString();
-        int data = dataNode.getInt(-1);
+        if (dataNode.virtual()) {
+            return false;
+        }
+        int data = dataNode.getInt();
         if (type != null && data >= 0 && data < COLORS.length &&
                 COLORED_TYPES.contains(type.toLowerCase(Locale.ROOT))) {
             String nameWithColor = COLORS[data] + "_" + type;
@@ -84,7 +87,10 @@ public class ItemStackTransformAction_v1_13 implements TransformAction {
 
     private boolean processBoneMeal(ConfigurationNode typeNode, ConfigurationNode dataNode) throws SerializationException {
         String type = typeNode.getString();
-        int data = dataNode.getInt(-1);
+        if (dataNode.virtual()) {
+            return false;
+        }
+        int data = dataNode.getInt();
         if (type != null && type.equalsIgnoreCase("ink_sack") && data == 15) {
             typeNode.raw("bone_meal");
             dataNode.raw(null);
@@ -95,7 +101,10 @@ public class ItemStackTransformAction_v1_13 implements TransformAction {
 
     private boolean processPlayerHead(ConfigurationNode typeNode, ConfigurationNode dataNode) throws SerializationException {
         String type = typeNode.getString();
-        int data = dataNode.getInt(-1);
+        if (dataNode.virtual()) {
+            return false;
+        }
+        int data = dataNode.getInt();
         if (type != null && type.equalsIgnoreCase("skull_item") && data == 3) {
             typeNode.raw("player_head");
             dataNode.raw(null);
