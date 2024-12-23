@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands;
 
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -16,6 +16,8 @@ import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
+import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
+import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
@@ -90,17 +92,20 @@ import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
+import me.m56738.easyarmorstands.region.RegionListener;
+import me.m56738.easyarmorstands.region.RegionListenerManager;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
+import me.m56738.easyarmorstands.util.ReflectionUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -128,11 +133,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -148,11 +151,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
-    private final Set<Addon> addons = new HashSet<>();
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
     private MessageManager messageManager;
+    private AddonManager addonManager;
+    private RegionListenerManager regionPrivilegeManager;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistryImpl entityElementProviderRegistry;
     private MenuSlotTypeRegistryImpl menuSlotTypeRegistry;
@@ -175,8 +179,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
-        addons.clear();
-
         Permissions.registerAll();
 
         instance = this;
@@ -204,6 +206,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
         menuSlotTypeRegistry.register(new DestroySlotType());
         menuSlotTypeRegistry.register(new PropertySlotType());
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/interaction")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
 
         menuProvider = new MenuProviderImpl();
 
@@ -211,12 +219,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         messageManager = new MessageManager(this);
         messageManager.load(config);
 
-        if (config.integration.lands.enabled && hasClass("me.angeschossen.lands.api.LandsIntegration")) {
-            loadAddon("me.m56738.easyarmorstands.lands.LandsAddon");
-        }
-        if (config.integration.fancyHolograms.enabled && hasClass("de.oliver.fancyholograms.api.FancyHologramsPlugin")) {
-            loadAddon("me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon");
-        }
+        regionPrivilegeManager = new RegionListenerManager();
+
+        addonManager = new AddonManager(getLogger());
+        addonManager.load(getClassLoader());
     }
 
     @Override
@@ -307,56 +313,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
 
-        if (config.integration.worldGuard.enabled && Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-            getLogger().info("Enabling WorldGuard integration");
-            if (hasClass("com.sk89q.worldguard.protection.regions.RegionContainer")) {
-                loadAddon("me.m56738.easyarmorstands.worldguard.v7.WorldGuardAddon");
-            } else if (hasClass("com.sk89q.worldguard.bukkit.WGBukkit")) {
-                loadAddon("me.m56738.easyarmorstands.worldguard.v6.WorldGuardAddon");
-            } else {
-                getLogger().warning("Unsupported WorldGuard version");
-            }
-        }
-
-        if (config.integration.plotSquared.enabled && Bukkit.getPluginManager().isPluginEnabled("PlotSquared")) {
-            getLogger().info("Enabling PlotSquared integration");
-            loadAddon("me.m56738.easyarmorstands.plotsquared.v6.PlotSquaredAddon");
-        }
-
-        if (config.integration.griefDefender.enabled && Bukkit.getPluginManager().isPluginEnabled("GriefDefender")) {
-            getLogger().info("Enabling GriefDefender integration");
-            loadAddon("me.m56738.easyarmorstands.griefdefender.GriefDefenderAddon");
-        }
-
-        if (config.integration.residence.enabled && Bukkit.getPluginManager().isPluginEnabled("Residence")) {
-            getLogger().info("Enabling Residence integration");
-            loadAddon("me.m56738.easyarmorstands.residence.ResidenceAddon");
-        }
-
-        if (config.integration.headDatabase.enabled && Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
-            getLogger().info("Enabling HeadDatabase integration");
-            loadAddon("me.m56738.easyarmorstands.headdatabase.HeadDatabaseAddon");
-        } else {
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
-        }
-
-        if (config.integration.trainCarts.enabled && hasClass("com.bergerkiller.bukkit.tc.attachments.ui.models.listing.DialogResult")) {
-            getLogger().info("Enabling TrainCarts integration");
-            loadAddon("me.m56738.easyarmorstands.traincarts.TrainCartsAddon");
-        } else {
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
-        }
-
-        if (hasClass("org.bukkit.entity.ItemDisplay") && hasClass("me.m56738.easyarmorstands.display.DisplayAddon")) {
-            loadAddon("me.m56738.easyarmorstands.display.DisplayAddon");
-        } else {
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
-            menuSlotTypeRegistry().register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/interaction")));
-        }
-
-        if (hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
+        if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
             try {
                 EntityPlaceAdapter.enable(this, sessionListener);
             } catch (ReflectiveOperationException e) {
@@ -367,32 +324,14 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadUpdateChecker();
         loadMenuTemplates();
 
-        for (Addon addon : addons) {
-            getLogger().info("Enabling " + addon.name() + " integration");
-            addon.enable();
-        }
-    }
-
-    private boolean hasClass(String name) {
-        try {
-            Class.forName(name);
-            return true;
-        } catch (Throwable e) {
-            return false;
-        }
-    }
-
-    private void loadAddon(String name) {
-        try {
-            Object object = Class.forName(name).getDeclaredConstructor().newInstance();
-            if (object instanceof Addon) {
-                addons.add(((Addon) object));
+        for (CapabilityLoader.Entry entry : loader.getCapabilities()) {
+            Object capability = entry.getInstance();
+            if (capability instanceof Listener) {
+                getServer().getPluginManager().registerEvents((Listener) capability, this);
             }
-        } catch (InvocationTargetException e) {
-            getLogger().log(Level.SEVERE, "Failed to enable addon " + name, e.getCause());
-        } catch (ReflectiveOperationException e) {
-            getLogger().log(Level.SEVERE, "Failed to instantiate addon " + name, e);
         }
+
+        addonManager.enable();
     }
 
     private Callable<BufferedReader> getDefaultConfigSource(String name) {
@@ -410,6 +349,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (sessionManager != null) {
             sessionManager.stopAllSessions();
         }
+        if (addonManager != null) {
+            addonManager.disable();
+        }
+        if (regionPrivilegeManager != null) {
+            regionPrivilegeManager.unregisterAll();
+        }
         Permissions.unregisterAll();
     }
 
@@ -418,9 +363,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadProperties();
         messageManager.load(config);
         loadMenuTemplates();
-        for (Addon addon : addons) {
-            addon.reload();
-        }
+        addonManager.reload();
     }
 
     private void loadConfig() {
@@ -719,17 +662,17 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
-        return menuSlotTypeRegistry;
+        return Objects.requireNonNull(menuSlotTypeRegistry);
     }
 
     @Override
     public @NotNull MenuProvider menuProvider() {
-        return menuProvider;
+        return Objects.requireNonNull(menuProvider);
     }
 
     @Override
     public @NotNull SessionManagerImpl sessionManager() {
-        return sessionManager;
+        return Objects.requireNonNull(sessionManager);
     }
 
     @Override
@@ -739,12 +682,17 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public @NotNull PropertyTypeRegistry propertyTypeRegistry() {
-        return propertyTypeRegistry;
+        return Objects.requireNonNull(propertyTypeRegistry);
     }
 
     @Override
     public @NotNull TypeSerializerCollection serializers() {
         return EasSerializers.serializers();
+    }
+
+    @Override
+    public @NotNull RegionPrivilegeManager regionPrivilegeManager() {
+        return Objects.requireNonNull(regionPrivilegeManager);
     }
 
     private interface ConfigProcessor {

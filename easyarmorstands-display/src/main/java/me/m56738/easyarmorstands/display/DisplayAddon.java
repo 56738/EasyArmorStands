@@ -3,12 +3,12 @@ package me.m56738.easyarmorstands.display;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.display.command.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.display.command.DisplayCommands;
-import me.m56738.easyarmorstands.display.editor.DisplaySessionListener;
 import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.InteractionElementProvider;
@@ -28,7 +28,7 @@ import org.bukkit.entity.TextDisplay;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 
-public class DisplayAddon {
+public class DisplayAddon implements Addon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
     private final DisplayElementType<BlockDisplay> blockDisplayType;
     private final DisplayElementType<TextDisplay> textDisplayType;
@@ -36,19 +36,6 @@ public class DisplayAddon {
 
     public DisplayAddon() {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-
-        JOMLMapper mapper;
-        try {
-            mapper = new JOMLMapper();
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-
-        new DefaultDisplayPropertyTypes(plugin.propertyTypeRegistry());
-
-        DisplaySessionListener listener = new DisplaySessionListener();
-        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
-        plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
 
         itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
         blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
@@ -60,6 +47,26 @@ public class DisplayAddon {
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/text_display"), textDisplayType));
         EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplayBoxSlotType());
         EasyArmorStands.get().menuSlotTypeRegistry().register(new InteractionSpawnSlotType(interactionType));
+
+        new DefaultDisplayPropertyTypes(plugin.propertyTypeRegistry());
+    }
+
+    @Override
+    public String name() {
+        return null;
+    }
+
+    @Override
+    public void enable() {
+        JOMLMapper mapper;
+        try {
+            mapper = new JOMLMapper();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
 
         EntityElementProviderRegistry registry = plugin.entityElementProviderRegistry();
         registry.register(new DisplayElementProvider<>(itemDisplayType));
@@ -82,6 +89,14 @@ public class DisplayAddon {
         }
 
         plugin.getAnnotationParser().parse(new DisplayCommands(this));
+    }
+
+    @Override
+    public void disable() {
+    }
+
+    @Override
+    public void reload() {
     }
 
     public DisplayElementType<ItemDisplay> getItemDisplayType() {

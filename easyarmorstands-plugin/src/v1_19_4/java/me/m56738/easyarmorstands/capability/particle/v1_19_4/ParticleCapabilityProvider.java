@@ -12,6 +12,11 @@ import org.bukkit.World;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.plugin.Plugin;
 
 public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCapability> {
@@ -48,7 +53,7 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
         return new ParticleCapabilityImpl(mapper);
     }
 
-    private static class ParticleCapabilityImpl implements ParticleCapability {
+    private static class ParticleCapabilityImpl implements ParticleCapability, Listener {
         private final JOMLMapper mapper;
 
         private ParticleCapabilityImpl(JOMLMapper mapper) {
@@ -78,6 +83,20 @@ public class ParticleCapabilityProvider implements CapabilityProvider<ParticleCa
         @Override
         public boolean isVisibleThroughWalls() {
             return true;
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onSpawn(EntitySpawnEvent event) {
+            if (event.getEntity().hasMetadata("easyarmorstands_force")) {
+                event.setCancelled(false);
+            }
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onTeleport(EntityTeleportEvent event) {
+            if (event.getEntity().hasMetadata("easyarmorstands_force")) {
+                event.setCancelled(false);
+            }
         }
     }
 }

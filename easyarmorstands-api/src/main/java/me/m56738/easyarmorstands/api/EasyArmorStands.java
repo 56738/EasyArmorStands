@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
+import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
@@ -39,4 +40,7 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull TypeSerializerCollection serializers();
+
+    @Contract(pure = true)
+    @NotNull RegionPrivilegeManager regionPrivilegeManager();
 }
