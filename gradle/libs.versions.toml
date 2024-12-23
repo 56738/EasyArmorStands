@@ -17,6 +17,7 @@ lands = "7.10.6"
 residence = "4.5._13.1"
 run-task = "2.3.1"
 shadow = "8.3.2"
+towny = "0.97.5.20"
 traincarts = "1.19.4-v2"
 worldguard-v6 = "6.2"
 worldguard-v7 = "7.0.9"
@@ -43,6 +44,7 @@ headdatabase-api = { module = "com.arcaniax:HeadDatabase-API", version.ref = "he
 joml = { module = "org.joml:joml", version.ref = "joml" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
 residence = { module = "com.bekvon.bukkit.residence:Residence", version.ref = "residence" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
 worldguard-v6 = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "worldguard-v6" }
 worldguard-v7 = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard-v7" }

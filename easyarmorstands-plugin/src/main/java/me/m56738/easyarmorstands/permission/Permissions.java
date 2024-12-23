@@ -93,6 +93,9 @@ public class Permissions {
     @Description("Allow spawning entities")
     public static final String SPAWN = "easyarmorstands.spawn";
 
+    @Description("Allow bypassing Towny restrictions")
+    public static final String TOWNY_BYPASS = "easyarmorstands.towny.bypass";
+
     @Description("Allow using the TrainCarts resource pack model browser")
     public static final String TRAINCARTS_MODEL = "easyarmorstands.traincarts.model";
 

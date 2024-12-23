@@ -17,6 +17,11 @@ repositories {
             includeGroup("com.griefdefender")
         }
     }
+    maven("https://repo.glaremasters.me/repository/towny/") {
+        mavenContent {
+            includeGroup("com.palmergames.bukkit.towny")
+        }
+    }
     maven("https://ci.athion.net/plugin/repository/tools/") {
         mavenContent {
             includeGroup("com.bekvon.bukkit.residence")
