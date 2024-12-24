@@ -12,5 +12,7 @@ public interface EntityElement<E extends Entity> extends Element {
     @NotNull EntityElementType<E> getType();
 
     @Override
-    @NotNull EntityElementReference<E> getReference();
+    default @NotNull EntityElementReference<E> getReference() {
+        return EntityElementReference.of(getType(), getEntity());
+    }
 }

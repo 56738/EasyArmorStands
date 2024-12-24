@@ -9,7 +9,6 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
-import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -53,11 +52,6 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     @Override
     public @NotNull SimpleEntityElementType<E> getType() {
         return type;
-    }
-
-    @Override
-    public @NotNull EntityElementReference<E> getReference() {
-        return new EntityElementReferenceImpl<>(type, entity);
     }
 
     @Override

@@ -10,13 +10,14 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElement;
+import me.m56738.easyarmorstands.api.element.EntityElementReference;
+import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
@@ -68,6 +69,7 @@ import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
@@ -92,7 +94,6 @@ import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
-import me.m56738.easyarmorstands.region.RegionListener;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -103,6 +104,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -693,6 +695,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull RegionPrivilegeManager regionPrivilegeManager() {
         return Objects.requireNonNull(regionPrivilegeManager);
+    }
+
+    @Override
+    public @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity) {
+        return new EntityElementReferenceImpl<>(type, entity);
     }
 
     private interface ConfigProcessor {
