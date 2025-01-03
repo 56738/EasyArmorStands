@@ -14,17 +14,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 abstract class ElementPresenceAction implements Action {
-    private final ElementType type;
     private final PropertyContainer properties;
     private ElementReference reference;
 
     public ElementPresenceAction(@NotNull Element element) {
-        this.type = element.getType();
         this.properties = new PropertyMap(element.getProperties());
         this.reference = element.getReference();
     }
 
     protected boolean create(ChangeContext context) {
+        ElementType type = reference.getType();
         if (!context.canCreateElement(type, properties)) {
             return false;
         }
@@ -78,6 +77,6 @@ abstract class ElementPresenceAction implements Action {
     }
 
     public ElementType getType() {
-        return type;
+        return reference.getType();
     }
 }

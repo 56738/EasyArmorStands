@@ -18,5 +18,5 @@ public interface EntityElementType<E extends Entity> extends ElementType {
     @Nullable EntityElement<E> getElement(@NotNull E entity);
 
     @Override
-    @Nullable Element createElement(@NotNull PropertyContainer properties);
+    @Nullable EntityElement<E> createElement(@NotNull PropertyContainer properties);
 }

@@ -17,7 +17,7 @@ public interface EntityElementReference<E extends Entity> extends ElementReferen
     @NotNull EntityElementType<E> getType();
 
     @Override
-    @Nullable Element getElement();
+    @Nullable EntityElement<E> getElement();
 
     @Contract(pure = true)
     @NotNull UUID getId();

@@ -69,6 +69,16 @@ public interface Session {
     @Contract(pure = true)
     @NotNull EyeRay eyeRay();
 
+    /**
+     * Returns the properties of an element, but with added permission checks and history tracking.
+     * <p>
+     * Changes will be performed immediately (if allowed).
+     * History actions are created when any property container tracked by the player is
+     * {@link PropertyContainer#commit() committed}.
+     *
+     * @param element the element whose properties should be returned
+     * @return a property container with permission checks and history tracking
+     */
     @Contract(pure = true)
     @NotNull PropertyContainer properties(@NotNull Element element);
 

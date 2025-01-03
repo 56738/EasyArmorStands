@@ -56,7 +56,11 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
     @Override
     public @Nullable SimpleEntityElement<E> createElement(@NotNull PropertyContainer properties) {
-        Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
+        Property<Location> locationProperty = properties.getOrNull(EntityPropertyTypes.LOCATION);
+        if (locationProperty == null) {
+            return null;
+        }
+        Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
         E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityClass, configurator);
         if (entity == null) {

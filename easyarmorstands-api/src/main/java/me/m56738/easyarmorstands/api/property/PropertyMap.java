@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * <p>
  * The contained properties are not bound to any element or entity, changing properties always succeeds.
  * This is primarily used to store properties for an element in memory before
- * {@link me.m56738.easyarmorstands.api.element.ElementType#createElement(PropertyContainer) creating} it.
+ * {@link me.m56738.easyarmorstands.api.element.ElementSpawnRequest creating} it.
  */
 public final class PropertyMap implements PropertyContainer {
     @SuppressWarnings("rawtypes")
