@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -34,18 +35,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class SessionListener implements Listener, SwapHandItemsListener {
-    private final Plugin plugin;
+    private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
 
-    public SessionListener(Plugin plugin, SessionManagerImpl manager) {
+    public SessionListener(EasyArmorStandsPlugin plugin, SessionManagerImpl manager) {
         this.plugin = plugin;
         this.manager = manager;
     }
@@ -54,8 +54,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         if (!player.hasPermission(Permissions.EDIT)) {
             return false;
         }
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
+        EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
         EntityEquipment equipment = player.getEquipment();
         for (EquipmentSlot hand : equipmentCapability.getHands()) {
             ItemStack item = equipmentCapability.getItem(equipment, hand);
@@ -212,10 +211,12 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     }
 
     public void onPlaceEntity(Player player, Entity entity) {
-        Bukkit.getScheduler().runTask(EasyArmorStandsPlugin.getInstance(), () -> {
-            Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            EasPlayer context = new EasPlayer(player);
+            Element element = plugin.entityElementProviderRegistry().getElement(entity);
             if (element != null) {
-                EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(element));
+                context.history().push(new ElementCreateAction(element));
+                context.clipboard().handleAutoApply(element, context);
             }
         });
     }
@@ -229,7 +230,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         Player player = (Player) damager;
         Entity entity = event.getEntity();
 
-        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
+        Element element = plugin.entityElementProviderRegistry().getElement(entity);
         if (element == null) {
             return;
         }
@@ -237,7 +238,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         ElementDestroyAction action = new ElementDestroyAction(element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
-                EasyArmorStandsPlugin.getInstance().getHistory(player).push(action);
+                plugin.getHistory(player).push(action);
             }
         });
     }
@@ -260,7 +261,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     @EventHandler
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (EasyArmorStandsPlugin.getInstance().isTool(item)) {
+            if (plugin.isTool(item)) {
                 event.getInventory().setResult(null);
                 break;
             }
