@@ -20,5 +20,7 @@ public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
     public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         properties.put(ArmorStandPropertyTypes.GRAVITY, false);
+        properties.put(ArmorStandPropertyTypes.BASE_PLATE, false);
+        properties.put(ArmorStandPropertyTypes.ARMS, true);
     }
 }
