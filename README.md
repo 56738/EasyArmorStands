@@ -8,8 +8,7 @@ Armor stand and display entity editor.
 
 **Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.4
 
-Download the `.jar` file from [Spigot](https://www.spigotmc.org/resources/easyarmorstands.108349/)
-or [Hangar](https://hangar.papermc.io/56738/EasyArmorStands) and place it in your `plugins` folder.
+Download the latest `.jar` file and place it in your `plugins` folder.
 
 # Usage
 
@@ -187,6 +186,12 @@ Players with the `easyarmorstands.worldguard.bypass` permission bypass this rest
 If GriefDefender is installed, only trusted builders can edit entities in a claim.
 
 Players with the `easyarmorstands.griefdefender.bypass` permission bypass this restriction.
+
+## Towny integration
+
+If Towny is installed, only trusted residents can edit entities in a claim.
+
+Players with the `easyarmorstands.towny.bypass` permission bypass this restriction.
 
 ## Residence integration
 
