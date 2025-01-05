@@ -16,6 +16,7 @@ import java.util.Set;
 
 @SuppressWarnings("PatternValidation")
 public class EntityPropertyTypes {
+    public static final @NotNull PropertyType<Boolean> AI = get("entity/ai", Boolean.class);
     public static final @NotNull PropertyType<Optional<Component>> CUSTOM_NAME = get("entity/custom_name", new TypeToken<Optional<Component>>() {
     });
     public static final @NotNull PropertyType<Boolean> CUSTOM_NAME_VISIBLE = get("entity/custom_name/visible", Boolean.class);

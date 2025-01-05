@@ -63,6 +63,7 @@ permissions:
       - easyarmorstands.edit.interaction
       - easyarmorstands.edit.itemdisplay
       - easyarmorstands.edit.textdisplay
+      - easyarmorstands.property.ai
       - easyarmorstands.property.armorstand.marker
       - easyarmorstands.property.display.billboard
       - easyarmorstands.property.display.block

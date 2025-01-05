@@ -20,6 +20,7 @@ public class DefaultPropertyTypes {
         registry.register(new BooleanTogglePropertyType(key("armor_stand/lock")));
         registry.register(new BooleanTogglePropertyType(key("armor_stand/marker")));
         registry.register(new EnumTogglePropertyType<>(key("armor_stand/size"), ArmorStandSize.class));
+        registry.register(new BooleanTogglePropertyType(key("entity/ai")));
         registry.register(new OptionalComponentPropertyType(key("entity/custom_name"), "/eas name set"));
         registry.register(new BooleanPropertyType(key("entity/custom_name/visible")));
         registry.register(new BooleanTogglePropertyType(key("entity/glowing")));

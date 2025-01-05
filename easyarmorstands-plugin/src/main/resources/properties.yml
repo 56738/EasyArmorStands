@@ -169,6 +169,18 @@ easyarmorstands:display/view_range:
   permission: easyarmorstands.property.display.viewrange
   value:
     format: 0.0
+easyarmorstands:entity/ai:
+  button:
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.ai.description>
+    name: <name>
+    type: redstone_block
+  name: <lang:easyarmorstands.property.ai.name>
+  permission: easyarmorstands.property.ai
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.disabled>
+    enabled: <green><lang:easyarmorstands.property.common.enabled>
 easyarmorstands:entity/custom_name:
   button:
     description:

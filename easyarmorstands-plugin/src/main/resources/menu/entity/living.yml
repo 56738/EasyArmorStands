@@ -5,6 +5,12 @@ slots:
   easyarmorstands:copy:
     column: 4
     row: 5
+  easyarmorstands:entity/ai:
+    column: 8
+    config:
+      property: easyarmorstands:entity/ai
+    row: 1
+    type: easyarmorstands:property
   easyarmorstands:entity/equipment/chest:
     column: 1
     config:

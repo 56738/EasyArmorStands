@@ -129,3 +129,5 @@ slots:
       property: easyarmorstands:armor_stand/size
     row: 2
     type: easyarmorstands:property
+  easyarmorstands:entity/ai:
+    enabled: false

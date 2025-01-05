@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
+import me.m56738.easyarmorstands.capability.entityai.EntityAICapability;
 import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
 import me.m56738.easyarmorstands.capability.entitytag.EntityTagCapability;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
@@ -24,6 +25,7 @@ import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
+import me.m56738.easyarmorstands.property.entity.EntityAIProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
 import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
@@ -84,6 +86,10 @@ public class EntityElementListener implements Listener {
         EntityScaleCapability scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
         if (scaleCapability != null) {
             registry.register(new EntityScaleProperty(entity, scaleCapability));
+        }
+        EntityAICapability aiCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityAICapability.class);
+        if (aiCapability != null) {
+            registry.register(new EntityAIProperty(entity, aiCapability));
         }
     }
 
