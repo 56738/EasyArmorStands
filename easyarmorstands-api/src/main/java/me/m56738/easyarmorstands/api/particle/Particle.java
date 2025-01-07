@@ -6,9 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.NonExtendable
 public interface Particle {
+    @Deprecated
     void show(@NotNull Player player);
 
+    @Deprecated
     void update();
 
+    @Deprecated
     void hide(@NotNull Player player);
 }

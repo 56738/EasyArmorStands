@@ -17,7 +17,6 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
 import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
 import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
@@ -105,8 +104,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
 
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
-        ParticleCapability particleCapability = plugin.getCapability(ParticleCapability.class);
-        if (glowCapability != null && !particleCapability.isVisibleThroughWalls()) {
+        if (glowCapability != null && !session.particleProvider().isVisibleThroughWalls()) {
             // Entity glowing is supported and particles are not visible through walls
             // Spawn a glowing skeleton instead
             SpawnCapability spawnCapability = plugin.getCapability(SpawnCapability.class);

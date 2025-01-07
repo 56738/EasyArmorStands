@@ -1,41 +1,39 @@
-package me.m56738.easyarmorstands.capability.particle.v1_19_4;
+package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
-import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.capability.particle.ParticleCapability;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class BoundingBoxParticleImpl implements BoundingBoxParticle {
+import java.util.function.Supplier;
+
+public class LineBoundingBoxParticle implements BoundingBoxParticle, EditorParticle {
     private final Line[] lines;
     private BoundingBox box = BoundingBox.of(new Vector3d());
     private ParticleColor color = ParticleColor.WHITE;
 
-    public BoundingBoxParticleImpl(World world, ParticleCapability capability) {
+    public LineBoundingBoxParticle(Supplier<GizmoLineParticle> lineSupplier) {
         this.lines = new Line[]{
-                createLine(world, capability, 0.5, 0, 0, Axis.X),
-                createLine(world, capability, 0.5, 0, 1, Axis.X),
-                createLine(world, capability, 0.5, 1, 0, Axis.X),
-                createLine(world, capability, 0.5, 1, 1, Axis.X),
-                createLine(world, capability, 0, 0.5, 0, Axis.Y),
-                createLine(world, capability, 0, 0.5, 1, Axis.Y),
-                createLine(world, capability, 1, 0.5, 0, Axis.Y),
-                createLine(world, capability, 1, 0.5, 1, Axis.Y),
-                createLine(world, capability, 0, 0, 0.5, Axis.Z),
-                createLine(world, capability, 1, 0, 0.5, Axis.Z),
-                createLine(world, capability, 0, 1, 0.5, Axis.Z),
-                createLine(world, capability, 1, 1, 0.5, Axis.Z)
+                createLine(lineSupplier, 0.5, 0, 0, Axis.X),
+                createLine(lineSupplier, 0.5, 0, 1, Axis.X),
+                createLine(lineSupplier, 0.5, 1, 0, Axis.X),
+                createLine(lineSupplier, 0.5, 1, 1, Axis.X),
+                createLine(lineSupplier, 0, 0.5, 0, Axis.Y),
+                createLine(lineSupplier, 0, 0.5, 1, Axis.Y),
+                createLine(lineSupplier, 1, 0.5, 0, Axis.Y),
+                createLine(lineSupplier, 1, 0.5, 1, Axis.Y),
+                createLine(lineSupplier, 0, 0, 0.5, Axis.Z),
+                createLine(lineSupplier, 1, 0, 0.5, Axis.Z),
+                createLine(lineSupplier, 0, 1, 0.5, Axis.Z),
+                createLine(lineSupplier, 1, 1, 0.5, Axis.Z)
         };
     }
 
-    private Line createLine(World world, ParticleCapability capability, double x, double y, double z, Axis axis) {
-        return new Line(world, axis, new Vector3d(x, y, z), capability);
+    private Line createLine(Supplier<GizmoLineParticle> lineSupplier, double x, double y, double z, Axis axis) {
+        return new Line(lineSupplier, axis, new Vector3d(x, y, z));
     }
 
     @Override
@@ -83,9 +81,9 @@ public class BoundingBoxParticleImpl implements BoundingBoxParticle {
     }
 
     @Override
-    public void show(@NotNull Player player) {
+    public void show() {
         for (Line line : lines) {
-            line.particle.show(player);
+            line.particle.show();
         }
     }
 
@@ -97,23 +95,23 @@ public class BoundingBoxParticleImpl implements BoundingBoxParticle {
     }
 
     @Override
-    public void hide(@NotNull Player player) {
+    public void hide() {
         for (Line line : lines) {
-            line.particle.hide(player);
+            line.particle.hide();
         }
     }
 
     private static class Line {
         private final Axis axis;
         private final Vector3dc offset;
-        private final LineParticle particle;
+        private final GizmoLineParticle particle;
         private final Vector3d position = new Vector3d();
         private final Vector3d size = new Vector3d();
 
-        private Line(World world, Axis axis, Vector3dc offset, ParticleCapability capability) {
+        private Line(Supplier<GizmoLineParticle> lineSupplier, Axis axis, Vector3dc offset) {
             this.axis = axis;
             this.offset = offset;
-            this.particle = capability.createLine(world);
+            this.particle = lineSupplier.get();
             this.particle.setAxis(axis);
         }
 

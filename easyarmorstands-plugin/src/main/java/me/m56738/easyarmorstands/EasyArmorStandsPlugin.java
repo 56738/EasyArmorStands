@@ -100,6 +100,7 @@ import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
@@ -168,6 +169,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
+    private BukkitGizmos gizmos;
     private LegacyPaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
@@ -231,6 +233,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     public void onEnable() {
         new Metrics(this, 17911);
         adventure = BukkitAudiences.create(this);
+        gizmos = BukkitGizmos.create(this);
 
         loadProperties();
 
@@ -358,6 +361,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             regionPrivilegeManager.unregisterAll();
         }
         Permissions.unregisterAll();
+        if (gizmos != null) {
+            gizmos.close();
+        }
+        if (adventure != null) {
+            adventure.close();
+        }
     }
 
     public void reload() {
@@ -587,6 +596,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public BukkitAudiences getAdventure() {
         return adventure;
+    }
+
+    public BukkitGizmos getGizmos() {
+        return gizmos;
     }
 
     public LegacyPaperCommandManager<EasCommandSender> getCommandManager() {

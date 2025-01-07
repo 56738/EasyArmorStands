@@ -12,6 +12,7 @@ softdepend:
   - Residence
   - Towny
   - Train_Carts
+  - ViaVersion
   - WorldGuard
 
 permissions:

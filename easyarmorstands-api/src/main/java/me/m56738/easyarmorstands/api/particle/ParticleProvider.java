@@ -17,4 +17,7 @@ public interface ParticleProvider {
 
     @Contract(value = "-> new", pure = true)
     @NotNull BoundingBoxParticle createAxisAlignedBox();
+
+    @Contract(pure = true)
+    boolean isVisibleThroughWalls();
 }

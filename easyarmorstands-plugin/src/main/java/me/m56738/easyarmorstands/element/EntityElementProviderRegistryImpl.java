@@ -30,7 +30,7 @@ public class EntityElementProviderRegistryImpl implements EntityElementProviderR
         if (!entity.isValid()) {
             return null;
         }
-        if (entity.hasMetadata("easyarmorstands_ignore")) {
+        if (entity.hasMetadata("easyarmorstands_ignore") || entity.hasMetadata("gizmo")) {
             return null;
         }
         for (MetadataValue metadataValue : entity.getMetadata("easyarmorstands_element")) {

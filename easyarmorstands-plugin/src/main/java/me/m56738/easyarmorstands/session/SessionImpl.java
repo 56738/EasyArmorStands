@@ -17,6 +17,8 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.particle.EditorParticle;
+import me.m56738.easyarmorstands.particle.GizmoParticleProvider;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -30,7 +32,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,8 +58,8 @@ public final class SessionImpl implements Session {
     private final Audience audience;
     private final ChangeContext context;
     private final SessionSnapper snapper;
-    private final Set<Particle> particles = new HashSet<>();
-    private final ParticleProvider particleProvider = new ParticleProviderImpl(this);
+    private final Set<EditorParticle> particles = new HashSet<>();
+    private final ParticleProvider particleProvider;
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private int clickTicks = 5;
@@ -74,6 +75,7 @@ public final class SessionImpl implements Session {
         this.audience = context;
         this.context = context;
         this.snapper = new SessionSnapper(player);
+        this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player));
     }
 
     @Override
@@ -225,7 +227,7 @@ public final class SessionImpl implements Session {
             }
         }
 
-        for (Particle particle : particles) {
+        for (EditorParticle particle : particles) {
             particle.update();
         }
 
@@ -273,8 +275,8 @@ public final class SessionImpl implements Session {
         nodeStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
-        for (Particle particle : particles) {
-            particle.hide(player);
+        for (EditorParticle particle : particles) {
+            particle.hide();
         }
         particles.clear();
         valid = false;
@@ -282,10 +284,6 @@ public final class SessionImpl implements Session {
 
     public ChangeContext context() {
         return context;
-    }
-
-    public World getWorld() {
-        return player.getWorld();
     }
 
     public double getRange() {
@@ -301,8 +299,9 @@ public final class SessionImpl implements Session {
         if (!valid) {
             return;
         }
-        if (particles.add(particle)) {
-            particle.show(player);
+        EditorParticle editorParticle = (EditorParticle) particle;
+        if (particles.add(editorParticle)) {
+            editorParticle.show();
         }
     }
 
@@ -311,8 +310,9 @@ public final class SessionImpl implements Session {
         if (!valid) {
             return;
         }
-        if (particles.remove(particle)) {
-            particle.hide(player);
+        EditorParticle editorParticle = (EditorParticle) particle;
+        if (particles.remove(editorParticle)) {
+            editorParticle.hide();
         }
     }
 
