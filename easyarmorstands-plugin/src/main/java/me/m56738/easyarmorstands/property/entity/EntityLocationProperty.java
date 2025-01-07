@@ -26,6 +26,10 @@ public class EntityLocationProperty implements Property<Location> {
 
     @Override
     public boolean setValue(@NotNull Location value) {
-        return entity.teleport(value);
+        boolean ok = entity.teleport(value);
+        if (ok) {
+            entity.setFallDistance(0);
+        }
+        return ok;
     }
 }
