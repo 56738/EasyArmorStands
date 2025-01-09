@@ -27,6 +27,7 @@ import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
+import me.m56738.gizmo.api.cursor.RayCursor;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -334,13 +335,12 @@ public final class SessionImpl implements Session {
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
-        Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3dc origin = Util.toVector3d(eyeLocation);
-        Vector3dc target = origin.fma(length, Util.toVector3d(eyeLocation.getDirection()), new Vector3d());
+        Vector3dc direction = Util.toVector3d(eyeLocation.getDirection());
         double threshold = getLookThreshold();
         float yaw = eyeLocation.getYaw();
         float pitch = eyeLocation.getPitch();
-        return new EyeRayImpl(eyeLocation.getWorld(), origin, target, length, threshold, yaw, pitch, eyeMatrix);
+        return new RayCursorEyeRay(eyeLocation.getWorld(), RayCursor.of(origin, direction, length), threshold, yaw, pitch);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
@@ -348,12 +348,11 @@ public final class SessionImpl implements Session {
         Location eyeLocation = player.getEyeLocation();
         Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
-        Vector3d target = eyeMatrix.transformDirection(0, 0, 1, new Vector3d())
-                .mulAdd(length, origin);
+        Vector3dc direction = Util.toVector3d(eyeLocation.getDirection());
         double threshold = getLookThreshold();
         float yaw = eyeLocation.getYaw();
         float pitch = eyeLocation.getPitch();
-        return new EyeRayImpl(eyeLocation.getWorld(), origin, target, length, threshold, yaw, pitch, eyeMatrix);
+        return new RayCursorEyeRay(eyeLocation.getWorld(), RayCursor.of(origin, direction, length), threshold, yaw, pitch);
     }
 
     private Matrix4dc eyeMatrix(Location eyeLocation) {

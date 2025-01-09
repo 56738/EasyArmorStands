@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Intersectiond;
 import org.joml.Matrix4dc;
-import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -75,123 +74,29 @@ public interface EyeRay {
     }
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position) {
-        return intersectPoint(position, 1);
-    }
+    @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position, double scale) {
-        double threshold = scale * threshold();
-        Vector3dc closestOnEyeRay = projectPoint(position);
-        if (position.distanceSquared(closestOnEyeRay) < threshold * threshold) {
-            return position;
-        } else {
-            return null;
-        }
-    }
+    @Nullable Vector3dc intersectPoint(@NotNull Vector3dc position, double scale);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end) {
-        return intersectLine(start, end, 1);
-    }
+    @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end, double scale) {
-        Vector3dc eyes = origin();
-        Vector3dc target = target();
-        Vector3d closestOnLookRay = new Vector3d();
-        Vector3d closestOnLine = new Vector3d();
-        double distanceSquared = Intersectiond.findClosestPointsLineSegments(
-                eyes.x(), eyes.y(), eyes.z(),
-                target.x(), target.y(), target.z(),
-                start.x(), start.y(), start.z(),
-                end.x(), end.y(), end.z(),
-                closestOnLookRay,
-                closestOnLine
-        );
-
-        double threshold = scale * threshold();
-        if (distanceSquared < threshold * threshold) {
-            return closestOnLine;
-        } else {
-            return null;
-        }
-    }
+    @Nullable Vector3dc intersectLine(@NotNull Vector3dc start, @NotNull Vector3dc end, double scale);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal) {
-        return intersectPlane(point, normal, length());
-    }
+    @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal, double range) {
-        Vector3dc origin = origin();
-        Vector3dc direction = target().sub(origin, new Vector3d()).normalize();
-        double ox = origin.x(), oy = origin.y(), oz = origin.z();
-        double dx = direction.x(), dy = direction.y(), dz = direction.z();
-        double px = point.x(), py = point.y(), pz = point.z();
-        double nx = normal.x(), ny = normal.y(), nz = normal.z();
-        double t = Intersectiond.intersectRayPlane(
-                ox, oy, oz, dx, dy, dz,
-                px, py, pz, nx, ny, nz,
-                0.1);
-        if (t < 0) {
-            // Didn't hit the front, try the back
-            t = Intersectiond.intersectRayPlane(
-                    ox, oy, oz, dx, dy, dz,
-                    px, py, pz, -nx, -ny, -nz,
-                    0.1);
-        }
-        if (t >= 0 && t <= range) {
-            return origin.fma(t, direction, new Vector3d());
-        } else {
-            return null;
-        }
-    }
+    @Nullable Vector3dc intersectPlane(@NotNull Vector3dc point, @NotNull Vector3dc normal, double range);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius) {
-        return intersectCircle(point, normal, radius, 1);
-    }
+    @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius, double scale) {
-        Vector3dc intersection = intersectPlane(point, normal);
-        double threshold = scale * threshold();
-        if (intersection != null) {
-            // Looking at the plane
-            double d = intersection.distanceSquared(point);
-            double min = radius - threshold;
-            double max = radius + threshold;
-            if (d >= min * min && d <= max * max) {
-                // Looking at the circle
-                return intersection;
-            }
-        }
-        return null;
-    }
+    @Nullable Vector3dc intersectCircle(@NotNull Vector3dc point, @NotNull Vector3dc normal, double radius, double scale);
 
     @Contract(pure = true)
-    default @Nullable Vector3dc intersectBox(@NotNull BoundingBox box) {
-        Vector3dc origin = origin();
-        Vector3dc min = box.getMinPosition();
-        Vector3dc max = box.getMaxPosition();
-        if (min.equals(max)) {
-            return null;
-        }
-        Vector3d direction = target().sub(origin, new Vector3d());
-        Vector2d result = new Vector2d();
-        if (Intersectiond.intersectRayAab(origin, direction, min, max, result) && result.x <= 1) {
-            // result.x contains the distance to the near point
-            // 0..1 because direction is not normalized
-            if (result.x > 0) {
-                // Looking at the box from outside
-                return origin.fma(result.x, direction, new Vector3d());
-            } else {
-                // Inside the box
-                return origin;
-            }
-        }
-        return null;
-    }
+    @Nullable Vector3dc intersectBox(@NotNull BoundingBox box);
 }
