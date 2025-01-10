@@ -1,5 +1,5 @@
 [versions]
-adventure-api = "4.17.0"
+adventure-api = "4.18.0"
 adventure-platform = "4.3.4"
 brigadier = "1.0.17"
 bstats = "3.0.2"
