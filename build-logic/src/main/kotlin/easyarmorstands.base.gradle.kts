@@ -8,9 +8,12 @@ version = property("version")!!
 repositories {
     mavenCentral()
     maven("https://repo.56738.me")
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://maven.enginehub.org/repo/") {
+        mavenContent {
+            includeGroupByRegex("com\\.sk89q\\..*")
+        }
+    }
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://maven.enginehub.org/repo/")
     maven("https://ci.mg-dev.eu/plugin/repository/everything/")
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.glaremasters.me/repository/bloodshot/") {

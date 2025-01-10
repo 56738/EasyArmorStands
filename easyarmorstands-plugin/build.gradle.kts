@@ -9,7 +9,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.bukkit) {
-        exclude("org.yaml", "snakeyaml")
+        isTransitive = false
     }
     api(project(":easyarmorstands-api"))
     api(libs.adventure.platform.bukkit)

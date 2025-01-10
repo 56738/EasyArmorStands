@@ -4,6 +4,8 @@ plugins {
 
 dependencies {
     compileOnly(project(":easyarmorstands-plugin"))
-    compileOnly(libs.bukkit)
+    compileOnly(libs.bukkit) {
+        isTransitive = false
+    }
     compileOnly(libs.headdatabase.api)
 }

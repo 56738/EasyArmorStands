@@ -4,12 +4,8 @@ plugins {
 
 dependencies {
     implementation(project(":easyarmorstands-plugin"))
-    compileOnly("org.bukkit:bukkit:1.13-R0.1-SNAPSHOT")
-    compileOnly(libs.worldguard.v7)
-}
-
-tasks {
-    withType<JavaCompile>().configureEach {
-        options.release.set(17)
+    compileOnly("org.bukkit:bukkit:1.13-R0.1-SNAPSHOT") {
+        isTransitive = false
     }
+    compileOnly(libs.worldguard.v7)
 }

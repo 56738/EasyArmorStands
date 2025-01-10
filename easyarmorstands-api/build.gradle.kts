@@ -5,7 +5,9 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.bukkit)
+    compileOnly(libs.bukkit) {
+        isTransitive = false
+    }
     api(libs.adventure.api)
     api(libs.adventure.text.minimessage)
     api(libs.configurate.core)

@@ -4,6 +4,8 @@ plugins {
 
 dependencies {
     implementation(project(":easyarmorstands-plugin"))
-    compileOnly(libs.bukkit)
+    compileOnly(libs.bukkit) {
+        isTransitive = false
+    }
     compileOnly(libs.griefdefender.api)
 }
