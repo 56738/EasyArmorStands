@@ -15,10 +15,10 @@ public class TextBackgroundToggleButton extends ToggleButton<Optional<Color>> {
 
     @Override
     public Optional<Color> getNextValue() {
-        if (property.getValue().isEmpty()) {
-            return Optional.of(Color.fromARGB(0, 0, 0, 0));
-        } else {
+        if (property.getValue().isPresent()) {
             return Optional.empty();
+        } else {
+            return Optional.of(Color.fromARGB(0, 0, 0, 0));
         }
     }
 

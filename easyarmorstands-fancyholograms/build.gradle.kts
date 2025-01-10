@@ -11,9 +11,3 @@ dependencies {
     }
     compileOnly(libs.fancyholograms)
 }
-
-tasks {
-    withType<JavaCompile>().configureEach {
-        options.release.set(17)
-    }
-}

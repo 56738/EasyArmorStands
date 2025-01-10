@@ -19,7 +19,7 @@ public class BrightnessPropertyType extends ConfigurablePropertyType<Optional<Br
     private Component none;
 
     public BrightnessPropertyType(@NotNull Key key) {
-        super(key, new TypeToken<>() {
+        super(key, new TypeToken<Optional<Brightness>>() {
         });
     }
 
@@ -32,7 +32,7 @@ public class BrightnessPropertyType extends ConfigurablePropertyType<Optional<Br
 
     @Override
     public @NotNull Component getValueComponent(@NotNull Optional<Brightness> value) {
-        if (value.isEmpty()) {
+        if (!value.isPresent()) {
             return none;
         }
         Brightness brightness = value.get();

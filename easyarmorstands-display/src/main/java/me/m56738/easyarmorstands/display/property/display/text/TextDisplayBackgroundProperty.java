@@ -51,7 +51,7 @@ public class TextDisplayBackgroundProperty implements Property<Optional<Color>> 
 
     @Override
     public boolean setValue(@NotNull Optional<Color> value) {
-        entity.setDefaultBackground(value.isEmpty());
+        entity.setDefaultBackground(!value.isPresent());
         entity.setBackgroundColor(value.orElse(null));
         return true;
     }

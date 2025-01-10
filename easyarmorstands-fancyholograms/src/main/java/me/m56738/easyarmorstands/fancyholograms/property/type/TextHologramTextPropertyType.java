@@ -13,7 +13,7 @@ public class TextHologramTextPropertyType extends ConfigurablePropertyType<List<
     public static final TextHologramTextPropertyType INSTANCE = new TextHologramTextPropertyType();
 
     public TextHologramTextPropertyType() {
-        super(Key.key("easyarmorstands", "fancyholograms/text"), new TypeToken<>() {
+        super(Key.key("easyarmorstands", "fancyholograms/text"), new TypeToken<List<String>>() {
         });
     }
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class GlowColorPropertyType extends ConfigurablePropertyType<Optional<Color>> {
     public GlowColorPropertyType(@NotNull Key key) {
-        super(key, new TypeToken<>() {
+        super(key, new TypeToken<Optional<Color>>() {
         });
     }
 

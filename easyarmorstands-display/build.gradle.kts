@@ -10,9 +10,3 @@ dependencies {
     }
     compileOnly(libs.brigadier)
 }
-
-tasks {
-    withType<JavaCompile>().configureEach {
-        options.release.set(17)
-    }
-}

@@ -409,7 +409,7 @@ public class DisplayCommands {
             return;
         }
         Optional<Color> oldValue = property.getValue();
-        if (oldValue.isEmpty()) {
+        if (!oldValue.isPresent()) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
