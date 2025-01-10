@@ -12,6 +12,8 @@ import org.joml.Vector3dc;
 public class GizmoLineParticle extends GizmoParticle implements LineParticle {
     private final LineGizmo gizmo;
     private double offset = 0;
+    private Axis axis = Axis.Y;
+    private ParticleColor color = ParticleColor.WHITE;
 
     public GizmoLineParticle(LineGizmo gizmo) {
         super(gizmo);
@@ -30,11 +32,12 @@ public class GizmoLineParticle extends GizmoParticle implements LineParticle {
 
     @Override
     public @NotNull Axis getAxis() {
-        return GizmoAdapter.convert(gizmo.getAxis());
+        return axis;
     }
 
     @Override
     public void setAxis(@NotNull Axis axis) {
+        this.axis = axis;
         gizmo.setAxis(GizmoAdapter.convert(axis));
     }
 
@@ -80,11 +83,12 @@ public class GizmoLineParticle extends GizmoParticle implements LineParticle {
 
     @Override
     public @NotNull ParticleColor getColor() {
-        return GizmoAdapter.convert(gizmo.getColor());
+        return color;
     }
 
     @Override
     public void setColor(@NotNull ParticleColor color) {
+        this.color = color;
         gizmo.setColor(GizmoAdapter.convert(color));
     }
 

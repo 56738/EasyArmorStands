@@ -27,7 +27,6 @@ import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
-import me.m56738.gizmo.api.cursor.RayCursor;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -335,12 +334,8 @@ public final class SessionImpl implements Session {
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
-        Vector3dc origin = Util.toVector3d(eyeLocation);
-        Vector3dc direction = Util.toVector3d(eyeLocation.getDirection());
         double threshold = getLookThreshold();
-        float yaw = eyeLocation.getYaw();
-        float pitch = eyeLocation.getPitch();
-        return new RayCursorEyeRay(eyeLocation.getWorld(), RayCursor.of(origin, direction, length), threshold, yaw, pitch);
+        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
@@ -348,11 +343,11 @@ public final class SessionImpl implements Session {
         Location eyeLocation = player.getEyeLocation();
         Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
-        Vector3dc direction = Util.toVector3d(eyeLocation.getDirection());
+        eyeLocation.setX(origin.x);
+        eyeLocation.setY(origin.y);
+        eyeLocation.setZ(origin.z);
         double threshold = getLookThreshold();
-        float yaw = eyeLocation.getYaw();
-        float pitch = eyeLocation.getPitch();
-        return new RayCursorEyeRay(eyeLocation.getWorld(), RayCursor.of(origin, direction, length), threshold, yaw, pitch);
+        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
     }
 
     private Matrix4dc eyeMatrix(Location eyeLocation) {

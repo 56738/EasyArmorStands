@@ -10,6 +10,8 @@ import org.joml.Vector3dc;
 
 public class GizmoCircleParticle extends GizmoParticle implements CircleParticle, EditorParticle {
     private final CircleGizmo gizmo;
+    private Axis axis = Axis.Y;
+    private ParticleColor color = ParticleColor.WHITE;
 
     public GizmoCircleParticle(CircleGizmo gizmo) {
         super(gizmo);
@@ -28,11 +30,12 @@ public class GizmoCircleParticle extends GizmoParticle implements CircleParticle
 
     @Override
     public @NotNull Axis getAxis() {
-        return GizmoAdapter.convert(gizmo.getAxis());
+        return axis;
     }
 
     @Override
     public void setAxis(@NotNull Axis axis) {
+        this.axis = axis;
         gizmo.setAxis(GizmoAdapter.convert(axis));
     }
 
@@ -68,11 +71,12 @@ public class GizmoCircleParticle extends GizmoParticle implements CircleParticle
 
     @Override
     public @NotNull ParticleColor getColor() {
-        return GizmoAdapter.convert(gizmo.getColor());
+        return color;
     }
 
     @Override
     public void setColor(@NotNull ParticleColor color) {
+        this.color = color;
         gizmo.setColor(GizmoAdapter.convert(color));
     }
 }

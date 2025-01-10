@@ -9,6 +9,7 @@ import org.joml.Vector3dc;
 
 public class GizmoPointParticle extends GizmoParticle implements PointParticle {
     private final PointGizmo gizmo;
+    private ParticleColor color = ParticleColor.WHITE;
 
     public GizmoPointParticle(PointGizmo gizmo) {
         super(gizmo);
@@ -58,11 +59,12 @@ public class GizmoPointParticle extends GizmoParticle implements PointParticle {
 
     @Override
     public @NotNull ParticleColor getColor() {
-        return GizmoAdapter.convert(gizmo.getColor());
+        return color;
     }
 
     @Override
     public void setColor(@NotNull ParticleColor color) {
+        this.color = color;
         gizmo.setColor(GizmoAdapter.convert(color));
     }
 }

@@ -2,36 +2,42 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.util.Util;
+import me.m56738.gizmo.api.cursor.Cursor;
 import me.m56738.gizmo.api.cursor.Intersection;
-import me.m56738.gizmo.api.cursor.RayCursor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class RayCursorEyeRay implements EyeRay {
+public class EyeRayImpl implements EyeRay {
     private final World world;
-    private final RayCursor cursor;
+    private final Vector3dc origin;
+    private final Vector3dc direction;
+    private final Vector3dc target;
+    private final double length;
+    private final Cursor cursor;
     private final double threshold;
     private final float yaw;
     private final float pitch;
     private final Matrix4dc matrix;
     private Matrix4dc inverseMatrix;
 
-    public RayCursorEyeRay(World world, RayCursor cursor, double threshold, float yaw, float pitch) {
+    public EyeRayImpl(World world, Location location, double length, double threshold) {
         this.world = world;
-        this.cursor = cursor;
+        this.origin = Util.toVector3d(location);
+        this.direction = Util.toVector3d(location.getDirection());
+        this.target = origin.fma(length, direction, new Vector3d());
+        this.length = length;
+        this.cursor = Cursor.of(origin, target);
         this.threshold = threshold;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.matrix = new Matrix4d()
-                .translation(cursor.origin())
-                .rotateY(-Math.toRadians(yaw))
-                .rotateX(Math.toRadians(pitch));
+        this.yaw = location.getYaw();
+        this.pitch = location.getPitch();
+        this.matrix = Util.toMatrix4d(location);
     }
 
     @Override
@@ -41,22 +47,22 @@ public class RayCursorEyeRay implements EyeRay {
 
     @Override
     public @NotNull Vector3dc origin() {
-        return cursor.origin();
+        return origin;
     }
 
     @Override
     public @NotNull Vector3dc target() {
-        return cursor.end();
+        return target;
     }
 
     @Override
     public @NotNull Vector3dc point(double distance) {
-        return cursor.origin().fma(distance, cursor.direction(), new Vector3d());
+        return origin.fma(distance, direction, new Vector3d());
     }
 
     @Override
     public double length() {
-        return cursor.length();
+        return length;
     }
 
     @Override
