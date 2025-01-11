@@ -23,6 +23,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -44,6 +46,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
+    private final Map<Player, Integer> suppressArmSwing = new HashMap<>();
 
     public SessionListener(EasyArmorStandsPlugin plugin, SessionManagerImpl manager) {
         this.plugin = plugin;
@@ -127,6 +130,11 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     }
 
     @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        suppressArmSwing.put(event.getPlayer(), 5);
+    }
+
+    @EventHandler
     public void onLeftClick(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK) {
@@ -149,6 +157,20 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         if (handleLeftClick(player, entity)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onLeftClick(PlayerAnimationEvent event) {
+        PlayerAnimationType type = event.getAnimationType();
+        if (type != PlayerAnimationType.ARM_SWING) {
+            return;
+        }
+
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!suppressArmSwing.containsKey(event.getPlayer())) {
+                handleLeftClick(event.getPlayer());
+            }
+        });
     }
 
     public void updateHeldItem(Player player) {
@@ -247,6 +269,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         suppressClick.put(player, 5);
+        suppressArmSwing.put(event.getPlayer(), 5);
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
@@ -281,10 +304,17 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         manager.stopSession(event.getPlayer());
+        suppressClick.remove(event.getPlayer());
+        suppressArmSwing.remove(event.getPlayer());
     }
 
     public void update() {
-        for (Iterator<Map.Entry<Player, Integer>> iterator = suppressClick.entrySet().iterator(); iterator.hasNext(); ) {
+        expireEntries(suppressClick);
+        expireEntries(suppressArmSwing);
+    }
+
+    private void expireEntries(Map<Player, Integer> map) {
+        for (Iterator<Map.Entry<Player, Integer>> iterator = map.entrySet().iterator(); iterator.hasNext(); ) {
             Map.Entry<Player, Integer> entry = iterator.next();
             int value = entry.getValue();
             if (value > 0) {
