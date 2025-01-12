@@ -228,7 +228,7 @@ public final class SessionImpl implements Session {
         }
 
         for (EditorParticle particle : particles) {
-            particle.update();
+            particle.updateGizmo();
         }
 
         updateOverlay(context);
@@ -276,7 +276,7 @@ public final class SessionImpl implements Session {
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
         for (EditorParticle particle : particles) {
-            particle.hide();
+            particle.hideGizmo();
         }
         particles.clear();
         valid = false;
@@ -301,7 +301,7 @@ public final class SessionImpl implements Session {
         }
         EditorParticle editorParticle = (EditorParticle) particle;
         if (particles.add(editorParticle)) {
-            editorParticle.show();
+            editorParticle.showGizmo();
         }
     }
 
@@ -312,7 +312,7 @@ public final class SessionImpl implements Session {
         }
         EditorParticle editorParticle = (EditorParticle) particle;
         if (particles.remove(editorParticle)) {
-            editorParticle.hide();
+            editorParticle.hideGizmo();
         }
     }
 

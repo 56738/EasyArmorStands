@@ -81,23 +81,23 @@ public class LineBoundingBoxParticle implements BoundingBoxParticle, EditorParti
     }
 
     @Override
-    public void show() {
+    public void showGizmo() {
         for (Line line : lines) {
-            line.particle.show();
+            line.particle.showGizmo();
         }
     }
 
     @Override
-    public void update() {
+    public void updateGizmo() {
         for (Line line : lines) {
-            line.particle.update();
+            line.particle.updateGizmo();
         }
     }
 
     @Override
-    public void hide() {
+    public void hideGizmo() {
         for (Line line : lines) {
-            line.particle.hide();
+            line.particle.hideGizmo();
         }
     }
 

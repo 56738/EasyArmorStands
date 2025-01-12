@@ -93,15 +93,15 @@ public class GizmoLineParticle extends GizmoParticle implements LineParticle {
     }
 
     @Override
-    public void show() {
+    public void showGizmo() {
         updateOffset();
-        super.show();
+        super.showGizmo();
     }
 
     @Override
-    public void update() {
+    public void updateGizmo() {
         updateOffset();
-        super.update();
+        super.updateGizmo();
     }
 
     private void updateOffset() {
