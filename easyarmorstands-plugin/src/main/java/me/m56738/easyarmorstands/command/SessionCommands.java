@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.command;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.ScaleButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
@@ -298,58 +297,6 @@ public class SessionCommands {
         sender.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatPosition(position)));
     }
 
-    @Command("position <position>")
-    @PropertyPermission("easyarmorstands:entity/location")
-    @CommandDescription("easyarmorstands.command.description.position")
-    @RequireElement
-    public void position(EasPlayer sender, Element element, @Argument("position") Location location) {
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location oldLocation = property.getValue();
-        location.setYaw(oldLocation.getYaw());
-        location.setPitch(oldLocation.getPitch());
-        if (!property.setValue(location)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatLocation(location)));
-    }
-
-    @Command("yaw <yaw>")
-    @PropertyPermission("easyarmorstands:entity/location")
-    @CommandDescription("easyarmorstands.command.description.yaw")
-    @RequireElement
-    public void setYaw(EasPlayer sender, Element element, @Argument("yaw") float yaw) {
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = property.getValue();
-        location.setYaw(yaw);
-        if (!property.setValue(location)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-yaw", Util.formatDegrees(yaw)));
-    }
-
-    @Command("pitch <pitch>")
-    @PropertyPermission("easyarmorstands:entity/location")
-    @CommandDescription("easyarmorstands.command.description.pitch")
-    @RequireElement
-    public void setPitch(EasPlayer sender, Element element, @Argument("pitch") float pitch) {
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = property.getValue();
-        location.setPitch(pitch);
-        if (!property.setValue(location)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-pitch", Util.formatDegrees(pitch)));
-    }
-
     @Command("name")
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name")
@@ -455,30 +402,9 @@ public class SessionCommands {
                 property.getType().getValueComponent(canTick)));
     }
 
-    @Command("scale")
-    @PropertyPermission("easyarmorstands:entity/scale")
-    @CommandDescription("easyarmorstands.command.description.scale")
-    @RequireElement
-    public void editScale(EasPlayer sender, Session session, Element element) {
-        ScaleTool scaleTool = null;
-        if (element instanceof EditableElement) {
-            PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-            ToolProvider tools = ((EditableElement) element).getTools(properties);
-            scaleTool = tools.scale(tools.position(), tools.rotation());
-        }
-        if (scaleTool == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
-            return;
-        }
-        ScaleButton scaleButton = session.menuEntryProvider().scale()
-                .setTool(scaleTool)
-                .build();
-        session.pushNode(scaleButton.createNode());
-    }
-
     @Command("scale <value>")
     @PropertyPermission("easyarmorstands:entity/scale")
-    @CommandDescription("easyarmorstands.command.description.scale")
+    @CommandDescription("easyarmorstands.command.description.scale.set")
     @RequireElement
     public void setScale(EasPlayer sender, Element element, @Argument("value") double value) {
         ScaleTool scaleTool = null;

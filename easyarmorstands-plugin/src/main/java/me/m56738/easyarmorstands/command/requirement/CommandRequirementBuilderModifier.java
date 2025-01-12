@@ -19,13 +19,18 @@ public class CommandRequirementBuilderModifier<A extends Annotation> implements 
     }
 
     @Override
-    public Command.Builder<? extends EasCommandSender> modifyBuilder(@NonNull A annotation, Command.Builder<EasCommandSender> builder) {
+    public Command.@NonNull Builder<? extends EasCommandSender> modifyBuilder(@NonNull A annotation, Command.Builder<EasCommandSender> builder) {
+        return builder.apply(requirementProvider.apply(annotation));
+    }
+
+    public static Command.@NonNull Builder<EasCommandSender> addRequirement(
+            Command.@NonNull Builder<EasCommandSender> builder, @NonNull CommandRequirement requirement) {
         List<CommandRequirement> requirements = new ArrayList<>(builder.meta().getOrDefault(CommandRequirement.KEY, Collections.emptyList()));
-        addRequirement(requirementProvider.apply(annotation), requirements);
+        addRequirement(requirement, requirements);
         return builder.meta(CommandRequirement.KEY, requirements);
     }
 
-    private void addRequirement(CommandRequirement requirement, List<CommandRequirement> destination) {
+    private static void addRequirement(CommandRequirement requirement, List<CommandRequirement> destination) {
         for (CommandRequirement parent : requirement.parents()) {
             addRequirement(parent, destination);
         }

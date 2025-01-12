@@ -33,6 +33,7 @@ import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ClipboardCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
+import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
@@ -317,6 +318,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
+
+        PropertyCommands.register(commandManager);
 
         if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
             try {

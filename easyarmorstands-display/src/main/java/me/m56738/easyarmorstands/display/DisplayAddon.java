@@ -4,11 +4,14 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.display.command.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.display.command.DisplayCommands;
+import me.m56738.easyarmorstands.display.command.value.DisplayScaleAxisCommand;
 import me.m56738.easyarmorstands.display.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.display.element.DisplayElementType;
 import me.m56738.easyarmorstands.display.element.InteractionElementProvider;
@@ -27,6 +30,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 public class DisplayAddon implements Addon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
@@ -74,11 +78,12 @@ public class DisplayAddon implements Addon {
         registry.register(new DisplayElementProvider<>(textDisplayType));
         registry.register(new InteractionElementProvider(interactionType));
 
-        plugin.getCommandManager().parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
+        LegacyPaperCommandManager<EasCommandSender> commandManager = plugin.getCommandManager();
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
 
-        if (plugin.getCommandManager().hasBrigadierManager()) {
-            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = plugin.getCommandManager().brigadierManager();
+        if (commandManager.hasBrigadierManager()) {
+            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = commandManager.brigadierManager();
             try {
                 BlockDataArgumentParser.registerBrigadier(brigadierManager);
             } catch (Throwable e) {
@@ -89,6 +94,10 @@ public class DisplayAddon implements Addon {
         }
 
         plugin.getAnnotationParser().parse(new DisplayCommands(this));
+
+        for (Axis axis : Axis.values()) {
+            PropertyCommands.register(commandManager, new DisplayScaleAxisCommand(axis));
+        }
     }
 
     @Override
