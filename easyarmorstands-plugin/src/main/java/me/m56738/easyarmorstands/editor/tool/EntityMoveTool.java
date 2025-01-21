@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -102,6 +103,11 @@ public class EntityMoveTool implements MoveTool {
         public @Nullable Component getDescription() {
             Component value = Util.formatLocation(locationProperty.getValue());
             return Message.component("easyarmorstands.history.move", value);
+        }
+
+        @Override
+        public boolean canSetPosition(Player player) {
+            return player.hasPermission(Permissions.POSITION);
         }
     }
 }

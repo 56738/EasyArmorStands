@@ -62,7 +62,7 @@ public class GroupAxisMoveTool implements AxisMoveTool {
         return false;
     }
 
-    private class SessionImpl extends GroupToolSession<AxisMoveToolSession> implements AxisMoveToolSession {
+    private class SessionImpl extends GroupScalarToolSession<AxisMoveToolSession> implements AxisMoveToolSession {
         private double change;
 
         private SessionImpl() {

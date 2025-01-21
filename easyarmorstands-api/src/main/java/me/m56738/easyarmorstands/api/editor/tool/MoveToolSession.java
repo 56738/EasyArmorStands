@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.editor.Snapper;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -16,4 +17,8 @@ public interface MoveToolSession extends ToolSession {
     @NotNull Vector3dc getPosition();
 
     void setPosition(@NotNull Vector3dc position);
+
+    default boolean canSetPosition(Player player) {
+        return true;
+    }
 }

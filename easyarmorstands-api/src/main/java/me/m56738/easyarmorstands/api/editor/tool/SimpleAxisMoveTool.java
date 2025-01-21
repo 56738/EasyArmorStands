@@ -93,5 +93,10 @@ class SimpleAxisMoveTool implements AxisMoveTool {
         public @Nullable Component getDescription() {
             return moveToolSession.getDescription();
         }
+
+        @Override
+        public boolean canSetValue(Player player) {
+            return moveToolSession.canSetPosition(player);
+        }
     }
 }

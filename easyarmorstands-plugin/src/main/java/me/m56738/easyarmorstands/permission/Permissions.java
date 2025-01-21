@@ -69,6 +69,9 @@ public class Permissions {
     @Description("Allow opening the menu")
     public static final String OPEN = "easyarmorstands.open";
 
+    @Description("Allow teleporting entities")
+    public static final String POSITION = "easyarmorstands.position";
+
     @Description("Allow bypassing PlotSquared restrictions")
     public static final String PLOTSQUARED_BYPASS = "easyarmorstands.plotsquared.bypass";
 

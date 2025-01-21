@@ -128,6 +128,11 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
     }
 
     @Override
+    public boolean canSetValue() {
+        return toolSession.canSetValue(session.player());
+    }
+
+    @Override
     public void setValue(Double value) {
         toolSession.setValue(value);
         hasManualInput = true;

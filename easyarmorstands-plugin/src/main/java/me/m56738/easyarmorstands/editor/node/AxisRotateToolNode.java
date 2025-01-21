@@ -134,6 +134,11 @@ public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     }
 
     @Override
+    public boolean canSetValue() {
+        return toolSession.canSetValue(session.player());
+    }
+
+    @Override
     public void setValue(Double value) {
         toolSession.setValue(Math.toRadians(value));
         hasManualInput = true;

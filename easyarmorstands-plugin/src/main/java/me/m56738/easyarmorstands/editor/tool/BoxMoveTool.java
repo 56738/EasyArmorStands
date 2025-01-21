@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -104,6 +105,11 @@ public class BoxMoveTool implements MoveTool {
         @Override
         public @Nullable Component getDescription() {
             return Message.component("easyarmorstands.history.move-box", Util.formatOffset(offset));
+        }
+
+        @Override
+        public boolean canSetPosition(Player player) {
+            return player.hasPermission(Permissions.POSITION);
         }
     }
 }

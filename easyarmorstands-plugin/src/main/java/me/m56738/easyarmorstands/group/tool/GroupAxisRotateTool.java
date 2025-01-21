@@ -61,7 +61,7 @@ public class GroupAxisRotateTool implements AxisRotateTool {
         return false;
     }
 
-    private class SessionImpl extends GroupToolSession<AxisRotateToolSession> implements AxisRotateToolSession {
+    private class SessionImpl extends GroupScalarToolSession<AxisRotateToolSession> implements AxisRotateToolSession {
         private double change;
 
         private SessionImpl() {

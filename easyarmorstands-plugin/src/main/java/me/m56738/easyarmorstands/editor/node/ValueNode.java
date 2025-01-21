@@ -12,5 +12,9 @@ public interface ValueNode<T> extends Node {
 
     ArgumentParser<CommandSender, T> getParser();
 
+    default boolean canSetValue() {
+        return true;
+    }
+
     void setValue(T value);
 }

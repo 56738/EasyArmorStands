@@ -129,6 +129,11 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
     }
 
     @Override
+    public boolean canSetValue() {
+        return toolSession.canSetValue(session.player());
+    }
+
+    @Override
     public void setValue(Double value) {
         toolSession.setValue(value);
         hasManualInput = true;

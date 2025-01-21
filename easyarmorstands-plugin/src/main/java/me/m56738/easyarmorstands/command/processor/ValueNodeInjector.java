@@ -28,6 +28,10 @@ public class ValueNodeInjector implements ParameterInjector<EasCommandSender, Va
         if (!(node instanceof ValueNode)) {
             return null;
         }
-        return (ValueNode) node;
+        ValueNode valueNode = (ValueNode) node;
+        if (!valueNode.canSetValue()) {
+            return null;
+        }
+        return valueNode;
     }
 }
