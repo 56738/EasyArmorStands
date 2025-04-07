@@ -15,6 +15,8 @@ public class IntegrationConfig {
     public IntegrationEntryConfig fancyHolograms;
     @Setting("GriefDefender")
     public IntegrationEntryConfig griefDefender;
+    @Setting("GriefPrevention")
+    public IntegrationEntryConfig griefPrevention;
     @Setting("Lands")
     public LandsConfig lands;
     @Setting("Residence")

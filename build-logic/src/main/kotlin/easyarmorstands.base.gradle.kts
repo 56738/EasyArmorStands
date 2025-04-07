@@ -39,6 +39,7 @@ repositories {
     maven("https://jitpack.io") {
         mavenContent {
             includeGroup("com.github.angeschossen")
+            includeGroup("com.github.GriefPrevention")
         }
     }
 }

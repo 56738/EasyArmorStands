@@ -41,6 +41,8 @@ integration:
     enabled: true
   GriefDefender:
     enabled: true
+  GriefPrevention:
+    enabled: true
   HeadDatabase:
     enabled: true
   Lands:

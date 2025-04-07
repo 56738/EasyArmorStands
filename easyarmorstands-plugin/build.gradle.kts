@@ -32,6 +32,7 @@ dependencies {
     runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))
     runtimeOnly(project(":easyarmorstands-griefdefender"))
+    runtimeOnly(project(":easyarmorstands-griefprevention"))
     runtimeOnly(project(":easyarmorstands-headdatabase"))
     runtimeOnly(project(":easyarmorstands-lands"))
     runtimeOnly(project(":easyarmorstands-plotsquared"))
