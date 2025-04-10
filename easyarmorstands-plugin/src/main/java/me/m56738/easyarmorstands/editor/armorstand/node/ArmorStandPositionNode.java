@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
-import me.m56738.easyarmorstands.editor.node.ToolMenuManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;

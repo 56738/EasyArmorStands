@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.editor.node;
+package me.m56738.easyarmorstands.api.editor.util;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.editor.tool.ToolContextImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class ToolMenuManager {
         } else {
             rotationProvider = toolProvider.rotation();
         }
-        return new ToolContextImpl(positionProvider, rotationProvider);
+        return ToolContext.of(positionProvider, rotationProvider);
     }
 
     private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {

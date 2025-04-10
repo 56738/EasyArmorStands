@@ -5,12 +5,12 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
-import me.m56738.easyarmorstands.editor.tool.ToolContextImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class DisplayShearNode extends DisplayMenuNode implements ResettableNode 
             // TODO use ToolMenuManager
             addButton(session.menuEntryProvider()
                     .axisRotate()
-                    .setTool(tools.shear(new ToolContextImpl(tools.position(), tools.rotation()), axis))
+                    .setTool(tools.shear(ToolContext.of(tools.position(), tools.rotation()), axis))
                     .build());
         }
     }
