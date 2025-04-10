@@ -1,14 +1,10 @@
-package me.m56738.easyarmorstands.editor.tool;
+package me.m56738.easyarmorstands.api.editor.tool;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Snapper;
-import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
-import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.api.util.EasConversion;
+import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,29 +14,31 @@ import org.joml.Math;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;
 
-public class EntityScaleTool implements ScaleTool {
+class ScalarScaleTool implements ScaleTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> positionProperty;
     private final Property<Double> scaleProperty;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
+    private final double minScale;
+    private final double maxScale;
 
-    public EntityScaleTool(PropertyContainer properties, Property<Location> positionProperty, Property<Double> scaleProperty, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    ScalarScaleTool(ToolContext context, PropertyContainer properties, Property<Location> positionProperty, Property<Double> scaleProperty, double minScale, double maxScale) {
+        this.context = context;
         this.properties = properties;
         this.positionProperty = positionProperty;
         this.scaleProperty = scaleProperty;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
+        this.minScale = minScale;
+        this.maxScale = maxScale;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override
@@ -53,7 +51,7 @@ public class EntityScaleTool implements ScaleTool {
         return scaleProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements ScaleToolSession {
+    private class SessionImpl implements ScaleToolSession {
         private final Location originalLocation;
         private final double originalScale;
         private final double originalEffectiveScale;
@@ -61,11 +59,10 @@ public class EntityScaleTool implements ScaleTool {
         private double scale;
 
         public SessionImpl() {
-            super(properties);
             this.originalLocation = positionProperty.getValue();
             this.originalScale = scaleProperty.getValue();
             this.originalEffectiveScale = getEffectiveScale(originalScale);
-            this.offset = Util.toVector3d(originalLocation).sub(getPosition());
+            this.offset = EasConversion.fromBukkit(originalLocation.toVector()).sub(getPosition());
             this.scale = originalScale;
         }
 
@@ -81,7 +78,7 @@ public class EntityScaleTool implements ScaleTool {
 
         @Override
         public void setChange(double change) {
-            scale = EasyArmorStandsPlugin.getInstance().getConfiguration().limits.entity.clampScale(originalEffectiveScale * change);
+            scale = Math.clamp(minScale, maxScale, originalEffectiveScale * change);
             scaleProperty.setValue(scale);
             updatePosition();
         }
@@ -96,7 +93,7 @@ public class EntityScaleTool implements ScaleTool {
 
         @Override
         public void setValue(double value) {
-            scale = EasyArmorStandsPlugin.getInstance().getConfiguration().limits.entity.clampScale(value);
+            scale = Math.clamp(minScale, maxScale, value);
             scaleProperty.setValue(scale);
             updatePosition();
         }
@@ -108,8 +105,18 @@ public class EntityScaleTool implements ScaleTool {
         }
 
         @Override
+        public void commit(@Nullable Component description) {
+            properties.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return properties.isValid();
+        }
+
+        @Override
         public @Nullable Component getStatus() {
-            return Component.text(Util.SCALE_FORMAT.format(scale));
+            return EasFormat.formatScale(scale);
         }
 
         @Override

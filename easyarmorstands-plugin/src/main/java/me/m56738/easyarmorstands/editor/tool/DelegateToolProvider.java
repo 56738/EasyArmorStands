@@ -6,10 +6,10 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,32 +43,27 @@ public class DelegateToolProvider implements ToolProvider {
     }
 
     @Override
-    @Contract(pure = true)
-    public @Nullable MoveTool move(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
-        return toolProvider.move(positionProvider, rotationProvider);
+    public @Nullable MoveTool move(@NotNull ToolContext context) {
+        return toolProvider.move(context);
     }
 
     @Override
-    @Contract(pure = true)
-    public @Nullable AxisMoveTool move(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        return toolProvider.move(positionProvider, rotationProvider, axis);
+    public @Nullable AxisMoveTool move(@NotNull ToolContext context, @NotNull Axis axis) {
+        return toolProvider.move(context, axis);
     }
 
     @Override
-    @Contract(pure = true)
-    public @Nullable AxisRotateTool rotate(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        return toolProvider.rotate(positionProvider, rotationProvider, axis);
+    public @Nullable AxisRotateTool rotate(@NotNull ToolContext context, @NotNull Axis axis) {
+        return toolProvider.rotate(context, axis);
     }
 
     @Override
-    @Contract(pure = true)
-    public @Nullable ScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
-        return toolProvider.scale(positionProvider, rotationProvider);
+    public @Nullable ScaleTool scale(@NotNull ToolContext context) {
+        return toolProvider.scale(context);
     }
 
     @Override
-    @Contract(pure = true)
-    public @Nullable AxisScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        return toolProvider.scale(positionProvider, rotationProvider, axis);
+    public @Nullable AxisScaleTool scale(@NotNull ToolContext context, @NotNull Axis axis) {
+        return toolProvider.scale(context, axis);
     }
 }

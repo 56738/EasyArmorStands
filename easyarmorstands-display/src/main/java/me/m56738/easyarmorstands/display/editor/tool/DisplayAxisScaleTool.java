@@ -5,10 +5,9 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleToolSession;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.message.Message;
@@ -24,28 +23,26 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayAxisScaleTool implements AxisScaleTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Vector3fc> scaleProperty;
     private final Axis axis;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
 
-    public DisplayAxisScaleTool(PropertyContainer properties, Axis axis, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    public DisplayAxisScaleTool(ToolContext context, PropertyContainer properties, Axis axis) {
+        this.context = context;
         this.properties = properties;
         this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
         this.axis = axis;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override

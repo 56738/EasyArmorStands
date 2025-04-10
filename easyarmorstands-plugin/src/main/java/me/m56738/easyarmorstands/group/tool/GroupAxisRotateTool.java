@@ -4,8 +4,7 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -19,26 +18,24 @@ import org.joml.Vector3dc;
 import java.util.List;
 
 public class GroupAxisRotateTool implements AxisRotateTool {
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
+    private final ToolContext context;
     private final Axis axis;
     private final List<AxisRotateTool> tools;
 
-    public GroupAxisRotateTool(PositionProvider positionProvider, RotationProvider rotationProvider, Axis axis, List<AxisRotateTool> tools) {
+    public GroupAxisRotateTool(ToolContext context, Axis axis, List<AxisRotateTool> tools) {
+        this.context = context;
         this.axis = axis;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
         this.tools = tools;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override

@@ -4,12 +4,12 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
@@ -31,36 +31,34 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayAxisRotateTool implements AxisRotateTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
     private final Property<Float> heightProperty;
     private final Axis axis;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
     private final RotationProvider parentRotationProvider;
 
-    public DisplayAxisRotateTool(PropertyContainer properties, PropertyType<Quaternionfc> type, Axis axis, PositionProvider positionProvider, RotationProvider rotationProvider, RotationProvider parentRotationProvider) {
+    public DisplayAxisRotateTool(ToolContext context, PropertyContainer properties, PropertyType<Quaternionfc> type, Axis axis, RotationProvider parentRotationProvider) {
+        this.context = context;
         this.properties = properties;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         this.heightProperty = properties.get(DisplayPropertyTypes.BOX_HEIGHT);
         this.rotationProperty = properties.get(type);
         this.axis = axis;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
         this.parentRotationProvider = parentRotationProvider;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override

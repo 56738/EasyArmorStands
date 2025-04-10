@@ -34,6 +34,7 @@ dependencies {
     runtimeOnly(project(":easyarmorstands-griefdefender"))
     runtimeOnly(project(":easyarmorstands-griefprevention"))
     runtimeOnly(project(":easyarmorstands-headdatabase"))
+    runtimeOnly(project(":easyarmorstands-itemsadder"))
     runtimeOnly(project(":easyarmorstands-lands"))
     runtimeOnly(project(":easyarmorstands-plotsquared"))
     runtimeOnly(project(":easyarmorstands-residence"))

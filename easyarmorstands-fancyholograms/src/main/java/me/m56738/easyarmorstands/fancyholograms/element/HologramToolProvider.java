@@ -3,9 +3,8 @@ package me.m56738.easyarmorstands.fancyholograms.element;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayAxisScaleTool;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayScaleTool;
 import me.m56738.easyarmorstands.element.SimpleEntityToolProvider;
@@ -18,15 +17,15 @@ public class HologramToolProvider extends SimpleEntityToolProvider {
     }
 
     @Override
-    public @NotNull ScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
-        return new DisplayScaleTool(properties, positionProvider, rotationProvider);
+    public @NotNull ScaleTool scale(@NotNull ToolContext context) {
+        return new DisplayScaleTool(context, properties);
     }
 
     @Override
-    public @Nullable AxisScaleTool scale(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        if (positionProvider == position() && rotationProvider == rotation()) {
-            return new DisplayAxisScaleTool(properties, axis, positionProvider, rotationProvider);
+    public @Nullable AxisScaleTool scale(@NotNull ToolContext context, @NotNull Axis axis) {
+        if (context.position() == position() && context.rotation() == rotation()) {
+            return new DisplayAxisScaleTool(context, properties, axis);
         }
-        return super.scale(positionProvider, rotationProvider, axis);
+        return super.scale(context, axis);
     }
 }

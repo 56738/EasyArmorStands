@@ -3,10 +3,9 @@ package me.m56738.easyarmorstands.element;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartRotationProvider;
@@ -28,7 +27,7 @@ public class ArmorStandPartToolProvider extends DelegateToolProvider {
     }
 
     @Override
-    public @Nullable AxisRotateTool rotate(@NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider, @NotNull Axis axis) {
-        return new ArmorStandPoseTool(properties, part, positionProvider, rotationProvider, axis);
+    public @Nullable AxisRotateTool rotate(@NotNull ToolContext context, @NotNull Axis axis) {
+        return new ArmorStandPoseTool(context, properties, part, axis);
     }
 }

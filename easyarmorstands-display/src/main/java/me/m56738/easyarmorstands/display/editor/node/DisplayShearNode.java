@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
+import me.m56738.easyarmorstands.editor.tool.ToolContextImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +29,10 @@ public class DisplayShearNode extends DisplayMenuNode implements ResettableNode 
         this.rightRotationProperty = properties.get(DisplayPropertyTypes.RIGHT_ROTATION);
         DisplayToolProvider tools = element.getTools(properties);
         for (Axis axis : Axis.values()) {
+            // TODO use ToolMenuManager
             addButton(session.menuEntryProvider()
                     .axisRotate()
-                    .setTool(tools.shear(tools.position(), tools.rotation(), axis))
+                    .setTool(tools.shear(new ToolContextImpl(tools.position(), tools.rotation()), axis))
                     .build());
         }
     }

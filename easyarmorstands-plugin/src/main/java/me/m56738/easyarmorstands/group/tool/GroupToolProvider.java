@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
@@ -36,49 +37,41 @@ public class GroupToolProvider implements ToolProvider {
     }
 
     @Override
-    public @Nullable MoveTool move(
-            @NotNull PositionProvider positionProvider,
-            @NotNull RotationProvider rotationProvider) {
+    public @Nullable MoveTool move(@NotNull ToolContext context) {
         List<MoveTool> tools = new ArrayList<>();
         for (GroupMember member : group.getMembers()) {
-            MoveTool tool = member.getTools().move(positionProvider, rotationProvider);
+            MoveTool tool = member.getTools().move(context);
             if (tool == null) {
-                return ToolProvider.super.move(positionProvider, rotationProvider);
+                return ToolProvider.super.move(context);
             }
             tools.add(tool);
         }
-        return new GroupMoveTool(positionProvider, rotationProvider, tools);
+        return new GroupMoveTool(context, tools);
     }
 
     @Override
-    public @Nullable AxisMoveTool move(
-            @NotNull PositionProvider positionProvider,
-            @NotNull RotationProvider rotationProvider,
-            @NotNull Axis axis) {
+    public @Nullable AxisMoveTool move(@NotNull ToolContext context, @NotNull Axis axis) {
         List<AxisMoveTool> tools = new ArrayList<>();
         for (GroupMember member : group.getMembers()) {
-            AxisMoveTool tool = member.getTools().move(positionProvider, rotationProvider, axis);
+            AxisMoveTool tool = member.getTools().move(context, axis);
             if (tool == null) {
-                return ToolProvider.super.move(positionProvider, rotationProvider, axis);
+                return ToolProvider.super.move(context, axis);
             }
             tools.add(tool);
         }
-        return new GroupAxisMoveTool(positionProvider, rotationProvider, axis, tools);
+        return new GroupAxisMoveTool(context, axis, tools);
     }
 
     @Override
-    public @Nullable AxisRotateTool rotate(
-            @NotNull PositionProvider positionProvider,
-            @NotNull RotationProvider rotationProvider,
-            @NotNull Axis axis) {
+    public @Nullable AxisRotateTool rotate(@NotNull ToolContext context, @NotNull Axis axis) {
         List<AxisRotateTool> tools = new ArrayList<>();
         for (GroupMember member : group.getMembers()) {
-            AxisRotateTool tool = member.getTools().rotate(positionProvider, rotationProvider, axis);
+            AxisRotateTool tool = member.getTools().rotate(context, axis);
             if (tool == null) {
-                return ToolProvider.super.rotate(positionProvider, rotationProvider, axis);
+                return ToolProvider.super.rotate(context, axis);
             }
             tools.add(tool);
         }
-        return new GroupAxisRotateTool(positionProvider, rotationProvider, axis, tools);
+        return new GroupAxisRotateTool(context, axis, tools);
     }
 }

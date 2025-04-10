@@ -4,10 +4,9 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
@@ -21,26 +20,24 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayScaleTool implements ScaleTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Vector3fc> scaleProperty;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
 
-    public DisplayScaleTool(PropertyContainer properties, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    public DisplayScaleTool(ToolContext context, PropertyContainer properties) {
+        this.context = context;
         this.properties = properties;
         this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override

@@ -1,16 +1,11 @@
-package me.m56738.easyarmorstands.editor.tool;
+package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
-import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
-import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.api.util.EasConversion;
+import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,32 +15,30 @@ import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
-public class EntityYawTool implements AxisRotateTool {
+class LocationPitchRotateTool implements AxisRotateTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
 
-    public EntityYawTool(PropertyContainer properties, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    LocationPitchRotateTool(ToolContext context, PropertyContainer properties, Property<Location> locationProperty) {
+        this.context = context;
         this.properties = properties;
-        this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
+        this.locationProperty = locationProperty;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override
     public @NotNull Axis getAxis() {
-        return Axis.Y;
+        return Axis.X;
     }
 
     @Override
@@ -58,39 +51,44 @@ public class EntityYawTool implements AxisRotateTool {
         return locationProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements AxisRotateToolSession {
+    private class SessionImpl implements AxisRotateToolSession {
         private final Location originalLocation;
         private final Vector3dc originalOffset;
+        private final Vector3dc direction;
         private final Vector3d offsetChange = new Vector3d();
 
         public SessionImpl() {
-            super(properties);
             this.originalLocation = locationProperty.getValue().clone();
-            this.originalOffset = Util.toVector3d(originalLocation).sub(getPosition());
+            this.originalOffset = EasConversion.fromBukkit(originalLocation.toVector()).sub(getPosition());
+            this.direction = getAxis().getDirection().rotate(getRotation(), new Vector3d());
         }
 
         @Override
         public void setChange(double change) {
-            originalOffset.rotateY(change, offsetChange).sub(originalOffset);
+            originalOffset.rotateAxis(change,
+                            direction.x(),
+                            direction.y(),
+                            direction.z(), offsetChange)
+                    .sub(originalOffset);
 
             Location location = originalLocation.clone();
             location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setYaw(location.getYaw() - (float) Math.toDegrees(change));
+            location.setPitch(location.getPitch() + (float) Math.toDegrees(change));
             locationProperty.setValue(location);
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            double original = Math.toRadians(originalLocation.getYaw());
-            change -= original;
-            change = context.snapAngle(change);
+            double original = Math.toRadians(originalLocation.getPitch());
             change += original;
+            change = context.snapAngle(change);
+            change -= original;
             return change;
         }
 
         @Override
         public void setValue(double value) {
-            setChange(Math.toRadians(originalLocation.getYaw()) - value);
+            setChange(value - Math.toRadians(originalLocation.getPitch()));
         }
 
         @Override
@@ -99,13 +97,23 @@ public class EntityYawTool implements AxisRotateTool {
         }
 
         @Override
+        public void commit(@Nullable Component description) {
+            properties.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return properties.isValid();
+        }
+
+        @Override
         public @Nullable Component getStatus() {
-            return Util.formatDegrees(locationProperty.getValue().getYaw());
+            return EasFormat.formatDegrees(locationProperty.getValue().getPitch());
         }
 
         @Override
         public @Nullable Component getDescription() {
-            return Message.component("easyarmorstands.history.rotate-yaw");
+            return Component.translatable("easyarmorstands.history.rotate-pitch");
         }
     }
 }

@@ -3,8 +3,7 @@ package me.m56738.easyarmorstands.group.tool;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -19,24 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupMoveTool implements MoveTool {
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
+    private final ToolContext context;
     private final List<MoveTool> tools;
 
-    public GroupMoveTool(PositionProvider positionProvider, RotationProvider rotationProvider, List<MoveTool> tools) {
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
+    public GroupMoveTool(ToolContext context, List<MoveTool> tools) {
+        this.context = context;
         this.tools = new ArrayList<>(tools);
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override
@@ -60,7 +57,7 @@ public class GroupMoveTool implements MoveTool {
 
         private SessionImpl() {
             super(tools);
-            originalPosition = new Vector3d(positionProvider.getPosition());
+            originalPosition = new Vector3d(context.position().getPosition());
         }
 
         @Override

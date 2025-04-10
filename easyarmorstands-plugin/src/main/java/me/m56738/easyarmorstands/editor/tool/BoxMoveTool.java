@@ -3,8 +3,7 @@ package me.m56738.easyarmorstands.editor.tool;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
 import me.m56738.easyarmorstands.message.Message;
@@ -20,23 +19,21 @@ import org.joml.Vector3dc;
 
 public class BoxMoveTool implements MoveTool {
     private final BoundingBoxEditor editor;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
+    private final ToolContext context;
 
-    public BoxMoveTool(BoundingBoxEditor editor, PositionProvider positionProvider, RotationProvider rotationProvider) {
+    public BoxMoveTool(BoundingBoxEditor editor, ToolContext context) {
         this.editor = editor;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
+        this.context = context;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override

@@ -9,9 +9,11 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.editor.tool.ToolContextImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class ToolMenuManager {
         return mode;
     }
 
-    private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {
+    private ToolContext createToolContext() {
         PositionProvider positionProvider = toolProvider.position();
         RotationProvider rotationProvider;
         if (mode == ToolMenuMode.GLOBAL) {
@@ -69,9 +71,14 @@ public class ToolMenuManager {
         } else {
             rotationProvider = toolProvider.rotation();
         }
+        return new ToolContextImpl(positionProvider, rotationProvider);
+    }
+
+    private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {
+        ToolContext context = createToolContext();
 
         if (mode == ToolMenuMode.SCALE) {
-            ScaleTool scaleTool = toolProvider.scale(positionProvider, rotationProvider);
+            ScaleTool scaleTool = toolProvider.scale(context);
             if (scaleTool != null && scaleTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .scale()
@@ -80,7 +87,7 @@ public class ToolMenuManager {
                         .build());
             }
             for (Axis axis : Axis.values()) {
-                AxisScaleTool axisScaleTool = toolProvider.scale(positionProvider, rotationProvider, axis);
+                AxisScaleTool axisScaleTool = toolProvider.scale(context, axis);
                 if (axisScaleTool != null && axisScaleTool.canUse(session.player())) {
                     buttons.add(session.menuEntryProvider()
                             .axisScale()
@@ -91,7 +98,7 @@ public class ToolMenuManager {
             return;
         }
 
-        MoveTool moveTool = toolProvider.move(positionProvider, rotationProvider);
+        MoveTool moveTool = toolProvider.move(context);
         if (moveTool != null && moveTool.canUse(session.player())) {
             buttons.add(session.menuEntryProvider()
                     .move()
@@ -100,14 +107,14 @@ public class ToolMenuManager {
                     .build());
         }
         for (Axis axis : Axis.values()) {
-            AxisMoveTool axisMoveTool = toolProvider.move(positionProvider, rotationProvider, axis);
+            AxisMoveTool axisMoveTool = toolProvider.move(context, axis);
             if (axisMoveTool != null && axisMoveTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .axisMove()
                         .setTool(axisMoveTool)
                         .build());
             }
-            AxisRotateTool axisRotateTool = toolProvider.rotate(positionProvider, rotationProvider, axis);
+            AxisRotateTool axisRotateTool = toolProvider.rotate(context, axis);
             if (axisRotateTool != null && axisRotateTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
                         .axisRotate()

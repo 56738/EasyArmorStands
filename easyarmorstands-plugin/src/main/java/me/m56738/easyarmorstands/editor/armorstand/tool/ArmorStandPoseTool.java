@@ -5,12 +5,11 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
+import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
@@ -26,30 +25,28 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ArmorStandPoseTool implements AxisRotateTool {
+    private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
     private final Property<EulerAngle> poseProperty;
-    private final PositionProvider positionProvider;
-    private final RotationProvider rotationProvider;
     private final Axis axis;
 
-    public ArmorStandPoseTool(PropertyContainer properties, ArmorStandPart part, PositionProvider positionProvider, RotationProvider rotationProvider, Axis axis) {
+    public ArmorStandPoseTool(ToolContext context, PropertyContainer properties, ArmorStandPart part, Axis axis) {
+        this.context = context;
         this.properties = properties;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.poseProperty = properties.get(ArmorStandPropertyTypes.POSE.get(part));
         this.axis = axis;
-        this.positionProvider = positionProvider;
-        this.rotationProvider = rotationProvider;
     }
 
     @Override
     public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+        return context.position().getPosition();
     }
 
     @Override
     public @NotNull Quaterniondc getRotation() {
-        return rotationProvider.getRotation();
+        return context.rotation().getRotation();
     }
 
     @Override
