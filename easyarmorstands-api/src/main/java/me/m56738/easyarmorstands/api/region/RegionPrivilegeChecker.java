@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 public interface RegionPrivilegeChecker {
     boolean isAllowed(Player player, Location location);
 
+    default boolean isAllowed(Player player, Location location, boolean silent) {
+        return isAllowed(player, location);
+    }
+
     boolean canBypass(Player player);
 
     void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties);

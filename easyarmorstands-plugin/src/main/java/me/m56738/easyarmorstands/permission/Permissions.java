@@ -63,6 +63,9 @@ public class Permissions {
     @Description("Allow showing the history")
     public static final String HISTORY = "easyarmorstands.history";
 
+    @Description("Allow bypassing HuskClaims restrictions")
+    public static final String HUSKCLAIMS_BYPASS = "easyarmorstands.huskclaims.bypass";
+
     @Description("Allow viewing details of the selected entity")
     public static final String INFO = "easyarmorstands.info";
 

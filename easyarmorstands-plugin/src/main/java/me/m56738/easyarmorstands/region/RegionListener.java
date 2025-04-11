@@ -28,8 +28,8 @@ public class RegionListener implements Listener {
         this.privilegeChecker = privilegeChecker;
     }
 
-    private boolean isAllowed(Player player, Location location) {
-        return privilegeChecker.isAllowed(player, location);
+    private boolean isAllowed(Player player, Location location, boolean silent) {
+        return privilegeChecker.isAllowed(player, location, silent);
     }
 
     @EventHandler
@@ -39,10 +39,10 @@ public class RegionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDiscover(PlayerDiscoverElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
+        if (canBypass(event.getPlayer())) {
             return;
         }
-        if (canBypass(event.getPlayer())) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue(), true)) {
             return;
         }
         event.setCancelled(true);
@@ -50,10 +50,10 @@ public class RegionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEdit(PlayerEditElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
+        if (canBypass(event.getPlayer())) {
             return;
         }
-        if (canBypass(event.getPlayer())) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue(), false)) {
             return;
         }
         event.setCancelled(true);
@@ -62,10 +62,10 @@ public class RegionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSpawn(PlayerCreateElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
+        if (canBypass(event.getPlayer())) {
             return;
         }
-        if (canBypass(event.getPlayer())) {
+        if (isAllowed(event.getPlayer(), event.getProperties().get(EntityPropertyTypes.LOCATION).getValue(), false)) {
             return;
         }
         event.setCancelled(true);
@@ -78,27 +78,27 @@ public class RegionListener implements Listener {
         if (!(element instanceof EntityElement<?>)) {
             return;
         }
+        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
+            return;
+        }
         Entity entity = ((EntityElement<?>) element).getEntity();
-        if (isAllowed(event.getPlayer(), entity.getLocation())) {
+        if (isAllowed(event.getPlayer(), entity.getLocation(), true)) {
             if (event.getProperty().getType() != EntityPropertyTypes.LOCATION) {
                 return;
             }
-            if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue())) {
+            if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue(), true)) {
                 return;
             }
-        }
-        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
-            return;
         }
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDestroy(PlayerDestroyElementEvent event) {
-        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue())) {
+        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
             return;
         }
-        if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
+        if (isAllowed(event.getPlayer(), event.getElement().getProperties().get(EntityPropertyTypes.LOCATION).getValue(), false)) {
             return;
         }
         event.setCancelled(true);

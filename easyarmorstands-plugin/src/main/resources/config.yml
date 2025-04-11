@@ -45,6 +45,8 @@ integration:
     enabled: true
   HeadDatabase:
     enabled: true
+  HuskClaims:
+    enabled: true
   Lands:
     enabled: true
     flag:

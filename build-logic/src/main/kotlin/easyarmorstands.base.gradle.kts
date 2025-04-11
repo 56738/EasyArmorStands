@@ -36,6 +36,11 @@ repositories {
             includeModule("de.oliver", "FancyHolograms")
         }
     }
+    maven("https://repo.william278.net/releases") {
+        mavenContent {
+            includeGroup("net.william278.huskclaims")
+        }
+    }
     maven("https://jitpack.io") {
         mavenContent {
             includeGroup("com.github.angeschossen")

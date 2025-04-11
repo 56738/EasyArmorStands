@@ -14,6 +14,7 @@ griefdefender = "2.1.0-SNAPSHOT"
 griefprevention = "16.18.4"
 hangar-publish-plugin = "0.1.3"
 headdatabase-api = "1.3.2"
+huskclaims = "1.5.2"
 joml = "1.10.8"
 lands = "7.10.6"
 residence = "4.5._13.1"
@@ -45,6 +46,7 @@ gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" 
 griefdefender-api = { module = "com.griefdefender:api", version.ref = "griefdefender" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 headdatabase-api = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabase-api" }
+huskclaims-bukkit = { module = "net.william278.huskclaims:huskclaims-bukkit", version.ref = "huskclaims" }
 joml = { module = "org.joml:joml", version.ref = "joml" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
 residence = { module = "com.bekvon.bukkit.residence:Residence", version.ref = "residence" }

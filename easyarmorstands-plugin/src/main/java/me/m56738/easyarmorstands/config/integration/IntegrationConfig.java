@@ -17,6 +17,8 @@ public class IntegrationConfig {
     public IntegrationEntryConfig griefDefender;
     @Setting("GriefPrevention")
     public IntegrationEntryConfig griefPrevention;
+    @Setting("HuskClaims")
+    public IntegrationEntryConfig huskClaims;
     @Setting("Lands")
     public LandsConfig lands;
     @Setting("Residence")
