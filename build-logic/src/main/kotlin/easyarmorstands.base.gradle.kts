@@ -36,11 +36,6 @@ repositories {
             includeModule("de.oliver", "FancyHolograms")
         }
     }
-    maven("https://maven.devs.beer") {
-        mavenContent {
-            includeGroup("dev.lone")
-        }
-    }
     maven("https://jitpack.io") {
         mavenContent {
             includeGroup("com.github.angeschossen")
