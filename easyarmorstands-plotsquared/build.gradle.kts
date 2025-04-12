@@ -7,11 +7,10 @@ dependencies {
     compileOnly(libs.bukkit) {
         isTransitive = false
     }
-    implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.31"))
-    compileOnly("com.plotsquared:PlotSquared-Core") {
+    compileOnly(libs.plotsquared.core) {
         exclude("net.kyori", "adventure-api")
     }
-    compileOnly("com.plotsquared:PlotSquared-Bukkit") {
+    compileOnly(libs.plotsquared.bukkit) {
         isTransitive = false
     }
 }
