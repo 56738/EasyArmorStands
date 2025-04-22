@@ -218,6 +218,9 @@ easyarmorstands:entity/equipment/legs:
 easyarmorstands:entity/equipment/off_hand:
   name: <lang:easyarmorstands.property.equipment.off-hand.name>
   permission: easyarmorstands.property.equipment.offhand
+easyarmorstands:entity/equipment/saddle:
+  name: <lang:easyarmorstands.property.equipment.saddle.name>
+  permission: easyarmorstands.property.equipment.saddle
 easyarmorstands:entity/glowing:
   button:
     description:

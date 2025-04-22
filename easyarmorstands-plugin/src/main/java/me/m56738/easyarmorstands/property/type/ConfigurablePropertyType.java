@@ -42,7 +42,7 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
     @Override
     public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         permission = config.node("permission").getString();
-        name = config.node("name").get(Component.class);
+        name = config.node("name").require(Component.class);
         buttonTemplate = config.node("button").get(SimpleItemTemplate.class);
 
         if (registeredPermission != null) {

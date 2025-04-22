@@ -20,3 +20,6 @@ include("easyarmorstands-towny")
 include("easyarmorstands-traincarts")
 include("easyarmorstands-worldguard-v6")
 include("easyarmorstands-worldguard-v7")
+
+includeBuild("adventure")
+includeBuild("adventure-platform")

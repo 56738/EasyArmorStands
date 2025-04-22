@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 # Installation
 
-**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.4
+**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.5
 
 Download the latest `.jar` file and place it in your `plugins` folder.
 
@@ -186,6 +186,27 @@ Players with the `easyarmorstands.worldguard.bypass` permission bypass this rest
 If GriefDefender is installed, only trusted builders can edit entities in a claim.
 
 Players with the `easyarmorstands.griefdefender.bypass` permission bypass this restriction.
+
+## GriefPrevention integration
+
+If GriefPrevention is installed, players can only edit entities if they are allowed to build.
+
+Players with the `easyarmorstands.griefprevention.bypass` permission bypass this restriction.
+
+## HuskClaims integration
+
+If HuskClaims is installed, players can only edit entities if they are allowed to perform the `easyarmorstands:edit`
+operation.
+
+The `easyarmorstands:edit` operation (flag) should be configured in the
+[HuskClaims config](https://william278.net/docs/huskclaims/config).
+
+* Add it to `wilderness_rules` in `config.yml` to allow using EasyArmorStands in the wilderness.
+* Add it to `allowed_owner_operations` in `trust_levels.yml` to allow players ot use EasyArmorStands in their own plots.
+* Add it to `flags` of certain `trust_levels` in `trust_levels.yml` to configure which trust levels can use
+  EasyArmorStands in claims.
+
+Players with the `easyarmorstands.huskclaims.bypass` permission bypass this restriction.
 
 ## Towny integration
 
