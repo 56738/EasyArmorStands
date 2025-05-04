@@ -29,6 +29,7 @@ dependencies {
         exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
     }
     api(libs.gizmo.bukkit)
+    api(libs.item.nbt.api)
     runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))
     runtimeOnly(project(":easyarmorstands-griefdefender"))
@@ -70,6 +71,7 @@ tasks {
         relocate("org.joml", "$prefix.joml")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
         relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
+        relocate("de.tr7zw.changeme.nbtapi", "$prefix.nbtapi")
         dependencies {
             exclude(dependency("com.google.code.gson:gson"))
         }

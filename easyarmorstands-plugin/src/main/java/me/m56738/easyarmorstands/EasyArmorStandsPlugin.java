@@ -617,9 +617,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         ItemStack item = config.editor.tool.render(locale);
         ToolCapability toolCapability = getCapability(ToolCapability.class);
         if (toolCapability != null) {
-            ItemMeta meta = item.getItemMeta();
-            toolCapability.configureTool(meta);
-            item.setItemMeta(meta);
+            toolCapability.configureTool(item);
         }
         return item;
     }

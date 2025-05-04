@@ -41,6 +41,11 @@ repositories {
             includeGroup("net.william278.huskclaims")
         }
     }
+    maven("https://repo.codemc.io/repository/maven-public/") {
+        mavenContent {
+            includeGroup("de.tr7zw")
+        }
+    }
     maven("https://jitpack.io") {
         mavenContent {
             includeGroup("com.github.angeschossen")

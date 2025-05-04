@@ -7,3 +7,4 @@ me.m56738.easyarmorstands.capability.itemcolor.v1_8.ItemColorCapabilityProvider
 me.m56738.easyarmorstands.capability.lock.v1_8.LockCapabilityProvider
 me.m56738.easyarmorstands.capability.lookup.v1_8.LookupCapabilityProvider
 me.m56738.easyarmorstands.capability.spawn.v1_8.SpawnCapabilityProvider
+me.m56738.easyarmorstands.capability.tool.v1_8.ToolCapabilityProvider

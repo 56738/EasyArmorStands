@@ -52,8 +52,13 @@ public class ToolCapabilityProvider implements CapabilityProvider<ToolCapability
         }
 
         @Override
-        public void configureTool(ItemMeta meta) {
+        public void configureTool(ItemStack item) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) {
+                return;
+            }
             meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+            item.setItemMeta(meta);
         }
     }
 }
