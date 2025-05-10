@@ -1,6 +1,7 @@
 [versions]
 adventure-api = "4.20.0"
 adventure-platform = "4.3.4"
+bentobox = "2.7.0-SNAPSHOT"
 brigadier = "1.0.17"
 bstats = "3.1.0"
 bukkit = "1.8.8-R0.1-SNAPSHOT"
@@ -34,6 +35,7 @@ adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", 
 adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-api" }
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
 adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure-api" }
+bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }

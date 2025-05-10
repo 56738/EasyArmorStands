@@ -227,6 +227,12 @@ can be used to restrict editing entities.
 
 Players with the `easyarmorstands.lands.bypass` permission bypass this restriction.
 
+## BentoBox integration
+
+If BentoBox is installed, the flag `ARMOR_STAND` is required to edit entities.
+
+Players with the `easyarmorstands.bentobox.bypass` permission bypass this restriction.
+
 # Configuration
 
 Configuration files, including all menu layouts, are automatically generated in the plugin folder.

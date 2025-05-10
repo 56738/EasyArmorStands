@@ -15,6 +15,9 @@ public class Permissions {
     @Description("Allow aligning entities to the block grid")
     public static final String ALIGN = "easyarmorstands.align";
 
+    @Description("Allow bypassing BentoBox restrictions")
+    public static final String BENTOBOX_BYPASS = "easyarmorstands.bentobox.bypass";
+
     @Description("Allow copying properties")
     public static final String CLIPBOARD = "easyarmorstands.clipboard";
 

@@ -7,6 +7,8 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @ConfigSerializable
 public class IntegrationConfig {
+    @Setting("BentoBox")
+    public IntegrationEntryConfig bentoBox;
     @Setting("WorldGuard")
     public IntegrationEntryConfig worldGuard;
     @Setting("PlotSquared")

@@ -37,6 +37,8 @@ editor:
     name: <gold><lang:easyarmorstands.tool-name>
     type: blaze_rod
 integration:
+  BentoBox:
+    enabled: true
   FancyHolograms:
     enabled: true
   GriefDefender:
