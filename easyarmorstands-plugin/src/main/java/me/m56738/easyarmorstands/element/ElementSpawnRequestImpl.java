@@ -47,11 +47,17 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
     public @Nullable Element spawn() {
         PropertyMap properties = new PropertyMap();
         if (player != null) {
-            Vector offset = player.get().getEyeLocation().getDirection().multiply(2);
+            Location originLocation;
+            if (type.isSpawnedAtEyeHeight()) {
+                originLocation = player.get().getEyeLocation();
+            } else {
+                originLocation = player.get().getLocation();
+            }
+            Vector offset = originLocation.getDirection().multiply(2);
             if (!player.get().isFlying()) {
                 offset.setY(0);
             }
-            Location location = player.get().getEyeLocation().add(offset);
+            Location location = originLocation.add(offset);
             location.setYaw(location.getYaw() + 180);
             Session session = player.session();
             if (session != null) {

@@ -29,6 +29,15 @@ public interface ElementType {
     }
 
     /**
+     * Whether the element is spawned at the eye height of the player instead of at their feet.
+     *
+     * @return true if spawned at eye height
+     */
+    default boolean isSpawnedAtEyeHeight() {
+        return true;
+    }
+
+    /**
      * Returns the display name of this element type.
      * <p>
      * For example, this is displayed in spawn buttons and history actions.

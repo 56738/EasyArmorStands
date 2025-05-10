@@ -23,4 +23,9 @@ public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
         properties.put(ArmorStandPropertyTypes.BASE_PLATE, false);
         properties.put(ArmorStandPropertyTypes.ARMS, true);
     }
+
+    @Override
+    public boolean isSpawnedAtEyeHeight() {
+        return false;
+    }
 }
