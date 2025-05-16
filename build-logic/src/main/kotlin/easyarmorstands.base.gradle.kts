@@ -2,9 +2,6 @@ plugins {
     id("java-library")
 }
 
-group = "me.m56738"
-version = property("version")!!
-
 repositories {
     mavenCentral()
     maven("https://repo.56738.me")
