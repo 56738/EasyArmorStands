@@ -3,19 +3,14 @@ package me.m56738.easyarmorstands.message;
 import me.m56738.easyarmorstands.config.EasConfig;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.renderer.ComponentRenderer;
-import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.translation.TranslationStore;
 import net.kyori.adventure.translation.Translator;
 import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,9 +35,7 @@ public class MessageManager {
     private final Plugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final Map<MessageStyle, String> styleTemplates = new HashMap<>();
-    private final TranslatorImpl translator = new TranslatorImpl();
-    private final TranslatableComponentRenderer<Locale> renderer = TranslatableComponentRenderer.usingTranslationSource(translator);
-    private TranslationRegistry registry = TranslationRegistry.create(key);
+    private TranslationStore.StringBased<MessageFormat> registry = TranslationStore.messageFormat(key);
 
     public MessageManager(Plugin plugin) {
         this.plugin = plugin;
@@ -54,7 +47,7 @@ public class MessageManager {
 
         GlobalTranslator.translator().removeSource(registry);
 
-        registry = TranslationRegistry.create(key);
+        registry = TranslationStore.messageFormat(key);
 
         // Load default locale from included or custom messages.properties
         Path path = plugin.getDataFolder().toPath();
@@ -110,30 +103,5 @@ public class MessageManager {
                         .tag("message", Tag.selfClosingInserting(message))
                         .resolver(resolver)
                         .build());
-    }
-
-    public Translator translator() {
-        return translator;
-    }
-
-    public ComponentRenderer<Locale> renderer() {
-        return renderer;
-    }
-
-    private class TranslatorImpl implements Translator {
-        @Override
-        public @NotNull Key name() {
-            return registry.name();
-        }
-
-        @Override
-        public @Nullable MessageFormat translate(@NotNull String key, @NotNull Locale locale) {
-            return registry.translate(key, locale);
-        }
-
-        @Override
-        public @Nullable Component translate(@NotNull TranslatableComponent component, @NotNull Locale locale) {
-            return registry.translate(component, locale);
-        }
     }
 }
