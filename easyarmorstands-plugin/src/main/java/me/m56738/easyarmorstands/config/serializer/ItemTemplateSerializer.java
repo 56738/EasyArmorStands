@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.config.serializer;
 
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.item.ItemRenderer;
+import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +20,11 @@ import java.util.List;
 
 public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
     private final @Nullable MethodHandle customModelDataSetter;
+    private final @Nullable MethodHandle hideTooltipSetter;
 
     public ItemTemplateSerializer() {
         customModelDataSetter = findCustomModelDataSetter();
+        hideTooltipSetter = findHideTooltipSetter();
     }
 
     @SuppressWarnings("JavaLangInvokeHandleSignature")
@@ -30,6 +32,16 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
         try {
             return MethodHandles.lookup().findVirtual(ItemMeta.class, "setCustomModelData",
                     MethodType.methodType(void.class, Integer.class));
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("JavaLangInvokeHandleSignature")
+    private static MethodHandle findHideTooltipSetter() {
+        try {
+            return MethodHandles.lookup().findVirtual(ItemMeta.class, "setHideTooltip",
+                    MethodType.methodType(void.class, boolean.class));
         } catch (ReflectiveOperationException e) {
             return null;
         }
@@ -51,6 +63,13 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
             if (customModelDataSetter != null) {
                 try {
                     customModelDataSetter.invoke(meta, node.node("custom-model-data").get(Integer.class));
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (hideTooltipSetter != null) {
+                try {
+                    hideTooltipSetter.invoke(meta, node.node("hide-tooltip").getBoolean());
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }

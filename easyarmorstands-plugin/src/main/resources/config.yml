@@ -20,6 +20,7 @@ editor:
           data: 3
           name: ''
           type: stained_glass_pane
+          hide-tooltip: true
       type: easyarmorstands:background
   scale:
     max-distance: 64.0
