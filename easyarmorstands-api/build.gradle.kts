@@ -10,6 +10,7 @@ dependencies {
     }
     api(libs.adventure.api)
     api(libs.adventure.text.minimessage)
+    api(libs.adventure.text.serializer.plain)
     api(libs.configurate.core)
     api(libs.configurate.yaml)
     api(libs.joml) {

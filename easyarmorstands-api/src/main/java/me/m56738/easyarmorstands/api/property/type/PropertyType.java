@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +49,16 @@ public interface PropertyType<T> extends Keyed {
      * @return The formatted value.
      */
     @NotNull Component getValueComponent(@NotNull T value);
+
+    /**
+     * Format a value as a string.
+     *
+     * @param value The value to format.
+     * @return The formatted value.
+     */
+    default @NotNull String getValueString(@NotNull T value) {
+        return PlainTextComponentSerializer.plainText().serialize(getValueComponent(value));
+    }
 
     default void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
     }

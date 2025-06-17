@@ -175,6 +175,7 @@ public class GlobalCommands {
 
     private <T> void appendPropertyDebug(TextComponent.Builder builder, Property<T> property) {
         PropertyType<T> type = property.getType();
+        T value = Objects.requireNonNull(property.getValue());
 
         TextComponent.Builder hover = Component.text();
         hover.append(Component.text(type.key().namespace() + ':', NamedTextColor.YELLOW)
@@ -182,7 +183,7 @@ public class GlobalCommands {
         hover.appendNewline();
         hover.append(debugLine(Component.text("Type"), Component.text(type.getClass().getName())));
         hover.appendNewline();
-        hover.append(debugLine(Component.text("Value"), type.getValueComponent(Objects.requireNonNull(property.getValue()))));
+        hover.append(debugLine(Component.text("Value"), type.getValueComponent(value)));
         String permission = type.getPermission();
         if (permission != null) {
             hover.appendNewline();
@@ -192,7 +193,7 @@ public class GlobalCommands {
         if (!builder.children().isEmpty()) {
             builder.append(Component.text(", "));
         }
-        builder.append(type.getName().hoverEvent(hover.build()));
+        builder.append(type.getName().hoverEvent(hover.build()).clickEvent(ClickEvent.copyToClipboard(type.getValueString(value))));
     }
 
     private Component debugLine(Component key, Component value) {
