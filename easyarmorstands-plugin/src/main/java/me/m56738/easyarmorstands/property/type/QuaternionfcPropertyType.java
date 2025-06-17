@@ -15,7 +15,7 @@ public class QuaternionfcPropertyType extends ConfigurablePropertyType<Quaternio
 
     @Override
     public @NotNull Component getValueComponent(@NotNull Quaternionfc value) {
-        return Util.formatAngle(Util.toEuler(new Quaterniond(value)));
+        return Util.formatRotation(new Quaterniond(value));
     }
 
     @Override

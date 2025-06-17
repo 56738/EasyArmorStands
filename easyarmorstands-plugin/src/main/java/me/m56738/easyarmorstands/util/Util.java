@@ -81,6 +81,18 @@ public class Util {
                 Math.toDegrees(angle.getZ())));
     }
 
+    public static Component formatRotation(Quaterniondc rotation) {
+        return Component.text()
+                .append(Component.text(rotation.x(), NamedTextColor.RED))
+                .append(Component.text(", "))
+                .append(Component.text(rotation.y(), NamedTextColor.GREEN))
+                .append(Component.text(", "))
+                .append(Component.text(rotation.z(), NamedTextColor.BLUE))
+                .append(Component.text(", "))
+                .append(Component.text(rotation.w(), NamedTextColor.WHITE))
+                .build();
+    }
+
     public static Component formatScale(double scale) {
         return Component.text(SCALE_FORMAT.format(scale));
     }
