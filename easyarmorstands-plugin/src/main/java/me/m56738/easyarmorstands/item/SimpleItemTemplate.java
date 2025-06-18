@@ -64,7 +64,7 @@ public class SimpleItemTemplate implements ItemTemplate {
                 componentCapability.setDisplayName(meta, renderName(locale, resolver));
             }
             componentCapability.setLore(meta, renderLore(locale, resolver));
-            meta.addItemFlags(ItemFlag.values());
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }
         return item;

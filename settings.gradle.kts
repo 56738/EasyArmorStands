@@ -4,6 +4,8 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
+includeBuild("adventure-platform")
+
 include("easyarmorstands-api")
 include("easyarmorstands-bentobox")
 include("easyarmorstands-display")
