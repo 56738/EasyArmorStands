@@ -329,6 +329,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             }
         }
 
+        addonManager.enable();
+
         loadUpdateChecker();
         loadMenuTemplates();
 
@@ -338,8 +340,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 getServer().getPluginManager().registerEvents((Listener) capability, this);
             }
         }
-
-        addonManager.enable();
     }
 
     private Callable<BufferedReader> getDefaultConfigSource(String name) {
