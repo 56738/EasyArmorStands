@@ -28,9 +28,10 @@ import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.brigadier.BrigadierManagerHolder;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
-import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 public class DisplayAddon implements Addon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;
@@ -78,26 +79,37 @@ public class DisplayAddon implements Addon {
         registry.register(new DisplayElementProvider<>(textDisplayType));
         registry.register(new InteractionElementProvider(interactionType));
 
-        LegacyPaperCommandManager<EasCommandSender> commandManager = plugin.getCommandManager();
+        CommandManager<EasCommandSender> commandManager = plugin.getCommandManager();
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
-
-        if (commandManager.hasBrigadierManager()) {
-            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = commandManager.brigadierManager();
-            try {
-                BlockDataArgumentParser.registerBrigadier(brigadierManager);
-            } catch (Throwable e) {
-                plugin.getLogger().warning("Failed to register Brigadier mappings for block data arguments");
-            }
-            brigadierManager.registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
-            }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
-        }
+        registerBrigadierMappings(commandManager, plugin);
 
         plugin.getAnnotationParser().parse(new DisplayCommands(this));
 
         for (Axis axis : Axis.values()) {
             PropertyCommands.register(commandManager, new DisplayScaleAxisCommand(axis));
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void registerBrigadierMappings(CommandManager<EasCommandSender> commandManager, EasyArmorStandsPlugin plugin) {
+        if (commandManager instanceof BrigadierManagerHolder) {
+            BrigadierManagerHolder<EasCommandSender, ?> brigadierManagerHolder = (BrigadierManagerHolder<EasCommandSender, ?>) commandManager;
+            if (brigadierManagerHolder.hasBrigadierManager()) {
+                registerBrigadierMappings(plugin, brigadierManagerHolder);
+            }
+        }
+    }
+
+    private static void registerBrigadierMappings(EasyArmorStandsPlugin plugin, BrigadierManagerHolder<EasCommandSender, ?> brigadierManagerHolder) {
+        CloudBrigadierManager<EasCommandSender, ?> brigadierManager = brigadierManagerHolder.brigadierManager();
+        try {
+            BlockDataArgumentParser.registerBrigadier(brigadierManager);
+        } catch (Throwable e) {
+            plugin.getLogger().warning("Failed to register Brigadier mappings for block data arguments");
+        }
+        brigadierManager.registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
+        }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
     }
 
     @Override

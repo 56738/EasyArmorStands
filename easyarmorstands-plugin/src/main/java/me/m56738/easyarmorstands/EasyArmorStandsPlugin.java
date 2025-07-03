@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
+import me.m56738.easyarmorstands.capability.command.CommandCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -56,7 +57,6 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
-import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
@@ -115,15 +115,12 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.annotations.AnnotationParser;
-import org.incendo.cloud.bukkit.BukkitCommandManager;
-import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
-import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
-import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -173,7 +170,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private UpdateManager updateManager;
     private BukkitAudiences adventure;
     private BukkitGizmos gizmos;
-    private LegacyPaperCommandManager<EasCommandSender> commandManager;
+    private CommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
     public static EasyArmorStandsPlugin getInstance() {
@@ -261,24 +258,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             swapHandItemsCapability.addListener(sessionListener);
         }
 
-        try {
-            commandManager = new LegacyPaperCommandManager<>(
-                    this,
-                    ExecutionCoordinator.simpleCoordinator(),
-                    new CommandSenderMapper(adventure));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (commandManager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
-            try {
-                commandManager.registerBrigadier();
-            } catch (BukkitCommandManager.BrigadierInitializationException e) {
-                getLogger().log(Level.WARNING, "Failed to register Brigadier mappings");
-            } catch (Throwable e) {
-                getLogger().log(Level.SEVERE, "Failed to register Brigadier mappings", e);
-            }
-        }
+        commandManager = getCapability(CommandCapability.class).createCommandManager();
 
         MinecraftExceptionHandler.<EasCommandSender>createNative()
                 .defaultArgumentParsingHandler()
@@ -610,7 +590,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return gizmos;
     }
 
-    public LegacyPaperCommandManager<EasCommandSender> getCommandManager() {
+    public CommandManager<EasCommandSender> getCommandManager() {
         return commandManager;
     }
 

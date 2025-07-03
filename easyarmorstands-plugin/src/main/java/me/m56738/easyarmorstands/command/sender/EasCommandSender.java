@@ -12,6 +12,7 @@ public class EasCommandSender implements ForwardingAudience.Single {
     private final @NotNull CommandSender sender;
     private final @NotNull Audience audience;
     private final @NotNull PermissionChecker permissions = new Permissions();
+    private Object source;
 
     public EasCommandSender(@NotNull CommandSender sender, @NotNull Audience audience) {
         this.sender = sender;
@@ -30,6 +31,14 @@ public class EasCommandSender implements ForwardingAudience.Single {
 
     public @NotNull PermissionChecker permissions() {
         return permissions;
+    }
+
+    public Object getSource() {
+        return source;
+    }
+
+    public void setSource(Object source) {
+        this.source = source;
     }
 
     private class Permissions implements PermissionChecker {
