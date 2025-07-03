@@ -12,4 +12,8 @@ public final class ReflectionUtil {
             return false;
         }
     }
+
+    public static boolean isDeprecated(Class<?> type) {
+        return type.getAnnotation(Deprecated.class) != null;
+    }
 }
