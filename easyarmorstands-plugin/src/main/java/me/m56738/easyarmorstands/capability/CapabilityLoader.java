@@ -6,17 +6,18 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Level;
 
 public class CapabilityLoader {
     private final Plugin plugin;
-    private final Map<Class<?>, Entry> capabilities = new HashMap<>();
+    private final Map<Class<?>, Entry> capabilities = new TreeMap<>(Comparator.comparing(Class::getName));
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public CapabilityLoader(Plugin plugin, ClassLoader classLoader) {
