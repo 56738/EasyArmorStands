@@ -11,14 +11,14 @@ import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
 import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
 import me.m56738.easyarmorstands.lib.cloud.parser.standard.FloatParser;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
-import me.m56738.easyarmorstands.lib.joml.Vector3f;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public abstract class ScaleAxisCommand implements ValueCommand<Float> {
     private final PropertyType<Vector3fc> type;

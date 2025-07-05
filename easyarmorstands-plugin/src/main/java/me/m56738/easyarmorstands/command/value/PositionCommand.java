@@ -9,11 +9,11 @@ import me.m56738.easyarmorstands.lib.cloud.bukkit.parser.location.LocationParser
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

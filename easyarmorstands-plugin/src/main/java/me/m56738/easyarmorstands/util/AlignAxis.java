@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public enum AlignAxis {
     X(true, false, false),

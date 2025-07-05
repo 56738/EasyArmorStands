@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.display.property.display;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
 import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionfc;
 
 public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
     private final Display entity;

@@ -8,11 +8,11 @@ import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.lib.joml.Math;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import org.bukkit.Location;
+import org.joml.Math;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandPartOffsetProvider implements OffsetProvider {
     private final Property<Location> locationProperty;

@@ -73,6 +73,7 @@ import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
+import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
 import me.m56738.easyarmorstands.lib.cloud.CommandManager;
 import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
 import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
@@ -83,16 +84,11 @@ import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
 import me.m56738.easyarmorstands.lib.configurate.loader.HeaderMode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
 import me.m56738.easyarmorstands.lib.configurate.util.MapFactories;
 import me.m56738.easyarmorstands.lib.configurate.yaml.NodeStyle;
 import me.m56738.easyarmorstands.lib.configurate.yaml.YamlConfigurationLoader;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.lib.gizmo.bukkit.api.BukkitGizmos;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
-import me.m56738.easyarmorstands.lib.nbtapi.utils.Metrics;
 import me.m56738.easyarmorstands.menu.ColorPickerMenuContext;
 import me.m56738.easyarmorstands.menu.ColorPicketContextWrapper;
 import me.m56738.easyarmorstands.menu.ElementMenuContext;
@@ -121,6 +117,8 @@ import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.session.SkeletonLoginListener;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -168,7 +166,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private HistoryManager historyManager;
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
-    private BukkitAudiences adventure;
     private BukkitGizmos gizmos;
     private CommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
@@ -232,7 +229,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
-        adventure = BukkitAudiences.create(this);
         gizmos = BukkitGizmos.create(this);
 
         loadProperties();
@@ -352,9 +348,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (gizmos != null) {
             gizmos.close();
         }
-        if (adventure != null) {
-            adventure.close();
-        }
     }
 
     public void reload() {
@@ -418,7 +411,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
         if (config.updateCheck.enabled) {
             if (updateManager == null) {
-                updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY, 108349);
+                updateManager = new UpdateManager(this, Permissions.UPDATE_NOTIFY, 108349);
             }
         } else {
             if (updateManager != null) {
@@ -582,10 +575,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return historyManager;
     }
 
-    public BukkitAudiences getAdventure() {
-        return adventure;
-    }
-
     public BukkitGizmos getGizmos() {
         return gizmos;
     }
@@ -684,11 +673,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull PropertyTypeRegistry propertyTypeRegistry() {
         return Objects.requireNonNull(propertyTypeRegistry);
-    }
-
-    @Override
-    public @NotNull TypeSerializerCollection serializers() {
-        return EasSerializers.serializers();
     }
 
     @Override

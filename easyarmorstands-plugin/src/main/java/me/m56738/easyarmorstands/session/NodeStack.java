@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.EnterContextImpl;
 import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.List;

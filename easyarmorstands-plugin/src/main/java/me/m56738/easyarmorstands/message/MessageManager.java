@@ -1,15 +1,15 @@
 package me.m56738.easyarmorstands.message;
 
 import me.m56738.easyarmorstands.config.EasConfig;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.Tag;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.GlobalTranslator;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.TranslationStore;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.Translator;
-import me.m56738.easyarmorstands.lib.kyori.adventure.util.UTF8ResourceBundleControl;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.TranslationStore;
+import net.kyori.adventure.translation.Translator;
+import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;

@@ -3,13 +3,13 @@ package me.m56738.easyarmorstands.display.api.property.type;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.Color;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.Display.Brightness;
+import org.joml.Quaternionfc;
+import org.joml.Vector3fc;
 
 import java.util.Optional;
 

@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class ComponentButton extends PropertyButton<Component> {

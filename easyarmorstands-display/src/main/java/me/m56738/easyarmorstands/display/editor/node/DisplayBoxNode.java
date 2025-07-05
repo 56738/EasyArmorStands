@@ -9,9 +9,9 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.editor.box.DisplayBoxEditor;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.tool.BoxToolProvider;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.message.Message;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 public class DisplayBoxNode extends DisplayMenuNode {

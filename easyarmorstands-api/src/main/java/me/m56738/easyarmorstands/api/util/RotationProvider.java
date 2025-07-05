@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.util;
 
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniondc;
 
 public interface RotationProvider {
     @Contract(pure = true)

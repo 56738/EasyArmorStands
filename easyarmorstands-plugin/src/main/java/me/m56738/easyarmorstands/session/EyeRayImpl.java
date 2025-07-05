@@ -4,15 +4,15 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Cursor;
 import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Intersection;
-import me.m56738.easyarmorstands.lib.joml.Matrix4d;
-import me.m56738.easyarmorstands.lib.joml.Matrix4dc;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4d;
+import org.joml.Matrix4dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class EyeRayImpl implements EyeRay {
     private final World world;

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.api.util;
 
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public final class EasConversion {
     private EasConversion() {

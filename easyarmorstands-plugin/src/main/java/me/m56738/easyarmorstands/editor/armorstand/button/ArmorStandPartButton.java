@@ -16,16 +16,16 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPartNode;
 import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.lib.joml.Math;
-import me.m56738.easyarmorstands.lib.joml.Quaterniond;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
+import org.joml.Quaterniond;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 

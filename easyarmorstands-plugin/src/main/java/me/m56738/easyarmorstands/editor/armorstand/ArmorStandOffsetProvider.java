@@ -6,8 +6,8 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandOffsetProvider implements OffsetProvider {
     private final ArmorStandElement element;

@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.group;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.EditableElement;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;

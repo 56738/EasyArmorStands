@@ -52,19 +52,16 @@ public class TownyPrivilegeChecker implements RegionPrivilegeChecker {
 
     @Override
     public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player).sendMessage(
-                Message.error("easyarmorstands.error.towny.deny-create"));
+        player.sendMessage(Message.error("easyarmorstands.error.towny.deny-create"));
     }
 
     @Override
     public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player).sendMessage(
-                Message.error("easyarmorstands.error.towny.deny-destroy"));
+        player.sendMessage(Message.error("easyarmorstands.error.towny.deny-destroy"));
     }
 
     @Override
     public void sendEditError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player).sendMessage(
-                Message.error("easyarmorstands.error.towny.deny-select"));
+        player.sendMessage(Message.error("easyarmorstands.error.towny.deny-select"));
     }
 }

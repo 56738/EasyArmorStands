@@ -5,9 +5,9 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3fc;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

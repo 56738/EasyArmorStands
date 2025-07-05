@@ -14,10 +14,10 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 public class DisplayMenuNode extends PropertyMenuNode {
     private final Session session;

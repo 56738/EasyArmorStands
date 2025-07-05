@@ -16,9 +16,8 @@ import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.identity.Identity;
 import me.m56738.easyarmorstands.session.SessionImpl;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -31,15 +30,11 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
     private final @NotNull History history;
     private final @NotNull Clipboard clipboard;
 
-    public EasPlayer(@NotNull Player player, @NotNull Audience audience) {
-        super(player, audience);
+    public EasPlayer(@NotNull Player player) {
+        super(player);
         this.player = player;
         this.history = EasyArmorStandsPlugin.getInstance().getHistory(player);
         this.clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
-    }
-
-    public EasPlayer(@NotNull Player player) {
-        this(player, EasyArmorStandsPlugin.getInstance().getAdventure().player(player));
     }
 
     @Override

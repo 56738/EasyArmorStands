@@ -9,7 +9,6 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.sk89q.worldguard.session.SessionManager;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
@@ -46,19 +45,16 @@ public class WorldGuardPrivilegeChecker implements RegionPrivilegeChecker {
 
     @Override
     public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.worldguard.deny-create"));
+        player.sendMessage(Message.error("easyarmorstands.error.worldguard.deny-create"));
     }
 
     @Override
     public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.worldguard.deny-destroy"));
+        player.sendMessage(Message.error("easyarmorstands.error.worldguard.deny-destroy"));
     }
 
     @Override
     public void sendEditError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.worldguard.deny-select"));
+        player.sendMessage(Message.error("easyarmorstands.error.worldguard.deny-select"));
     }
 }

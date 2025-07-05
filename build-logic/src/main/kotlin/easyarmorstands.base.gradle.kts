@@ -53,7 +53,6 @@ repositories {
 }
 
 java {
-    disableAutoTargetJvm()
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
@@ -61,7 +60,6 @@ java {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(8)
         options.encoding = "UTF-8"
     }
 

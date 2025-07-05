@@ -6,9 +6,9 @@ import me.m56738.easyarmorstands.lib.cloud.Command;
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
 import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public interface ValueCommand<T> extends Command.Builder.Applicable<EasCommandSender> {

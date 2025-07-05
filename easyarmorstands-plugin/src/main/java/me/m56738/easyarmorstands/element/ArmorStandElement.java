@@ -12,10 +12,10 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     private final ArmorStand entity;

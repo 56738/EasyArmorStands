@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.element;
 
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;

@@ -1,18 +1,8 @@
 package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.lib.joml.Math;
-import me.m56738.easyarmorstands.lib.joml.Matrix3d;
-import me.m56738.easyarmorstands.lib.joml.Matrix3dc;
-import me.m56738.easyarmorstands.lib.joml.Matrix4d;
-import me.m56738.easyarmorstands.lib.joml.Quaterniond;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
-import me.m56738.easyarmorstands.lib.joml.Quaternionf;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
-import me.m56738.easyarmorstands.lib.kyori.adventure.util.RGBLike;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +12,16 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Math;
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
+import org.joml.Matrix4d;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Quaternionf;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3fc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

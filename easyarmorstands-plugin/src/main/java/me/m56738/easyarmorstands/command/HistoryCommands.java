@@ -9,10 +9,10 @@ import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
 import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
 import me.m56738.easyarmorstands.lib.cloud.annotations.Default;
 import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.Iterator;
 

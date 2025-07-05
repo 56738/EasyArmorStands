@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializer;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

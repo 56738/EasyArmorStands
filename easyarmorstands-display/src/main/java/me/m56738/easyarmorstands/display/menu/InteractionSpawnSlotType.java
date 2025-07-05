@@ -6,8 +6,8 @@ import me.m56738.easyarmorstands.display.element.InteractionElementType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
 import me.m56738.easyarmorstands.menu.slot.SpawnSlotFactory;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class InteractionSpawnSlotType implements MenuSlotType {
