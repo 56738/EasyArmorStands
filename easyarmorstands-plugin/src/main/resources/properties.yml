@@ -172,8 +172,8 @@ easyarmorstands:display/view_range:
 easyarmorstands:entity/ai:
   button:
     description:
-      - <value>
-      - <lang:easyarmorstands.property.ai.description>
+    - <value>
+    - <lang:easyarmorstands.property.ai.description>
     name: <name>
     type: redstone_block
   name: <lang:easyarmorstands.property.ai.name>

@@ -9,16 +9,16 @@ import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
+import me.m56738.easyarmorstands.lib.cloud.parser.standard.DoubleParser;
+import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.Cursor2D;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
-import org.incendo.cloud.parser.ArgumentParser;
-import org.incendo.cloud.parser.standard.DoubleParser;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniondc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 public class AxisRotateToolNode extends ToolNode implements ValueNode<Double> {
     private final Session session;

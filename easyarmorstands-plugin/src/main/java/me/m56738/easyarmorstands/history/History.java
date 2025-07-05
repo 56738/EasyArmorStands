@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.history;
 
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.GroupAction;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

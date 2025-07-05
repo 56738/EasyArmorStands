@@ -24,9 +24,9 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramSeeThr
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadowProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.JOMLMapper;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

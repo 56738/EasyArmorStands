@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.command.requirement;
 
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.Command;
+import me.m56738.easyarmorstands.lib.cloud.annotations.BuilderModifier;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.Command;
-import org.incendo.cloud.annotations.BuilderModifier;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -18,11 +18,6 @@ public class CommandRequirementBuilderModifier<A extends Annotation> implements 
         this.requirementProvider = requirementProvider;
     }
 
-    @Override
-    public Command.@NonNull Builder<? extends EasCommandSender> modifyBuilder(@NonNull A annotation, Command.Builder<EasCommandSender> builder) {
-        return builder.apply(requirementProvider.apply(annotation));
-    }
-
     public static Command.@NonNull Builder<EasCommandSender> addRequirement(
             Command.@NonNull Builder<EasCommandSender> builder, @NonNull CommandRequirement requirement) {
         List<CommandRequirement> requirements = new ArrayList<>(builder.meta().getOrDefault(CommandRequirement.KEY, Collections.emptyList()));
@@ -35,5 +30,10 @@ public class CommandRequirementBuilderModifier<A extends Annotation> implements 
             addRequirement(parent, destination);
         }
         destination.add(requirement);
+    }
+
+    @Override
+    public Command.@NonNull Builder<? extends EasCommandSender> modifyBuilder(@NonNull A annotation, Command.Builder<EasCommandSender> builder) {
+        return builder.apply(requirementProvider.apply(annotation));
     }
 }

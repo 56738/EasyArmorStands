@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.editor.tool;
 
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractToolSession implements ToolSession {

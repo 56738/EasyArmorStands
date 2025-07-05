@@ -11,10 +11,10 @@ import me.m56738.easyarmorstands.display.editor.node.InteractionRootNode;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.Interaction;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
 public class InteractionElement extends SimpleEntityElement<Interaction> {
     private final Interaction entity;

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.capability.tool.v1_8;
 
-import de.tr7zw.changeme.nbtapi.NBT;
 import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.lib.nbtapi.NBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;

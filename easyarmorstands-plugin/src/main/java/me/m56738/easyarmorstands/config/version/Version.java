@@ -37,6 +37,14 @@ public class Version implements Comparable<Version> {
         return new Version(major, minor, patch);
     }
 
+    private static int parseIntOrZero(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public int getMajor() {
         return major;
     }
@@ -60,14 +68,6 @@ public class Version implements Comparable<Version> {
             return major + "." + minor + "." + patch;
         } else {
             return major + "." + minor;
-        }
-    }
-
-    private static int parseIntOrZero(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return 0;
         }
     }
 }

@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

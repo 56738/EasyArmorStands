@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 
 public class Cursor3D {
     private final Session session;

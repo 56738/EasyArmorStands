@@ -9,10 +9,10 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.BoundingBoxProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.lib.joml.Quaterniond;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniond;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 

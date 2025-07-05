@@ -2,16 +2,16 @@ package me.m56738.easyarmorstands.config.version.game;
 
 import me.m56738.easyarmorstands.config.version.Version;
 import me.m56738.easyarmorstands.config.version.game.v1_13.ItemStackTransformAction_v1_13;
+import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
+import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
+import me.m56738.easyarmorstands.lib.configurate.transformation.ConfigurationTransformation;
+import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
 import org.bukkit.Bukkit;
-import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.transformation.ConfigurationTransformation;
-import org.spongepowered.configurate.transformation.TransformAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.spongepowered.configurate.NodePath.path;
+import static me.m56738.easyarmorstands.lib.configurate.NodePath.path;
 
 public class GameVersionTransformation implements ConfigurationTransformation {
     private static final Version MAX_TARGET_VERSION = new Version(1, 21, 3);
@@ -132,6 +132,21 @@ public class GameVersionTransformation implements ConfigurationTransformation {
         return new GameVersionTransformation(entries);
     }
 
+    private static Version getTargetVersion() {
+        Version serverVersion = getServerVersion();
+        if (serverVersion.compareTo(MAX_TARGET_VERSION) > 0) {
+            return MAX_TARGET_VERSION;
+        } else {
+            return serverVersion;
+        }
+    }
+
+    private static Version getServerVersion() {
+        String bukkitVersion = Bukkit.getBukkitVersion();
+        String version = bukkitVersion.substring(0, bukkitVersion.indexOf('-'));
+        return Version.parse(version);
+    }
+
     @Override
     public void apply(ConfigurationNode node) throws ConfigurateException {
         ConfigurationNode gameVersionNode = node.node("_version", "game");
@@ -174,20 +189,5 @@ public class GameVersionTransformation implements ConfigurationTransformation {
         public Version getVersion() {
             return version;
         }
-    }
-
-    private static Version getTargetVersion() {
-        Version serverVersion = getServerVersion();
-        if (serverVersion.compareTo(MAX_TARGET_VERSION) > 0) {
-            return MAX_TARGET_VERSION;
-        } else {
-            return serverVersion;
-        }
-    }
-
-    private static Version getServerVersion() {
-        String bukkitVersion = Bukkit.getBukkitVersion();
-        String version = bukkitVersion.substring(0, bukkitVersion.indexOf('-'));
-        return Version.parse(version);
     }
 }

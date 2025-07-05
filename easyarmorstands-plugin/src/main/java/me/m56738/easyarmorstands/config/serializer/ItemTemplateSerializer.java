@@ -3,14 +3,14 @@ package me.m56738.easyarmorstands.config.serializer;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
 import me.m56738.easyarmorstands.item.ItemRenderer;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
+import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
+import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializer;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
-import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

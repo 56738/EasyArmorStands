@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.integration.lands;
 
 import me.m56738.easyarmorstands.config.integration.IntegrationEntryConfig;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class LandsConfig extends IntegrationEntryConfig {

@@ -6,8 +6,8 @@ import me.m56738.easyarmorstands.api.menu.MenuContext;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
 import me.m56738.easyarmorstands.menu.MenuImpl;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 class MenuFactoryImpl implements MenuFactory {
     private final String titleTemplate;

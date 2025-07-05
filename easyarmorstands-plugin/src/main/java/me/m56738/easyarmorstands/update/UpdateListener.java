@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.update;
 
+import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
+import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
 import me.m56738.easyarmorstands.permission.Permissions;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

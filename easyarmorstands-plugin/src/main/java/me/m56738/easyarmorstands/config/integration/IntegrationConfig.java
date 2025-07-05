@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.config.integration;
 
 import me.m56738.easyarmorstands.config.integration.lands.LandsConfig;
 import me.m56738.easyarmorstands.config.integration.towny.TownyConfig;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Setting;
+import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
+import me.m56738.easyarmorstands.lib.configurate.objectmapping.meta.Setting;
 
 @ConfigSerializable
 public class IntegrationConfig {

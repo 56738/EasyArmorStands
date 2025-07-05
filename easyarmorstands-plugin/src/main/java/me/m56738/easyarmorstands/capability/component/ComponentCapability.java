@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.component;
 
 import me.m56738.easyarmorstands.capability.Capability;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

@@ -4,98 +4,98 @@ main: me.m56738.easyarmorstands.EasyArmorStandsPlugin
 author: '56738'
 api-version: 1.13
 softdepend:
-  - BentoBox
-  - FancyHolograms
-  - GriefDefender
-  - HeadDatabase
-  - HuskClaims
-  - Lands
-  - PlotSquared
-  - Residence
-  - Towny
-  - Train_Carts
-  - ViaVersion
-  - WorldGuard
+- BentoBox
+- FancyHolograms
+- GriefDefender
+- HeadDatabase
+- HuskClaims
+- Lands
+- PlotSquared
+- Residence
+- Towny
+- Train_Carts
+- ViaVersion
+- WorldGuard
 
 permissions:
   # Categories
   easyarmorstands.survival:
     description: "Allow editing armor stands and their basic properties"
     children:
-      - easyarmorstands.align
-      - easyarmorstands.clipboard
-      - easyarmorstands.edit.armorstand
-      - easyarmorstands.give
-      - easyarmorstands.property.armorstand.arms
-      - easyarmorstands.property.armorstand.baseplate
-      - easyarmorstands.property.armorstand.cantick
-      - easyarmorstands.property.armorstand.lock
-      - easyarmorstands.property.armorstand.pose.body
-      - easyarmorstands.property.armorstand.pose.head
-      - easyarmorstands.property.armorstand.pose.leftarm
-      - easyarmorstands.property.armorstand.pose.leftleg
-      - easyarmorstands.property.armorstand.pose.rightarm
-      - easyarmorstands.property.armorstand.pose.rightleg
-      - easyarmorstands.property.armorstand.size
-      - easyarmorstands.property.equipment.hand
-      - easyarmorstands.property.equipment.offhand
-      - easyarmorstands.property.equipment.feet
-      - easyarmorstands.property.equipment.legs
-      - easyarmorstands.property.equipment.chest
-      - easyarmorstands.property.equipment.head
-      - easyarmorstands.property.equipment.body
-      - easyarmorstands.property.gravity
-      - easyarmorstands.property.location
-      - easyarmorstands.property.visible
-      - easyarmorstands.select
-      - easyarmorstands.snap
+    - easyarmorstands.align
+    - easyarmorstands.clipboard
+    - easyarmorstands.edit.armorstand
+    - easyarmorstands.give
+    - easyarmorstands.property.armorstand.arms
+    - easyarmorstands.property.armorstand.baseplate
+    - easyarmorstands.property.armorstand.cantick
+    - easyarmorstands.property.armorstand.lock
+    - easyarmorstands.property.armorstand.pose.body
+    - easyarmorstands.property.armorstand.pose.head
+    - easyarmorstands.property.armorstand.pose.leftarm
+    - easyarmorstands.property.armorstand.pose.leftleg
+    - easyarmorstands.property.armorstand.pose.rightarm
+    - easyarmorstands.property.armorstand.pose.rightleg
+    - easyarmorstands.property.armorstand.size
+    - easyarmorstands.property.equipment.hand
+    - easyarmorstands.property.equipment.offhand
+    - easyarmorstands.property.equipment.feet
+    - easyarmorstands.property.equipment.legs
+    - easyarmorstands.property.equipment.chest
+    - easyarmorstands.property.equipment.head
+    - easyarmorstands.property.equipment.body
+    - easyarmorstands.property.gravity
+    - easyarmorstands.property.location
+    - easyarmorstands.property.visible
+    - easyarmorstands.select
+    - easyarmorstands.snap
   easyarmorstands.creative:
     description: "Allow spawning and editing armor stands and display entities"
     children:
-      - easyarmorstands.survival
-      - easyarmorstands.clone
-      - easyarmorstands.color
-      - easyarmorstands.convert
-      - easyarmorstands.copy.entity
-      - easyarmorstands.destroy.armorstand
-      - easyarmorstands.destroy.blockdisplay
-      - easyarmorstands.destroy.interaction
-      - easyarmorstands.destroy.itemdisplay
-      - easyarmorstands.destroy.textdisplay
-      - easyarmorstands.edit.blockdisplay
-      - easyarmorstands.edit.interaction
-      - easyarmorstands.edit.itemdisplay
-      - easyarmorstands.edit.textdisplay
-      - easyarmorstands.position
-      - easyarmorstands.property.ai
-      - easyarmorstands.property.armorstand.marker
-      - easyarmorstands.property.display.billboard
-      - easyarmorstands.property.display.block
-      - easyarmorstands.property.display.brightness
-      - easyarmorstands.property.display.glow.color
-      - easyarmorstands.property.display.item
-      - easyarmorstands.property.display.item.transform
-      - easyarmorstands.property.display.rotation
-      - easyarmorstands.property.display.scale
-      - easyarmorstands.property.display.shearing
-      - easyarmorstands.property.display.size
-      - easyarmorstands.property.display.text
-      - easyarmorstands.property.display.text.alignment
-      - easyarmorstands.property.display.text.background
-      - easyarmorstands.property.display.text.linewidth
-      - easyarmorstands.property.display.text.seethrough
-      - easyarmorstands.property.display.text.shadow
-      - easyarmorstands.property.display.translation
-      - easyarmorstands.property.glow
-      - easyarmorstands.property.interaction.responsive
-      - easyarmorstands.property.invulnerable
-      - easyarmorstands.property.name
-      - easyarmorstands.property.name.visible
-      - easyarmorstands.property.silent
-      - easyarmorstands.redo
-      - easyarmorstands.spawn.armorstand
-      - easyarmorstands.spawn.blockdisplay
-      - easyarmorstands.spawn.interaction
-      - easyarmorstands.spawn.itemdisplay
-      - easyarmorstands.spawn.textdisplay
-      - easyarmorstands.undo
+    - easyarmorstands.survival
+    - easyarmorstands.clone
+    - easyarmorstands.color
+    - easyarmorstands.convert
+    - easyarmorstands.copy.entity
+    - easyarmorstands.destroy.armorstand
+    - easyarmorstands.destroy.blockdisplay
+    - easyarmorstands.destroy.interaction
+    - easyarmorstands.destroy.itemdisplay
+    - easyarmorstands.destroy.textdisplay
+    - easyarmorstands.edit.blockdisplay
+    - easyarmorstands.edit.interaction
+    - easyarmorstands.edit.itemdisplay
+    - easyarmorstands.edit.textdisplay
+    - easyarmorstands.position
+    - easyarmorstands.property.ai
+    - easyarmorstands.property.armorstand.marker
+    - easyarmorstands.property.display.billboard
+    - easyarmorstands.property.display.block
+    - easyarmorstands.property.display.brightness
+    - easyarmorstands.property.display.glow.color
+    - easyarmorstands.property.display.item
+    - easyarmorstands.property.display.item.transform
+    - easyarmorstands.property.display.rotation
+    - easyarmorstands.property.display.scale
+    - easyarmorstands.property.display.shearing
+    - easyarmorstands.property.display.size
+    - easyarmorstands.property.display.text
+    - easyarmorstands.property.display.text.alignment
+    - easyarmorstands.property.display.text.background
+    - easyarmorstands.property.display.text.linewidth
+    - easyarmorstands.property.display.text.seethrough
+    - easyarmorstands.property.display.text.shadow
+    - easyarmorstands.property.display.translation
+    - easyarmorstands.property.glow
+    - easyarmorstands.property.interaction.responsive
+    - easyarmorstands.property.invulnerable
+    - easyarmorstands.property.name
+    - easyarmorstands.property.name.visible
+    - easyarmorstands.property.silent
+    - easyarmorstands.redo
+    - easyarmorstands.spawn.armorstand
+    - easyarmorstands.spawn.blockdisplay
+    - easyarmorstands.spawn.interaction
+    - easyarmorstands.spawn.itemdisplay
+    - easyarmorstands.spawn.textdisplay
+    - easyarmorstands.undo

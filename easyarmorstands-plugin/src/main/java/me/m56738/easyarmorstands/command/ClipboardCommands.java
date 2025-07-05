@@ -9,14 +9,14 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
+import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.PropertyCopier;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.CommandDescription;
-import org.incendo.cloud.annotations.Permission;
 
 @Command("eas")
 public class ClipboardCommands {

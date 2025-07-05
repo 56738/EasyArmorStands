@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.editor.util;
 
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 
 public enum ToolMenuMode {
     LOCAL(Component.translatable("easyarmorstands.node.local")),

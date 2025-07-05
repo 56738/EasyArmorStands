@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.editor.button.MoveButton;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class MoveButtonBuilderImpl implements MoveButtonBuilder {

@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.capability.command.v1_20_6_paper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.SenderMapper;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.SenderMapper;
 
 public class CommandSourceStackMapper implements SenderMapper<CommandSourceStack, EasCommandSender> {
     private final CommandSenderMapper commandSenderMapper;

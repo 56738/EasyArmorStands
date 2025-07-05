@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
+import me.m56738.easyarmorstands.lib.cloud.injection.ParameterInjector;
+import me.m56738.easyarmorstands.lib.cloud.util.annotation.AnnotationAccessor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.injection.ParameterInjector;
-import org.incendo.cloud.util.annotation.AnnotationAccessor;
 
 import static me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor.elementSelectionKey;
 

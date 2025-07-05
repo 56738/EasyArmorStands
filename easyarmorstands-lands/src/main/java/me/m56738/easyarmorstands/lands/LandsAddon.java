@@ -28,6 +28,10 @@ public class LandsAddon implements Addon {
         integration.onLoad(this::onLoad);
     }
 
+    private static boolean hasSimilarFlag(Role role) {
+        return role != null && role.hasFlag(Flags.BLOCK_PLACE);
+    }
+
     private void onLoad() {
         flag = RoleFlag.of(integration, FlagTarget.PLAYER, RoleFlagCategory.ACTION, FLAG_NAME);
         configureFlag();
@@ -40,10 +44,6 @@ public class LandsAddon implements Addon {
         flag.setDescription(flagConfig.description);
         flag.setDisplay(flagConfig.display);
         flag.setUpdatePredicate(LandsAddon::hasSimilarFlag);
-    }
-
-    private static boolean hasSimilarFlag(Role role) {
-        return role != null && role.hasFlag(Flags.BLOCK_PLACE);
     }
 
     @Override

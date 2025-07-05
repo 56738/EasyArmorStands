@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

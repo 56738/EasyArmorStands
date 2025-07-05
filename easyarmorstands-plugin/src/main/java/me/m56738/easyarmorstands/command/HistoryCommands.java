@@ -3,16 +3,16 @@ package me.m56738.easyarmorstands.command;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
+import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Range;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Argument;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
+import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Default;
+import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.incendo.cloud.annotation.specifier.Range;
-import org.incendo.cloud.annotations.Argument;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.CommandDescription;
-import org.incendo.cloud.annotations.Default;
-import org.incendo.cloud.annotations.Permission;
 
 import java.util.Iterator;
 

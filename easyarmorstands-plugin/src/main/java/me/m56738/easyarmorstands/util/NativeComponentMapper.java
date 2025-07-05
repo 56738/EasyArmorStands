@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.util;
 
 import com.google.gson.JsonElement;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;

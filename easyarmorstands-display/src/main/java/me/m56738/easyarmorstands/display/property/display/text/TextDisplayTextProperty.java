@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.display.adapter.TextDisplayAdapter;
 import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 

@@ -4,8 +4,8 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.lib.cloud.Command;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.Command;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;

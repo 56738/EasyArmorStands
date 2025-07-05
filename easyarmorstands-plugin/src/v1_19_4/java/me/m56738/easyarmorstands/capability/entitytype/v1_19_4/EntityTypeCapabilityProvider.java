@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.capability.entitytype.v1_19_4;
 import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 
