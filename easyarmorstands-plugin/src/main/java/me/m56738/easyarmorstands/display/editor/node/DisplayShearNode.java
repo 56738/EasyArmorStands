@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
-public class DisplayShearNode extends DisplayMenuNode implements ResettableNode {
+public class DisplayShearNode extends DisplayNode implements ResettableNode {
     private final Session session;
     private final Component name;
     private final Property<Quaternionfc> rightRotationProperty;

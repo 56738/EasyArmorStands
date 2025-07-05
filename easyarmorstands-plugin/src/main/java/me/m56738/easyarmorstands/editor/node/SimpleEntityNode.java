@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -14,7 +14,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleEntityNode extends MenuNode implements ElementNode {
+public class SimpleEntityNode extends AbstractNode implements ElementNode {
     private final Session session;
     private final Element element;
     private final ToolMenuManager toolManager;

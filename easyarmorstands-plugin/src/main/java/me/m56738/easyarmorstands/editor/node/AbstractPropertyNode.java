@@ -1,15 +1,15 @@
 package me.m56738.easyarmorstands.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class PropertyMenuNode extends MenuNode {
+public abstract class AbstractPropertyNode extends AbstractNode {
     private final PropertyContainer properties;
 
-    public PropertyMenuNode(Session session, PropertyContainer properties) {
+    public AbstractPropertyNode(Session session, PropertyContainer properties) {
         super(session);
         this.properties = properties;
     }

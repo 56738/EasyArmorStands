@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.api.editor.util;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -20,14 +20,14 @@ import java.util.Objects;
 
 public class ToolMenuManager {
     private final Session session;
-    private final MenuNode menuNode;
+    private final AbstractNode node;
     private final ToolProvider toolProvider;
     private final List<MenuButton> buttons = new ArrayList<>();
     private ToolMenuMode mode = null;
 
-    public ToolMenuManager(Session session, MenuNode menuNode, ToolProvider toolProvider) {
+    public ToolMenuManager(Session session, AbstractNode node, ToolProvider toolProvider) {
         this.session = session;
-        this.menuNode = menuNode;
+        this.node = node;
         this.toolProvider = toolProvider;
         for (ToolMenuMode mode : ToolMenuMode.values()) {
             if (setMode(mode)) {
@@ -127,14 +127,14 @@ public class ToolMenuManager {
         this.mode = Objects.requireNonNull(mode);
 
         for (MenuButton button : buttons) {
-            menuNode.removeButton(button);
+            node.removeButton(button);
         }
         buttons.clear();
 
         collectButtons(mode, buttons);
 
         for (MenuButton button : buttons) {
-            menuNode.addButton(button);
+            node.addButton(button);
         }
 
         return !buttons.isEmpty();

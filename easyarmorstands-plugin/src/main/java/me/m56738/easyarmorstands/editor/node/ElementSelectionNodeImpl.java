@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class ElementSelectionNodeImpl extends MenuNode implements ElementSelectionNode {
+public class ElementSelectionNodeImpl extends AbstractNode implements ElementSelectionNode {
     private final Session session;
     private final Map<ElementDiscoveryEntry, ElementEntry> entries = new HashMap<>();
     private final Component name;

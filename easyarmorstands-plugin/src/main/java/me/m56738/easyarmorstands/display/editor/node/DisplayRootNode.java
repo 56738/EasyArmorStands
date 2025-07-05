@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class DisplayRootNode extends DisplayMenuNode implements ElementNode, ResettableNode {
+public class DisplayRootNode extends DisplayNode implements ElementNode, ResettableNode {
     private final Session session;
     private final DisplayElement<?> element;
     private final Property<Location> locationProperty;

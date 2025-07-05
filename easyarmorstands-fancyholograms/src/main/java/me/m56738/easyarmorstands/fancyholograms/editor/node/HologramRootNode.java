@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
+import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
@@ -18,7 +18,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class HologramRootNode extends PropertyMenuNode implements ElementNode {
+public class HologramRootNode extends AbstractPropertyNode implements ElementNode {
     private final Session session;
     private final HologramElement element;
     private final ToolMenuModeSwitcher toolSwitcher;

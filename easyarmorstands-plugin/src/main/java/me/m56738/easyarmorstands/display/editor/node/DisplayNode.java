@@ -13,13 +13,13 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
+import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-public class DisplayMenuNode extends PropertyMenuNode {
+public class DisplayNode extends AbstractPropertyNode {
     private final Session session;
     private final BoundingBoxParticle boxParticle;
     private final Property<Location> locationProperty;
@@ -30,7 +30,7 @@ public class DisplayMenuNode extends PropertyMenuNode {
     private boolean isVisible;
     private boolean isActive;
 
-    public DisplayMenuNode(Session session, PropertyContainer container) {
+    public DisplayNode(Session session, PropertyContainer container) {
         super(session, container);
         this.session = session;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();

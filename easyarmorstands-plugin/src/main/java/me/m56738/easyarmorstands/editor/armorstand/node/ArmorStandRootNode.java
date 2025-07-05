@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends MenuNode implements ElementNode, ResettableNode {
+public class ArmorStandRootNode extends AbstractNode implements ElementNode, ResettableNode {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandElement element;

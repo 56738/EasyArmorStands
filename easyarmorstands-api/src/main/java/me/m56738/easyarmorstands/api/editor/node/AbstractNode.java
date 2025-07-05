@@ -22,14 +22,14 @@ import java.util.Objects;
 /**
  * A node which can contain multiple {@link Button buttons}.
  */
-public abstract class MenuNode implements Node {
+public abstract class AbstractNode implements Node {
     private final Session session;
     private final Map<MenuButton, Button> buttons = new HashMap<>();
     private MenuButton targetButton;
     private Vector3dc targetCursor;
     private boolean visible;
 
-    public MenuNode(@NotNull Session session) {
+    public AbstractNode(@NotNull Session session) {
         this.session = session;
     }
 
