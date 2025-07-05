@@ -1,6 +1,5 @@
 [versions]
 bentobox = "2.7.0-SNAPSHOT"
-brigadier = "1.0.17"
 bstats = "3.1.0"
 checker-qual = "3.49.2"
 cloud = "2.0.0"
@@ -22,12 +21,10 @@ run-task = "2.3.1"
 shadow = "8.3.6"
 towny = "0.101.1.7"
 traincarts = "1.21.1-v1"
-worldguard-v6 = "6.2"
-worldguard-v7 = "7.0.9"
+worldguard = "7.0.14"
 
 [libraries]
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
-brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "checker-qual" }
@@ -49,8 +46,7 @@ plotsquared-core = { module = "com.intellectualsites.plotsquared:plotsquared-cor
 residence = { module = "com.bekvon.bukkit.residence:Residence", version.ref = "residence" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
-worldguard-v6 = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "worldguard-v6" }
-worldguard-v7 = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard-v7" }
+worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish-plugin" }

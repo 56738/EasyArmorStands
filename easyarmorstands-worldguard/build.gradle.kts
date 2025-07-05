@@ -5,5 +5,5 @@ plugins {
 dependencies {
     compileOnly(libs.paper.api)
     implementation(project(":easyarmorstands-plugin"))
-    compileOnly(libs.worldguard.v7)
+    compileOnly(libs.worldguard)
 }

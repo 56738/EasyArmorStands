@@ -23,8 +23,7 @@ dependencies {
     runtimeOnly(project(":easyarmorstands-residence"))
     runtimeOnly(project(":easyarmorstands-towny"))
     runtimeOnly(project(":easyarmorstands-traincarts"))
-    runtimeOnly(project(":easyarmorstands-worldguard-v6"))
-    runtimeOnly(project(":easyarmorstands-worldguard-v7"))
+    runtimeOnly(project(":easyarmorstands-worldguard"))
 }
 
 tasks {
