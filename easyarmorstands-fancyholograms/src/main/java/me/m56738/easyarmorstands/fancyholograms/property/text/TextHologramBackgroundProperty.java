@@ -4,7 +4,7 @@ import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
 

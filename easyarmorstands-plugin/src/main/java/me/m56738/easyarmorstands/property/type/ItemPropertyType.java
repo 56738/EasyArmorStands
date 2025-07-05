@@ -1,10 +1,8 @@
 package me.m56738.easyarmorstands.property.type;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -21,7 +19,7 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
 
     @Override
     public @NotNull Component getValueComponent(@NotNull ItemStack value) {
-        return EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class).getItemDisplayName(value);
+        return value.displayName();
     }
 
     @Override

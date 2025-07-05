@@ -1,12 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
-import me.m56738.easyarmorstands.capability.lookup.LookupCapability;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -37,12 +34,11 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
     public @Nullable EntityElement<E> getElement() {
         // Load chunk at the expected position
         World world = Bukkit.getWorld(worldId);
-        Chunk chunk = null;
         if (world != null) {
-            chunk = world.getChunkAt(position.toLocation(world));
+            world.getChunkAt(position.toLocation(world));
         }
 
-        Entity entity = EasyArmorStandsPlugin.getInstance().getCapability(LookupCapability.class).getEntity(id, chunk);
+        Entity entity = Bukkit.getEntity(id);
         if (entity == null) {
             return null;
         }

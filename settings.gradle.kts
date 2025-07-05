@@ -4,13 +4,9 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-includeBuild("adventure-platform")
-
 include("easyarmorstands-api")
 include("easyarmorstands-api-dependencies")
 include("easyarmorstands-bentobox")
-include("easyarmorstands-display")
-include("easyarmorstands-display-api")
 include("easyarmorstands-fancyholograms")
 include("easyarmorstands-griefdefender")
 include("easyarmorstands-griefprevention")

@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -17,6 +18,8 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public class SimpleItemTemplate implements ItemTemplate {
+    private static final Style FALLBACK_STYLE = Style.style(
+            NamedTextColor.WHITE, TextDecoration.ITALIC.withState(false));
     private final ItemStack template;
     private final String displayName;
     private final List<String> lore;
@@ -55,15 +58,15 @@ public class SimpleItemTemplate implements ItemTemplate {
                 .resolver(resolver)
                 .build();
 
-        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
-
         ItemStack item = template.clone();
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             if (displayName != null) {
-                componentCapability.setDisplayName(meta, renderName(locale, resolver));
+                meta.displayName(renderName(locale, resolver).applyFallbackStyle(FALLBACK_STYLE));
             }
-            componentCapability.setLore(meta, renderLore(locale, resolver));
+            meta.lore(renderLore(locale, resolver).stream()
+                    .map(c -> c.applyFallbackStyle(FALLBACK_STYLE))
+                    .toList());
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }

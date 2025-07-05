@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -16,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -118,9 +118,6 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     private boolean isApplicable(ItemPropertySlot slot) {
         ItemStack item = slot.getProperty().getValue();
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-        return EasyArmorStandsPlugin.getInstance().getCapability(ItemColorCapability.class).hasColor(meta);
+        return meta instanceof LeatherArmorMeta || meta instanceof MapMeta;
     }
 }

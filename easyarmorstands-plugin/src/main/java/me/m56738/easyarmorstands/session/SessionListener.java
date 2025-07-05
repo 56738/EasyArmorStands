@@ -4,8 +4,6 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -31,18 +29,17 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SessionListener implements Listener, SwapHandItemsListener {
+public class SessionListener implements Listener {
     private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
@@ -57,15 +54,8 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         if (!player.hasPermission(Permissions.EDIT)) {
             return false;
         }
-        EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
-        EntityEquipment equipment = player.getEquipment();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
-            if (plugin.isTool(item)) {
-                return true;
-            }
-        }
-        return false;
+        PlayerInventory inventory = player.getInventory();
+        return plugin.isTool(inventory.getItemInMainHand()) || plugin.isTool(inventory.getItemInOffHand());
     }
 
     public boolean handleLeftClick(Player player, Entity entity, Block block) {
@@ -119,14 +109,14 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         return handleRightClick(player, entity, null);
     }
 
-    @Override
-    public boolean handleSwap(Player player) {
-        SessionImpl session = manager.getSession(player);
+    @EventHandler
+    public void onSwapHand(PlayerSwapHandItemsEvent event) {
+        SessionImpl session = manager.getSession(event.getPlayer());
         if (session == null) {
-            return false;
+            return;
         }
         session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
-        return true;
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -296,11 +286,6 @@ public class SessionListener implements Listener, SwapHandItemsListener {
                 break;
             }
         }
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        manager.hideSkeletons(event.getPlayer());
     }
 
     @EventHandler

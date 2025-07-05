@@ -3,17 +3,15 @@ package me.m56738.easyarmorstands.property.armorstand;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.lock.LockCapability;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandLockProperty implements Property<Boolean> {
     private final ArmorStand entity;
-    private final LockCapability lockCapability;
 
-    public ArmorStandLockProperty(ArmorStand entity, LockCapability lockCapability) {
+    public ArmorStandLockProperty(ArmorStand entity) {
         this.entity = entity;
-        this.lockCapability = lockCapability;
     }
 
     @Override
@@ -23,12 +21,27 @@ public class ArmorStandLockProperty implements Property<Boolean> {
 
     @Override
     public @NotNull Boolean getValue() {
-        return lockCapability.isLocked(entity);
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            for (ArmorStand.LockType type : ArmorStand.LockType.values()) {
+                if (entity.hasEquipmentLock(slot, type)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean setValue(@NotNull Boolean value) {
-        lockCapability.setLocked(entity, value);
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            for (ArmorStand.LockType type : ArmorStand.LockType.values()) {
+                if (value) {
+                    entity.addEquipmentLock(slot, type);
+                } else {
+                    entity.removeEquipmentLock(slot, type);
+                }
+            }
+        }
         return true;
     }
 }

@@ -3,17 +3,14 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.silent.SilentCapability;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class EntitySilentProperty implements Property<Boolean> {
     private final Entity entity;
-    private final SilentCapability silentCapability;
 
-    public EntitySilentProperty(Entity entity, SilentCapability silentCapability) {
+    public EntitySilentProperty(Entity entity) {
         this.entity = entity;
-        this.silentCapability = silentCapability;
     }
 
     @Override
@@ -23,12 +20,12 @@ public class EntitySilentProperty implements Property<Boolean> {
 
     @Override
     public @NotNull Boolean getValue() {
-        return silentCapability.isSilent(entity);
+        return entity.isSilent();
     }
 
     @Override
     public boolean setValue(@NotNull Boolean value) {
-        silentCapability.setSilent(entity, value);
+        entity.setSilent(value);
         return true;
     }
 }

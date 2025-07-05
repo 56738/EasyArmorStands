@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.command.sender;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.permission.PermissionChecker;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class EasCommandSender implements ForwardingAudience.Single {
     private final @NotNull CommandSender sender;
     private final @NotNull PermissionChecker permissions = new Permissions();
-    private Object source;
+    private CommandSourceStack source;
 
     public EasCommandSender(@NotNull CommandSender sender) {
         this.sender = sender;
@@ -31,11 +32,11 @@ public class EasCommandSender implements ForwardingAudience.Single {
         return permissions;
     }
 
-    public Object getSource() {
+    public CommandSourceStack getSource() {
         return source;
     }
 
-    public void setSource(Object source) {
+    public void setSource(CommandSourceStack source) {
         this.source = source;
     }
 

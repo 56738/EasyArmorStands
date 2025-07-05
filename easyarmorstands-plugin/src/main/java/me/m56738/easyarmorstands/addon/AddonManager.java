@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.addon;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
@@ -22,8 +21,6 @@ public class AddonManager {
         for (AddonFactory<?> addonFactory : ServiceLoader.load(AddonFactory.class, loader)) {
             addonFactories.add(addonFactory);
         }
-
-        addonFactories.sort(Comparator.comparing(AddonFactory::getPriority));
 
         for (AddonFactory<?> addonFactory : addonFactories) {
             load(addonFactory);

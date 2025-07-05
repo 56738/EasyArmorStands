@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscovery
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementType;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import me.m56738.easyarmorstands.fancyholograms.property.type.TextHologramTextPropertyType;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.event.HandlerList;
 
 public class FancyHologramsAddon implements Addon {
@@ -40,15 +39,8 @@ public class FancyHologramsAddon implements Addon {
         EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(HologramDataPropertyType.INSTANCE);
         EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(TextHologramTextPropertyType.INSTANCE);
 
-        JOMLMapper mapper;
-        try {
-            mapper = new JOMLMapper();
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
-        HologramElementType type = new HologramElementType(manager, mapper, this);
+        HologramElementType type = new HologramElementType(manager, this);
         HologramElementDiscoverySource discoverySource = new HologramElementDiscoverySource(type, manager);
         listener = new FancyHologramsListener(discoverySource);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);

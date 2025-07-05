@@ -1,20 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.entityai.EntityAICapability;
-import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
-import me.m56738.easyarmorstands.capability.entitytag.EntityTagCapability;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
-import me.m56738.easyarmorstands.capability.lock.LockCapability;
-import me.m56738.easyarmorstands.capability.silent.SilentCapability;
-import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
@@ -60,37 +49,20 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry) {
-        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
-        GlowCapability glowCapability = EasyArmorStandsPlugin.getInstance().getCapability(GlowCapability.class);
-        if (glowCapability != null) {
-            registry.register(new EntityGlowingProperty(entity, glowCapability));
-        }
+        registry.register(new EntityGlowingProperty(entity));
         registry.register(new EntityLocationProperty(entity));
-        SilentCapability silentCapability = EasyArmorStandsPlugin.getInstance().getCapability(SilentCapability.class);
-        if (silentCapability != null) {
-            registry.register(new EntitySilentProperty(entity, silentCapability));
-        }
-        EntityTagCapability tagCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTagCapability.class);
-        if (tagCapability != null) {
-            registry.register(new EntityTagsProperty(entity, tagCapability));
-        }
-        registry.register(new EntityCustomNameProperty(entity, componentCapability));
+        registry.register(new EntitySilentProperty(entity));
+        registry.register(new EntityTagsProperty(entity));
+        registry.register(new EntityCustomNameProperty(entity));
         registry.register(new EntityCustomNameVisibleProperty(entity));
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
-        EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            registry.register(new EntityEquipmentProperty(entity, slot, equipmentCapability));
+            registry.register(new EntityEquipmentProperty(entity, slot));
         }
-        EntityScaleCapability scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
-        if (scaleCapability != null) {
-            registry.register(new EntityScaleProperty(entity, scaleCapability));
-        }
-        EntityAICapability aiCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityAICapability.class);
-        if (aiCapability != null) {
-            registry.register(new EntityAIProperty(entity, aiCapability));
-        }
+        registry.register(new EntityScaleProperty(entity));
+        registry.register(new EntityAIProperty(entity));
     }
 
     private void registerArmorStandProperties(ArmorStand entity, PropertyRegistry registry) {
@@ -99,19 +71,10 @@ public class EntityElementListener implements Listener {
         registry.register(new ArmorStandMarkerProperty(entity));
         registry.register(new ArmorStandSizeProperty(entity));
         registry.register(new ArmorStandVisibilityProperty(entity));
-        TickCapability tickCapability = EasyArmorStandsPlugin.getInstance().getCapability(TickCapability.class);
-        if (tickCapability != null) {
-            registry.register(new ArmorStandCanTickProperty(entity, tickCapability));
-        }
+        registry.register(new ArmorStandCanTickProperty(entity));
         registry.register(new ArmorStandGravityProperty(entity));
-        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStandsPlugin.getInstance().getCapability(InvulnerabilityCapability.class);
-        if (invulnerabilityCapability != null) {
-            registry.register(new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
-        }
-        LockCapability lockCapability = EasyArmorStandsPlugin.getInstance().getCapability(LockCapability.class);
-        if (lockCapability != null) {
-            registry.register(new ArmorStandLockProperty(entity, lockCapability));
-        }
+        registry.register(new ArmorStandInvulnerabilityProperty(entity));
+        registry.register(new ArmorStandLockProperty(entity));
         for (ArmorStandPart part : ArmorStandPart.values()) {
             registry.register(new ArmorStandPoseProperty(entity, part));
         }

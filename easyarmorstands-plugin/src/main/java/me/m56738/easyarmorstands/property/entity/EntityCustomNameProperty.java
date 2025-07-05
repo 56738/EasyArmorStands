@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -12,11 +11,9 @@ import java.util.Optional;
 
 public class EntityCustomNameProperty implements Property<Optional<Component>> {
     private final Entity entity;
-    private final ComponentCapability componentCapability;
 
-    public EntityCustomNameProperty(Entity entity, ComponentCapability componentCapability) {
+    public EntityCustomNameProperty(Entity entity) {
         this.entity = entity;
-        this.componentCapability = componentCapability;
     }
 
     @Override
@@ -26,12 +23,12 @@ public class EntityCustomNameProperty implements Property<Optional<Component>> {
 
     @Override
     public @NotNull Optional<Component> getValue() {
-        return Optional.ofNullable(componentCapability.getCustomName(entity));
+        return Optional.ofNullable(entity.customName());
     }
 
     @Override
     public boolean setValue(@NotNull Optional<Component> value) {
-        componentCapability.setCustomName(entity, value.orElse(null));
+        entity.customName(value.orElse(null));
         return true;
     }
 }

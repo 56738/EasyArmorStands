@@ -19,7 +19,6 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.capability.entitytag.EntityTagCapability;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
@@ -47,7 +46,6 @@ import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionSnapper;
 import me.m56738.easyarmorstands.util.AlignAxis;
@@ -104,11 +102,10 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.open")
     @RequireElement
     public void open(EasPlayer sender, Element element) {
-        if (!(element instanceof MenuElement)) {
+        if (!(element instanceof MenuElement menuElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        MenuElement menuElement = (MenuElement) element;
         menuElement.openMenu(sender.get());
     }
 
@@ -122,11 +119,10 @@ public class SessionCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
             return;
         }
-        if (!(element instanceof MenuElement)) {
+        if (!(element instanceof MenuElement menuElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        MenuElement menuElement = (MenuElement) element;
         if (!menuElement.canEdit(sender.get())) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-edit"));
             return;
@@ -200,11 +196,10 @@ public class SessionCommands {
     public void destroy(EasPlayer sender, ElementSelection selection) {
         List<ElementDestroyAction> actions = new ArrayList<>();
         for (Element element : selection.elements()) {
-            if (!(element instanceof DestroyableElement)) {
+            if (!(element instanceof DestroyableElement destroyableElement)) {
                 continue;
             }
 
-            DestroyableElement destroyableElement = (DestroyableElement) element;
             if (!sender.canDestroyElement(destroyableElement)) {
                 continue;
             }
@@ -387,11 +382,7 @@ public class SessionCommands {
         PropertyContainer properties = selection.properties(sender);
         Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
         if (property == null) {
-            if (ArmorStandCanTickProperty.isSupported()) {
-                sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));
-            } else {
-                sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported"));
-            }
+            sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));
             return;
         }
         if (!property.setValue(canTick)) {
@@ -516,13 +507,8 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.select.tag")
     @RequireSession
     public void selectTag(EasPlayer sender, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
-        EntityTagCapability tagCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTagCapability.class);
-        if (tagCapability == null) {
-            selectGroup(sender, session, Collections.emptyIterator());
-            return;
-        }
         selectGroup(sender, session, sender.get().getWorld().getEntities().stream()
-                .filter(entity -> tagCapability.getTags(entity).contains(tag))
+                .filter(entity -> entity.getScoreboardTags().contains(tag))
                 .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
@@ -553,22 +539,16 @@ public class SessionCommands {
 
     @Suggestions("discoverable_tags")
     public Set<String> getDiscoverableTags(CommandContext<EasCommandSender> ctx, String input) {
-        EntityTagCapability tagCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTagCapability.class);
-        if (tagCapability == null) {
-            return Collections.emptySet();
-        }
         EasCommandSender sender = ctx.sender();
-        if (!(sender instanceof EasPlayer)) {
+        if (!(sender instanceof EasPlayer player)) {
             return Collections.emptySet();
         }
-        EasPlayer player = (EasPlayer) sender;
         Set<String> tags = new TreeSet<>();
         for (Entity entity : player.get().getWorld().getEntities()) {
-            Set<String> entityTags = tagCapability.getTags(entity);
+            Set<String> entityTags = entity.getScoreboardTags();
             if (!tags.containsAll(entityTags)) {
                 Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
-                if (element instanceof EditableElement) {
-                    EditableElement editableElement = (EditableElement) element;
+                if (element instanceof EditableElement editableElement) {
                     if (player.canDiscoverElement(editableElement)) {
                         tags.addAll(entityTags);
                     }
@@ -610,11 +590,10 @@ public class SessionCommands {
     @RequireSession
     public void reset(EasPlayer sender, Session session) {
         Node node = session.getNode();
-        if (!(node instanceof ResettableNode)) {
+        if (!(node instanceof ResettableNode resettableNode)) {
             sender.sendMessage(Message.error("easyarmorstands.error.reset-unsupported"));
             return;
         }
-        ResettableNode resettableNode = (ResettableNode) node;
         resettableNode.reset();
         sender.sendMessage(Message.success("easyarmorstands.success.reset-value"));
     }

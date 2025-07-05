@@ -13,7 +13,6 @@ dependencies {
     api(project(":easyarmorstands-api"))
     api(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
     runtimeOnly(project(":easyarmorstands-bentobox"))
-    runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))
     runtimeOnly(project(":easyarmorstands-griefdefender"))
     runtimeOnly(project(":easyarmorstands-griefprevention"))

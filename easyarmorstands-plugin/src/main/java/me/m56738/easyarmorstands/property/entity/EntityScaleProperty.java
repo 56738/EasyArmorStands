@@ -3,17 +3,16 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityScaleProperty implements Property<Double> {
     private final LivingEntity entity;
-    private final EntityScaleCapability capability;
 
-    public EntityScaleProperty(LivingEntity entity, EntityScaleCapability capability) {
+    public EntityScaleProperty(LivingEntity entity) {
         this.entity = entity;
-        this.capability = capability;
     }
 
     @Override
@@ -23,15 +22,22 @@ public class EntityScaleProperty implements Property<Double> {
 
     @Override
     public @NotNull Double getValue() {
-        return capability.getScale(entity);
+        AttributeInstance attribute = entity.getAttribute(Attribute.SCALE);
+        if (attribute != null) {
+            return attribute.getBaseValue();
+        } else {
+            return 1.0;
+        }
     }
 
     @Override
     public boolean setValue(@NotNull Double value) {
-        if (!capability.hasScale(entity)) {
+        AttributeInstance attribute = entity.getAttribute(Attribute.SCALE);
+        if (attribute != null) {
+            attribute.setBaseValue(value);
+            return true;
+        } else {
             return false;
         }
-        capability.setScale(entity, value);
-        return true;
     }
 }

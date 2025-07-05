@@ -25,7 +25,6 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadow
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -33,12 +32,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
     private final HologramManager manager;
-    private final JOMLMapper mapper;
     private final FancyHologramsAddon addon;
 
-    public HologramElementType(HologramManager manager, JOMLMapper mapper, FancyHologramsAddon addon) {
+    public HologramElementType(HologramManager manager, FancyHologramsAddon addon) {
         this.manager = manager;
-        this.mapper = mapper;
         this.addon = addon;
     }
 
@@ -47,21 +44,17 @@ public class HologramElementType implements ElementType {
         HologramData data = hologram.getData();
         element.getProperties().register(new HologramDataProperty(hologram));
         element.getProperties().register(new HologramLocationProperty(hologram));
-        if (data instanceof DisplayHologramData) {
-            DisplayHologramData displayData = (DisplayHologramData) data;
-            element.getProperties().register(new DisplayHologramScaleProperty(hologram, displayData, mapper));
+        if (data instanceof DisplayHologramData displayData) {
+            element.getProperties().register(new DisplayHologramScaleProperty(hologram, displayData));
             element.getProperties().register(new DisplayHologramBillboardProperty(hologram, displayData));
         }
-        if (data instanceof ItemHologramData) {
-            ItemHologramData itemData = (ItemHologramData) data;
+        if (data instanceof ItemHologramData itemData) {
             element.getProperties().register(new ItemHologramItemProperty(hologram, itemData));
         }
-        if (data instanceof BlockHologramData) {
-            BlockHologramData blockData = (BlockHologramData) data;
+        if (data instanceof BlockHologramData blockData) {
             element.getProperties().register(new BlockHologramBlockProperty(hologram, blockData));
         }
-        if (data instanceof TextHologramData) {
-            TextHologramData textData = (TextHologramData) data;
+        if (data instanceof TextHologramData textData) {
             element.getProperties().register(new TextHologramTextProperty(hologram, textData));
             element.getProperties().register(new TextHologramShadowProperty(hologram, textData));
             element.getProperties().register(new TextHologramSeeThroughProperty(hologram, textData));
