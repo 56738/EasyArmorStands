@@ -5,6 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.NonExtendable
-public interface MoveButton extends MenuButton {
+public interface MoveButton extends EditorButton {
     @NotNull Node createNode();
 }

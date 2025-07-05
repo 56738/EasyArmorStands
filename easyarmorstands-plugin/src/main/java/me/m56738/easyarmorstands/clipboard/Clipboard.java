@@ -1,13 +1,10 @@
 package me.m56738.easyarmorstands.clipboard;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.util.PropertyCopier;
 import org.bukkit.entity.Player;
@@ -40,14 +37,6 @@ public class Clipboard {
         if (copier.getSuccessCount() > 0) {
             player.sendMessage(Message.hint("easyarmorstands.hint.clipboard-auto-applied"));
             player.sendMessage(Message.hint("easyarmorstands.hint.clear-clipboard", Message.command("/eas clipboard clear")));
-        }
-    }
-
-    public <T> void handlePropertyShiftClick(Property<T> property, MenuClick click) {
-        PropertyType<T> type = property.getType();
-        if (click.player().hasPermission(Permissions.CLIPBOARD) && type.canCopy(click.player())) {
-            properties.put(type, property.getValue());
-            click.sendMessage(Message.success("easyarmorstands.success.property-copied", type.getName()));
         }
     }
 

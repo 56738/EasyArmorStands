@@ -28,7 +28,7 @@ public final class PointButton implements Button {
         this.session = session;
         this.positionProvider = positionProvider;
         this.rotationProvider = rotationProvider;
-        this.particle = session.particleProvider().createPoint();
+        this.particle = session.particles().createPoint();
     }
 
     public @NotNull ParticleColor getColor() {

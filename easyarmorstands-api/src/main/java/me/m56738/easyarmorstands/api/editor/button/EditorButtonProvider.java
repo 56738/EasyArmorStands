@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.NonExtendable
-public interface MenuButtonProvider {
+public interface EditorButtonProvider {
     @Contract(pure = true)
     @NotNull MoveButtonBuilder move();
 

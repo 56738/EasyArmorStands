@@ -17,7 +17,7 @@ public class Cursor3D {
 
     public Cursor3D(Session session) {
         this.session = session;
-        this.particle = session.particleProvider().createPoint();
+        this.particle = session.particles().createPoint();
     }
 
     public void start(EnterContext context, Vector3dc cursor) {

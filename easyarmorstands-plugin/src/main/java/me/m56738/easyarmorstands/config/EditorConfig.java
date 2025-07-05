@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializabl
 @ConfigSerializable
 public class EditorConfig {
     public EditorDiscoveryConfig discovery;
-    public EditorMenuConfig menu;
     public EditorButtonConfig button;
     public EditorScaleConfig scale;
     public EditorSelectionConfig selection;

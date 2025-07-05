@@ -39,7 +39,7 @@ public class InteractionRootNode extends AbstractPropertyNode implements Element
         super(session, session.properties(element));
         this.session = session;
         this.element = element;
-        this.boxParticle = session.particleProvider().createAxisAlignedBox();
+        this.boxParticle = session.particles().createAxisAlignedBox();
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.widthProperty = properties().get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = properties().get(DisplayPropertyTypes.BOX_HEIGHT);

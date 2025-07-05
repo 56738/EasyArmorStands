@@ -5,6 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.NonExtendable
-public interface AxisScaleButton extends MenuButton {
+public interface AxisScaleButton extends EditorButton {
     @NotNull Node createNode();
 }

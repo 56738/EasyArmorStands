@@ -32,12 +32,12 @@ public final class BoundingBoxButton implements Button {
 
     public BoundingBoxButton(@NotNull Session session, @NotNull BoundingBoxProvider boxProvider, @NotNull PositionProvider positionProvider, @NotNull RotationProvider rotationProvider) {
         this.session = session;
-        this.pointParticle = session.particleProvider().createPoint();
+        this.pointParticle = session.particles().createPoint();
         this.boxProvider = boxProvider;
         this.positionProvider = positionProvider;
         this.rotationProvider = rotationProvider;
         this.pointParticle.setBillboard(false);
-        this.boxParticle = session.particleProvider().createAxisAlignedBox();
+        this.boxParticle = session.particles().createAxisAlignedBox();
     }
 
     @Override

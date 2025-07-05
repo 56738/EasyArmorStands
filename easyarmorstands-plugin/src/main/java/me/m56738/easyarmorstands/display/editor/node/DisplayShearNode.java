@@ -30,7 +30,7 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
         DisplayToolProvider tools = element.getTools(properties);
         for (Axis axis : Axis.values()) {
             // TODO use ToolMenuManager
-            addButton(session.menuEntryProvider()
+            addButton(session.buttons()
                     .axisRotate()
                     .setTool(tools.shear(ToolContext.of(tools.position(), tools.rotation()), axis))
                     .build());

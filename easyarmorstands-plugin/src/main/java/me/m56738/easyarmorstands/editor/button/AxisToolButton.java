@@ -37,7 +37,7 @@ public abstract class AxisToolButton implements NodeFactoryButton {
         this.session = session;
         this.tool = tool;
         this.length = length;
-        this.particle = session.particleProvider().createLine();
+        this.particle = session.particles().createLine();
         this.color = color;
     }
 

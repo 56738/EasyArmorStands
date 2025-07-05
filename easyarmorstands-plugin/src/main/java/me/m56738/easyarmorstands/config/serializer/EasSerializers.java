@@ -1,8 +1,5 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
 import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
@@ -23,9 +20,6 @@ public class EasSerializers {
             .register(ItemTemplate.class, new ItemTemplateSerializer())
             .register(Key.class, new KeySerializer())
             .register(Material.class, new MaterialSerializer())
-            .register(MenuFactory.class, new MenuFactorySerializer())
-            .register(MenuSlotFactory.class, new MenuSlotFactorySerializer())
-            .register(MenuSlotType.class, new MenuSlotTypeSerializer())
             .register(PropertyType.type(), new PropertyTypeSerializer())
             .register(MessageStyle.class, new MessageStyleSerializer())
             .build();

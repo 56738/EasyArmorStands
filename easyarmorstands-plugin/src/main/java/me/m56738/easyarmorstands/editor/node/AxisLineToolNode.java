@@ -46,9 +46,9 @@ public abstract class AxisLineToolNode extends ToolNode implements ValueNode<Dou
         this.rotation = new Quaterniond(rotation);
         this.axis = axis;
         this.direction = axis.getDirection().rotate(rotation, new Vector3d());
-        this.particle = session.particleProvider().createLine();
+        this.particle = session.particles().createLine();
         this.particle.setColor(color);
-        this.cursorLineParticle = session.particleProvider().createLine();
+        this.cursorLineParticle = session.particles().createLine();
         this.cursor = new Cursor3D(session);
     }
 

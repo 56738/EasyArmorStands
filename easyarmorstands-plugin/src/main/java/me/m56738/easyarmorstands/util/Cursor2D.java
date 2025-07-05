@@ -20,7 +20,7 @@ public class Cursor2D {
 
     public Cursor2D(Session session) {
         this.session = session;
-        this.particle = session.particleProvider().createPoint();
+        this.particle = session.particles().createPoint();
     }
 
     public void start(EnterContext context, Vector3dc origin, Vector3dc cursor, Vector3dc normal) {

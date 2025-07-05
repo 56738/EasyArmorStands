@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public interface MenuButton {
+public interface EditorButton {
     @NotNull Button getButton();
 
     @NotNull Component getName();

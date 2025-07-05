@@ -14,7 +14,6 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -57,7 +56,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -184,9 +182,7 @@ public class SessionCommands {
     @Permission(Permissions.SPAWN)
     @CommandDescription("easyarmorstands.command.description.spawn")
     public void spawn(EasPlayer sender) {
-        Player player = sender.get();
-        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
-        player.openInventory(menu.getInventory());
+        EasyArmorStandsPlugin.getInstance().openSpawnMenu(sender.get());
     }
 
     @Command("destroy")

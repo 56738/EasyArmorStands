@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.api.editor.util;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.button.EditorButton;
 import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
@@ -22,7 +22,7 @@ public class ToolManager {
     private final Session session;
     private final AbstractNode node;
     private final ToolProvider toolProvider;
-    private final List<MenuButton> buttons = new ArrayList<>();
+    private final List<EditorButton> buttons = new ArrayList<>();
     private ToolMode mode = null;
 
     public ToolManager(Session session, AbstractNode node, ToolProvider toolProvider) {
@@ -38,7 +38,7 @@ public class ToolManager {
     }
 
     public boolean hasMode(ToolMode mode) {
-        List<MenuButton> buttons = new ArrayList<>();
+        List<EditorButton> buttons = new ArrayList<>();
         collectButtons(mode, buttons);
         return !buttons.isEmpty();
     }
@@ -73,13 +73,13 @@ public class ToolManager {
         return ToolContext.of(positionProvider, rotationProvider);
     }
 
-    private void collectButtons(ToolMode mode, List<MenuButton> buttons) {
+    private void collectButtons(ToolMode mode, List<EditorButton> buttons) {
         ToolContext context = createToolContext();
 
         if (mode == ToolMode.SCALE) {
             ScaleTool scaleTool = toolProvider.scale(context);
             if (scaleTool != null && scaleTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                buttons.add(session.buttons()
                         .scale()
                         .setTool(scaleTool)
                         .setPriority(1)
@@ -88,7 +88,7 @@ public class ToolManager {
             for (Axis axis : Axis.values()) {
                 AxisScaleTool axisScaleTool = toolProvider.scale(context, axis);
                 if (axisScaleTool != null && axisScaleTool.canUse(session.player())) {
-                    buttons.add(session.menuEntryProvider()
+                    buttons.add(session.buttons()
                             .axisScale()
                             .setTool(axisScaleTool)
                             .build());
@@ -99,7 +99,7 @@ public class ToolManager {
 
         MoveTool moveTool = toolProvider.move(context);
         if (moveTool != null && moveTool.canUse(session.player())) {
-            buttons.add(session.menuEntryProvider()
+            buttons.add(session.buttons()
                     .move()
                     .setTool(moveTool)
                     .setPriority(1)
@@ -108,14 +108,14 @@ public class ToolManager {
         for (Axis axis : Axis.values()) {
             AxisMoveTool axisMoveTool = toolProvider.move(context, axis);
             if (axisMoveTool != null && axisMoveTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                buttons.add(session.buttons()
                         .axisMove()
                         .setTool(axisMoveTool)
                         .build());
             }
             AxisRotateTool axisRotateTool = toolProvider.rotate(context, axis);
             if (axisRotateTool != null && axisRotateTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                buttons.add(session.buttons()
                         .axisRotate()
                         .setTool(axisRotateTool)
                         .build());
@@ -126,14 +126,14 @@ public class ToolManager {
     public boolean setMode(ToolMode mode) {
         this.mode = Objects.requireNonNull(mode);
 
-        for (MenuButton button : buttons) {
+        for (EditorButton button : buttons) {
             node.removeButton(button);
         }
         buttons.clear();
 
         collectButtons(mode, buttons);
 
-        for (MenuButton button : buttons) {
+        for (EditorButton button : buttons) {
             node.addButton(button);
         }
 

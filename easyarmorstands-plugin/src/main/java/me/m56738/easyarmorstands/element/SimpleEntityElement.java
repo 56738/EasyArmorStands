@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -97,8 +96,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(@NotNull Player player) {
-        Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-        EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
+        // TODO
     }
 
     @Override

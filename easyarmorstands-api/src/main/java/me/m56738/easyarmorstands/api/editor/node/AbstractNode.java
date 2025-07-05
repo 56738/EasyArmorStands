@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.button.EditorButton;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
@@ -24,8 +24,8 @@ import java.util.Objects;
  */
 public abstract class AbstractNode implements Node {
     private final Session session;
-    private final Map<MenuButton, Button> buttons = new HashMap<>();
-    private MenuButton targetButton;
+    private final Map<EditorButton, Button> buttons = new HashMap<>();
+    private EditorButton targetButton;
     private Vector3dc targetCursor;
     private boolean visible;
 
@@ -33,20 +33,20 @@ public abstract class AbstractNode implements Node {
         this.session = session;
     }
 
-    public final void addButton(@NotNull MenuButton menuButton) {
-        setButton(menuButton, menuButton.getButton());
+    public final void addButton(@NotNull EditorButton editorButton) {
+        setButton(editorButton, editorButton.getButton());
     }
 
-    public final void removeButton(@NotNull MenuButton menuButton) {
-        setButton(Objects.requireNonNull(menuButton), null);
+    public final void removeButton(@NotNull EditorButton editorButton) {
+        setButton(Objects.requireNonNull(editorButton), null);
     }
 
-    private void setButton(MenuButton menuButton, Button button) {
+    private void setButton(EditorButton editorButton, Button button) {
         Button oldButton;
         if (button != null) {
-            oldButton = buttons.put(menuButton, button);
+            oldButton = buttons.put(editorButton, button);
         } else {
-            oldButton = buttons.remove(menuButton);
+            oldButton = buttons.remove(editorButton);
         }
         if (visible) {
             if (oldButton != null) {
@@ -54,7 +54,7 @@ public abstract class AbstractNode implements Node {
             }
             if (button != null) {
                 button.update();
-                button.updatePreview(menuButton.isAlwaysFocused());
+                button.updatePreview(editorButton.isAlwaysFocused());
                 button.showPreview();
             }
         }
@@ -64,11 +64,11 @@ public abstract class AbstractNode implements Node {
     public void onEnter(@NotNull EnterContext context) {
         targetButton = null;
         visible = true;
-        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
-            MenuButton menuButton = entry.getKey();
+        for (Map.Entry<EditorButton, Button> entry : buttons.entrySet()) {
+            EditorButton editorButton = entry.getKey();
             Button button = entry.getValue();
             button.update();
-            button.updatePreview(menuButton.isAlwaysFocused());
+            button.updatePreview(editorButton.isAlwaysFocused());
             button.showPreview();
         }
     }
@@ -86,13 +86,13 @@ public abstract class AbstractNode implements Node {
     public void onUpdate(@NotNull UpdateContext context) {
         EyeRay ray = context.eyeRay();
         Button bestButton = null;
-        MenuButton bestMenuButton = null;
+        EditorButton bestMenuButton = null;
         Vector3dc bestCursor = null;
         int bestPriority = Integer.MIN_VALUE;
         double bestDistance = Double.POSITIVE_INFINITY;
         List<ButtonResult> results = new ArrayList<>();
-        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
-            MenuButton menuButton = entry.getKey();
+        for (Map.Entry<EditorButton, Button> entry : buttons.entrySet()) {
+            EditorButton editorButton = entry.getKey();
             Button button = entry.getValue();
             button.update();
             button.intersect(ray, results::add);
@@ -105,7 +105,7 @@ public abstract class AbstractNode implements Node {
                 double distance = position.distanceSquared(ray.origin());
                 if (priority > bestPriority || distance < bestDistance) {
                     bestButton = button;
-                    bestMenuButton = menuButton;
+                    bestMenuButton = editorButton;
                     bestCursor = position;
                     bestPriority = priority;
                     bestDistance = distance;
@@ -113,10 +113,10 @@ public abstract class AbstractNode implements Node {
             }
             results.clear();
         }
-        for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
-            MenuButton menuButton = entry.getKey();
+        for (Map.Entry<EditorButton, Button> entry : buttons.entrySet()) {
+            EditorButton editorButton = entry.getKey();
             Button button = entry.getValue();
-            button.updatePreview(button == bestButton || menuButton.isAlwaysFocused());
+            button.updatePreview(button == bestButton || editorButton.isAlwaysFocused());
         }
         Component targetName;
         if (bestButton != null) {

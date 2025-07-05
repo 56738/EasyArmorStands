@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.button.EditorButton;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
@@ -14,7 +14,6 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -67,7 +66,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
         super(session);
         this.session = session;
         this.name = Message.component("easyarmorstands.node.select-entity");
-        this.selectionBoxParticle = session.particleProvider().createAxisAlignedBox();
+        this.selectionBoxParticle = session.particles().createAxisAlignedBox();
     }
 
     @Override
@@ -310,8 +309,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
             if (player.hasPermission(Permissions.SPAWN)) {
                 // open spawn menu
-                Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
-                player.openInventory(menu.getInventory());
+                EasyArmorStandsPlugin.getInstance().openSpawnMenu(player);
                 return true;
             }
         }
@@ -411,7 +409,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
         }
     }
 
-    private class ElementButton implements MenuButton {
+    private class ElementButton implements EditorButton {
         private final ElementDiscoveryEntry entry;
         private final SelectableElement element;
         private final Button button;

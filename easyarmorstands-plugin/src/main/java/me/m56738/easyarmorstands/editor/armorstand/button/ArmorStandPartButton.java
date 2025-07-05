@@ -51,7 +51,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
         this.part = part;
         this.partInfo = ArmorStandPartInfo.of(part);
         this.element = element;
-        this.particle = session.particleProvider().createLine();
+        this.particle = session.particles().createLine();
         this.particle.setAxis(Axis.Y);
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.poseProperty = container.get(ArmorStandPropertyTypes.POSE.get(part));

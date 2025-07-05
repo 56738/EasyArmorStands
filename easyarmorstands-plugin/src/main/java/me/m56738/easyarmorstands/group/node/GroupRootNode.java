@@ -27,7 +27,7 @@ public class GroupRootNode extends AbstractNode {
         super(group.getSession());
         this.session = group.getSession();
         this.group = group;
-        this.boxParticle = session.particleProvider().createAxisAlignedBox();
+        this.boxParticle = session.particles().createAxisAlignedBox();
         this.boxParticle.setColor(ParticleColor.GRAY);
         this.toolManager = new ToolManager(session, this, new GroupToolProvider(group));
     }

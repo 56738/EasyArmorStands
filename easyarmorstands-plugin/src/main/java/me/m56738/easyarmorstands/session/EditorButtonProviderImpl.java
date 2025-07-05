@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.AxisMoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.AxisRotateButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.AxisScaleButtonBuilder;
-import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
+import me.m56738.easyarmorstands.api.editor.button.EditorButtonProvider;
 import me.m56738.easyarmorstands.api.editor.button.MoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.button.ScaleButtonBuilder;
 import me.m56738.easyarmorstands.editor.button.AxisMoveButtonBuilderImpl;
@@ -14,10 +14,10 @@ import me.m56738.easyarmorstands.editor.button.MoveButtonBuilderImpl;
 import me.m56738.easyarmorstands.editor.button.ScaleButtonBuilderImpl;
 import org.jetbrains.annotations.NotNull;
 
-class MenuButtonProviderImpl implements MenuButtonProvider {
+class EditorButtonProviderImpl implements EditorButtonProvider {
     private final Session session;
 
-    MenuButtonProviderImpl(Session session) {
+    EditorButtonProviderImpl(Session session) {
         this.session = session;
     }
 

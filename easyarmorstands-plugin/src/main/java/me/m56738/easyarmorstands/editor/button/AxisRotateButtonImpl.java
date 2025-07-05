@@ -36,7 +36,7 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
     public AxisRotateButtonImpl(Session session, AxisRotateTool tool, double radius, double length, Component name, ParticleColor color) {
         this.session = session;
         this.tool = tool;
-        this.particle = session.particleProvider().createCircle();
+        this.particle = session.particles().createCircle();
         this.radius = radius;
         this.length = length;
         this.name = name;

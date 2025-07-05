@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
+import me.m56738.easyarmorstands.api.editor.button.EditorButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -60,7 +60,7 @@ public final class SessionImpl implements Session {
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
-    private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
+    private final EditorButtonProvider editorButtonProvider = new EditorButtonProviderImpl(this);
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private int clickTicks = 5;
     private boolean valid = true;
@@ -355,17 +355,17 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public @NotNull ParticleProvider particleProvider() {
+    public @NotNull ParticleProvider particles() {
         return particleProvider;
     }
 
     @Override
-    public @NotNull MenuButtonProvider menuEntryProvider() {
-        return menuButtonProvider;
+    public @NotNull EditorButtonProvider buttons() {
+        return editorButtonProvider;
     }
 
     @Override
-    public @NotNull NodeProvider nodeProvider() {
+    public @NotNull NodeProvider nodes() {
         return nodeProvider;
     }
 

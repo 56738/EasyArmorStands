@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.editor;
 
-import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
+import me.m56738.easyarmorstands.api.editor.button.EditorButtonProvider;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -83,13 +83,13 @@ public interface Session {
     @NotNull PropertyContainer properties(@NotNull Element element);
 
     @Contract(pure = true)
-    @NotNull ParticleProvider particleProvider();
+    @NotNull ParticleProvider particles();
 
     @Contract(pure = true)
-    @NotNull MenuButtonProvider menuEntryProvider();
+    @NotNull EditorButtonProvider buttons();
 
     @Contract(pure = true)
-    @NotNull NodeProvider nodeProvider();
+    @NotNull NodeProvider nodes();
 
     @Contract(pure = true)
     @NotNull Snapper snapper();

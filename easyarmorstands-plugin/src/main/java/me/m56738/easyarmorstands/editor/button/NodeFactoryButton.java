@@ -2,14 +2,14 @@ package me.m56738.easyarmorstands.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.button.EditorButton;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.editor.node.NodeFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public interface NodeFactoryButton extends MenuButton, Button, NodeFactory {
+public interface NodeFactoryButton extends EditorButton, Button, NodeFactory {
     @Override
     default @NotNull Button getButton() {
         return this;

@@ -33,7 +33,7 @@ public class DisplayNode extends AbstractPropertyNode {
     public DisplayNode(Session session, PropertyContainer container) {
         super(session, container);
         this.session = session;
-        this.boxParticle = session.particleProvider().createAxisAlignedBox();
+        this.boxParticle = session.particles().createAxisAlignedBox();
         this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
         this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);

@@ -38,7 +38,7 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
         super(session, toolSession, name);
         this.session = session;
         this.toolSession = toolSession;
-        this.cursorLineParticle = session.particleProvider().createLine();
+        this.cursorLineParticle = session.particles().createLine();
         this.position = new Vector3d(position);
         this.color = color;
         this.cursor = new Cursor3D(session);

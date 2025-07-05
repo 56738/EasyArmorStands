@@ -1,7 +1,6 @@
 [versions]
 bentobox = "2.7.0-SNAPSHOT"
 bstats = "3.1.0"
-checker-qual = "3.49.2"
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-beta.10"
 commodore = "2.2"
@@ -27,7 +26,6 @@ worldguard = "7.0.14"
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
-checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "checker-qual" }
 cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
