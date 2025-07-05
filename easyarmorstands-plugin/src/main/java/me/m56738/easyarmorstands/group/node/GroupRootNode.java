@@ -7,8 +7,8 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -21,7 +21,7 @@ public class GroupRootNode extends AbstractNode {
     private final Session session;
     private final Group group;
     private final BoundingBoxParticle boxParticle;
-    private final ToolMenuManager toolManager;
+    private final ToolManager toolManager;
 
     public GroupRootNode(Group group) {
         super(group.getSession());
@@ -29,7 +29,7 @@ public class GroupRootNode extends AbstractNode {
         this.group = group;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
         this.boxParticle.setColor(ParticleColor.GRAY);
-        this.toolManager = new ToolMenuManager(session, this, new GroupToolProvider(group));
+        this.toolManager = new ToolManager(session, this, new GroupToolProvider(group));
     }
 
     private void updateBox() {
@@ -58,7 +58,7 @@ public class GroupRootNode extends AbstractNode {
     public void onEnter(@NotNull EnterContext context) {
         super.onEnter(context);
         boxParticle.setColor(ParticleColor.WHITE);
-        toolManager.setMode(ToolMenuMode.GLOBAL);
+        toolManager.setMode(ToolMode.GLOBAL);
     }
 
     @Override

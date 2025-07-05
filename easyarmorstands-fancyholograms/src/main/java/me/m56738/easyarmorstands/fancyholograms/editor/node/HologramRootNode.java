@@ -4,12 +4,12 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
-import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
+import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -21,15 +21,15 @@ import org.jetbrains.annotations.NotNull;
 public class HologramRootNode extends AbstractPropertyNode implements ElementNode {
     private final Session session;
     private final HologramElement element;
-    private final ToolMenuModeSwitcher toolSwitcher;
+    private final ToolModeSwitcher toolModeSwitcher;
     private final Property<BlockData> blockDataProperty;
 
     public HologramRootNode(Session session, HologramElement element) {
         super(session, session.properties(element));
         this.session = session;
         this.element = element;
-        this.toolSwitcher = new ToolMenuModeSwitcher(
-                new ToolMenuManager(session, this, element.getTools(properties())));
+        this.toolModeSwitcher = new ToolModeSwitcher(
+                new ToolManager(session, this, element.getTools(properties())));
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
     }
 
@@ -55,13 +55,13 @@ public class HologramRootNode extends AbstractPropertyNode implements ElementNod
             element.openMenu(player);
             return true;
         }
-        return toolSwitcher.onClick(context);
+        return toolModeSwitcher.onClick(context);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolSwitcher.getActionBar());
+        context.setActionBar(toolModeSwitcher.getActionBar());
     }
 
     @Override

@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -13,7 +13,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
+import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Location;
@@ -29,8 +29,8 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
     private final DisplayElement<?> element;
     private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
-    private final ToolMenuManager toolManager;
-    private final ToolMenuModeSwitcher toolSwitcher;
+    private final ToolManager toolManager;
+    private final ToolModeSwitcher toolModeSwitcher;
 
     public DisplayRootNode(Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
@@ -38,8 +38,8 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
         this.element = element;
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
-        this.toolManager = new ToolMenuManager(session, this, element.getTools(properties()));
-        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
+        this.toolManager = new ToolManager(session, this, element.getTools(properties()));
+        this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 
     @Override
@@ -64,13 +64,13 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
             element.openMenu(player);
             return true;
         }
-        return toolSwitcher.onClick(context);
+        return toolModeSwitcher.onClick(context);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolSwitcher.getActionBar());
+        context.setActionBar(toolModeSwitcher.getActionBar());
     }
 
     @Override

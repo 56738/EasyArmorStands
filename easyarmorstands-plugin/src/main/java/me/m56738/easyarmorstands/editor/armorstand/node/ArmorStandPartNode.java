@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
-import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
+import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
 import org.bukkit.util.EulerAngle;
@@ -18,22 +18,22 @@ import org.jetbrains.annotations.NotNull;
 public class ArmorStandPartNode extends AbstractPropertyNode implements ResettableNode {
     private final Session session;
     private final ArmorStandPart part;
-    private final ToolMenuManager toolManager;
-    private final ToolMenuModeSwitcher toolSwitcher;
+    private final ToolManager toolManager;
+    private final ToolModeSwitcher toolModeSwitcher;
 
     public ArmorStandPartNode(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         super(session, container);
         this.session = session;
         this.part = part;
-        this.toolManager = new ToolMenuManager(session, this,
+        this.toolManager = new ToolManager(session, this,
                 new ArmorStandPartToolProvider(container, part, element, element.getTools(container)));
-        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
+        this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolSwitcher.getActionBar());
+        context.setActionBar(toolModeSwitcher.getActionBar());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ArmorStandPartNode extends AbstractPropertyNode implements Resettab
             session.popNode();
             return true;
         }
-        return toolSwitcher.onClick(context);
+        return toolModeSwitcher.onClick(context);
     }
 
     @Override

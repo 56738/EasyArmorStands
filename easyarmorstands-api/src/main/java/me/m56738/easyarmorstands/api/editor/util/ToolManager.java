@@ -18,37 +18,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ToolMenuManager {
+public class ToolManager {
     private final Session session;
     private final AbstractNode node;
     private final ToolProvider toolProvider;
     private final List<MenuButton> buttons = new ArrayList<>();
-    private ToolMenuMode mode = null;
+    private ToolMode mode = null;
 
-    public ToolMenuManager(Session session, AbstractNode node, ToolProvider toolProvider) {
+    public ToolManager(Session session, AbstractNode node, ToolProvider toolProvider) {
         this.session = session;
         this.node = node;
         this.toolProvider = toolProvider;
-        for (ToolMenuMode mode : ToolMenuMode.values()) {
+        for (ToolMode mode : ToolMode.values()) {
             if (setMode(mode)) {
                 return;
             }
         }
-        setMode(ToolMenuMode.LOCAL);
+        setMode(ToolMode.LOCAL);
     }
 
-    public boolean hasMode(ToolMenuMode mode) {
+    public boolean hasMode(ToolMode mode) {
         List<MenuButton> buttons = new ArrayList<>();
         collectButtons(mode, buttons);
         return !buttons.isEmpty();
     }
 
-    public ToolMenuMode getMode() {
+    public ToolMode getMode() {
         return mode;
     }
 
-    public ToolMenuMode getNextMode() {
-        ToolMenuMode[] modes = ToolMenuMode.values();
+    public ToolMode getNextMode() {
+        ToolMode[] modes = ToolMode.values();
         for (int i = mode.ordinal() + 1; i < modes.length; i++) {
             if (hasMode(modes[i])) {
                 return modes[i];
@@ -65,7 +65,7 @@ public class ToolMenuManager {
     private ToolContext createToolContext() {
         PositionProvider positionProvider = toolProvider.position();
         RotationProvider rotationProvider;
-        if (mode == ToolMenuMode.GLOBAL) {
+        if (mode == ToolMode.GLOBAL) {
             rotationProvider = RotationProvider.identity();
         } else {
             rotationProvider = toolProvider.rotation();
@@ -73,10 +73,10 @@ public class ToolMenuManager {
         return ToolContext.of(positionProvider, rotationProvider);
     }
 
-    private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {
+    private void collectButtons(ToolMode mode, List<MenuButton> buttons) {
         ToolContext context = createToolContext();
 
-        if (mode == ToolMenuMode.SCALE) {
+        if (mode == ToolMode.SCALE) {
             ScaleTool scaleTool = toolProvider.scale(context);
             if (scaleTool != null && scaleTool.canUse(session.player())) {
                 buttons.add(session.menuEntryProvider()
@@ -123,7 +123,7 @@ public class ToolMenuManager {
         }
     }
 
-    public boolean setMode(ToolMenuMode mode) {
+    public boolean setMode(ToolMode mode) {
         this.mode = Objects.requireNonNull(mode);
 
         for (MenuButton button : buttons) {

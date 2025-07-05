@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -17,22 +17,22 @@ import org.jetbrains.annotations.NotNull;
 public class SimpleEntityNode extends AbstractNode implements ElementNode {
     private final Session session;
     private final Element element;
-    private final ToolMenuManager toolManager;
-    private final ToolMenuModeSwitcher toolSwitcher;
+    private final ToolManager toolManager;
+    private final ToolModeSwitcher toolModeSwitcher;
 
     public SimpleEntityNode(Session session, EditableElement element) {
         super(session);
         this.session = session;
         this.element = element;
-        this.toolManager = new ToolMenuManager(session, this, element.getTools(session.properties(element)));
-        this.toolManager.setMode(ToolMenuMode.GLOBAL);
-        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
+        this.toolManager = new ToolManager(session, this, element.getTools(session.properties(element)));
+        this.toolManager.setMode(ToolMode.GLOBAL);
+        this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
-        context.setActionBar(toolSwitcher.getActionBar());
+        context.setActionBar(toolModeSwitcher.getActionBar());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SimpleEntityNode extends AbstractNode implements ElementNode {
                 return true;
             }
         }
-        return toolSwitcher.onClick(context);
+        return toolModeSwitcher.onClick(context);
     }
 
     @Override

@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -43,7 +43,7 @@ public class InteractionRootNode extends AbstractPropertyNode implements Element
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.widthProperty = properties().get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = properties().get(DisplayPropertyTypes.BOX_HEIGHT);
-        new ToolMenuManager(session, this, element.getTools(properties())).setMode(ToolMenuMode.GLOBAL);
+        new ToolManager(session, this, element.getTools(properties())).setMode(ToolMode.GLOBAL);
         new BoxResizeToolManager(session, this, new InteractionBoxEditor(properties()));
     }
 

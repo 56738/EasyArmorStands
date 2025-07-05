@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.display.editor.node;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.editor.box.DisplayBoxEditor;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
@@ -25,7 +25,7 @@ public class DisplayBoxNode extends DisplayNode {
         setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
 
         DisplayBoxEditor boxEditor = new DisplayBoxEditor(properties);
-        new ToolMenuManager(session, this, new BoxToolProvider(boxEditor)).setMode(ToolMenuMode.GLOBAL);
+        new ToolManager(session, this, new BoxToolProvider(boxEditor)).setMode(ToolMode.GLOBAL);
         new BoxResizeToolManager(session, this, boxEditor);
     }
 
