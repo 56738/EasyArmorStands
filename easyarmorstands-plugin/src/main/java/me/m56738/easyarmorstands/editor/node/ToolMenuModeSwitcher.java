@@ -5,10 +5,10 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 public class ToolMenuModeSwitcher {
     private final ToolMenuManager toolManager;

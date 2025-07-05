@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyTypeException;
-import net.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -6,13 +6,13 @@ import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 

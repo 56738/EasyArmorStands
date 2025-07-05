@@ -1,17 +1,17 @@
 package me.m56738.easyarmorstands.config.serializer;
 
+import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
+import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
 import me.m56738.easyarmorstands.message.MessageStyle;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 import java.text.DecimalFormat;
 

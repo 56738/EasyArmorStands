@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
+import me.m56738.easyarmorstands.lib.cloud.injection.ParameterInjector;
+import me.m56738.easyarmorstands.lib.cloud.util.annotation.AnnotationAccessor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.injection.ParameterInjector;
-import org.incendo.cloud.util.annotation.AnnotationAccessor;
 
 @SuppressWarnings("rawtypes")
 public class ValueNodeInjector implements ParameterInjector<EasCommandSender, ValueNode> {

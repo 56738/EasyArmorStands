@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.command.sender;
 
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import me.m56738.easyarmorstands.lib.cloud.SenderMapper;
+import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.SenderMapper;
 
 public class CommandSenderMapper implements SenderMapper<CommandSender, EasCommandSender> {
     private final BukkitAudiences adventure;

@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.gizmo.api.GizmoAxis;
-import me.m56738.gizmo.api.color.GizmoColor;
+import me.m56738.easyarmorstands.lib.gizmo.api.GizmoAxis;
+import me.m56738.easyarmorstands.lib.gizmo.api.color.GizmoColor;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -11,9 +11,6 @@ import java.util.Map;
 public final class GizmoAdapter {
     private static final Map<Axis, GizmoAxis> AXIS_MAP = new EnumMap<>(Axis.class);
     private static final Map<ParticleColor, GizmoColor> COLOR_MAP = new EnumMap<>(ParticleColor.class);
-
-    private GizmoAdapter() {
-    }
 
     static {
         AXIS_MAP.put(Axis.X, GizmoAxis.X);
@@ -26,6 +23,9 @@ public final class GizmoAdapter {
         COLOR_MAP.put(ParticleColor.YELLOW, GizmoColor.YELLOW);
         COLOR_MAP.put(ParticleColor.GRAY, GizmoColor.GRAY);
         COLOR_MAP.put(ParticleColor.AQUA, GizmoColor.AQUA);
+    }
+
+    private GizmoAdapter() {
     }
 
     public static GizmoAxis convert(Axis axis) {

@@ -2,17 +2,17 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Cursor;
+import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Intersection;
+import me.m56738.easyarmorstands.lib.joml.Matrix4d;
+import me.m56738.easyarmorstands.lib.joml.Matrix4dc;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.util.Util;
-import me.m56738.gizmo.api.cursor.Cursor;
-import me.m56738.gizmo.api.cursor.Intersection;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 public class EyeRayImpl implements EyeRay {
     private final World world;
@@ -38,6 +38,14 @@ public class EyeRayImpl implements EyeRay {
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
         this.matrix = Util.toMatrix4d(location);
+    }
+
+    private static @Nullable Vector3dc convert(@Nullable Intersection intersection) {
+        if (intersection != null) {
+            return intersection.positionOnTarget();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -91,14 +99,6 @@ public class EyeRayImpl implements EyeRay {
             inverseMatrix = matrix.invert(new Matrix4d());
         }
         return inverseMatrix;
-    }
-
-    private static @Nullable Vector3dc convert(@Nullable Intersection intersection) {
-        if (intersection != null) {
-            return intersection.positionOnTarget();
-        } else {
-            return null;
-        }
     }
 
     @Override

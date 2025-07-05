@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.fancyholograms.property.type;
 
 import de.oliver.fancyholograms.api.data.HologramData;
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

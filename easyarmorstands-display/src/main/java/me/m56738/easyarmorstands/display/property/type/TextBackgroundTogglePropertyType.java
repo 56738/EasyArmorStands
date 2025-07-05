@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.display.property.type;
 
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.property.button.TextBackgroundToggleButton;
+import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

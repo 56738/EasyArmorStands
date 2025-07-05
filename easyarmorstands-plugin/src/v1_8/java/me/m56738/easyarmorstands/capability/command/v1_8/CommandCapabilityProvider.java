@@ -6,12 +6,12 @@ import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.CommandManager;
+import me.m56738.easyarmorstands.lib.cloud.bukkit.BukkitCommandManager;
+import me.m56738.easyarmorstands.lib.cloud.bukkit.CloudBukkitCapabilities;
+import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
+import me.m56738.easyarmorstands.lib.cloud.paper.LegacyPaperCommandManager;
 import org.bukkit.plugin.Plugin;
-import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.bukkit.BukkitCommandManager;
-import org.incendo.cloud.bukkit.CloudBukkitCapabilities;
-import org.incendo.cloud.execution.ExecutionCoordinator;
-import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import java.util.logging.Level;
 

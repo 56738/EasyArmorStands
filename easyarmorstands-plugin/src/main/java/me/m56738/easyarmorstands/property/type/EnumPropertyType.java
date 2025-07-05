@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.property.type;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
+import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.EnumMap;
 

@@ -6,9 +6,9 @@ import me.m56738.easyarmorstands.api.editor.button.AxisRotateButton;
 import me.m56738.easyarmorstands.api.editor.button.AxisRotateButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
 
 public class AxisRotateButtonBuilderImpl implements AxisRotateButtonBuilder {

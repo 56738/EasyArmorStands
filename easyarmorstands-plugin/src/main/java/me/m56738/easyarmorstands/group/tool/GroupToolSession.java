@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.editor.tool.Tool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

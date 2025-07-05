@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.session.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
+import me.m56738.easyarmorstands.lib.joml.Vector2dc;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2dc;
-import org.joml.Vector3dc;
 
 public class EnterContextImpl implements EnterContext {
     private final @NotNull SessionImpl session;

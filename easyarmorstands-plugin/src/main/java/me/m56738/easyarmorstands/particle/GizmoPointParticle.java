@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.particle.PointParticle;
-import me.m56738.gizmo.api.PointGizmo;
+import me.m56738.easyarmorstands.lib.gizmo.api.PointGizmo;
+import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniondc;
-import org.joml.Vector3dc;
 
 public class GizmoPointParticle extends GizmoParticle implements PointParticle {
     private final PointGizmo gizmo;

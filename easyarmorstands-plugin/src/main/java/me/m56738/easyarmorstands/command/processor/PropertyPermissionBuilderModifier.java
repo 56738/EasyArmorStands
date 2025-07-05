@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.Command;
+import me.m56738.easyarmorstands.lib.cloud.annotations.BuilderModifier;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.Command;
-import org.incendo.cloud.annotations.BuilderModifier;
 
 public class PropertyPermissionBuilderModifier implements BuilderModifier<PropertyPermission, EasCommandSender> {
     @Override

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

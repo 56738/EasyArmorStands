@@ -9,14 +9,14 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.box.AbstractBoundingBoxEditorSession;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
+import me.m56738.easyarmorstands.lib.joml.Quaternionf;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.joml.Vector3f;
+import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.joml.Quaternionf;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 public class DisplayBoxEditor implements BoundingBoxEditor {
     private final PropertyContainer properties;

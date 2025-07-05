@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.capability.handswap;
 
 import me.m56738.easyarmorstands.capability.Capability;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 
 @Capability(name = "Swap hand items", optional = true)
 public interface SwapHandItemsCapability {

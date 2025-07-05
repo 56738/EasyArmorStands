@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.button;
 
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3dc;
 
 class ButtonResultImpl implements ButtonResult {
     private final Vector3dc position;

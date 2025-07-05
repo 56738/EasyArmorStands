@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.message;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEventSource;
-import net.kyori.adventure.text.format.TextDecoration;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.ComponentLike;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.event.ClickEvent;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.event.HoverEventSource;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.PropertyKey;
 
 public class Message {

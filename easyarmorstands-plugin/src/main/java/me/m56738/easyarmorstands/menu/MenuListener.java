@@ -6,8 +6,9 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.lib.joml.Matrix4dc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4dc;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

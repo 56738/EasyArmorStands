@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;

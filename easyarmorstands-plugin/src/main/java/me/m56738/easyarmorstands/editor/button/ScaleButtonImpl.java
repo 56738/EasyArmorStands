@@ -8,10 +8,10 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.editor.node.ScaleToolNode;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3dc;
 
 public class ScaleButtonImpl implements ScaleButton {
     private final Session session;

@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.command.requirement;
 
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
+import me.m56738.easyarmorstands.lib.cloud.execution.postprocessor.CommandPostprocessingContext;
+import me.m56738.easyarmorstands.lib.cloud.execution.postprocessor.CommandPostprocessor;
+import me.m56738.easyarmorstands.lib.cloud.services.type.ConsumerService;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
-import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
-import org.incendo.cloud.services.type.ConsumerService;
 
 import java.util.Collections;
 import java.util.List;

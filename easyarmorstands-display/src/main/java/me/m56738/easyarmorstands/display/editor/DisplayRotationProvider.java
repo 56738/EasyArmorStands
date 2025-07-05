@@ -5,12 +5,12 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.lib.joml.Quaterniond;
+import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
+import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
 import me.m56738.easyarmorstands.util.EasMath;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
-import org.joml.Quaternionfc;
 
 public class DisplayRotationProvider implements RotationProvider {
     private final Property<Location> locationProperty;

@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.particle;
 
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.util.HSVLike;
-import net.kyori.adventure.util.RGBLike;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.util.HSVLike;
+import me.m56738.easyarmorstands.lib.kyori.adventure.util.RGBLike;
 import org.jetbrains.annotations.NotNull;
 
 public enum ParticleColor implements RGBLike {

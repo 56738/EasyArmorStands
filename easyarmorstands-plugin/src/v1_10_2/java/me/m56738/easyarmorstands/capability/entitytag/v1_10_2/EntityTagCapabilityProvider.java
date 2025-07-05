@@ -8,7 +8,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class EntityTagCapabilityProvider implements CapabilityProvider<EntityTagCapability> {
     @Override

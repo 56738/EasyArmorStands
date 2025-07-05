@@ -9,15 +9,15 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.joml.Vector3f;
+import me.m56738.easyarmorstands.lib.joml.Vector3fc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaterniondc;
-import org.joml.Vector3dc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 public class DisplayScaleTool implements ScaleTool {
     private final ToolContext context;

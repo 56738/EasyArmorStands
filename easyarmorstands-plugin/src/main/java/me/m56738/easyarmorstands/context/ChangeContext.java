@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
-import net.kyori.adventure.permission.PermissionChecker;
+import me.m56738.easyarmorstands.lib.kyori.adventure.permission.PermissionChecker;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

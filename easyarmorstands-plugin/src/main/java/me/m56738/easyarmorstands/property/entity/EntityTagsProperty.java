@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class EntityTagsProperty implements Property<Set<String>> {
     private final Entity entity;

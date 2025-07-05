@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.config;
 
-import org.joml.Math;
-import org.joml.Vector3f;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
+import me.m56738.easyarmorstands.lib.joml.Math;
+import me.m56738.easyarmorstands.lib.joml.Vector3f;
 
 @ConfigSerializable
 public class LimitScaleConfig {

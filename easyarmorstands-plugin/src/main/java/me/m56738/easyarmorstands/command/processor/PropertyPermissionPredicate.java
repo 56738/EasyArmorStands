@@ -4,12 +4,12 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
+import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
+import me.m56738.easyarmorstands.lib.cloud.permission.PredicatePermission;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
 import me.m56738.easyarmorstands.permission.Permissions;
-import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
-import org.incendo.cloud.key.CloudKey;
-import org.incendo.cloud.permission.Permission;
-import org.incendo.cloud.permission.PredicatePermission;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,15 +20,6 @@ public class PropertyPermissionPredicate implements Predicate<EasCommandSender> 
 
     public PropertyPermissionPredicate(PropertyType<?> type) {
         this.type = type;
-    }
-
-    @Override
-    public boolean test(EasCommandSender sender) {
-        if (sender instanceof EasPlayer) {
-            Player player = ((EasPlayer) sender).player();
-            return player.hasPermission(Permissions.EDIT) && type.canChange(player);
-        }
-        return false;
     }
 
     public static @NotNull Permission createPermission(@Subst("n:v") String value) {
@@ -43,5 +34,14 @@ public class PropertyPermissionPredicate implements Predicate<EasCommandSender> 
         return PredicatePermission.of(
                 CloudKey.of("property_permission_" + type.key().asString()),
                 new PropertyPermissionPredicate(type));
+    }
+
+    @Override
+    public boolean test(EasCommandSender sender) {
+        if (sender instanceof EasPlayer) {
+            Player player = ((EasPlayer) sender).player();
+            return player.hasPermission(Permissions.EDIT) && type.canChange(player);
+        }
+        return false;
     }
 }

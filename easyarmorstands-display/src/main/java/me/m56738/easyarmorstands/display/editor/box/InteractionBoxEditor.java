@@ -8,11 +8,11 @@ import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.box.AbstractBoundingBoxEditorSession;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 public class InteractionBoxEditor implements BoundingBoxEditor {
     private final PropertyContainer properties;

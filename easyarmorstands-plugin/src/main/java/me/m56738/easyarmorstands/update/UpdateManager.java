@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.update;
 
+import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
+import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.event.ClickEvent;
 import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

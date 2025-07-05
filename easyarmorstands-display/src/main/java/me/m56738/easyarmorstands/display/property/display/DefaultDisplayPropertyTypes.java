@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.display.property.display;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.display.property.display.interaction.InteractionWidthProperty;
 import me.m56738.easyarmorstands.display.property.type.BlockDataPropertyType;
 import me.m56738.easyarmorstands.display.property.type.BrightnessPropertyType;
 import me.m56738.easyarmorstands.display.property.type.GlowColorPropertyType;
 import me.m56738.easyarmorstands.display.property.type.TextBackgroundTogglePropertyType;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
 import me.m56738.easyarmorstands.property.type.BooleanTogglePropertyType;
 import me.m56738.easyarmorstands.property.type.ComponentPropertyType;
 import me.m56738.easyarmorstands.property.type.EnumTogglePropertyType;
@@ -14,8 +15,6 @@ import me.m56738.easyarmorstands.property.type.IntegerPropertyType;
 import me.m56738.easyarmorstands.property.type.ItemPropertyType;
 import me.m56738.easyarmorstands.property.type.QuaternionfcPropertyType;
 import me.m56738.easyarmorstands.property.type.Vector3fcPropertyType;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;

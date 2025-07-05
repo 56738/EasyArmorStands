@@ -4,8 +4,6 @@ plugins {
 
 dependencies {
     implementation(project(":easyarmorstands-plugin"))
-    compileOnly(libs.bukkit) {
-        isTransitive = false
-    }
+    compileOnly(libs.bukkit)
     compileOnly(libs.bentobox)
 }

@@ -2,13 +2,13 @@ package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
-import net.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaterniondc;
-import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

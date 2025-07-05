@@ -4,18 +4,18 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.lib.cloud.Command;
+import me.m56738.easyarmorstands.lib.cloud.bukkit.parser.location.LocationParser;
+import me.m56738.easyarmorstands.lib.cloud.description.Description;
+import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
+import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
+import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.Command;
-import org.incendo.cloud.bukkit.parser.location.LocationParser;
-import org.incendo.cloud.description.Description;
-import org.incendo.cloud.minecraft.extras.RichDescription;
-import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 public class PositionCommand extends PropertyCommand<Location> {

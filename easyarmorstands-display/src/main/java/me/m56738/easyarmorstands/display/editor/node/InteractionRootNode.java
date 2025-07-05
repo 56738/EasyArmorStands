@@ -8,6 +8,8 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -18,14 +20,12 @@ import me.m56738.easyarmorstands.display.editor.box.InteractionBoxEditor;
 import me.m56738.easyarmorstands.display.element.InteractionElement;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
 public class InteractionRootNode extends PropertyMenuNode implements ElementNode {
     private final Session session;

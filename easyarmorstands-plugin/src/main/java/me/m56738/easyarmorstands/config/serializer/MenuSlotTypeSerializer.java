@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.config.serializer;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
-import net.kyori.adventure.key.Key;
+import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
+import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
+import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializer;
+import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
-import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 

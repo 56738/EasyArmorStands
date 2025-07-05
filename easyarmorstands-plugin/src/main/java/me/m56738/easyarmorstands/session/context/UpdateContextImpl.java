@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.session.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.lib.joml.Vector2dc;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.ComponentLike;
 import me.m56738.easyarmorstands.session.SessionImpl;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2dc;
 
 public class UpdateContextImpl implements UpdateContext {
     private final @NotNull SessionImpl session;

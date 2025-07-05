@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -12,8 +13,9 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
+import me.m56738.easyarmorstands.lib.joml.Quaternionf;
+import me.m56738.easyarmorstands.lib.joml.Vector3f;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Location;
@@ -21,8 +23,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class DisplayRootNode extends DisplayMenuNode implements ElementNode, ResettableNode {
     private final Session session;
