@@ -1,5 +1,9 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuNotifier;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
@@ -26,5 +30,10 @@ public class OptionalComponentPropertyType extends ConfigurablePropertyType<Opti
     @Override
     public @NotNull Component getValueComponent(@NotNull Optional<Component> value) {
         return value.orElse(none);
+    }
+
+    @Override
+    public void addToMenu(@NotNull MenuBuilder builder, @NotNull Property<Optional<Component>> property, @NotNull PropertyContainer properties, @NotNull MenuNotifier notifier) {
+        // TODO
     }
 }

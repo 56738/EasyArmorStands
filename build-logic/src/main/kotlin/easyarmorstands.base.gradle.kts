@@ -50,6 +50,14 @@ repositories {
             includeGroup("com.github.GriefPrevention")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven("https://maven-prs.papermc.io/Paper/pr12671")
+        }
+        filter {
+            includeVersion("io.papermc.paper", "paper-api", "1.21.7-R0.1-SNAPSHOT")
+        }
+    }
 }
 
 java {

@@ -1,5 +1,9 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuNotifier;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
@@ -62,5 +66,8 @@ public interface PropertyType<T> extends Keyed {
 
     default @NotNull T cloneValue(@NotNull T value) {
         return value;
+    }
+
+    default void addToMenu(@NotNull MenuBuilder builder, @NotNull Property<T> property, @NotNull PropertyContainer properties, @NotNull MenuNotifier notifier) {
     }
 }

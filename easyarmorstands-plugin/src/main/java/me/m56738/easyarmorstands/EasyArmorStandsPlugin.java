@@ -6,11 +6,22 @@ import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.MenuNotifier;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -44,6 +55,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.sender.CommandSourceStackMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
@@ -59,6 +71,7 @@ import me.m56738.easyarmorstands.display.element.InteractionElementType;
 import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
@@ -68,6 +81,7 @@ import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
+import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
 import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
 import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
@@ -84,9 +98,15 @@ import me.m56738.easyarmorstands.lib.configurate.yaml.NodeStyle;
 import me.m56738.easyarmorstands.lib.configurate.yaml.YamlConfigurationLoader;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.lib.gizmo.bukkit.api.BukkitGizmos;
+import me.m56738.easyarmorstands.menu.DialogMenuBuilder;
+import me.m56738.easyarmorstands.menu.SimpleMenuNotifier;
+import me.m56738.easyarmorstands.menu.inventory.ElementInventory;
+import me.m56738.easyarmorstands.menu.inventory.ElementInventoryBuilder;
+import me.m56738.easyarmorstands.menu.inventory.ElementInventoryListener;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
@@ -95,6 +115,8 @@ import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
@@ -103,6 +125,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -137,6 +160,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
     private DisplayElementType<ItemDisplay> itemDisplayType;
+    private ArmorStandElementType armorStandElementType;
+    private DisplayElementType<BlockDisplay> blockDisplayType;
+    private TextDisplayElementType textDisplayType;
 
     public static EasyArmorStandsPlugin getInstance() {
         return instance;
@@ -158,11 +184,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         new DefaultDisplayPropertyTypes(propertyTypeRegistry);
 
         itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
-        DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
-        TextDisplayElementType textDisplayType = new TextDisplayElementType();
+        blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
+        textDisplayType = new TextDisplayElementType();
         InteractionElementType interactionType = new InteractionElementType();
 
-        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
+        armorStandElementType = new ArmorStandElementType();
         entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
         entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
@@ -198,6 +224,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getPluginManager().registerEvents(new ClipboardListener(clipboardManager), this);
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
         getServer().getPluginManager().registerEvents(new DisplayListener(), this);
+        getServer().getPluginManager().registerEvents(new ElementInventoryListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
 
@@ -473,7 +500,70 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public void openSpawnMenu(Player player) {
-        // TODO
+        MenuBuilder menuBuilder = new DialogMenuBuilder(Component.translatable("easyarmorstands.menu.spawn.title"), player.locale());
+        addSpawnAction(player, menuBuilder, armorStandElementType);
+        addSpawnAction(player, menuBuilder, itemDisplayType);
+        addSpawnAction(player, menuBuilder, blockDisplayType);
+        addSpawnAction(player, menuBuilder, textDisplayType);
+        menuBuilder.build().open(player);
+    }
+
+    private void addSpawnAction(Player player, MenuBuilder builder, ElementType elementType) {
+        builder.addAction(elementType.getDisplayName(), () -> {
+            ElementSpawnRequestImpl request = new ElementSpawnRequestImpl(elementType);
+            request.setPlayer(player);
+            Element element = request.spawn();
+            if (element instanceof SelectableElement selectableElement) {
+                Session session = sessionManager().getSession(player);
+                if (session != null) {
+                    ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
+                    if (selectionNode != null) {
+                        selectionNode.selectElement(selectableElement);
+                    }
+                }
+            }
+        });
+    }
+
+    public void openElementMenu(Player player, Element element) {
+        // TODO do this properly
+        EasPlayer context = new EasPlayer(player);
+        PropertyContainer properties = new TrackedPropertyContainer(element, context);
+        SimpleMenuNotifier notifier = new SimpleMenuNotifier();
+        MenuBuilder menuBuilder = new DialogMenuBuilder(element.getType().getDisplayName(), player.locale());
+        menuBuilder.addAction(Component.translatable("easyarmorstands.menu.cancel"), null);
+        menuBuilder.addAction(Component.translatable("easyarmorstands.menu.confirm"), notifier::submit).setSubmit(true);
+        if (element instanceof ArmorStandElement) {
+            ElementInventoryBuilder inventoryBuilder = new ElementInventoryBuilder(properties);
+            inventoryBuilder.setSlot(0, 4, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.HEAD)));
+            inventoryBuilder.setSlot(1, 3, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.OFF_HAND)));
+            inventoryBuilder.setSlot(1, 4, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.CHEST)));
+            inventoryBuilder.setSlot(1, 5, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.HAND)));
+            inventoryBuilder.setSlot(2, 4, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.LEGS)));
+            inventoryBuilder.setSlot(3, 4, properties.get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.FEET)));
+            ElementInventory inventory = inventoryBuilder.build();
+            menuBuilder.addAction(Component.text("Edit equipment"), () -> player.openInventory(inventory.getInventory()));
+        } else if (element.getType() == itemDisplayType) {
+            ElementInventoryBuilder inventoryBuilder = new ElementInventoryBuilder(properties);
+            inventoryBuilder.setSlot(0, 4, properties.get(ItemDisplayPropertyTypes.ITEM));
+            ElementInventory inventory = inventoryBuilder.build();
+            menuBuilder.addAction(Component.text("Edit item"), () -> player.openInventory(inventory.getInventory()));
+        }
+        if (element instanceof DestroyableElement destroyableElement && context.canDestroyElement(destroyableElement)) {
+            menuBuilder.addAction(Component.translatable("easyarmorstands.menu.destroy", NamedTextColor.RED), () -> {
+                if (context.canDestroyElement(destroyableElement)) {
+                    context.history().push(new ElementDestroyAction(destroyableElement));
+                    destroyableElement.destroy();
+                }
+            });
+        }
+        properties.forEach(property -> addPropertyToMenu(menuBuilder, properties, property, notifier));
+        Menu menu = menuBuilder.build();
+        menu.open(player);
+    }
+
+    private <T> void addPropertyToMenu(MenuBuilder builder, PropertyContainer container, Property<T> property, MenuNotifier notifier) {
+        property.getType().addToMenu(builder, property, container, notifier);
     }
 
     @Override
