@@ -6,20 +6,21 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
+import org.jspecify.annotations.NullMarked;
 
-public class DisplayNode extends AbstractPropertyNode {
+@NullMarked
+public class DisplayNode extends AbstractElementNode<DisplayElement<?>> {
     private final Session session;
     private final BoundingBoxParticle boxParticle;
     private final Property<Location> locationProperty;
@@ -30,33 +31,35 @@ public class DisplayNode extends AbstractPropertyNode {
     private boolean isVisible;
     private boolean isActive;
 
-    public DisplayNode(Session session, PropertyContainer container) {
-        super(session, container);
+    public DisplayNode(Session session, DisplayElement<?> element) {
+        super(session, element);
         this.session = session;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
-        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
-        this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
-        this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);
+        this.locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
+        this.widthProperty = getProperties().get(DisplayPropertyTypes.BOX_WIDTH);
+        this.heightProperty = getProperties().get(DisplayPropertyTypes.BOX_HEIGHT);
     }
 
     @Override
-    public void onAdd(@NotNull AddContext context) {
+    public void onAdd(AddContext context) {
         canShow = true;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
+        super.onAdd(context);
     }
 
     @Override
-    public void onRemove(@NotNull RemoveContext context) {
+    public void onRemove(RemoveContext context) {
         canShow = false;
         if (isVisible) {
             session.removeParticle(boxParticle);
             isVisible = false;
         }
+        super.onRemove(context);
     }
 
     @Override
-    public void onEnter(@NotNull EnterContext context) {
+    public void onEnter(EnterContext context) {
         isActive = true;
         boxParticle.setColor(ParticleColor.WHITE);
         updateBoundingBox();
@@ -64,7 +67,7 @@ public class DisplayNode extends AbstractPropertyNode {
     }
 
     @Override
-    public void onExit(@NotNull ExitContext context) {
+    public void onExit(ExitContext context) {
         isActive = false;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
@@ -72,13 +75,13 @@ public class DisplayNode extends AbstractPropertyNode {
     }
 
     @Override
-    public void onUpdate(@NotNull UpdateContext context) {
+    public void onUpdate(UpdateContext context) {
         updateBoundingBox();
         super.onUpdate(context);
     }
 
     @Override
-    public void onInactiveUpdate(@NotNull UpdateContext context) {
+    public void onInactiveUpdate(UpdateContext context) {
         updateBoundingBox();
         super.onInactiveUpdate(context);
     }

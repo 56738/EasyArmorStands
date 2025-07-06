@@ -15,7 +15,7 @@ public class HeadDatabaseSlotFactory implements MenuSlotFactory {
 
     @Override
     public MenuSlot createSlot(@NotNull MenuSlotContext context) {
-        if (context.permissions().test("headdb.open")) {
+        if (context.player().hasPermission("headdb.open")) {
             return new HeadDatabaseSlot(itemTemplate, context.resolver());
         } else {
             return null;

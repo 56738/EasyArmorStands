@@ -28,4 +28,9 @@ public class ArmorStandArmsProperty implements Property<Boolean> {
         entity.setArms(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

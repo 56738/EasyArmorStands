@@ -59,4 +59,9 @@ class TrackedPropertyWrapper<T> implements Property<T> {
     public boolean canChange(@NotNull Player player) {
         return property.canChange(player);
     }
+
+    @Override
+    public boolean isValid() {
+        return property.isValid();
+    }
 }

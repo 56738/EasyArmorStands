@@ -2,19 +2,18 @@ package me.m56738.easyarmorstands.fancyholograms.property.display;
 
 import de.oliver.fancyholograms.api.data.DisplayHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-public class DisplayHologramScaleProperty implements Property<Vector3fc> {
-    private final Hologram hologram;
+public class DisplayHologramScaleProperty extends HologramProperty<Vector3fc> {
     private final DisplayHologramData data;
 
     public DisplayHologramScaleProperty(Hologram hologram, DisplayHologramData data) {
-        this.hologram = hologram;
+        super(hologram);
         this.data = data;
     }
 

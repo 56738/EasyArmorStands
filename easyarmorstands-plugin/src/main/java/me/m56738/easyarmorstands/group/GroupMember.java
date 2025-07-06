@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.group;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 
@@ -10,20 +9,14 @@ import java.util.Objects;
 public class GroupMember {
     private final Session session;
     private final EditableElement element;
-    private final ToolProvider tools;
 
     public GroupMember(Session session, EditableElement element) {
         this.session = session;
         this.element = element;
-        this.tools = element.getTools(session.properties(element));
     }
 
     public EditableElement getElement() {
         return element;
-    }
-
-    public ToolProvider getTools() {
-        return tools;
     }
 
     public BoundingBox getBoundingBox() {

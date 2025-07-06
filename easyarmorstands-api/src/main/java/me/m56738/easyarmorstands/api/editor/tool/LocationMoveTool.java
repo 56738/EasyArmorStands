@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.EasConversion;
 import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
@@ -16,12 +16,12 @@ import org.joml.Vector3dc;
 
 class LocationMoveTool implements MoveTool {
     private final ToolContext context;
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Location> locationProperty;
 
-    LocationMoveTool(ToolContext context, PropertyContainer properties, Property<Location> locationProperty) {
+    LocationMoveTool(ToolContext context, ChangeContext changeContext, Property<Location> locationProperty) {
         this.context = context;
-        this.properties = properties;
+        this.changeContext = changeContext;
         this.locationProperty = locationProperty;
     }
 
@@ -87,12 +87,12 @@ class LocationMoveTool implements MoveTool {
 
         @Override
         public void commit(@Nullable Component description) {
-            properties.commit(description);
+            changeContext.commit(description);
         }
 
         @Override
         public boolean isValid() {
-            return properties.isValid();
+            return locationProperty.isValid();
         }
 
         @Override

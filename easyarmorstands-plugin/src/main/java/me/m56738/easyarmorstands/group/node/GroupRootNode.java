@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractChangeContextNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
@@ -17,7 +17,7 @@ import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.tool.GroupToolProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class GroupRootNode extends AbstractNode {
+public class GroupRootNode extends AbstractChangeContextNode {
     private final Session session;
     private final Group group;
     private final BoundingBoxParticle boxParticle;
@@ -29,7 +29,7 @@ public class GroupRootNode extends AbstractNode {
         this.group = group;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
         this.boxParticle.setColor(ParticleColor.GRAY);
-        this.toolManager = new ToolManager(session, this, new GroupToolProvider(group));
+        this.toolManager = new ToolManager(session, this, new GroupToolProvider(group, getContext()));
     }
 
     private void updateBox() {

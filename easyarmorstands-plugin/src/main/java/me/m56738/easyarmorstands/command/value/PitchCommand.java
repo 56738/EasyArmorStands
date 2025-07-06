@@ -4,10 +4,10 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.Command;
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
 import me.m56738.easyarmorstands.lib.cloud.parser.standard.FloatParser;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
@@ -18,10 +18,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class PitchCommand implements ValueCommand<Float> {
     @Override
-    public Command.@NonNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NonNull Builder<EasCommandSender> builder) {
+    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
         return builder.literal("pitch");
     }
 
@@ -36,7 +38,7 @@ public class PitchCommand implements ValueCommand<Float> {
     }
 
     @Override
-    public @NotNull ParserDescriptor<EasCommandSender, Float> getParser() {
+    public @NotNull ParserDescriptor<Source, Float> getParser() {
         return FloatParser.floatParser();
     }
 

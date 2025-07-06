@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
@@ -8,7 +9,6 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -21,12 +21,12 @@ import org.joml.Vector3fc;
 
 public class DisplayScaleTool implements ScaleTool {
     private final ToolContext context;
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Vector3fc> scaleProperty;
 
-    public DisplayScaleTool(ToolContext context, PropertyContainer properties) {
+    public DisplayScaleTool(ToolContext context, ChangeContext changeContext, PropertyContainer properties) {
         this.context = context;
-        this.properties = properties;
+        this.changeContext = changeContext;
         this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
     }
 
@@ -50,13 +50,12 @@ public class DisplayScaleTool implements ScaleTool {
         return scaleProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements ScaleToolSession {
+    private class SessionImpl implements ScaleToolSession {
         private final Vector3fc originalScale;
         private final float originalAverage;
         private final Vector3f scale;
 
         public SessionImpl() {
-            super(properties);
             this.originalScale = new Vector3f(scaleProperty.getValue());
             this.originalAverage = (originalScale.x() + originalScale.y() + originalScale.z()) / 3;
             this.scale = new Vector3f(originalScale);
@@ -86,6 +85,16 @@ public class DisplayScaleTool implements ScaleTool {
         @Override
         public void revert() {
             scaleProperty.setValue(originalScale);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return scaleProperty.isValid();
         }
 
         @Override

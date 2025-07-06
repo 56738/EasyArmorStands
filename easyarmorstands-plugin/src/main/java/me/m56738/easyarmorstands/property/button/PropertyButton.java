@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -12,14 +13,32 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Locale;
 
 public abstract class PropertyButton<T> implements MenuSlot {
-    protected final Property<T> property;
-    protected final PropertyContainer container;
+    private final Element element;
+    private final PropertyType<T> type;
     private final SimpleItemTemplate itemTemplate;
+    private final Property<T> untrackedProperty;
 
-    public PropertyButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item) {
-        this.property = property;
-        this.container = container;
+    public PropertyButton(Element element, PropertyType<T> type, SimpleItemTemplate item) {
+        this.element = element;
+        this.type = type;
         this.itemTemplate = item;
+        this.untrackedProperty = element.getProperties().get(type);
+    }
+
+    protected Element getElement() {
+        return element;
+    }
+
+    protected PropertyType<T> getType() {
+        return type;
+    }
+
+    protected Property<T> getUntrackedProperty() {
+        return untrackedProperty;
+    }
+
+    protected Property<T> getProperty(ChangeContext context) {
+        return context.getProperties(element).get(type);
     }
 
     protected SimpleItemTemplate prepareTemplate(SimpleItemTemplate template) {
@@ -27,9 +46,8 @@ public abstract class PropertyButton<T> implements MenuSlot {
     }
 
     protected void prepareTagResolver(TagResolver.Builder builder) {
-        PropertyType<T> type = property.getType();
         builder.tag("name", Tag.selfClosingInserting(type.getName()));
-        builder.tag("value", Tag.selfClosingInserting(type.getValueComponent(property.getValue())));
+        builder.tag("value", Tag.selfClosingInserting(type.getValueComponent(untrackedProperty.getValue())));
     }
 
     @Override

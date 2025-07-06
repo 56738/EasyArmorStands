@@ -29,4 +29,9 @@ public class TextDisplayTextProperty implements Property<Component> {
         entity.text(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.fancyholograms.element;
 import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
@@ -13,7 +14,6 @@ import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
@@ -31,7 +31,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
     private final HologramManager manager;
     private final Hologram hologram;
     private final FancyHologramsAddon addon;
-    private final PropertyRegistry properties = PropertyRegistry.create(this);
+    private final PropertyRegistry properties = new PropertyRegistry();
 
     public HologramElement(HologramElementType type, HologramManager manager, Hologram hologram, FancyHologramsAddon addon) {
         this.type = type;
@@ -68,8 +68,8 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
     }
 
     @Override
-    public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new HologramToolProvider(properties);
+    public @NotNull ToolProvider getTools(@NotNull ChangeContext changeContext) {
+        return new HologramToolProvider(this, changeContext);
     }
 
     @Override
@@ -109,5 +109,9 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
     @Override
     public @NotNull BoundingBox getBoundingBox() {
         return BoundingBox.of(Util.toVector3d(hologram.getData().getLocation()));
+    }
+
+    public @NotNull Hologram getHologram() {
+        return hologram;
     }
 }

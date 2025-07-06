@@ -44,4 +44,9 @@ public class ArmorStandLockProperty implements Property<Boolean> {
         }
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

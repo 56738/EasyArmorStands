@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -38,8 +39,8 @@ public class InteractionElement extends SimpleEntityElement<Interaction> {
     }
 
     @Override
-    public @NotNull InteractionToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new InteractionToolProvider(properties);
+    public @NotNull InteractionToolProvider getTools(@NotNull ChangeContext changeContext) {
+        return new InteractionToolProvider(this, changeContext);
     }
 
     @Override

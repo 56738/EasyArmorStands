@@ -33,7 +33,7 @@ public class EntityCopySlotFactory implements MenuSlotFactory {
         Element element = context.element();
         if (element instanceof EntityElement<?>) {
             Entity entity = ((EntityElement<?>) element).getEntity();
-            if (context.permissions().test(Permissions.COPY_ENTITY)) {
+            if (context.player().hasPermission(Permissions.COPY_ENTITY)) {
                 ItemStack item = createItem(entity);
                 if (item != null) {
                     return new EntityCopySlot(

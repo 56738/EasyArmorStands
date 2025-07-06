@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -68,19 +67,6 @@ public interface Session {
 
     @Contract(pure = true)
     @NotNull EyeRay eyeRay();
-
-    /**
-     * Returns the properties of an element, but with added permission checks and history tracking.
-     * <p>
-     * Changes will be performed immediately (if allowed).
-     * History actions are created when any property container tracked by the player is
-     * {@link PropertyContainer#commit() committed}.
-     *
-     * @param element the element whose properties should be returned
-     * @return a property container with permission checks and history tracking
-     */
-    @Contract(pure = true)
-    @NotNull PropertyContainer properties(@NotNull Element element);
 
     @Contract(pure = true)
     @NotNull ParticleProvider particleProvider();

@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,15 +49,6 @@ public final class PropertyMap implements PropertyContainer {
         return properties.get(type);
     }
 
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
-    public void commit(@Nullable Component description) {
-    }
-
     @SuppressWarnings("unchecked")
     public <T> boolean put(@NotNull PropertyType<T> type, @NotNull T value) {
         return properties.computeIfAbsent(type, PropertyImpl::new).setValue(value);
@@ -76,7 +66,7 @@ public final class PropertyMap implements PropertyContainer {
         properties.clear();
     }
 
-    private static class PropertyImpl<T> implements Property<T> {
+    private class PropertyImpl<T> implements Property<T> {
         private final PropertyType<T> type;
         private T value;
 
@@ -99,6 +89,11 @@ public final class PropertyMap implements PropertyContainer {
             Objects.requireNonNull(value);
             this.value = type.cloneValue(value);
             return true;
+        }
+
+        @Override
+        public boolean isValid() {
+            return properties.get(type) == this;
         }
     }
 }

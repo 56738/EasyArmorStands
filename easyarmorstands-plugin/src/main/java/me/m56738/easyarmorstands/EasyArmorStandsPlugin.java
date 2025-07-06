@@ -6,18 +6,27 @@ import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
+import me.m56738.easyarmorstands.api.context.ChangeContextFactory;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -54,9 +63,6 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
-import me.m56738.easyarmorstands.command.sender.CommandSourceStackMapper;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
@@ -85,7 +91,6 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
-import me.m56738.easyarmorstands.lib.cloud.CommandManager;
 import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
 import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
 import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
@@ -93,6 +98,8 @@ import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.MinecraftExceptionHa
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
 import me.m56738.easyarmorstands.lib.cloud.paper.PaperCommandManager;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PaperSimpleSenderMapper;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
 import me.m56738.easyarmorstands.lib.configurate.loader.HeaderMode;
@@ -121,6 +128,7 @@ import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.property.context.PlayerChangeContextFactory;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
@@ -181,8 +189,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
     private BukkitGizmos gizmos;
-    private PaperCommandManager<EasCommandSender> commandManager;
-    private AnnotationParser<EasCommandSender> annotationParser;
+    private PaperCommandManager<Source> commandManager;
+    private AnnotationParser<Source> annotationParser;
     private DisplayElementType<ItemDisplay> itemDisplayType;
 
     public static EasyArmorStandsPlugin getInstance() {
@@ -274,7 +282,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         commandManager = createCommandManager();
 
-        MinecraftExceptionHandler.<EasCommandSender>createNative()
+        MinecraftExceptionHandler.create(Source::source)
                 .defaultArgumentParsingHandler()
                 .defaultInvalidSyntaxHandler()
                 .defaultNoPermissionHandler()
@@ -296,12 +304,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorParser<>());
-        commandManager.brigadierManager().registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
+        commandManager.brigadierManager().registerMapping(new TypeToken<TextColorParser<Source>>() {
         }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
 
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
-        commandManager.brigadierManager().registerMapping(new TypeToken<BlockDataArgumentParser<EasCommandSender>>() {
+        commandManager.brigadierManager().registerMapping(new TypeToken<BlockDataArgumentParser<Source>>() {
         }, builder -> builder.toConstant(ArgumentTypes.blockState()));
 
         commandManager.registerCommandPreProcessor(new ElementSelectionProcessor());
@@ -312,7 +320,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         commandManager.registerCommandPostProcessor(new CommandRequirementPostProcessor());
 
-        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
+        annotationParser = new AnnotationParser<>(commandManager, Source.class);
         annotationParser.descriptionMapper(RichDescription::translatable);
 
         annotationParser.registerBuilderModifier(RequireSession.class, new CommandRequirementBuilderModifier<>(a -> new SessionRequirement()));
@@ -342,9 +350,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadMenuTemplates();
     }
 
-    private PaperCommandManager<EasCommandSender> createCommandManager() {
-        CommandSourceStackMapper mapper = new CommandSourceStackMapper();
-        return PaperCommandManager.builder(mapper)
+    private PaperCommandManager<Source> createCommandManager() {
+        return PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper())
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(this);
     }
@@ -596,14 +603,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return gizmos;
     }
 
-    public CommandManager<EasCommandSender> getCommandManager() {
-        return commandManager;
-    }
-
-    public AnnotationParser<EasCommandSender> getAnnotationParser() {
-        return annotationParser;
-    }
-
     public ItemStack createTool(Locale locale) {
         ItemStack item = config.editor.tool.render(locale);
         item.editMeta(meta -> meta.getPersistentDataContainer().set(TOOL_KEY, PersistentDataType.BYTE, (byte) 1));
@@ -628,19 +627,19 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public Menu createSpawnMenu(Player player) {
-        return spawnMenuFactory.createMenu(new SimpleMenuContext(new EasPlayer(player)));
+        return spawnMenuFactory.createMenu(new SimpleMenuContext(player));
     }
 
     public Menu createColorPicker(Player player, ColorPickerContext context) {
         ColorPicketContextWrapper contextWrapper = new ColorPicketContextWrapper(context);
-        ColorPickerMenuContext menuContext = new ColorPickerMenuContext(new EasPlayer(player), contextWrapper);
+        ColorPickerMenuContext menuContext = new ColorPickerMenuContext(player, contextWrapper);
         Menu menu = colorPickerFactory.createMenu(menuContext);
         contextWrapper.subscribe(() -> menu.updateItems(slot -> slot instanceof ColorSlot));
         return menu;
     }
 
     public void openMenu(Player player, Session session, MenuFactory factory, Element element) {
-        Menu menu = factory.createMenu(new ElementMenuContext(new EasPlayer(player), session, element));
+        Menu menu = factory.createMenu(new ElementMenuContext(player, session, element));
         player.openInventory(menu.getInventory());
     }
 
@@ -691,8 +690,33 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     @Override
+    public @NotNull ChangeContextFactory changeContext() {
+        return new PlayerChangeContextFactory();
+    }
+
+    @Override
     public @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity) {
         return new EntityElementReferenceImpl<>(type, entity);
+    }
+
+    public boolean canDiscoverElement(Player player, EditableElement element) {
+        return new PlayerDiscoverElementEvent(player, element).callEvent();
+    }
+
+    public boolean canSelectElement(Player player, EditableElement element) {
+        return new PlayerSelectElementEvent(player, element).callEvent();
+    }
+
+    public boolean canCreateElement(Player player, ElementType type, PropertyContainer properties) {
+        return new PlayerCreateElementEvent(player, type, properties).callEvent();
+    }
+
+    public boolean canDestroyElement(Player player, Element element) {
+        return new PlayerDestroyElementEvent(player, element).callEvent();
+    }
+
+    public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
+        return new PlayerEditPropertyEvent<>(player, element, property, property.getValue(), value).callEvent();
     }
 
     private interface ConfigProcessor {

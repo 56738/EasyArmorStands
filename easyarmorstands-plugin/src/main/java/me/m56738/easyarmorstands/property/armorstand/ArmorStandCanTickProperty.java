@@ -28,4 +28,9 @@ public class ArmorStandCanTickProperty implements Property<Boolean> {
         entity.setCanTick(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

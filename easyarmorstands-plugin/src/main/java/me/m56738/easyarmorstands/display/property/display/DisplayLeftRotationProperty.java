@@ -32,4 +32,9 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
         entity.setTransformation(transformation);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

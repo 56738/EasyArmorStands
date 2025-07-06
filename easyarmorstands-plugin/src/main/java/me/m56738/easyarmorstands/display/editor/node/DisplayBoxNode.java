@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.editor.box.DisplayBoxEditor;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.tool.BoxToolProvider;
 import me.m56738.easyarmorstands.message.Message;
@@ -18,13 +18,13 @@ public class DisplayBoxNode extends DisplayNode {
     private final Session session;
     private final Component name;
 
-    public DisplayBoxNode(Session session, PropertyContainer properties) {
-        super(session, properties);
+    public DisplayBoxNode(Session session, DisplayElement<?> element) {
+        super(session, element);
         this.session = session;
         this.name = Message.component("easyarmorstands.node.display.box").color(NamedTextColor.GOLD);
         setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool node is active
 
-        DisplayBoxEditor boxEditor = new DisplayBoxEditor(properties);
+        DisplayBoxEditor boxEditor = new DisplayBoxEditor(getContext(), getProperties());
         new ToolManager(session, this, new BoxToolProvider(boxEditor)).setMode(ToolMode.GLOBAL);
         new BoxResizeToolManager(session, this, boxEditor);
     }

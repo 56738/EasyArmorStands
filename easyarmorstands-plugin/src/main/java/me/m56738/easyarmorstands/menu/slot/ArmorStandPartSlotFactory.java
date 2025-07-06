@@ -31,12 +31,11 @@ public class ArmorStandPartSlotFactory implements MenuSlotFactory {
         if (root == null) {
             return null;
         }
-        PropertyContainer properties = context.properties(root.getElement());
         return new ArmorStandPartSlot(
+                root.getElement(),
+                ArmorStandPropertyTypes.POSE.get(part),
                 session,
                 root.getPartButton(part),
-                properties,
-                properties.get(ArmorStandPropertyTypes.POSE.get(part)),
                 itemTemplate,
                 context.resolver());
     }

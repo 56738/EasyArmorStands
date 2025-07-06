@@ -3,8 +3,6 @@ package me.m56738.easyarmorstands.group.property;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.message.Message;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,27 +47,5 @@ public class GroupPropertyContainer implements PropertyContainer {
             return null;
         }
         return property;
-    }
-
-    @Override
-    public boolean isValid() {
-        for (PropertyContainer container : containers) {
-            if (container.isValid()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void commit(@Nullable Component description) {
-        for (PropertyContainer container : containers) {
-            container.commit(description);
-        }
-    }
-
-    @Override
-    public void commit() {
-        commit(Message.component("easyarmorstands.history.edit-group", Component.text(containers.size())));
     }
 }

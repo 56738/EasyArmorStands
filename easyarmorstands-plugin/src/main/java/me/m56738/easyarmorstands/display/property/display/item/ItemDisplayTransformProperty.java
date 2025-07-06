@@ -29,4 +29,9 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
         entity.setItemDisplayTransform(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

@@ -28,4 +28,9 @@ public class EntityCustomNameVisibleProperty implements Property<Boolean> {
         entity.setCustomNameVisible(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

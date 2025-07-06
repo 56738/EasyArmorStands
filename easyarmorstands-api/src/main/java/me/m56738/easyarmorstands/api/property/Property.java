@@ -45,4 +45,11 @@ public interface Property<T> {
     default boolean canChange(@NotNull Player player) {
         return true;
     }
+
+    /**
+     * Checks whether this property is still valid.
+     *
+     * @return Whether the property can still be used.
+     */
+    boolean isValid();
 }

@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerEditElementEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -49,7 +49,7 @@ public class RegionListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEdit(PlayerEditElementEvent event) {
+    public void onEdit(PlayerSelectElementEvent event) {
         if (canBypass(event.getPlayer())) {
             return;
         }

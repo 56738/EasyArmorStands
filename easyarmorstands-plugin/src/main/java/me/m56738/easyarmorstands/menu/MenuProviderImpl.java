@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuContext;
 import me.m56738.easyarmorstands.api.menu.MenuFactoryBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -26,16 +25,16 @@ public class MenuProviderImpl implements MenuProvider {
 
     @Override
     public @NotNull MenuContext context(@NotNull Player player) {
-        return new SimpleMenuContext(new EasPlayer(player));
+        return new SimpleMenuContext(player);
     }
 
     @Override
     public @NotNull MenuContext context(@NotNull Player player, @NotNull Element element) {
-        return new ElementMenuContext(new EasPlayer(player), null, element);
+        return new ElementMenuContext(player, null, element);
     }
 
     @Override
     public @NotNull MenuContext context(@NotNull Session session, @NotNull Element element) {
-        return new ElementMenuContext(new EasPlayer(session.player()), session, element);
+        return new ElementMenuContext(session.player(), session, element);
     }
 }

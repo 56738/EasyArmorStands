@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
@@ -15,13 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class InteractionToolProvider implements ToolProvider {
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final PositionProvider positionProvider;
     private final Property<Location> locationProperty;
 
-    public InteractionToolProvider(PropertyContainer properties) {
-        this.properties = properties;
-        this.positionProvider = new BoxCenterPositionProvider(new InteractionBoxEditor(properties));
+    public InteractionToolProvider(InteractionElement element, ChangeContext changeContext) {
+        this.changeContext = changeContext;
+        PropertyContainer properties = changeContext.getProperties(element);
+        this.positionProvider = new BoxCenterPositionProvider(new InteractionBoxEditor(changeContext, properties));
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
     }
 
@@ -37,6 +39,6 @@ public class InteractionToolProvider implements ToolProvider {
 
     @Override
     public @Nullable MoveTool move(@NotNull ToolContext context) {
-        return MoveTool.of(context, properties, locationProperty);
+        return MoveTool.of(context, changeContext, locationProperty);
     }
 }

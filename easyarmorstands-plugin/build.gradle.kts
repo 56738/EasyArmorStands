@@ -10,6 +10,7 @@ plugins {
 dependencies {
     compileOnly(libs.paper.api)
     compileOnlyApi(libs.checker.qual)
+    compileOnlyApi(libs.apiguardian.api)
     api(project(":easyarmorstands-api"))
     api(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
     runtimeOnly(project(":easyarmorstands-bentobox"))

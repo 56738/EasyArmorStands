@@ -39,4 +39,9 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
         entity.setAlignment(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

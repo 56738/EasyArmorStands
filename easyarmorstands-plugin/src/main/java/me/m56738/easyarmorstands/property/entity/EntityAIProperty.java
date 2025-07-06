@@ -28,4 +28,9 @@ public class EntityAIProperty implements Property<Boolean> {
         entity.setAI(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

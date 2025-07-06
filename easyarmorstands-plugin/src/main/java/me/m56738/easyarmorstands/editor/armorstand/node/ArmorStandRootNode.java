@@ -4,13 +4,10 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
+import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
@@ -21,32 +18,25 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends AbstractNode implements ElementNode, ResettableNode {
-    private final Session session;
-    private final ArmorStand entity;
-    private final ArmorStandElement element;
+@NullMarked
+public class ArmorStandRootNode extends AbstractElementNode<ArmorStandElement> implements ResettableNode {
     private final ArmorStandPositionButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
-    private final PropertyContainer container;
     private final Component name;
 
-    public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
-        super(session);
-        this.session = session;
-        this.entity = entity;
-        this.element = element;
-        this.container = session.properties(element);
+    public ArmorStandRootNode(Session session, ArmorStandElement element) {
+        super(session, element);
         this.name = Message.component("easyarmorstands.node.select-bone");
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part, element);
+            ArmorStandPartButton partButton = new ArmorStandPartButton(session, getProperties(), part, element);
             addButton(partButton);
             partButtons.put(part, partButton);
         }
@@ -55,8 +45,8 @@ public class ArmorStandRootNode extends AbstractNode implements ElementNode, Res
                 session,
                 ParticleColor.WHITE,
                 Message.component("easyarmorstands.node.position"),
-                container,
-                new ArmorStandOffsetProvider(element, container),
+                getProperties(),
+                new ArmorStandOffsetProvider(element, getProperties()),
                 element);
         addButton(positionButton);
     }
@@ -77,34 +67,24 @@ public class ArmorStandRootNode extends AbstractNode implements ElementNode, Res
 
     @Override
     public boolean onClick(@NotNull ClickContext context) {
-        Player player = session.player();
+        Player player = getSession().player();
         if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
+            getElement().openMenu(player);
             return true;
         }
         return super.onClick(context);
     }
 
     @Override
-    public boolean isValid() {
-        return entity.isValid();
-    }
-
-    @Override
-    public @NotNull Element getElement() {
-        return element;
-    }
-
-    @Override
     public void reset() {
-        Property<Location> locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        Property<Location> locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
         Location location = locationProperty.getValue();
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            container.get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+            getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
         }
-        container.commit();
+        getContext().commit();
     }
 }

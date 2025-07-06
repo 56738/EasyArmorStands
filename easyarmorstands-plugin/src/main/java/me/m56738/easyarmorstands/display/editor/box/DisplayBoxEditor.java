@@ -1,17 +1,19 @@
 package me.m56738.easyarmorstands.display.editor.box;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.box.AbstractBoundingBoxEditorSession;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -19,14 +21,14 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayBoxEditor implements BoundingBoxEditor {
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Float> widthProperty;
     private final Property<Float> heightProperty;
 
-    public DisplayBoxEditor(PropertyContainer properties) {
-        this.properties = properties;
+    public DisplayBoxEditor(ChangeContext changeContext, PropertyContainer properties) {
+        this.changeContext = changeContext;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         this.widthProperty = properties.get(DisplayPropertyTypes.BOX_WIDTH);
@@ -56,7 +58,7 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
         return new SessionImpl();
     }
 
-    private class SessionImpl extends AbstractBoundingBoxEditorSession {
+    private class SessionImpl implements BoundingBoxEditorSession {
         private final Location originalLocation;
         private final Vector3dc originalPosition;
         private final Vector3fc originalTranslation;
@@ -64,7 +66,6 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
         private final float originalHeight;
 
         private SessionImpl() {
-            super(properties);
             this.originalLocation = locationProperty.getValue().clone();
             this.originalPosition = Util.toVector3d(this.originalLocation);
             this.originalTranslation = new Vector3f(translationProperty.getValue());
@@ -128,6 +129,19 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
             translationProperty.setValue(originalTranslation);
             widthProperty.setValue(originalWidth);
             heightProperty.setValue(originalHeight);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return locationProperty.isValid()
+                    && translationProperty.isValid()
+                    && widthProperty.isValid()
+                    && heightProperty.isValid();
         }
     }
 }

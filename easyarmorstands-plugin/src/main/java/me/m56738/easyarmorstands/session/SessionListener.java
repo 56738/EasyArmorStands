@@ -4,7 +4,8 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.clipboard.Clipboard;
+import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -224,11 +225,12 @@ public class SessionListener implements Listener {
 
     public void onPlaceEntity(Player player, Entity entity) {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            EasPlayer context = new EasPlayer(player);
+            History history = EasyArmorStandsPlugin.getInstance().getHistory(player);
+            Clipboard clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
             Element element = plugin.entityElementProviderRegistry().getElement(entity);
             if (element != null) {
-                context.history().push(new ElementCreateAction(element));
-                context.clipboard().handleAutoApply(element, context);
+                history.push(new ElementCreateAction(element));
+                clipboard.handleAutoApply(element, player);
             }
         });
     }

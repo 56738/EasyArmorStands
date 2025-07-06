@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.command;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
@@ -23,8 +24,6 @@ import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.group.Group;
@@ -43,9 +42,10 @@ import me.m56738.easyarmorstands.lib.cloud.bukkit.data.MultipleEntitySelector;
 import me.m56738.easyarmorstands.lib.cloud.bukkit.data.SingleEntitySelector;
 import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier.Decoder;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionSnapper;
 import me.m56738.easyarmorstands.util.AlignAxis;
@@ -56,6 +56,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +64,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -101,18 +101,20 @@ public class SessionCommands {
     @Permission(Permissions.OPEN)
     @CommandDescription("easyarmorstands.command.description.open")
     @RequireElement
-    public void open(EasPlayer sender, Element element) {
+    public void open(PlayerSource source, Element element) {
+        Player sender = source.source();
         if (!(element instanceof MenuElement menuElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        menuElement.openMenu(sender.get());
+        menuElement.openMenu(sender);
     }
 
     @Command("open <entity>")
     @Permission(Permissions.OPEN)
     @CommandDescription("easyarmorstands.command.description.open.entity")
-    public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
+    public void open(PlayerSource source, @Argument("entity") SingleEntitySelector selector) {
+        Player sender = source.source();
         Entity entity = selector.single();
         Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
         if (element == null) {
@@ -123,23 +125,24 @@ public class SessionCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        if (!menuElement.canEdit(sender.get())) {
+        if (!menuElement.canEdit(sender)) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-edit"));
             return;
         }
-        menuElement.openMenu(sender.get());
+        menuElement.openMenu(sender);
     }
 
     @Command("select <entities>")
     @Permission(Permissions.SELECT)
     @CommandDescription("easyarmorstands.command.description.select")
     @RequireSession
-    public void select(EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
+    public void select(PlayerSource source, Session session, @Argument("entities") MultipleEntitySelector selector) {
+        Player sender = source.source();
         selectGroup(sender, session, selector.values().stream()
                 .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
-                .filter(sender::canEditElement)
+                .filter(e -> EasyArmorStandsPlugin.getInstance().canSelectElement(sender, e))
                 .iterator());
     }
 
@@ -147,12 +150,13 @@ public class SessionCommands {
     @Permission(Permissions.CLONE)
     @CommandDescription("easyarmorstands.command.description.clone")
     @RequireElementSelection
-    public void clone(EasPlayer sender, ElementSelection selection) {
+    public void clone(PlayerSource source, ElementSelection selection) {
+        Player sender = source.source();
         List<Element> clones = new ArrayList<>();
         for (Element element : selection.elements()) {
             ElementType type = element.getType();
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
-            if (sender.canCreateElement(type, properties)) {
+            if (EasyArmorStandsPlugin.getInstance().canCreateElement(sender, type, properties)) {
                 Element clone = type.createElement(properties);
                 if (clone != null) {
                     clones.add(clone);
@@ -177,30 +181,31 @@ public class SessionCommands {
         for (Element clone : clones) {
             actions.add(new ElementCreateAction(clone));
         }
-        sender.history().push(actions, description);
+        EasyArmorStandsPlugin.getInstance().getHistory(sender).push(actions, description);
     }
 
     @Command("spawn")
     @Permission(Permissions.SPAWN)
     @CommandDescription("easyarmorstands.command.description.spawn")
-    public void spawn(EasPlayer sender) {
-        Player player = sender.get();
-        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
-        player.openInventory(menu.getInventory());
+    public void spawn(PlayerSource source) {
+        Player sender = source.source();
+        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(sender);
+        sender.openInventory(menu.getInventory());
     }
 
     @Command("destroy")
     @Permission(Permissions.DESTROY)
     @CommandDescription("easyarmorstands.command.description.destroy")
     @RequireElementSelection
-    public void destroy(EasPlayer sender, ElementSelection selection) {
+    public void destroy(PlayerSource source, ElementSelection selection) {
+        Player sender = source.source();
         List<ElementDestroyAction> actions = new ArrayList<>();
         for (Element element : selection.elements()) {
             if (!(element instanceof DestroyableElement destroyableElement)) {
                 continue;
             }
 
-            if (!sender.canDestroyElement(destroyableElement)) {
+            if (!EasyArmorStandsPlugin.getInstance().canDestroyElement(sender, destroyableElement)) {
                 continue;
             }
 
@@ -209,7 +214,8 @@ public class SessionCommands {
         }
 
         int count = actions.size();
-        sender.history().push(actions, Message.component("easyarmorstands.history.destroy-elements", Component.text(count)));
+        EasyArmorStandsPlugin.getInstance().getHistory(sender)
+                .push(actions, Message.component("easyarmorstands.history.destroy-elements", Component.text(count)));
 
         if (count > 1) {
             sender.sendMessage(Message.success("easyarmorstands.success.entity-destroyed.multiple", Component.text(count)));
@@ -225,9 +231,10 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.snap.angle")
     @RequireSession
     public void setAngleSnapIncrement(
-            EasPlayer sender,
+            PlayerSource source,
             SessionImpl session,
             @Argument(value = "value") @Range(min = "0", max = "90") Double value) {
+        Player sender = source.source();
         if (value == null) {
             value = SessionSnapper.DEFAULT_ANGLE_INCREMENT;
             if (value == session.snapper().getAngleIncrement()) {
@@ -245,9 +252,10 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.snap.move")
     @RequireSession
     public void setSnapIncrement(
-            EasPlayer sender,
+            PlayerSource source,
             SessionImpl session,
             @Argument(value = "value") @Range(min = "0", max = "10") Double value) {
+        Player sender = source.source();
         if (value == null) {
             value = SessionSnapper.DEFAULT_POSITION_INCREMENT;
             if (value == session.snapper().getPositionIncrement()) {
@@ -264,32 +272,35 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.align")
     @RequireElement
     public void align(
-            EasPlayer sender,
+            PlayerSource source,
             Element element,
             @Argument(value = "axis") @Default("all") AlignAxis axis,
             @Argument(value = "value") @Range(min = "0.001", max = "1") Double value,
             @Argument(value = "offset") @Range(min = "-1", max = "1") Double offset
     ) {
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Vector3d offsetVector = new Vector3d();
-        if (value == null) {
-            // None specified: Snap to the middle of the bottom of a block
-            value = 1.0;
-            offsetVector.set(0.5, 0.0, 0.5);
-        } else if (offset != null) {
-            offsetVector.set(offset, offset, offset);
+        Player sender = source.source();
+        Vector3dc position;
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(element);
+            Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
+            Vector3d offsetVector = new Vector3d();
+            if (value == null) {
+                // None specified: Snap to the middle of the bottom of a block
+                value = 1.0;
+                offsetVector.set(0.5, 0.0, 0.5);
+            } else if (offset != null) {
+                offsetVector.set(offset, offset, offset);
+            }
+            Location location = property.getValue();
+            position = axis.snap(Util.toVector3d(location), value, offsetVector, new Vector3d());
+            location.setX(position.x());
+            location.setY(position.y());
+            location.setZ(position.z());
+            if (!property.setValue(location)) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
+                return;
+            }
         }
-        Location location = property.getValue();
-        Vector3dc position = axis.snap(Util.toVector3d(location), value, offsetVector, new Vector3d());
-        location.setX(position.x());
-        location.setY(position.y());
-        location.setZ(position.z());
-        if (!property.setValue(location)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
-            return;
-        }
-        properties.commit();
         sender.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatPosition(position)));
     }
 
@@ -297,14 +308,18 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name")
     @RequireElementSelection
-    public void showName(EasPlayer sender, ElementSelection selection) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
-            return;
+    public void showName(PlayerSource source, ElementSelection selection) {
+        Player sender = source.source();
+        Component text;
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
+                return;
+            }
+            text = property.getValue().orElse(null);
         }
-        Component text = property.getValue().orElse(null);
         showText(sender, EntityPropertyTypes.CUSTOM_NAME.getName(), text, "/eas name set");
     }
 
@@ -312,23 +327,25 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.set")
     @RequireElementSelection
-    public void setName(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
-        if (nameProperty == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
-            return;
+    public void setName(PlayerSource source, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+            if (nameProperty == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
+                return;
+            }
+            Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
+            boolean hadName = nameProperty.getValue().isPresent();
+            if (!nameProperty.setValue(Optional.of(name))) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+            if (!hadName && nameVisibleProperty != null) {
+                nameVisibleProperty.setValue(true);
+            }
         }
-        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
-        boolean hadName = nameProperty.getValue().isPresent();
-        if (!nameProperty.setValue(Optional.of(name))) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-            return;
-        }
-        if (!hadName && nameVisibleProperty != null) {
-            nameVisibleProperty.setValue(true);
-        }
-        properties.commit();
         sender.sendMessage(Message.success("easyarmorstands.success.changed-name", name.colorIfAbsent(NamedTextColor.WHITE)));
     }
 
@@ -336,22 +353,24 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.clear")
     @RequireElementSelection
-    public void clearName(EasPlayer sender, ElementSelection selection) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
-        if (nameProperty == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
-            return;
+    public void clearName(PlayerSource source, ElementSelection selection) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
+            if (nameProperty == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
+                return;
+            }
+            Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
+            if (!nameProperty.setValue(Optional.empty())) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+            if (nameVisibleProperty != null) {
+                nameVisibleProperty.setValue(false);
+            }
         }
-        Property<Boolean> nameVisibleProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
-        if (!nameProperty.setValue(Optional.empty())) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-            return;
-        }
-        if (nameVisibleProperty != null) {
-            nameVisibleProperty.setValue(false);
-        }
-        properties.commit();
         sender.sendMessage(Message.success("easyarmorstands.success.removed-name"));
     }
 
@@ -359,59 +378,65 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name/visible")
     @CommandDescription("easyarmorstands.command.description.name.visible")
     @RequireElementSelection
-    public void setNameVisible(EasPlayer sender, ElementSelection selection, @Argument("value") boolean visible) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
-            return;
+    public void setNameVisible(PlayerSource source, ElementSelection selection, @Argument("value") boolean visible) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.name-unsupported"));
+                return;
+            }
+            if (!property.setValue(visible)) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-name-visibility",
+                    property.getType().getValueComponent(visible)));
         }
-        if (!property.setValue(visible)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-name-visibility", property.getType().getValueComponent(visible)));
     }
 
     @Command("cantick <value>")
     @PropertyPermission("easyarmorstands:armor_stand/can_tick")
     @CommandDescription("easyarmorstands.command.description.cantick")
     @RequireElementSelection
-    public void setCanTick(EasPlayer sender, ElementSelection selection, @Argument("value") boolean canTick) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));
-            return;
+    public void setCanTick(PlayerSource source, ElementSelection selection, @Argument("value") boolean canTick) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.can-tick-unsupported-entity"));
+                return;
+            }
+            if (!property.setValue(canTick)) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+            sender.sendMessage(Message.success("easyarmorstands.success.changed-can-tick",
+                    property.getType().getValueComponent(canTick)));
         }
-        if (!property.setValue(canTick)) {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-            return;
-        }
-        properties.commit();
-        sender.sendMessage(Message.success("easyarmorstands.success.changed-can-tick",
-                property.getType().getValueComponent(canTick)));
     }
 
     @Command("scale <value>")
     @PropertyPermission("easyarmorstands:entity/scale")
     @CommandDescription("easyarmorstands.command.description.scale.set")
     @RequireElement
-    public void setScale(EasPlayer sender, Element element, @Argument("value") double value) {
-        ScaleTool scaleTool = null;
-        if (element instanceof EditableElement) {
-            PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-            ToolProvider tools = ((EditableElement) element).getTools(properties);
-            scaleTool = tools.scale(ToolContext.of(tools.position(), tools.rotation()));
+    public void setScale(PlayerSource source, Element element, @Argument("value") double value) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            ScaleTool scaleTool = null;
+            if (element instanceof EditableElement editableElement) {
+                ToolProvider tools = editableElement.getTools(context);
+                scaleTool = tools.scale(ToolContext.of(tools.position(), tools.rotation()));
+            }
+            if (scaleTool == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
+                return;
+            }
+            ScaleToolSession toolSession = scaleTool.start();
+            toolSession.setValue(value);
         }
-        if (scaleTool == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));
-            return;
-        }
-        ScaleToolSession toolSession = scaleTool.start();
-        toolSession.setValue(value);
-        toolSession.commit(toolSession.getDescription());
         sender.sendMessage(Message.success("easyarmorstands.success.changed-scale", Util.formatScale(value)));
     }
 
@@ -419,23 +444,23 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/tags")
     @CommandDescription("easyarmorstands.command.description.tag.add")
     @RequireElementSelection
-    public void addTag(EasPlayer sender, ElementSelection selection, @Argument("value") String tag) {
+    public void addTag(PlayerSource source, ElementSelection selection, @Argument("value") String tag) {
+        Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        for (Element element : selection.elements()) {
-            TrackedPropertyContainer properties = new TrackedPropertyContainer(element, sender);
-            Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
-            if (property != null) {
-                Set<String> tags = new TreeSet<>(property.getValue());
-                if (tags.add(tag)) {
-                    if (property.setValue(tags)) {
-                        changed.add(properties);
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            for (Element element : selection.elements()) {
+                PropertyContainer properties = context.getProperties(element);
+                Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
+                if (property != null) {
+                    Set<String> tags = new TreeSet<>(property.getValue());
+                    if (tags.add(tag)) {
+                        if (property.setValue(tags)) {
+                            changed.add(properties);
+                        }
                     }
                 }
             }
-        }
-
-        for (PropertyContainer properties : changed) {
-            properties.commit(Message.component("easyarmorstands.history.added-tag", Component.text(tag, NamedTextColor.WHITE)));
+            context.commit(Message.component("easyarmorstands.history.added-tag", Component.text(tag, NamedTextColor.WHITE)));
         }
 
         if (!changed.isEmpty()) {
@@ -449,23 +474,23 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/tags")
     @CommandDescription("easyarmorstands.command.description.tag.remove")
     @RequireElementSelection
-    public void removeTag(EasPlayer sender, ElementSelection selection, @Argument(value = "value", suggestions = "selection_tags") String tag) {
+    public void removeTag(PlayerSource source, ElementSelection selection, @Argument(value = "value", suggestions = "selection_tags") String tag) {
+        Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        for (Element element : selection.elements()) {
-            TrackedPropertyContainer properties = new TrackedPropertyContainer(element, sender);
-            Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
-            if (property != null) {
-                Set<String> tags = new TreeSet<>(property.getValue());
-                if (tags.remove(tag)) {
-                    if (property.setValue(tags)) {
-                        changed.add(properties);
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            for (Element element : selection.elements()) {
+                PropertyContainer properties = context.getProperties(element);
+                Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
+                if (property != null) {
+                    Set<String> tags = new TreeSet<>(property.getValue());
+                    if (tags.remove(tag)) {
+                        if (property.setValue(tags)) {
+                            changed.add(properties);
+                        }
                     }
                 }
             }
-        }
-
-        for (PropertyContainer properties : changed) {
-            properties.commit(Message.component("easyarmorstands.history.removed-tag", Component.text(tag, NamedTextColor.WHITE)));
+            context.commit(Message.component("easyarmorstands.history.removed-tag", Component.text(tag, NamedTextColor.WHITE)));
         }
 
         if (!changed.isEmpty()) {
@@ -479,7 +504,8 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/tags")
     @CommandDescription("easyarmorstands.command.description.tag.list")
     @RequireElementSelection
-    public void listTags(EasPlayer sender, ElementSelection selection) {
+    public void listTags(PlayerSource source, ElementSelection selection) {
+        Player sender = source.source();
         Set<String> tags = new TreeSet<>();
         for (Element element : selection.elements()) {
             Property<Set<String>> property = element.getProperties().getOrNull(EntityPropertyTypes.TAGS);
@@ -506,22 +532,23 @@ public class SessionCommands {
     @Permission(Permissions.SELECT_TAG)
     @CommandDescription("easyarmorstands.command.description.select.tag")
     @RequireSession
-    public void selectTag(EasPlayer sender, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
-        selectGroup(sender, session, sender.get().getWorld().getEntities().stream()
+    public void selectTag(PlayerSource source, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
+        Player sender = source.source();
+        selectGroup(sender, session, sender.getWorld().getEntities().stream()
                 .filter(entity -> entity.getScoreboardTags().contains(tag))
                 .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
-                .filter(sender::canEditElement)
+                .filter(e -> EasyArmorStandsPlugin.getInstance().canSelectElement(sender, e))
                 .iterator());
     }
 
     @Suggestions("selection_tags")
-    public Set<String> getSelectionTags(CommandContext<EasCommandSender> ctx, String input) {
-        ElementSelection selection = ctx.getOrDefault(elementSelectionKey(), null);
-        if (selection == null) {
-            return Collections.emptySet();
+    public Set<String> getSelectionTags(CommandContext<Source> ctx, String input) {
+        if (!ctx.contains(elementSelectionKey())) {
+            return Set.of();
         }
+        ElementSelection selection = ctx.get(elementSelectionKey());
         Set<String> tags = new TreeSet<>();
         for (Element element : selection.elements()) {
             PropertyContainer properties = element.getProperties();
@@ -538,18 +565,18 @@ public class SessionCommands {
     }
 
     @Suggestions("discoverable_tags")
-    public Set<String> getDiscoverableTags(CommandContext<EasCommandSender> ctx, String input) {
-        EasCommandSender sender = ctx.sender();
-        if (!(sender instanceof EasPlayer player)) {
-            return Collections.emptySet();
+    public Set<String> getDiscoverableTags(CommandContext<Source> ctx, String input) {
+        if (!(ctx.sender() instanceof PlayerSource playerSource)) {
+            return Set.of();
         }
+        Player player = playerSource.source();
         Set<String> tags = new TreeSet<>();
-        for (Entity entity : player.get().getWorld().getEntities()) {
+        for (Entity entity : player.getWorld().getEntities()) {
             Set<String> entityTags = entity.getScoreboardTags();
             if (!tags.containsAll(entityTags)) {
                 Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
                 if (element instanceof EditableElement editableElement) {
-                    if (player.canDiscoverElement(editableElement)) {
+                    if (EasyArmorStandsPlugin.getInstance().canDiscoverElement(player, editableElement)) {
                         tags.addAll(entityTags);
                     }
                 }
@@ -558,14 +585,14 @@ public class SessionCommands {
         return tags;
     }
 
-    private void selectGroup(EasPlayer sender, Session session, Iterator<EditableElement> elements) {
+    private void selectGroup(Player sender, Session session, Iterator<EditableElement> elements) {
         Group group = new Group(session);
         while (elements.hasNext()) {
             EditableElement element = elements.next();
             if (group.getMembers().size() >= EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit) {
                 sender.sendMessage(Message.error("easyarmorstands.error.group-too-big"));
                 return;
-            } else if (group.getMembers().size() == 1 && !sender.get().hasPermission(Permissions.GROUP)) {
+            } else if (group.getMembers().size() == 1 && !sender.hasPermission(Permissions.GROUP)) {
                 sender.sendMessage(Message.error("easyarmorstands.error.found-multiple-entities"));
                 return;
             }
@@ -588,7 +615,8 @@ public class SessionCommands {
     @Permission(Permissions.EDIT)
     @CommandDescription("easyarmorstands.command.description.reset")
     @RequireSession
-    public void reset(EasPlayer sender, Session session) {
+    public void reset(PlayerSource source, Session session) {
+        Player sender = source.source();
         Node node = session.getNode();
         if (!(node instanceof ResettableNode resettableNode)) {
             sender.sendMessage(Message.error("easyarmorstands.error.reset-unsupported"));
@@ -603,10 +631,11 @@ public class SessionCommands {
     @Permission(Permissions.EDIT)
     @CommandDescription("easyarmorstands.command.description.set")
     public void set(
-            EasCommandSender sender,
+            Source source,
             ValueNode node,
             @Argument(value = "value", parserName = "node_value") Object value
     ) {
+        CommandSender sender = source.source();
         node.setValue(value);
         sender.sendMessage(Message.success("easyarmorstands.success.changed-value",
                 node.getName(),
@@ -617,7 +646,8 @@ public class SessionCommands {
     @Permission(Permissions.INFO)
     @CommandDescription("easyarmorstands.command.description.info")
     @RequireElement
-    public void info(EasPlayer sender, Element element) {
+    public void info(PlayerSource source, Element element) {
+        CommandSender sender = source.source();
         sender.sendMessage(Message.title("easyarmorstands.info.title"));
         sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)));
         if (element instanceof EntityElement) {

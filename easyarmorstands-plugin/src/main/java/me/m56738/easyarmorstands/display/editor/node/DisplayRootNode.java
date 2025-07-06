@@ -6,12 +6,10 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.message.Message;
@@ -33,12 +31,12 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
     private final ToolModeSwitcher toolModeSwitcher;
 
     public DisplayRootNode(Session session, DisplayElement<?> element) {
-        super(session, session.properties(element));
+        super(session, element);
         this.session = session;
         this.element = element;
-        this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
-        this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
-        this.toolManager = new ToolManager(session, this, element.getTools(properties()));
+        this.locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
+        this.blockDataProperty = getProperties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
+        this.toolManager = new ToolManager(session, this, element.getTools(getContext()));
         this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 
@@ -53,8 +51,8 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
             if (block != null) {
                 BlockData blockData = block.getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
-                    properties().commit();
-                    new EasPlayer(player).sendMessage(Message.success("easyarmorstands.success.changed-block",
+                    getContext().commit();
+                    player.sendMessage(Message.success("easyarmorstands.success.changed-block",
                             blockDataProperty.getType().getValueComponent(blockData)));
                     return true;
                 }
@@ -74,22 +72,17 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
     }
 
     @Override
-    public @NotNull Element getElement() {
-        return element;
-    }
-
-    @Override
     public void reset() {
-        properties().get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
-        properties().get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
-        properties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
-        properties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
+        getProperties().get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
+        getProperties().get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
+        getProperties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
+        getProperties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
 
         Location location = locationProperty.getValue();
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
 
-        properties().commit();
+        getContext().commit();
     }
 }

@@ -28,4 +28,9 @@ public class TextDisplayLineWidthProperty implements Property<Integer> {
         entity.setLineWidth(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

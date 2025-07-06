@@ -2,18 +2,17 @@ package me.m56738.easyarmorstands.fancyholograms.property.display;
 
 import de.oliver.fancyholograms.api.data.DisplayHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
 import org.bukkit.entity.Display;
 import org.jetbrains.annotations.NotNull;
 
-public class DisplayHologramBillboardProperty implements Property<Display.Billboard> {
-    private final Hologram hologram;
+public class DisplayHologramBillboardProperty extends HologramProperty<Display.Billboard> {
     private final DisplayHologramData data;
 
     public DisplayHologramBillboardProperty(Hologram hologram, DisplayHologramData data) {
-        this.hologram = hologram;
+        super(hologram);
         this.data = data;
     }
 

@@ -31,4 +31,9 @@ public class DisplayBrightnessProperty implements Property<Optional<Brightness>>
         entity.setBrightness(value.orElse(null));
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

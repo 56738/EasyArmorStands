@@ -28,4 +28,9 @@ public class DisplayWidthProperty implements Property<Float> {
         entity.setDisplayWidth(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

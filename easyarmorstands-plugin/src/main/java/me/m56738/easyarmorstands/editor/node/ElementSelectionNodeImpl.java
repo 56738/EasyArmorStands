@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
@@ -18,8 +18,6 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
@@ -58,9 +56,9 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
     private BoundingBox selectionBox;
     private boolean selectionBoxEditing;
     private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
-    private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.range;
-    private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.discovery.limit;
-    private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit;
+    private final double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.range;
+    private final int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.discovery.limit;
+    private final int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit;
     private int buttonCount;
 
     public ElementSelectionNodeImpl(Session session) {
@@ -234,8 +232,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
-        ChangeContext context = new EasPlayer(session.player());
-        if (element == null || !context.canDiscoverElement(element)) {
+        if (element == null || !EasyArmorStandsPlugin.getInstance().canDiscoverElement(session.player(), element)) {
             return ElementEntry.EMPTY;
         }
         ElementButton button = new ElementButton(entry, session, element);
@@ -347,8 +344,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
     @Override
     public boolean selectElement(@NotNull SelectableElement element) {
-        ChangeContext context = new EasPlayer(session.player());
-        if (!context.canEditElement(element)) {
+        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
             return false;
         }
 
@@ -365,9 +361,8 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
         }
 
         Group group = new Group(session);
-        ChangeContext context = new EasPlayer(session.player());
         for (SelectableElement element : elements) {
-            if (context.canEditElement(element)) {
+            if (EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
                 group.addMember(element);
             }
         }
@@ -385,8 +380,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
             return;
         }
 
-        ChangeContext context = new EasPlayer(session.player());
-        if (!context.canEditElement(element)) {
+        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
             return;
         }
 

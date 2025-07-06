@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 
 public class ArmorStandPartButton implements NodeFactoryButton {
     private final Session session;
-    private final PropertyContainer container;
     private final ArmorStandPart part;
     private final ArmorStandPartInfo partInfo;
     private final ArmorStandElement element;
@@ -47,7 +46,6 @@ public class ArmorStandPartButton implements NodeFactoryButton {
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         this.session = session;
-        this.container = container;
         this.part = part;
         this.partInfo = ArmorStandPartInfo.of(part);
         this.element = element;
@@ -113,6 +111,6 @@ public class ArmorStandPartButton implements NodeFactoryButton {
 
     @Override
     public Node createNode() {
-        return new ArmorStandPartNode(session, container, part, element);
+        return new ArmorStandPartNode(session, element, part);
     }
 }

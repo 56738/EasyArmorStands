@@ -28,4 +28,9 @@ public class DisplayViewRangeProperty implements Property<Float> {
         entity.setViewRange(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

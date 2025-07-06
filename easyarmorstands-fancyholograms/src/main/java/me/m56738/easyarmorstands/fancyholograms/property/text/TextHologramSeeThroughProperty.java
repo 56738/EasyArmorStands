@@ -2,17 +2,16 @@ package me.m56738.easyarmorstands.fancyholograms.property.text;
 
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
 import org.jetbrains.annotations.NotNull;
 
-public class TextHologramSeeThroughProperty implements Property<Boolean> {
-    private final Hologram hologram;
+public class TextHologramSeeThroughProperty extends HologramProperty<Boolean> {
     private final TextHologramData data;
 
     public TextHologramSeeThroughProperty(Hologram hologram, TextHologramData data) {
-        this.hologram = hologram;
+        super(hologram);
         this.data = data;
     }
 

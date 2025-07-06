@@ -30,4 +30,9 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
         entity.setItemStack(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

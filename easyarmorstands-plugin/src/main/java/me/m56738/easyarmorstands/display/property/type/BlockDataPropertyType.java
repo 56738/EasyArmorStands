@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.display.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.menu.BlockDisplaySlot;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
@@ -22,7 +21,7 @@ public class BlockDataPropertyType extends ConfigurablePropertyType<BlockData> {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<BlockData> property, @NotNull PropertyContainer container) {
-        return new BlockDisplaySlot(property, container, buttonTemplate);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new BlockDisplaySlot(element, this, buttonTemplate);
     }
 }

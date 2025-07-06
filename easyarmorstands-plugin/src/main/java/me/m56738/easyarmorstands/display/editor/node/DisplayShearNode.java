@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
@@ -22,12 +21,12 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
     private final Component name;
     private final Property<Quaternionfc> rightRotationProperty;
 
-    public DisplayShearNode(Session session, PropertyContainer properties, DisplayElement<?> element) {
-        super(session, properties);
+    public DisplayShearNode(Session session, DisplayElement<?> element) {
+        super(session, element);
         this.session = session;
         this.name = DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD);
-        this.rightRotationProperty = properties.get(DisplayPropertyTypes.RIGHT_ROTATION);
-        DisplayToolProvider tools = element.getTools(properties);
+        this.rightRotationProperty = getProperties().get(DisplayPropertyTypes.RIGHT_ROTATION);
+        DisplayToolProvider tools = element.getTools(getContext());
         for (Axis axis : Axis.values()) {
             // TODO use ToolMenuManager
             addButton(session.menuEntryProvider()

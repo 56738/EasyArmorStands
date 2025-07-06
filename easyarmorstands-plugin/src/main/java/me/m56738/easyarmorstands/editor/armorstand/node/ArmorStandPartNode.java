@@ -4,29 +4,28 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
 import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class ArmorStandPartNode extends AbstractPropertyNode implements ResettableNode {
-    private final Session session;
+@NullMarked
+public class ArmorStandPartNode extends AbstractElementNode<ArmorStandElement> implements ResettableNode {
     private final ArmorStandPart part;
     private final ToolManager toolManager;
     private final ToolModeSwitcher toolModeSwitcher;
 
-    public ArmorStandPartNode(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
-        super(session, container);
-        this.session = session;
+    public ArmorStandPartNode(Session session, ArmorStandElement element, ArmorStandPart part) {
+        super(session, element);
         this.part = part;
         this.toolManager = new ToolManager(session, this,
-                new ArmorStandPartToolProvider(container, part, element, element.getTools(container)));
+                new ArmorStandPartToolProvider(element, part, getContext(), element.getTools(getContext())));
         this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 
@@ -42,7 +41,7 @@ public class ArmorStandPartNode extends AbstractPropertyNode implements Resettab
             return true;
         }
         if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            session.popNode();
+            getSession().popNode();
             return true;
         }
         return toolModeSwitcher.onClick(context);
@@ -50,7 +49,7 @@ public class ArmorStandPartNode extends AbstractPropertyNode implements Resettab
 
     @Override
     public void reset() {
-        properties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
-        properties().commit();
+        getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+        getContext().commit();
     }
 }

@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.display.command.value;
 
 import me.m56738.easyarmorstands.api.Axis;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
 import me.m56738.easyarmorstands.lib.cloud.Command;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public class DisplayScaleAxisCommand extends ScaleAxisCommand {
     }
 
     @Override
-    public Command.@NonNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NonNull Builder<EasCommandSender> builder) {
+    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
         return builder.literal("scale").literal(axisName);
     }
 }

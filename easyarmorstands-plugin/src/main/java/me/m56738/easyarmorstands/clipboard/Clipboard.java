@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.clipboard;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.util.PropertyCopier;
 import org.bukkit.entity.Player;
 
@@ -27,15 +27,16 @@ public class Clipboard {
         return properties;
     }
 
-    public void handleAutoApply(Element element, EasPlayer player) {
+    public void handleAutoApply(Element element, Player player) {
         if (this.properties.isEmpty()) {
             return;
         }
 
         PropertyCopier copier = new PropertyCopier();
-        TrackedPropertyContainer properties = new TrackedPropertyContainer(element, player);
-        copier.copyProperties(properties, this.properties);
-        properties.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(player)) {
+            copier.copyProperties(context.getProperties(element), properties);
+            context.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
+        }
 
         if (copier.getSuccessCount() > 0) {
             player.sendMessage(Message.hint("easyarmorstands.hint.clipboard-auto-applied"));

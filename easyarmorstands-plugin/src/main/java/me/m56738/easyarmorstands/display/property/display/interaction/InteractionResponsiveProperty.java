@@ -28,4 +28,9 @@ public class InteractionResponsiveProperty implements Property<Boolean> {
         entity.setResponsive(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

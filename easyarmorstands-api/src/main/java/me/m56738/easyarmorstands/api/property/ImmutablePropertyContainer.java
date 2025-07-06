@@ -11,6 +11,6 @@ class ImmutablePropertyContainer extends PropertyWrapperContainer {
     @Override
     protected @NotNull <T> Property<T> wrap(@NotNull Property<T> property) {
         PropertyType<T> type = property.getType();
-        return new ImmutableProperty<>(type, property.getValue());
+        return new ImmutableProperty<>(type, property);
     }
 }

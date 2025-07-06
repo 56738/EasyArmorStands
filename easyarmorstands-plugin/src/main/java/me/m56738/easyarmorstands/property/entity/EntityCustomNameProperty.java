@@ -31,4 +31,9 @@ public class EntityCustomNameProperty implements Property<Optional<Component>> {
         entity.customName(value.orElse(null));
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

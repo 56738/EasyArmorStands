@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import me.m56738.easyarmorstands.property.button.GravityToggleButton;
@@ -27,7 +26,7 @@ public class GravityPropertyType extends BooleanTogglePropertyType {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Boolean> property, @NotNull PropertyContainer container) {
-        return new GravityToggleButton(property, container, buttonTemplate, canTickWarning);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new GravityToggleButton(element, this, buttonTemplate, canTickWarning);
     }
 }

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandSize;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -35,12 +36,12 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
 
     @Override
     public @NotNull Node createNode(@NotNull Session session) {
-        return new ArmorStandRootNode(session, entity, this);
+        return new ArmorStandRootNode(session, this);
     }
 
     @Override
-    public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new ArmorStandToolProvider(properties);
+    public @NotNull ToolProvider getTools(@NotNull ChangeContext context) {
+        return new ArmorStandToolProvider(this, context);
     }
 
     @Override

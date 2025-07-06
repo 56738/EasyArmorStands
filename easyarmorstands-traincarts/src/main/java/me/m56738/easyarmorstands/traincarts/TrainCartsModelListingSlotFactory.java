@@ -20,7 +20,7 @@ public class TrainCartsModelListingSlotFactory implements MenuSlotFactory {
     @Override
     public @Nullable MenuSlot createSlot(@NotNull MenuSlotContext context) {
         Element element = context.element();
-        if (element instanceof MenuElement && context.permissions().test(Permissions.TRAINCARTS_MODEL)) {
+        if (element instanceof MenuElement && context.player().hasPermission(Permissions.TRAINCARTS_MODEL)) {
             return new TrainCartsModelListingSlot(itemTemplate, (MenuElement) element, context.resolver());
         } else {
             return null;

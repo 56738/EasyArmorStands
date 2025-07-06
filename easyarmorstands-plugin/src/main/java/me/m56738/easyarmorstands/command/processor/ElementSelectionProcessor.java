@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.GroupMember;
@@ -9,6 +8,7 @@ import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
 import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessingContext;
 import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessor;
 import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collections;
@@ -18,7 +18,7 @@ import static me.m56738.easyarmorstands.command.processor.ElementProcessor.eleme
 import static me.m56738.easyarmorstands.command.processor.GroupProcessor.groupKey;
 import static me.m56738.easyarmorstands.lib.cloud.key.CloudKey.cloudKey;
 
-public class ElementSelectionProcessor implements CommandPreprocessor<EasCommandSender> {
+public class ElementSelectionProcessor implements CommandPreprocessor<Source> {
     private static final CloudKey<ElementSelection> KEY = cloudKey("selection", ElementSelection.class);
 
     public static CloudKey<ElementSelection> elementSelectionKey() {
@@ -26,17 +26,17 @@ public class ElementSelectionProcessor implements CommandPreprocessor<EasCommand
     }
 
     @Override
-    public void accept(@NonNull CommandPreprocessingContext<EasCommandSender> context) {
-        CommandContext<EasCommandSender> commandContext = context.commandContext();
+    public void accept(@NonNull CommandPreprocessingContext<Source> context) {
+        CommandContext<Source> commandContext = context.commandContext();
 
-        Element element = commandContext.getOrDefault(elementKey(), null);
-        if (element != null) {
+        if (commandContext.contains(elementKey())) {
+            Element element = commandContext.get(elementKey());
             commandContext.set(KEY, new ElementSelection(Collections.singleton(element)));
             return;
         }
 
-        Group group = commandContext.getOrDefault(groupKey(), null);
-        if (group != null) {
+        if (commandContext.contains(groupKey())) {
+            Group group = commandContext.get(groupKey());
             commandContext.set(KEY, new ElementSelection(group.getMembers().stream()
                     .map(GroupMember::getElement)
                     .collect(Collectors.toList())));

@@ -1,19 +1,19 @@
 package me.m56738.easyarmorstands.property.button;
 
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 
 public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     private final T[] values;
 
-    public EnumToggleButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item, T[] values) {
-        super(property, container, item);
+    public EnumToggleButton(Element element, PropertyType<T> type, SimpleItemTemplate item, T[] values) {
+        super(element, type, item);
         this.values = values;
     }
 
     private T getNeighbour(int offset) {
-        int index = property.getValue().ordinal() + offset;
+        int index = getUntrackedProperty().getValue().ordinal() + offset;
         if (index >= values.length) {
             index -= values.length;
         } else if (index < 0) {

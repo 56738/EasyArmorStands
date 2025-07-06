@@ -3,28 +3,25 @@ package me.m56738.easyarmorstands.editor.node;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.AbstractNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class SimpleEntityNode extends AbstractNode implements ElementNode {
-    private final Session session;
-    private final Element element;
+@NullMarked
+public class SimpleEntityNode extends AbstractElementNode<EditableElement> implements ElementNode {
     private final ToolManager toolManager;
     private final ToolModeSwitcher toolModeSwitcher;
 
     public SimpleEntityNode(Session session, EditableElement element) {
-        super(session);
-        this.session = session;
-        this.element = element;
-        this.toolManager = new ToolManager(session, this, element.getTools(session.properties(element)));
+        super(session, element);
+        this.toolManager = new ToolManager(session, this, element.getTools(getContext()));
         this.toolManager.setMode(ToolMode.GLOBAL);
         this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
@@ -40,23 +37,13 @@ public class SimpleEntityNode extends AbstractNode implements ElementNode {
         if (super.onClick(context)) {
             return true;
         }
-        if (element instanceof MenuElement) {
-            Player player = session.player();
+        if (getElement() instanceof MenuElement menuElement) {
+            Player player = getSession().player();
             if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-                ((MenuElement) element).openMenu(player);
+                menuElement.openMenu(player);
                 return true;
             }
         }
         return toolModeSwitcher.onClick(context);
-    }
-
-    @Override
-    public boolean isValid() {
-        return element.isValid();
-    }
-
-    @Override
-    public @NotNull Element getElement() {
-        return element;
     }
 }

@@ -46,4 +46,9 @@ public class EntityEquipmentProperty implements Property<ItemStack> {
             return false;
         }
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

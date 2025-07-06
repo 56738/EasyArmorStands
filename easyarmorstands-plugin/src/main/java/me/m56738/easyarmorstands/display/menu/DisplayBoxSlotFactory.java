@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
@@ -27,16 +26,12 @@ public class DisplayBoxSlotFactory implements MenuSlotFactory {
             return null;
         }
         Element element = context.element();
-        if (!(element instanceof DisplayElement<?>)) {
-            return null;
-        }
-        PropertyContainer properties = context.properties();
-        if (properties == null) {
+        if (!(element instanceof DisplayElement<?> displayElement)) {
             return null;
         }
         return new NodeSlot(
                 session,
-                () -> new DisplayBoxNode(session, properties),
+                () -> new DisplayBoxNode(session, displayElement),
                 null,
                 itemTemplate,
                 context.resolver());

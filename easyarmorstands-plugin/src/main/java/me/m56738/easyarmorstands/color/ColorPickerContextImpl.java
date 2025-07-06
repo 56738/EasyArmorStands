@@ -1,12 +1,16 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -16,26 +20,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class ColorPickerContextImpl implements ColorPickerContext {
-    private final Property<ItemStack> property;
-    private final PropertyContainer container;
+    private final Player player;
+    private final Element element;
+    private final PropertyType<ItemStack> type;
+    private final Property<ItemStack> untrackedProperty;
 
-    public ColorPickerContextImpl(Property<ItemStack> property, PropertyContainer container) {
-        this.property = property;
-        this.container = container;
+    public ColorPickerContextImpl(Player player, Element element, PropertyType<ItemStack> type) {
+        this.player = player;
+        this.element = element;
+        this.type = type;
+        this.untrackedProperty = element.getProperties().get(type);
     }
 
-    public ColorPickerContextImpl(ItemPropertySlot slot) {
-        this(slot.getProperty(), slot.getContainer());
+    public ColorPickerContextImpl(Player player, ItemPropertySlot slot) {
+        this(player, slot.getElement(), slot.getType());
     }
 
     @Override
     public @NotNull ItemStack item() {
-        return property.getValue();
+        return untrackedProperty.getValue();
     }
 
     @Override
     public @NotNull Color getColor() {
-        ItemStack item = property.getValue();
+        ItemStack item = untrackedProperty.getValue();
         ItemMeta meta = item.getItemMeta();
         if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
             return leatherArmorMeta.getColor();
@@ -52,15 +60,18 @@ public class ColorPickerContextImpl implements ColorPickerContext {
 
     @Override
     public void setColor(@NotNull Color color) {
-        ItemStack item = property.getValue().clone();
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return;
-        }
-        if (setColor(meta, color)) {
-            item.setItemMeta(meta);
-            property.setValue(item);
-            container.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
+        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(player)) {
+            Property<ItemStack> property = context.getProperties(element).get(type);
+            ItemStack item = property.getValue().clone();
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) {
+                return;
+            }
+            if (setColor(meta, color)) {
+                item.setItemMeta(meta);
+                property.setValue(item);
+                context.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
+            }
         }
     }
 

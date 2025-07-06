@@ -22,7 +22,7 @@ public class ColorPickerSlotFactory implements MenuSlotFactory {
     @Override
     public @Nullable MenuSlot createSlot(@NotNull MenuSlotContext context) {
         Element element = context.element();
-        if (element instanceof MenuElement && context.permissions().test(Permissions.COLOR)) {
+        if (element instanceof MenuElement && context.player().hasPermission(Permissions.COLOR)) {
             return new ColorPickerSlot(itemTemplate, activeItemTemplate, context.resolver(), (MenuElement) element);
         } else {
             return null;

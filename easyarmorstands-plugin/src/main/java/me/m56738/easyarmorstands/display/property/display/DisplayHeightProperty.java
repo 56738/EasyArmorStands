@@ -28,4 +28,9 @@ public class DisplayHeightProperty implements Property<Float> {
         entity.setDisplayHeight(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

@@ -1,4 +1,5 @@
 [versions]
+apiguardian = "1.1.2"
 bentobox = "2.7.0-SNAPSHOT"
 bstats = "3.1.0"
 checker-qual = "3.49.2"
@@ -24,6 +25,7 @@ traincarts = "1.21.1-v1"
 worldguard = "7.0.14"
 
 [libraries]
+apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardian" }
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }

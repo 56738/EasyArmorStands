@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.command.value;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.Command;
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
 import me.m56738.easyarmorstands.message.Message;
@@ -11,12 +11,12 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
-public interface ValueCommand<T> extends Command.Builder.Applicable<EasCommandSender> {
+public interface ValueCommand<T> extends Command.Builder.Applicable<Source> {
     @NotNull Component getDisplayName();
 
     @NotNull Permission getPermission();
 
-    @NotNull ParserDescriptor<EasCommandSender, T> getParser();
+    @NotNull ParserDescriptor<Source, T> getParser();
 
     @NotNull Description getShowDescription();
 

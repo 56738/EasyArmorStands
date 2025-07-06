@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ElementSpawnRequestImpl implements ElementSpawnRequest {
     private final PropertyMap properties = new PropertyMap();
     private final ElementType type;
-    private EasPlayer player;
+    private Player player;
 
     public ElementSpawnRequestImpl(ElementType type) {
         this.type = type;
@@ -30,12 +30,12 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
 
     @Override
     public @Nullable Player getPlayer() {
-        return player != null ? player.get() : null;
+        return player;
     }
 
     @Override
     public void setPlayer(@Nullable Player player) {
-        this.player = player != null ? new EasPlayer(player) : null;
+        this.player = player;
     }
 
     @Override
@@ -49,17 +49,17 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         if (player != null) {
             Location originLocation;
             if (type.isSpawnedAtEyeHeight()) {
-                originLocation = player.get().getEyeLocation();
+                originLocation = player.getEyeLocation();
             } else {
-                originLocation = player.get().getLocation();
+                originLocation = player.getLocation();
             }
             Vector offset = originLocation.getDirection().multiply(2);
-            if (!player.get().isFlying()) {
+            if (!player.isFlying()) {
                 offset.setY(0);
             }
             Location location = originLocation.add(offset);
             location.setYaw(location.getYaw() + 180);
-            Session session = player.session();
+            Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
             if (session != null) {
                 location.setX(session.snapper().snapPosition(location.getX()));
                 location.setY(session.snapper().snapPosition(location.getY()));
@@ -72,7 +72,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         type.applyDefaultProperties(properties);
         properties.putAll(this.properties);
 
-        if (player != null && !player.canCreateElement(type, properties)) {
+        if (player != null && !EasyArmorStandsPlugin.getInstance().canCreateElement(player, type, properties)) {
             return null;
         }
 
@@ -82,8 +82,8 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         }
 
         if (player != null) {
-            player.history().push(new ElementCreateAction(element));
-            player.clipboard().handleAutoApply(element, player);
+            EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(element));
+            EasyArmorStandsPlugin.getInstance().getClipboard(player).handleAutoApply(element, player);
         }
         return element;
     }

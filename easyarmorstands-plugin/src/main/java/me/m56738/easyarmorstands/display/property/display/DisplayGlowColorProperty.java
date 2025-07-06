@@ -31,4 +31,9 @@ public class DisplayGlowColorProperty implements Property<Optional<Color>> {
         entity.setGlowColorOverride(value.orElse(null));
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

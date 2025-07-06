@@ -33,6 +33,10 @@ public abstract class AbstractNode implements Node {
         this.session = session;
     }
 
+    public final Session getSession() {
+        return session;
+    }
+
     public final void addButton(@NotNull MenuButton menuButton) {
         setButton(menuButton, menuButton.getButton());
     }

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
@@ -19,11 +20,13 @@ import java.util.List;
 
 public class GroupAxisRotateTool implements AxisRotateTool {
     private final ToolContext context;
+    private final ChangeContext changeContext;
     private final Axis axis;
     private final List<AxisRotateTool> tools;
 
-    public GroupAxisRotateTool(ToolContext context, Axis axis, List<AxisRotateTool> tools) {
+    public GroupAxisRotateTool(ToolContext context, ChangeContext changeContext, Axis axis, List<AxisRotateTool> tools) {
         this.context = context;
+        this.changeContext = changeContext;
         this.axis = axis;
         this.tools = tools;
     }
@@ -76,6 +79,11 @@ public class GroupAxisRotateTool implements AxisRotateTool {
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
             return context.snapAngle(change);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
         }
 
         @Override

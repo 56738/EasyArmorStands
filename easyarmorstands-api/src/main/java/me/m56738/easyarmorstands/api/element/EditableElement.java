@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.element;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBoxProvider;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -23,9 +23,9 @@ public interface EditableElement extends Element, BoundingBoxProvider {
     /**
      * Returns the tools which can be used to edit this element.
      *
-     * @param properties the properties which the tools should modify
+     * @param context the context which should be used by the tools
      * @return the tools
      */
     @Contract(pure = true)
-    @NotNull ToolProvider getTools(@NotNull PropertyContainer properties);
+    @NotNull ToolProvider getTools(@NotNull ChangeContext context);
 }

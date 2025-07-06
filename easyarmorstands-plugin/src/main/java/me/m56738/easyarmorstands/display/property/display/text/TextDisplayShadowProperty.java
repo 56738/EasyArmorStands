@@ -28,4 +28,9 @@ public class TextDisplayShadowProperty implements Property<Boolean> {
         entity.setShadowed(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

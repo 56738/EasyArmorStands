@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
@@ -8,11 +9,10 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -32,7 +32,7 @@ import org.joml.Vector3fc;
 
 public class DisplayAxisRotateTool implements AxisRotateTool {
     private final ToolContext context;
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
@@ -40,9 +40,9 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
     private final Axis axis;
     private final RotationProvider parentRotationProvider;
 
-    public DisplayAxisRotateTool(ToolContext context, PropertyContainer properties, PropertyType<Quaternionfc> type, Axis axis, RotationProvider parentRotationProvider) {
+    public DisplayAxisRotateTool(ToolContext context, ChangeContext changeContext, PropertyContainer properties, PropertyType<Quaternionfc> type, Axis axis, RotationProvider parentRotationProvider) {
         this.context = context;
-        this.properties = properties;
+        this.changeContext = changeContext;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         this.heightProperty = properties.get(DisplayPropertyTypes.BOX_HEIGHT);
@@ -78,7 +78,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
                 translationProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements AxisRotateToolSession {
+    private class SessionImpl implements AxisRotateToolSession {
         private final Location originalLocation;
         private final Vector3fc originalTranslation;
         private final Quaternionfc originalRotation;
@@ -92,7 +92,6 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         private double change;
 
         public SessionImpl() {
-            super(properties);
             float height = heightProperty.getValue();
             Quaterniondc rotation = getRotation();
             Quaterniondc localRotation = parentRotationProvider.getRotation().conjugate(new Quaterniond())
@@ -162,6 +161,16 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             locationProperty.setValue(originalLocation);
             translationProperty.setValue(originalTranslation);
             rotationProperty.setValue(originalRotation);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return locationProperty.isValid() && translationProperty.isValid() && rotationProperty.isValid();
         }
 
         @Override

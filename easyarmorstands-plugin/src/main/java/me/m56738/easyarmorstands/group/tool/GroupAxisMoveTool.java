@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveToolSession;
@@ -20,11 +21,13 @@ import java.util.List;
 
 public class GroupAxisMoveTool implements AxisMoveTool {
     private final ToolContext context;
+    private final ChangeContext changeContext;
     private final Axis axis;
     private final List<AxisMoveTool> tools;
 
-    public GroupAxisMoveTool(ToolContext context, Axis axis, List<AxisMoveTool> tools) {
+    public GroupAxisMoveTool(ToolContext context, ChangeContext changeContext, Axis axis, List<AxisMoveTool> tools) {
         this.context = context;
+        this.changeContext = changeContext;
         this.axis = axis;
         this.tools = new ArrayList<>(tools);
     }
@@ -77,6 +80,11 @@ public class GroupAxisMoveTool implements AxisMoveTool {
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
             return context.snapOffset(change);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
         }
 
         @Override

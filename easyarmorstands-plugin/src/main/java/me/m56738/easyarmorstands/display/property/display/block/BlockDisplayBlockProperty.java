@@ -29,4 +29,9 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
         entity.setBlock(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

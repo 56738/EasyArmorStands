@@ -1,16 +1,12 @@
 package me.m56738.easyarmorstands.editor.armorstand.tool;
 
-import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -26,16 +22,16 @@ import org.joml.Vector3dc;
 
 public class ArmorStandPoseTool implements AxisRotateTool {
     private final ToolContext context;
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Location> locationProperty;
     private final Property<EulerAngle> poseProperty;
     private final Axis axis;
 
-    public ArmorStandPoseTool(ToolContext context, PropertyContainer properties, ArmorStandPart part, Axis axis) {
+    public ArmorStandPoseTool(ToolContext context, ChangeContext changeContext, Property<Location> locationProperty, Property<EulerAngle> poseProperty, Axis axis) {
         this.context = context;
-        this.properties = properties;
-        this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
-        this.poseProperty = properties.get(ArmorStandPropertyTypes.POSE.get(part));
+        this.changeContext = changeContext;
+        this.locationProperty = locationProperty;
+        this.poseProperty = poseProperty;
         this.axis = axis;
     }
 
@@ -64,7 +60,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         return poseProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements AxisRotateToolSession {
+    private class SessionImpl implements AxisRotateToolSession {
         private final Vector3dc direction;
         private final EulerAngle originalAngle;
         private final Quaterniondc originalRotation;
@@ -72,7 +68,6 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         private double change;
 
         public SessionImpl() {
-            super(properties);
             originalAngle = poseProperty.getValue();
             originalRotation = Util.fromEuler(originalAngle, new Quaterniond());
             Location location = locationProperty.getValue();
@@ -97,6 +92,16 @@ public class ArmorStandPoseTool implements AxisRotateTool {
         @Override
         public void revert() {
             poseProperty.setValue(originalAngle);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return poseProperty.isValid();
         }
 
         @Override

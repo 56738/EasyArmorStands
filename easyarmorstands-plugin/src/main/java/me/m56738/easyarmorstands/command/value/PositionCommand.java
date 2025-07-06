@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.command.value;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.Command;
 import me.m56738.easyarmorstands.lib.cloud.bukkit.parser.location.LocationParser;
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -24,7 +24,7 @@ public class PositionCommand extends PropertyCommand<Location> {
     }
 
     @Override
-    public Command.@NonNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NonNull Builder<EasCommandSender> builder) {
+    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
         return builder.literal("position");
     }
 

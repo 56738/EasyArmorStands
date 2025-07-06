@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -11,7 +12,6 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
@@ -33,7 +33,7 @@ import java.util.Objects;
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
-    private final PropertyRegistry properties = PropertyRegistry.create(this);
+    private final PropertyRegistry properties = new PropertyRegistry();
 
     public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
         this.entity = entity;
@@ -61,8 +61,8 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
     }
 
     @Override
-    public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new SimpleEntityToolProvider(properties);
+    public @NotNull ToolProvider getTools(@NotNull ChangeContext context) {
+        return new SimpleEntityToolProvider(this, context);
     }
 
     @Override

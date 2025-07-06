@@ -28,7 +28,7 @@ public class ArmorStandPositionSlotFactory implements MenuSlotFactory {
         }
         return new NodeSlot(session,
                 root.getPositionButton(),
-                new ArmorStandPositionResetAction(context.properties(root.getElement())),
+                new ArmorStandPositionResetAction(root.getElement()),
                 itemTemplate,
                 context.resolver());
     }

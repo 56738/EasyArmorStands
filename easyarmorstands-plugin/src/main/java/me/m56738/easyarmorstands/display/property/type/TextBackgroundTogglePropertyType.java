@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.display.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.property.button.TextBackgroundToggleButton;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.message.Message;
@@ -38,7 +37,7 @@ public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<O
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Optional<Color>> property, @NotNull PropertyContainer container) {
-        return new TextBackgroundToggleButton(property, container, buttonTemplate);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new TextBackgroundToggleButton(element, this, buttonTemplate);
     }
 }

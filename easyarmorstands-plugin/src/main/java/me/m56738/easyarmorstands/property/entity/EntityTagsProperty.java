@@ -51,4 +51,9 @@ public class EntityTagsProperty implements Property<Set<String>> {
 
         return changed;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

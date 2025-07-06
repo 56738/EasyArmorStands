@@ -28,4 +28,9 @@ public class EntityGlowingProperty implements Property<Boolean> {
         entity.setGlowing(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

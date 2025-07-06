@@ -1,28 +1,30 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.element.ArmorStandElement;
 import org.bukkit.Location;
 
 import java.util.function.Consumer;
 
 public class ArmorStandPositionResetAction implements Consumer<MenuClick> {
-    private final Property<Location> property;
-    private final PropertyContainer container;
+    private final ArmorStandElement element;
 
-    public ArmorStandPositionResetAction(PropertyContainer properties) {
-        this.property = properties.get(EntityPropertyTypes.LOCATION);
-        this.container = properties;
+    public ArmorStandPositionResetAction(ArmorStandElement element) {
+        this.element = element;
     }
 
     @Override
     public void accept(MenuClick click) {
-        Location location = property.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        property.setValue(location);
-        container.commit();
+        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(click.player())) {
+            Property<Location> property = context.getProperties(element).get(EntityPropertyTypes.LOCATION);
+            Location location = property.getValue().clone();
+            location.setYaw(0);
+            location.setPitch(0);
+            property.setValue(location);
+        }
     }
 }

@@ -28,4 +28,9 @@ public class InteractionWidthProperty implements Property<Float> {
         entity.setInteractionWidth(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

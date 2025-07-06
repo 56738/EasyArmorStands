@@ -1,17 +1,14 @@
 package me.m56738.easyarmorstands.fancyholograms.property;
 
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class HologramLocationProperty implements Property<Location> {
-    private final Hologram hologram;
-
+public class HologramLocationProperty extends HologramProperty<Location> {
     public HologramLocationProperty(Hologram hologram) {
-        this.hologram = hologram;
+        super(hologram);
     }
 
     @Override

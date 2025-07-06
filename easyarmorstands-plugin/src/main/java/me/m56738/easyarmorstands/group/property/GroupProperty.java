@@ -88,4 +88,14 @@ public class GroupProperty<T> implements Property<T> {
         }
         return false;
     }
+
+    @Override
+    public boolean isValid() {
+        for (Property<T> property : properties) {
+            if (property.isValid()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

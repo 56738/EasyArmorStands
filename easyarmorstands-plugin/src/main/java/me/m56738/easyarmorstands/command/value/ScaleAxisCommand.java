@@ -5,9 +5,9 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.description.Description;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
 import me.m56738.easyarmorstands.lib.cloud.parser.standard.FloatParser;
 import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
@@ -42,7 +42,7 @@ public abstract class ScaleAxisCommand implements ValueCommand<Float> {
     }
 
     @Override
-    public @NotNull ParserDescriptor<EasCommandSender, Float> getParser() {
+    public @NotNull ParserDescriptor<Source, Float> getParser() {
         return FloatParser.floatParser(0);
     }
 

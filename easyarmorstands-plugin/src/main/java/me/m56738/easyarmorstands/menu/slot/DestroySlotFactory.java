@@ -20,7 +20,7 @@ public class DestroySlotFactory implements MenuSlotFactory {
     @Override
     public @Nullable MenuSlot createSlot(@NotNull MenuSlotContext context) {
         Element element = context.element();
-        if (element instanceof DestroyableElement && context.permissions().test(Permissions.DESTROY)) {
+        if (element instanceof DestroyableElement && context.player().hasPermission(Permissions.DESTROY)) {
             return new DestroySlot((DestroyableElement) element, itemTemplate, context.resolver());
         } else {
             return null;

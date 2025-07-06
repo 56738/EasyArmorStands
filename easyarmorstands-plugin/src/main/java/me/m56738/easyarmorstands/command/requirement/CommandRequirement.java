@@ -1,32 +1,32 @@
 package me.m56738.easyarmorstands.command.requirement;
 
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.Command;
 import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
 import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.List;
 
 import static me.m56738.easyarmorstands.lib.cloud.key.CloudKey.cloudKey;
 
-public interface CommandRequirement extends Command.Builder.Applicable<EasCommandSender> {
-    CloudKey<List<CommandRequirement>> KEY = cloudKey("requirements", new TypeToken<List<CommandRequirement>>() {
+@NullMarked
+public interface CommandRequirement extends Command.Builder.Applicable<Source> {
+    CloudKey<List<CommandRequirement>> KEY = cloudKey("requirements", new TypeToken<>() {
     });
 
-    boolean evaluateRequirement(@NonNull CommandContext<EasCommandSender> commandContext);
+    boolean evaluateRequirement(CommandContext<Source> commandContext);
 
-    void handle(CommandContext<EasCommandSender> context);
+    void handle(CommandContext<Source> context);
 
-    @NonNull
-    default List<@NonNull CommandRequirement> parents() {
+    default List<CommandRequirement> parents() {
         return Collections.emptyList();
     }
 
     @Override
-    default Command.@NonNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NonNull Builder<EasCommandSender> builder) {
+    default Command.Builder<Source> applyToCommandBuilder(Command.Builder<Source> builder) {
         return CommandRequirementBuilderModifier.addRequirement(builder, this);
     }
 }

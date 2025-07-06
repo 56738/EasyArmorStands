@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.group.tool;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
@@ -19,10 +20,12 @@ import java.util.List;
 
 public class GroupMoveTool implements MoveTool {
     private final ToolContext context;
+    private final ChangeContext changeContext;
     private final List<MoveTool> tools;
 
-    public GroupMoveTool(ToolContext context, List<MoveTool> tools) {
+    public GroupMoveTool(ToolContext context, ChangeContext changeContext, List<MoveTool> tools) {
         this.context = context;
+        this.changeContext = changeContext;
         this.tools = new ArrayList<>(tools);
     }
 
@@ -82,6 +85,11 @@ public class GroupMoveTool implements MoveTool {
         public void setPosition(@NotNull Vector3dc position) {
             position.sub(originalPosition, offset);
             setChange(offset);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
         }
 
         @Override

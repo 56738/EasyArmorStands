@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -39,8 +40,8 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    public @NotNull DisplayToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new DisplayToolProvider(properties);
+    public @NotNull DisplayToolProvider getTools(@NotNull ChangeContext context) {
+        return new DisplayToolProvider(this, context);
     }
 
     @Override

@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import org.bukkit.Bukkit;
@@ -32,7 +31,7 @@ public class SessionManagerImpl implements SessionManager {
 
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
-        SessionImpl session = new SessionImpl(new EasPlayer(player));
+        SessionImpl session = new SessionImpl(player);
         ElementSelectionNode node = new ElementSelectionNodeImpl(session);
         node.addSource(new EntityElementDiscoverySource());
         session.pushNode(node);

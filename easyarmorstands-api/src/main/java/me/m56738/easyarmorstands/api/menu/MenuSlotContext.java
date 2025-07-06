@@ -20,12 +20,6 @@ public interface MenuSlotContext {
 
     @Nullable Element element();
 
-    @Nullable PropertyContainer properties();
-
-    @NotNull PropertyContainer properties(@NotNull Element element);
-
-    @NotNull PermissionChecker permissions();
-
     @NotNull Locale locale();
 
     @NotNull TagResolver resolver();

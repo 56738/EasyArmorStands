@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -28,8 +27,8 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<ItemStack> property, @NotNull PropertyContainer container) {
-        return new ItemPropertySlot(property, container);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new ItemPropertySlot(element, this);
     }
 
     @Override

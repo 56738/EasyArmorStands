@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.Component;
@@ -14,13 +15,14 @@ import java.util.Optional;
 public class OptionalComponentButton extends PropertyButton<Optional<Component>> {
     private final String command;
 
-    public OptionalComponentButton(Property<Optional<Component>> property, PropertyContainer container, SimpleItemTemplate item, String command) {
-        super(property, container, item);
+    public OptionalComponentButton(Element element, PropertyType<Optional<Component>> type, SimpleItemTemplate item, String command) {
+        super(element, type, item);
         this.command = command;
     }
 
     @Override
     public void onClick(@NotNull MenuClick click) {
+        Property<Optional<Component>> property = getUntrackedProperty();
         if (click.isShiftClick()) {
             EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
                     .handlePropertyShiftClick(property, click);

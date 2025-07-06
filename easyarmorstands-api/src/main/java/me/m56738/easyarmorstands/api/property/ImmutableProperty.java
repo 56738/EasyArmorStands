@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,11 +8,11 @@ import java.util.Objects;
 
 class ImmutableProperty<T> implements Property<T> {
     private final PropertyType<T> type;
-    private final T value;
+    private final Property<T> property;
 
-    ImmutableProperty(PropertyType<T> type, T value) {
+    ImmutableProperty(PropertyType<T> type, Property<T> property) {
         this.type = Objects.requireNonNull(type);
-        this.value = Objects.requireNonNull(value);
+        this.property = Objects.requireNonNull(property);
     }
 
     @Override
@@ -23,7 +22,7 @@ class ImmutableProperty<T> implements Property<T> {
 
     @Override
     public @NotNull T getValue() {
-        return value;
+        return property.getValue();
     }
 
     @Override
@@ -37,7 +36,7 @@ class ImmutableProperty<T> implements Property<T> {
     }
 
     @Override
-    public boolean canChange(@NotNull Player player) {
-        return false;
+    public boolean isValid() {
+        return property.isValid();
     }
 }

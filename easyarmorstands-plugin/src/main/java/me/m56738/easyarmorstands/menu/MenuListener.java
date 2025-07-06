@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
@@ -24,44 +24,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-
 public class MenuListener implements Listener {
-    private final @Nullable MethodHandle inventoryHolderGetter;
-
-    public MenuListener() {
-        inventoryHolderGetter = findInventoryHolderGetter();
-    }
-
-    @SuppressWarnings("JavaLangInvokeHandleSignature")
-    private static @Nullable MethodHandle findInventoryHolderGetter() {
-        try {
-            // Paper adds getHolder(boolean useSnapshot)
-            return MethodHandles.lookup().findVirtual(Inventory.class, "getHolder",
-                    MethodType.methodType(InventoryHolder.class, boolean.class));
-        } catch (ReflectiveOperationException e) {
-            return null;
-        }
-    }
-
-    private InventoryHolder getHolder(Inventory inventory) {
-        if (inventoryHolderGetter == null) {
-            return inventory.getHolder();
-        }
-        try {
-            // Call with useSnapshot=false
-            return (InventoryHolder) inventoryHolderGetter.invoke(inventory, false);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        InventoryHolder holder = getHolder(event.getInventory());
-        if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
+        InventoryHolder holder = event.getInventory().getHolder(false);
+        if (holder instanceof Menu menu && event.getWhoClicked() instanceof Player) {
             if (event.getRawSlot() >= event.getInventory().getSize()) {
                 // Not the upper inventory
                 if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
@@ -70,7 +37,6 @@ public class MenuListener implements Listener {
                 }
                 return;
             }
-            Menu menu = (Menu) holder;
             event.setCancelled(true);
             SingleClick click = new SingleClick(menu, event);
             menu.onClick(click);
@@ -82,8 +48,8 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        InventoryHolder holder = getHolder(event.getInventory());
-        if (holder instanceof Menu && event.getWhoClicked() instanceof Player) {
+        InventoryHolder holder = event.getInventory().getHolder(false);
+        if (holder instanceof Menu menu && event.getWhoClicked() instanceof Player) {
             if (event.getRawSlots().size() != 1) {
                 event.setCancelled(true);
                 return;
@@ -92,7 +58,6 @@ public class MenuListener implements Listener {
             if (slot != event.getView().convertSlot(slot)) {
                 return;
             }
-            Menu menu = (Menu) holder;
             event.setCancelled(true);
             menu.onClick(new DragClick(menu, event, slot));
         }
@@ -103,14 +68,14 @@ public class MenuListener implements Listener {
         private final MenuSlot slot;
         private final InventoryInteractEvent event;
         private final int index;
-        private final EasPlayer player;
+        private final Player player;
 
         private Click(Menu menu, InventoryInteractEvent event, int index) {
             this.menu = menu;
             this.slot = menu.getSlot(index);
             this.event = event;
             this.index = index;
-            this.player = new EasPlayer((Player) event.getWhoClicked());
+            this.player = (Player) event.getWhoClicked();
         }
 
         @Override
@@ -130,7 +95,7 @@ public class MenuListener implements Listener {
 
         @Override
         public @NotNull Player player() {
-            return player.get();
+            return player;
         }
 
         @Override
@@ -140,12 +105,12 @@ public class MenuListener implements Listener {
 
         @Override
         public @Nullable Session session() {
-            return player.session();
+            return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
         }
 
         @Override
         public @NotNull Matrix4dc eyeMatrix() {
-            return Util.toMatrix4d(player.get().getEyeLocation());
+            return Util.toMatrix4d(player.getEyeLocation());
         }
 
         @Override
@@ -155,12 +120,12 @@ public class MenuListener implements Listener {
 
         @Override
         public void open(@NotNull Inventory inventory) {
-            queueTask(() -> player.get().openInventory(inventory));
+            queueTask(() -> player.openInventory(inventory));
         }
 
         @Override
         public void close() {
-            queueTask(() -> menu.close(player.get()));
+            queueTask(() -> menu.close(player));
         }
 
         @Override

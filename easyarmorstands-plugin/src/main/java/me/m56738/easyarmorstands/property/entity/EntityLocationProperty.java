@@ -50,6 +50,11 @@ public class EntityLocationProperty implements Property<Location> {
         return ok;
     }
 
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
+
     private boolean isValid(@NotNull Location location) {
         return isValid(location.getX(), COORDINATE_LIMIT) &&
                 isValid(location.getY(), HEIGHT_LIMIT) &&

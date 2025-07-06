@@ -32,4 +32,9 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
         entity.setTransformation(transformation);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

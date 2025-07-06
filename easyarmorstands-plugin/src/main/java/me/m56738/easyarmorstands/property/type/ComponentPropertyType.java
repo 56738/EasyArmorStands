@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.ComponentButton;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -23,7 +22,7 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Component> property, @NotNull PropertyContainer container) {
-        return new ComponentButton(property, container, buttonTemplate, command);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new ComponentButton(element, this, buttonTemplate, command);
     }
 }

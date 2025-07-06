@@ -28,4 +28,9 @@ public class EntitySilentProperty implements Property<Boolean> {
         entity.setSilent(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

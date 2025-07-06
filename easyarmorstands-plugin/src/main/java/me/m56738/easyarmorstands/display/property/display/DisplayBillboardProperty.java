@@ -29,4 +29,9 @@ public class DisplayBillboardProperty implements Property<Billboard> {
         entity.setBillboard(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

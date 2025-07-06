@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -35,12 +35,12 @@ public class DestroySlot implements MenuSlot {
             return;
         }
 
-        ChangeContext context = new EasPlayer(click.player());
-        if (!context.canDestroyElement(element)) {
+        if (!EasyArmorStandsPlugin.getInstance().canDestroyElement(click.player(), element)) {
             return;
         }
 
-        context.history().push(new ElementDestroyAction(element));
+        History history = EasyArmorStandsPlugin.getInstance().getHistory(click.player());
+        history.push(new ElementDestroyAction(element));
         element.destroy();
         click.close();
     }

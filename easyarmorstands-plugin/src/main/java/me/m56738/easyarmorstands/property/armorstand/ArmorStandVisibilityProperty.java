@@ -29,4 +29,9 @@ public class ArmorStandVisibilityProperty implements Property<Boolean> {
         entity.setVisible(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

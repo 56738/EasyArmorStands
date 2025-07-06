@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
@@ -8,7 +9,6 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -24,7 +24,7 @@ abstract class ElementPresenceAction implements Action {
 
     protected boolean create(ChangeContext context) {
         ElementType type = reference.getType();
-        if (!context.canCreateElement(type, properties)) {
+        if (!EasyArmorStandsPlugin.getInstance().canCreateElement(context.getPlayer(), type, properties)) {
             return false;
         }
 
@@ -49,12 +49,11 @@ abstract class ElementPresenceAction implements Action {
         }
 
         Element element = reference.getElement();
-        if (!(element instanceof DestroyableElement)) {
+        if (!(element instanceof DestroyableElement destroyableElement)) {
             return false;
         }
 
-        DestroyableElement destroyableElement = (DestroyableElement) element;
-        if (!context.canDestroyElement(destroyableElement)) {
+        if (!EasyArmorStandsPlugin.getInstance().canDestroyElement(context.getPlayer(), destroyableElement)) {
             return false;
         }
 

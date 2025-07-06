@@ -28,4 +28,9 @@ public class TextDisplaySeeThroughProperty implements Property<Boolean> {
         entity.setSeeThrough(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

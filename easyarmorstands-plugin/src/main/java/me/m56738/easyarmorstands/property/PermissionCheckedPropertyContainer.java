@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,16 +11,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PermissionCheckedPropertyContainer extends PropertyWrapperContainer {
     private final Element element;
-    private final ChangeContext context;
+    private final Player player;
 
-    public PermissionCheckedPropertyContainer(Element element, ChangeContext context) {
+    public PermissionCheckedPropertyContainer(Element element, Player player) {
         super(element.getProperties());
         this.element = element;
-        this.context = context;
+        this.player = player;
     }
 
     @Override
     protected @NotNull <T> Property<T> wrap(@NotNull Property<T> property) {
-        return new PermissionCheckedPropertyWrapper<>(property, element, context);
+        return new PermissionCheckedPropertyWrapper<>(property, element, player);
     }
 }

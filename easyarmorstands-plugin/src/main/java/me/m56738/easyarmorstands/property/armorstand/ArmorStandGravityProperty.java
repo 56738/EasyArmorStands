@@ -28,4 +28,9 @@ public class ArmorStandGravityProperty implements Property<Boolean> {
         entity.setGravity(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

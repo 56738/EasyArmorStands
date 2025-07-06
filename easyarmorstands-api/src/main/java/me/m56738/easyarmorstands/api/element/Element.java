@@ -24,7 +24,7 @@ public interface Element {
      * Changes to these properties will be performed immediately without any permission checks or history tracking.
      *
      * @return the properties of the element
-     * @see me.m56738.easyarmorstands.api.editor.Session#properties(Element) Permission checks and history tracking
+     * @see me.m56738.easyarmorstands.api.context.ChangeContext Permission checks and history tracking
      */
     @Contract(pure = true)
     @NotNull PropertyContainer getProperties();

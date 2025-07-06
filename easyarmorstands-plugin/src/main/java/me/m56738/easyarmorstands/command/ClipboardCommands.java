@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.command;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -7,23 +9,25 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
 import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
 import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
+import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.PropertyCopier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.entity.Player;
 
 @Command("eas")
 public class ClipboardCommands {
     @Command("clipboard")
     @Permission(Permissions.CLIPBOARD)
     @CommandDescription("easyarmorstands.command.description.clipboard")
-    public void clipboard(EasPlayer sender, Clipboard clipboard) {
+    public void clipboard(PlayerSource source, Clipboard clipboard) {
+        Player sender = source.source();
         if (clipboard.getProperties().isEmpty()) {
             sender.sendMessage(Message.warning("easyarmorstands.warning.clipboard-empty"));
             return;
@@ -49,7 +53,8 @@ public class ClipboardCommands {
     @Command("clipboard clear")
     @Permission(Permissions.CLIPBOARD)
     @CommandDescription("easyarmorstands.command.description.clipboard.clear")
-    public void clear(EasPlayer sender, Clipboard clipboard) {
+    public void clear(PlayerSource source, Clipboard clipboard) {
+        Player sender = source.source();
         if (clipboard.getProperties().isEmpty()) {
             sender.sendMessage(Message.warning("easyarmorstands.warning.clipboard-empty"));
         } else {
@@ -62,9 +67,10 @@ public class ClipboardCommands {
     @Permission(Permissions.CLIPBOARD)
     @CommandDescription("easyarmorstands.command.description.copy")
     @RequireElement
-    public void copy(EasPlayer sender, Clipboard clipboard, Element element) {
+    public void copy(PlayerSource source, Clipboard clipboard, Element element) {
+        Player sender = source.source();
         element.getProperties().forEach(property -> {
-            if (property.getType().canCopy(sender.player())) {
+            if (property.getType().canCopy(sender)) {
                 copyProperty(clipboard, property);
             }
         });
@@ -81,7 +87,8 @@ public class ClipboardCommands {
     @Permission(Permissions.CLIPBOARD)
     @CommandDescription("easyarmorstands.command.description.paste")
     @RequireElementSelection
-    public void paste(EasPlayer sender, Clipboard clipboard, ElementSelection selection) {
+    public void paste(PlayerSource source, Clipboard clipboard, ElementSelection selection) {
+        Player sender = source.source();
         if (clipboard.getProperties().isEmpty()) {
             sender.sendMessage(Message.error("easyarmorstands.error.clipboard-empty"));
             sender.sendMessage(Message.hint("easyarmorstands.hint.copy-property"));
@@ -90,9 +97,13 @@ public class ClipboardCommands {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        PropertyContainer properties = selection.properties(sender);
-        copier.copyProperties(properties, clipboard.getProperties());
-        properties.commit(Message.component("easyarmorstands.history.clipboard-pasted"));
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+            for (Element element : selection.elements()) {
+                PropertyContainer properties = context.getProperties(element);
+                copier.copyProperties(properties, clipboard.getProperties());
+            }
+            context.commit(Message.component("easyarmorstands.history.clipboard-pasted"));
+        }
 
         if (copier.getSuccessCount() > 0) {
             sender.sendMessage(Message.success("easyarmorstands.success.clipboard-pasted"));

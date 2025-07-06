@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.property.type;
 
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.BooleanToggleButton;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ public class BooleanTogglePropertyType extends BooleanPropertyType {
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Boolean> property, @NotNull PropertyContainer container) {
-        return new BooleanToggleButton(property, container, buttonTemplate);
+    public @Nullable MenuSlot createSlot(@NotNull Element element) {
+        return new BooleanToggleButton(element, this, buttonTemplate);
     }
 }

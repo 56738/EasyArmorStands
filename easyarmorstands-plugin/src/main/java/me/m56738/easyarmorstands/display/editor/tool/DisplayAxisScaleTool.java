@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.display.editor.tool;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.Axis;
+import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleToolSession;
@@ -9,7 +10,6 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -24,13 +24,13 @@ import org.joml.Vector3fc;
 
 public class DisplayAxisScaleTool implements AxisScaleTool {
     private final ToolContext context;
-    private final PropertyContainer properties;
+    private final ChangeContext changeContext;
     private final Property<Vector3fc> scaleProperty;
     private final Axis axis;
 
-    public DisplayAxisScaleTool(ToolContext context, PropertyContainer properties, Axis axis) {
+    public DisplayAxisScaleTool(ToolContext context, ChangeContext changeContext, PropertyContainer properties, Axis axis) {
         this.context = context;
-        this.properties = properties;
+        this.changeContext = changeContext;
         this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
         this.axis = axis;
     }
@@ -60,11 +60,10 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         return scaleProperty.canChange(player);
     }
 
-    private class SessionImpl extends AbstractToolSession implements AxisScaleToolSession {
+    private class SessionImpl implements AxisScaleToolSession {
         private final Vector3fc originalScale;
 
         public SessionImpl() {
-            super(properties);
             this.originalScale = new Vector3f(scaleProperty.getValue());
         }
 
@@ -94,6 +93,16 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         @Override
         public void revert() {
             scaleProperty.setValue(originalScale);
+        }
+
+        @Override
+        public void commit(@Nullable Component description) {
+            changeContext.commit(description);
+        }
+
+        @Override
+        public boolean isValid() {
+            return scaleProperty.isValid();
         }
 
         @Override

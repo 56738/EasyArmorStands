@@ -34,4 +34,9 @@ public class ArmorStandPoseProperty implements Property<EulerAngle> {
         part.setPose(entity, value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

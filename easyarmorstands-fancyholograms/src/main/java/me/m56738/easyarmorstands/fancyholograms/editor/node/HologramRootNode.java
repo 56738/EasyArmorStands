@@ -3,12 +3,11 @@ package me.m56738.easyarmorstands.fancyholograms.editor.node;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.AbstractPropertyNode;
 import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
@@ -17,20 +16,19 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public class HologramRootNode extends AbstractPropertyNode implements ElementNode {
-    private final Session session;
-    private final HologramElement element;
+@NullMarked
+public class HologramRootNode extends AbstractElementNode<HologramElement> implements ElementNode {
     private final ToolModeSwitcher toolModeSwitcher;
-    private final Property<BlockData> blockDataProperty;
+    private final @Nullable Property<BlockData> blockDataProperty;
 
     public HologramRootNode(Session session, HologramElement element) {
-        super(session, session.properties(element));
-        this.session = session;
-        this.element = element;
+        super(session, element);
         this.toolModeSwitcher = new ToolModeSwitcher(
-                new ToolManager(session, this, element.getTools(properties())));
-        this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
+                new ToolManager(session, this, element.getTools(getContext())));
+        this.blockDataProperty = getProperties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
     }
 
     @Override
@@ -38,21 +36,21 @@ public class HologramRootNode extends AbstractPropertyNode implements ElementNod
         if (super.onClick(context)) {
             return true;
         }
-        Player player = session.player();
+        Player player = getSession().player();
         if (blockDataProperty != null && context.type() == ClickContext.Type.LEFT_CLICK && player.isSneaking()) {
             Block block = context.block();
             if (block != null) {
                 BlockData blockData = block.getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
-                    properties().commit();
-                    new EasPlayer(player).sendMessage(Message.success("easyarmorstands.success.changed-block",
+                    getContext().commit();
+                    player.sendMessage(Message.success("easyarmorstands.success.changed-block",
                             blockDataProperty.getType().getValueComponent(blockData)));
                     return true;
                 }
             }
         }
         if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
+            getElement().openMenu(player);
             return true;
         }
         return toolModeSwitcher.onClick(context);
@@ -62,10 +60,5 @@ public class HologramRootNode extends AbstractPropertyNode implements ElementNod
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(toolModeSwitcher.getActionBar());
-    }
-
-    @Override
-    public @NotNull HologramElement getElement() {
-        return element;
     }
 }

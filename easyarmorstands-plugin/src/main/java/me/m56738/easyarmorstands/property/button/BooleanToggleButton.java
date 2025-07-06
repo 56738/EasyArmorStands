@@ -1,17 +1,17 @@
 package me.m56738.easyarmorstands.property.button;
 
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 
 public class BooleanToggleButton extends ToggleButton<Boolean> {
-    public BooleanToggleButton(Property<Boolean> property, PropertyContainer container, SimpleItemTemplate item) {
-        super(property, container, item);
+    public BooleanToggleButton(Element element, PropertyType<Boolean> type, SimpleItemTemplate item) {
+        super(element, type, item);
     }
 
     @Override
     public Boolean getNextValue() {
-        return !property.getValue();
+        return !getUntrackedProperty().getValue();
     }
 
     @Override

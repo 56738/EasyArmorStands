@@ -40,4 +40,9 @@ public class EntityScaleProperty implements Property<Double> {
             return false;
         }
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

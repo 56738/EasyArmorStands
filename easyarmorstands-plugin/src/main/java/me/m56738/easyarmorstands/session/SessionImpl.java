@@ -11,15 +11,11 @@ import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.particle.EditorParticle;
 import me.m56738.easyarmorstands.particle.GizmoParticleProvider;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import me.m56738.easyarmorstands.session.context.EnterContextImpl;
@@ -27,7 +23,6 @@ import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
@@ -55,8 +50,6 @@ public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
     private final Player player;
-    private final Audience audience;
-    private final ChangeContext context;
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
@@ -70,10 +63,8 @@ public final class SessionImpl implements Session {
     private int overlayTicks;
     private boolean toolRequired;
 
-    public SessionImpl(EasPlayer context) {
-        this.player = context.get();
-        this.audience = context;
-        this.context = context;
+    public SessionImpl(Player player) {
+        this.player = player;
         this.snapper = new SessionSnapper(player);
         this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player));
     }
@@ -247,20 +238,20 @@ public final class SessionImpl implements Session {
         boolean resendOverlay = overlayTicks <= 0;
         if (resendOverlay) {
             overlayTicks = 20;
-            audience.sendTitlePart(TitlePart.TIMES, titleTimes);
+            player.sendTitlePart(TitlePart.TIMES, titleTimes);
         }
         overlayTicks--;
 
         if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
             currentTitle = pendingTitle;
             currentSubtitle = pendingSubtitle;
-            audience.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
-            audience.sendTitlePart(TitlePart.TITLE, currentTitle);
+            player.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
+            player.sendTitlePart(TitlePart.TITLE, currentTitle);
         }
 
         if (resendOverlay || !Objects.equals(currentActionBar, pendingActionBar)) {
             currentActionBar = pendingActionBar;
-            audience.sendActionBar(currentActionBar);
+            player.sendActionBar(currentActionBar);
         }
     }
 
@@ -273,17 +264,13 @@ public final class SessionImpl implements Session {
             node.onRemove(RemoveContextImpl.INSTANCE);
         }
         nodeStack.clear();
-        audience.clearTitle();
-        audience.sendActionBar(Component.empty());
+        player.clearTitle();
+        player.sendActionBar(Component.empty());
         for (EditorParticle particle : particles) {
             particle.hideGizmo();
         }
         particles.clear();
         valid = false;
-    }
-
-    public ChangeContext context() {
-        return context;
     }
 
     public double getRange() {
@@ -323,11 +310,6 @@ public final class SessionImpl implements Session {
     @Override
     public @NotNull Player player() {
         return player;
-    }
-
-    @Override
-    public @NotNull PropertyContainer properties(@NotNull Element element) {
-        return new TrackedPropertyContainer(element, context);
     }
 
     @Override

@@ -70,8 +70,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         int foundSlots = 0;
         for (int i = 0; i < size; i++) {
             MenuSlot slot = menu.getSlot(i);
-            if (slot instanceof ItemPropertySlot) {
-                ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
+            if (slot instanceof ItemPropertySlot itemSlot) {
                 if (isApplicable(itemSlot)) {
                     foundSlot = itemSlot;
                     foundSlots++;
@@ -101,8 +100,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         }
 
         MenuSlot slot = click.slot();
-        if (slot instanceof ItemPropertySlot) {
-            ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
+        if (slot instanceof ItemPropertySlot itemSlot) {
             if (isApplicable(itemSlot)) {
                 open(click.player(), itemSlot);
             }
@@ -110,13 +108,13 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot));
+        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(player, itemSlot));
         menu.addCloseListener((p, m) -> element.openMenu(p));
         player.openInventory(menu.getInventory());
     }
 
     private boolean isApplicable(ItemPropertySlot slot) {
-        ItemStack item = slot.getProperty().getValue();
+        ItemStack item = slot.getElement().getProperties().get(slot.getType()).getValue();
         ItemMeta meta = item.getItemMeta();
         return meta instanceof LeatherArmorMeta || meta instanceof MapMeta;
     }

@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.property;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,13 +12,13 @@ import org.jetbrains.annotations.Nullable;
 class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     private final Property<T> property;
     private final Element element;
-    private final ChangeContext context;
+    private final Player player;
     private Boolean hasPermissionCache;
 
-    PermissionCheckedPropertyWrapper(Property<T> property, Element element, ChangeContext context) {
+    PermissionCheckedPropertyWrapper(Property<T> property, Element element, Player player) {
         this.property = property;
         this.element = element;
-        this.context = context;
+        this.player = player;
     }
 
     private boolean hasPermission() {
@@ -26,7 +26,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
             return hasPermissionCache;
         }
 
-        boolean result = property.getType().canChange(context.player());
+        boolean result = property.getType().canChange(player);
         hasPermissionCache = result;
         return result;
     }
@@ -45,7 +45,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
         if (!hasPermission()) {
             return false;
         }
-        return context.canChangeProperty(element, property, value);
+        return EasyArmorStandsPlugin.getInstance().canChangeProperty(player, element, property, value);
     }
 
     @Override
@@ -67,5 +67,10 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     @Override
     public boolean canChange(@NotNull Player player) {
         return hasPermission();
+    }
+
+    @Override
+    public boolean isValid() {
+        return property.isValid();
     }
 }

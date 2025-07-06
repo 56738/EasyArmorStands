@@ -9,16 +9,16 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called to check whether an element can be edited.
+ * Called when an element is selected by a player using the editor or internally using a command.
  * <p>
  * Can be used to prevent selecting certain elements.
  */
-public class PlayerEditElementEvent extends PlayerEvent implements Cancellable {
+public class PlayerSelectElementEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
     private final EditableElement element;
     private boolean cancelled;
 
-    public PlayerEditElementEvent(@NotNull Player player, @NotNull EditableElement element) {
+    public PlayerSelectElementEvent(@NotNull Player player, @NotNull EditableElement element) {
         super(player);
         this.element = element;
     }

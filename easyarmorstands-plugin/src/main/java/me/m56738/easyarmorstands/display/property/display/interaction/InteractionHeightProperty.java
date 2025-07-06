@@ -28,4 +28,9 @@ public class InteractionHeightProperty implements Property<Float> {
         entity.setInteractionHeight(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

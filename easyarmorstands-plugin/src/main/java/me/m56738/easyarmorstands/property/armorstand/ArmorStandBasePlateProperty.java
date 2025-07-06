@@ -28,4 +28,9 @@ public class ArmorStandBasePlateProperty implements Property<Boolean> {
         entity.setBasePlate(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }

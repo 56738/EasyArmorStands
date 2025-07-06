@@ -28,4 +28,9 @@ public class ArmorStandMarkerProperty implements Property<Boolean> {
         entity.setMarker(value);
         return true;
     }
+
+    @Override
+    public boolean isValid() {
+        return entity.isValid();
+    }
 }
