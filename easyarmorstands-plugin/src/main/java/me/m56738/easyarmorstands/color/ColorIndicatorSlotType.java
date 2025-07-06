@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import net.kyori.adventure.key.Key;

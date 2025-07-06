@@ -34,12 +34,6 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
         return key;
     }
 
-    @Override
-    public @NotNull TypeToken<T> getValueType() {
-        return valueType;
-    }
-
-    @Override
     public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         permission = config.node("permission").getString();
         name = config.node("name").require(Component.class);

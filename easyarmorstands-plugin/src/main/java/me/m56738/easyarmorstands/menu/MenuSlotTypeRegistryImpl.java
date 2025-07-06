@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
-import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

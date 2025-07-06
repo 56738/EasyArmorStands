@@ -1,22 +1,46 @@
-name: EasyArmorStands
+name: 'EasyArmorStands'
 version: '${version}'
-main: me.m56738.easyarmorstands.EasyArmorStandsPlugin
+main: 'me.m56738.easyarmorstands.EasyArmorStandsPlugin'
 author: '56738'
-api-version: 1.13
-softdepend:
-- BentoBox
-- FancyHolograms
-- GriefDefender
-- HeadDatabase
-- HuskClaims
-- Lands
-- PlotSquared
-- Residence
-- Towny
-- Train_Carts
-- ViaVersion
-- WorldGuard
-
+api-version: '${minecraftVersion}'
+dependencies:
+  server:
+    BentoBox:
+      load: BEFORE
+      required: false
+    FancyHolograms:
+      load: BEFORE
+      required: false
+    GriefDefender:
+      load: BEFORE
+      required: false
+    HeadDatabase:
+      load: BEFORE
+      required: false
+    HuskClaims:
+      load: BEFORE
+      required: false
+    Lands:
+      load: BEFORE
+      required: false
+    PlotSquared:
+      load: BEFORE
+      required: false
+    Residence:
+      load: BEFORE
+      required: false
+    Towny:
+      load: BEFORE
+      required: false
+    Train_Carts:
+      load: BEFORE
+      required: false
+    ViaVersion:
+      load: BEFORE
+      required: false
+    WorldGuard:
+      load: BEFORE
+      required: false
 permissions:
   # Categories
   easyarmorstands.survival:

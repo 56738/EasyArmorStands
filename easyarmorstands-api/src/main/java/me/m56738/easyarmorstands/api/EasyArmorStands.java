@@ -1,14 +1,12 @@
 package me.m56738.easyarmorstands.api;
 
+import me.m56738.easyarmorstands.api.context.ChangeContextFactory;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
-import me.m56738.easyarmorstands.api.menu.MenuProvider;
-import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
-import me.m56738.easyarmorstands.api.context.ChangeContextFactory;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import org.bukkit.entity.Entity;
@@ -28,12 +26,6 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull EntityElementProviderRegistry entityElementProviderRegistry();
-
-    @Contract(pure = true)
-    @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry();
-
-    @Contract(pure = true)
-    @NotNull MenuProvider menuProvider();
 
     @Contract(pure = true)
     @NotNull SessionManager sessionManager();

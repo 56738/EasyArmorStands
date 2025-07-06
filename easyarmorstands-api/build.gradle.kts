@@ -5,5 +5,4 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
-    api(project(":easyarmorstands-api-dependencies", configuration = "shadow"))
 }

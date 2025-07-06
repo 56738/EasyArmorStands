@@ -24,7 +24,6 @@ import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
-import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
@@ -114,6 +113,7 @@ import me.m56738.easyarmorstands.menu.ColorPicketContextWrapper;
 import me.m56738.easyarmorstands.menu.ElementMenuContext;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.MenuProviderImpl;
+import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.SimpleMenuContext;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPartSlotType;
@@ -659,12 +659,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return entityElementProviderRegistry;
     }
 
-    @Override
     public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
         return Objects.requireNonNull(menuSlotTypeRegistry);
     }
 
-    @Override
     public @NotNull MenuProvider menuProvider() {
         return Objects.requireNonNull(menuProvider);
     }

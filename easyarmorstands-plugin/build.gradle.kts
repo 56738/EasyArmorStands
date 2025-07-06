@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.run.paper)
 }
 
+val minecraftVersion = property("minecraftVersion")
+
 dependencies {
     compileOnly(libs.paper.api)
     compileOnlyApi(libs.checker.qual)
@@ -36,9 +38,13 @@ tasks {
     }
 
     processResources {
-        inputs.property("version", version)
+        val props = mapOf(
+            "version" to version,
+            "minecraftVersion" to minecraftVersion
+        )
+        inputs.properties(props)
         filesMatching("*.yml") {
-            expand("version" to version)
+            expand(props)
         }
     }
 
@@ -71,7 +77,7 @@ hangarPublish {
                 register(Platforms.PAPER) {
                     jar.set(tasks.shadowJar.flatMap { it.archiveFile })
                     platformVersions.set(
-                        property("minecraftVersion").toString()
+                        minecraftVersion.toString()
                             .split(",")
                             .map { it.trim() }
                     )
