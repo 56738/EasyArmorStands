@@ -3,14 +3,6 @@ _version:
 height: 4
 parent: entity/default
 slots:
-  easyarmorstands:copy:
-    enabled: false
-  easyarmorstands:display/billboard:
-    column: 4
-    config:
-      property: easyarmorstands:display/billboard
-    row: 1
-    type: easyarmorstands:property
   easyarmorstands:display/box:
     column: 8
     config:
@@ -22,11 +14,3 @@ slots:
         type: black_stained_glass
     row: 3
     type: easyarmorstands:display/box
-  easyarmorstands:display/content:
-    column: 1
-    row: 2
-    type: easyarmorstands:property
-  easyarmorstands:entity/custom_name:
-    enabled: false
-  easyarmorstands:entity/silent:
-    enabled: false

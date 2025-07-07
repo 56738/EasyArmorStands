@@ -1,7 +1,0 @@
-_version:
-  game: 1.19.4
-parent: entity/display
-slots:
-  easyarmorstands:display/content:
-    config:
-      property: easyarmorstands:block_display/block

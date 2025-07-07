@@ -59,6 +59,9 @@ public class EntityElementListener implements Listener {
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (entity instanceof ArmorStand && (slot == EquipmentSlot.BODY || slot == EquipmentSlot.SADDLE)) {
+                continue;
+            }
             registry.register(new EntityEquipmentProperty(entity, slot));
         }
         registry.register(new EntityScaleProperty(entity));

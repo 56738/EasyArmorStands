@@ -12,9 +12,9 @@ import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.event.element.ElementMenuLayoutEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
@@ -24,6 +24,7 @@ import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
+import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
@@ -116,13 +117,13 @@ import me.m56738.easyarmorstands.menu.MenuProviderImpl;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.SimpleMenuContext;
-import me.m56738.easyarmorstands.menu.slot.ArmorStandPartSlotType;
+import me.m56738.easyarmorstands.menu.layout.MenuBuilder;
+import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
+import me.m56738.easyarmorstands.menu.listener.ElementMenuListener;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPositionSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlotType;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
-import me.m56738.easyarmorstands.menu.slot.DestroySlotType;
-import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
@@ -158,11 +159,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -173,7 +172,6 @@ import java.util.stream.Stream;
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
     private static final NamespacedKey TOOL_KEY = new NamespacedKey("easyarmorstands", "tool");
     private static EasyArmorStandsPlugin instance;
-    private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -227,8 +225,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         entityElementProviderRegistry.register(new InteractionElementProvider(interactionType));
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
-        menuSlotTypeRegistry.register(new EntityCopySlotType());
-        menuSlotTypeRegistry.register(new ArmorStandPartSlotType());
         menuSlotTypeRegistry.register(new ArmorStandPositionSlotType());
         menuSlotTypeRegistry.register(new ArmorStandSpawnSlotType(armorStandElementType));
         menuSlotTypeRegistry.register(new BackgroundSlotType());
@@ -237,7 +233,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
         menuSlotTypeRegistry.register(new ColorPickerSlotType());
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
-        menuSlotTypeRegistry.register(new DestroySlotType());
         menuSlotTypeRegistry.register(new PropertySlotType());
         menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
         menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
@@ -276,6 +271,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getPluginManager().registerEvents(new ClipboardListener(clipboardManager), this);
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
+        getServer().getPluginManager().registerEvents(new ElementMenuListener(), this);
         getServer().getPluginManager().registerEvents(new DisplayListener(), this);
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
@@ -457,19 +453,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private void loadMenuTemplates() {
         spawnMenuFactory = loadMenuTemplate("spawn");
         colorPickerFactory = loadMenuTemplate("color_picker");
-        MenuFactory defaultEntityMenuFactory = loadMenuTemplate("entity/default");
-        MenuFactory livingEntityMenuFactory = loadMenuTemplate("entity/living");
-        for (EntityType type : EntityType.values()) {
-            MenuFactory factory = loadMenuTemplate("entity/type/" + type.name().toLowerCase(Locale.ROOT));
-            if (factory == null) {
-                if (type.isAlive()) {
-                    factory = livingEntityMenuFactory;
-                } else {
-                    factory = defaultEntityMenuFactory;
-                }
-            }
-            entityMenuFactories.put(type.getEntityClass(), factory);
-        }
     }
 
     public MenuFactory loadMenuTemplate(String name) {
@@ -643,11 +626,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         player.openInventory(menu.getInventory());
     }
 
-    public void openEntityMenu(Player player, Session session, EntityElement<?> element) {
-        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityClass());
-        if (factory != null) {
-            openMenu(player, session, factory, element);
-        }
+    public void openMenu(Player player, Element element, MenuBuilderFactory builderFactory) {
+        MenuSlot background = Objects.requireNonNull(EasyArmorStandsPlugin.getInstance().getConfiguration().editor.menu.background.createSlot(new SimpleMenuContext(player)));
+        MenuBuilder builder = builderFactory.createMenuBuilder(element.getType().getDisplayName(), player.locale(), background);
+        new ElementMenuLayoutEvent(player, element, builder).callEvent();
+        Menu menu = builder.createMenu();
+        player.openInventory(menu.getInventory());
     }
 
     public DisplayElementType<ItemDisplay> getItemDisplayType() {

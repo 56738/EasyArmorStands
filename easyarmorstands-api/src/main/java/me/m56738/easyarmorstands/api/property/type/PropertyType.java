@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -56,5 +57,12 @@ public interface PropertyType<T> extends Keyed {
 
     default @Nullable MenuSlot createSlot(@NotNull Element element) {
         return null;
+    }
+
+    default void addToMenu(@NotNull MenuLayout layout, @NotNull Element element) {
+        MenuSlot slot = createSlot(element);
+        if (slot != null) {
+            layout.addSlot(slot);
+        }
     }
 }

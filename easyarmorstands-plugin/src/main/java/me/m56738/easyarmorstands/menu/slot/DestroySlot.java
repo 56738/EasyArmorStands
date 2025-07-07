@@ -6,27 +6,30 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.util.ComponentUtil;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Locale;
 
 public class DestroySlot implements MenuSlot {
     private final DestroyableElement element;
-    private final SimpleItemTemplate itemTemplate;
-    private final TagResolver resolver;
 
-    public DestroySlot(DestroyableElement element, SimpleItemTemplate itemTemplate, TagResolver resolver) {
+    public DestroySlot(DestroyableElement element) {
         this.element = element;
-        this.itemTemplate = itemTemplate;
-        this.resolver = resolver;
     }
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return itemTemplate.render(locale, resolver);
+        ItemStack item = ItemStack.of(Material.TNT);
+        item.editMeta(meta -> {
+            meta.displayName(ComponentUtil.renderForItem(Message.buttonName("easyarmorstands.menu.destroy"), locale));
+            meta.lore(List.of(ComponentUtil.renderForItem(Message.buttonDescription("easyarmorstands.menu.destroy.description"), locale)));
+        });
+        return item;
     }
 
     @Override

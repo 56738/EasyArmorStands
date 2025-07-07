@@ -17,6 +17,9 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
+import me.m56738.easyarmorstands.menu.layout.DefaultMenuBuilder;
+import me.m56738.easyarmorstands.menu.layout.EquipmentMenuBuilder;
+import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -24,6 +27,7 @@ import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -97,8 +101,13 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(@NotNull Player player) {
-        Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-        EasyArmorStandsPlugin.getInstance().openEntityMenu(player, session, this);
+        MenuBuilderFactory builderFactory;
+        if (entity instanceof LivingEntity) {
+            builderFactory = EquipmentMenuBuilder::new;
+        } else {
+            builderFactory = DefaultMenuBuilder::new;
+        }
+        EasyArmorStandsPlugin.getInstance().openMenu(player, this, builderFactory);
     }
 
     @Override

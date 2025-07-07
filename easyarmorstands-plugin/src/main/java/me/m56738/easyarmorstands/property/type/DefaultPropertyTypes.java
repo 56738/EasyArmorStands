@@ -33,7 +33,7 @@ public class DefaultPropertyTypes {
             registry.register(new EulerAnglePropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            registry.register(new ItemPropertyType(key("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT))));
+            registry.register(new EquipmentItemPropertyType(key("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT)), slot));
         }
     }
 
