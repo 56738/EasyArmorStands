@@ -1,28 +1,28 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
-import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
-import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
-import me.m56738.easyarmorstands.property.entity.EntityAIProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
-import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
-import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
-import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
-import me.m56738.easyarmorstands.property.entity.EntityScaleProperty;
-import me.m56738.easyarmorstands.property.entity.EntitySilentProperty;
-import me.m56738.easyarmorstands.property.entity.EntityTagsProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandArmsProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandBasePlateProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandCanTickProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandGravityProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandInvulnerabilityProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandLockProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandMarkerProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandPoseProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandSizeProperty;
+import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandVisibilityProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityAIProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityCustomNameProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityCustomNameVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityEquipmentProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityGlowingProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityScaleProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntitySilentProperty;
+import me.m56738.easyarmorstands.paper.property.entity.EntityTagsProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,7 +34,7 @@ import org.bukkit.inventory.EquipmentSlot;
 public class EntityElementListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInitialize(EntityElementInitializeEvent event) {
-        ConfigurableEntityElement<?> element = event.getElement();
+        DefaultEntityElement<?> element = event.getElement();
         registerProperties(element.getEntity(), element.getProperties());
     }
 

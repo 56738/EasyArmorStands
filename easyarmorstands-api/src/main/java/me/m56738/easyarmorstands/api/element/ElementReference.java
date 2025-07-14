@@ -10,8 +10,6 @@ import java.util.UUID;
 /**
  * Stable reference which can find an element even after it was deleted and recreated or
  * after the chunk was unloaded and loaded.
- *
- * @see EntityElementReference
  */
 public interface ElementReference extends EntityReplacementListener {
     /**

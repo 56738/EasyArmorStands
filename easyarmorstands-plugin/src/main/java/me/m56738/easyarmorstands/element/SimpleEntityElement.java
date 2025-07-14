@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
-import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -20,6 +19,8 @@ import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.menu.layout.DefaultMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.EquipmentMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
+import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.paper.element.AbstractEntityElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -34,12 +35,13 @@ import org.joml.Vector3d;
 
 import java.util.Objects;
 
-public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
+public class SimpleEntityElement<E extends @NotNull Entity> extends AbstractEntityElement<E> implements DefaultEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
     private final E entity;
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = new PropertyRegistry();
 
     public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
+        super(type, entity);
         this.entity = entity;
         this.type = type;
     }
@@ -49,7 +51,6 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
         return entity;
     }
 
-    @Override
     public @NotNull SimpleEntityElementType<E> getType() {
         return type;
     }

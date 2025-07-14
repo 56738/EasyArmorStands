@@ -1,30 +1,30 @@
 package me.m56738.easyarmorstands.display;
 
-import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
-import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.display.property.display.DisplayBillboardProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayBrightnessProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayGlowColorProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayHeightProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayLeftRotationProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayRightRotationProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayScaleProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayTranslationProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayViewRangeProperty;
-import me.m56738.easyarmorstands.display.property.display.DisplayWidthProperty;
-import me.m56738.easyarmorstands.display.property.display.block.BlockDisplayBlockProperty;
-import me.m56738.easyarmorstands.display.property.display.interaction.InteractionHeightProperty;
-import me.m56738.easyarmorstands.display.property.display.interaction.InteractionResponsiveProperty;
-import me.m56738.easyarmorstands.display.property.display.interaction.InteractionWidthProperty;
-import me.m56738.easyarmorstands.display.property.display.item.ItemDisplayItemProperty;
-import me.m56738.easyarmorstands.display.property.display.item.ItemDisplayTransformProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplayAlignmentProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplayBackgroundProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplayLineWidthProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplaySeeThroughProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplayShadowProperty;
-import me.m56738.easyarmorstands.display.property.display.text.TextDisplayTextProperty;
+import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.property.display.DisplayBillboardProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayBrightnessProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayGlowColorProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayHeightProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayLeftRotationProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayRightRotationProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayScaleProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayTranslationProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayViewRangeProperty;
+import me.m56738.easyarmorstands.paper.property.display.DisplayWidthProperty;
+import me.m56738.easyarmorstands.paper.property.display.block.BlockDisplayBlockProperty;
+import me.m56738.easyarmorstands.paper.property.display.interaction.InteractionHeightProperty;
+import me.m56738.easyarmorstands.paper.property.display.interaction.InteractionResponsiveProperty;
+import me.m56738.easyarmorstands.paper.property.display.interaction.InteractionWidthProperty;
+import me.m56738.easyarmorstands.paper.property.display.item.ItemDisplayItemProperty;
+import me.m56738.easyarmorstands.paper.property.display.item.ItemDisplayTransformProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplayAlignmentProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplayBackgroundProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplayLineWidthProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplaySeeThroughProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplayShadowProperty;
+import me.m56738.easyarmorstands.paper.property.display.text.TextDisplayTextProperty;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -37,7 +37,7 @@ import org.bukkit.event.Listener;
 public class DisplayListener implements Listener {
     @EventHandler
     public void onInitialize(EntityElementInitializeEvent event) {
-        ConfigurableEntityElement<?> element = event.getElement();
+        DefaultEntityElement<?> element = event.getElement();
         registerProperties(element.getEntity(), element.getProperties());
     }
 

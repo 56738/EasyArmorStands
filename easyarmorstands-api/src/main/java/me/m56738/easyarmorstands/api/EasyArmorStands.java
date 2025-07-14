@@ -5,11 +5,8 @@ import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
-import me.m56738.easyarmorstands.api.element.EntityElementReference;
-import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +35,4 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull ChangeContextFactory changeContext();
-
-    @Contract(pure = true)
-    @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity);
 }

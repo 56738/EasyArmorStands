@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -45,6 +44,7 @@ import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier
 import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
 import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.element.EntityElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionSnapper;
@@ -650,8 +650,8 @@ public class SessionCommands {
         CommandSender sender = source.source();
         sender.sendMessage(Message.title("easyarmorstands.info.title"));
         sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)));
-        if (element instanceof EntityElement) {
-            Entity entity = ((EntityElement<?>) element).getEntity();
+        if (element instanceof EntityElement<?> entityElement) {
+            Entity entity = entityElement.getEntity();
             sender.sendMessage(Component.text()
                     .append(Message.hint("easyarmorstands.info.uuid",
                             Component.text(entity.getUniqueId().toString(), NamedTextColor.WHITE)))

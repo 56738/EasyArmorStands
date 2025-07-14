@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Any object with properties.
- * <p>
- * Usually an {@link EntityElement entity}, but it could also be something else.
  */
 public interface Element {
     /**

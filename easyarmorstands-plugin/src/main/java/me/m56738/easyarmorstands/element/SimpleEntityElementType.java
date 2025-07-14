@@ -1,12 +1,11 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.element.EntityElementType;
-import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.element.EntityElementType;
+import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -30,12 +29,10 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         this.displayName = Component.translatable(entityType.translationKey());
     }
 
-    @Override
     public @NotNull EntityType getEntityType() {
         return entityType;
     }
 
-    @Override
     public @NotNull Class<E> getEntityClass() {
         return entityClass;
     }
@@ -44,7 +41,6 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         return new SimpleEntityElement<>(entity, this);
     }
 
-    @Override
     public SimpleEntityElement<E> getElement(@NotNull E entity) {
         SimpleEntityElement<E> element = createInstance(entity);
         Bukkit.getPluginManager().callEvent(new EntityElementInitializeEvent(element));

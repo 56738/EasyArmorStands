@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.menu.listener;
 
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.element.ElementMenuLayoutEvent;
 import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.menu.slot.DestroySlot;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlot;
+import me.m56738.easyarmorstands.paper.api.element.EntityElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;

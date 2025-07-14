@@ -6,9 +6,9 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.paper.element.EntityElementReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -69,8 +69,8 @@ abstract class ElementPresenceAction implements Action {
     }
 
     private UUID getId(ElementReference reference) {
-        if (reference instanceof EntityElementReference) {
-            return ((EntityElementReference<?>) reference).getId();
+        if (reference instanceof EntityElementReference<?> entityElementReference) {
+            return entityElementReference.getId();
         }
         return null;
     }

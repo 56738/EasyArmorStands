@@ -1,17 +1,16 @@
 package me.m56738.easyarmorstands.region;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
+import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
+import me.m56738.easyarmorstands.paper.api.element.EntityElement;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -81,8 +80,7 @@ public class RegionListener implements Listener {
         if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {
             return;
         }
-        Entity entity = ((EntityElement<?>) element).getEntity();
-        if (isAllowed(event.getPlayer(), entity.getLocation(), true)) {
+        if (isAllowed(event.getPlayer(), element.getProperties().get(EntityPropertyTypes.LOCATION).getValue(), true)) {
             if (event.getProperty().getType() != EntityPropertyTypes.LOCATION) {
                 return;
             }

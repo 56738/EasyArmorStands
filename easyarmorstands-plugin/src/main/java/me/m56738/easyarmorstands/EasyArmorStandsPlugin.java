@@ -12,8 +12,6 @@ import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.element.EntityElementReference;
-import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.event.element.ElementMenuLayoutEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
@@ -79,14 +77,13 @@ import me.m56738.easyarmorstands.display.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.display.menu.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.display.menu.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.display.menu.InteractionSpawnSlotType;
-import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
+import me.m56738.easyarmorstands.display.property.DefaultDisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
-import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
@@ -139,11 +136,11 @@ import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -628,7 +625,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public void openMenu(Player player, Element element, MenuBuilderFactory builderFactory) {
         MenuSlot background = Objects.requireNonNull(EasyArmorStandsPlugin.getInstance().getConfiguration().editor.menu.background.createSlot(new SimpleMenuContext(player)));
-        MenuBuilder builder = builderFactory.createMenuBuilder(element.getType().getDisplayName(), player.locale(), background);
+        MenuBuilder builder = builderFactory.createMenuBuilder(Component.text("Element"), player.locale(), background); // TODO name
         new ElementMenuLayoutEvent(player, element, builder).callEvent();
         Menu menu = builder.createMenu();
         player.openInventory(menu.getInventory());
@@ -674,11 +671,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull ChangeContextFactory changeContext() {
         return new PlayerChangeContextFactory();
-    }
-
-    @Override
-    public @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity) {
-        return new EntityElementReferenceImpl<>(type, entity);
     }
 
     public boolean canDiscoverElement(Player player, EditableElement element) {
