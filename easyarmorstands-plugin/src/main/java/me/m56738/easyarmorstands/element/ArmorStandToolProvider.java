@@ -25,7 +25,7 @@ public class ArmorStandToolProvider extends SimpleEntityToolProvider {
 
     @Override
     public @Nullable AxisRotateTool rotate(@NotNull ToolContext context, @NotNull Axis axis) {
-        if (axis == Axis.Y && (context.rotation() == RotationProvider.identity() || context.rotation() == rotation())) {
+        if (axis == Axis.Y && (context.rotation() == RotationProvider.identity() || context.rotation() == rotationProvider)) {
             // armor stands have no pitch, yaw tool also works in local mode
             return AxisRotateTool.ofYaw(context, changeContext, locationProperty);
         }

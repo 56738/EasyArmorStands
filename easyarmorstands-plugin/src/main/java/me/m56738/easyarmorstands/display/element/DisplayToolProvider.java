@@ -36,7 +36,7 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
     }
 
     public @Nullable AxisRotateTool shear(@NotNull ToolContext context, @NotNull Axis axis) {
-        return new DisplayAxisRotateTool(context, changeContext, properties, DisplayPropertyTypes.RIGHT_ROTATION, axis, rotation());
+        return new DisplayAxisRotateTool(context, changeContext, properties, DisplayPropertyTypes.RIGHT_ROTATION, axis, rotationProvider);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
 
     @Override
     public @Nullable AxisScaleTool scale(@NotNull ToolContext context, @NotNull Axis axis) {
-        if (context.position() == position() && context.rotation() == rotation()) {
+        if (context.position() == positionProvider && context.rotation() == rotationProvider) {
             return new DisplayAxisScaleTool(context, changeContext, properties, axis);
         }
         return super.scale(context, axis);

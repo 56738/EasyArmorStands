@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -27,10 +28,9 @@ public class ArmorStandPositionNode extends AbstractElementNode<ArmorStandElemen
     public ArmorStandPositionNode(Session session, PropertyContainer properties, OffsetProvider offsetProvider, ArmorStandElement element) {
         super(session, element);
         this.session = session;
-        this.toolManager = new ToolManager(session, this,
-                new DelegateToolProvider(element.getTools(getContext()),
-                        new EntityPositionProvider(properties, offsetProvider),
-                        null));
+        ToolProvider tools = element.getTools(getContext());
+        this.toolManager = new ToolManager(session, this, new DelegateToolProvider(
+                tools, tools.context().withPosition(new EntityPositionProvider(properties, offsetProvider))));
         this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
     }
 

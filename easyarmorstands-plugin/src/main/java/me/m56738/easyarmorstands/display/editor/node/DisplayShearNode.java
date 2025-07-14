@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
-import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
@@ -31,7 +30,7 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
             // TODO use ToolMenuManager
             addButton(session.menuEntryProvider()
                     .axisRotate()
-                    .setTool(tools.shear(ToolContext.of(tools.position(), tools.rotation()), axis))
+                    .setTool(tools.shear(tools.context(), axis))
                     .build());
         }
     }

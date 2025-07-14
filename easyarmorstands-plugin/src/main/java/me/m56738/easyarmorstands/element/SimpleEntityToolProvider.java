@@ -39,13 +39,8 @@ public class SimpleEntityToolProvider implements ToolProvider {
     }
 
     @Override
-    public final @NotNull PositionProvider position() {
-        return positionProvider;
-    }
-
-    @Override
-    public final @NotNull RotationProvider rotation() {
-        return rotationProvider;
+    public @NotNull ToolContext context() {
+        return ToolContext.of(positionProvider, rotationProvider);
     }
 
     @Override
@@ -58,7 +53,7 @@ public class SimpleEntityToolProvider implements ToolProvider {
         if (axis == Axis.Y && context.rotation() == RotationProvider.identity()) {
             return AxisRotateTool.ofYaw(context, changeContext, locationProperty);
         }
-        if (axis == Axis.X && context.rotation() == rotation()) {
+        if (axis == Axis.X && context.rotation() == rotationProvider) {
             return AxisRotateTool.ofPitch(context, changeContext, locationProperty);
         }
         return null;

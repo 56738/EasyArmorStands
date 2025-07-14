@@ -26,9 +26,9 @@ public class ArmorStandPartToolProvider extends DelegateToolProvider {
     private final ChangeContext changeContext;
 
     public ArmorStandPartToolProvider(ArmorStandElement element, ArmorStandPart part, ChangeContext changeContext, ToolProvider toolProvider) {
-        super(toolProvider,
-                new EntityPositionProvider(element.getProperties(), new ArmorStandPartOffsetProvider(element.getProperties(), part, element)),
-                new ArmorStandPartRotationProvider(element.getProperties(), part));
+        super(toolProvider, toolProvider.context()
+                .withPosition(new EntityPositionProvider(element.getProperties(), new ArmorStandPartOffsetProvider(element.getProperties(), part, element)))
+                .withRotation(new ArmorStandPartRotationProvider(element.getProperties(), part)));
         this.changeContext = changeContext;
         this.properties = changeContext.getProperties(element);
         this.part = part;

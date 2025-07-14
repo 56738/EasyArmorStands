@@ -136,7 +136,6 @@ import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
@@ -625,7 +624,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public void openMenu(Player player, Element element, MenuBuilderFactory builderFactory) {
         MenuSlot background = Objects.requireNonNull(EasyArmorStandsPlugin.getInstance().getConfiguration().editor.menu.background.createSlot(new SimpleMenuContext(player)));
-        MenuBuilder builder = builderFactory.createMenuBuilder(Component.text("Element"), player.locale(), background); // TODO name
+        MenuBuilder builder = builderFactory.createMenuBuilder(element.getType().getDisplayName(), player.locale(), background);
         new ElementMenuLayoutEvent(player, element, builder).callEvent();
         Menu menu = builder.createMenu();
         player.openInventory(menu.getInventory());

@@ -30,13 +30,8 @@ public class GroupToolProvider implements ToolProvider {
     }
 
     @Override
-    public @NotNull PositionProvider position() {
-        return positionProvider;
-    }
-
-    @Override
-    public @NotNull RotationProvider rotation() {
-        return RotationProvider.identity();
+    public @NotNull ToolContext context() {
+        return ToolContext.of(positionProvider, RotationProvider.identity());
     }
 
     @Override

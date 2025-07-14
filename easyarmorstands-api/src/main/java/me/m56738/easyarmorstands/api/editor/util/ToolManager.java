@@ -11,7 +11,6 @@ import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
-import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 
 import java.util.ArrayList;
@@ -63,14 +62,11 @@ public class ToolManager {
     }
 
     private ToolContext createToolContext() {
-        PositionProvider positionProvider = toolProvider.position();
-        RotationProvider rotationProvider;
         if (mode == ToolMode.GLOBAL) {
-            rotationProvider = RotationProvider.identity();
+            return toolProvider.context().withRotation(RotationProvider.identity());
         } else {
-            rotationProvider = toolProvider.rotation();
+            return toolProvider.context();
         }
-        return ToolContext.of(positionProvider, rotationProvider);
     }
 
     private void collectButtons(ToolMode mode, List<MenuButton> buttons) {

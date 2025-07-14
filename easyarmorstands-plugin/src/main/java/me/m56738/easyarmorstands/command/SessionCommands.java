@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
-import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -428,7 +427,7 @@ public class SessionCommands {
             ScaleTool scaleTool = null;
             if (element instanceof EditableElement editableElement) {
                 ToolProvider tools = editableElement.getTools(context);
-                scaleTool = tools.scale(ToolContext.of(tools.position(), tools.rotation()));
+                scaleTool = tools.scale(tools.context());
             }
             if (scaleTool == null) {
                 sender.sendMessage(Message.error("easyarmorstands.error.scale-unsupported"));

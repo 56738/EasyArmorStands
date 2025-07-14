@@ -24,7 +24,7 @@ public class HologramToolProvider extends SimpleEntityToolProvider {
 
     @Override
     public @Nullable AxisScaleTool scale(ToolContext context, Axis axis) {
-        if (context.position() == position() && context.rotation() == rotation()) {
+        if (context.position() == positionProvider && context.rotation() == rotationProvider) {
             return new DisplayAxisScaleTool(context, changeContext, properties, axis);
         }
         return super.scale(context, axis);
