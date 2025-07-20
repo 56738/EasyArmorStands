@@ -21,7 +21,7 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.editor.box.InteractionBoxEditor;
 import me.m56738.easyarmorstands.display.element.InteractionElement;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
-import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.NullMarked;

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
 
 import java.util.Collection;
@@ -54,6 +55,10 @@ public interface Session {
 
     @Contract(pure = true)
     <T extends Node> @Nullable T findNode(@NotNull Class<T> type);
+
+    @Contract(pure = true)
+    @UnmodifiableView
+    Collection<Node> getAllNodes();
 
     @Contract(pure = true)
     double getScale(Vector3dc position);

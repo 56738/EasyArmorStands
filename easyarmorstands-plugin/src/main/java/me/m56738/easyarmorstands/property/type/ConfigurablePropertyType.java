@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property.type;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.permissions.Permission;
@@ -40,10 +40,10 @@ public abstract class ConfigurablePropertyType<T> implements PropertyType<T> {
         buttonTemplate = config.node("button").get(SimpleItemTemplate.class);
 
         if (registeredPermission != null) {
-            Permissions.unregister(registeredPermission);
+            PaperPermissionRegistrar.unregister(registeredPermission);
         }
         if (permission != null) {
-            registeredPermission = Permissions.register(new Permission(
+            registeredPermission = PaperPermissionRegistrar.register(new Permission(
                     permission,
                     "Allow editing " + key.asString()));
         } else {

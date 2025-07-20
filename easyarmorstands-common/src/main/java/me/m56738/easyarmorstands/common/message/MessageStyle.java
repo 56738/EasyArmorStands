@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.message;
+package me.m56738.easyarmorstands.common.message;
 
 public enum MessageStyle {
     TITLE,

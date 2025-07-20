@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.util.ComponentUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.menu.slot.EntityCopySlot;
 import me.m56738.easyarmorstands.paper.api.element.EntityElement;
 import me.m56738.easyarmorstands.paper.api.event.element.ElementMenuLayoutEvent;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

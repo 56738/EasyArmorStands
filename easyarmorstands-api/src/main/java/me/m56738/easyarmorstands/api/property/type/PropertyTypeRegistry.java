@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public interface PropertyTypeRegistry {
     void register(@NotNull PropertyType<?> type);
 
-    <T> @Nullable PropertyType<T> getOrNull(@NotNull Key key);
+    @Nullable PropertyType<?> getOrNull(@NotNull Key key);
 
     @SuppressWarnings("unchecked")
     default <T> @NotNull PropertyType<T> get(@NotNull Key key) {

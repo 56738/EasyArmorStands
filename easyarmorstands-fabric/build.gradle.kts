@@ -1,5 +1,6 @@
 plugins {
     id("easyarmorstands.base")
+    id("easyarmorstands.bundle")
     alias(libs.plugins.fabric.loom)
 }
 
@@ -15,15 +16,20 @@ dependencies {
 
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
+    modImplementation(libs.fabric.permissions.api)
     modImplementation(libs.cloud.fabric)
     modImplementation(libs.adventure.platform.fabric)
 
+    bundle(project(":easyarmorstands-assets"))
     include(project(":easyarmorstands-fabric-api"))
     include(project(":easyarmorstands-fabric-repack"))
     include(project(":easyarmorstands-common"))
     include(project(":easyarmorstands-api"))
     include(libs.cloud.fabric)
+    include(libs.cloud.annotations)
+    include(libs.cloud.minecraft.extras)
     include(libs.adventure.platform.fabric)
+    include(libs.fabric.permissions.api)
 }
 
 loom {

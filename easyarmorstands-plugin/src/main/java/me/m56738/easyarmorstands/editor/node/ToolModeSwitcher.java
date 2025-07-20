@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.editor.node;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;

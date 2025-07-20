@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
-import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 

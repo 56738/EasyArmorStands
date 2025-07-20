@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.update;
 
-import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

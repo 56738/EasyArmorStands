@@ -1,59 +1,40 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.common.command;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.session.SessionImpl;
-import me.m56738.easyarmorstands.session.SessionListener;
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.annotation.specifier.Greedy;
-import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.annotations.suggestion.Suggestions;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.help.result.CommandEntry;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
-import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.annotations.processing.CommandContainer;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
+@CommandContainer
 @Command("eas")
 public class GlobalCommands {
-    private final CommandManager<Source> commandManager;
-    private final MinecraftHelp<Source> help;
-    private final SessionListener sessionListener;
-
-    public GlobalCommands(CommandManager<Source> commandManager, SessionListener sessionListener) {
-        this.commandManager = commandManager;
-        this.help = MinecraftHelp.create("/eas help", commandManager, Source::source);
-        this.sessionListener = sessionListener;
-    }
-
     @Command("")
     @Permission(Permissions.HELP)
     @CommandDescription("easyarmorstands.command.description")
-    public void showOverview(Source source) {
+    public void showOverview(CommandSource source, Platform platform) {
         CommandSender sender = source.source();
         if (sender.hasPermission(Permissions.VERSION)) {
-            String version = EasyArmorStandsPlugin.getInstance().getPluginMeta().getVersion();
+            String version = platform.getEasyArmorStandsVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
@@ -61,55 +42,41 @@ public class GlobalCommands {
         if (sender.hasPermission(Permissions.GIVE)) {
             sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
         }
-        sender.sendMessage(Message.hint("easyarmorstands.hint.show-help", Message.command("/eas help")));
-    }
-
-    @Command("help [query]")
-    @Permission(Permissions.HELP)
-    @CommandDescription("easyarmorstands.command.description.help")
-    public void help(Source source,
-                     @Argument(value = "query", suggestions = "help_queries") @Greedy String query) {
-        help.queryCommands(query != null ? query : "", source);
-    }
-
-    @Suggestions("help_queries")
-    public List<String> suggestHelpQueries(CommandContext<Source> ctx, String input) {
-        return commandManager.createHelpHandler().queryRootIndex(ctx.sender()).entries().stream()
-                .map(CommandEntry::syntax)
-                .collect(Collectors.toList());
+        if (sender.hasPermission(Permissions.HELP)) {
+            sender.sendMessage(Message.hint("easyarmorstands.hint.show-help", Message.command("/eas help")));
+        }
     }
 
     @Command("give")
     @Permission(Permissions.GIVE)
     @CommandDescription("easyarmorstands.command.description.give")
-    public void give(PlayerSource source) {
+    public void give(PlayerCommandSource source, Platform platform) {
         Player sender = source.source();
-        sender.getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
+        sender.giveItem(platform.createTool());
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
         if (sender.hasPermission(Permissions.SPAWN)) {
             sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
         }
         sender.sendMessage(Message.hint("easyarmorstands.hint.deselect-entity"));
-        sessionListener.updateHeldItem(sender);
+//        sessionListener.updateHeldItem(sender); TODO
     }
 
-    @Command("reload")
-    @Permission(Permissions.RELOAD)
-    @CommandDescription("easyarmorstands.command.description.reload")
-    public void reloadConfig(Source source) {
-        CommandSender sender = source.source();
-        EasyArmorStandsPlugin.getInstance().reload();
-        sender.sendMessage(Message.success("easyarmorstands.success.reloaded-config"));
-    }
+//    @Command("reload") TODO
+//    @Permission(Permissions.RELOAD)
+//    @CommandDescription("easyarmorstands.command.description.reload")
+//    public void reloadConfig(CommandSource source) {
+//        CommandSender sender = source.source();
+//        EasyArmorStandsPlugin.getInstance().reload();
+//        sender.sendMessage(Message.success("easyarmorstands.success.reloaded-config"));
+//    }
 
     @Command("version")
     @Permission(Permissions.VERSION)
     @CommandDescription("easyarmorstands.command.description.version")
-    public void version(Source source) {
+    public void version(CommandSource source, Platform platform) {
         CommandSender sender = source.source();
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        String version = plugin.getPluginMeta().getVersion();
+        String version = platform.getEasyArmorStandsVersion();
         String url = "https://github.com/56738/EasyArmorStands";
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
@@ -118,21 +85,20 @@ public class GlobalCommands {
     @Command("debug")
     @Permission(Permissions.DEBUG)
     @CommandDescription("easyarmorstands.command.description.debug")
-    public void debug(Source source) {
+    public void debug(CommandSource source, Platform platform, SessionManager sessionManager) {
         CommandSender sender = source.source();
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        String version = plugin.getPluginMeta().getVersion();
+        String version = platform.getEasyArmorStandsVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
-        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
-        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
+//        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion()))); TODO
+//        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
 
         if (sender instanceof Player player) {
-            SessionImpl session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(PaperPlayer.fromNative(player));
+            Session session = sessionManager.getSession(player);
             Element element = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
                 boolean first = true;
-                for (Node node : session.getNodeStack()) {
+                for (Node node : session.getAllNodes()) {
                     sender.sendMessage(
                             Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
                                     .append(Component.text(node.getClass().getSimpleName())

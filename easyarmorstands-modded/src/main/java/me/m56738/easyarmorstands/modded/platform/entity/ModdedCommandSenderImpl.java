@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedCommandSender;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 
-public class ModdedCommandSenderImpl implements ModdedCommandSender, ForwardingAudience.Single {
+public abstract class ModdedCommandSenderImpl implements ModdedCommandSender, ForwardingAudience.Single {
     private final Audience audience;
 
     public ModdedCommandSenderImpl(Audience audience) {
@@ -14,10 +14,5 @@ public class ModdedCommandSenderImpl implements ModdedCommandSender, ForwardingA
     @Override
     public Audience audience() {
         return audience;
-    }
-
-    @Override
-    public boolean hasPermission(String permission) {
-        return false;
     }
 }

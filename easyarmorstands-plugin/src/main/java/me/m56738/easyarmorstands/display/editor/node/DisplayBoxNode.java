@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.display.editor.box.DisplayBoxEditor;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.tool.BoxToolProvider;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;

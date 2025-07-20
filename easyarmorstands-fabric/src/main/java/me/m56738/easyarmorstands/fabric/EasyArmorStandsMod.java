@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.fabric;
 
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.fabric.platform.command.FabricSenderMapper;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
-import me.m56738.easyarmorstands.modded.platform.command.ModdedSenderMapper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -19,7 +19,7 @@ public class EasyArmorStandsMod implements ModInitializer {
                 .getMetadata().getVersion().getFriendlyString();
         ModdedPlatformImpl platform = new ModdedPlatformImpl(version);
         FabricServerCommandManager<ModdedCommandSource> commandManager = new FabricServerCommandManager<>(
-                ExecutionCoordinator.simpleCoordinator(), new ModdedSenderMapper());
+                ExecutionCoordinator.simpleCoordinator(), new FabricSenderMapper());
         EasyArmorStandsCommon.registerCommands(commandManager, ModdedCommandSource.class, platform);
     }
 }

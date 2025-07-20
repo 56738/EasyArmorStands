@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.command.value;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.Command;

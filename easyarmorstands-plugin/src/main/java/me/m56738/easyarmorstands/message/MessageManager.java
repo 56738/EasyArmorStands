@@ -1,5 +1,8 @@
 package me.m56738.easyarmorstands.message;
 
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.message.MessageFormatter;
+import me.m56738.easyarmorstands.common.message.MessageStyle;
 import me.m56738.easyarmorstands.config.EasConfig;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -29,7 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public class MessageManager {
+public class MessageManager implements MessageFormatter {
     private static final Pattern PATTERN = Pattern.compile("messages_(.+)\\.properties");
     private static final Key key = Key.key("easyarmorstands", "translation");
     private final Plugin plugin;
@@ -39,7 +42,7 @@ public class MessageManager {
 
     public MessageManager(Plugin plugin) {
         this.plugin = plugin;
-        Message.messageManager = this;
+        Message.messageFormatter = this;
     }
 
     public void load(EasConfig config) {

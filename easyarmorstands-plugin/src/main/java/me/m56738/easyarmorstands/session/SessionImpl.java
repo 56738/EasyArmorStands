@@ -37,6 +37,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -73,10 +74,6 @@ public final class SessionImpl implements Session {
         return nodeStack.peek();
     }
 
-    public @UnmodifiableView List<Node> getNodeStack() {
-        return Collections.unmodifiableList(nodeStack);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public <T extends Node> @Nullable T findNode(@NotNull Class<T> type) {
@@ -86,6 +83,11 @@ public final class SessionImpl implements Session {
             }
         }
         return null;
+    }
+
+    @Override
+    public @UnmodifiableView Collection<Node> getAllNodes() {
+        return Collections.unmodifiableList(nodeStack);
     }
 
     @Override

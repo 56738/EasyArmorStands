@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.message.MessageStyle;
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.message.MessageStyle;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 

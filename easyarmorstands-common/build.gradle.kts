@@ -4,10 +4,14 @@ plugins {
 
 dependencies {
     compileOnlyApi(libs.adventure.api)
-    compileOnlyApi(libs.cloud.core)
-    compileOnlyApi(libs.gizmo.common)
+    api(libs.cloud.core)
+    api(libs.cloud.annotations)
+    annotationProcessor(libs.cloud.annotations)
+    api(libs.cloud.minecraft.extras)
+    api(libs.gizmo.common)
     compileOnlyApi(libs.jspecify)
     api(project(":easyarmorstands-api"))
+    api(project(":easyarmorstands-assets"))
 }
 
 tasks {

@@ -1,21 +1,35 @@
-package me.m56738.easyarmorstands.message;
+package me.m56738.easyarmorstands.common.message;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.PropertyKey;
 
 public class Message {
     private static final String BUNDLE = "me.m56738.easyarmorstands.messages";
-    static MessageManager messageManager;
+    public static MessageFormatter messageFormatter = (style, component) -> switch (style) {
+        case TITLE -> component.colorIfAbsent(NamedTextColor.GOLD);
+        case SUCCESS -> component.colorIfAbsent(NamedTextColor.GREEN);
+        case WARNING -> component.colorIfAbsent(NamedTextColor.YELLOW);
+        case ERROR -> component.colorIfAbsent(NamedTextColor.RED);
+        case HINT, BUTTON_DESCRIPTION, HOVER -> component.colorIfAbsent(NamedTextColor.GRAY);
+        case CHAT_BUTTON -> Component.text()
+                .append(Component.text("["))
+                .append(component)
+                .append(Component.text("]"))
+                .color(NamedTextColor.GRAY)
+                .build();
+        case BUTTON_NAME -> component.colorIfAbsent(NamedTextColor.BLUE);
+    };
 
     private Message() {
     }
 
     public static Component format(MessageStyle style, Component component) {
-        return messageManager.format(style, component);
+        return messageFormatter.format(style, component);
     }
 
     public static Component format(MessageStyle style,

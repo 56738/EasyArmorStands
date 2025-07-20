@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.permission;
+package me.m56738.easyarmorstands.common.permission;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@interface Children {
-    Child[] value();
+public @interface Description {
+    String value();
 }

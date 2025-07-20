@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.editor.button.AxisMoveButton;
 import me.m56738.easyarmorstands.api.editor.button.AxisMoveButtonBuilder;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;

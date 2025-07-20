@@ -13,6 +13,7 @@ configurate = "4.2.0"
 fabric-api = "0.129.0+1.21.8"
 fabric-loader = "0.16.14"
 fabric-loom = "1.11-SNAPSHOT"
+fabric-permissions-api = "0.4.1"
 fancyholograms = "2.4.2"
 gizmo = "1.0.0"
 griefdefender = "2.1.1-SNAPSHOT"
@@ -58,6 +59,7 @@ configurate-core = { module = "org.spongepowered:configurate-core", version.ref 
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-permissions-api = { module = "me.lucko:fabric-permissions-api", version.ref = "fabric-permissions-api" }
 fancyholograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
 gizmo-common = { module = "me.m56738.gizmo:gizmo-common", version.ref = "gizmo" }
 gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" }

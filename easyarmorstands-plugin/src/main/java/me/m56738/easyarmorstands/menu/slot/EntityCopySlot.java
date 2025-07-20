@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.paper.api.element.EntityElement;
 import me.m56738.easyarmorstands.util.ComponentUtil;
 import org.bukkit.Material;

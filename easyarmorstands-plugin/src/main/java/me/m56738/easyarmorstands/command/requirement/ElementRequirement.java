@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.command.requirement;
 
 import me.m56738.easyarmorstands.command.processor.GroupProcessor;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;

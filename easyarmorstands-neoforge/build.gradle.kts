@@ -1,5 +1,6 @@
 plugins {
     id("easyarmorstands.base")
+    id("easyarmorstands.bundle")
     alias(libs.plugins.moddev)
 }
 
@@ -34,12 +35,15 @@ dependencies {
     implementation(libs.cloud.neoforge)
     implementation(libs.adventure.platform.neoforge)
 
+    bundle(project(":easyarmorstands-assets"))
     jarJar(project(":easyarmorstands-neoforge-api"))
     jarJar(project(":easyarmorstands-modded"))
     jarJar(project(":easyarmorstands-modded-api"))
     jarJar(project(":easyarmorstands-common"))
     jarJar(project(":easyarmorstands-api"))
     jarJar(libs.cloud.neoforge)
+    jarJar(libs.cloud.annotations)
+    jarJar(libs.cloud.minecraft.extras)
     jarJar(libs.adventure.platform.neoforge)
 }
 

@@ -31,7 +31,6 @@ import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
 import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ClipboardCommands;
-import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
@@ -57,6 +56,8 @@ import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
@@ -99,7 +100,6 @@ import me.m56738.easyarmorstands.menu.slot.BackgroundSlotType;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
 import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.paper.api.event.element.ElementMenuLayoutEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerCreateElementEvent;
@@ -108,8 +108,9 @@ import me.m56738.easyarmorstands.paper.api.event.player.PlayerDiscoverElementEve
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.item.PaperItem;
+import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
 import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
-import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.context.PlayerChangeContextFactory;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
@@ -123,15 +124,12 @@ import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
@@ -168,8 +166,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
-    private static final NamespacedKey TOOL_KEY = new NamespacedKey("easyarmorstands", "tool");
     private static EasyArmorStandsPlugin instance;
+    private PaperPlatformImpl platform;
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -199,7 +197,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
-        Permissions.registerAll();
+        PaperPermissionRegistrar.registerAll();
 
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
@@ -259,7 +257,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         loadProperties();
 
-        PaperPlatformImpl platform = new PaperPlatformImpl(this);
+        platform = new PaperPlatformImpl(this);
         sessionManager = new SessionManagerImpl(platform);
         historyManager = new HistoryManager();
         clipboardManager = new ClipboardManager();
@@ -323,7 +321,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.registerBuilderModifier(RequireElementSelection.class, new CommandRequirementBuilderModifier<>(a -> new ElementSelectionRequirement()));
 
         annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
-        annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
@@ -372,7 +369,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (regionPrivilegeManager != null) {
             regionPrivilegeManager.unregisterAll();
         }
-        Permissions.unregisterAll();
+        PaperPermissionRegistrar.unregisterAll();
         if (gizmos != null) {
             gizmos.close();
         }
@@ -586,22 +583,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public ItemStack createTool(Locale locale) {
-        ItemStack item = config.editor.tool.render(locale);
-        item.editMeta(meta -> meta.getPersistentDataContainer().set(TOOL_KEY, PersistentDataType.BYTE, (byte) 1));
-        return item;
+        return PaperItem.toNative(platform.createTool());
     }
 
     public boolean isTool(ItemStack item) {
-        if (item == null) {
-            return false;
-        }
-
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-
-        return meta.getPersistentDataContainer().has(TOOL_KEY);
+        return platform.isTool(PaperItem.fromNative(item));
     }
 
     public EasConfig getConfiguration() {

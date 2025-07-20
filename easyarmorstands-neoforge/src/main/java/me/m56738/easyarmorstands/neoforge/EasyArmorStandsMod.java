@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.neoforge;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
-import me.m56738.easyarmorstands.modded.platform.command.ModdedSenderMapper;
+import me.m56738.easyarmorstands.neoforge.platform.command.NeoForgeSenderMapper;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -23,7 +23,7 @@ public class EasyArmorStandsMod {
 
     private void onSetup(FMLCommonSetupEvent event) {
         ModdedPlatformImpl platform = new ModdedPlatformImpl(modContainer.getModInfo().getVersion().toString());
-        NeoForgeServerCommandManager<ModdedCommandSource> commandManager = new NeoForgeServerCommandManager<>(ExecutionCoordinator.simpleCoordinator(), new ModdedSenderMapper());
+        NeoForgeServerCommandManager<ModdedCommandSource> commandManager = new NeoForgeServerCommandManager<>(ExecutionCoordinator.simpleCoordinator(), new NeoForgeSenderMapper());
         EasyArmorStandsCommon.registerCommands(commandManager, ModdedCommandSource.class, platform);
     }
 }

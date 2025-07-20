@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.permission;
+package me.m56738.easyarmorstands.common.permission;
 
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(Children.class)
-@interface Child {
+public @interface Child {
     @MagicConstant(valuesFromClass = Permissions.class)
     String value();
 }

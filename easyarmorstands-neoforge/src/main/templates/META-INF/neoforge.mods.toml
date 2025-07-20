@@ -6,7 +6,7 @@ modId = "easyarmorstands"
 version = "${version}"
 displayName = "EasyArmorStands"
 displayURL = "https://github.com/56738/EasyArmorStands"
-logoFile = "easyarmorstands.png"
+logoFile = "assets/easyarmorstands/icon.png"
 authors = "56738"
 description = '''Armor stand and display entity editor'''
 

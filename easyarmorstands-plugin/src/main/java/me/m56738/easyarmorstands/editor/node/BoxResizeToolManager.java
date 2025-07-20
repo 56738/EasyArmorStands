@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoxSidePositionProvider;
 import me.m56738.easyarmorstands.editor.button.BoxResizeButton;
 import me.m56738.easyarmorstands.editor.tool.BoxResizeTool;
-import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
