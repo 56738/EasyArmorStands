@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "easyarmorstands",
+  "version": "${version}",
+  "name": "EasyArmorStands",
+  "description": "Armor stand and display entity editor",
+  "authors": [
+    "56738"
+  ],
+  "contact": {
+    "sources": "https://github.com/56738/EasyArmorStands"
+  },
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/easyarmorstands/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.m56738.easyarmorstands.fabric.EasyArmorStandsMod"
+    ],
+    "client": [
+      "me.m56738.easyarmorstands.fabric.EasyArmorStandsClientMod"
+    ]
+  },
+  "mixins": [
+    "easyarmorstands.mixins.json",
+    {
+      "config": "easyarmorstands.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.7",
+    "java": ">=21",
+    "fabric-api": "*",
+    "cloud": "*"
+  }
+}

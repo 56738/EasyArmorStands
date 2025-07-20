@@ -14,19 +14,16 @@ dependencies {
     compileOnlyApi(libs.checker.qual)
     compileOnlyApi(libs.apiguardian.api)
     api(project(":easyarmorstands-paper-api"))
-    api(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
-    runtimeOnly(project(":easyarmorstands-bentobox"))
-    runtimeOnly(project(":easyarmorstands-fancyholograms"))
-    runtimeOnly(project(":easyarmorstands-griefdefender"))
-    runtimeOnly(project(":easyarmorstands-griefprevention"))
-    runtimeOnly(project(":easyarmorstands-headdatabase"))
-    runtimeOnly(project(":easyarmorstands-huskclaims"))
-    runtimeOnly(project(":easyarmorstands-lands"))
-    runtimeOnly(project(":easyarmorstands-plotsquared"))
-    runtimeOnly(project(":easyarmorstands-residence"))
-    runtimeOnly(project(":easyarmorstands-towny"))
-    runtimeOnly(project(":easyarmorstands-traincarts"))
-    runtimeOnly(project(":easyarmorstands-worldguard"))
+    api(project(":easyarmorstands-common"))
+    api(libs.bstats)
+    runtimeOnly(libs.cloud.annotations) // TODO remove
+    api(libs.cloud.minecraft.extras)
+    api(libs.cloud.paper)
+    api(libs.commodore) {
+        isTransitive = false
+    }
+    api(libs.configurate.yaml)
+    api(libs.gizmo.bukkit)
 }
 
 tasks {
@@ -49,13 +46,24 @@ tasks {
     }
 
     shadowJar {
+        val prefix = "me.m56738.easyarmorstands.lib"
+        relocate("org.incendo.cloud", "$prefix.cloud")
+        relocate("io.leangen.geantyref", "$prefix.geantyref")
+        relocate("me.lucko.commodore", "$prefix.commodore")
+        relocate("me.m56738.gizmo", "$prefix.gizmo")
+        relocate("org.bstats", "$prefix.bstats")
+        relocate("org.spongepowered.configurate", "$prefix.configurate")
+        relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
+        dependencies {
+            exclude(dependency("com.google.code.gson:gson"))
+        }
         mergeServiceFiles()
     }
 
     val staticJar by registering(Copy::class) {
         from(shadowJar)
         into(layout.buildDirectory.dir("static"))
-        rename { "EasyArmorStands.jar" }
+        rename { "EasyArmorStands-Paper.jar" }
     }
 
     assemble {

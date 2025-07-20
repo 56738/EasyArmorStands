@@ -1,0 +1,32 @@
+license = "GNU GPLv3"
+issueTrackerURL = "https://github.com/56738/EasyArmorStands/issues"
+
+[[mods]]
+modId = "easyarmorstands"
+version = "${version}"
+displayName = "EasyArmorStands"
+displayURL = "https://github.com/56738/EasyArmorStands"
+logoFile = "easyarmorstands.png"
+authors = "56738"
+description = '''Armor stand and display entity editor'''
+
+[[dependencies.easyarmorstands]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforgeVersion},)" #mandatory
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.easyarmorstands]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraftVersion}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.easyarmorstands]]
+modId = "cloud"
+type = "required"
+versionRange = "[1.0,)"
+ordering = "NONE"
+side = "BOTH"

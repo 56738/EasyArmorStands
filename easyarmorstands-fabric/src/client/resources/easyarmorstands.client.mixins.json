@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.m56738.easyarmorstands.fabric.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

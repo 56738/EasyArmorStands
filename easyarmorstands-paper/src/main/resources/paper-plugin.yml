@@ -1,6 +1,6 @@
 name: 'EasyArmorStands'
 version: '${version}'
-main: 'me.m56738.easyarmorstands.EasyArmorStandsPlugin'
+main: 'me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin'
 author: '56738'
 api-version: '${minecraftVersion}'
 dependencies:
