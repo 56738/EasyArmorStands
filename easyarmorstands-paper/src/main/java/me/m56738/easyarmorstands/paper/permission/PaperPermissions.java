@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.permissions.Permission;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class PaperPermissionRegistrar {
+public class PaperPermissions {
     private static final Map<String, Permission> registeredPermissions = new HashMap<>();
 
     public static void registerAll() {
@@ -56,7 +57,7 @@ public class PaperPermissionRegistrar {
                 children));
     }
 
-    public static Permission register(Permission permission) {
+    public static @Nullable Permission register(Permission permission) {
         try {
             Bukkit.getPluginManager().addPermission(permission);
         } catch (IllegalArgumentException e) {

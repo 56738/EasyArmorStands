@@ -24,7 +24,7 @@ import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
 import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.element.AbstractEntityElement;
-import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
+import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.attribute.Attributable;
@@ -120,12 +120,12 @@ public class SimpleEntityElement<E extends @NotNull Entity> extends AbstractEnti
 
     @Override
     public boolean canEdit(@NotNull Player player) {
-        return player.hasPermission(PaperPermissionRegistrar.entityType(Permissions.EDIT, type.getEntityType()));
+        return player.hasPermission(PaperPermissions.entityType(Permissions.EDIT, type.getEntityType()));
     }
 
     @Override
     public boolean canDestroy(@NotNull Player player) {
-        return player.hasPermission(PaperPermissionRegistrar.entityType(Permissions.DESTROY, type.getEntityType()));
+        return player.hasPermission(PaperPermissions.entityType(Permissions.DESTROY, type.getEntityType()));
     }
 
     @Override

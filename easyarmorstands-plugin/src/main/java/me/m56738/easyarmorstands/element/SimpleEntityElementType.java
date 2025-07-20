@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.paper.api.element.EntityElementType;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
-import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
+import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -80,7 +80,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
     @Override
     public boolean canSpawn(@NotNull Player player) {
-        return player.hasPermission(PaperPermissionRegistrar.entityType(Permissions.SPAWN, entityType));
+        return player.hasPermission(PaperPermissions.entityType(Permissions.SPAWN, entityType));
     }
 
     private class SpawnedEntityConfigurator implements Consumer<E> {

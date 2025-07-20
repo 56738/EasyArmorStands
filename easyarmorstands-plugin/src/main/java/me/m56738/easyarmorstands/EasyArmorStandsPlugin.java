@@ -109,7 +109,7 @@ import me.m56738.easyarmorstands.paper.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.item.PaperItem;
-import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
+import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
 import me.m56738.easyarmorstands.property.context.PlayerChangeContextFactory;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
@@ -197,7 +197,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
-        PaperPermissionRegistrar.registerAll();
+        PaperPermissions.registerAll();
 
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
@@ -369,7 +369,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (regionPrivilegeManager != null) {
             regionPrivilegeManager.unregisterAll();
         }
-        PaperPermissionRegistrar.unregisterAll();
+        PaperPermissions.unregisterAll();
         if (gizmos != null) {
             gizmos.close();
         }
