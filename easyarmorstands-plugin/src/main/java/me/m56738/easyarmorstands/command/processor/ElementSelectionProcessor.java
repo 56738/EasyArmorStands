@@ -4,19 +4,19 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.GroupMember;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessingContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessor;
-import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessor;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static me.m56738.easyarmorstands.command.processor.ElementProcessor.elementKey;
 import static me.m56738.easyarmorstands.command.processor.GroupProcessor.groupKey;
-import static me.m56738.easyarmorstands.lib.cloud.key.CloudKey.cloudKey;
+import static org.incendo.cloud.key.CloudKey.cloudKey;
 
 public class ElementSelectionProcessor implements CommandPreprocessor<Source> {
     private static final CloudKey<ElementSelection> KEY = cloudKey("selection", ElementSelection.class);

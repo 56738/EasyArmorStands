@@ -2,16 +2,16 @@ package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.util.EasConversion;
 import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Quaterniondc;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 class ScalarScaleTool implements ScaleTool {
@@ -62,7 +62,7 @@ class ScalarScaleTool implements ScaleTool {
             this.originalLocation = positionProperty.getValue();
             this.originalScale = scaleProperty.getValue();
             this.originalEffectiveScale = getEffectiveScale(originalScale);
-            this.offset = EasConversion.fromBukkit(originalLocation.toVector()).sub(getPosition());
+            this.offset = originalLocation.position().sub(getPosition(), new Vector3d());
             this.scale = originalScale;
         }
 
@@ -72,8 +72,7 @@ class ScalarScaleTool implements ScaleTool {
 
         private void updatePosition() {
             double delta = getEffectiveScale(scale) / originalEffectiveScale - 1;
-            positionProperty.setValue(originalLocation.clone()
-                    .add(offset.x() * delta, offset.y() * delta, offset.z() * delta));
+            positionProperty.setValue(originalLocation.withScaledOffset(offset, delta));
         }
 
         @Override

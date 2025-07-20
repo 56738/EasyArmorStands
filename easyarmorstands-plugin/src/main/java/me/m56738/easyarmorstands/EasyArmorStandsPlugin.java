@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
@@ -12,12 +13,6 @@ import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.event.element.ElementMenuLayoutEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
@@ -87,25 +82,6 @@ import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
-import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
-import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
-import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
-import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.MinecraftExceptionHandler;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
-import me.m56738.easyarmorstands.lib.cloud.paper.PaperCommandManager;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PaperSimpleSenderMapper;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
-import me.m56738.easyarmorstands.lib.configurate.loader.HeaderMode;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.configurate.util.MapFactories;
-import me.m56738.easyarmorstands.lib.configurate.yaml.NodeStyle;
-import me.m56738.easyarmorstands.lib.configurate.yaml.YamlConfigurationLoader;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import me.m56738.easyarmorstands.lib.gizmo.bukkit.api.BukkitGizmos;
 import me.m56738.easyarmorstands.menu.ColorPickerMenuContext;
 import me.m56738.easyarmorstands.menu.ColorPicketContextWrapper;
 import me.m56738.easyarmorstands.menu.ElementMenuContext;
@@ -125,6 +101,14 @@ import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
+import me.m56738.easyarmorstands.paper.api.event.element.ElementMenuLayoutEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerCreateElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerDiscoverElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerEditPropertyEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerSelectElementEvent;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.context.PlayerChangeContextFactory;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
@@ -135,8 +119,10 @@ import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.TextColor;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
@@ -147,7 +133,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.exception.InvalidCommandSenderException;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
+import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.loader.HeaderMode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.util.MapFactories;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -257,7 +259,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         loadProperties();
 
-        sessionManager = new SessionManagerImpl();
+        PaperPlatformImpl platform = new PaperPlatformImpl(this);
+        sessionManager = new SessionManagerImpl(platform);
         historyManager = new HistoryManager();
         clipboardManager = new ClipboardManager();
 
@@ -326,7 +329,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new ClipboardCommands());
         annotationParser.parse(new DisplayCommands());
 
-        PropertyCommands.register(commandManager);
+        PropertyCommands.register(commandManager, platform);
 
         if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
             try {
@@ -571,7 +574,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public Clipboard getClipboard(Player player) {
-        return clipboardManager.getClipboard(player);
+        return clipboardManager.getClipboard(PaperPlayer.fromNative(player));
     }
 
     public HistoryManager getHistoryManager() {

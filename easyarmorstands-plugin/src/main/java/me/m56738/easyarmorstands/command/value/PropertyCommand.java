@@ -3,10 +3,10 @@ package me.m56738.easyarmorstands.command.value;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
-import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
 import net.kyori.adventure.text.Component;
+import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.parser.ParserDescriptor;
+import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class PropertyCommand<T> implements ValueCommand<T> {

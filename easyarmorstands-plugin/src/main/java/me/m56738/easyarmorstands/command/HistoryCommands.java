@@ -4,18 +4,19 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Range;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Argument;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Default;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotation.specifier.Range;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Default;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.Iterator;
 
@@ -48,7 +49,7 @@ public class HistoryCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         Player sender = source.source();
         History history = EasyArmorStandsPlugin.getInstance().getHistory(sender);
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             for (int i = 0; i < count; i++) {
                 Action action = history.takeRedoAction();
                 if (action != null) {
@@ -72,7 +73,7 @@ public class HistoryCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         Player sender = source.source();
         History history = EasyArmorStandsPlugin.getInstance().getHistory(sender);
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             for (int i = 0; i < count; i++) {
                 Action action = history.takeUndoAction();
                 if (action != null) {

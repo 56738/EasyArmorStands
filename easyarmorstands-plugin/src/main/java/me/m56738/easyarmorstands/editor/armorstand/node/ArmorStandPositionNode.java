@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -15,7 +16,6 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -37,10 +37,7 @@ public class ArmorStandPositionNode extends AbstractElementNode<ArmorStandElemen
     @Override
     public void reset() {
         Property<Location> locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue().withRotation(0, 0));
         getContext().commit();
     }
 

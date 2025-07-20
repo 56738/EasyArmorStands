@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class SpawnSlot implements MenuSlot {
     public void onClick(@NotNull MenuClick click) {
         if (click.isLeftClick()) {
             ElementSpawnRequest spawnRequest = EasyArmorStands.get().elementSpawnRequest(type);
-            spawnRequest.setPlayer(click.player());
+            spawnRequest.setPlayer(PaperPlayer.fromNative(click.player()));
             Element element = spawnRequest.spawn();
 
             Session session = click.session();

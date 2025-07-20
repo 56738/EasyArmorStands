@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display;
 
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
-import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.paper.property.display.DisplayGlowColorProperty;

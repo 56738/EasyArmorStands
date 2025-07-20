@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -24,9 +24,6 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
     public void applyDefaultProperties(@NotNull PropertyMap properties) {
         super.applyDefaultProperties(properties);
         Property<Location> locationProperty = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = locationProperty.getValue().clone();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue().withRotation(0, 0));
     }
 }

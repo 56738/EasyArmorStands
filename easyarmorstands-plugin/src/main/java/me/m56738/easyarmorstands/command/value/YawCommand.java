@@ -1,22 +1,22 @@
 package me.m56738.easyarmorstands.command.value;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.description.Description;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
-import me.m56738.easyarmorstands.lib.cloud.parser.standard.FloatParser;
-import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.parser.ParserDescriptor;
+import org.incendo.cloud.parser.standard.FloatParser;
+import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 public class YawCommand implements ValueCommand<Float> {
@@ -52,15 +52,13 @@ public class YawCommand implements ValueCommand<Float> {
 
     @Override
     public @NotNull Float getValue(@NotNull PropertyContainer properties) {
-        return properties.get(EntityPropertyTypes.LOCATION).getValue().getYaw();
+        return properties.get(EntityPropertyTypes.LOCATION).getValue().yaw();
     }
 
     @Override
     public boolean setValue(@NotNull PropertyContainer properties, @NotNull Float value) {
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = property.getValue();
-        location.setYaw(value);
-        return property.setValue(location);
+        return property.setValue(property.getValue().withYaw(value));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.clipboard;
 
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;

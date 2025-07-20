@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.display.editor.box;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
@@ -8,10 +10,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -32,7 +31,7 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
     @Override
     public BoundingBox getBoundingBox() {
         return BoundingBox.of(
-                Util.toVector3d(locationProperty.getValue()),
+                locationProperty.getValue().position(),
                 (double) widthProperty.getValue(),
                 (double) heightProperty.getValue());
     }
@@ -59,8 +58,8 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
         private final float originalHeight;
 
         private SessionImpl() {
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalPosition = Util.toVector3d(this.originalLocation);
+            this.originalLocation = locationProperty.getValue();
+            this.originalPosition = this.originalLocation.position();
             this.originalWidth = widthProperty.getValue();
             this.originalHeight = heightProperty.getValue();
         }
@@ -73,8 +72,7 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
         @Override
         public boolean setCenter(Vector3dc center) {
             Vector3d delta = center.sub(0, getHeight() / 2, 0, new Vector3d()).sub(originalPosition);
-            Location location = originalLocation.clone();
-            location.add(delta.x(), delta.y(), delta.z());
+            Location location = originalLocation.withOffset(delta);
             return locationProperty.setValue(location);
         }
 

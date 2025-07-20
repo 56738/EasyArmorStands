@@ -22,6 +22,7 @@ import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageStyle;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -53,12 +54,12 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
     private final Vector3d selectionBoxOrigin = new Vector3d();
     private final double selectionCursorOffset = 2.0;
     private final BoundingBoxParticle selectionBoxParticle;
-    private BoundingBox selectionBox;
-    private boolean selectionBoxEditing;
-    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
     private final double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.range;
     private final int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.discovery.limit;
     private final int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit;
+    private BoundingBox selectionBox;
+    private boolean selectionBoxEditing;
+    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
     private int buttonCount;
 
     public ElementSelectionNodeImpl(Session session) {
@@ -232,7 +233,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
-        if (element == null || !EasyArmorStandsPlugin.getInstance().canDiscoverElement(session.player(), element)) {
+        if (element == null || !EasyArmorStandsPlugin.getInstance().canDiscoverElement(PaperPlayer.toNative(session.player()), element)) {
             return ElementEntry.EMPTY;
         }
         ElementButton button = new ElementButton(entry, session, element);
@@ -269,7 +270,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
     @Override
     public boolean onClick(@NotNull ClickContext context) {
-        Player player = session.player();
+        Player player = PaperPlayer.toNative(session.player());
         if (context.type() == ClickContext.Type.RIGHT_CLICK && selectionBoxEditing) {
             finishBoxSelection();
             return true;
@@ -344,7 +345,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
     @Override
     public boolean selectElement(@NotNull SelectableElement element) {
-        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
+        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(PaperPlayer.toNative(session.player()), element)) {
             return false;
         }
 
@@ -362,7 +363,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
 
         Group group = new Group(session);
         for (SelectableElement element : elements) {
-            if (EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
+            if (EasyArmorStandsPlugin.getInstance().canSelectElement(PaperPlayer.toNative(session.player()), element)) {
                 group.addMember(element);
             }
         }
@@ -380,7 +381,7 @@ public class ElementSelectionNodeImpl extends AbstractNode implements ElementSel
             return;
         }
 
-        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(session.player(), element)) {
+        if (!EasyArmorStandsPlugin.getInstance().canSelectElement(PaperPlayer.toNative(session.player()), element)) {
             return;
         }
 

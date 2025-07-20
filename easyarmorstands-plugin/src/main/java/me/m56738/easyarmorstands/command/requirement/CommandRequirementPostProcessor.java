@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.command.requirement;
 
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.postprocessor.CommandPostprocessingContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.postprocessor.CommandPostprocessor;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.cloud.services.type.ConsumerService;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.services.type.ConsumerService;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;

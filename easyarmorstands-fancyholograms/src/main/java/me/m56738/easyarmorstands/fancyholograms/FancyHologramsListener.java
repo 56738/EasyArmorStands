@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.fancyholograms;
 
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
-import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscoverySource;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

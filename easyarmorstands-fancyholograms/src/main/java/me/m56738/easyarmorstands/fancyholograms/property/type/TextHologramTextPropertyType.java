@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.fancyholograms.property.type;
 
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;

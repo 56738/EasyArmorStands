@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.command.requirement;
 
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.BuilderModifier;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.annotations.BuilderModifier;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 

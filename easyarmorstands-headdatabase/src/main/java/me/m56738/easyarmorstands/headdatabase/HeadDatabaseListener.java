@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,7 @@ public class HeadDatabaseListener implements Listener {
             return;
         }
         SessionManager sessionManager = plugin.sessionManager();
-        Session session = sessionManager.getSession(player);
+        Session session = sessionManager.getSession(PaperPlayer.fromNative(player));
         if (session == null) {
             return;
         }
@@ -34,7 +35,7 @@ public class HeadDatabaseListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        ((MenuElement) element).openMenu(player);
+        ((MenuElement) element).openMenu(PaperPlayer.fromNative(player));
         player.setItemOnCursor(event.getHead());
     }
 }

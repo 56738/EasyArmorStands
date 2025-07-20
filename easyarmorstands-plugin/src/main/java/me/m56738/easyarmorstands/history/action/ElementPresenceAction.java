@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.element.ElementReference;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.element.EntityElementReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ abstract class ElementPresenceAction implements Action {
 
     protected boolean create(ChangeContext context) {
         ElementType type = reference.getType();
-        if (!EasyArmorStandsPlugin.getInstance().canCreateElement(context.getPlayer(), type, properties)) {
+        if (!EasyArmorStandsPlugin.getInstance().canCreateElement(PaperPlayer.toNative(context.getPlayer()), type, properties)) {
             return false;
         }
 
@@ -53,7 +54,7 @@ abstract class ElementPresenceAction implements Action {
             return false;
         }
 
-        if (!EasyArmorStandsPlugin.getInstance().canDestroyElement(context.getPlayer(), destroyableElement)) {
+        if (!EasyArmorStandsPlugin.getInstance().canDestroyElement(PaperPlayer.toNative(context.getPlayer()), destroyableElement)) {
             return false;
         }
 

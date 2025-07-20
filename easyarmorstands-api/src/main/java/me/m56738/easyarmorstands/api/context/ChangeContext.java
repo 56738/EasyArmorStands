@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.api.context;
 
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

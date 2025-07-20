@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -28,22 +29,9 @@ import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Greedy;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Range;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Argument;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Default;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.cloud.annotations.suggestion.Suggestions;
-import me.m56738.easyarmorstands.lib.cloud.bukkit.data.MultipleEntitySelector;
-import me.m56738.easyarmorstands.lib.cloud.bukkit.data.SingleEntitySelector;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier.Decoder;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.paper.api.element.EntityElement;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionSnapper;
@@ -54,10 +42,23 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotation.specifier.Greedy;
+import org.incendo.cloud.annotation.specifier.Range;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Default;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.bukkit.data.MultipleEntitySelector;
+import org.incendo.cloud.bukkit.data.SingleEntitySelector;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -106,7 +107,7 @@ public class SessionCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        menuElement.openMenu(sender);
+        menuElement.openMenu(PaperPlayer.fromNative(sender));
     }
 
     @Command("open <entity>")
@@ -124,11 +125,11 @@ public class SessionCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.menu-unsupported"));
             return;
         }
-        if (!menuElement.canEdit(sender)) {
+        if (!menuElement.canEdit(PaperPlayer.fromNative(sender))) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-edit"));
             return;
         }
-        menuElement.openMenu(sender);
+        menuElement.openMenu(PaperPlayer.fromNative(sender));
     }
 
     @Command("select <entities>")
@@ -279,7 +280,7 @@ public class SessionCommands {
     ) {
         Player sender = source.source();
         Vector3dc position;
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(element);
             Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
             Vector3d offsetVector = new Vector3d();
@@ -291,11 +292,8 @@ public class SessionCommands {
                 offsetVector.set(offset, offset, offset);
             }
             Location location = property.getValue();
-            position = axis.snap(Util.toVector3d(location), value, offsetVector, new Vector3d());
-            location.setX(position.x());
-            location.setY(position.y());
-            location.setZ(position.z());
-            if (!property.setValue(location)) {
+            position = axis.snap(location.position(), value, offsetVector, new Vector3d());
+            if (!property.setValue(location.withPosition(position))) {
                 sender.sendMessage(Message.error("easyarmorstands.error.cannot-move"));
                 return;
             }
@@ -310,7 +308,7 @@ public class SessionCommands {
     public void showName(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
         Component text;
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (property == null) {
@@ -328,7 +326,7 @@ public class SessionCommands {
     @RequireElementSelection
     public void setName(PlayerSource source, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (nameProperty == null) {
@@ -354,7 +352,7 @@ public class SessionCommands {
     @RequireElementSelection
     public void clearName(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (nameProperty == null) {
@@ -379,7 +377,7 @@ public class SessionCommands {
     @RequireElementSelection
     public void setNameVisible(PlayerSource source, ElementSelection selection, @Argument("value") boolean visible) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
             if (property == null) {
@@ -401,7 +399,7 @@ public class SessionCommands {
     @RequireElementSelection
     public void setCanTick(PlayerSource source, ElementSelection selection, @Argument("value") boolean canTick) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
             if (property == null) {
@@ -423,7 +421,7 @@ public class SessionCommands {
     @RequireElement
     public void setScale(PlayerSource source, Element element, @Argument("value") double value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             ScaleTool scaleTool = null;
             if (element instanceof EditableElement editableElement) {
                 ToolProvider tools = editableElement.getTools(context);
@@ -446,7 +444,7 @@ public class SessionCommands {
     public void addTag(PlayerSource source, ElementSelection selection, @Argument("value") String tag) {
         Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
@@ -476,7 +474,7 @@ public class SessionCommands {
     public void removeTag(PlayerSource source, ElementSelection selection, @Argument(value = "value", suggestions = "selection_tags") String tag) {
         Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);

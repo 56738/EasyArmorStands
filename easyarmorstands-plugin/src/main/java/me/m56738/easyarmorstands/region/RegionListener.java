@@ -1,16 +1,17 @@
 package me.m56738.easyarmorstands.region;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.api.event.player.PlayerCreateElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerDestroyElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerDiscoverElementEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
-import me.m56738.easyarmorstands.api.event.player.PlayerSelectElementEvent;
-import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.paper.api.element.EntityElement;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerCreateElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerDestroyElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerDiscoverElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerEditPropertyEvent;
+import me.m56738.easyarmorstands.paper.api.event.player.PlayerSelectElementEvent;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,7 +29,7 @@ public class RegionListener implements Listener {
     }
 
     private boolean isAllowed(Player player, Location location, boolean silent) {
-        return privilegeChecker.isAllowed(player, location, silent);
+        return privilegeChecker.isAllowed(player, PaperLocationAdapter.toNative(location), silent);
     }
 
     @EventHandler
@@ -84,7 +85,7 @@ public class RegionListener implements Listener {
             if (event.getProperty().getType() != EntityPropertyTypes.LOCATION) {
                 return;
             }
-            if (isAllowed(event.getPlayer(), (org.bukkit.Location) event.getNewValue(), true)) {
+            if (isAllowed(event.getPlayer(), (Location) event.getNewValue(), true)) {
                 return;
             }
         }

@@ -3,12 +3,13 @@ package me.m56738.easyarmorstands.session;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
-import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
-import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStopEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SessionManagerImpl implements SessionManager {
+    private final CommonPlatform platform;
     private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
+
+    public SessionManagerImpl(CommonPlatform platform) {
+        this.platform = platform;
+    }
 
     public void startSession(SessionImpl session) {
         final SessionImpl old = sessions.put(session.player(), session);
@@ -31,7 +37,7 @@ public class SessionManagerImpl implements SessionManager {
 
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
-        SessionImpl session = new SessionImpl(player);
+        SessionImpl session = new SessionImpl(platform, player);
         ElementSelectionNode node = new ElementSelectionNodeImpl(session);
         node.addSource(new EntityElementDiscoverySource());
         session.pushNode(node);

@@ -2,14 +2,15 @@ package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
-import me.m56738.easyarmorstands.lib.cloud.permission.PredicatePermission;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.permission.Permission;
+import org.incendo.cloud.permission.PredicatePermission;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,7 @@ public class PropertyPermissionPredicate implements Predicate<Source> {
     public boolean test(Source sender) {
         if (sender instanceof PlayerSource playerSource) {
             Player player = playerSource.source();
-            return player.hasPermission(Permissions.EDIT) && type.canChange(player);
+            return player.hasPermission(Permissions.EDIT) && type.canChange(PaperPlayer.fromNative(player));
         }
         return false;
     }

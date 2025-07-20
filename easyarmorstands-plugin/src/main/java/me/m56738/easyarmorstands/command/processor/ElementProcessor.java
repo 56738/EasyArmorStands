@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessingContext;
-import me.m56738.easyarmorstands.lib.cloud.execution.preprocessor.CommandPreprocessor;
-import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessor;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.util.sender.Source;
 
 import static me.m56738.easyarmorstands.command.processor.SessionProcessor.sessionKey;
-import static me.m56738.easyarmorstands.lib.cloud.key.CloudKey.cloudKey;
+import static org.incendo.cloud.key.CloudKey.cloudKey;
 
 public class ElementProcessor implements CommandPreprocessor<Source> {
     private static final CloudKey<Element> KEY = cloudKey("element", Element.class);

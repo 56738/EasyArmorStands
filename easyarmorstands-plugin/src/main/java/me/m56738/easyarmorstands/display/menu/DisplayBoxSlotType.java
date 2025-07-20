@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.display.menu;
 
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class DisplayBoxSlotType implements MenuSlotType {
     public static final Key KEY = Key.key("easyarmorstands", "display/box");

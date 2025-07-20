@@ -3,12 +3,11 @@ package me.m56738.easyarmorstands.api.editor.tool;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.util.EasConversion;
 import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -57,23 +56,23 @@ class LocationYawRotateTool implements AxisRotateTool {
         private final Vector3d offsetChange = new Vector3d();
 
         public SessionImpl() {
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalOffset = EasConversion.fromBukkit(originalLocation.toVector()).sub(getPosition());
+            this.originalLocation = locationProperty.getValue();
+            this.originalOffset = originalLocation.position().sub(getPosition(), new Vector3d());
         }
 
         @Override
         public void setChange(double change) {
             originalOffset.rotateY(change, offsetChange).sub(originalOffset);
 
-            Location location = originalLocation.clone();
-            location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setYaw(location.getYaw() - (float) Math.toDegrees(change));
+            Location location = originalLocation
+                    .withPosition(offsetChange)
+                    .withYaw(originalLocation.yaw() - (float) Math.toDegrees(change));
             locationProperty.setValue(location);
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            double original = Math.toRadians(originalLocation.getYaw());
+            double original = Math.toRadians(originalLocation.yaw());
             change -= original;
             change = context.snapAngle(change);
             change += original;
@@ -82,7 +81,7 @@ class LocationYawRotateTool implements AxisRotateTool {
 
         @Override
         public void setValue(double value) {
-            setChange(Math.toRadians(originalLocation.getYaw()) - value);
+            setChange(Math.toRadians(originalLocation.yaw()) - value);
         }
 
         @Override
@@ -102,7 +101,7 @@ class LocationYawRotateTool implements AxisRotateTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return EasFormat.formatDegrees(locationProperty.getValue().getYaw());
+            return EasFormat.formatDegrees(locationProperty.getValue().yaw());
         }
 
         @Override

@@ -11,6 +11,9 @@ import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
@@ -22,17 +25,13 @@ import me.m56738.easyarmorstands.session.context.EnterContextImpl;
 import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Math;
-import org.joml.Matrix4dc;
 import org.joml.Vector2dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -63,10 +62,10 @@ public final class SessionImpl implements Session {
     private int overlayTicks;
     private boolean toolRequired;
 
-    public SessionImpl(Player player) {
+    public SessionImpl(CommonPlatform platform, Player player) {
         this.player = player;
         this.snapper = new SessionSnapper(player);
-        this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player));
+        this.particleProvider = new GizmoParticleProvider(platform.getGizmoFactory(player));
     }
 
     @Override
@@ -92,7 +91,7 @@ public final class SessionImpl implements Session {
     @Override
     public double getScale(Vector3dc position) {
         EasConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration();
-        Vector3d eyePosition = Util.toVector3d(player.getEyeLocation());
+        Vector3dc eyePosition = player.getEyeLocation().position();
         double minDistance = config.editor.scale.minDistance;
         double maxDistance = config.editor.scale.maxDistance;
         if (maxDistance <= minDistance) {
@@ -317,23 +316,15 @@ public final class SessionImpl implements Session {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
         double threshold = getLookThreshold();
-        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
+        return new EyeRayImpl(eyeLocation.world(), eyeLocation, length, threshold);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
         double length = getRange();
         Location eyeLocation = player.getEyeLocation();
-        Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
-        Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
-        eyeLocation.setX(origin.x);
-        eyeLocation.setY(origin.y);
-        eyeLocation.setZ(origin.z);
         double threshold = getLookThreshold();
-        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
-    }
-
-    private Matrix4dc eyeMatrix(Location eyeLocation) {
-        return Util.toMatrix4d(eyeLocation);
+        Vector3d origin = eyeLocation.matrix().transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
+        return new EyeRayImpl(eyeLocation.world(), eyeLocation.withPosition(origin), length, threshold);
     }
 
     @Override

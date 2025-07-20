@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config;
 
 import me.m56738.easyarmorstands.config.integration.IntegrationConfig;
-import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class EasConfig {

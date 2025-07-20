@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.particle;
 
-import me.m56738.easyarmorstands.lib.gizmo.api.Gizmo;
+import me.m56738.gizmo.api.Gizmo;
 
 public class GizmoParticle implements EditorParticle {
     private final Gizmo gizmo;

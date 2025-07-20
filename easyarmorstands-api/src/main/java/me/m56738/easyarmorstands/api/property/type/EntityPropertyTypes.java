@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

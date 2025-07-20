@@ -3,12 +3,13 @@ package me.m56738.easyarmorstands.property.context;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.group.property.GroupPropertyContainer;
 import me.m56738.easyarmorstands.history.ChangeTracker;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -19,7 +20,7 @@ public class PlayerChangeContext implements ManagedChangeContext {
 
     public PlayerChangeContext(Player player) {
         this.player = player;
-        this.tracker = EasyArmorStandsPlugin.getInstance().getHistory(player).getTracker();
+        this.tracker = EasyArmorStandsPlugin.getInstance().getHistory(PaperPlayer.toNative(player)).getTracker();
     }
 
     @Override

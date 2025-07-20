@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +48,7 @@ public class ItemPropertySlot implements MenuSlot {
             return;
         }
 
-        if (!untrackedProperty.canChange(click.player())) {
+        if (!untrackedProperty.canChange(PaperPlayer.fromNative(click.player()))) {
             return;
         }
 
@@ -57,7 +58,7 @@ public class ItemPropertySlot implements MenuSlot {
             click.allow();
             click.queueTask(() -> {
                 ItemStack item = click.menu().getInventory().getItem(click.index());
-                try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(click.player())) {
+                try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(PaperPlayer.fromNative(click.player()))) {
                     Property<ItemStack> property = context.getProperties(element).get(type);
                     if (property.setValue(Util.wrapItem(item))) {
                         context.commit();
@@ -79,7 +80,7 @@ public class ItemPropertySlot implements MenuSlot {
 
         click.queueTask(() -> {
             // Event is still cancelled, swap the items ourselves to prevent duplication
-            try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(click.player())) {
+            try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(PaperPlayer.fromNative(click.player()))) {
                 Property<ItemStack> property = context.getProperties(element).get(type);
                 ItemStack itemInCursor = click.cursor();
                 ItemStack itemInProperty = property.getValue();

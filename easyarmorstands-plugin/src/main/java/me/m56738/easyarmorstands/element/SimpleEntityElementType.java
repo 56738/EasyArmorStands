@@ -1,15 +1,16 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.paper.api.element.EntityElementType;
-import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -56,14 +57,15 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
         E entity;
+        org.bukkit.Location nativeLocation = PaperLocationAdapter.toNative(location);
         try {
-            entity = location.getWorld().spawn(location, entityClass, configurator);
+            entity = nativeLocation.getWorld().spawn(nativeLocation, entityClass, configurator);
         } catch (IllegalArgumentException e) {
             return null;
         }
         SimpleEntityElement<E> element = configurator.getElement();
         if (element != null) {
-            entity.teleport(location);
+            entity.teleport(nativeLocation);
         } else {
             entity.remove();
         }

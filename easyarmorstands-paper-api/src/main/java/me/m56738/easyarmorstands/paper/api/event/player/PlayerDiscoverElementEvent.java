@@ -1,5 +1,6 @@
-package me.m56738.easyarmorstands.api.event.player;
+package me.m56738.easyarmorstands.paper.api.event.player;
 
+import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -7,13 +8,18 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerDestroyElementEvent extends PlayerEvent implements Cancellable {
+/**
+ * Called to check whether an element can be discovered by a player.
+ * <p>
+ * Can be used to prevent displaying buttons for certain elements.
+ */
+public class PlayerDiscoverElementEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlerList = new HandlerList();
-    private final Element element;
+    private final EditableElement element;
     private boolean cancelled;
 
-    public PlayerDestroyElementEvent(@NotNull Player who, @NotNull Element element) {
-        super(who);
+    public PlayerDiscoverElementEvent(@NotNull Player player, @NotNull EditableElement element) {
+        super(player);
         this.element = element;
     }
 

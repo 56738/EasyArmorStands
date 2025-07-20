@@ -3,9 +3,9 @@ package me.m56738.easyarmorstands.display.command.value;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;

@@ -15,4 +15,9 @@ public class ModdedCommandSenderImpl implements ModdedCommandSender, ForwardingA
     public Audience audience() {
         return audience;
     }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return false;
+    }
 }

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.property;
 
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**

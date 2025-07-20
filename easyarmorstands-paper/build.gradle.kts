@@ -16,7 +16,6 @@ dependencies {
     api(project(":easyarmorstands-paper-api"))
     api(project(":easyarmorstands-common"))
     api(libs.bstats)
-    runtimeOnly(libs.cloud.annotations) // TODO remove
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
     api(libs.commodore) {

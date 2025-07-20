@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuContext;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ public class SimpleMenuContext implements MenuContext {
 
     public SimpleMenuContext(Player player) {
         this.player = player;
-        this.session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
+        this.session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(PaperPlayer.fromNative(player));
         this.locale = player.locale();
     }
 

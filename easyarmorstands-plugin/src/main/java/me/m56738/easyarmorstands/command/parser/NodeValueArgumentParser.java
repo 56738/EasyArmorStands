@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.command.parser;
 
 import me.m56738.easyarmorstands.editor.node.ValueNode;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandInput;
-import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParseResult;
-import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
-import me.m56738.easyarmorstands.lib.cloud.suggestion.Suggestion;
-import me.m56738.easyarmorstands.lib.cloud.suggestion.SuggestionProvider;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.parser.ArgumentParseResult;
+import org.incendo.cloud.parser.ArgumentParser;
+import org.incendo.cloud.suggestion.Suggestion;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;

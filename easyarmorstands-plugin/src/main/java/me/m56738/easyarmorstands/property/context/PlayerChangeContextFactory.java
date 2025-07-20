@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.property.context;
 
 import me.m56738.easyarmorstands.api.context.ChangeContextFactory;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 
 public class PlayerChangeContextFactory implements ChangeContextFactory {
     @Override

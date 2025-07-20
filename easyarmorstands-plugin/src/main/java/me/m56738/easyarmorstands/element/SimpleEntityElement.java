@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
@@ -20,6 +21,7 @@ import me.m56738.easyarmorstands.menu.layout.DefaultMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.EquipmentMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
 import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.element.AbstractEntityElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
@@ -29,7 +31,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
@@ -108,7 +109,7 @@ public class SimpleEntityElement<E extends @NotNull Entity> extends AbstractEnti
         } else {
             builderFactory = DefaultMenuBuilder::new;
         }
-        EasyArmorStandsPlugin.getInstance().openMenu(player, this, builderFactory);
+        EasyArmorStandsPlugin.getInstance().openMenu(PaperPlayer.toNative(player), this, builderFactory);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.editor;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public interface EyeRay {
     @NotNull Matrix4dc inverseMatrix();
 
     default boolean isInRange(@NotNull Location location) {
-        return world().equals(location.getWorld()) && isInRange(location.getX(), location.getY(), location.getZ());
+        return world().equals(location.world()) && isInRange(location.position());
     }
 
     default boolean isInRange(@NotNull Vector3dc position) {

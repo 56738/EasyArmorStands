@@ -4,11 +4,12 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.layout.ContentMenuLayout;
 import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,6 @@ public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
 
     @Override
     public boolean canCopy(@NotNull Player player) {
-        return player.getGameMode() == GameMode.CREATIVE;
+        return PaperPlayer.toNative(player).getGameMode() == GameMode.CREATIVE;
     }
 }

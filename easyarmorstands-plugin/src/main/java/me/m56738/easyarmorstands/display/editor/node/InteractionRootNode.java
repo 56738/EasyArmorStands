@@ -12,6 +12,8 @@ import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -20,11 +22,8 @@ import me.m56738.easyarmorstands.display.editor.box.InteractionBoxEditor;
 import me.m56738.easyarmorstands.display.element.InteractionElement;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -99,7 +98,7 @@ public class InteractionRootNode extends AbstractElementNode<InteractionElement>
         float width = widthProperty.getValue();
         float height = heightProperty.getValue();
         Location location = locationProperty.getValue();
-        Vector3d position = Util.toVector3d(location);
+        Vector3dc position = location.position();
         boxParticle.setBoundingBox(BoundingBox.of(position, width, height));
     }
 }

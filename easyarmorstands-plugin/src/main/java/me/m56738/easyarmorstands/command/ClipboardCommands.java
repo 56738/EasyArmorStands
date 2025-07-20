@@ -10,16 +10,17 @@ import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.PropertyCopier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 @Command("eas")
 public class ClipboardCommands {
@@ -70,7 +71,7 @@ public class ClipboardCommands {
     public void copy(PlayerSource source, Clipboard clipboard, Element element) {
         Player sender = source.source();
         element.getProperties().forEach(property -> {
-            if (property.getType().canCopy(sender)) {
+            if (property.getType().canCopy(PaperPlayer.fromNative(sender))) {
                 copyProperty(clipboard, property);
             }
         });
@@ -97,7 +98,7 @@ public class ClipboardCommands {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 copier.copyProperties(properties, clipboard.getProperties());

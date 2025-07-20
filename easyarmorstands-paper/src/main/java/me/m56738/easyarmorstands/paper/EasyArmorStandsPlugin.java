@@ -13,7 +13,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin {
     public void onEnable() {
         PaperPlatformImpl platform = new PaperPlatformImpl(this);
 
-        PaperCommandManager<PaperCommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper())
+        PaperCommandManager<PaperCommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper(platform))
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(this);
 

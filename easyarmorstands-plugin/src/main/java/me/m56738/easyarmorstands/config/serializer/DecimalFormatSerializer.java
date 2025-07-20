@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.lib.configurate.serialize.ScalarSerializer;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.ScalarSerializer;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;

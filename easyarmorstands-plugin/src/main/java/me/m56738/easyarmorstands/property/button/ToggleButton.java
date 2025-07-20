@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ToggleButton<T> extends PropertyButton<T> {
@@ -26,7 +27,7 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
 
     @Override
     public void onClick(@NotNull MenuClick click) {
-        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(click.player())) {
+        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(PaperPlayer.fromNative(click.player()))) {
             boolean changed;
             if (click.isShiftClick()) {
                 EasyArmorStandsPlugin.getInstance().getClipboard(click.player())

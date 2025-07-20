@@ -1,12 +1,11 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Cursor;
-import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Intersection;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.World;
+import me.m56738.gizmo.api.cursor.Cursor;
+import me.m56738.gizmo.api.cursor.Intersection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4d;
@@ -29,15 +28,15 @@ public class EyeRayImpl implements EyeRay {
 
     public EyeRayImpl(World world, Location location, double length, double threshold) {
         this.world = world;
-        this.origin = Util.toVector3d(location);
-        this.direction = Util.toVector3d(location.getDirection());
+        this.origin = location.position();
+        this.direction = location.direction();
         this.target = origin.fma(length, direction, new Vector3d());
         this.length = length;
         this.cursor = Cursor.of(origin, target);
         this.threshold = threshold;
-        this.yaw = location.getYaw();
-        this.pitch = location.getPitch();
-        this.matrix = Util.toMatrix4d(location);
+        this.yaw = location.yaw();
+        this.pitch = location.pitch();
+        this.matrix = location.matrix();
     }
 
     private static @Nullable Vector3dc convert(@Nullable Intersection intersection) {

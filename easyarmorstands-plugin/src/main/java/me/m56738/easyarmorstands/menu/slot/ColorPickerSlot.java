@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -108,8 +109,8 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(player, itemSlot));
-        menu.addCloseListener((p, m) -> element.openMenu(p));
+        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(PaperPlayer.fromNative(player), itemSlot));
+        menu.addCloseListener((p, m) -> element.openMenu(PaperPlayer.fromNative(p)));
         player.openInventory(menu.getInventory());
     }
 

@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
@@ -32,22 +33,15 @@ import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Greedy;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Range;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Argument;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier.Decoder;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
@@ -58,6 +52,14 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
+import org.incendo.cloud.annotation.specifier.Greedy;
+import org.incendo.cloud.annotation.specifier.Range;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
@@ -77,7 +79,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setBlock(PlayerSource source, ElementSelection selection, @Argument("value") BlockData value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
             if (property == null) {
@@ -99,7 +101,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setBlockBrightness(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -109,7 +111,7 @@ public class DisplayCommands {
             }
             int skyLight = property.getValue()
                     .map(Brightness::getSkyLight)
-                    .orElseGet(() -> (int) location.getBlock().getLightFromSky());
+                    .orElseGet(() -> (int) PaperLocationAdapter.toNative(location).getBlock().getLightFromSky());
             Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
             if (property.setValue(brightness)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -126,7 +128,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setSkyBrightness(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -136,7 +138,7 @@ public class DisplayCommands {
             }
             int blockLight = property.getValue()
                     .map(Brightness::getSkyLight)
-                    .orElseGet(() -> (int) location.getBlock().getLightFromBlocks());
+                    .orElseGet(() -> (int) PaperLocationAdapter.toNative(location).getBlock().getLightFromBlocks());
             Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
             if (property.setValue(brightness)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -153,7 +155,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setLocalBrightness(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -177,7 +179,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setDefaultBrightness(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -199,7 +201,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setBoxWidth(PlayerSource source, ElementSelection selection, @Argument("width") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
             if (widthProperty == null) {
@@ -225,7 +227,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setBoxHeight(PlayerSource source, ElementSelection selection, @Argument("height") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
             if (heightProperty == null) {
@@ -251,7 +253,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void removeBox(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
 
             int success = 0;
@@ -311,7 +313,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setText(PlayerSource source, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
             if (property == null) {
@@ -333,7 +335,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setTextWidth(PlayerSource source, ElementSelection selection, @Argument("value") int value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
             if (property == null) {
@@ -355,7 +357,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setTextBackground(PlayerSource source, ElementSelection selection, @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -378,7 +380,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetTextBackground(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -400,7 +402,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void hideTextBackground(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -423,7 +425,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void hideTextBackground(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "255") int alpha) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -452,7 +454,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setGlowColor(PlayerSource source, ElementSelection selection, @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
@@ -475,7 +477,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetGlowColor(PlayerSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
@@ -605,18 +607,17 @@ public class DisplayCommands {
         }
 
         ArmorStandPartInfo info = ArmorStandPartInfo.of(part);
-        Location location = entity.getLocation();
-        Vector3d offset = info.getOffset(ArmorStandSize.get(entity), 1).rotateY(Util.getRoundedYawAngle(location.getYaw()), new Vector3d());
-        location.add(offset.x, offset.y, offset.z);
+        Location location = PaperLocationAdapter.fromNative(entity.getLocation());
+        Vector3d offset = info.getOffset(ArmorStandSize.get(entity), 1).rotateY(Util.getRoundedYawAngle(location.yaw()), new Vector3d());
+        location = location.withOffset(offset);
 
         EulerAngle angle = part.getPose(entity);
         Matrix4d transform = new Matrix4d()
-                .rotateY(Util.getRoundedYawAngle(location.getYaw()))
+                .rotateY(Util.getRoundedYawAngle(location.yaw()))
                 .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
                 .mul(matrix);
 
-        location.setYaw(0);
-        location.setPitch(0);
+        location = location.withRotation(0, 0);
 
         PropertyMap properties = new PropertyMap();
         properties.put(EntityPropertyTypes.LOCATION, location);
@@ -647,7 +648,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setViewRange(PlayerSource source, ElementSelection selection, @Argument("value") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> property = properties.getOrNull(DisplayPropertyTypes.VIEW_RANGE);
             if (property == null) {

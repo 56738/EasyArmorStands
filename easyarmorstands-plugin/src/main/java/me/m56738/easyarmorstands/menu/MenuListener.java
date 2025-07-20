@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
@@ -105,7 +106,7 @@ public class MenuListener implements Listener {
 
         @Override
         public @Nullable Session session() {
-            return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
+            return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(PaperPlayer.fromNative(player));
         }
 
         @Override

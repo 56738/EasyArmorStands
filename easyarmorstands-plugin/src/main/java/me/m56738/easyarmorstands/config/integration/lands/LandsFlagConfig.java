@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.integration.lands;
 
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class LandsFlagConfig {

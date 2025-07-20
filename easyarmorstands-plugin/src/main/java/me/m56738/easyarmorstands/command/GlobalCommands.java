@@ -5,19 +5,8 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.lib.cloud.CommandManager;
-import me.m56738.easyarmorstands.lib.cloud.annotation.specifier.Greedy;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Argument;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.CommandDescription;
-import me.m56738.easyarmorstands.lib.cloud.annotations.Permission;
-import me.m56738.easyarmorstands.lib.cloud.annotations.suggestion.Suggestions;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.help.result.CommandEntry;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.MinecraftHelp;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.PlayerSource;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
@@ -29,6 +18,18 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.annotation.specifier.Greedy;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
+import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.help.result.CommandEntry;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
+import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.List;
 import java.util.Objects;
@@ -126,7 +127,7 @@ public class GlobalCommands {
         sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
 
         if (sender instanceof Player player) {
-            SessionImpl session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
+            SessionImpl session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(PaperPlayer.fromNative(player));
             Element element = null;
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));

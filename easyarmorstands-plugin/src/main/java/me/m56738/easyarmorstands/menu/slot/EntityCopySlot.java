@@ -29,31 +29,6 @@ public class EntityCopySlot implements MenuSlot {
         this.item = item;
     }
 
-    @Override
-    public ItemStack getItem(Locale locale) {
-        ItemStack item = this.item.clone();
-        item.editMeta(meta -> {
-            meta.displayName(ComponentUtil.renderForItem(Message.buttonName("easyarmorstands.menu.copy"), locale));
-            meta.lore(List.of(ComponentUtil.renderForItem(Message.buttonDescription("easyarmorstands.menu.copy.description"), locale)));
-        });
-        return item;
-    }
-
-    @Override
-    public void onClick(MenuClick click) {
-        if (click.cursor().getType() == Material.AIR) {
-            click.queueTask(() -> {
-                ItemStack item = createItem(element.getEntity());
-                if (item != null) {
-                    item.editMeta(meta -> meta.displayName(null));
-                }
-                click.player().setItemOnCursor(item);
-            });
-        } else {
-            click.queueTask(() -> click.player().setItemOnCursor(null));
-        }
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     public static @Nullable ItemStack createItem(Entity entity) {
         EntitySnapshot snapshot = entity.createSnapshot();
@@ -104,5 +79,30 @@ public class EntityCopySlot implements MenuSlot {
         tagField.set(meta, data);
         item.setItemMeta(meta);
         return item;
+    }
+
+    @Override
+    public ItemStack getItem(Locale locale) {
+        ItemStack item = this.item.clone();
+        item.editMeta(meta -> {
+            meta.displayName(ComponentUtil.renderForItem(Message.buttonName("easyarmorstands.menu.copy"), locale));
+            meta.lore(List.of(ComponentUtil.renderForItem(Message.buttonDescription("easyarmorstands.menu.copy.description"), locale)));
+        });
+        return item;
+    }
+
+    @Override
+    public void onClick(MenuClick click) {
+        if (click.cursor().getType() == Material.AIR) {
+            click.queueTask(() -> {
+                ItemStack item = createItem(element.getEntity());
+                if (item != null) {
+                    item.editMeta(meta -> meta.displayName(null));
+                }
+                click.player().setItemOnCursor(item);
+            });
+        } else {
+            click.queueTask(() -> click.player().setItemOnCursor(null));
+        }
     }
 }

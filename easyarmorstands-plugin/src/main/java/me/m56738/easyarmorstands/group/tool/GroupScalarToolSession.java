@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.group.tool;
 
 import me.m56738.easyarmorstands.api.editor.tool.ScalarToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.Tool;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 
 import java.util.List;
 

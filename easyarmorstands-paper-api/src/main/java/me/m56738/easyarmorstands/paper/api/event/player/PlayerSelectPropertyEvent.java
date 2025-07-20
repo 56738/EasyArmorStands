@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.api.event.player;
+package me.m56738.easyarmorstands.paper.api.event.player;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import org.bukkit.entity.Player;

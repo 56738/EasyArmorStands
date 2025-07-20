@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.paper.api.event;
+package me.m56738.easyarmorstands.paper.api.event.element;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
-import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
-import me.m56738.easyarmorstands.paper.api.event.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
+import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandCanTickProperty;

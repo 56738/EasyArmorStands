@@ -2,12 +2,11 @@ package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Snapper;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.util.EasConversion;
 import me.m56738.easyarmorstands.api.util.EasFormat;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -47,37 +46,33 @@ class LocationMoveTool implements MoveTool {
 
     private class SessionImpl implements MoveToolSession {
         private final Location originalLocation;
-        private final Vector3dc originalPosition;
         private final Vector3d offset = new Vector3d();
 
         public SessionImpl() {
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalPosition = EasConversion.fromBukkit(originalLocation.toVector());
+            this.originalLocation = locationProperty.getValue();
         }
 
         @Override
         public void setChange(@NotNull Vector3dc change) {
             this.offset.set(change);
-            Location location = originalLocation.clone();
-            location.add(change.x(), change.y(), change.z());
-            locationProperty.setValue(location);
+            locationProperty.setValue(originalLocation.withOffset(change));
         }
 
         @Override
         public void snapChange(@NotNull Vector3d change, @NotNull Snapper context) {
-            change.add(originalPosition);
+            change.add(originalLocation.position());
             context.snapPosition(change);
-            change.sub(originalPosition);
+            change.sub(originalLocation.position());
         }
 
         @Override
         public @NotNull Vector3dc getPosition() {
-            return EasConversion.fromBukkit(locationProperty.getValue().toVector());
+            return locationProperty.getValue().position();
         }
 
         @Override
         public void setPosition(@NotNull Vector3dc position) {
-            setChange(position.sub(originalPosition, offset));
+            setChange(position.sub(originalLocation.position(), offset));
         }
 
         @Override

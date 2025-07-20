@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.util;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
@@ -32,7 +32,7 @@ public final class EasFormat {
     }
 
     public static @NotNull Component formatLocation(@NotNull Location location) {
-        return formatPosition(EasConversion.fromBukkit(location.toVector()));
+        return formatPosition(location.position());
     }
 
     public static @NotNull Component formatDegrees(double degrees) {

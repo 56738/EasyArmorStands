@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.menu.MenuContext;
 import me.m56738.easyarmorstands.api.menu.MenuFactoryBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +36,6 @@ public class MenuProviderImpl implements MenuProvider {
 
     @Override
     public @NotNull MenuContext context(@NotNull Session session, @NotNull Element element) {
-        return new ElementMenuContext(session.player(), session, element);
+        return new ElementMenuContext(PaperPlayer.toNative(session.player()), session, element);
     }
 }

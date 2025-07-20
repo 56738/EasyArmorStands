@@ -4,10 +4,11 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
+import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +38,11 @@ public class EntityElementDiscoverySource implements ElementDiscoverySource {
 
     @Override
     public void discover(@NotNull World world, @NotNull BoundingBox box, @NotNull Consumer<@NotNull ElementDiscoveryEntry> consumer) {
+        org.bukkit.World nativeWorld = PaperWorld.toNative(world);
         Vector3dc delta = box.getMaxPosition().sub(box.getMinPosition(), new Vector3d()).div(2);
         Vector3dc center = box.getMinPosition().add(delta, new Vector3d());
-        Location location = new Location(world, center.x(), center.y(), center.z());
-        for (Entity entity : world.getNearbyEntities(location, delta.x(), delta.y(), delta.z())) {
+        Location location = new Location(nativeWorld, center.x(), center.y(), center.z());
+        for (Entity entity : nativeWorld.getNearbyEntities(location, delta.x(), delta.y(), delta.z())) {
             consumer.accept(getEntry(entity));
         }
     }

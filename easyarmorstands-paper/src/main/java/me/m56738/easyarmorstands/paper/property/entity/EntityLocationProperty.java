@@ -1,11 +1,13 @@
 package me.m56738.easyarmorstands.paper.property.entity;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import org.bukkit.entity.Entity;
+import org.joml.Vector3dc;
 import org.jspecify.annotations.Nullable;
 
 public class EntityLocationProperty implements Property<Location> {
@@ -24,7 +26,7 @@ public class EntityLocationProperty implements Property<Location> {
 
     @Override
     public Location getValue() {
-        return entity.getLocation();
+        return PaperLocationAdapter.fromNative(entity.getLocation());
     }
 
     @Override
@@ -42,7 +44,7 @@ public class EntityLocationProperty implements Property<Location> {
             return false;
         }
 
-        boolean ok = entity.teleport(value);
+        boolean ok = entity.teleport(PaperLocationAdapter.toNative(value));
         if (ok) {
             entity.setFallDistance(0);
         }
@@ -55,9 +57,10 @@ public class EntityLocationProperty implements Property<Location> {
     }
 
     private boolean isValid(Location location) {
-        return isValid(location.getX(), COORDINATE_LIMIT) &&
-                isValid(location.getY(), HEIGHT_LIMIT) &&
-                isValid(location.getZ(), COORDINATE_LIMIT);
+        Vector3dc position = location.position();
+        return isValid(position.x(), COORDINATE_LIMIT) &&
+                isValid(position.y(), HEIGHT_LIMIT) &&
+                isValid(position.z(), COORDINATE_LIMIT);
     }
 
     private boolean isValid(double value, double limit) {

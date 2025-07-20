@@ -1,9 +1,13 @@
 package me.m56738.easyarmorstands.modded.platform.entity;
 
+import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedPlayer;
+import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minecraft.world.entity.player.Player;
+import org.joml.Vector3d;
 
 public class ModdedPlayerImpl extends ModdedCommandSenderImpl implements ModdedPlayer, ForwardingAudience.Single {
     private final Player player;
@@ -24,7 +28,24 @@ public class ModdedPlayerImpl extends ModdedCommandSenderImpl implements ModdedP
     }
 
     @Override
+    public boolean isFlying() {
+        return player.isFallFlying(); // TODO probably wrong
+    }
+
+    @Override
     public boolean isValid() {
-        return player.isAlive();
+        return player.isAlive(); // TODO check
+    }
+
+    @Override
+    public Location getLocation() {
+        World world = ModdedWorld.fromNative(player.level());
+        return Location.of(world, new Vector3d(player.getX(), player.getY(), player.getZ()), player.getYRot(), player.getXRot());
+    }
+
+    @Override
+    public Location getEyeLocation() {
+        World world = ModdedWorld.fromNative(player.level());
+        return Location.of(world, new Vector3d(player.getX(), player.getEyeY(), player.getZ()), player.getYRot(), player.getXRot());
     }
 }

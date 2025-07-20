@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.display.editor.box;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -11,8 +13,6 @@ import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
@@ -38,7 +38,7 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
     @Override
     public BoundingBox getBoundingBox() {
         return BoundingBox.of(
-                Util.toVector3d(locationProperty.getValue()),
+                locationProperty.getValue().position(),
                 (double) widthProperty.getValue(),
                 (double) heightProperty.getValue());
     }
@@ -66,8 +66,8 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
         private final float originalHeight;
 
         private SessionImpl() {
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalPosition = Util.toVector3d(this.originalLocation);
+            this.originalLocation = locationProperty.getValue();
+            this.originalPosition = this.originalLocation.position();
             this.originalTranslation = new Vector3f(translationProperty.getValue());
             this.originalWidth = widthProperty.getValue();
             this.originalHeight = heightProperty.getValue();
@@ -83,13 +83,12 @@ public class DisplayBoxEditor implements BoundingBoxEditor {
             Vector3d delta = center.sub(0, getHeight() / 2, 0, new Vector3d()).sub(originalPosition);
 
             // Move box by modifying the location
-            Location location = originalLocation.clone();
-            location.add(delta.x(), delta.y(), delta.z());
+            Location location = originalLocation.withOffset(delta);
             PendingChange locationChange = locationProperty.prepareChange(location);
 
             // Make sure the display stays in the same place by performing the inverse using the translation
             Vector3fc rotatedDelta = delta.get(new Vector3f())
-                    .rotate(Util.getRoundedYawPitchRotation(location, new Quaternionf()).conjugate());
+                    .rotate(Util.getRoundedYawPitchRotation(location.yaw(), location.pitch(), new Quaternionf()).conjugate());
             Vector3fc translation = originalTranslation.sub(rotatedDelta, new Vector3f());
             PendingChange translationChange = translationProperty.prepareChange(translation);
 

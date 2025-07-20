@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.command.requirement;
 
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.util.sender.Source;
 
 import static me.m56738.easyarmorstands.command.processor.SessionProcessor.sessionKey;
 

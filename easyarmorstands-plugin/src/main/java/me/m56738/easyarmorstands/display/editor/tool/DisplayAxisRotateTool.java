@@ -6,6 +6,8 @@ import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -17,8 +19,6 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
@@ -96,11 +96,11 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             Quaterniondc rotation = getRotation();
             Quaterniondc localRotation = parentRotationProvider.getRotation().conjugate(new Quaterniond())
                     .mul(rotation);
-            this.originalLocation = locationProperty.getValue().clone();
+            this.originalLocation = locationProperty.getValue();
             this.originalTranslation = new Vector3f(translationProperty.getValue());
             this.originalRotation = new Quaternionf(rotationProperty.getValue());
-            this.originalOffset = Util.toVector3d(originalLocation)
-                    .add(0, height / 2, 0)
+            this.originalOffset = originalLocation.position()
+                    .add(0, height / 2, 0, new Vector3d())
                     .sub(getPosition());
             this.translationOffset = new Vector3d(originalTranslation)
                     .sub(0, height / 2, 0);
@@ -118,8 +118,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
                             direction.z(), offsetChange)
                     .sub(originalOffset);
 
-            Location location = originalLocation.clone();
-            location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
+            Location location = originalLocation.withOffset(offsetChange);
 
             translationOffset.rotateAxis(change,
                             direction.x(),

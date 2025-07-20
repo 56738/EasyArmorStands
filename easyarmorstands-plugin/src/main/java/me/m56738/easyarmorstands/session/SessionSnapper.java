@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.Snapper;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.Player;
 
 public class SessionSnapper implements Snapper {
     public static final double DEFAULT_OFFSET_INCREMENT = 1.0 / 32;

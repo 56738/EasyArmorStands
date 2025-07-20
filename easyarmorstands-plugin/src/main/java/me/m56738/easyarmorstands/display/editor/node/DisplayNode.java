@@ -9,14 +9,13 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -90,7 +89,7 @@ public class DisplayNode extends AbstractElementNode<DisplayElement<?>> {
         float width = widthProperty.getValue();
         float height = heightProperty.getValue();
         Location location = locationProperty.getValue();
-        Vector3d position = Util.toVector3d(location);
+        Vector3dc position = location.position();
         boolean visible = canShow && width != 0 && height != 0 && (isActive || showBoundingBoxIfInactive);
         if (visible) {
             boxParticle.setBoundingBox(BoundingBox.of(position, width, height));

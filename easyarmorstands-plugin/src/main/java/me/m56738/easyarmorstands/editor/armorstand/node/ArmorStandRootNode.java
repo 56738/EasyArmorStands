@@ -7,6 +7,8 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
@@ -17,8 +19,6 @@ import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
@@ -78,10 +78,7 @@ public class ArmorStandRootNode extends AbstractElementNode<ArmorStandElement> i
     @Override
     public void reset() {
         Property<Location> locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue().withRotation(0, 0));
         for (ArmorStandPart part : ArmorStandPart.values()) {
             getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
         }

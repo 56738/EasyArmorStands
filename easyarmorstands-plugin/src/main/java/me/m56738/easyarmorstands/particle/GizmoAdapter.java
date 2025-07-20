@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.lib.gizmo.api.GizmoAxis;
-import me.m56738.easyarmorstands.lib.gizmo.api.color.GizmoColor;
+import me.m56738.gizmo.api.GizmoAxis;
+import me.m56738.gizmo.api.color.GizmoColor;
 
 import java.util.EnumMap;
 import java.util.Map;

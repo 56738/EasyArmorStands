@@ -1,16 +1,16 @@
-package me.m56738.easyarmorstands.api.event.session;
+package me.m56738.easyarmorstands.paper.api.event.session;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a session is started.
+ * Called when a session is stopped.
  */
-public class SessionStartEvent extends SessionEvent {
+public class SessionStopEvent extends SessionEvent {
     private static final HandlerList handlerList = new HandlerList();
 
-    public SessionStartEvent(@NotNull Session session) {
+    public SessionStopEvent(@NotNull Session session) {
         super(session);
     }
 

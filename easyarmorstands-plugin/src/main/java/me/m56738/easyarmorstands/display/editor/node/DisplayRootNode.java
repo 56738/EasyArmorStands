@@ -6,6 +6,8 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
@@ -14,10 +16,8 @@ import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -78,10 +78,7 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
         getProperties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
         getProperties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
 
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue().withRotation(0, 0));
 
         getContext().commit();
     }

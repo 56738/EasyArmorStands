@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.Bukkit;
@@ -60,7 +61,7 @@ public class SessionListener implements Listener {
     }
 
     public boolean handleLeftClick(Player player, Entity entity, Block block) {
-        SessionImpl session = manager.getSession(player);
+        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
         if (session == null) {
             return false;
         }
@@ -83,7 +84,7 @@ public class SessionListener implements Listener {
     }
 
     private boolean handleRightClick(Player player, Entity entity, Block block) {
-        SessionImpl session = manager.getSession(player);
+        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
         if (session != null) {
             if (!suppressClick.containsKey(player)) {
                 session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
@@ -93,7 +94,7 @@ public class SessionListener implements Listener {
         if (!isHoldingTool(player)) {
             return false;
         }
-        session = manager.startSession(player);
+        session = manager.startSession(PaperPlayer.fromNative(player));
         session.setToolRequired(true);
         return true;
     }
@@ -112,7 +113,7 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onSwapHand(PlayerSwapHandItemsEvent event) {
-        SessionImpl session = manager.getSession(event.getPlayer());
+        SessionImpl session = manager.getSession(PaperPlayer.fromNative(event.getPlayer()));
         if (session == null) {
             return;
         }
@@ -165,13 +166,13 @@ public class SessionListener implements Listener {
     }
 
     public void updateHeldItem(Player player) {
-        SessionImpl session = manager.getSession(player);
+        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
         if (session != null) {
             if (session.isToolRequired() && !isHoldingTool(player)) {
-                manager.stopSession(player);
+                manager.stopSession(PaperPlayer.fromNative(player));
             }
         } else if (isHoldingTool(player)) {
-            session = manager.startSession(player);
+            session = manager.startSession(PaperPlayer.fromNative(player));
             session.setToolRequired(true);
         }
     }
@@ -230,7 +231,7 @@ public class SessionListener implements Listener {
             Element element = plugin.entityElementProviderRegistry().getElement(entity);
             if (element != null) {
                 history.push(new ElementCreateAction(element));
-                clipboard.handleAutoApply(element, player);
+                clipboard.handleAutoApply(element, PaperPlayer.fromNative(player));
             }
         });
     }
@@ -262,7 +263,7 @@ public class SessionListener implements Listener {
         Player player = event.getPlayer();
         suppressClick.put(player, 5);
         suppressArmSwing.put(event.getPlayer(), 5);
-        SessionImpl session = manager.getSession(player);
+        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
             if (node != null && node != session.getNode()) {
@@ -292,7 +293,7 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        manager.stopSession(event.getPlayer());
+        manager.stopSession(PaperPlayer.fromNative(event.getPlayer()));
         suppressClick.remove(event.getPlayer());
         suppressArmSwing.remove(event.getPlayer());
     }

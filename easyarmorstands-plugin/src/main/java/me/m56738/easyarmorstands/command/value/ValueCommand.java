@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.command.value;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.description.Description;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.cloud.parser.ParserDescriptor;
-import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.paper.util.sender.Source;
+import org.incendo.cloud.parser.ParserDescriptor;
+import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 public interface ValueCommand<T> extends Command.Builder.Applicable<Source> {

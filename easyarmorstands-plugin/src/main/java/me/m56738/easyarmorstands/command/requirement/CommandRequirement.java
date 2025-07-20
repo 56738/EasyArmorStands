@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.command.requirement;
 
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
-import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
-import me.m56738.easyarmorstands.lib.cloud.paper.util.sender.Source;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import io.leangen.geantyref.TypeToken;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.List;
 
-import static me.m56738.easyarmorstands.lib.cloud.key.CloudKey.cloudKey;
+import static org.incendo.cloud.key.CloudKey.cloudKey;
 
 @NullMarked
 public interface CommandRequirement extends Command.Builder.Applicable<Source> {
