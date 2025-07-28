@@ -16,6 +16,7 @@ neoForge {
 dependencies {
     api(project(":easyarmorstands-modded-api"))
     api(project(":easyarmorstands-common"))
+    compileOnlyApi(libs.gizmo.modded)
     compileOnlyApi(libs.cloud.minecraft.modded.common)
 }
 

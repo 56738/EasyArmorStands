@@ -7,22 +7,23 @@ import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
-public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
-    private final ArmorStand entity;
+public class ArmorStandElement extends SimpleEntityElement {
+    private final Entity entity;
 
-    public ArmorStandElement(ArmorStand entity, SimpleEntityElementType<ArmorStand> type) {
-        super(entity, type);
+    public ArmorStandElement(Platform platform, Entity entity, SimpleEntityElementType type) {
+        super(platform, entity, type);
         this.entity = entity;
     }
 
@@ -46,8 +47,8 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        ArmorStandSize size = ArmorStandSize.get(entity);
-        Vector3d position = Util.toVector3d(entity.getLocation());
+        ArmorStandSize size = getProperties().get(ArmorStandPropertyTypes.SIZE).getValue();
+        Vector3dc position = entity.getLocation().position();
         double scale = getScale();
         double width = size.getWidth() * scale;
         double height = size.getHeight() * scale;

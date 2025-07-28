@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
-import me.m56738.easyarmorstands.paper.api.element.EntityElement;
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerCreateElementEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerDestroyElementEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerDiscoverElementEvent;
@@ -75,7 +75,7 @@ public class RegionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEdit(PlayerEditPropertyEvent<?> event) {
         Element element = event.getElement();
-        if (!(element instanceof EntityElement<?>)) {
+        if (!(element instanceof EntityElement)) {
             return;
         }
         if (bypassCache.computeIfAbsent(event.getPlayer(), this::canBypass)) {

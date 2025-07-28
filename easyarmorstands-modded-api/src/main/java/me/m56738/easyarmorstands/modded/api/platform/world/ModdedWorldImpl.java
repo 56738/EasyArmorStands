@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.modded.api.platform.world;
 
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
-record ModdedWorldImpl(Level nativeWorld) implements ModdedWorld {
+record ModdedWorldImpl(ServerLevel nativeWorld) implements ModdedWorld {
     @Override
-    public Level getNative() {
+    public ServerLevel getNative() {
         return nativeWorld;
     }
 }

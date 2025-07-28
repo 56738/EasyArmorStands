@@ -1,19 +1,24 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import org.bukkit.entity.ArmorStand;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandElementType extends SimpleEntityElementType<ArmorStand> {
-    public ArmorStandElementType() {
-        super(EntityType.ARMOR_STAND, ArmorStand.class);
+public class ArmorStandElementType extends SimpleEntityElementType {
+    private final Platform platform;
+
+    public ArmorStandElementType(Platform platform) {
+        super(platform, PaperEntityType.fromNative(EntityType.ARMOR_STAND));
+        this.platform = platform;
     }
 
     @Override
-    protected SimpleEntityElement<ArmorStand> createInstance(ArmorStand entity) {
-        return new ArmorStandElement(entity, this);
+    protected SimpleEntityElement createInstance(Entity entity) {
+        return new ArmorStandElement(platform, entity, this);
     }
 
     @Override

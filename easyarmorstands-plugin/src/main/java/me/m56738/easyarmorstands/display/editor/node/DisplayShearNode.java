@@ -20,7 +20,7 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
     private final Component name;
     private final Property<Quaternionfc> rightRotationProperty;
 
-    public DisplayShearNode(Session session, DisplayElement<?> element) {
+    public DisplayShearNode(Session session, DisplayElement element) {
         super(session, element);
         this.session = session;
         this.name = DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD);

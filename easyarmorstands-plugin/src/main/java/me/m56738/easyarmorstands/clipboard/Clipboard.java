@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.util.PropertyCopier;
+import me.m56738.easyarmorstands.common.util.PropertyCopier;
 
 import java.util.ArrayList;
 import java.util.List;

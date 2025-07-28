@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,7 @@ public class SpawnSlotFactory implements MenuSlotFactory {
 
     @Override
     public @Nullable MenuSlot createSlot(@NotNull MenuSlotContext context) {
-        if (type.canSpawn(context.player())) {
+        if (type.canSpawn(PaperPlayer.fromNative(context.player()))) {
             return new SpawnSlot(type, buttonTemplate,
                     TagResolver.builder()
                             .resolver(context.resolver())

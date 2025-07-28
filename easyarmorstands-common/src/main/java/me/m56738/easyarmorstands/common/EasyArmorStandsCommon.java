@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.common;
 
 import me.m56738.easyarmorstands.api.platform.Platform;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.platform.PlatformHolder;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.annotations.AnnotationParser;
@@ -14,9 +15,9 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
 public class EasyArmorStandsCommon {
-    public static <C extends CommandSource> void registerCommands(CommandManager<C> commandManager, Class<C> commandSenderClass, Platform platform) {
+    public static <C extends CommandSource> void registerCommands(CommandManager<C> commandManager, Class<C> commandSenderClass, PlatformHolder platformHolder) {
         commandManager.parameterInjectorRegistry().registerInjector(Platform.class,
-                (context, annotationAccessor) -> platform);
+                (context, annotationAccessor) -> platformHolder.getPlatform());
 
         MinecraftHelp<C> help = MinecraftHelp.create("/eas help", commandManager, CommandSource::source);
         commandManager.command(commandManager.commandBuilder("eas")

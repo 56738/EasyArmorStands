@@ -1,23 +1,27 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
-public class DisplayElementType<E extends Display> extends SimpleEntityElementType<E> {
-    public DisplayElementType(EntityType entityType, Class<E> entityClass) {
-        super(entityType, entityClass);
+public class DisplayElementType extends SimpleEntityElementType {
+    private final Platform platform;
+
+    public DisplayElementType(Platform platform, EntityType entityType) {
+        super(platform, entityType);
+        this.platform = platform;
     }
 
     @Override
-    protected SimpleEntityElement<E> createInstance(E entity) {
-        return new DisplayElement<>(entity, this);
+    protected SimpleEntityElement createInstance(Entity entity) {
+        return new DisplayElement(platform, entity, this);
     }
 
     @Override

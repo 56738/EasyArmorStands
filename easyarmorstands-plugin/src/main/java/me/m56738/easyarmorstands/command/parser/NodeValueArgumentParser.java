@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.command.parser;
 
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.common.editor.node.ValueNode;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;

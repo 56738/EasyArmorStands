@@ -14,13 +14,13 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.common.editor.button.NodeFactoryButton;
+import me.m56738.easyarmorstands.common.util.ArmorStandPartInfo;
+import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPartNode;
-import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniond;
@@ -40,7 +40,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     private final Quaterniond rotation = new Quaterniond();
     private final LineParticle particle;
     private final Property<Location> locationProperty;
-    private final Property<EulerAngle> poseProperty;
+    private final Property<EulerAngles> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
     private double scale = 1;
 

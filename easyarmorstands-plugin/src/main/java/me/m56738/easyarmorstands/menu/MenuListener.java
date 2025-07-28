@@ -1,13 +1,14 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.LegacyUtil;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -101,7 +102,7 @@ public class MenuListener implements Listener {
 
         @Override
         public @NotNull ItemStack cursor() {
-            return Util.wrapItem(event.getView().getCursor());
+            return LegacyUtil.wrapItem(event.getView().getCursor());
         }
 
         @Override
@@ -111,7 +112,7 @@ public class MenuListener implements Listener {
 
         @Override
         public @NotNull Matrix4dc eyeMatrix() {
-            return Util.toMatrix4d(player.getEyeLocation());
+            return PaperLocationAdapter.fromNative(player.getEyeLocation()).matrix();
         }
 
         @Override

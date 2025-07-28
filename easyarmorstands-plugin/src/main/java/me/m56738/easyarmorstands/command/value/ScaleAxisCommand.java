@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

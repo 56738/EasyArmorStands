@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.editor.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.world.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

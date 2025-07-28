@@ -56,8 +56,12 @@ import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
+import me.m56738.easyarmorstands.common.editor.node.ValueNode;
+import me.m56738.easyarmorstands.common.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.util.ReflectionUtil;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
@@ -74,12 +78,10 @@ import me.m56738.easyarmorstands.display.menu.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.display.menu.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.display.menu.InteractionSpawnSlotType;
 import me.m56738.easyarmorstands.display.property.DefaultDisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
@@ -107,6 +109,7 @@ import me.m56738.easyarmorstands.paper.api.event.player.PlayerDestroyElementEven
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerDiscoverElementEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.paper.api.event.player.PlayerSelectElementEvent;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.item.PaperItem;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
@@ -115,19 +118,15 @@ import me.m56738.easyarmorstands.property.context.PlayerChangeContextFactory;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
-import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
-import me.m56738.easyarmorstands.util.ReflectionUtil;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -185,7 +184,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private BukkitGizmos gizmos;
     private PaperCommandManager<Source> commandManager;
     private AnnotationParser<Source> annotationParser;
-    private DisplayElementType<ItemDisplay> itemDisplayType;
+    private DisplayElementType itemDisplayType;
 
     public static EasyArmorStandsPlugin getInstance() {
         return instance;
@@ -197,7 +196,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     @Override
     public void onLoad() {
-        PaperPermissions.registerAll();
+        platform = new PaperPlatformImpl(this);
+        PaperPermissions.registerAll(platform);
 
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
@@ -206,18 +206,18 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         new DefaultPropertyTypes(propertyTypeRegistry);
         new DefaultDisplayPropertyTypes(propertyTypeRegistry);
 
-        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
-        DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
-        TextDisplayElementType textDisplayType = new TextDisplayElementType();
-        InteractionElementType interactionType = new InteractionElementType();
+        itemDisplayType = new DisplayElementType(platform, PaperEntityType.fromNative(EntityType.ITEM_DISPLAY));
+        DisplayElementType blockDisplayType = new DisplayElementType(platform, PaperEntityType.fromNative(EntityType.BLOCK_DISPLAY));
+        TextDisplayElementType textDisplayType = new TextDisplayElementType(platform);
+        InteractionElementType interactionType = new InteractionElementType(platform);
 
-        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
-        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
+        ArmorStandElementType armorStandElementType = new ArmorStandElementType(platform);
+        entityElementProviderRegistry = new EntityElementProviderRegistryImpl(platform);
         entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
-        entityElementProviderRegistry.register(new SimpleEntityElementProvider());
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(itemDisplayType));
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(blockDisplayType));
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(textDisplayType));
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider(platform));
+        entityElementProviderRegistry.register(new DisplayElementProvider(itemDisplayType));
+        entityElementProviderRegistry.register(new DisplayElementProvider(blockDisplayType));
+        entityElementProviderRegistry.register(new DisplayElementProvider(textDisplayType));
         entityElementProviderRegistry.register(new InteractionElementProvider(interactionType));
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
@@ -257,8 +257,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         loadProperties();
 
-        platform = new PaperPlatformImpl(this);
-        sessionManager = new SessionManagerImpl(platform);
+        sessionManager = new SessionManagerImpl(platform, entityElementProviderRegistry);
         historyManager = new HistoryManager();
         clipboardManager = new ClipboardManager();
 
@@ -619,7 +618,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         player.openInventory(menu.getInventory());
     }
 
-    public DisplayElementType<ItemDisplay> getItemDisplayType() {
+    public DisplayElementType getItemDisplayType() {
         return itemDisplayType;
     }
 

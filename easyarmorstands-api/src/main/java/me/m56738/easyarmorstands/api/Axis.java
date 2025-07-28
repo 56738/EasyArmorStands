@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.api;
 
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -21,11 +20,6 @@ public enum Axis {
         }
 
         @Override
-        public double getValue(@NotNull Location source) {
-            return source.getX();
-        }
-
-        @Override
         public void setValue(@NotNull Vector3f target, float value) {
             target.x = value;
         }
@@ -33,11 +27,6 @@ public enum Axis {
         @Override
         public void setValue(@NotNull Vector3d target, double value) {
             target.x = value;
-        }
-
-        @Override
-        public void setValue(@NotNull Location target, double value) {
-            target.setX(value);
         }
     },
     Y("Y", ParticleColor.GREEN, new Vector3d(0, 1, 0)) {
@@ -52,11 +41,6 @@ public enum Axis {
         }
 
         @Override
-        public double getValue(@NotNull Location source) {
-            return source.getY();
-        }
-
-        @Override
         public void setValue(@NotNull Vector3f target, float value) {
             target.y = value;
         }
@@ -64,11 +48,6 @@ public enum Axis {
         @Override
         public void setValue(@NotNull Vector3d target, double value) {
             target.y = value;
-        }
-
-        @Override
-        public void setValue(@NotNull Location target, double value) {
-            target.setY(value);
         }
     },
     Z("Z", ParticleColor.BLUE, new Vector3d(0, 0, 1)) {
@@ -83,11 +62,6 @@ public enum Axis {
         }
 
         @Override
-        public double getValue(@NotNull Location source) {
-            return source.getZ();
-        }
-
-        @Override
         public void setValue(@NotNull Vector3f target, float value) {
             target.z = value;
         }
@@ -95,11 +69,6 @@ public enum Axis {
         @Override
         public void setValue(@NotNull Vector3d target, double value) {
             target.z = value;
-        }
-
-        @Override
-        public void setValue(@NotNull Location target, double value) {
-            target.setZ(value);
         }
     };
 
@@ -129,11 +98,7 @@ public enum Axis {
 
     public abstract double getValue(@NotNull Vector3dc source);
 
-    public abstract double getValue(@NotNull Location source);
-
     public abstract void setValue(@NotNull Vector3f target, float value);
 
     public abstract void setValue(@NotNull Vector3d target, double value);
-
-    public abstract void setValue(@NotNull Location target, double value);
 }

@@ -9,8 +9,10 @@ import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramDataProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramLocationProperty;
@@ -24,9 +26,7 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramSeeThr
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadowProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
-import me.m56738.easyarmorstands.common.permission.Permissions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

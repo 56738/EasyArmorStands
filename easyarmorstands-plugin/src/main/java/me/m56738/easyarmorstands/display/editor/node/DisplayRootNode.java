@@ -7,16 +7,17 @@ import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
+import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import org.bukkit.block.Block;
+import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
@@ -24,13 +25,13 @@ import org.joml.Vector3f;
 
 public class DisplayRootNode extends DisplayNode implements ElementNode, ResettableNode {
     private final Session session;
-    private final DisplayElement<?> element;
+    private final DisplayElement element;
     private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
     private final ToolManager toolManager;
     private final ToolModeSwitcher toolModeSwitcher;
 
-    public DisplayRootNode(Session session, DisplayElement<?> element) {
+    public DisplayRootNode(Session session, DisplayElement element) {
         super(session, element);
         this.session = session;
         this.element = element;
@@ -49,7 +50,7 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
         if (blockDataProperty != null && context.type() == ClickContext.Type.LEFT_CLICK && player.isSneaking()) {
             Block block = context.block();
             if (block != null) {
-                BlockData blockData = block.getBlockData();
+                BlockData blockData = PaperBlock.toNative(block).getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
                     getContext().commit();
                     player.sendMessage(Message.success("easyarmorstands.success.changed-block",

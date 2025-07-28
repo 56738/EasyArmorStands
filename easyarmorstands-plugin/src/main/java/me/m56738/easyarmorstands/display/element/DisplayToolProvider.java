@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class DisplayToolProvider extends SimpleEntityToolProvider implements ToolProvider {
     private final RotationProvider entityRotationProvider;
 
-    public DisplayToolProvider(DisplayElement<?> element, ChangeContext changeContext) {
+    public DisplayToolProvider(DisplayElement element, ChangeContext changeContext) {
         super(element, changeContext);
         positionProvider = new EntityPositionProvider(properties, new DisplayOffsetProvider(properties));
         rotationProvider = new DisplayRotationProvider(properties);

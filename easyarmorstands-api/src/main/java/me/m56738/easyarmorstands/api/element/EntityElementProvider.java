@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.element;
 
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -7,10 +7,8 @@ import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
 import java.util.function.Consumer;
 
@@ -25,11 +23,10 @@ public class HologramElementDiscoverySource implements ElementDiscoverySource {
 
     @Override
     public void discover(@NotNull World world, @NotNull BoundingBox box, @NotNull Consumer<@NotNull ElementDiscoveryEntry> consumer) {
-        Vector3d temp = new Vector3d();
         for (Hologram hologram : manager.getHolograms()) {
             HologramData data = hologram.getData();
             Location location = data.getLocation();
-            if (world == location.getWorld() && box.contains(Util.toVector3d(location, temp))) {
+            if (world == location.getWorld() && box.contains(location.toVector().toVector3d())) {
                 consumer.accept(new HologramElementDiscoveryEntry(type, hologram));
             }
         }

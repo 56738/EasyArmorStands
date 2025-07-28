@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.session.context.AddContextImpl;
-import me.m56738.easyarmorstands.session.context.EnterContextImpl;
-import me.m56738.easyarmorstands.session.context.ExitContextImpl;
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
+import me.m56738.easyarmorstands.common.editor.context.AddContextImpl;
+import me.m56738.easyarmorstands.common.editor.context.EnterContextImpl;
+import me.m56738.easyarmorstands.common.editor.context.ExitContextImpl;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 

@@ -2,27 +2,29 @@ package me.m56738.easyarmorstands.paper.element;
 
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
-import me.m56738.easyarmorstands.paper.api.element.EntityElementType;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.world.Location;
 import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
-public class EntityElementReference<E extends Entity> implements ElementReference {
-    private final EntityElementType<E> type;
+public class EntityElementReference implements ElementReference {
+    private final Platform platform;
+    private final EntityElementType type;
     private final Location location;
     private UUID id;
 
-    public EntityElementReference(EntityElementType<E> type, Entity entity) {
+    public EntityElementReference(Platform platform, EntityElementType type, Entity entity) {
+        this.platform = platform;
         this.type = type;
         this.location = entity.getLocation();
         this.id = entity.getUniqueId();
     }
 
     @Override
-    public EntityElementType<E> getType() {
+    public EntityElementType getType() {
         return type;
     }
 
@@ -32,15 +34,11 @@ public class EntityElementReference<E extends Entity> implements ElementReferenc
 
     @Override
     public @Nullable Element getElement() {
-        location.getChunk(); // load chunk at expected location
-        Entity entity = Bukkit.getEntity(id);
-        if (entity == null) {
+        Entity entity = platform.getEntity(id, location);
+        if (entity == null || !entity.getType().equals(type.getEntityType())) {
             return null;
         }
-        if (!type.getEntityClass().isInstance(entity)) {
-            return null;
-        }
-        return type.getElement(type.getEntityClass().cast(entity));
+        return type.getElement(entity);
     }
 
     @Override

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.traincarts;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.AddonFactory;
-import me.m56738.easyarmorstands.util.ReflectionUtil;
+import me.m56738.easyarmorstands.common.util.ReflectionUtil;
 import org.bukkit.Bukkit;
 
 public class TrainCartsAddonFactory implements AddonFactory<TrainCartsAddon> {

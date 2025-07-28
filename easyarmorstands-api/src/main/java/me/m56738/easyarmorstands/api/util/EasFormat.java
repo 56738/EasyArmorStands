@@ -10,9 +10,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public final class EasFormat {
-    public static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.0000");
-    public static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
-    public static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");
+    private static final NumberFormat POSITION_FORMAT = new DecimalFormat("0.0000");
+    private static final NumberFormat OFFSET_FORMAT = new DecimalFormat("+0.0000;-0.0000");
+    private static final NumberFormat ANGLE_FORMAT = new DecimalFormat("+0.00°;-0.00°");
+    private static final NumberFormat SCALE_FORMAT = new DecimalFormat("0.0000");
 
     private EasFormat() {
     }
@@ -33,6 +34,14 @@ public final class EasFormat {
 
     public static @NotNull Component formatLocation(@NotNull Location location) {
         return formatPosition(location.position());
+    }
+
+    public static @NotNull Component formatOffset(double offset) {
+        return Component.text(OFFSET_FORMAT.format(offset));
+    }
+
+    public static @NotNull Component formatOffset(@NotNull Vector3dc offset) {
+        return format3D(offset, OFFSET_FORMAT);
     }
 
     public static @NotNull Component formatDegrees(double degrees) {

@@ -3,8 +3,9 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.paper.api.element.EntityElement;
-import me.m56738.easyarmorstands.util.ComponentUtil;
+import me.m56738.easyarmorstands.common.util.ComponentUtil;
+import me.m56738.easyarmorstands.api.element.EntityElement;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntitySnapshot;
@@ -21,10 +22,10 @@ import java.util.Locale;
 
 @NullMarked
 public class EntityCopySlot implements MenuSlot {
-    private final EntityElement<?> element;
+    private final EntityElement element;
     private final ItemStack item;
 
-    public EntityCopySlot(EntityElement<?> element, ItemStack item) {
+    public EntityCopySlot(EntityElement element, ItemStack item) {
         this.element = element;
         this.item = item;
     }
@@ -95,7 +96,7 @@ public class EntityCopySlot implements MenuSlot {
     public void onClick(MenuClick click) {
         if (click.cursor().getType() == Material.AIR) {
             click.queueTask(() -> {
-                ItemStack item = createItem(element.getEntity());
+                ItemStack item = createItem(PaperEntity.toNative(element.getEntity()));
                 if (item != null) {
                     item.editMeta(meta -> meta.displayName(null));
                 }

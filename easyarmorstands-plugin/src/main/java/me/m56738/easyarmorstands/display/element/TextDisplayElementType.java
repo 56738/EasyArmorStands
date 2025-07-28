@@ -1,17 +1,18 @@
 package me.m56738.easyarmorstands.display.element;
 
+import me.m56738.easyarmorstands.api.platform.Platform;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextDisplayElementType extends DisplayElementType<TextDisplay> {
-    public TextDisplayElementType() {
-        super(EntityType.TEXT_DISPLAY, TextDisplay.class);
+public class TextDisplayElementType extends DisplayElementType {
+    public TextDisplayElementType(Platform platform) {
+        super(platform, PaperEntityType.fromNative(EntityType.TEXT_DISPLAY));
     }
 
     @Override

@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.editor.box.InteractionBoxEditor;
-import me.m56738.easyarmorstands.editor.box.BoxCenterPositionProvider;
+import me.m56738.easyarmorstands.common.editor.box.BoxCenterPositionProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

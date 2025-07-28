@@ -13,7 +13,7 @@ import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.util.PropertyCopier;
+import me.m56738.easyarmorstands.common.util.PropertyCopier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;

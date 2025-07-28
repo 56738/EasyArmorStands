@@ -4,13 +4,14 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 
-public class ArmorStandPoseProperty implements Property<EulerAngle> {
+public class ArmorStandPoseProperty implements Property<EulerAngles> {
     private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final PropertyType<EulerAngle> type;
+    private final PropertyType<EulerAngles> type;
 
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
         this.entity = entity;
@@ -19,18 +20,19 @@ public class ArmorStandPoseProperty implements Property<EulerAngle> {
     }
 
     @Override
-    public PropertyType<EulerAngle> getType() {
+    public PropertyType<EulerAngles> getType() {
         return type;
     }
 
     @Override
-    public EulerAngle getValue() {
-        return part.getPose(entity);
+    public EulerAngles getValue() {
+        EulerAngle pose = part.getPose(entity);
+        return EulerAngles.of(pose.getX(), pose.getY(), pose.getZ());
     }
 
     @Override
-    public boolean setValue(EulerAngle value) {
-        part.setPose(entity, value);
+    public boolean setValue(EulerAngles value) {
+        part.setPose(entity, new EulerAngle(value.x(), value.y(), value.z()));
         return true;
     }
 

@@ -12,14 +12,14 @@ import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPartButton;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButton;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.common.permission.Permissions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -80,7 +80,7 @@ public class ArmorStandRootNode extends AbstractElementNode<ArmorStandElement> i
         Property<Location> locationProperty = getProperties().get(EntityPropertyTypes.LOCATION);
         locationProperty.setValue(locationProperty.getValue().withRotation(0, 0));
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+            getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngles.ZERO);
         }
         getContext().commit();
     }

@@ -21,6 +21,12 @@ import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.common.group.Group;
+import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.util.ArmorStandPartInfo;
+import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayNode;
 import me.m56738.easyarmorstands.display.editor.node.DisplayShearNode;
@@ -28,17 +34,12 @@ import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
-import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
-import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
@@ -285,7 +286,7 @@ public class DisplayCommands {
     @RequireElement
     public void moveBox(PlayerSource source, Session session, Element element) {
         Player sender = source.source();
-        if (!(element instanceof DisplayElement<?> displayElement)) {
+        if (!(element instanceof DisplayElement displayElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
@@ -500,11 +501,11 @@ public class DisplayCommands {
     @RequireElement
     public void editRightRotation(PlayerSource source, Session session, Element element) {
         Player sender = source.source();
-        if (!(element instanceof DisplayElement<?>)) {
+        if (!(element instanceof DisplayElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
-        DisplayNode node = new DisplayShearNode(session, (DisplayElement<?>) element);
+        DisplayNode node = new DisplayShearNode(session, (DisplayElement) element);
         session.pushNode(node);
     }
 
@@ -514,16 +515,16 @@ public class DisplayCommands {
     @RequireElementSelection
     public void convert(PlayerSource source, Session session, ElementSelection selection) {
         Player sender = source.source();
-        List<SimpleEntityElement<ItemDisplay>> createdElements = new ArrayList<>();
+        List<SimpleEntityElement> createdElements = new ArrayList<>();
         List<Action> allActions = new ArrayList<>();
         boolean foundArmorStand = false;
         int count = 0;
         for (Element element : selection.elements()) {
-            if (!(element instanceof ArmorStandElement)) {
+            if (!(element instanceof ArmorStandElement armorStandElement)) {
                 continue;
             }
             foundArmorStand = true;
-            ArmorStand entity = ((ArmorStandElement) element).getEntity();
+            ArmorStand entity = (ArmorStand) PaperEntity.toNative(armorStandElement.getEntity());
             EntityEquipment equipment = entity.getEquipment();
 
             Matrix4d headMatrix = new Matrix4d();
@@ -583,7 +584,7 @@ public class DisplayCommands {
             // Add created entities to the selected group
             Group group = groupRootNode.getGroup();
             session.returnToNode(groupRootNode);
-            for (SimpleEntityElement<ItemDisplay> element : createdElements) {
+            for (SimpleEntityElement element : createdElements) {
                 if (EasyArmorStandsPlugin.getInstance().canSelectElement(sender, element)) {
                     group.addMember(element);
                 }
@@ -601,7 +602,7 @@ public class DisplayCommands {
         return item != null && item.getItemMeta() instanceof SkullMeta;
     }
 
-    private void convert(Player sender, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement<ItemDisplay>> elements) {
+    private void convert(Player sender, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement> elements) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -627,13 +628,13 @@ public class DisplayCommands {
         properties.put(DisplayPropertyTypes.LEFT_ROTATION, transform.getUnnormalizedRotation(new Quaternionf()));
         properties.put(DisplayPropertyTypes.SCALE, transform.getScale(new Vector3d()).get(new Vector3f()));
 
-        SimpleEntityElementType<ItemDisplay> type = EasyArmorStandsPlugin.getInstance().getItemDisplayType();
+        SimpleEntityElementType type = EasyArmorStandsPlugin.getInstance().getItemDisplayType();
 
         if (!EasyArmorStandsPlugin.getInstance().canCreateElement(sender, type, properties)) {
             return;
         }
 
-        SimpleEntityElement<ItemDisplay> element = type.createElement(properties);
+        SimpleEntityElement element = type.createElement(properties);
         if (element == null) {
             return;
         }

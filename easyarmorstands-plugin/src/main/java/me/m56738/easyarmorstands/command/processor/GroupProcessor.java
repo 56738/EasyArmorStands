@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.command.processor;
 
-import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
-import me.m56738.easyarmorstands.session.SessionImpl;
+import me.m56738.easyarmorstands.common.group.Group;
+import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;

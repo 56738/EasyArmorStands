@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.util.ComponentUtil;
+import me.m56738.easyarmorstands.common.util.ComponentUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

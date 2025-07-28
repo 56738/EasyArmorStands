@@ -2,8 +2,7 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +15,8 @@ public class ArmorStandElementProvider implements EntityElementProvider {
 
     @Override
     public @Nullable Element getElement(@NotNull Entity entity) {
-        if (entity instanceof ArmorStand) {
-            return type.getElement((ArmorStand) entity);
+        if (type.getEntityType().equals(entity.getType())) {
+            return type.getElement(entity);
         }
         return null;
     }

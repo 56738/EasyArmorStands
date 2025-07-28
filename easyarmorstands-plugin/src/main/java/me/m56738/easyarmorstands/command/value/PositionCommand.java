@@ -5,10 +5,9 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
+import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -64,6 +63,6 @@ public class PositionCommand extends PropertyCommand<Location> {
 
     @Override
     public void sendSuccess(@NotNull Audience audience, @NotNull Location value) {
-        audience.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatLocation(PaperLocationAdapter.toNative(value))));
+        audience.sendMessage(Message.success("easyarmorstands.success.moved", Util.formatLocation(value)));
     }
 }

@@ -9,10 +9,10 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.util.EasMath;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.common.util.EasMath;
+import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
@@ -24,10 +24,10 @@ public class ArmorStandPoseTool implements AxisRotateTool {
     private final ToolContext context;
     private final ChangeContext changeContext;
     private final Property<Location> locationProperty;
-    private final Property<EulerAngle> poseProperty;
+    private final Property<EulerAngles> poseProperty;
     private final Axis axis;
 
-    public ArmorStandPoseTool(ToolContext context, ChangeContext changeContext, Property<Location> locationProperty, Property<EulerAngle> poseProperty, Axis axis) {
+    public ArmorStandPoseTool(ToolContext context, ChangeContext changeContext, Property<Location> locationProperty, Property<EulerAngles> poseProperty, Axis axis) {
         this.context = context;
         this.changeContext = changeContext;
         this.locationProperty = locationProperty;
@@ -62,7 +62,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
 
     private class SessionImpl implements AxisRotateToolSession {
         private final Vector3dc direction;
-        private final EulerAngle originalAngle;
+        private final EulerAngles originalAngle;
         private final Quaterniondc originalRotation;
         private final Quaterniond currentRotation = new Quaterniond();
         private double change;

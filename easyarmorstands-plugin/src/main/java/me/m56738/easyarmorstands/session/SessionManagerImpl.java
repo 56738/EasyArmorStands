@@ -4,9 +4,11 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
+import me.m56738.easyarmorstands.common.editor.node.ElementSelectionNodeImpl;
+import me.m56738.easyarmorstands.common.editor.node.EntityElementDiscoverySource;
+import me.m56738.easyarmorstands.common.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
-import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.paper.api.event.session.SessionStopEvent;
 import org.bukkit.Bukkit;
@@ -21,9 +23,11 @@ import java.util.List;
 public class SessionManagerImpl implements SessionManager {
     private final CommonPlatform platform;
     private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
+    private final EntityElementProviderRegistryImpl entityElementProviderRegistry;
 
-    public SessionManagerImpl(CommonPlatform platform) {
+    public SessionManagerImpl(CommonPlatform platform, EntityElementProviderRegistryImpl entityElementProviderRegistry) {
         this.platform = platform;
+        this.entityElementProviderRegistry = entityElementProviderRegistry;
     }
 
     public void startSession(SessionImpl session) {
@@ -38,8 +42,8 @@ public class SessionManagerImpl implements SessionManager {
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
         SessionImpl session = new SessionImpl(platform, player);
-        ElementSelectionNode node = new ElementSelectionNodeImpl(session);
-        node.addSource(new EntityElementDiscoverySource());
+        ElementSelectionNode node = new ElementSelectionNodeImpl(platform, session);
+        node.addSource(new EntityElementDiscoverySource(platform, entityElementProviderRegistry));
         session.pushNode(node);
         startSession(session);
         return session;

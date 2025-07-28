@@ -3,10 +3,10 @@ package me.m56738.easyarmorstands.fabric.platform.entity;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import me.m56738.easyarmorstands.modded.platform.entity.ModdedPlayerImpl;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
 public class FabricPlayerImpl extends ModdedPlayerImpl {
-    public FabricPlayerImpl(Player player) {
+    public FabricPlayerImpl(ServerPlayer player) {
         super(player);
     }
 

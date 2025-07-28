@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
-import org.bukkit.util.EulerAngle;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -18,7 +18,7 @@ public final class ArmorStandPropertyTypes {
     public static final @NotNull PropertyType<Boolean> INVULNERABLE = get("armor_stand/invulnerable");
     public static final @NotNull PropertyType<Boolean> LOCK = get("armor_stand/lock");
     public static final @NotNull PropertyType<Boolean> MARKER = get("armor_stand/marker");
-    public static final @NotNull KeyedPropertyType<ArmorStandPart, EulerAngle> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
+    public static final @NotNull KeyedPropertyType<ArmorStandPart, EulerAngles> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
             part -> get("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT)));
     public static final @NotNull PropertyType<ArmorStandSize> SIZE = get("armor_stand/size");
 

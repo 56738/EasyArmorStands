@@ -5,12 +5,15 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
+import me.m56738.easyarmorstands.common.editor.context.ClickContextImpl;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.session.context.ClickContextImpl;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -66,7 +69,7 @@ public class SessionListener implements Listener {
             return false;
         }
         if (!suppressClick.containsKey(player)) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, PaperEntity.fromNative(entity), PaperBlock.fromNative(block)));
         }
         return true;
     }
@@ -87,7 +90,7 @@ public class SessionListener implements Listener {
         SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
         if (session != null) {
             if (!suppressClick.containsKey(player)) {
-                session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
+                session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, PaperEntity.fromNative(entity), PaperBlock.fromNative(block)));
             }
             return true;
         }
@@ -228,7 +231,7 @@ public class SessionListener implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> {
             History history = EasyArmorStandsPlugin.getInstance().getHistory(player);
             Clipboard clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
-            Element element = plugin.entityElementProviderRegistry().getElement(entity);
+            Element element = plugin.entityElementProviderRegistry().getElement(PaperEntity.fromNative(entity));
             if (element != null) {
                 history.push(new ElementCreateAction(element));
                 clipboard.handleAutoApply(element, PaperPlayer.fromNative(player));
@@ -245,7 +248,7 @@ public class SessionListener implements Listener {
         Player player = (Player) damager;
         Entity entity = event.getEntity();
 
-        Element element = plugin.entityElementProviderRegistry().getElement(entity);
+        Element element = plugin.entityElementProviderRegistry().getElement(PaperEntity.fromNative(entity));
         if (element == null) {
             return;
         }

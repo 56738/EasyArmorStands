@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.command.processor;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.common.editor.node.ValueNode;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

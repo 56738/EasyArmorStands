@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.paper.permission;
 
+import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.common.permission.Child;
 import me.m56738.easyarmorstands.common.permission.Children;
 import me.m56738.easyarmorstands.common.permission.Description;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
 import org.bukkit.permissions.Permission;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jspecify.annotations.Nullable;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class PaperPermissions {
     private static final Map<String, Permission> registeredPermissions = new HashMap<>();
 
-    public static void registerAll() {
+    public static void registerAll(CommonPlatform platform) {
         try {
             for (Field field : Permissions.class.getDeclaredFields()) {
                 int modifiers = field.getModifiers();
@@ -31,7 +32,7 @@ public class PaperPermissions {
             throw new RuntimeException(e);
         }
 
-        for (EntityType entityType : EntityType.values()) {
+        for (EntityType entityType : platform.getAllEntityTypes()) {
             register(entityType, Permissions.SPAWN, "spawning");
             register(entityType, Permissions.DESTROY, "destroying");
             register(entityType, Permissions.EDIT, "editing");

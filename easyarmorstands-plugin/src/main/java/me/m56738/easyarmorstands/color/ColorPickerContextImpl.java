@@ -7,9 +7,9 @@ import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.common.util.Util;
+import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -70,7 +70,7 @@ public class ColorPickerContextImpl implements ColorPickerContext {
             if (setColor(meta, color)) {
                 item.setItemMeta(meta);
                 property.setValue(item);
-                context.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
+                context.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(new java.awt.Color(color.asRGB()))));
             }
         }
     }

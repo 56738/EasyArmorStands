@@ -7,13 +7,14 @@ import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
-import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
+import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import org.bukkit.block.Block;
+import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
@@ -40,7 +41,7 @@ public class HologramRootNode extends AbstractElementNode<HologramElement> imple
         if (blockDataProperty != null && context.type() == ClickContext.Type.LEFT_CLICK && player.isSneaking()) {
             Block block = context.block();
             if (block != null) {
-                BlockData blockData = block.getBlockData();
+                BlockData blockData = PaperBlock.toNative(block).getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
                     getContext().commit();
                     player.sendMessage(Message.success("easyarmorstands.success.changed-block",

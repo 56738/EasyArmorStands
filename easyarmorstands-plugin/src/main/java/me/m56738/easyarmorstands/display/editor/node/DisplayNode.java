@@ -19,7 +19,7 @@ import org.joml.Vector3dc;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class DisplayNode extends AbstractElementNode<DisplayElement<?>> {
+public class DisplayNode extends AbstractElementNode<DisplayElement> {
     private final Session session;
     private final BoundingBoxParticle boxParticle;
     private final Property<Location> locationProperty;
@@ -30,7 +30,7 @@ public class DisplayNode extends AbstractElementNode<DisplayElement<?>> {
     private boolean isVisible;
     private boolean isActive;
 
-    public DisplayNode(Session session, DisplayElement<?> element) {
+    public DisplayNode(Session session, DisplayElement element) {
         super(session, element);
         this.session = session;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();

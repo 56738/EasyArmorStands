@@ -4,12 +4,13 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.menu.slot.DestroySlot;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlot;
-import me.m56738.easyarmorstands.paper.api.element.EntityElement;
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.paper.api.event.element.ElementMenuLayoutEvent;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.common.permission.Permissions;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,8 +31,8 @@ public class ElementMenuListener implements Listener {
         if (element instanceof DestroyableElement destroyableElement && destroyableElement.canDestroy(PaperPlayer.fromNative(player))) {
             layout.addSlot(new DestroySlot(destroyableElement));
         }
-        if (element instanceof EntityElement<?> entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
-            ItemStack item = EntityCopySlot.createItem(entityElement.getEntity());
+        if (element instanceof EntityElement entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
+            ItemStack item = EntityCopySlot.createItem(PaperEntity.toNative(entityElement.getEntity()));
             if (item != null) {
                 layout.addSlot(new EntityCopySlot(entityElement, item));
             }

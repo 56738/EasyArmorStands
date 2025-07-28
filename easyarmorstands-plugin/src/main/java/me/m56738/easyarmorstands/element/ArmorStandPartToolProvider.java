@@ -11,12 +11,12 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.common.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandPartRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.tool.ArmorStandPoseTool;
-import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
-import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +37,7 @@ public class ArmorStandPartToolProvider extends DelegateToolProvider {
     @Override
     public @Nullable AxisRotateTool rotate(@NotNull ToolContext context, @NotNull Axis axis) {
         Property<Location> locationProperty = properties.get(EntityPropertyTypes.LOCATION);
-        Property<EulerAngle> poseProperty = properties.get(ArmorStandPropertyTypes.POSE.get(part));
+        Property<EulerAngles> poseProperty = properties.get(ArmorStandPropertyTypes.POSE.get(part));
         return new ArmorStandPoseTool(context, changeContext, locationProperty, poseProperty, axis);
     }
 }

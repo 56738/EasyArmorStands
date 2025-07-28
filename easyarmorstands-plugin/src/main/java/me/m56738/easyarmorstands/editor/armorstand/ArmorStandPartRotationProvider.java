@@ -6,9 +6,9 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.util.EulerAngle;
+import me.m56738.easyarmorstands.common.util.Util;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniond;
@@ -16,7 +16,7 @@ import org.joml.Quaterniondc;
 
 public class ArmorStandPartRotationProvider implements RotationProvider {
     private final Property<Location> locationProperty;
-    private final Property<EulerAngle> poseProperty;
+    private final Property<EulerAngles> poseProperty;
     private final Quaterniond currentRotation = new Quaterniond();
 
     public ArmorStandPartRotationProvider(PropertyContainer properties, ArmorStandPart part) {

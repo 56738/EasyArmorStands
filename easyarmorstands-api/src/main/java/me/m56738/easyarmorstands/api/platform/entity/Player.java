@@ -8,8 +8,6 @@ public interface Player extends Entity, CommandSender {
 
     boolean isFlying();
 
-    boolean isValid();
-
     Location getEyeLocation();
 
     void giveItem(Item item);

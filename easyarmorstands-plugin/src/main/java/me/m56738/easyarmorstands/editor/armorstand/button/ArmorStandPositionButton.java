@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPositionNode;
-import me.m56738.easyarmorstands.editor.node.NodeFactory;
+import me.m56738.easyarmorstands.common.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;

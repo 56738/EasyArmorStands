@@ -31,9 +31,10 @@ neoForge {
 dependencies {
     implementation(project(":easyarmorstands-modded"))
     implementation(project(":easyarmorstands-neoforge-api"))
-    implementation(libs.neoforge)
-    implementation(libs.cloud.neoforge)
     implementation(libs.adventure.platform.neoforge)
+    implementation(libs.cloud.neoforge)
+    implementation(libs.gizmo.neoforge)
+    implementation(libs.neoforge)
 
     bundle(project(":easyarmorstands-assets"))
     jarJar(project(":easyarmorstands-neoforge-api"))
@@ -41,10 +42,11 @@ dependencies {
     jarJar(project(":easyarmorstands-modded-api"))
     jarJar(project(":easyarmorstands-common"))
     jarJar(project(":easyarmorstands-api"))
-    jarJar(libs.cloud.neoforge)
+    jarJar(libs.adventure.platform.neoforge)
     jarJar(libs.cloud.annotations)
     jarJar(libs.cloud.minecraft.extras)
-    jarJar(libs.adventure.platform.neoforge)
+    jarJar(libs.cloud.neoforge)
+    jarJar(libs.gizmo.neoforge)
 }
 
 val generateModMetadata by tasks.registering(ProcessResources::class) {

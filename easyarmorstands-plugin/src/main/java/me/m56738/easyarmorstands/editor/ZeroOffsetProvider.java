@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.editor;
 
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.common.util.Util;
 import org.joml.Vector3dc;
 
 class ZeroOffsetProvider implements OffsetProvider {

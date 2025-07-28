@@ -70,7 +70,7 @@ abstract class ElementPresenceAction implements Action {
     }
 
     private UUID getId(ElementReference reference) {
-        if (reference instanceof EntityElementReference<?> entityElementReference) {
+        if (reference instanceof EntityElementReference entityElementReference) {
             return entityElementReference.getId();
         }
         return null;

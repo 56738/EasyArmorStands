@@ -29,11 +29,6 @@ public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
     }
 
     @Override
-    default boolean isValid() {
-        return getNative().isValid();
-    }
-
-    @Override
     default Location getEyeLocation() {
         return PaperLocationAdapter.fromNative(getNative().getEyeLocation());
     }

@@ -26,7 +26,7 @@ public class DisplayBoxSlotFactory implements MenuSlotFactory {
             return null;
         }
         Element element = context.element();
-        if (!(element instanceof DisplayElement<?> displayElement)) {
+        if (!(element instanceof DisplayElement displayElement)) {
             return null;
         }
         return new NodeSlot(

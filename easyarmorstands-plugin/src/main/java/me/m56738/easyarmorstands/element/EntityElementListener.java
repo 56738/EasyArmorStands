@@ -2,8 +2,9 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandCanTickProperty;
@@ -34,8 +35,8 @@ import org.bukkit.inventory.EquipmentSlot;
 public class EntityElementListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInitialize(EntityElementInitializeEvent event) {
-        DefaultEntityElement<?> element = event.getElement();
-        registerProperties(element.getEntity(), element.getProperties());
+        DefaultEntityElement element = event.getElement();
+        registerProperties(PaperEntity.toNative(element.getEntity()), element.getProperties());
     }
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {

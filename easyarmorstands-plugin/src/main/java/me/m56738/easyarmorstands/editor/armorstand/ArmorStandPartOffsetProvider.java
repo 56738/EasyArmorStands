@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
+import me.m56738.easyarmorstands.common.util.ArmorStandPartInfo;
 import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;

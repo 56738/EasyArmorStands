@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.LegacyUtil;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -9,7 +10,6 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class ItemPropertySlot implements MenuSlot {
 
     @Override
     public ItemStack getItem(Locale locale) {
-        return Util.wrapItem(getElement().getProperties().get(getType()).getValue());
+        return LegacyUtil.wrapItem(getElement().getProperties().get(getType()).getValue());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ItemPropertySlot implements MenuSlot {
                 ItemStack item = click.menu().getInventory().getItem(click.index());
                 try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(PaperPlayer.fromNative(click.player()))) {
                     Property<ItemStack> property = context.getProperties(element).get(type);
-                    if (property.setValue(Util.wrapItem(item))) {
+                    if (property.setValue(LegacyUtil.wrapItem(item))) {
                         context.commit();
                     } else {
                         // Failed to change the property, revert changes

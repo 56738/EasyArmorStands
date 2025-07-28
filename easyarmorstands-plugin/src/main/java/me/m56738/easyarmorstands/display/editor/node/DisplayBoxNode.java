@@ -7,8 +7,8 @@ import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.display.editor.box.DisplayBoxEditor;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
-import me.m56738.easyarmorstands.editor.tool.BoxToolProvider;
+import me.m56738.easyarmorstands.common.editor.node.BoxResizeToolManager;
+import me.m56738.easyarmorstands.common.editor.tool.BoxToolProvider;
 import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -18,7 +18,7 @@ public class DisplayBoxNode extends DisplayNode {
     private final Session session;
     private final Component name;
 
-    public DisplayBoxNode(Session session, DisplayElement<?> element) {
+    public DisplayBoxNode(Session session, DisplayElement element) {
         super(session, element);
         this.session = session;
         this.name = Message.component("easyarmorstands.node.display.box").color(NamedTextColor.GOLD);

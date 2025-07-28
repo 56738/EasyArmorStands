@@ -8,7 +8,8 @@ import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import me.m56738.easyarmorstands.editor.node.ToolModeSwitcher;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
 import org.bukkit.util.EulerAngle;
@@ -49,7 +50,7 @@ public class ArmorStandPartNode extends AbstractElementNode<ArmorStandElement> i
 
     @Override
     public void reset() {
-        getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+        getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngles.ZERO);
         getContext().commit();
     }
 }

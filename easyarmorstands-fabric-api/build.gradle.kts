@@ -16,3 +16,11 @@ dependencies {
 loom {
     splitEnvironmentSourceSets()
 }
+
+tasks {
+    jar {
+        manifest {
+            attributes["Automatic-Module-Name"] = "me.m56738.easyarmorstands.fabric.api"
+        }
+    }
+}

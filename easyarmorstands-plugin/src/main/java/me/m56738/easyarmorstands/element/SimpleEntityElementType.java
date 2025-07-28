@@ -1,72 +1,60 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.EntityType;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.paper.api.element.EntityElementType;
+import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class SimpleEntityElementType<E extends Entity> implements EntityElementType<E> {
+public class SimpleEntityElementType implements EntityElementType {
+    private final Platform platform;
     private final EntityType entityType;
-    private final Class<E> entityClass;
-    private final Component displayName;
 
-    public SimpleEntityElementType(EntityType entityType, Class<E> entityClass) {
+    public SimpleEntityElementType(Platform platform, EntityType entityType) {
+        this.platform = platform;
         this.entityType = entityType;
-        this.entityClass = entityClass;
-        this.displayName = Component.translatable(entityType.translationKey());
     }
 
     public @NotNull EntityType getEntityType() {
         return entityType;
     }
 
-    public @NotNull Class<E> getEntityClass() {
-        return entityClass;
+    protected SimpleEntityElement createInstance(Entity entity) {
+        return new SimpleEntityElement(platform, entity, this);
     }
 
-    protected SimpleEntityElement<E> createInstance(E entity) {
-        return new SimpleEntityElement<>(entity, this);
-    }
-
-    public SimpleEntityElement<E> getElement(@NotNull E entity) {
-        SimpleEntityElement<E> element = createInstance(entity);
+    public SimpleEntityElement getElement(@NotNull Entity entity) {
+        SimpleEntityElement element = createInstance(entity);
         Bukkit.getPluginManager().callEvent(new EntityElementInitializeEvent(element));
         return element;
     }
 
     @Override
-    public @Nullable SimpleEntityElement<E> createElement(@NotNull PropertyContainer properties) {
+    public @Nullable SimpleEntityElement createElement(@NotNull PropertyContainer properties) {
         Property<Location> locationProperty = properties.getOrNull(EntityPropertyTypes.LOCATION);
         if (locationProperty == null) {
             return null;
         }
         Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        E entity;
-        org.bukkit.Location nativeLocation = PaperLocationAdapter.toNative(location);
-        try {
-            entity = nativeLocation.getWorld().spawn(nativeLocation, entityClass, configurator);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        SimpleEntityElement<E> element = configurator.getElement();
+        Entity entity = platform.spawnEntity(entityType, location, configurator);
+        SimpleEntityElement element = configurator.getElement();
         if (element != null) {
-            entity.teleport(nativeLocation);
+            entity.setLocation(location);
         } else {
             entity.remove();
         }
@@ -75,7 +63,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
     @Override
     public @NotNull Component getDisplayName() {
-        return displayName;
+        return entityType.asComponent();
     }
 
     @Override
@@ -83,16 +71,16 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         return player.hasPermission(PaperPermissions.entityType(Permissions.SPAWN, entityType));
     }
 
-    private class SpawnedEntityConfigurator implements Consumer<E> {
+    private class SpawnedEntityConfigurator implements Consumer<Entity> {
         private final PropertyContainer properties;
-        private SimpleEntityElement<E> element;
+        private SimpleEntityElement element;
 
         private SpawnedEntityConfigurator(PropertyContainer properties) {
             this.properties = properties;
         }
 
         @Override
-        public void accept(E entity) {
+        public void accept(Entity entity) {
             element = SimpleEntityElementType.this.getElement(entity);
             if (element != null) {
                 copyProperties(properties, element.getProperties());
@@ -115,7 +103,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
             }
         }
 
-        public @Nullable SimpleEntityElement<E> getElement() {
+        public @Nullable SimpleEntityElement getElement() {
             return element;
         }
     }

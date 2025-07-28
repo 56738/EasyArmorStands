@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.display;
 
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.paper.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBrightnessProperty;
 import me.m56738.easyarmorstands.paper.property.display.DisplayGlowColorProperty;
@@ -37,8 +38,8 @@ import org.bukkit.event.Listener;
 public class DisplayListener implements Listener {
     @EventHandler
     public void onInitialize(EntityElementInitializeEvent event) {
-        DefaultEntityElement<?> element = event.getElement();
-        registerProperties(element.getEntity(), element.getProperties());
+        DefaultEntityElement element = event.getElement();
+        registerProperties(PaperEntity.toNative(element.getEntity()), element.getProperties());
     }
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {
