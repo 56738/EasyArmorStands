@@ -24,6 +24,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -227,7 +228,13 @@ public class SessionListener implements Listener {
         onRightClick(event);
     }
 
-    public void onPlaceEntity(Player player, Entity entity) {
+    @EventHandler
+    public void onPlaceEntity(EntityPlaceEvent event) {
+        Player player = event.getPlayer();
+        Entity entity = event.getEntity();
+        if (player == null) {
+            return;
+        }
         Bukkit.getScheduler().runTask(plugin, () -> {
             History history = EasyArmorStandsPlugin.getInstance().getHistory(player);
             Clipboard clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);

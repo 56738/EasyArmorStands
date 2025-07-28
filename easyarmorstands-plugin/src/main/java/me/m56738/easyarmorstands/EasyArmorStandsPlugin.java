@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
@@ -61,7 +60,6 @@ import me.m56738.easyarmorstands.common.editor.node.ValueNode;
 import me.m56738.easyarmorstands.common.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.common.util.ReflectionUtil;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
@@ -326,14 +324,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new DisplayCommands());
 
         PropertyCommands.register(commandManager, platform);
-
-        if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
-            try {
-                EntityPlaceAdapter.enable(this, sessionListener);
-            } catch (ReflectiveOperationException e) {
-                getLogger().log(Level.WARNING, "Failed to listen to entity place event", e);
-            }
-        }
 
         addonManager.enable();
 
