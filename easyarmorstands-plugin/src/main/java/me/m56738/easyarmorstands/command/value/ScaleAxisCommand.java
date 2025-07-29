@@ -6,13 +6,13 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
 import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.RichDescription;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.parser.standard.FloatParser;
 import org.incendo.cloud.permission.Permission;
@@ -42,7 +42,7 @@ public abstract class ScaleAxisCommand implements ValueCommand<Float> {
     }
 
     @Override
-    public @NotNull ParserDescriptor<Source, Float> getParser() {
+    public @NotNull ParserDescriptor<CommandSource, Float> getParser() {
         return FloatParser.floatParser(0);
     }
 

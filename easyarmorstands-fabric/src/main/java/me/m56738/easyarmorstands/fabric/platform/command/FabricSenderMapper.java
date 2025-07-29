@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.fabric.platform.command;
 
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.fabric.platform.entity.FabricCommandSenderImpl;
 import me.m56738.easyarmorstands.fabric.platform.entity.FabricPlayerImpl;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
@@ -8,9 +9,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import org.incendo.cloud.SenderMapper;
 
-public class FabricSenderMapper implements SenderMapper<CommandSourceStack, ModdedCommandSource> {
+public class FabricSenderMapper implements SenderMapper<CommandSourceStack, CommandSource> {
     @Override
-    public ModdedCommandSource map(CommandSourceStack base) {
+    public CommandSource map(CommandSourceStack base) {
         if (base.getEntity() instanceof ServerPlayer player) {
             return new ModdedPlayerCommandSource(base, new FabricPlayerImpl(player));
         } else {
@@ -19,7 +20,7 @@ public class FabricSenderMapper implements SenderMapper<CommandSourceStack, Modd
     }
 
     @Override
-    public CommandSourceStack reverse(ModdedCommandSource mapped) {
-        return mapped.stack();
+    public CommandSourceStack reverse(CommandSource mapped) {
+        return ((ModdedCommandSource) mapped).stack();
     }
 }

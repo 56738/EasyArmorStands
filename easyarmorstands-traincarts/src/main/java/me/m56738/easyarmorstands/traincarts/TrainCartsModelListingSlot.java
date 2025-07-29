@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -26,7 +26,7 @@ public class TrainCartsModelListingSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         return itemTemplate.render(locale, resolver);
     }
 
@@ -35,7 +35,7 @@ public class TrainCartsModelListingSlot implements MenuSlot {
         if (!click.isLeftClick()) {
             return;
         }
-        Player player = click.player();
+        Player player = PaperPlayer.toNative(click.player());
         click.queueTask(() -> {
             player.setItemOnCursor(null);
             TrainCarts.plugin.getModelListing().buildDialog(player, EasyArmorStandsPlugin.getInstance())

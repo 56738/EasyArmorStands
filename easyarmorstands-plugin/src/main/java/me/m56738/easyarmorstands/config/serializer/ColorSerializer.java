@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.api.util.Color;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
 import org.bukkit.DyeColor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -17,7 +18,7 @@ public class ColorSerializer implements TypeSerializer<Color> {
         }
 
         if (node.isMap()) {
-            return Color.fromRGB(
+            return Color.of(
                     node.node("red").getInt(),
                     node.node("green").getInt(),
                     node.node("blue").getInt());
@@ -30,14 +31,14 @@ public class ColorSerializer implements TypeSerializer<Color> {
 
         if (value.startsWith("#")) {
             try {
-                return Color.fromRGB(Integer.parseInt(value.substring(1), 16));
+                return Color.ofRGB(Integer.parseInt(value.substring(1), 16));
             } catch (NumberFormatException e) {
                 throw new SerializationException(e);
             }
         }
 
         try {
-            return DyeColor.valueOf(value).getColor();
+            return PaperColorAdapter.fromNative(DyeColor.valueOf(value).getColor());
         } catch (IllegalArgumentException e) {
             throw new SerializationException(e);
         }
@@ -49,8 +50,8 @@ public class ColorSerializer implements TypeSerializer<Color> {
             node.raw(null);
             return;
         }
-        node.node("red").set(obj.getRed());
-        node.node("green").set(obj.getGreen());
-        node.node("blue").set(obj.getBlue());
+        node.node("red").set(obj.red());
+        node.node("green").set(obj.green());
+        node.node("blue").set(obj.blue());
     }
 }

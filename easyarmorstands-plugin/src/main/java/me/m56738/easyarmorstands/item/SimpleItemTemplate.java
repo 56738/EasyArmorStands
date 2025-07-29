@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.item;
 
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -47,12 +49,12 @@ public class SimpleItemTemplate implements ItemTemplate {
     }
 
     @Override
-    public ItemStack render(Locale locale) {
+    public Item render(Locale locale) {
         return render(locale, TagResolver.empty());
     }
 
     @Override
-    public ItemStack render(Locale locale, TagResolver resolver) {
+    public Item render(Locale locale, TagResolver resolver) {
         resolver = TagResolver.builder()
                 .resolver(this.resolver)
                 .resolver(resolver)
@@ -70,7 +72,7 @@ public class SimpleItemTemplate implements ItemTemplate {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }
-        return item;
+        return PaperItem.fromNative(item);
     }
 
     public SimpleItemTemplate appendLore(List<String> lore) {

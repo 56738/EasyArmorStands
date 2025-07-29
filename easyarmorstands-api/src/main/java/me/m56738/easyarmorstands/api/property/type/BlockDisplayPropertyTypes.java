@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import org.bukkit.block.data.BlockData;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 
 import static me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes.get;
 

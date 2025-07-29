@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.menu.layout;
 
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import org.bukkit.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 
 /**
  * A menu layout with equipment (armor) slots on the left and other buttons on the right.

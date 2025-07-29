@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -23,7 +23,7 @@ public class ColorAxisSlot implements ColorSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         return itemTemplate.render(locale, resolver);
     }
 

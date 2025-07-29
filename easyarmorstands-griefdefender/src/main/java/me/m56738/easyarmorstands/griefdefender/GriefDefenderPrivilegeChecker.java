@@ -5,14 +5,15 @@ import com.griefdefender.api.claim.Claim;
 import com.griefdefender.api.claim.TrustTypes;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.paper.api.region.RegionListener;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class GriefDefenderPrivilegeChecker implements RegionPrivilegeChecker {
+@NullMarked
+public class GriefDefenderPrivilegeChecker extends RegionListener {
     private final Core core;
 
     public GriefDefenderPrivilegeChecker(Core core) {
@@ -20,7 +21,7 @@ public class GriefDefenderPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public boolean isAllowed(Player player, Location location) {
+    public boolean isAllowed(Player player, Location location, boolean silent) {
         if (!core.isEnabled(location.getWorld().getUID())) {
             return true;
         }
@@ -37,17 +38,17 @@ public class GriefDefenderPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
+    public void sendCreateError(Player player, PropertyContainer properties) {
         player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-create"));
     }
 
     @Override
-    public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
+    public void sendDestroyError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-destroy"));
     }
 
     @Override
-    public void sendEditError(@NotNull Player player, @NotNull Element element) {
+    public void sendEditError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-select"));
     }
 }

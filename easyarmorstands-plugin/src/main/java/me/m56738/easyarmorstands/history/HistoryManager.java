@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.history;
 
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -14,7 +15,7 @@ public class HistoryManager implements Listener {
     private final Map<Player, History> history = new HashMap<>();
 
     public History getHistory(Player player) {
-        if (!player.isOnline()) {
+        if (!player.isValid()) {
             return new History();
         }
         return history.computeIfAbsent(player, p -> new History());
@@ -22,7 +23,7 @@ public class HistoryManager implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        history.remove(event.getPlayer());
+        history.remove(PaperPlayer.fromNative(event.getPlayer()));
     }
 
     public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {

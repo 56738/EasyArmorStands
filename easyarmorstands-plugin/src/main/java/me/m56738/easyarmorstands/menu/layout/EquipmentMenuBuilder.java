@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.menu.layout;
 
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.layout.EquipmentMenuLayout;
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 import net.kyori.adventure.text.Component;
-import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;

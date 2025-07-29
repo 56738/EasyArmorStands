@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import org.bukkit.Color;
-import org.bukkit.entity.Display.Billboard;
-import org.bukkit.entity.Display.Brightness;
+import me.m56738.easyarmorstands.api.platform.entity.display.Billboard;
+import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
+import me.m56738.easyarmorstands.api.util.Color;
 import org.joml.Quaternionfc;
 import org.joml.Vector3fc;
 

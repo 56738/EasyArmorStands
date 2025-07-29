@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.api.menu;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 @ApiStatus.NonExtendable
-public interface Menu extends InventoryHolder {
+public interface Menu {
     static int index(int row, int column) {
         return 9 * row + column;
     }
@@ -24,7 +23,7 @@ public interface Menu extends InventoryHolder {
 
     void close(@NotNull Player player);
 
-    @Nullable ItemStack getItem(int index);
+    @Nullable Item getItem(int index);
 
     void updateItem(int index);
 

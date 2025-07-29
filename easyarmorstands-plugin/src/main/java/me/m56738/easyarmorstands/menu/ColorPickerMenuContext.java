@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 public class ColorPickerMenuContext extends SimpleMenuContext {

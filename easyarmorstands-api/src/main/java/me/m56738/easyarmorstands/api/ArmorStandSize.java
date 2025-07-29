@@ -1,8 +1,5 @@
 package me.m56738.easyarmorstands.api;
 
-import org.bukkit.entity.ArmorStand;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Locale;
 
 public enum ArmorStandSize {
@@ -17,17 +14,9 @@ public enum ArmorStandSize {
         this.height = height;
     }
 
-    public static @NotNull ArmorStandSize get(@NotNull ArmorStand entity) {
-        return entity.isSmall() ? SMALL : NORMAL;
-    }
-
     @Override
     public String toString() {
         return name().toLowerCase(Locale.ROOT);
-    }
-
-    public boolean isSmall() {
-        return this == SMALL;
     }
 
     public double getWidth() {

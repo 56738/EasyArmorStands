@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +26,7 @@ public class PropertySlotFactory<T> implements MenuSlotFactory {
         if (property == null) {
             return null;
         }
-        if (!type.canChange(PaperPlayer.fromNative(context.player()))) {
+        if (!type.canChange(context.player())) {
             return null;
         }
         return type.createSlot(element);

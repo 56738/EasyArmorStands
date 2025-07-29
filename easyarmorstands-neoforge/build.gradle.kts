@@ -77,4 +77,14 @@ tasks {
             attributes["Automatic-Module-Name"] = "me.m56738.easyarmorstands.neoforge"
         }
     }
+
+    val staticJar by registering(Copy::class) {
+        from(jar)
+        into(layout.buildDirectory.dir("static"))
+        rename { "EasyArmorStands-NeoForge.jar" }
+    }
+
+    assemble {
+        dependsOn(staticJar)
+    }
 }

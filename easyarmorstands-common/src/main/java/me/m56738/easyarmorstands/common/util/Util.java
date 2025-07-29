@@ -2,8 +2,10 @@ package me.m56738.easyarmorstands.common.util;
 
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.api.util.EulerAngles;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.joml.Math;
 import org.joml.Matrix3d;
@@ -15,7 +17,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3fc;
 
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.UUID;
@@ -198,14 +199,13 @@ public class Util {
         if (color == null) {
             color = Color.BLACK;
         }
-        String red = String.format("%02X", color.getRed());
-        String green = String.format("%02X", color.getGreen());
-        String blue = String.format("%02X", color.getBlue());
-        return Component.text()
-                .content("#")
-                .append(Component.text(red, NamedTextColor.RED))
-                .append(Component.text(green, NamedTextColor.GREEN))
-                .append(Component.text(blue, NamedTextColor.BLUE))
-                .build();
+        TextComponent.Builder builder = Component.text().content("#").color(NamedTextColor.WHITE);
+        if (color.alpha() != 0xFF) {
+            builder.append(Component.text(String.format("%02X", color.alpha()), NamedTextColor.GRAY));
+        }
+        builder.append(Component.text(String.format("%02X", color.red()), NamedTextColor.RED));
+        builder.append(Component.text(String.format("%02X", color.green()), NamedTextColor.GREEN));
+        builder.append(Component.text(String.format("%02X", color.blue()), NamedTextColor.BLUE));
+        return builder.build();
     }
 }

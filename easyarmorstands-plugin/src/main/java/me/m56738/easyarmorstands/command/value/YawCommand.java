@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
 import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -13,7 +14,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.RichDescription;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.parser.standard.FloatParser;
 import org.incendo.cloud.permission.Permission;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class YawCommand implements ValueCommand<Float> {
     @Override
-    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
+    public Command.@NonNull Builder<CommandSource> applyToCommandBuilder(Command.@NonNull Builder<CommandSource> builder) {
         return builder.literal("yaw");
     }
 
@@ -36,7 +36,7 @@ public class YawCommand implements ValueCommand<Float> {
     }
 
     @Override
-    public @NotNull ParserDescriptor<Source, Float> getParser() {
+    public @NotNull ParserDescriptor<CommandSource, Float> getParser() {
         return FloatParser.floatParser();
     }
 

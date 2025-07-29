@@ -2,7 +2,8 @@ package me.m56738.easyarmorstands.bentobox;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 
 public class BentoBoxAddon implements Addon {
     private BentoBoxPrivilegeChecker privilegeChecker;
@@ -15,15 +16,13 @@ public class BentoBoxAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new BentoBoxPrivilegeChecker();
-        EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
+        Plugin plugin = EasyArmorStandsPlugin.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 
     @Override
     public void disable() {
-        if (privilegeChecker != null) {
-            EasyArmorStands.get().regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
-            privilegeChecker = null;
-        }
+        HandlerList.unregisterAll(privilegeChecker);
     }
 
     @Override

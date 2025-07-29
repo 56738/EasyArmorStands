@@ -5,28 +5,23 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.layout.ContentMenuLayout;
 import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
+public class ItemPropertyType extends ConfigurablePropertyType<Item> {
     public ItemPropertyType(@NotNull Key key) {
-        super(key, ItemStack.class);
+        super(key, Item.class);
     }
 
     @Override
-    public @NotNull Component getValueComponent(@NotNull ItemStack value) {
+    public @NotNull Component getValueComponent(@NotNull Item value) {
         return value.displayName();
-    }
-
-    @Override
-    public @NotNull ItemStack cloneValue(@NotNull ItemStack value) {
-        return value.clone();
     }
 
     @Override

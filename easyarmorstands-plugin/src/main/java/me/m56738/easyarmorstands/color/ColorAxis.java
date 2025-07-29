@@ -1,31 +1,28 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.common.message.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
 
 public enum ColorAxis {
-    RED(Message.component("easyarmorstands.color.red"), Color::getRed, Color::setRed, Color.RED, NamedTextColor.RED, DyeColor.RED),
-    GREEN(Message.component("easyarmorstands.color.green"), Color::getGreen, Color::setGreen, Color.LIME, NamedTextColor.GREEN, DyeColor.LIME),
-    BLUE(Message.component("easyarmorstands.color.blue"), Color::getBlue, Color::setBlue, Color.BLUE, NamedTextColor.BLUE, DyeColor.BLUE);
+    RED(Message.component("easyarmorstands.color.red"), Color::red, Color::withRed, Color.RED, NamedTextColor.RED),
+    GREEN(Message.component("easyarmorstands.color.green"), Color::green, Color::withGreen, Color.GREEN, NamedTextColor.GREEN),
+    BLUE(Message.component("easyarmorstands.color.blue"), Color::blue, Color::withBlue, Color.BLUE, NamedTextColor.BLUE);
 
     private final Component displayName;
     private final Getter getter;
     private final Setter setter;
     private final Color color;
     private final TextColor textColor;
-    private final DyeColor dyeColor;
 
-    ColorAxis(Component displayName, Getter getter, Setter setter, Color color, TextColor textColor, DyeColor dyeColor) {
+    ColorAxis(Component displayName, Getter getter, Setter setter, Color color, TextColor textColor) {
         this.displayName = displayName.color(textColor);
         this.getter = getter;
         this.setter = setter;
         this.color = color;
         this.textColor = textColor;
-        this.dyeColor = dyeColor;
     }
 
     public Component getDisplayName() {
@@ -42,14 +39,6 @@ public enum ColorAxis {
 
     public Color getColor() {
         return color;
-    }
-
-    public TextColor getTextColor() {
-        return textColor;
-    }
-
-    public DyeColor getDyeColor() {
-        return dyeColor;
     }
 
     @FunctionalInterface

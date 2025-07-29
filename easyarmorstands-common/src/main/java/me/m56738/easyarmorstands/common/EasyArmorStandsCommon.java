@@ -15,11 +15,11 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
 public class EasyArmorStandsCommon {
-    public static <C extends CommandSource> void registerCommands(CommandManager<C> commandManager, Class<C> commandSenderClass, PlatformHolder platformHolder) {
+    public static void registerCommands(CommandManager<CommandSource> commandManager, PlatformHolder platformHolder) {
         commandManager.parameterInjectorRegistry().registerInjector(Platform.class,
                 (context, annotationAccessor) -> platformHolder.getPlatform());
 
-        MinecraftHelp<C> help = MinecraftHelp.create("/eas help", commandManager, CommandSource::source);
+        MinecraftHelp<CommandSource> help = MinecraftHelp.create("/eas help", commandManager, CommandSource::source);
         commandManager.command(commandManager.commandBuilder("eas")
                 .literal("help")
                 .optional("query", StringParser.greedyStringParser(), DefaultValue.constant(""),
@@ -35,7 +35,7 @@ public class EasyArmorStandsCommon {
                 .permission(Permissions.HELP)
                 .handler(context -> help.queryCommands(context.get("query"), context.sender())));
 
-        AnnotationParser<C> annotationParser = new AnnotationParser<>(commandManager, commandSenderClass);
+        AnnotationParser<CommandSource> annotationParser = new AnnotationParser<>(commandManager, CommandSource.class);
         try {
             annotationParser.parseContainers(EasyArmorStandsCommon.class.getClassLoader());
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.paper.api.platform.world;
 
+import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.World;
+import org.joml.Vector3ic;
 
 public interface PaperWorld extends World {
     static PaperWorld fromNative(org.bukkit.World nativeWorld) {
@@ -12,4 +14,9 @@ public interface PaperWorld extends World {
     }
 
     org.bukkit.World getNative();
+
+    @Override
+    default Block getBlock(Vector3ic position) {
+        return PaperBlock.fromNative(getNative().getBlockAt(position.x(), position.y(), position.z()));
+    }
 }

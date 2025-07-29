@@ -1,11 +1,10 @@
 package me.m56738.easyarmorstands.api.menu;
 
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.identity.Identity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,11 +30,11 @@ public interface MenuClick extends ForwardingAudience.Single {
         return getOrDefault(Identity.LOCALE, Locale.US);
     }
 
-    @NotNull ItemStack cursor();
+    @NotNull Item cursor();
 
     void allow();
 
-    void open(@NotNull Inventory inventory);
+    void open(@NotNull Menu menu);
 
     void close();
 

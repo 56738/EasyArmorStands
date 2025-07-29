@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.paper.property.display.item;
 
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
 
-public class ItemDisplayItemProperty implements Property<ItemStack> {
+public class ItemDisplayItemProperty implements Property<Item> {
     private final ItemDisplay entity;
 
     public ItemDisplayItemProperty(ItemDisplay entity) {
@@ -14,18 +15,18 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
     }
 
     @Override
-    public PropertyType<ItemStack> getType() {
+    public PropertyType<Item> getType() {
         return ItemDisplayPropertyTypes.ITEM;
     }
 
     @Override
-    public ItemStack getValue() {
-        return entity.getItemStack();
+    public Item getValue() {
+        return PaperItem.fromNative(entity.getItemStack());
     }
 
     @Override
-    public boolean setValue(ItemStack value) {
-        entity.setItemStack(value);
+    public boolean setValue(Item value) {
+        entity.setItemStack(PaperItem.toNative(value));
         return true;
     }
 

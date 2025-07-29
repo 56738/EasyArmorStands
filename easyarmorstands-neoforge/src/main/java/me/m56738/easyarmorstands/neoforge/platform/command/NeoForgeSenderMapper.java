@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.neoforge.platform.command;
 
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedPlayerCommandSource;
 import me.m56738.easyarmorstands.neoforge.platform.entity.NeoForgeCommandSenderImpl;
@@ -8,9 +9,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import org.incendo.cloud.SenderMapper;
 
-public class NeoForgeSenderMapper implements SenderMapper<CommandSourceStack, ModdedCommandSource> {
+public class NeoForgeSenderMapper implements SenderMapper<CommandSourceStack, CommandSource> {
     @Override
-    public ModdedCommandSource map(CommandSourceStack base) {
+    public CommandSource map(CommandSourceStack base) {
         if (base.getEntity() instanceof ServerPlayer player) {
             return new ModdedPlayerCommandSource(base, new NeoForgePlayerImpl(player));
         } else {
@@ -19,7 +20,7 @@ public class NeoForgeSenderMapper implements SenderMapper<CommandSourceStack, Mo
     }
 
     @Override
-    public CommandSourceStack reverse(ModdedCommandSource mapped) {
-        return mapped.stack();
+    public CommandSourceStack reverse(CommandSource mapped) {
+        return ((ModdedCommandSource) mapped).stack();
     }
 }

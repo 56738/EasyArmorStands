@@ -3,15 +3,16 @@ package me.m56738.easyarmorstands.modded.platform;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
-import me.m56738.easyarmorstands.api.platform.item.Item;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatform;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntity;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedPlayer;
-import me.m56738.easyarmorstands.modded.api.platform.item.ModdedItem;
+import me.m56738.easyarmorstands.modded.api.platform.inventory.ModdedItem;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
+import me.m56738.easyarmorstands.modded.platform.inventory.ModdedItemImpl;
 import me.m56738.gizmo.api.GizmoFactory;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
@@ -47,6 +48,11 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     }
 
     @Override
+    public ModdedItem getItem(ItemStack nativeItem) {
+        return new ModdedItemImpl(this, nativeItem);
+    }
+
+    @Override
     public String getEasyArmorStandsVersion() {
         return modVersion;
     }
@@ -57,7 +63,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         CompoundTag tag = new CompoundTag();
         tag.putByte("easyarmorstands_tool", (byte) 1);
         item.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        return ModdedItem.fromNative(item);
+        return getItem(item);
     }
 
     @Override

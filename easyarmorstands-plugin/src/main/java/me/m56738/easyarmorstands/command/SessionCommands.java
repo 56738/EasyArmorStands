@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
@@ -42,8 +43,6 @@ import me.m56738.easyarmorstands.common.util.AlignAxis;
 import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.api.element.EntityElement;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -59,7 +58,6 @@ import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -183,7 +181,7 @@ public class SessionCommands {
         for (Element clone : clones) {
             actions.add(new ElementCreateAction(clone));
         }
-        EasyArmorStandsPlugin.getInstance().getHistory(PaperPlayer.toNative(sender)).push(actions, description);
+        EasyArmorStandsPlugin.getInstance().getHistory(sender).push(actions, description);
     }
 
     @Command("spawn")
@@ -215,7 +213,7 @@ public class SessionCommands {
         }
 
         int count = actions.size();
-        EasyArmorStandsPlugin.getInstance().getHistory(PaperPlayer.toNative(sender))
+        EasyArmorStandsPlugin.getInstance().getHistory(sender)
                 .push(actions, Message.component("easyarmorstands.history.destroy-elements", Component.text(count)));
 
         if (count > 1) {
@@ -542,7 +540,7 @@ public class SessionCommands {
     }
 
     @Suggestions("selection_tags")
-    public Set<String> getSelectionTags(CommandContext<Source> ctx, String input) {
+    public Set<String> getSelectionTags(CommandContext<CommandSource> ctx, String input) {
         if (!ctx.contains(elementSelectionKey())) {
             return Set.of();
         }
@@ -563,7 +561,7 @@ public class SessionCommands {
     }
 
     @Suggestions("discoverable_tags")
-    public Set<String> getDiscoverableTags(CommandContext<Source> ctx, String input, CommonPlatform platform) {
+    public Set<String> getDiscoverableTags(CommandContext<CommandSource> ctx, String input, CommonPlatform platform) {
         if (!(ctx.sender() instanceof PlayerCommandSource PlayerCommandSource)) {
             return Set.of();
         }

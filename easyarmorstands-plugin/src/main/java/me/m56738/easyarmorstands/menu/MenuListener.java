@@ -1,14 +1,15 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.LegacyUtil;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,9 +20,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
@@ -43,7 +42,7 @@ public class MenuListener implements Listener {
             SingleClick click = new SingleClick(menu, event);
             menu.onClick(click);
             if (click.update) {
-                event.setCurrentItem(menu.getItem(event.getSlot()));
+                event.setCurrentItem(PaperItem.toNative(menu.getItem(event.getSlot())));
             }
         }
     }
@@ -96,13 +95,13 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public @NotNull Player player() {
-            return player;
+        public @NotNull me.m56738.easyarmorstands.api.platform.entity.Player player() {
+            return PaperPlayer.fromNative(player);
         }
 
         @Override
-        public @NotNull ItemStack cursor() {
-            return LegacyUtil.wrapItem(event.getView().getCursor());
+        public @NotNull Item cursor() {
+            return PaperItem.fromNative(event.getView().getCursor());
         }
 
         @Override
@@ -121,13 +120,13 @@ public class MenuListener implements Listener {
         }
 
         @Override
-        public void open(@NotNull Inventory inventory) {
-            queueTask(() -> player.openInventory(inventory));
+        public void open(@NotNull Menu menu) {
+            queueTask(() -> player.openInventory(((MenuImpl) menu).getInventory()));
         }
 
         @Override
         public void close() {
-            queueTask(() -> menu.close(player));
+            queueTask(() -> menu.close(PaperPlayer.fromNative(player)));
         }
 
         @Override

@@ -3,9 +3,9 @@ package me.m56738.easyarmorstands.display.command.value;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -24,7 +24,7 @@ public class DisplayScaleAxisCommand extends ScaleAxisCommand {
     }
 
     @Override
-    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
+    public Command.@NonNull Builder<CommandSource> applyToCommandBuilder(Command.@NonNull Builder<CommandSource> builder) {
         return builder.literal("scale").literal(axisName);
     }
 }

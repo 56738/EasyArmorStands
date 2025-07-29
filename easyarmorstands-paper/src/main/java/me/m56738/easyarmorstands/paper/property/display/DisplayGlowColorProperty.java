@@ -3,7 +3,8 @@ package me.m56738.easyarmorstands.paper.property.display;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.api.util.Color;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
 import org.bukkit.entity.Display;
 
 import java.util.Optional;
@@ -22,12 +23,15 @@ public class DisplayGlowColorProperty implements Property<Optional<Color>> {
 
     @Override
     public Optional<Color> getValue() {
-        return Optional.ofNullable(entity.getGlowColorOverride());
+        return Optional.ofNullable(entity.getGlowColorOverride())
+                .map(c -> Color.ofARGB(c.asARGB()));
     }
 
     @Override
     public boolean setValue(Optional<Color> value) {
-        entity.setGlowColorOverride(value.orElse(null));
+        entity.setGlowColorOverride(value
+                .map(PaperColorAdapter::toNative)
+                .orElse(null));
         return true;
     }
 

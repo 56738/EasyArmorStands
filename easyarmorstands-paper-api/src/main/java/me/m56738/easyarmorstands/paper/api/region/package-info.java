@@ -1,4 +1,4 @@
 @NullMarked
-package me.m56738.easyarmorstands.api.platform.item;
+package me.m56738.easyarmorstands.paper.api.region;
 
 import org.jspecify.annotations.NullMarked;

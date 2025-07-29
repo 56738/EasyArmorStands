@@ -4,9 +4,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuContext;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +24,7 @@ public class ElementMenuContext implements MenuContext {
         this.player = player;
         this.session = session;
         this.element = element;
-        this.locale = player.locale();
+        this.locale = player.getOrDefault(Identity.LOCALE, Locale.US);
         this.resolver = TagResolver.builder()
                 .tag("type", Tag.selfClosingInserting(element.getType().getDisplayName()))
                 .build();

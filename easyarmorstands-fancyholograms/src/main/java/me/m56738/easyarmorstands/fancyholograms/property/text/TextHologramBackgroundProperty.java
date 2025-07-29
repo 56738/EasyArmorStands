@@ -4,8 +4,9 @@ import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -25,12 +26,12 @@ public class TextHologramBackgroundProperty extends HologramProperty<Optional<Co
 
     @Override
     public @NotNull Optional<Color> getValue() {
-        return Optional.ofNullable(data.getBackground());
+        return Optional.ofNullable(data.getBackground()).map(PaperColorAdapter::fromNative);
     }
 
     @Override
     public boolean setValue(@NotNull Optional<Color> value) {
-        data.setBackground(value.orElse(null));
+        data.setBackground(value.map(PaperColorAdapter::toNative).orElse(null));
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

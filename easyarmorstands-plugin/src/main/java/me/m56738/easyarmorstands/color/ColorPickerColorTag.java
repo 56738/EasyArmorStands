@@ -6,8 +6,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Inserting;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-
 public class ColorPickerColorTag implements Inserting {
     private final ColorPickerContext context;
 
@@ -17,7 +15,7 @@ public class ColorPickerColorTag implements Inserting {
 
     @Override
     public @NotNull Component value() {
-        return Util.formatColor(new Color(context.getColor().asRGB()));
+        return Util.formatColor(context.getColor());
     }
 
     @Override

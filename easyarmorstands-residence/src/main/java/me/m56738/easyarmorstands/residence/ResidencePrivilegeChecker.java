@@ -5,14 +5,15 @@ import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.paper.api.region.RegionListener;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class ResidencePrivilegeChecker implements RegionPrivilegeChecker {
+@NullMarked
+public class ResidencePrivilegeChecker extends RegionListener {
     private final Residence residencePlugin;
 
     public ResidencePrivilegeChecker(Residence residencePlugin) {
@@ -20,7 +21,7 @@ public class ResidencePrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public boolean isAllowed(Player player, Location location) {
+    public boolean isAllowed(Player player, Location location, boolean silent) {
         try {
             FlagPermissions perms = residencePlugin.getPermsByLoc(location);
             return perms.playerHas(player, Flags.build, true);
@@ -35,17 +36,17 @@ public class ResidencePrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
+    public void sendCreateError(Player player, PropertyContainer properties) {
         player.sendMessage(Message.error("easyarmorstands.error.residence.deny-create"));
     }
 
     @Override
-    public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
+    public void sendDestroyError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.residence.deny-destroy"));
     }
 
     @Override
-    public void sendEditError(@NotNull Player player, @NotNull Element element) {
+    public void sendEditError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.residence.deny-select"));
     }
 }

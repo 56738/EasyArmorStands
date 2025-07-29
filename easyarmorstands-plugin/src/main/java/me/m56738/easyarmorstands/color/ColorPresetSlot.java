@@ -3,10 +3,10 @@ package me.m56738.easyarmorstands.color;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -25,7 +25,7 @@ public class ColorPresetSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         return itemTemplate.render(locale, resolver);
     }
 
@@ -33,8 +33,6 @@ public class ColorPresetSlot implements MenuSlot {
     public void onClick(@NotNull MenuClick click) {
         if (click.isLeftClick()) {
             context.setColor(color);
-        } else if (click.isRightClick()) {
-            context.setColor(context.getColor().mixColors(color));
         }
     }
 }

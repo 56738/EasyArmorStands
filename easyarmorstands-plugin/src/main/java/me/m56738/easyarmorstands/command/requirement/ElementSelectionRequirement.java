@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.command.requirement;
 
+import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
 import me.m56738.easyarmorstands.common.message.Message;
-import org.bukkit.command.CommandSender;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,12 +13,12 @@ import static me.m56738.easyarmorstands.command.processor.ElementSelectionProces
 
 public class ElementSelectionRequirement implements CommandRequirement {
     @Override
-    public boolean evaluateRequirement(@NonNull CommandContext<Source> commandContext) {
+    public boolean evaluateRequirement(@NonNull CommandContext<CommandSource> commandContext) {
         return commandContext.contains(elementSelectionKey());
     }
 
     @Override
-    public void handle(CommandContext<Source> context) {
+    public void handle(CommandContext<CommandSource> context) {
         CommandSender sender = context.sender().source();
         sender.sendMessage(Message.error("easyarmorstands.error.nothing-selected"));
         sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));

@@ -1,14 +1,15 @@
 package me.m56738.easyarmorstands.paper.platform.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperCommandSender;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.SenderMapper;
 
-public class PaperSenderMapper implements SenderMapper<CommandSourceStack, PaperCommandSource> {
+public class PaperSenderMapper implements SenderMapper<CommandSourceStack, CommandSource> {
     @Override
-    public PaperCommandSource map(CommandSourceStack base) {
+    public CommandSource map(CommandSourceStack base) {
         if (base.getSender() instanceof Player player) {
             return new PaperPlayerCommandSource(base, PaperPlayer.fromNative(player));
         } else {
@@ -17,7 +18,7 @@ public class PaperSenderMapper implements SenderMapper<CommandSourceStack, Paper
     }
 
     @Override
-    public CommandSourceStack reverse(PaperCommandSource mapped) {
-        return mapped.stack();
+    public CommandSourceStack reverse(CommandSource mapped) {
+        return ((PaperCommandSource) mapped).stack();
     }
 }

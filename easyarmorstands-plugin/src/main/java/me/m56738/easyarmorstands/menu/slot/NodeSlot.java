@@ -3,10 +3,10 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.common.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -28,7 +28,7 @@ public class NodeSlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         return itemTemplate.render(locale, resolver);
     }
 

@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +45,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
         if (!hasPermission()) {
             return false;
         }
-        return EasyArmorStandsPlugin.getInstance().canChangeProperty(PaperPlayer.toNative(player), element, property, value);
+        return EasyArmorStandsPlugin.getInstance().canChangeProperty(player, element, property, value);
     }
 
     @Override

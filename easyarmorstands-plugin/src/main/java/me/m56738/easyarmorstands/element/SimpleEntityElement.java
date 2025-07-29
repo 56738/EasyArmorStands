@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
+import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -24,8 +25,6 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.menu.layout.DefaultMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.EquipmentMenuBuilder;
 import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
-import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.element.AbstractEntityElement;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import net.kyori.adventure.text.Component;
@@ -111,7 +110,7 @@ public class SimpleEntityElement extends AbstractEntityElement implements Defaul
         } else {
             builderFactory = DefaultMenuBuilder::new;
         }
-        EasyArmorStandsPlugin.getInstance().openMenu(PaperPlayer.toNative(player), this, builderFactory);
+        EasyArmorStandsPlugin.getInstance().openMenu(player, this, builderFactory);
     }
 
     @Override

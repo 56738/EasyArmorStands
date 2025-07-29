@@ -26,13 +26,28 @@ public class ArmorStandPoseProperty implements Property<EulerAngles> {
 
     @Override
     public EulerAngles getValue() {
-        EulerAngle pose = part.getPose(entity);
+        EulerAngle pose = switch (part) {
+            case HEAD -> entity.getHeadPose();
+            case BODY -> entity.getBodyPose();
+            case LEFT_ARM -> entity.getLeftArmPose();
+            case RIGHT_ARM -> entity.getRightArmPose();
+            case LEFT_LEG -> entity.getLeftLegPose();
+            case RIGHT_LEG -> entity.getRightLegPose();
+        };
         return EulerAngles.of(pose.getX(), pose.getY(), pose.getZ());
     }
 
     @Override
     public boolean setValue(EulerAngles value) {
-        part.setPose(entity, new EulerAngle(value.x(), value.y(), value.z()));
+        EulerAngle pose = new EulerAngle(value.x(), value.y(), value.z());
+        switch (part) {
+            case HEAD -> entity.setHeadPose(pose);
+            case BODY -> entity.setBodyPose(pose);
+            case LEFT_ARM -> entity.setLeftArmPose(pose);
+            case RIGHT_ARM -> entity.setRightArmPose(pose);
+            case LEFT_LEG -> entity.setLeftLegPose(pose);
+            case RIGHT_LEG -> entity.setRightLegPose(pose);
+        }
         return true;
     }
 

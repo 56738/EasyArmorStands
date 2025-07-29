@@ -2,10 +2,11 @@ package me.m56738.easyarmorstands.huskclaims;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import net.william278.huskclaims.api.BukkitHuskClaimsAPI;
 import net.william278.huskclaims.libraries.cloplib.operation.OperationType;
 import net.william278.huskclaims.libraries.cloplib.operation.OperationTypeRegistry;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 
@@ -33,13 +34,14 @@ public class HuskClaimsAddon implements Addon {
         }
 
         privilegeChecker = new HuskClaimsPrivilegeChecker(api, operationType);
-        EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
+        Plugin plugin = EasyArmorStandsPlugin.getInstance();
+        plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 
     @Override
     public void disable() {
         if (privilegeChecker != null) {
-            EasyArmorStands.get().regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+            HandlerList.unregisterAll(privilegeChecker);
             privilegeChecker = null;
         }
 

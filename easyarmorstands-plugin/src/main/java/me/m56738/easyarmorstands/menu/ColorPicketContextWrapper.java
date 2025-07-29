@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
-import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.api.util.Color;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class ColorPicketContextWrapper implements ColorPickerContext {
     }
 
     @Override
-    public @NotNull ItemStack item() {
+    public @NotNull Item item() {
         return context.item();
     }
 

@@ -1,11 +1,14 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.util.ComponentUtil;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntitySnapshot;
@@ -83,27 +86,27 @@ public class EntityCopySlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         ItemStack item = this.item.clone();
         item.editMeta(meta -> {
             meta.displayName(ComponentUtil.renderForItem(Message.buttonName("easyarmorstands.menu.copy"), locale));
             meta.lore(List.of(ComponentUtil.renderForItem(Message.buttonDescription("easyarmorstands.menu.copy.description"), locale)));
         });
-        return item;
+        return PaperItem.fromNative(item);
     }
 
     @Override
     public void onClick(MenuClick click) {
-        if (click.cursor().getType() == Material.AIR) {
+        if (click.cursor().isEmpty()) {
             click.queueTask(() -> {
                 ItemStack item = createItem(PaperEntity.toNative(element.getEntity()));
                 if (item != null) {
                     item.editMeta(meta -> meta.displayName(null));
                 }
-                click.player().setItemOnCursor(item);
+                PaperPlayer.toNative(click.player()).setItemOnCursor(item);
             });
         } else {
-            click.queueTask(() -> click.player().setItemOnCursor(null));
+            click.queueTask(() -> PaperPlayer.toNative(click.player()).setItemOnCursor(null));
         }
     }
 }

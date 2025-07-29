@@ -7,15 +7,25 @@ import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
+import me.m56738.easyarmorstands.api.platform.entity.display.ItemDisplayTransform;
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.api.platform.world.Block;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.util.Color;
+import me.m56738.easyarmorstands.api.util.EulerAngles;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.requirement.RequireElement;
@@ -25,6 +35,7 @@ import me.m56738.easyarmorstands.common.group.Group;
 import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
 import me.m56738.easyarmorstands.common.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.display.editor.node.DisplayBoxNode;
@@ -37,22 +48,9 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Display.Brightness;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.util.EulerAngle;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotation.specifier.Range;
 import org.incendo.cloud.annotations.Argument;
@@ -60,7 +58,6 @@ import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.minecraft.extras.annotation.specifier.Decoder;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Matrix4dc;
@@ -78,9 +75,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:block_display/block")
     @CommandDescription("easyarmorstands.command.description.block")
     @RequireElementSelection
-    public void setBlock(PlayerSource source, ElementSelection selection, @Argument("value") BlockData value) {
+    public void setBlock(PlayerCommandSource source, ElementSelection selection, @Argument("value") BlockData value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
             if (property == null) {
@@ -100,9 +97,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.block")
     @RequireElementSelection
-    public void setBlockBrightness(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
+    public void setBlockBrightness(PlayerCommandSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int blockLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -111,9 +108,9 @@ public class DisplayCommands {
                 return;
             }
             int skyLight = property.getValue()
-                    .map(Brightness::getSkyLight)
+                    .map(Brightness::sky)
                     .orElseGet(() -> (int) PaperLocationAdapter.toNative(location).getBlock().getLightFromSky());
-            Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
+            Optional<Brightness> brightness = Optional.of(Brightness.of(blockLight, skyLight));
             if (property.setValue(brightness)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
                         property.getType().getValueComponent(brightness)));
@@ -127,9 +124,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.sky")
     @RequireElementSelection
-    public void setSkyBrightness(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
+    public void setSkyBrightness(PlayerCommandSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "15") int skyLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -138,9 +135,9 @@ public class DisplayCommands {
                 return;
             }
             int blockLight = property.getValue()
-                    .map(Brightness::getSkyLight)
+                    .map(Brightness::sky)
                     .orElseGet(() -> (int) PaperLocationAdapter.toNative(location).getBlock().getLightFromBlocks());
-            Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
+            Optional<Brightness> brightness = Optional.of(Brightness.of(blockLight, skyLight));
             if (property.setValue(brightness)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
                         property.getType().getValueComponent(brightness)));
@@ -154,9 +151,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.here")
     @RequireElementSelection
-    public void setLocalBrightness(PlayerSource source, ElementSelection selection) {
+    public void setLocalBrightness(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -164,7 +161,7 @@ public class DisplayCommands {
                 return;
             }
             Block block = sender.getLocation().getBlock();
-            Optional<Brightness> brightness = Optional.of(new Brightness(block.getLightFromBlocks(), block.getLightFromSky()));
+            Optional<Brightness> brightness = Optional.of(block.getBrightness());
             if (property.setValue(brightness)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
                         property.getType().getValueComponent(brightness)));
@@ -178,9 +175,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.reset")
     @RequireElementSelection
-    public void setDefaultBrightness(PlayerSource source, ElementSelection selection) {
+    public void setDefaultBrightness(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -200,9 +197,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/box/width")
     @CommandDescription("easyarmorstands.command.description.box.width")
     @RequireElementSelection
-    public void setBoxWidth(PlayerSource source, ElementSelection selection, @Argument("width") float value) {
+    public void setBoxWidth(PlayerCommandSource source, ElementSelection selection, @Argument("width") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
             if (widthProperty == null) {
@@ -226,9 +223,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/box/height")
     @CommandDescription("easyarmorstands.command.description.box.height")
     @RequireElementSelection
-    public void setBoxHeight(PlayerSource source, ElementSelection selection, @Argument("height") float value) {
+    public void setBoxHeight(PlayerCommandSource source, ElementSelection selection, @Argument("height") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
             if (heightProperty == null) {
@@ -252,9 +249,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/box/height")
     @CommandDescription("easyarmorstands.command.description.box.remove")
     @RequireElementSelection
-    public void removeBox(PlayerSource source, ElementSelection selection) {
+    public void removeBox(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
 
             int success = 0;
@@ -284,7 +281,7 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/translation")
     @CommandDescription("easyarmorstands.command.description.box")
     @RequireElement
-    public void moveBox(PlayerSource source, Session session, Element element) {
+    public void moveBox(PlayerCommandSource source, Session session, Element element) {
         Player sender = source.source();
         if (!(element instanceof DisplayElement displayElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
@@ -297,7 +294,7 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text")
     @RequireElement
-    public void showText(PlayerSource source, Element element) {
+    public void showText(PlayerCommandSource source, Element element) {
         Player sender = source.source();
         Property<Component> property = element.getProperties().getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {
@@ -312,9 +309,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text.set")
     @RequireElementSelection
-    public void setText(PlayerSource source, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
+    public void setText(PlayerCommandSource source, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
             if (property == null) {
@@ -334,9 +331,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/line_width")
     @CommandDescription("easyarmorstands.command.description.text.width")
     @RequireElementSelection
-    public void setTextWidth(PlayerSource source, ElementSelection selection, @Argument("value") int value) {
+    public void setTextWidth(PlayerCommandSource source, ElementSelection selection, @Argument("value") int value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
             if (property == null) {
@@ -356,16 +353,16 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.color")
     @RequireElementSelection
-    public void setTextBackground(PlayerSource source, ElementSelection selection, @Argument("value") TextColor color) {
+    public void setTextBackground(PlayerCommandSource source, ElementSelection selection, @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
                 sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
                 return;
             }
-            Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+            Optional<Color> value = Optional.of(Color.of(color, 0xFF));
             if (property.setValue(value)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
                         property.getType().getValueComponent(value)));
@@ -379,9 +376,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.reset")
     @RequireElementSelection
-    public void resetTextBackground(PlayerSource source, ElementSelection selection) {
+    public void resetTextBackground(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -401,16 +398,16 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.none")
     @RequireElementSelection
-    public void hideTextBackground(PlayerSource source, ElementSelection selection) {
+    public void hideTextBackground(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
                 sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
                 return;
             }
-            Optional<Color> value = Optional.of(Color.fromARGB(0));
+            Optional<Color> value = Optional.of(Color.TRANSPARENT);
             if (property.setValue(value)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
                         property.getType().getValueComponent(value)));
@@ -424,9 +421,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/background")
     @CommandDescription("easyarmorstands.command.description.text.background.alpha")
     @RequireElementSelection
-    public void hideTextBackground(PlayerSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "255") int alpha) {
+    public void hideTextBackground(PlayerCommandSource source, ElementSelection selection, @Argument("value") @Range(min = "0", max = "255") int alpha) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -439,7 +436,7 @@ public class DisplayCommands {
                 return;
             }
 
-            Optional<Color> value = oldValue.map(v -> v.setAlpha(alpha));
+            Optional<Color> value = oldValue.map(v -> v.withAlpha(alpha));
             if (property.setValue(value)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background-alpha",
                         Component.text(alpha)));
@@ -453,16 +450,16 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/glowing/color")
     @CommandDescription("easyarmorstands.command.description.glow.color")
     @RequireElementSelection
-    public void setGlowColor(PlayerSource source, ElementSelection selection, @Argument("value") TextColor color) {
+    public void setGlowColor(PlayerCommandSource source, ElementSelection selection, @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
                 sender.sendMessage(Message.error("easyarmorstands.error.glow-color-unsupported"));
                 return;
             }
-            Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+            Optional<Color> value = Optional.of(Color.of(color, 0xFF));
             if (property.setValue(value)) {
                 sender.sendMessage(Message.success("easyarmorstands.success.changed-glow-color",
                         property.getType().getValueComponent(value)));
@@ -476,9 +473,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/glowing/color")
     @CommandDescription("easyarmorstands.command.description.glow.color.reset")
     @RequireElementSelection
-    public void resetGlowColor(PlayerSource source, ElementSelection selection) {
+    public void resetGlowColor(PlayerCommandSource source, ElementSelection selection) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
@@ -499,7 +496,7 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/right_rotation")
     @CommandDescription("easyarmorstands.command.description.shear")
     @RequireElement
-    public void editRightRotation(PlayerSource source, Session session, Element element) {
+    public void editRightRotation(PlayerCommandSource source, Session session, Element element) {
         Player sender = source.source();
         if (!(element instanceof DisplayElement)) {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
@@ -513,7 +510,7 @@ public class DisplayCommands {
     @Permission(Permissions.CONVERT)
     @CommandDescription("easyarmorstands.command.description.convert")
     @RequireElementSelection
-    public void convert(PlayerSource source, Session session, ElementSelection selection) {
+    public void convert(PlayerCommandSource source, Session session, ElementSelection selection) {
         Player sender = source.source();
         List<SimpleEntityElement> createdElements = new ArrayList<>();
         List<Action> allActions = new ArrayList<>();
@@ -524,20 +521,20 @@ public class DisplayCommands {
                 continue;
             }
             foundArmorStand = true;
-            ArmorStand entity = (ArmorStand) PaperEntity.toNative(armorStandElement.getEntity());
-            EntityEquipment equipment = entity.getEquipment();
+            ArmorStandSize size = armorStandElement.getProperties().get(ArmorStandPropertyTypes.SIZE).getValue();
+            Item helmet = armorStandElement.getProperties().get(EntityPropertyTypes.EQUIPMENT.get(EquipmentSlot.HEAD)).getValue();
 
             Matrix4d headMatrix = new Matrix4d();
             Matrix4d rightMatrix = new Matrix4d();
             Matrix4d leftMatrix = new Matrix4d();
 
-            if (entity.isSmall()) {
+            if (size == ArmorStandSize.SMALL) {
                 headMatrix.scale(0.7);
                 rightMatrix.scale(0.5);
                 leftMatrix.scale(0.5);
             }
 
-            if (isSkull(equipment.getHelmet())) {
+            if (isSkull(helmet)) {
                 headMatrix.scale(1.1875);
                 headMatrix.translate(0, 0.5, 0);
                 headMatrix.rotateY(Math.PI);
@@ -553,12 +550,12 @@ public class DisplayCommands {
             leftMatrix.rotateX(Math.PI / 2);
 
             List<Action> actions = new ArrayList<>();
-            convert(sender, entity, equipment.getHelmet(), ArmorStandPart.HEAD, ItemDisplay.ItemDisplayTransform.HEAD, headMatrix, actions, createdElements);
-            convert(sender, entity, equipment.getItemInMainHand(), ArmorStandPart.RIGHT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions, createdElements);
-            convert(sender, entity, equipment.getItemInOffHand(), ArmorStandPart.LEFT_ARM, ItemDisplay.ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions, createdElements);
+            convert(sender, armorStandElement, size, EquipmentSlot.HEAD, ArmorStandPart.HEAD, ItemDisplayTransform.HEAD, headMatrix, actions, createdElements);
+            convert(sender, armorStandElement, size, EquipmentSlot.HAND, ArmorStandPart.RIGHT_ARM, ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions, createdElements);
+            convert(sender, armorStandElement, size, EquipmentSlot.OFF_HAND, ArmorStandPart.LEFT_ARM, ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions, createdElements);
             if (!actions.isEmpty()) {
                 actions.add(new ElementDestroyAction(element));
-                entity.remove();
+                armorStandElement.destroy();
                 count++;
             }
             allActions.addAll(actions);
@@ -598,24 +595,25 @@ public class DisplayCommands {
         }
     }
 
-    private boolean isSkull(ItemStack item) {
-        return item != null && item.getItemMeta() instanceof SkullMeta;
+    private boolean isSkull(Item item) {
+        return item.isSkull();
     }
 
-    private void convert(Player sender, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement> elements) {
-        if (item == null || item.getType().isAir()) {
+    private void convert(Player sender, ArmorStandElement element, ArmorStandSize size, EquipmentSlot slot, ArmorStandPart part, ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement> elements) {
+        Item item = element.getProperties().get(EntityPropertyTypes.EQUIPMENT.get(slot)).getValue();
+        if (item.isEmpty()) {
             return;
         }
 
         ArmorStandPartInfo info = ArmorStandPartInfo.of(part);
-        Location location = PaperLocationAdapter.fromNative(entity.getLocation());
-        Vector3d offset = info.getOffset(ArmorStandSize.get(entity), 1).rotateY(Util.getRoundedYawAngle(location.yaw()), new Vector3d());
+        Location location = element.getProperties().get(EntityPropertyTypes.LOCATION).getValue();
+        Vector3d offset = info.getOffset(size, 1).rotateY(Util.getRoundedYawAngle(location.yaw()), new Vector3d());
         location = location.withOffset(offset);
 
-        EulerAngle angle = part.getPose(entity);
+        EulerAngles angle = element.getProperties().get(ArmorStandPropertyTypes.POSE.get(part)).getValue();
         Matrix4d transform = new Matrix4d()
                 .rotateY(Util.getRoundedYawAngle(location.yaw()))
-                .rotateZYX(-angle.getZ(), -angle.getY(), angle.getX())
+                .rotateZYX(-angle.z(), -angle.y(), angle.x())
                 .mul(matrix);
 
         location = location.withRotation(0, 0);
@@ -634,8 +632,8 @@ public class DisplayCommands {
             return;
         }
 
-        SimpleEntityElement element = type.createElement(properties);
-        if (element == null) {
+        SimpleEntityElement newElement = type.createElement(properties);
+        if (newElement == null) {
             return;
         }
 
@@ -647,9 +645,9 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:display/view_range")
     @CommandDescription("easyarmorstands.command.description.view-range")
     @RequireElementSelection
-    public void setViewRange(PlayerSource source, ElementSelection selection, @Argument("value") float value) {
+    public void setViewRange(PlayerCommandSource source, ElementSelection selection, @Argument("value") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+        try (ManagedChangeContext context = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> property = properties.getOrNull(DisplayPropertyTypes.VIEW_RANGE);
             if (property == null) {

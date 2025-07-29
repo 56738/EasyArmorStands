@@ -5,12 +5,15 @@ import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -22,10 +25,10 @@ import java.util.Objects;
 public class ColorPickerContextImpl implements ColorPickerContext {
     private final Player player;
     private final Element element;
-    private final PropertyType<ItemStack> type;
-    private final Property<ItemStack> untrackedProperty;
+    private final PropertyType<Item> type;
+    private final Property<Item> untrackedProperty;
 
-    public ColorPickerContextImpl(Player player, Element element, PropertyType<ItemStack> type) {
+    public ColorPickerContextImpl(Player player, Element element, PropertyType<Item> type) {
         this.player = player;
         this.element = element;
         this.type = type;
@@ -37,22 +40,22 @@ public class ColorPickerContextImpl implements ColorPickerContext {
     }
 
     @Override
-    public @NotNull ItemStack item() {
+    public @NotNull Item item() {
         return untrackedProperty.getValue();
     }
 
     @Override
     public @NotNull Color getColor() {
-        ItemStack item = untrackedProperty.getValue();
+        ItemStack item = PaperItem.toNative(untrackedProperty.getValue());
         ItemMeta meta = item.getItemMeta();
         if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
-            return leatherArmorMeta.getColor();
+            return PaperColorAdapter.fromNative(leatherArmorMeta.getColor());
         }
         if (meta instanceof MapMeta mapMeta) {
             if (mapMeta.hasColor()) {
-                return Objects.requireNonNull(mapMeta.getColor());
+                return PaperColorAdapter.fromNative(Objects.requireNonNull(mapMeta.getColor()));
             } else {
-                return Color.fromRGB(0x46402E);
+                return Color.ofRGB(0x46402E);
             }
         }
         return Color.WHITE;
@@ -61,27 +64,27 @@ public class ColorPickerContextImpl implements ColorPickerContext {
     @Override
     public void setColor(@NotNull Color color) {
         try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(player)) {
-            Property<ItemStack> property = context.getProperties(element).get(type);
-            ItemStack item = property.getValue().clone();
+            Property<Item> property = context.getProperties(element).get(type);
+            ItemStack item = PaperItem.toNative(property.getValue());
             ItemMeta meta = item.getItemMeta();
             if (meta == null) {
                 return;
             }
             if (setColor(meta, color)) {
                 item.setItemMeta(meta);
-                property.setValue(item);
-                context.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(new java.awt.Color(color.asRGB()))));
+                property.setValue(PaperItem.fromNative(item));
+                context.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
             }
         }
     }
 
     private boolean setColor(ItemMeta meta, Color color) {
         if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
-            leatherArmorMeta.setColor(color);
+            leatherArmorMeta.setColor(PaperColorAdapter.toNative(color));
             return true;
         }
         if (meta instanceof MapMeta mapMeta) {
-            mapMeta.setColor(color);
+            mapMeta.setColor(PaperColorAdapter.toNative(color));
             return true;
         }
         return false;

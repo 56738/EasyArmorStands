@@ -21,7 +21,7 @@ public class ArmorStandOffsetProvider implements OffsetProvider {
     @Override
     public Vector3dc getOffset() {
         double offset = 1.25 * element.getScale();
-        if (sizeProperty.getValue().isSmall()) {
+        if (sizeProperty.getValue() == ArmorStandSize.SMALL) {
             offset /= 2;
         }
         return new Vector3d(0, offset, 0);

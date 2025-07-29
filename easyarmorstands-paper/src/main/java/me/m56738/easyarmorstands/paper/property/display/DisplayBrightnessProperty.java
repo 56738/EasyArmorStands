@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
+import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Display.Brightness;
 
 import java.util.Optional;
 
@@ -22,12 +22,15 @@ public class DisplayBrightnessProperty implements Property<Optional<Brightness>>
 
     @Override
     public Optional<Brightness> getValue() {
-        return Optional.ofNullable(entity.getBrightness());
+        return Optional.ofNullable(entity.getBrightness())
+                .map(brightness -> Brightness.of(brightness.getBlockLight(), brightness.getSkyLight()));
     }
 
     @Override
     public boolean setValue(Optional<Brightness> value) {
-        entity.setBrightness(value.orElse(null));
+        entity.setBrightness(value
+                .map(brightness -> new Display.Brightness(brightness.block(), brightness.sky()))
+                .orElse(null));
         return true;
     }
 

@@ -4,7 +4,7 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramLocationProperty extends HologramProperty<Location> {

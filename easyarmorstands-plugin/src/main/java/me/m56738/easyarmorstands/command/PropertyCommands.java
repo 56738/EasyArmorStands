@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
@@ -13,22 +14,20 @@ import me.m56738.easyarmorstands.command.value.ValueCommand;
 import me.m56738.easyarmorstands.command.value.YawCommand;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
 import me.m56738.easyarmorstands.display.command.value.DisplayScaleAxisCommand;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.permission.Permission;
 
 public final class PropertyCommands {
     private PropertyCommands() {
     }
 
-    public static void register(CommandManager<Source> commandManager, CommonPlatform platform) {
+    public static void register(CommandManager<CommandSource> commandManager, CommonPlatform platform) {
         register(commandManager, new PositionCommand(platform));
         register(commandManager, new YawCommand());
         register(commandManager, new PitchCommand());
@@ -37,9 +36,9 @@ public final class PropertyCommands {
         }
     }
 
-    public static <T> void register(CommandManager<Source> commandManager, ValueCommand<T> valueCommand) {
+    public static <T> void register(CommandManager<CommandSource> commandManager, ValueCommand<T> valueCommand) {
         Permission permission = valueCommand.getPermission();
-        Command.Builder<Source> builder = commandManager.commandBuilder("eas").apply(valueCommand);
+        Command.Builder<CommandSource> builder = commandManager.commandBuilder("eas").apply(valueCommand);
 
         commandManager.command(builder
                 .permission(permission)
@@ -68,11 +67,11 @@ public final class PropertyCommands {
                 .commandDescription(valueCommand.getSetterDescription())
                 .apply(new ElementRequirement())
                 .required("value", valueCommand.getParser())
-                .senderType(PlayerSource.class)
+                .senderType(PlayerCommandSource.class)
                 .handler(context -> {
                     Element element = context.get(ElementProcessor.elementKey());
                     Player sender = context.sender().source();
-                    try (ManagedChangeContext changeContext = EasyArmorStandsPlugin.getInstance().changeContext().create(PaperPlayer.fromNative(sender))) {
+                    try (ManagedChangeContext changeContext = EasyArmorStandsPlugin.getInstance().changeContext().create(sender)) {
                         PropertyContainer properties = changeContext.getProperties(element);
                         if (!valueCommand.isSupported(properties)) {
                             valueCommand.sendNotSupported(sender);

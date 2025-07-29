@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -14,7 +15,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.RichDescription;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
@@ -25,7 +25,7 @@ public class PositionCommand extends PropertyCommand<Location> {
     }
 
     @Override
-    public Command.@NonNull Builder<Source> applyToCommandBuilder(Command.@NonNull Builder<Source> builder) {
+    public Command.@NonNull Builder<CommandSource> applyToCommandBuilder(Command.@NonNull Builder<CommandSource> builder) {
         return builder.literal("position");
     }
 

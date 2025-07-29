@@ -1,8 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
-import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandArmsProperty;
@@ -30,7 +31,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.EquipmentSlot;
 
 public class EntityElementListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)

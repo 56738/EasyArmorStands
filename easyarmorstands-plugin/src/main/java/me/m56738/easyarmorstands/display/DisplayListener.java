@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.display;
 
-import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
+import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBillboardProperty;
@@ -83,12 +83,8 @@ public class DisplayListener implements Listener {
     }
 
     private void registerTextDisplayProperties(TextDisplay entity, PropertyRegistry registry) {
-        if (TextDisplayAlignmentProperty.isSupported()) {
-            registry.register(new TextDisplayAlignmentProperty(entity));
-        }
-        if (TextDisplayBackgroundProperty.isSupported()) {
-            registry.register(new TextDisplayBackgroundProperty(entity));
-        }
+        registry.register(new TextDisplayAlignmentProperty(entity));
+        registry.register(new TextDisplayBackgroundProperty(entity));
         registry.register(new TextDisplayLineWidthProperty(entity));
         registry.register(new TextDisplaySeeThroughProperty(entity));
         registry.register(new TextDisplayShadowProperty(entity));

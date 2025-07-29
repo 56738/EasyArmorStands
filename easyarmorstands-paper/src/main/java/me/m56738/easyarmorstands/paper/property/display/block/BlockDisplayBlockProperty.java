@@ -1,9 +1,10 @@
 package me.m56738.easyarmorstands.paper.property.display.block;
 
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.block.data.BlockData;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import org.bukkit.entity.BlockDisplay;
 
 public class BlockDisplayBlockProperty implements Property<BlockData> {
@@ -20,12 +21,12 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
 
     @Override
     public BlockData getValue() {
-        return entity.getBlock();
+        return PaperBlockData.fromNative(entity.getBlock());
     }
 
     @Override
     public boolean setValue(BlockData value) {
-        entity.setBlock(value);
+        entity.setBlock(PaperBlockData.toNative(value));
         return true;
     }
 

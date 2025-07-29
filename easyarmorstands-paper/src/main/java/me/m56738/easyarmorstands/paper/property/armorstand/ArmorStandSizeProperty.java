@@ -25,7 +25,7 @@ public class ArmorStandSizeProperty implements Property<ArmorStandSize> {
 
     @Override
     public boolean setValue(ArmorStandSize value) {
-        entity.setSmall(value.isSmall());
+        entity.setSmall(value == ArmorStandSize.SMALL);
         return true;
     }
 

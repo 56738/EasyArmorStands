@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.command.requirement;
 
+import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
 import me.m56738.easyarmorstands.command.processor.GroupProcessor;
 import me.m56738.easyarmorstands.common.message.Message;
-import org.bukkit.command.CommandSender;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,12 +14,12 @@ import static me.m56738.easyarmorstands.command.processor.ElementProcessor.eleme
 
 public class ElementRequirement implements CommandRequirement {
     @Override
-    public boolean evaluateRequirement(@NonNull CommandContext<Source> commandContext) {
+    public boolean evaluateRequirement(@NonNull CommandContext<CommandSource> commandContext) {
         return commandContext.contains(elementKey());
     }
 
     @Override
-    public void handle(CommandContext<Source> context) {
+    public void handle(CommandContext<CommandSource> context) {
         CommandSender sender = context.sender().source();
         if (context.contains(GroupProcessor.groupKey())) {
             sender.sendMessage(Message.error("easyarmorstands.error.group-selected"));

@@ -4,12 +4,12 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.common.group.Group;
 import me.m56738.easyarmorstands.common.group.GroupMember;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
 import org.incendo.cloud.execution.preprocessor.CommandPreprocessor;
 import org.incendo.cloud.key.CloudKey;
-import org.incendo.cloud.paper.util.sender.Source;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import static me.m56738.easyarmorstands.command.processor.ElementProcessor.eleme
 import static me.m56738.easyarmorstands.command.processor.GroupProcessor.groupKey;
 import static org.incendo.cloud.key.CloudKey.cloudKey;
 
-public class ElementSelectionProcessor implements CommandPreprocessor<Source> {
+public class ElementSelectionProcessor implements CommandPreprocessor<CommandSource> {
     private static final CloudKey<ElementSelection> KEY = cloudKey("selection", ElementSelection.class);
 
     public static CloudKey<ElementSelection> elementSelectionKey() {
@@ -26,8 +26,8 @@ public class ElementSelectionProcessor implements CommandPreprocessor<Source> {
     }
 
     @Override
-    public void accept(@NonNull CommandPreprocessingContext<Source> context) {
-        CommandContext<Source> commandContext = context.commandContext();
+    public void accept(@NonNull CommandPreprocessingContext<CommandSource> context) {
+        CommandContext<CommandSource> commandContext = context.commandContext();
 
         if (commandContext.contains(elementKey())) {
             Element element = commandContext.get(elementKey());

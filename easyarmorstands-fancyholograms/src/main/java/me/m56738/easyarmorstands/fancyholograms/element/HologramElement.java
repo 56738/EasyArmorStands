@@ -22,7 +22,6 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.editor.node.HologramRootNode;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +76,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
         MenuFactory factory = addon.getMenuFactory(hologram.getData());
         if (factory != null) {
             Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-            EasyArmorStandsPlugin.getInstance().openMenu(PaperPlayer.toNative(player), session, factory, this);
+            EasyArmorStandsPlugin.getInstance().openMenu(player, session, factory, this);
         }
     }
 

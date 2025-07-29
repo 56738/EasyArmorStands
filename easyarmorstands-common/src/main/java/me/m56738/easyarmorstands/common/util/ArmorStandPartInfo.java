@@ -85,12 +85,12 @@ public class ArmorStandPartInfo {
     }
 
     public Vector3dc getOffset(ArmorStandSize size, double scale) {
-        Vector3dc offset = size.isSmall() ? smallOffset : this.offset;
+        Vector3dc offset = size == ArmorStandSize.SMALL ? smallOffset : this.offset;
         return mul(offset, scale);
     }
 
     public Vector3dc getLength(ArmorStandSize size, double scale) {
-        Vector3dc length = size.isSmall() ? smallLength : this.length;
+        Vector3dc length = size == ArmorStandSize.SMALL ? smallLength : this.length;
         return mul(length, scale);
     }
 

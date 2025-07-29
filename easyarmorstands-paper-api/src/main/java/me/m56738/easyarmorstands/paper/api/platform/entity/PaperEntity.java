@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.paper.api.platform.entity;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.world.Location;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 
 import java.util.Set;
 import java.util.UUID;

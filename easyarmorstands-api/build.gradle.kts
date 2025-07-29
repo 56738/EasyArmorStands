@@ -4,7 +4,12 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.paper.api)
+    compileOnly(libs.adventure.api)
+    compileOnly(libs.adventure.text.minimessage)
+    compileOnly(libs.adventure.text.serializer.plain)
+    compileOnly(libs.jetbrains.annotations)
+    compileOnly(libs.joml)
+    compileOnly(libs.jspecify)
 }
 
 tasks {

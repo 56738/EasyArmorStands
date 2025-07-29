@@ -8,8 +8,9 @@ import me.angeschossen.lands.api.flags.type.RoleFlag;
 import me.angeschossen.lands.api.role.Role;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.config.integration.lands.LandsFlagConfig;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import org.bukkit.event.HandlerList;
 
 import java.util.Locale;
 
@@ -19,7 +20,7 @@ public class LandsAddon implements Addon {
     private final EasyArmorStandsPlugin plugin;
     private final LandsIntegration integration;
 
-    private RegionPrivilegeChecker privilegeChecker;
+    private LandsPrivilegeChecker privilegeChecker;
     private RoleFlag flag;
 
     public LandsAddon() {
@@ -39,7 +40,7 @@ public class LandsAddon implements Addon {
 
     private void configureFlag() {
         LandsFlagConfig flagConfig = plugin.getConfiguration().integration.lands.flag;
-        flag.setIcon(flagConfig.icon.render(Locale.US));
+        flag.setIcon(PaperItem.toNative(flagConfig.icon.render(Locale.US)));
         flag.setDisplayName(flagConfig.displayName);
         flag.setDescription(flagConfig.description);
         flag.setDisplay(flagConfig.display);
@@ -54,12 +55,12 @@ public class LandsAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new LandsPrivilegeChecker(integration, flag);
-        plugin.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
+        plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 
     @Override
     public void disable() {
-        plugin.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+        HandlerList.unregisterAll(privilegeChecker);
     }
 
     @Override

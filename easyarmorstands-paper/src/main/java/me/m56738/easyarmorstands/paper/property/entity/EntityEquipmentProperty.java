@@ -1,44 +1,45 @@
 package me.m56738.easyarmorstands.paper.property.entity;
 
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
-public class EntityEquipmentProperty implements Property<ItemStack> {
+public class EntityEquipmentProperty implements Property<Item> {
     private final LivingEntity entity;
-    private final EquipmentSlot slot;
-    private final PropertyType<ItemStack> type;
+    private final org.bukkit.inventory.EquipmentSlot nativeSlot;
+    private final PropertyType<Item> type;
 
     public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot) {
         this.entity = entity;
-        this.slot = slot;
+        this.nativeSlot = org.bukkit.inventory.EquipmentSlot.valueOf(slot.name());
         this.type = EntityPropertyTypes.EQUIPMENT.get(slot);
     }
 
     @Override
-    public PropertyType<ItemStack> getType() {
+    public PropertyType<Item> getType() {
         return type;
     }
 
     @Override
-    public ItemStack getValue() {
+    public Item getValue() {
         EntityEquipment equipment = entity.getEquipment();
         if (equipment != null) {
-            return equipment.getItem(slot);
+            return PaperItem.fromNative(equipment.getItem(nativeSlot));
         } else {
-            return ItemStack.empty();
+            return PaperItem.empty();
         }
     }
 
     @Override
-    public boolean setValue(ItemStack value) {
+    public boolean setValue(Item value) {
         EntityEquipment equipment = entity.getEquipment();
         if (equipment != null) {
-            equipment.setItem(slot, value);
+            equipment.setItem(nativeSlot, PaperItem.toNative(value));
             return true;
         } else {
             return false;

@@ -230,18 +230,18 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onPlaceEntity(EntityPlaceEvent event) {
-        Player player = event.getPlayer();
-        Entity entity = event.getEntity();
-        if (player == null) {
+        if (event.getPlayer() == null) {
             return;
         }
+        me.m56738.easyarmorstands.api.platform.entity.Player player = PaperPlayer.fromNative(event.getPlayer());
+        Entity entity = event.getEntity();
         Bukkit.getScheduler().runTask(plugin, () -> {
             History history = EasyArmorStandsPlugin.getInstance().getHistory(player);
             Clipboard clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
             Element element = plugin.entityElementProviderRegistry().getElement(PaperEntity.fromNative(entity));
             if (element != null) {
                 history.push(new ElementCreateAction(element));
-                clipboard.handleAutoApply(element, PaperPlayer.fromNative(player));
+                clipboard.handleAutoApply(element, player);
             }
         });
     }
@@ -263,7 +263,7 @@ public class SessionListener implements Listener {
         ElementDestroyAction action = new ElementDestroyAction(element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
-                plugin.getHistory(player).push(action);
+                plugin.getHistory(PaperPlayer.fromNative(player)).push(action);
             }
         });
     }

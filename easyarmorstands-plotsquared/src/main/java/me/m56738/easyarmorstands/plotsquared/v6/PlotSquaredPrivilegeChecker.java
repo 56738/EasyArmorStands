@@ -6,14 +6,15 @@ import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.paper.api.region.RegionListener;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class PlotSquaredPrivilegeChecker implements RegionPrivilegeChecker {
+@NullMarked
+public class PlotSquaredPrivilegeChecker extends RegionListener {
     private final PlotAPI api;
 
     public PlotSquaredPrivilegeChecker(PlotAPI api) {
@@ -21,7 +22,7 @@ public class PlotSquaredPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public boolean isAllowed(Player player, Location location) {
+    public boolean isAllowed(Player player, Location location, boolean silent) {
         com.plotsquared.core.location.Location plotLocation = BukkitUtil.adapt(location);
         PlotArea area = api.getPlotSquared().getPlotAreaManager().getPlotArea(plotLocation);
         if (area == null) {
@@ -43,17 +44,17 @@ public class PlotSquaredPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
+    public void sendCreateError(Player player, PropertyContainer properties) {
         player.sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-create"));
     }
 
     @Override
-    public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
+    public void sendDestroyError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-destroy"));
     }
 
     @Override
-    public void sendEditError(@NotNull Player player, @NotNull Element element) {
+    public void sendEditError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.plotsquared.deny-select"));
     }
 }

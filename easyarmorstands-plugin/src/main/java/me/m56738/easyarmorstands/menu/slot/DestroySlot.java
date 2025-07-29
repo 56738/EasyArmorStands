@@ -4,10 +4,12 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.history.History;
-import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.util.ComponentUtil;
+import me.m56738.easyarmorstands.history.History;
+import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +25,13 @@ public class DestroySlot implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         ItemStack item = ItemStack.of(Material.TNT);
         item.editMeta(meta -> {
             meta.displayName(ComponentUtil.renderForItem(Message.buttonName("easyarmorstands.menu.destroy"), locale));
             meta.lore(List.of(ComponentUtil.renderForItem(Message.buttonDescription("easyarmorstands.menu.destroy.description"), locale)));
         });
-        return item;
+        return PaperItem.fromNative(item);
     }
 
     @Override

@@ -10,7 +10,6 @@ import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -76,7 +75,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         type.applyDefaultProperties(properties);
         properties.putAll(this.properties);
 
-        if (player != null && !EasyArmorStandsPlugin.getInstance().canCreateElement(PaperPlayer.toNative(player), type, properties)) {
+        if (player != null && !EasyArmorStandsPlugin.getInstance().canCreateElement(player, type, properties)) {
             return null;
         }
 
@@ -86,8 +85,8 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         }
 
         if (player != null) {
-            EasyArmorStandsPlugin.getInstance().getHistory(PaperPlayer.toNative(player)).push(new ElementCreateAction(element));
-            EasyArmorStandsPlugin.getInstance().getClipboard(PaperPlayer.toNative(player)).handleAutoApply(element, player);
+            EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(element));
+            EasyArmorStandsPlugin.getInstance().getClipboard(player).handleAutoApply(element, player);
         }
         return element;
     }

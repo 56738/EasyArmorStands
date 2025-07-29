@@ -1,6 +1,7 @@
-package me.m56738.easyarmorstands.paper.api.platform.world;
+package me.m56738.easyarmorstands.paper.api.platform.adapter;
 
 import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 

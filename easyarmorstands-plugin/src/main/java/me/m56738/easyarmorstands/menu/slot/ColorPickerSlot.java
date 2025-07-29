@@ -6,13 +6,13 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -40,8 +40,8 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
-        ItemStack item = getItemTemplate().render(locale, resolver);
+    public Item getItem(Locale locale) {
+        ItemStack item = PaperItem.toNative(getItemTemplate().render(locale, resolver));
         if (active) {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -50,7 +50,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
                 item.setItemMeta(meta);
             }
         }
-        return item;
+        return PaperItem.fromNative(item);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
             return;
         }
 
-        if (!click.isLeftClick() || click.cursor().getType() != Material.AIR) {
+        if (!click.isLeftClick() || click.cursor().isEmpty()) {
             return;
         }
 
@@ -96,7 +96,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         active = false;
         click.updateItem(this);
 
-        if (!click.isLeftClick() || click.cursor().getType() != Material.AIR) {
+        if (!click.isLeftClick() || click.cursor().isEmpty()) {
             return;
         }
 
@@ -109,13 +109,13 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(PaperPlayer.fromNative(player), itemSlot));
-        menu.addCloseListener((p, m) -> element.openMenu(PaperPlayer.fromNative(p)));
-        player.openInventory(menu.getInventory());
+        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(player, itemSlot));
+        menu.addCloseListener((p, m) -> element.openMenu(p));
+        player.openMenu(menu);
     }
 
     private boolean isApplicable(ItemPropertySlot slot) {
-        ItemStack item = slot.getElement().getProperties().get(slot.getType()).getValue();
+        ItemStack item = PaperItem.toNative(slot.getElement().getProperties().get(slot.getType()).getValue());
         ItemMeta meta = item.getItemMeta();
         return meta instanceof LeatherArmorMeta || meta instanceof MapMeta;
     }

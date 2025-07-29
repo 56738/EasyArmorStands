@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Block;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
@@ -17,8 +18,6 @@ import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
-import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -50,7 +49,7 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
         if (blockDataProperty != null && context.type() == ClickContext.Type.LEFT_CLICK && player.isSneaking()) {
             Block block = context.block();
             if (block != null) {
-                BlockData blockData = PaperBlock.toNative(block).getBlockData();
+                BlockData blockData = block.getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
                     getContext().commit();
                     player.sendMessage(Message.success("easyarmorstands.success.changed-block",

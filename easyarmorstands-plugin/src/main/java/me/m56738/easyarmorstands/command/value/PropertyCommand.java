@@ -3,17 +3,17 @@ package me.m56738.easyarmorstands.command.value;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import net.kyori.adventure.text.Component;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class PropertyCommand<T> implements ValueCommand<T> {
     private final PropertyType<T> type;
-    private final ParserDescriptor<Source, T> parser;
+    private final ParserDescriptor<CommandSource, T> parser;
 
-    public PropertyCommand(PropertyType<T> type, ParserDescriptor<Source, T> parser) {
+    public PropertyCommand(PropertyType<T> type, ParserDescriptor<CommandSource, T> parser) {
         this.type = type;
         this.parser = parser;
     }
@@ -29,7 +29,7 @@ public abstract class PropertyCommand<T> implements ValueCommand<T> {
     }
 
     @Override
-    public @NotNull ParserDescriptor<Source, T> getParser() {
+    public @NotNull ParserDescriptor<CommandSource, T> getParser() {
         return parser;
     }
 

@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.paper.api.platform.world.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.Nullable;

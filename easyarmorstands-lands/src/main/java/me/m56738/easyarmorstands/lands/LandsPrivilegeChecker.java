@@ -5,14 +5,15 @@ import me.angeschossen.lands.api.flags.type.RoleFlag;
 import me.angeschossen.lands.api.land.Area;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.paper.api.region.RegionListener;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
-public class LandsPrivilegeChecker implements RegionPrivilegeChecker {
+@NullMarked
+public class LandsPrivilegeChecker extends RegionListener {
     private final LandsIntegration integration;
     private final RoleFlag flag;
 
@@ -22,7 +23,7 @@ public class LandsPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public boolean isAllowed(Player player, Location location) {
+    public boolean isAllowed(Player player, Location location, boolean silent) {
         if (!location.getChunk().isLoaded()) {
             return false;
         }
@@ -39,17 +40,17 @@ public class LandsPrivilegeChecker implements RegionPrivilegeChecker {
     }
 
     @Override
-    public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
+    public void sendCreateError(Player player, PropertyContainer properties) {
         player.sendMessage(Message.error("easyarmorstands.error.lands.deny-create"));
     }
 
     @Override
-    public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
+    public void sendDestroyError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.lands.deny-destroy"));
     }
 
     @Override
-    public void sendEditError(@NotNull Player player, @NotNull Element element) {
+    public void sendEditError(Player player, Element element) {
         player.sendMessage(Message.error("easyarmorstands.error.lands.deny-select"));
     }
 }

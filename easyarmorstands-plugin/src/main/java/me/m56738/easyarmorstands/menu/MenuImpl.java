@@ -6,10 +6,13 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuCloseListener;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -76,13 +79,13 @@ public class MenuImpl implements InventoryHolder, Menu {
         for (int i = 0; i < slots.length; i++) {
             MenuSlot slot = slots[i];
             if (slot != null && predicate.test(slot)) {
-                inventory.setItem(i, slot.getItem(locale));
+                inventory.setItem(i, PaperItem.toNative(slot.getItem(locale)));
             }
         }
     }
 
     @Override
-    public @Nullable ItemStack getItem(int index) {
+    public @Nullable Item getItem(int index) {
         MenuSlot slot = slots[index];
         if (slot != null) {
             return slot.getItem(locale);
@@ -94,13 +97,13 @@ public class MenuImpl implements InventoryHolder, Menu {
     public void updateItem(int index) {
         MenuSlot slot = slots[index];
         if (slot != null) {
-            inventory.setItem(index, slot.getItem(locale));
+            inventory.setItem(index, PaperItem.toNative(slot.getItem(locale)));
         }
     }
 
     @Override
     public void updateItem(@NotNull MenuSlot slot) {
-        ItemStack item = slot.getItem(locale);
+        ItemStack item = PaperItem.toNative(slot.getItem(locale));
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] == slot) {
                 inventory.setItem(i, item);
@@ -134,8 +137,8 @@ public class MenuImpl implements InventoryHolder, Menu {
         for (MenuCloseListener listener : closeListeners) {
             listener.onClose(player, this);
         }
-        if (inventory.equals(player.getOpenInventory().getTopInventory())) {
-            player.closeInventory();
+        if (inventory.equals(PaperPlayer.toNative(player).getOpenInventory().getTopInventory())) {
+            PaperPlayer.toNative(player).closeInventory();
         }
     }
 }

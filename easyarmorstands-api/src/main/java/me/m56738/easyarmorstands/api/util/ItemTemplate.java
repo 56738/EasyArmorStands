@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.api.util;
 
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
 public interface ItemTemplate {
-    ItemStack render(Locale locale);
+    Item render(Locale locale);
 
-    ItemStack render(Locale locale, TagResolver resolver);
+    Item render(Locale locale, TagResolver resolver);
 }

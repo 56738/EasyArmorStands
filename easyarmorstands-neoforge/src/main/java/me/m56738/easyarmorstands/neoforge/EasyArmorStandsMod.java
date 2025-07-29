@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.neoforge;
 
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
 import me.m56738.easyarmorstands.neoforge.platform.NeoForgePlatformImpl;
@@ -21,8 +22,8 @@ public class EasyArmorStandsMod {
 
     public EasyArmorStandsMod(ModContainer modContainer) {
         this.modContainer = modContainer;
-        NeoForgeServerCommandManager<ModdedCommandSource> commandManager = new NeoForgeServerCommandManager<>(ExecutionCoordinator.simpleCoordinator(), new NeoForgeSenderMapper());
-        EasyArmorStandsCommon.registerCommands(commandManager, ModdedCommandSource.class, platformHolder);
+        NeoForgeServerCommandManager<CommandSource> commandManager = new NeoForgeServerCommandManager<>(ExecutionCoordinator.simpleCoordinator(), new NeoForgeSenderMapper());
+        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
         NeoForge.EVENT_BUS.addListener(this::onSetup);
     }
 

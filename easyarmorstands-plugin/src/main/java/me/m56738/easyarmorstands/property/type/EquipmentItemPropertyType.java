@@ -4,8 +4,8 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.layout.EquipmentMenuLayout;
 import me.m56738.easyarmorstands.api.menu.layout.MenuLayout;
+import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 import net.kyori.adventure.key.Key;
-import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 

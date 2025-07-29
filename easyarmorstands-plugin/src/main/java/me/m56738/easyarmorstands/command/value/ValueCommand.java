@@ -2,21 +2,21 @@ package me.m56738.easyarmorstands.command.value;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.message.Message;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
-import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
-public interface ValueCommand<T> extends Command.Builder.Applicable<Source> {
+public interface ValueCommand<T> extends Command.Builder.Applicable<CommandSource> {
     @NotNull Component getDisplayName();
 
     @NotNull Permission getPermission();
 
-    @NotNull ParserDescriptor<Source, T> getParser();
+    @NotNull ParserDescriptor<CommandSource, T> getParser();
 
     @NotNull Description getShowDescription();
 

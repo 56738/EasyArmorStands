@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.fabric;
 
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.fabric.platform.FabricPlatformImpl;
 import me.m56738.easyarmorstands.fabric.platform.command.FabricSenderMapper;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
@@ -20,10 +21,10 @@ public class EasyArmorStandsMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        FabricServerCommandManager<ModdedCommandSource> commandManager = new FabricServerCommandManager<>(
+        FabricServerCommandManager<CommandSource> commandManager = new FabricServerCommandManager<>(
                 ExecutionCoordinator.simpleCoordinator(), new FabricSenderMapper());
 
-        EasyArmorStandsCommon.registerCommands(commandManager, ModdedCommandSource.class, platformHolder);
+        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::onSetup);
     }

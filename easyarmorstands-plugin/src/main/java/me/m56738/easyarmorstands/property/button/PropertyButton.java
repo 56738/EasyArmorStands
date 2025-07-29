@@ -3,12 +3,12 @@ package me.m56738.easyarmorstands.property.button;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
@@ -51,7 +51,7 @@ public abstract class PropertyButton<T> implements MenuSlot {
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
+    public Item getItem(Locale locale) {
         SimpleItemTemplate template = prepareTemplate(itemTemplate);
         TagResolver.Builder resolver = TagResolver.builder();
         prepareTagResolver(resolver);

@@ -1,17 +1,17 @@
 package me.m56738.easyarmorstands.command.requirement;
 
+import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import org.bukkit.command.CommandSender;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.paper.util.sender.Source;
 
 import static me.m56738.easyarmorstands.command.processor.SessionProcessor.sessionKey;
 
 public class SessionRequirement implements CommandRequirement {
     @Override
-    public void handle(CommandContext<Source> context) {
+    public void handle(CommandContext<CommandSource> context) {
         CommandSender sender = context.sender().source();
         sender.sendMessage(Message.error("easyarmorstands.error.not-using-editor"));
         if (sender.hasPermission(Permissions.GIVE)) {
@@ -20,7 +20,7 @@ public class SessionRequirement implements CommandRequirement {
     }
 
     @Override
-    public boolean evaluateRequirement(@NonNull CommandContext<Source> commandContext) {
+    public boolean evaluateRequirement(@NonNull CommandContext<CommandSource> commandContext) {
         return commandContext.contains(sessionKey());
     }
 }

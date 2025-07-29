@@ -26,4 +26,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Package
-          path: easyarmorstands-plugin/build/EasyArmorStands-*.jar
+          path: |
+            easyarmorstands-paper/build/EasyArmorStands-Paper.jar
+            easyarmorstands-fabric/build/EasyArmorStands-Fabric.jar
+            easyarmorstands-neoforge/build/EasyArmorStands-NeoForge.jar

@@ -19,7 +19,6 @@ import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
 import me.m56738.easyarmorstands.menu.layout.ContentMenuBuilder;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
@@ -59,6 +58,6 @@ public class DisplayElement extends SimpleEntityElement {
 
     @Override
     public void openMenu(@NotNull Player player) {
-        EasyArmorStandsPlugin.getInstance().openMenu(PaperPlayer.toNative(player), this, ContentMenuBuilder::new);
+        EasyArmorStandsPlugin.getInstance().openMenu(player, this, ContentMenuBuilder::new);
     }
 }

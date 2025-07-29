@@ -36,6 +36,10 @@ public interface Location {
 
     float pitch();
 
+    default Block getBlock() {
+        return world().getBlock(position());
+    }
+
     default Location withOffset(Vector3dc offset) {
         return new LocationImpl(world(), position().add(offset, new Vector3d()), yaw(), pitch());
     }

@@ -180,7 +180,7 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public Element getElement() {
+    public @Nullable Element getElement() {
         for (Node node : nodeStack) {
             if (node instanceof ElementNode) {
                 return ((ElementNode) node).getElement();

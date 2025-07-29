@@ -27,7 +27,7 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
 
     @Override
     public void onClick(@NotNull MenuClick click) {
-        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(PaperPlayer.fromNative(click.player()))) {
+        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(click.player())) {
             boolean changed;
             if (click.isShiftClick()) {
                 EasyArmorStandsPlugin.getInstance().getClipboard(click.player())

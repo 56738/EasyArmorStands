@@ -58,4 +58,14 @@ tasks {
             attributes["Automatic-Module-Name"] = "me.m56738.easyarmorstands.fabric"
         }
     }
+
+    val staticJar by registering(Copy::class) {
+        from(remapJar)
+        into(layout.buildDirectory.dir("static"))
+        rename { "EasyArmorStands-Fabric.jar" }
+    }
+
+    assemble {
+        dependsOn(staticJar)
+    }
 }

@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,9 +28,6 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull ElementSpawnRequest elementSpawnRequest(ElementType type);
-
-    @Contract(pure = true)
-    @NotNull RegionPrivilegeManager regionPrivilegeManager();
 
     @Contract(pure = true)
     @NotNull ChangeContextFactory changeContext();

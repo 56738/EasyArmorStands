@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.paper;
 
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.paper.message.TranslationParser;
 import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
-import me.m56738.easyarmorstands.paper.platform.command.PaperCommandSource;
 import me.m56738.easyarmorstands.paper.platform.command.PaperSenderMapper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -22,10 +22,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin {
 
         GlobalTranslator.translator().addSource(TranslationParser.read(getResource("assets/easyarmorstands/lang/en_us.json"), Key.key("easyarmorstands", "translation")));
 
-        PaperCommandManager<PaperCommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper())
+        PaperCommandManager<CommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper())
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(this);
 
-        EasyArmorStandsCommon.registerCommands(commandManager, PaperCommandSource.class, platformHolder);
+        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
     }
 }

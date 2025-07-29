@@ -2,10 +2,11 @@ package me.m56738.easyarmorstands.fancyholograms.property.block;
 
 import de.oliver.fancyholograms.api.data.BlockHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
-import org.bukkit.block.data.BlockData;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockHologramBlockProperty extends HologramProperty<BlockData> {
@@ -23,12 +24,12 @@ public class BlockHologramBlockProperty extends HologramProperty<BlockData> {
 
     @Override
     public @NotNull BlockData getValue() {
-        return data.getBlock().createBlockData();
+        return PaperBlockData.fromNative(data.getBlock().createBlockData());
     }
 
     @Override
     public boolean setValue(@NotNull BlockData value) {
-        data.setBlock(value.getMaterial());
+        data.setBlock(PaperBlockData.toNative(value).getMaterial());
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

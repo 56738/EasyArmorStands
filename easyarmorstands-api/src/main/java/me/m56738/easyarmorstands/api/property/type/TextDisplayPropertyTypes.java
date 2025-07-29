@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import me.m56738.easyarmorstands.api.platform.entity.display.TextAlignment;
+import me.m56738.easyarmorstands.api.util.Color;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Color;
-import org.bukkit.entity.TextDisplay.TextAlignment;
 
 import java.util.Optional;
 
