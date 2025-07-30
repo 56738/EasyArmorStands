@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramDataProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramLocationProperty;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramPropertyTypes;
 import me.m56738.easyarmorstands.fancyholograms.property.block.BlockHologramBlockProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.display.DisplayHologramBillboardProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.display.DisplayHologramScaleProperty;
@@ -25,7 +26,6 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramBackgr
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramSeeThroughProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadowProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
-import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,7 +71,7 @@ public class HologramElementType implements ElementType {
 
     @Override
     public @Nullable Element createElement(@NotNull PropertyContainer properties) {
-        Property<HologramData> property = properties.getOrNull(HologramDataPropertyType.INSTANCE);
+        Property<HologramData> property = properties.getOrNull(HologramPropertyTypes.DATA);
         if (property == null) {
             return null;
         }

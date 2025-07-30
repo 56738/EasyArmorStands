@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.fancyholograms.element;
 
 import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -13,7 +12,6 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -73,11 +71,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public void openMenu(@NotNull Player player) {
-        MenuFactory factory = addon.getMenuFactory(hologram.getData());
-        if (factory != null) {
-            Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-            EasyArmorStandsPlugin.getInstance().openMenu(player, session, factory, this);
-        }
+        // TODO
     }
 
     @Override

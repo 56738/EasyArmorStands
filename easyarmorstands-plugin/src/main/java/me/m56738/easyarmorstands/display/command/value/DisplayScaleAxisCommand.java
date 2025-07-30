@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.display.command.value;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.command.value.ScaleAxisCommand;
+import me.m56738.easyarmorstands.common.command.value.ScaleAxisCommand;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;

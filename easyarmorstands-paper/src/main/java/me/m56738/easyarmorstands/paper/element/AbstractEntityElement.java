@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
+import me.m56738.easyarmorstands.common.element.EntityElementReference;
 
 public abstract class AbstractEntityElement implements EntityElement {
     private final Platform platform;

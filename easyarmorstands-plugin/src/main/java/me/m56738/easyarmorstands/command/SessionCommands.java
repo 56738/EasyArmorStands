@@ -22,18 +22,21 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
-import me.m56738.easyarmorstands.command.requirement.RequireElement;
-import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
-import me.m56738.easyarmorstands.command.requirement.RequireSession;
-import me.m56738.easyarmorstands.command.util.ElementSelection;
-import me.m56738.easyarmorstands.common.command.parser.EntitySelector;
+import me.m56738.easyarmorstands.common.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.common.command.requirement.RequireSession;
+import me.m56738.easyarmorstands.common.command.util.ElementSelection;
+import me.m56738.easyarmorstands.common.command.util.EntitySelector;
 import me.m56738.easyarmorstands.common.editor.SessionImpl;
 import me.m56738.easyarmorstands.common.editor.SessionSnapper;
 import me.m56738.easyarmorstands.common.editor.node.ValueNode;
 import me.m56738.easyarmorstands.common.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.common.group.Group;
 import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.common.history.HistoryManager;
+import me.m56738.easyarmorstands.common.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.common.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
@@ -41,8 +44,6 @@ import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
 import me.m56738.easyarmorstands.common.util.AlignAxis;
 import me.m56738.easyarmorstands.common.util.Util;
-import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -69,7 +70,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor.elementSelectionKey;
+import static me.m56738.easyarmorstands.common.command.processor.ElementSelectionProcessor.elementSelectionKey;
 
 @Command("eas")
 public class SessionCommands {
@@ -150,7 +151,7 @@ public class SessionCommands {
     @Permission(Permissions.CLONE)
     @CommandDescription("easyarmorstands.command.description.clone")
     @RequireElementSelection
-    public void clone(PlayerCommandSource source, ElementSelection selection, CommonPlatform platform) {
+    public void clone(PlayerCommandSource source, ElementSelection selection, CommonPlatform platform, HistoryManager historyManager) {
         Player sender = source.source();
         List<Element> clones = new ArrayList<>();
         for (Element element : selection.elements()) {
@@ -179,7 +180,7 @@ public class SessionCommands {
 
         List<ElementCreateAction> actions = new ArrayList<>();
         for (Element clone : clones) {
-            actions.add(new ElementCreateAction(clone));
+            actions.add(new ElementCreateAction(platform, historyManager, clone));
         }
         EasyArmorStandsPlugin.getInstance().getHistory(sender).push(actions, description);
     }
@@ -196,7 +197,7 @@ public class SessionCommands {
     @Permission(Permissions.DESTROY)
     @CommandDescription("easyarmorstands.command.description.destroy")
     @RequireElementSelection
-    public void destroy(PlayerCommandSource source, ElementSelection selection, CommonPlatform platform) {
+    public void destroy(PlayerCommandSource source, ElementSelection selection, CommonPlatform platform, HistoryManager historyManager) {
         Player sender = source.source();
         List<ElementDestroyAction> actions = new ArrayList<>();
         for (Element element : selection.elements()) {
@@ -208,7 +209,7 @@ public class SessionCommands {
                 continue;
             }
 
-            actions.add(new ElementDestroyAction(element));
+            actions.add(new ElementDestroyAction(platform, historyManager, element));
             destroyableElement.destroy();
         }
 
@@ -316,7 +317,7 @@ public class SessionCommands {
             }
             text = property.getValue().orElse(null);
         }
-        showText(sender, EntityPropertyTypes.CUSTOM_NAME.getName(), text, "/eas name set");
+        showText(sender, EntityPropertyTypes.CUSTOM_NAME.name(), text, "/eas name set");
     }
 
     @Command("name set <value>")

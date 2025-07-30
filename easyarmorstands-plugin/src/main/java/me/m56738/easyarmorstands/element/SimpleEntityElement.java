@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
@@ -22,16 +21,12 @@ import me.m56738.easyarmorstands.common.editor.node.SimpleEntityNode;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.util.Util;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
-import me.m56738.easyarmorstands.menu.layout.DefaultMenuBuilder;
-import me.m56738.easyarmorstands.menu.layout.EquipmentMenuBuilder;
-import me.m56738.easyarmorstands.menu.layout.MenuBuilderFactory;
 import me.m56738.easyarmorstands.paper.element.AbstractEntityElement;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
@@ -104,13 +99,7 @@ public class SimpleEntityElement extends AbstractEntityElement implements Defaul
 
     @Override
     public void openMenu(@NotNull Player player) {
-        MenuBuilderFactory builderFactory;
-        if (entity instanceof LivingEntity) {
-            builderFactory = EquipmentMenuBuilder::new;
-        } else {
-            builderFactory = DefaultMenuBuilder::new;
-        }
-        EasyArmorStandsPlugin.getInstance().openMenu(player, this, builderFactory);
+        // TODO
     }
 
     @Override

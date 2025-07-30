@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.modded.platform.entity;
 
-import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
@@ -50,10 +49,5 @@ public abstract class ModdedPlayerImpl extends ModdedCommandSenderImpl implement
     @Override
     public void giveItem(Item item) {
         player.addItem(ModdedItem.toNative(item));
-    }
-
-    @Override
-    public void openMenu(Menu menu) {
-        // TODO
     }
 }

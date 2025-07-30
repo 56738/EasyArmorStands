@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.paper.platform;
 
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
@@ -9,15 +10,16 @@ import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
+import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
+import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
-import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
 import me.m56738.gizmo.api.GizmoFactory;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
@@ -170,6 +172,12 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
 
     @Override
     public boolean canDestroyElement(Player player, DestroyableElement element) {
+        // TODO
+        return true;
+    }
+
+    @Override
+    public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
         // TODO
         return true;
     }

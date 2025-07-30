@@ -9,18 +9,24 @@ import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.common.history.HistoryManager;
+import me.m56738.easyarmorstands.common.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 public class ElementSpawnRequestImpl implements ElementSpawnRequest {
+    private final CommonPlatform platform;
+    private final HistoryManager historyManager;
     private final PropertyMap properties = new PropertyMap();
     private final ElementType type;
     private Player player;
 
-    public ElementSpawnRequestImpl(ElementType type) {
+    public ElementSpawnRequestImpl(CommonPlatform platform, HistoryManager historyManager, ElementType type) {
+        this.platform = platform;
+        this.historyManager = historyManager;
         this.type = type;
     }
 
@@ -85,7 +91,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         }
 
         if (player != null) {
-            EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(element));
+            EasyArmorStandsPlugin.getInstance().getHistory(player).push(new ElementCreateAction(platform, historyManager, element));
             EasyArmorStandsPlugin.getInstance().getClipboard(player).handleAutoApply(element, player);
         }
         return element;

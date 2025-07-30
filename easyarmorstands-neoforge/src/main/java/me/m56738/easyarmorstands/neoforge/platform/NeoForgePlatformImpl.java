@@ -2,9 +2,11 @@ package me.m56738.easyarmorstands.neoforge.platform;
 
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
@@ -49,6 +51,11 @@ public class NeoForgePlatformImpl extends ModdedPlatformImpl {
 
     @Override
     public boolean canDestroyElement(Player player, DestroyableElement element) {
+        return false;
+    }
+
+    @Override
+    public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
         return false;
     }
 }

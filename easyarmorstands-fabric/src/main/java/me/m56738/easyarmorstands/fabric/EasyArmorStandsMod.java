@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.fabric;
 
+import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.common.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.fabric.platform.FabricPlatformImpl;
 import me.m56738.easyarmorstands.fabric.platform.command.FabricSenderMapper;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
-import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -18,13 +19,14 @@ import java.util.NoSuchElementException;
 
 public class EasyArmorStandsMod implements ModInitializer {
     private final PlatformHolder platformHolder = new PlatformHolder();
+    private final PropertyTypeRegistry propertyTypeRegistry = new PropertyTypeRegistryImpl();
 
     @Override
     public void onInitialize() {
         FabricServerCommandManager<CommandSource> commandManager = new FabricServerCommandManager<>(
                 ExecutionCoordinator.simpleCoordinator(), new FabricSenderMapper());
 
-        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
+        EasyArmorStandsCommon.registerCommands(commandManager, propertyTypeRegistry, platformHolder);
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::onSetup);
     }

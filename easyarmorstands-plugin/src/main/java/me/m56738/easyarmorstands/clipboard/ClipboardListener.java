@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.clipboard;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.common.clipboard.ClipboardManager;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

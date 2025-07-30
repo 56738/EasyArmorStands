@@ -1,6 +1,16 @@
 package me.m56738.easyarmorstands.common;
 
 import me.m56738.easyarmorstands.api.platform.Platform;
+import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
+import me.m56738.easyarmorstands.common.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.common.command.processor.PropertyPermissionBuilderModifier;
+import me.m56738.easyarmorstands.common.command.requirement.CommandRequirementBuilderModifier;
+import me.m56738.easyarmorstands.common.command.requirement.ElementRequirement;
+import me.m56738.easyarmorstands.common.command.requirement.ElementSelectionRequirement;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.common.command.requirement.RequireSession;
+import me.m56738.easyarmorstands.common.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
@@ -15,7 +25,7 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
 public class EasyArmorStandsCommon {
-    public static void registerCommands(CommandManager<CommandSource> commandManager, PlatformHolder platformHolder) {
+    public static void registerCommands(CommandManager<CommandSource> commandManager, PropertyTypeRegistry propertyTypeRegistry, PlatformHolder platformHolder) {
         commandManager.parameterInjectorRegistry().registerInjector(Platform.class,
                 (context, annotationAccessor) -> platformHolder.getPlatform());
 
@@ -36,6 +46,11 @@ public class EasyArmorStandsCommon {
                 .handler(context -> help.queryCommands(context.get("query"), context.sender())));
 
         AnnotationParser<CommandSource> annotationParser = new AnnotationParser<>(commandManager, CommandSource.class);
+        annotationParser.descriptionMapper(RichDescription::translatable);
+        annotationParser.registerBuilderModifier(RequireSession.class, new CommandRequirementBuilderModifier<>(a -> new SessionRequirement()));
+        annotationParser.registerBuilderModifier(RequireElement.class, new CommandRequirementBuilderModifier<>(a -> new ElementRequirement()));
+        annotationParser.registerBuilderModifier(RequireElementSelection.class, new CommandRequirementBuilderModifier<>(a -> new ElementSelectionRequirement()));
+        annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier(propertyTypeRegistry));
         try {
             annotationParser.parseContainers(EasyArmorStandsCommon.class.getClassLoader());
         } catch (Exception e) {

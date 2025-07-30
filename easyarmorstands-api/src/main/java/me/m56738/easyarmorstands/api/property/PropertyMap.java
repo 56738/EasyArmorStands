@@ -81,13 +81,12 @@ public final class PropertyMap implements PropertyContainer {
 
         @Override
         public @NotNull T getValue() {
-            return type.cloneValue(value);
+            return value;
         }
 
         @Override
         public boolean setValue(@NotNull T value) {
-            Objects.requireNonNull(value);
-            this.value = type.cloneValue(value);
+            this.value = Objects.requireNonNull(value);
             return true;
         }
 

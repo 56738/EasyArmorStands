@@ -23,7 +23,7 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
     public DisplayShearNode(Session session, DisplayElement element) {
         super(session, element);
         this.session = session;
-        this.name = DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD);
+        this.name = DisplayPropertyTypes.RIGHT_ROTATION.name().color(NamedTextColor.GOLD);
         this.rightRotationProperty = getProperties().get(DisplayPropertyTypes.RIGHT_ROTATION);
         DisplayToolProvider tools = element.getTools(getContext());
         for (Axis axis : Axis.values()) {

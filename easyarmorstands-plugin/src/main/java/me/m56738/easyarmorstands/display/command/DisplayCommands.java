@@ -27,14 +27,19 @@ import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.api.util.EulerAngles;
 import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
-import me.m56738.easyarmorstands.command.requirement.RequireElement;
-import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
-import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.common.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.common.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.common.command.util.ElementSelection;
 import me.m56738.easyarmorstands.common.group.Group;
 import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.common.history.HistoryManager;
+import me.m56738.easyarmorstands.common.history.action.Action;
+import me.m56738.easyarmorstands.common.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.common.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
 import me.m56738.easyarmorstands.common.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.common.util.Util;
@@ -45,9 +50,6 @@ import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.history.action.Action;
-import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -302,7 +304,7 @@ public class DisplayCommands {
             return;
         }
         Component text = property.getValue();
-        SessionCommands.showText(sender, TextDisplayPropertyTypes.TEXT.getName(), text, "/eas text set");
+        SessionCommands.showText(sender, TextDisplayPropertyTypes.TEXT.name(), text, "/eas text set");
     }
 
     @Command("text set <value>")
@@ -510,7 +512,7 @@ public class DisplayCommands {
     @Permission(Permissions.CONVERT)
     @CommandDescription("easyarmorstands.command.description.convert")
     @RequireElementSelection
-    public void convert(PlayerCommandSource source, Session session, ElementSelection selection) {
+    public void convert(PlayerCommandSource source, Session session, ElementSelection selection, CommonPlatform platform, HistoryManager historyManager) {
         Player sender = source.source();
         List<SimpleEntityElement> createdElements = new ArrayList<>();
         List<Action> allActions = new ArrayList<>();
@@ -550,11 +552,11 @@ public class DisplayCommands {
             leftMatrix.rotateX(Math.PI / 2);
 
             List<Action> actions = new ArrayList<>();
-            convert(sender, armorStandElement, size, EquipmentSlot.HEAD, ArmorStandPart.HEAD, ItemDisplayTransform.HEAD, headMatrix, actions, createdElements);
-            convert(sender, armorStandElement, size, EquipmentSlot.HAND, ArmorStandPart.RIGHT_ARM, ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions, createdElements);
-            convert(sender, armorStandElement, size, EquipmentSlot.OFF_HAND, ArmorStandPart.LEFT_ARM, ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions, createdElements);
+            convert(sender, armorStandElement, size, EquipmentSlot.HEAD, ArmorStandPart.HEAD, ItemDisplayTransform.HEAD, headMatrix, actions, createdElements, platform, historyManager);
+            convert(sender, armorStandElement, size, EquipmentSlot.HAND, ArmorStandPart.RIGHT_ARM, ItemDisplayTransform.THIRDPERSON_RIGHTHAND, rightMatrix, actions, createdElements, platform, historyManager);
+            convert(sender, armorStandElement, size, EquipmentSlot.OFF_HAND, ArmorStandPart.LEFT_ARM, ItemDisplayTransform.THIRDPERSON_LEFTHAND, leftMatrix, actions, createdElements, platform, historyManager);
             if (!actions.isEmpty()) {
-                actions.add(new ElementDestroyAction(element));
+                actions.add(new ElementDestroyAction(platform, historyManager, element));
                 armorStandElement.destroy();
                 count++;
             }
@@ -599,7 +601,7 @@ public class DisplayCommands {
         return item.isSkull();
     }
 
-    private void convert(Player sender, ArmorStandElement element, ArmorStandSize size, EquipmentSlot slot, ArmorStandPart part, ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement> elements) {
+    private void convert(Player sender, ArmorStandElement element, ArmorStandSize size, EquipmentSlot slot, ArmorStandPart part, ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<SimpleEntityElement> elements, CommonPlatform platform, HistoryManager historyManager) {
         Item item = element.getProperties().get(EntityPropertyTypes.EQUIPMENT.get(slot)).getValue();
         if (item.isEmpty()) {
             return;
@@ -637,7 +639,7 @@ public class DisplayCommands {
             return;
         }
 
-        actions.add(new ElementCreateAction(element));
+        actions.add(new ElementCreateAction(platform, historyManager, element));
         elements.add(element);
     }
 

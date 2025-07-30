@@ -1,0 +1,34 @@
+package me.m56738.easyarmorstands.common.command.processor;
+
+import me.m56738.easyarmorstands.common.editor.SessionImpl;
+import me.m56738.easyarmorstands.common.group.Group;
+import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessingContext;
+import org.incendo.cloud.execution.preprocessor.CommandPreprocessor;
+import org.incendo.cloud.key.CloudKey;
+
+import static me.m56738.easyarmorstands.common.command.processor.SessionProcessor.sessionKey;
+import static org.incendo.cloud.key.CloudKey.cloudKey;
+
+public class GroupProcessor implements CommandPreprocessor<CommandSource> {
+    private static final CloudKey<Group> KEY = cloudKey("group", Group.class);
+
+    public static CloudKey<Group> groupKey() {
+        return KEY;
+    }
+
+    @Override
+    public void accept(@NonNull CommandPreprocessingContext<CommandSource> context) {
+        CommandContext<CommandSource> commandContext = context.commandContext();
+        if (commandContext.contains(sessionKey())) {
+            SessionImpl session = commandContext.get(sessionKey());
+            GroupRootNode node = session.findNode(GroupRootNode.class);
+            if (node != null) {
+                commandContext.set(KEY, node.getGroup());
+            }
+        }
+    }
+}

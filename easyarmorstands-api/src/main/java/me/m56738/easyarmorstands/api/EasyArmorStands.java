@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
+import me.m56738.easyarmorstands.api.platform.Platform;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,9 @@ public interface EasyArmorStands {
         }
         return EasyArmorStandsHolder.instance;
     }
+
+    @Contract(pure = true)
+    @NotNull Platform platform();
 
     @Contract(pure = true)
     @NotNull PropertyTypeRegistry propertyTypeRegistry();

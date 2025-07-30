@@ -4,13 +4,13 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.clipboard.Clipboard;
+import me.m56738.easyarmorstands.common.clipboard.Clipboard;
 import me.m56738.easyarmorstands.common.editor.SessionImpl;
 import me.m56738.easyarmorstands.common.editor.context.ClickContextImpl;
+import me.m56738.easyarmorstands.common.history.History;
+import me.m56738.easyarmorstands.common.history.action.ElementCreateAction;
+import me.m56738.easyarmorstands.common.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.history.History;
-import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
@@ -240,7 +240,7 @@ public class SessionListener implements Listener {
             Clipboard clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
             Element element = plugin.entityElementProviderRegistry().getElement(PaperEntity.fromNative(entity));
             if (element != null) {
-                history.push(new ElementCreateAction(element));
+                history.push(new ElementCreateAction(plugin.platform(), plugin.getHistoryManager(), element));
                 clipboard.handleAutoApply(element, player);
             }
         });
@@ -260,7 +260,7 @@ public class SessionListener implements Listener {
             return;
         }
 
-        ElementDestroyAction action = new ElementDestroyAction(element);
+        ElementDestroyAction action = new ElementDestroyAction(plugin.platform(), plugin.getHistoryManager(), element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
                 plugin.getHistory(PaperPlayer.fromNative(player)).push(action);

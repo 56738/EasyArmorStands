@@ -1,8 +1,10 @@
 package me.m56738.easyarmorstands.paper;
 
+import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.common.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.paper.message.TranslationParser;
 import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
 import me.m56738.easyarmorstands.paper.platform.command.PaperSenderMapper;
@@ -26,6 +28,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin {
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(this);
 
-        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
+        PropertyTypeRegistry propertyTypeRegistry = new PropertyTypeRegistryImpl();
+
+        EasyArmorStandsCommon.registerCommands(commandManager, propertyTypeRegistry, platformHolder);
     }
 }

@@ -1,10 +1,11 @@
 package me.m56738.easyarmorstands.neoforge;
 
+import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.platform.PlatformHolder;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.common.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
-import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
 import me.m56738.easyarmorstands.neoforge.platform.NeoForgePlatformImpl;
 import me.m56738.easyarmorstands.neoforge.platform.command.NeoForgeSenderMapper;
 import net.neoforged.fml.ModContainer;
@@ -23,7 +24,8 @@ public class EasyArmorStandsMod {
     public EasyArmorStandsMod(ModContainer modContainer) {
         this.modContainer = modContainer;
         NeoForgeServerCommandManager<CommandSource> commandManager = new NeoForgeServerCommandManager<>(ExecutionCoordinator.simpleCoordinator(), new NeoForgeSenderMapper());
-        EasyArmorStandsCommon.registerCommands(commandManager, platformHolder);
+        PropertyTypeRegistry propertyTypeRegistry = new PropertyTypeRegistryImpl();
+        EasyArmorStandsCommon.registerCommands(commandManager, propertyTypeRegistry, platformHolder);
         NeoForge.EVENT_BUS.addListener(this::onSetup);
     }
 

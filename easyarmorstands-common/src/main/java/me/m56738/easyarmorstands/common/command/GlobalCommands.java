@@ -130,7 +130,7 @@ public class GlobalCommands {
         hover.append(debugLine(Component.text("Type"), Component.text(type.getClass().getName())));
         hover.appendNewline();
         hover.append(debugLine(Component.text("Value"), type.getValueComponent(value)));
-        String permission = type.getPermission();
+        String permission = type.permission();
         if (permission != null) {
             hover.appendNewline();
             hover.append(debugLine(Component.text("Permission"), Component.text(permission)));
@@ -139,7 +139,7 @@ public class GlobalCommands {
         if (!builder.children().isEmpty()) {
             builder.append(Component.text(", "));
         }
-        builder.append(type.getName().hoverEvent(hover.build()).clickEvent(ClickEvent.copyToClipboard(type.getValueString(value))));
+        builder.append(type.name().hoverEvent(hover.build()).clickEvent(ClickEvent.copyToClipboard(type.getValueString(value))));
     }
 
     private Component debugLine(Component key, Component value) {

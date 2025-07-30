@@ -40,7 +40,7 @@ public class LandsAddon implements Addon {
 
     private void configureFlag() {
         LandsFlagConfig flagConfig = plugin.getConfiguration().integration.lands.flag;
-        flag.setIcon(PaperItem.toNative(flagConfig.icon.render(Locale.US)));
+//        flag.setIcon(PaperItem.toNative(flagConfig.icon.render(Locale.US))); TODO
         flag.setDisplayName(flagConfig.displayName);
         flag.setDescription(flagConfig.description);
         flag.setDisplay(flagConfig.display);

@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.display.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
@@ -18,7 +17,6 @@ import me.m56738.easyarmorstands.display.editor.node.DisplayRootNode;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
-import me.m56738.easyarmorstands.menu.layout.ContentMenuBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
@@ -58,6 +56,6 @@ public class DisplayElement extends SimpleEntityElement {
 
     @Override
     public void openMenu(@NotNull Player player) {
-        EasyArmorStandsPlugin.getInstance().openMenu(player, this, ContentMenuBuilder::new);
+        // TODO
     }
 }
