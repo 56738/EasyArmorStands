@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.common.command.processor;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.common.editor.SessionImpl;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.platform.command.PlayerCommandSource;
@@ -23,8 +23,9 @@ public class SessionProcessor implements CommandPreprocessor<CommandSource> {
     @Override
     public void accept(@NonNull CommandPreprocessingContext<CommandSource> context) {
         CommandContext<CommandSource> commandContext = context.commandContext();
+        SessionManager sessionManager = commandContext.inject(SessionManager.class).orElseThrow();
         if (commandContext.sender() instanceof PlayerCommandSource playerSource) {
-            Session session = EasyArmorStands.get().sessionManager().getSession(playerSource.source());
+            Session session = sessionManager.getSession(playerSource.source());
             commandContext.set(KEY, (SessionImpl) session);
         }
     }

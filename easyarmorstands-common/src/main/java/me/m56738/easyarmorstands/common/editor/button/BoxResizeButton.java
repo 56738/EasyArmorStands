@@ -41,7 +41,7 @@ public class BoxResizeButton implements MenuButton {
 
     @Override
     public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-        Node node = new AxisMoveToolNode(session, tool.start(), name, color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis());
+        Node node = new AxisMoveToolNode(session, tool.start(), name, color, 3, tool.position(), tool.getRotation(), tool.getAxis());
         session.pushNode(node, cursor);
     }
 }

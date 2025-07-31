@@ -2,14 +2,13 @@ package me.m56738.easyarmorstands.common.history.action;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.common.history.HistoryManager;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.message.Message;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import net.kyori.adventure.text.Component;
 
 public class ElementDestroyAction extends ElementPresenceAction {
-    public ElementDestroyAction(CommonPlatform platform, HistoryManager historyManager, Element element) {
-        super(platform, historyManager, element);
+    public ElementDestroyAction(EasyArmorStandsCommon eas, Element element) {
+        super(eas, element);
     }
 
     @Override

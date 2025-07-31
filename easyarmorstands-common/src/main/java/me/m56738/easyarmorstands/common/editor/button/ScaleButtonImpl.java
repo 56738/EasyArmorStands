@@ -48,6 +48,6 @@ public class ScaleButtonImpl implements ScaleButton {
 
     @Override
     public @NotNull Node createNode() {
-        return new ScaleToolNode(session, tool.start(), name, color, tool.getPosition());
+        return new ScaleToolNode(session, tool.start(), name, color, tool.position());
     }
 }

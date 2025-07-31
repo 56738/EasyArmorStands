@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.common.command;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.clipboard.Clipboard;
 import me.m56738.easyarmorstands.common.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.common.command.requirement.RequireElementSelection;
@@ -89,7 +89,7 @@ public class ClipboardCommands {
     @Permission(Permissions.CLIPBOARD)
     @CommandDescription("easyarmorstands.command.description.paste")
     @RequireElementSelection
-    public void paste(PlayerCommandSource source, Clipboard clipboard, ElementSelection selection) {
+    public void paste(PlayerCommandSource source, Clipboard clipboard, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
         if (clipboard.getProperties().isEmpty()) {
             sender.sendMessage(Message.error("easyarmorstands.error.clipboard-empty"));
@@ -99,7 +99,7 @@ public class ClipboardCommands {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 copier.copyProperties(properties, clipboard.getProperties());

@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.api.editor.node;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -14,7 +13,7 @@ public abstract class AbstractChangeContextNode extends AbstractNode {
 
     public AbstractChangeContextNode(Session session) {
         super(session);
-        this.context = EasyArmorStands.get().changeContext().create(session.player());
+        this.context = session.getEasyArmorStands().changeContext().create(session.player());
     }
 
     public final ChangeContext getContext() {

@@ -12,7 +12,7 @@ public class GroupPositionProvider implements PositionProvider {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
+    public @NotNull Vector3dc position() {
         return group.getAveragePosition();
     }
 }

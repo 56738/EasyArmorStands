@@ -1,12 +1,16 @@
 package me.m56738.easyarmorstands.worldguard.v7;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class WorldGuardAddon implements Addon {
+    private final EasyArmorStandsPlugin plugin;
     private WorldGuardPrivilegeChecker privilegeChecker;
+
+    public WorldGuardAddon(EasyArmorStandsPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public String name() {
@@ -16,7 +20,6 @@ public class WorldGuardAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new WorldGuardPrivilegeChecker();
-        Plugin plugin = EasyArmorStandsPlugin.getInstance();
         plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 

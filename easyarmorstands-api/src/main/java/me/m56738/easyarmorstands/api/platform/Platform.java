@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.api.platform;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
@@ -13,12 +12,6 @@ import java.util.function.Consumer;
 
 @ApiStatus.NonExtendable
 public interface Platform {
-    static Platform get() {
-        return EasyArmorStands.get().platform();
-    }
-
-    String getEasyArmorStandsVersion();
-
     Item createTool();
 
     boolean isTool(Item item);

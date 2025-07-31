@@ -1,10 +1,8 @@
 package me.m56738.easyarmorstands.fabric;
 
-import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
-import me.m56738.easyarmorstands.common.platform.PlatformHolder;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
-import me.m56738.easyarmorstands.common.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.fabric.platform.FabricPlatformImpl;
 import me.m56738.easyarmorstands.fabric.platform.command.FabricSenderMapper;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
@@ -14,28 +12,42 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.fabric.FabricServerCommandManager;
+import org.jspecify.annotations.Nullable;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class EasyArmorStandsMod implements ModInitializer {
-    private final PlatformHolder platformHolder = new PlatformHolder();
-    private final PropertyTypeRegistry propertyTypeRegistry = new PropertyTypeRegistryImpl();
+public class EasyArmorStandsMod implements ModInitializer, EasyArmorStandsCommonProvider {
+    private @Nullable EasyArmorStandsCommon eas;
 
     @Override
     public void onInitialize() {
         FabricServerCommandManager<CommandSource> commandManager = new FabricServerCommandManager<>(
-                ExecutionCoordinator.simpleCoordinator(), new FabricSenderMapper());
+                ExecutionCoordinator.simpleCoordinator(), new FabricSenderMapper(this));
 
-        EasyArmorStandsCommon.registerCommands(commandManager, propertyTypeRegistry, platformHolder);
+        EasyArmorStandsCommon.registerCommands(commandManager, this);
 
-        ServerLifecycleEvents.SERVER_STARTED.register(this::onSetup);
+        ServerLifecycleEvents.SERVER_STARTED.register(this::onStarted);
+        ServerLifecycleEvents.SERVER_STOPPED.register(this::onStopped);
     }
 
-    private void onSetup(MinecraftServer server) {
+    private void onStarted(MinecraftServer server) {
         String version = FabricLoader.getInstance().getModContainer("easyarmorstands")
                 .orElseThrow(NoSuchElementException::new)
                 .getMetadata().getVersion().getFriendlyString();
-        ModdedPlatformImpl platform = new FabricPlatformImpl(server, version);
-        platformHolder.setPlatform(platform);
+        ModdedPlatformImpl platform = new FabricPlatformImpl(server);
+        eas = new EasyArmorStandsCommon(platform, version);
+    }
+
+    private void onStopped(MinecraftServer server) {
+        if (eas != null) {
+            eas.platform().close();
+            eas = null;
+        }
+    }
+
+    @Override
+    public EasyArmorStandsCommon getEasyArmorStands() {
+        return Objects.requireNonNull(eas);
     }
 }

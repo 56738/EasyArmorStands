@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands.fabric.platform.command;
 
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.fabric.platform.FabricPlatformImpl;
 import me.m56738.easyarmorstands.fabric.platform.entity.FabricCommandSenderImpl;
 import me.m56738.easyarmorstands.fabric.platform.entity.FabricPlayerImpl;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedCommandSource;
@@ -10,10 +12,17 @@ import net.minecraft.server.level.ServerPlayer;
 import org.incendo.cloud.SenderMapper;
 
 public class FabricSenderMapper implements SenderMapper<CommandSourceStack, CommandSource> {
+    private final EasyArmorStandsCommonProvider easProvider;
+
+    public FabricSenderMapper(EasyArmorStandsCommonProvider easProvider) {
+        this.easProvider = easProvider;
+    }
+
     @Override
     public CommandSource map(CommandSourceStack base) {
         if (base.getEntity() instanceof ServerPlayer player) {
-            return new ModdedPlayerCommandSource(base, new FabricPlayerImpl(player));
+            FabricPlatformImpl platform = (FabricPlatformImpl) easProvider.getEasyArmorStands().platform();
+            return new ModdedPlayerCommandSource(base, new FabricPlayerImpl(platform, player));
         } else {
             return new ModdedCommandSource(base, new FabricCommandSenderImpl(base));
         }

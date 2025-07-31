@@ -24,8 +24,8 @@ class SimpleAxisMoveTool implements AxisMoveTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return moveTool.getPosition();
+    public @NotNull Vector3dc position() {
+        return moveTool.position();
     }
 
     @Override

@@ -13,4 +13,8 @@ public interface Player extends Entity, CommandSender {
     Location getEyeLocation();
 
     void giveItem(Item item);
+
+    Item getItemInMainHand();
+
+    Item getItemInOffHand();
 }

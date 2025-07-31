@@ -292,6 +292,7 @@
   "easyarmorstands.property.glow.name": "Glowing",
   "easyarmorstands.property.gravity.can-tick-warning": "Armor stand ticking is disabled.",
   "easyarmorstands.property.gravity.name": "Affected by gravity",
+  "easyarmorstands.property.hologram.data.name": "Hologram data",
   "easyarmorstands.property.interaction.responsive.description": "Whether this interaction triggers a response.",
   "easyarmorstands.property.interaction.responsive.name": "Responsive",
   "easyarmorstands.property.invulnerability.disabled": "can be damaged",

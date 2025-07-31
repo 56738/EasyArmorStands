@@ -8,4 +8,12 @@ public interface Brightness {
     int block();
 
     int sky();
+
+    default Brightness withBlock(int block) {
+        return Brightness.of(block, sky());
+    }
+
+    default Brightness withSky(int sky) {
+        return Brightness.of(block(), sky);
+    }
 }

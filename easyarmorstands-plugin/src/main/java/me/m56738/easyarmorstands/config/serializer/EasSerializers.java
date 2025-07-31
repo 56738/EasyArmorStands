@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.common.message.MessageStyle;
 import net.kyori.adventure.key.Key;
@@ -18,8 +17,6 @@ public class EasSerializers {
             .register(DecimalFormat.class, new DecimalFormatSerializer())
             .register(Key.class, new KeySerializer())
             .register(Material.class, new MaterialSerializer())
-            .register(new TypeToken<>() {
-            }, new PropertyTypeSerializer())
             .register(MessageStyle.class, new MessageStyleSerializer())
             .build();
 

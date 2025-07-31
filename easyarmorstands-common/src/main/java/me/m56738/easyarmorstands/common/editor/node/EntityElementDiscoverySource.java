@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.common.element.EntityElementProviderRegistryImpl;
+import me.m56738.easyarmorstands.common.element.CommonEntityElementProviderRegistry;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 
 public class EntityElementDiscoverySource implements ElementDiscoverySource {
     private final CommonPlatform platform;
-    private final EntityElementProviderRegistryImpl providerRegistry;
+    private final CommonEntityElementProviderRegistry providerRegistry;
 
-    public EntityElementDiscoverySource(CommonPlatform platform, EntityElementProviderRegistryImpl providerRegistry) {
+    public EntityElementDiscoverySource(CommonPlatform platform, CommonEntityElementProviderRegistry providerRegistry) {
         this.platform = platform;
         this.providerRegistry = providerRegistry;
     }

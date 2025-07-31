@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.common.editor.context.AddContextImpl;
 import me.m56738.easyarmorstands.common.editor.context.ClickContextImpl;
@@ -23,7 +24,6 @@ import me.m56738.easyarmorstands.common.group.GroupMember;
 import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.common.particle.EditorParticle;
 import me.m56738.easyarmorstands.common.particle.GizmoParticleProvider;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
-    private final CommonPlatform platform;
+    private final EasyArmorStandsCommon eas;
     private final Player player;
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
@@ -63,12 +63,12 @@ public final class SessionImpl implements Session {
     private int overlayTicks;
     private boolean toolRequired;
 
-    public SessionImpl(CommonPlatform platform, Player player) {
-        this.platform = platform;
+    public SessionImpl(EasyArmorStandsCommon eas, Player player) {
+        this.eas = eas;
         this.player = player;
         this.snapper = new SessionSnapper(player);
-        this.particleProvider = new GizmoParticleProvider(platform.getGizmoFactory(player));
-        this.nodeProvider = new NodeProviderImpl(platform, this);
+        this.particleProvider = new GizmoParticleProvider(eas.platform().getGizmoFactory(player));
+        this.nodeProvider = new NodeProviderImpl(eas.platform(), this);
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class SessionImpl implements Session {
 
     @Override
     public double getScale(Vector3dc position) {
-        Configuration config = platform.getConfiguration();
+        Configuration config = eas.platform().getConfiguration();
         Vector3dc eyePosition = player.getEyeLocation().position();
         double minDistance = config.getEditorScaleMinDistance();
         double maxDistance = config.getEditorScaleMaxDistance();
@@ -277,11 +277,11 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return platform.getConfiguration().getEditorButtonRange();
+        return eas.platform().getConfiguration().getEditorButtonRange();
     }
 
     public double getLookThreshold() {
-        return platform.getConfiguration().getEditorButtonThreshold();
+        return eas.platform().getConfiguration().getEditorButtonThreshold();
     }
 
     @Override
@@ -357,5 +357,10 @@ public final class SessionImpl implements Session {
 
     public void setToolRequired(boolean toolRequired) {
         this.toolRequired = toolRequired;
+    }
+
+    @Override
+    public EasyArmorStandsCommon getEasyArmorStands() {
+        return eas;
     }
 }

@@ -1,13 +1,17 @@
 package me.m56738.easyarmorstands.residence;
 
 import com.bekvon.bukkit.residence.Residence;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class ResidenceAddon implements Addon {
+    private final EasyArmorStandsPlugin plugin;
     private ResidencePrivilegeChecker privilegeChecker;
+
+    public ResidenceAddon(EasyArmorStandsPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public String name() {
@@ -17,7 +21,6 @@ public class ResidenceAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new ResidencePrivilegeChecker(Residence.getInstance());
-        Plugin plugin = EasyArmorStandsPlugin.getInstance();
         plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 

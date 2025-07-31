@@ -30,8 +30,8 @@ public class GroupMoveTool implements MoveTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
+    public @NotNull Vector3dc position() {
+        return context.position().position();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GroupMoveTool implements MoveTool {
 
         private SessionImpl() {
             super(tools);
-            originalPosition = new Vector3d(context.position().getPosition());
+            originalPosition = new Vector3d(context.position().position());
         }
 
         @Override

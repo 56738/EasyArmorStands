@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.common.clipboard;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.context.ManagedChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.util.PropertyCopier;
@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Clipboard {
+    private final EasyArmorStandsCommon eas;
     private final Player player;
     private final PropertyMap properties = new PropertyMap();
 
-    Clipboard(Player player) {
+    Clipboard(EasyArmorStandsCommon eas, Player player) {
+        this.eas = eas;
         this.player = player;
     }
 
@@ -32,7 +34,7 @@ public class Clipboard {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        try (ManagedChangeContext context = EasyArmorStands.get().changeContext().create(player)) {
+        try (ManagedChangeContext context = eas.changeContext().create(player)) {
             copier.copyProperties(context.getProperties(element), properties);
             context.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
         }

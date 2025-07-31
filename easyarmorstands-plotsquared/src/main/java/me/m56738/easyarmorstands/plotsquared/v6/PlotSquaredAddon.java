@@ -1,13 +1,17 @@
 package me.m56738.easyarmorstands.plotsquared.v6;
 
 import com.plotsquared.core.PlotAPI;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class PlotSquaredAddon implements Addon {
+    private final EasyArmorStandsPlugin plugin;
     private PlotSquaredPrivilegeChecker privilegeChecker;
+
+    public PlotSquaredAddon(EasyArmorStandsPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public String name() {
@@ -17,7 +21,6 @@ public class PlotSquaredAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new PlotSquaredPrivilegeChecker(new PlotAPI());
-        Plugin plugin = EasyArmorStandsPlugin.getInstance();
         plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 

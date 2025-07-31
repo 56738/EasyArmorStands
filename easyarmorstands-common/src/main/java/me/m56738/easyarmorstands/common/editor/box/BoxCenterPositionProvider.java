@@ -14,7 +14,7 @@ public class BoxCenterPositionProvider implements PositionProvider {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
+    public @NotNull Vector3dc position() {
         return editor.getBoundingBox().getCenter(center);
     }
 }

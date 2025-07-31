@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.plotsquared.v6;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.Bukkit;
 
 public class PlotSquaredAddonFactory implements AddonFactory<PlotSquaredAddon> {
     @Override
     public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.plotSquared.enabled;
+        return true;
     }
 
     @Override
@@ -16,7 +16,7 @@ public class PlotSquaredAddonFactory implements AddonFactory<PlotSquaredAddon> {
     }
 
     @Override
-    public PlotSquaredAddon create() {
-        return new PlotSquaredAddon();
+    public PlotSquaredAddon create(EasyArmorStandsPlugin plugin) {
+        return new PlotSquaredAddon(plugin);
     }
 }

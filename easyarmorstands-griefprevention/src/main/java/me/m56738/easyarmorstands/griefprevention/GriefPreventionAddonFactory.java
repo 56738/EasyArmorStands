@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.griefprevention;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.Bukkit;
 
 public class GriefPreventionAddonFactory implements AddonFactory<GriefPreventionAddon> {
     @Override
     public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.griefPrevention.enabled;
+        return true;
     }
 
     @Override
@@ -16,7 +16,7 @@ public class GriefPreventionAddonFactory implements AddonFactory<GriefPrevention
     }
 
     @Override
-    public GriefPreventionAddon create() {
-        return new GriefPreventionAddon();
+    public GriefPreventionAddon create(EasyArmorStandsPlugin plugin) {
+        return new GriefPreventionAddon(plugin);
     }
 }

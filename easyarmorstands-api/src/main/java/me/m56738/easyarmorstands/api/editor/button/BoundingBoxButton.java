@@ -43,7 +43,7 @@ public final class BoundingBoxButton implements Button {
     @Override
     public void update() {
         box = BoundingBox.of(boxProvider.getBoundingBox());
-        position.set(positionProvider.getPosition());
+        position.set(positionProvider.position());
         rotation.set(rotationProvider.getRotation());
         scale = session.getScale(position);
     }

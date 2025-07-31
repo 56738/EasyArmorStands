@@ -32,8 +32,8 @@ class ScalarScaleTool implements ScaleTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
+    public @NotNull Vector3dc position() {
+        return context.position().position();
     }
 
     @Override
@@ -62,7 +62,7 @@ class ScalarScaleTool implements ScaleTool {
             this.originalLocation = positionProperty.getValue();
             this.originalScale = scaleProperty.getValue();
             this.originalEffectiveScale = getEffectiveScale(originalScale);
-            this.offset = originalLocation.position().sub(getPosition(), new Vector3d());
+            this.offset = originalLocation.position().sub(position(), new Vector3d());
             this.scale = originalScale;
         }
 

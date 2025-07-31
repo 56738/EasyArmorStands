@@ -26,8 +26,8 @@ class LocationYawRotateTool implements AxisRotateTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
+    public @NotNull Vector3dc position() {
+        return context.position().position();
     }
 
     @Override
@@ -57,7 +57,7 @@ class LocationYawRotateTool implements AxisRotateTool {
 
         public SessionImpl() {
             this.originalLocation = locationProperty.getValue();
-            this.originalOffset = originalLocation.position().sub(getPosition(), new Vector3d());
+            this.originalOffset = originalLocation.position().sub(position(), new Vector3d());
         }
 
         @Override

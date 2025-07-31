@@ -49,7 +49,7 @@ public final class PointButton implements Button {
 
     @Override
     public void update() {
-        position.set(positionProvider.getPosition());
+        position.set(positionProvider.position());
         scale = session.getScale(position);
     }
 

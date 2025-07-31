@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.lands;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
 import me.m56738.easyarmorstands.common.util.ReflectionUtil;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.Bukkit;
 
 public class LandsAddonFactory implements AddonFactory<LandsAddon> {
     @Override
     public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.lands.enabled;
+        return true;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class LandsAddonFactory implements AddonFactory<LandsAddon> {
     }
 
     @Override
-    public LandsAddon create() {
-        return new LandsAddon();
+    public LandsAddon create(EasyArmorStandsPlugin plugin) {
+        return new LandsAddon(plugin);
     }
 }

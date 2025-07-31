@@ -15,22 +15,25 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.editor.EntityPositionProvider;
-import me.m56738.easyarmorstands.editor.EntityRotationProvider;
+import me.m56738.easyarmorstands.common.editor.EntityPositionProvider;
+import me.m56738.easyarmorstands.common.editor.EntityRotationProvider;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.editor.node.HologramRootNode;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramElement implements SelectableElement, DestroyableElement, EditableElement, MenuElement {
+    private final EasyArmorStandsCommon eas;
     private final HologramElementType type;
     private final HologramManager manager;
     private final Hologram hologram;
     private final FancyHologramsAddon addon;
     private final PropertyRegistry properties = new PropertyRegistry();
 
-    public HologramElement(HologramElementType type, HologramManager manager, Hologram hologram, FancyHologramsAddon addon) {
+    public HologramElement(EasyArmorStandsCommon eas, HologramElementType type, HologramManager manager, Hologram hologram, FancyHologramsAddon addon) {
+        this.eas = eas;
         this.type = type;
         this.manager = manager;
         this.hologram = hologram;
@@ -66,7 +69,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public @NotNull ToolProvider getTools(@NotNull ChangeContext changeContext) {
-        return new HologramToolProvider(this, changeContext);
+        return new HologramToolProvider(eas, this, changeContext);
     }
 
     @Override

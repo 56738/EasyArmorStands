@@ -48,6 +48,6 @@ public class MoveButtonImpl implements MoveButton {
 
     @Override
     public @NotNull Node createNode() {
-        return new MoveToolNode(session, tool.start(), name, tool.getPosition());
+        return new MoveToolNode(session, tool.start(), name, tool.position());
     }
 }

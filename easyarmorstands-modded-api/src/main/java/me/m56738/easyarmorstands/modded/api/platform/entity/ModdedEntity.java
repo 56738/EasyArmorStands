@@ -71,6 +71,11 @@ public interface ModdedEntity extends Entity {
     }
 
     @Override
+    default boolean isDead() {
+        return !getNative().isAlive();
+    }
+
+    @Override
     default Set<String> getTags() {
         return Set.copyOf(getNative().getTags());
     }

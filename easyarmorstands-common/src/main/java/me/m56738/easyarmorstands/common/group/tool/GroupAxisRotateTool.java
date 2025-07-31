@@ -32,8 +32,8 @@ public class GroupAxisRotateTool implements AxisRotateTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
+    public @NotNull Vector3dc position() {
+        return context.position().position();
     }
 
     @Override

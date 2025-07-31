@@ -1,13 +1,16 @@
 package me.m56738.easyarmorstands.griefprevention;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 
 public class GriefPreventionAddon implements Addon {
+    private final EasyArmorStandsPlugin plugin;
     private GriefPreventionPrivilegeChecker privilegeChecker;
+
+    public GriefPreventionAddon(EasyArmorStandsPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public String name() {
@@ -17,7 +20,6 @@ public class GriefPreventionAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new GriefPreventionPrivilegeChecker();
-        Plugin plugin = EasyArmorStandsPlugin.getInstance();
         plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 

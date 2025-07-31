@@ -34,7 +34,7 @@ public class BoxSidePositionProvider implements PositionProvider {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
+    public @NotNull Vector3dc position() {
         editor.getBoundingBox().getCenter(center);
         editor.getBoundingBox().getSize(size);
         return offset.mul(size, new Vector3d()).add(center);

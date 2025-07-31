@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.huskclaims;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.Bukkit;
 
 public class HuskClaimsAddonFactory implements AddonFactory<HuskClaimsAddon> {
     @Override
     public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.huskClaims.enabled;
+        return true;
     }
 
     @Override
@@ -16,7 +16,7 @@ public class HuskClaimsAddonFactory implements AddonFactory<HuskClaimsAddon> {
     }
 
     @Override
-    public HuskClaimsAddon create() {
-        return new HuskClaimsAddon();
+    public HuskClaimsAddon create(EasyArmorStandsPlugin plugin) {
+        return new HuskClaimsAddon(plugin);
     }
 }

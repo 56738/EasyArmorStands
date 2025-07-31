@@ -1,5 +1,7 @@
 package me.m56738.easyarmorstands.paper.platform;
 
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -8,21 +10,28 @@ import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
+import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
+import me.m56738.easyarmorstands.paper.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
+import me.m56738.easyarmorstands.paper.config.PaperConfiguration;
 import me.m56738.gizmo.api.GizmoFactory;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
@@ -30,15 +39,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import org.incendo.cloud.bukkit.parser.location.LocationParser;
-import org.incendo.cloud.parser.ParserDescriptor;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -46,15 +52,12 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     private static final NamespacedKey TOOL_KEY = new NamespacedKey("easyarmorstands", "tool");
     private final Plugin plugin;
     private final BukkitGizmos gizmos;
+    private final Configuration configuration;
 
     public PaperPlatformImpl(Plugin plugin) {
         this.plugin = plugin;
         this.gizmos = BukkitGizmos.create(plugin);
-    }
-
-    @Override
-    public String getEasyArmorStandsVersion() {
-        return plugin.getPluginMeta().getVersion();
+        this.configuration = new PaperConfiguration();
     }
 
     @Override
@@ -92,7 +95,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
 
     @Override
     public Configuration getConfiguration() {
-        return null;
+        return configuration;
     }
 
     @Override
@@ -106,10 +109,8 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     }
 
     @Override
-    public <C> ParserDescriptor<C, Location> getLocationParser() {
-        return LocationParser.<C>locationParser().mapSuccess(Location.class,
-                (context, location) ->
-                        CompletableFuture.completedFuture(PaperLocationAdapter.fromNative(location)));
+    public BlockData createBlockData(String input) {
+        return PaperBlockData.fromNative(Bukkit.createBlockData(input));
     }
 
     @Override
@@ -180,6 +181,46 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
         // TODO
         return true;
+    }
+
+    @Override
+    public EntityType getArmorStandType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.ARMOR_STAND);
+    }
+
+    @Override
+    public EntityType getBlockDisplayType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.BLOCK_DISPLAY);
+    }
+
+    @Override
+    public EntityType getItemDisplayType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.ITEM_DISPLAY);
+    }
+
+    @Override
+    public EntityType getTextDisplayType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.TEXT_DISPLAY);
+    }
+
+    @Override
+    public EntityType getInteractionType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.INTERACTION);
+    }
+
+    @Override
+    public void onStartSession(Session session) {
+        plugin.getServer().getPluginManager().callEvent(new SessionStartEvent(session));
+    }
+
+    @Override
+    public void onStopSession(Session session) {
+        plugin.getServer().getPluginManager().callEvent(new SessionStopEvent(session));
+    }
+
+    @Override
+    public void onElementInitialize(DefaultEntityElement element) {
+        plugin.getServer().getPluginManager().callEvent(new EntityElementInitializeEvent(element));
     }
 
     private static class SpawnedEntityConfigurator implements Consumer<org.bukkit.entity.Entity> {

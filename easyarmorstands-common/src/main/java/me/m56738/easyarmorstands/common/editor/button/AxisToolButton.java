@@ -43,7 +43,7 @@ public abstract class AxisToolButton implements NodeFactoryButton {
 
     @Override
     public void update() {
-        position.set(tool.getPosition());
+        position.set(tool.position());
         rotation.set(tool.getRotation());
         axis = tool.getAxis();
         axis.getDirection().rotate(rotation, direction);

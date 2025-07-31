@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.message.Message;
@@ -26,7 +25,7 @@ public class TownyPrivilegeChecker extends RegionListener {
     public boolean isAllowed(Player player, Location location, boolean silent) {
         TownBlock block = towny.getTownBlock(location);
         if (block == null) {
-            return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.towny.allowWilderness;
+            return true; // TODO allowWilderness
         }
 
         Resident resident = towny.getResident(player);

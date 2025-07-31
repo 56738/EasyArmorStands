@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.worldguard.v7;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
 import me.m56738.easyarmorstands.common.util.ReflectionUtil;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.Bukkit;
 
 public class WorldGuardAddonFactory implements AddonFactory<WorldGuardAddon> {
     @Override
     public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.worldGuard.enabled;
+        return true;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class WorldGuardAddonFactory implements AddonFactory<WorldGuardAddon> {
     }
 
     @Override
-    public WorldGuardAddon create() {
-        return new WorldGuardAddon();
+    public WorldGuardAddon create(EasyArmorStandsPlugin plugin) {
+        return new WorldGuardAddon(plugin);
     }
 }

@@ -45,7 +45,7 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
 
     @Override
     public void update() {
-        position.set(tool.getPosition());
+        position.set(tool.position());
         rotation.set(tool.getRotation());
         scale = session.getScale(position);
         axis = tool.getAxis();

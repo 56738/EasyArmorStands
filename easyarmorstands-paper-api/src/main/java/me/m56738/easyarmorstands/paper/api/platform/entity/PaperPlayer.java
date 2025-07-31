@@ -43,4 +43,14 @@ public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
     default void giveItem(Item item) {
         getNative().getInventory().addItem(PaperItem.toNative(item));
     }
+
+    @Override
+    default Item getItemInMainHand() {
+        return PaperItem.fromNative(getNative().getInventory().getItemInMainHand());
+    }
+
+    @Override
+    default Item getItemInOffHand() {
+        return PaperItem.fromNative(getNative().getInventory().getItemInOffHand());
+    }
 }

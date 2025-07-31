@@ -27,8 +27,8 @@ public class BoxMoveTool implements MoveTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
+    public @NotNull Vector3dc position() {
+        return context.position().position();
     }
 
     @Override

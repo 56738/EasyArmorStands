@@ -36,8 +36,8 @@ public class BoxResizeTool implements AxisMoveTool {
     }
 
     @Override
-    public @NotNull Vector3dc getPosition() {
-        return positionProvider.getPosition();
+    public @NotNull Vector3dc position() {
+        return positionProvider.position();
     }
 
     @Override

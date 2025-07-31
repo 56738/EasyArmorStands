@@ -3,13 +3,27 @@ package me.m56738.easyarmorstands.api.property.type;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.function.Consumer;
+
+@NullMarked
 public interface PropertyType<T> extends Keyed {
-    @Nullable String permission();
+    static <T> PropertyTypeBuilder<T> builder() {
+        return new PropertyTypeBuilder<>();
+    }
 
-    default boolean canChange(@NotNull Player player) {
+    static <T> PropertyType<T> build(Consumer<PropertyTypeBuilder<T>> consumer) {
+        PropertyTypeBuilder<T> builder = new PropertyTypeBuilder<>();
+        consumer.accept(builder);
+        return builder.build();
+    }
+
+    @Nullable
+    String permission();
+
+    default boolean canChange(Player player) {
         String permission = permission();
         if (permission != null) {
             return player.hasPermission(permission);
@@ -18,7 +32,7 @@ public interface PropertyType<T> extends Keyed {
         }
     }
 
-    default boolean canCopy(@NotNull Player player) {
+    default boolean canCopy(Player player) {
         return true;
     }
 
@@ -27,7 +41,7 @@ public interface PropertyType<T> extends Keyed {
      *
      * @return Display name.
      */
-    @NotNull Component name();
+    Component name();
 
     /**
      * Format a value for display in a chat message.
@@ -35,7 +49,7 @@ public interface PropertyType<T> extends Keyed {
      * @param value The value to format.
      * @return The formatted value.
      */
-    @NotNull Component getValueComponent(@NotNull T value);
+    Component getValueComponent(T value);
 
     /**
      * Format a value as a string.
@@ -43,5 +57,5 @@ public interface PropertyType<T> extends Keyed {
      * @param value The value to format.
      * @return The formatted value.
      */
-    @NotNull String getValueString(@NotNull T value);
+    String getValueString(T value);
 }

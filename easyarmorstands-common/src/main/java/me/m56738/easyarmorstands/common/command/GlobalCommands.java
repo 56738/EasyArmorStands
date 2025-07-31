@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.platform.entity.CommandSender;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
@@ -31,10 +32,10 @@ public class GlobalCommands {
     @Command("")
     @Permission(Permissions.HELP)
     @CommandDescription("easyarmorstands.command.description")
-    public void showOverview(CommandSource source, Platform platform) {
+    public void showOverview(CommandSource source, EasyArmorStandsCommon eas) {
         CommandSender sender = source.source();
         if (sender.hasPermission(Permissions.VERSION)) {
-            String version = platform.getEasyArmorStandsVersion();
+            String version = eas.version();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
@@ -74,9 +75,9 @@ public class GlobalCommands {
     @Command("version")
     @Permission(Permissions.VERSION)
     @CommandDescription("easyarmorstands.command.description.version")
-    public void version(CommandSource source, Platform platform) {
+    public void version(CommandSource source, EasyArmorStandsCommon eas) {
         CommandSender sender = source.source();
-        String version = platform.getEasyArmorStandsVersion();
+        String version = eas.version();
         String url = "https://github.com/56738/EasyArmorStands";
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
@@ -85,9 +86,9 @@ public class GlobalCommands {
     @Command("debug")
     @Permission(Permissions.DEBUG)
     @CommandDescription("easyarmorstands.command.description.debug")
-    public void debug(CommandSource source, Platform platform, SessionManager sessionManager) {
+    public void debug(CommandSource source, EasyArmorStandsCommon eas, SessionManager sessionManager) {
         CommandSender sender = source.source();
-        String version = platform.getEasyArmorStandsVersion();
+        String version = eas.version();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
 //        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion()))); TODO
 //        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));

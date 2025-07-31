@@ -1,22 +1,24 @@
 package me.m56738.easyarmorstands.fabric.platform;
 
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
-import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.gizmo.api.GizmoFactory;
 import net.minecraft.server.MinecraftServer;
-import org.incendo.cloud.parser.ParserDescriptor;
 
 public class FabricPlatformImpl extends ModdedPlatformImpl {
-    public FabricPlatformImpl(MinecraftServer server, String modVersion) {
-        super(server, modVersion);
+    public FabricPlatformImpl(MinecraftServer server) {
+        super(server);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class FabricPlatformImpl extends ModdedPlatformImpl {
     }
 
     @Override
-    public <C> ParserDescriptor<C, Location> getLocationParser() {
+    public BlockData createBlockData(String input) {
         return null;
     }
 
@@ -57,5 +59,43 @@ public class FabricPlatformImpl extends ModdedPlatformImpl {
     @Override
     public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
         return false;
+    }
+
+    @Override
+    public EntityType getArmorStandType() {
+        return null;
+    }
+
+    @Override
+    public EntityType getBlockDisplayType() {
+        return null;
+    }
+
+    @Override
+    public EntityType getItemDisplayType() {
+        return null;
+    }
+
+    @Override
+    public EntityType getTextDisplayType() {
+        return null;
+    }
+
+    @Override
+    public EntityType getInteractionType() {
+        return null;
+    }
+
+    @Override
+    public void onStartSession(Session session) {
+    }
+
+    @Override
+    public void onStopSession(Session session) {
+    }
+
+    @Override
+    public void onElementInitialize(DefaultEntityElement element) {
+
     }
 }

@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.common.history.action;
 
 import me.m56738.easyarmorstands.api.context.ChangeContext;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.history.HistoryManager;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.platform.CommonPlatform;
@@ -9,8 +10,8 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class ElementCreateAction extends ElementPresenceAction {
-    public ElementCreateAction(@NotNull CommonPlatform platform, @NotNull HistoryManager historyManager, @NotNull Element element) {
-        super(platform, historyManager, element);
+    public ElementCreateAction(@NotNull EasyArmorStandsCommon eas, @NotNull Element element) {
+        super(eas, element);
     }
 
     @Override

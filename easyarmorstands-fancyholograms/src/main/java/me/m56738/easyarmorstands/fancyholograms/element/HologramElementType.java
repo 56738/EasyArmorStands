@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramDataProperty;
@@ -31,16 +32,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
+    private final EasyArmorStandsCommon eas;
     private final HologramManager manager;
     private final FancyHologramsAddon addon;
 
-    public HologramElementType(HologramManager manager, FancyHologramsAddon addon) {
+    public HologramElementType(EasyArmorStandsCommon eas, HologramManager manager, FancyHologramsAddon addon) {
+        this.eas = eas;
         this.manager = manager;
         this.addon = addon;
     }
 
     public HologramElement getElement(Hologram hologram) {
-        HologramElement element = new HologramElement(this, manager, hologram, addon);
+        HologramElement element = new HologramElement(eas, this, manager, hologram, addon);
         HologramData data = hologram.getData();
         element.getProperties().register(new HologramDataProperty(hologram));
         element.getProperties().register(new HologramLocationProperty(hologram));

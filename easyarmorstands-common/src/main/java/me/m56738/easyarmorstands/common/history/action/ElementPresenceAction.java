@@ -7,29 +7,26 @@ import me.m56738.easyarmorstands.api.element.ElementReference;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.element.EntityElementReference;
-import me.m56738.easyarmorstands.common.history.HistoryManager;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 abstract class ElementPresenceAction implements Action {
-    private final CommonPlatform platform;
-    private final HistoryManager historyManager;
+    private final EasyArmorStandsCommon eas;
     private final PropertyContainer properties;
     private ElementReference reference;
 
-    public ElementPresenceAction(@NotNull CommonPlatform platform, HistoryManager historyManager, @NotNull Element element) {
-        this.platform = platform;
-        this.historyManager = historyManager;
+    public ElementPresenceAction(@NotNull EasyArmorStandsCommon eas, @NotNull Element element) {
+        this.eas = eas;
         this.properties = new PropertyMap(element.getProperties());
         this.reference = element.getReference();
     }
 
     protected boolean create(ChangeContext context) {
         ElementType type = reference.getType();
-        if (!platform.canCreateElement(context.getPlayer(), type, properties)) {
+        if (!eas.platform().canCreateElement(context.getPlayer(), type, properties)) {
             return false;
         }
 
@@ -42,7 +39,7 @@ abstract class ElementPresenceAction implements Action {
         reference = element.getReference();
         UUID newId = getId(reference);
         if (oldId != null && newId != null) {
-            historyManager.onEntityReplaced(oldId, newId);
+            eas.historyManager().onEntityReplaced(oldId, newId);
         }
 
         return true;
@@ -58,7 +55,7 @@ abstract class ElementPresenceAction implements Action {
             return false;
         }
 
-        if (!platform.canDestroyElement(context.getPlayer(), destroyableElement)) {
+        if (!eas.platform().canDestroyElement(context.getPlayer(), destroyableElement)) {
             return false;
         }
 

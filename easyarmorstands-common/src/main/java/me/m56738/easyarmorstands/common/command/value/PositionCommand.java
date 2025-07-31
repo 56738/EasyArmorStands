@@ -4,9 +4,9 @@ import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.common.command.parser.LocationParser;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.util.Util;
 import net.kyori.adventure.audience.Audience;
@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3dc;
 
 public class PositionCommand extends PropertyCommand<Location> {
-    public PositionCommand(CommonPlatform platform) {
-        super(EntityPropertyTypes.LOCATION, platform.getLocationParser());
+    public PositionCommand() {
+        super(EntityPropertyTypes.LOCATION, LocationParser.locationParser());
     }
 
     @Override

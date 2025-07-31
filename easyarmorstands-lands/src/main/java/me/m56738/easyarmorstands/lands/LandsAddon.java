@@ -6,13 +6,9 @@ import me.angeschossen.lands.api.flags.enums.RoleFlagCategory;
 import me.angeschossen.lands.api.flags.type.Flags;
 import me.angeschossen.lands.api.flags.type.RoleFlag;
 import me.angeschossen.lands.api.role.Role;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.config.integration.lands.LandsFlagConfig;
-import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
 import org.bukkit.event.HandlerList;
-
-import java.util.Locale;
 
 public class LandsAddon implements Addon {
     private static final String FLAG_NAME = "easyarmorstands_edit";
@@ -23,8 +19,8 @@ public class LandsAddon implements Addon {
     private LandsPrivilegeChecker privilegeChecker;
     private RoleFlag flag;
 
-    public LandsAddon() {
-        this.plugin = EasyArmorStandsPlugin.getInstance();
+    public LandsAddon(EasyArmorStandsPlugin plugin) {
+        this.plugin = plugin;
         this.integration = LandsIntegration.of(plugin);
         integration.onLoad(this::onLoad);
     }
@@ -39,12 +35,12 @@ public class LandsAddon implements Addon {
     }
 
     private void configureFlag() {
-        LandsFlagConfig flagConfig = plugin.getConfiguration().integration.lands.flag;
+//        LandsFlagConfig flagConfig = plugin.getConfiguration().integration.lands.flag;
 //        flag.setIcon(PaperItem.toNative(flagConfig.icon.render(Locale.US))); TODO
-        flag.setDisplayName(flagConfig.displayName);
-        flag.setDescription(flagConfig.description);
-        flag.setDisplay(flagConfig.display);
-        flag.setUpdatePredicate(LandsAddon::hasSimilarFlag);
+//        flag.setDisplayName(flagConfig.displayName);
+//        flag.setDescription(flagConfig.description);
+//        flag.setDisplay(flagConfig.display);
+//        flag.setUpdatePredicate(LandsAddon::hasSimilarFlag);
     }
 
     @Override

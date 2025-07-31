@@ -27,6 +27,8 @@ public interface Entity {
 
     boolean isValid();
 
+    boolean isDead();
+
     Set<String> getTags();
 
     void addTag(String tag);

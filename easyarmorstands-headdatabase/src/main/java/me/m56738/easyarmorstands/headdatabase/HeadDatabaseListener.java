@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.headdatabase;
 
 import me.arcaniax.hdb.api.PlayerClickHeadEvent;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.common.permission.Permissions;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +25,7 @@ public class HeadDatabaseListener implements Listener {
         if (event.isEconomy() || !player.hasPermission(Permissions.OPEN)) {
             return;
         }
-        SessionManager sessionManager = plugin.sessionManager();
+        SessionManager sessionManager = plugin.getEasyArmorStands().sessionManager();
         Session session = sessionManager.getSession(PaperPlayer.fromNative(player));
         if (session == null) {
             return;

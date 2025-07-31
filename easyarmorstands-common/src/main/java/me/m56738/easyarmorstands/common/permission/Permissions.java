@@ -1,5 +1,10 @@
 package me.m56738.easyarmorstands.common.permission;
 
+import me.m56738.easyarmorstands.api.platform.entity.EntityType;
+import org.intellij.lang.annotations.MagicConstant;
+
+import java.util.Locale;
+
 public class Permissions {
     @Description("Allow aligning entities to the block grid")
     public static final String ALIGN = "easyarmorstands.align";
@@ -120,4 +125,10 @@ public class Permissions {
     @Child(OPEN)
     @Child(VERSION)
     public static final String EDIT = "easyarmorstands.edit";
+
+    public static String entityType(
+            @MagicConstant(valuesFromClass = Permissions.class) String prefix,
+            EntityType type) {
+        return prefix + "." + type.name().toLowerCase(Locale.ROOT).replace("_", "");
+    }
 }

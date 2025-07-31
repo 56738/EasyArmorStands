@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.editor;
 
+import me.m56738.easyarmorstands.api.EasyArmorStandsProvider;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
@@ -17,7 +18,7 @@ import org.joml.Vector3dc;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface Session {
+public interface Session extends EasyArmorStandsProvider {
     void pushNode(@NotNull Node node);
 
     void pushNode(@NotNull Node node, @Nullable Vector3dc cursor);

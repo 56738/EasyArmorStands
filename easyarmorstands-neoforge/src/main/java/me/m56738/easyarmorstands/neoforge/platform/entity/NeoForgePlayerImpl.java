@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.neoforge.platform.entity;
 
 import me.m56738.easyarmorstands.modded.platform.entity.ModdedPlayerImpl;
+import me.m56738.easyarmorstands.neoforge.platform.NeoForgePlatformImpl;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class NeoForgePlayerImpl extends ModdedPlayerImpl {
-    public NeoForgePlayerImpl(ServerPlayer player) {
-        super(player);
+    public NeoForgePlayerImpl(NeoForgePlatformImpl platform, ServerPlayer player) {
+        super(platform, player);
     }
 
     @Override

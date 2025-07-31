@@ -36,25 +36,18 @@ import java.util.function.Consumer;
 
 public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatform {
     private final MinecraftServer server;
-    private final String modVersion;
-    private final MinecraftServerAudiences audiences;
+    private final MinecraftServerAudiences adventure;
     private final ModdedServerGizmos gizmos;
 
-    public ModdedPlatformImpl(MinecraftServer server, String modVersion) {
+    public ModdedPlatformImpl(MinecraftServer server) {
         this.server = server;
-        this.modVersion = modVersion;
-        this.audiences = MinecraftServerAudiences.of(server);
+        this.adventure = MinecraftServerAudiences.of(server);
         this.gizmos = ModdedServerGizmos.create();
     }
 
     @Override
     public ModdedItem getItem(ItemStack nativeItem) {
         return new ModdedItemImpl(this, nativeItem);
-    }
-
-    @Override
-    public String getEasyArmorStandsVersion() {
-        return modVersion;
     }
 
     @Override
@@ -154,11 +147,11 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
 
     @Override
     public void close() {
-        audiences.close();
+        adventure.close();
         gizmos.close();
     }
 
     public MinecraftServerAudiences getAdventure() {
-        return audiences;
+        return adventure;
     }
 }
