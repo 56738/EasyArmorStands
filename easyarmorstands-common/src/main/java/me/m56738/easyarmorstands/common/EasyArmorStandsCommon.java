@@ -161,14 +161,13 @@ public class EasyArmorStandsCommon implements EasyArmorStands {
     }
 
     private static void registerParameterInjection(ParameterInjectorRegistry<CommandSource> parameterInjectorRegistry, EasyArmorStandsCommonProvider provider) {
-        EasyArmorStandsCommon eas = provider.getEasyArmorStands();
         parameterInjectorRegistry
-                .registerInjector(EasyArmorStands.class, injector(eas))
-                .registerInjector(EasyArmorStandsCommon.class, injector(eas))
-                .registerInjector(HistoryManager.class, injector(eas.historyManager()))
-                .registerInjector(SessionManager.class, injector(eas.sessionManager()))
-                .registerInjector(ClipboardManager.class, injector(eas.clipboardManager()))
-                .registerInjector(Platform.class, injector(eas.platform()))
+                .registerInjector(EasyArmorStands.class, injector(provider::getEasyArmorStands))
+                .registerInjector(EasyArmorStandsCommon.class, injector(provider::getEasyArmorStands))
+                .registerInjector(HistoryManager.class, injector(() -> provider.getEasyArmorStands().historyManager()))
+                .registerInjector(SessionManager.class, injector(() -> provider.getEasyArmorStands().sessionManager()))
+                .registerInjector(ClipboardManager.class, injector(() -> provider.getEasyArmorStands().clipboardManager()))
+                .registerInjector(Platform.class, injector(() -> provider.getEasyArmorStands().platform()))
                 .registerInjector(ValueNode.class, new ValueNodeInjector())
                 .registerInjector(SessionImpl.class, new SessionInjector())
                 .registerInjector(Clipboard.class, new ClipboardInjector())

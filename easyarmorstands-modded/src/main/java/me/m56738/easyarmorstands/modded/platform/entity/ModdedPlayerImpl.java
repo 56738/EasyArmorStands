@@ -13,6 +13,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import org.joml.Vector3d;
 
+import java.util.Objects;
+
 public abstract class ModdedPlayerImpl extends ModdedCommandSenderImpl implements ModdedPlayer, ForwardingAudience.Single {
     private final ModdedPlatformImpl platform;
     private final ServerPlayer player;
@@ -62,5 +64,17 @@ public abstract class ModdedPlayerImpl extends ModdedCommandSenderImpl implement
     @Override
     public Item getItemInOffHand() {
         return platform.getItem(player.getOffhandItem());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ModdedPlayerImpl that = (ModdedPlayerImpl) o;
+        return Objects.equals(player, that.player);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(player);
     }
 }

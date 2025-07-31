@@ -1,0 +1,4 @@
+accessWidener v2 named
+accessible method net/minecraft/world/entity/decoration/ArmorStand setMarker (Z)V
+accessible method net/minecraft/world/entity/decoration/ArmorStand setSmall (Z)V
+accessible field net/minecraft/world/entity/decoration/ArmorStand disabledSlots I

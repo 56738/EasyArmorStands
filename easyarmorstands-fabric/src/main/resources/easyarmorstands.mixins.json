@@ -3,6 +3,8 @@
   "package": "me.m56738.easyarmorstands.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "InventoryMixin",
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

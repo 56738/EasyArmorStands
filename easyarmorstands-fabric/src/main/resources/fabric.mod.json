@@ -13,6 +13,7 @@
   "license": "GPL-3.0-or-later",
   "icon": "assets/easyarmorstands/icon.png",
   "environment": "*",
+  "accessWidener": "easyarmorstands.accesswidener",
   "entrypoints": {
     "main": [
       "me.m56738.easyarmorstands.fabric.EasyArmorStandsMod"

@@ -31,7 +31,7 @@ public class SessionListener {
         return eas.platform().isTool(player.getItemInMainHand()) || eas.platform().isTool(player.getItemInOffHand());
     }
 
-    private boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity, @Nullable Block block) {
+    public boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity, @Nullable Block block) {
         SessionImpl session = manager.getSession(player);
         if (session == null) {
             if (type == ClickContext.Type.RIGHT_CLICK && isHoldingTool(player)) {

@@ -184,6 +184,11 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     }
 
     @Override
+    public EntityType getPlayerType() {
+        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.PLAYER);
+    }
+
+    @Override
     public EntityType getArmorStandType() {
         return PaperEntityType.fromNative(org.bukkit.entity.EntityType.ARMOR_STAND);
     }

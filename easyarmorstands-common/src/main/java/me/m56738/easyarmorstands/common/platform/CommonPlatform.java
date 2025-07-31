@@ -49,6 +49,8 @@ public interface CommonPlatform extends Platform {
 
     <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value);
 
+    EntityType getPlayerType();
+
     EntityType getArmorStandType();
 
     EntityType getBlockDisplayType();

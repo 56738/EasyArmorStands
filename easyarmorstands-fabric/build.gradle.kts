@@ -36,6 +36,7 @@ dependencies {
 
 loom {
     splitEnvironmentSourceSets()
+    accessWidenerPath = file("src/main/resources/easyarmorstands.accesswidener")
     mods {
         register("easyarmorstands") {
             sourceSet("main")

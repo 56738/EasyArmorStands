@@ -19,7 +19,7 @@ public interface ModdedBlock extends Block {
 
     @Override
     default BlockData getBlockData() {
-        return new ModdedBlockDataImpl();
+        return new ModdedBlockDataImpl(getState());
     }
 
     @Override

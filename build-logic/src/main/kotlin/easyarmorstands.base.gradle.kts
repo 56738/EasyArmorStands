@@ -50,7 +50,6 @@ repositories {
             includeGroup("com.github.GriefPrevention")
         }
     }
-    mavenLocal()
 }
 
 java {

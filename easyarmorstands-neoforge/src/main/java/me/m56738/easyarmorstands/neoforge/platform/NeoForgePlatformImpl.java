@@ -62,31 +62,6 @@ public class NeoForgePlatformImpl extends ModdedPlatformImpl {
     }
 
     @Override
-    public EntityType getArmorStandType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getBlockDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getItemDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getTextDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getInteractionType() {
-        return null;
-    }
-
-    @Override
     public void onStartSession(Session session) {
     }
 

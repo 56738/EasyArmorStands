@@ -71,6 +71,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     @Override
+    public boolean hasEasyArmorStands() {
+        return eas != null;
+    }
+
+    @Override
     public EasyArmorStandsCommon getEasyArmorStands() {
         return Objects.requireNonNull(eas);
     }

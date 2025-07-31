@@ -6,96 +6,70 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
-import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
+import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsEvents;
+import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsEvents.PropertyChange;
+import me.m56738.easyarmorstands.fabric.config.FabricConfiguration;
+import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlockDataImpl;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
-import me.m56738.gizmo.api.GizmoFactory;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.server.MinecraftServer;
 
 public class FabricPlatformImpl extends ModdedPlatformImpl {
+    private final FabricConfiguration configuration;
+
     public FabricPlatformImpl(MinecraftServer server) {
         super(server);
+        this.configuration = new FabricConfiguration();
     }
 
     @Override
     public Configuration getConfiguration() {
-        return null;
-    }
-
-    @Override
-    public GizmoFactory getGizmoFactory(Player player) {
-        return null;
-    }
-
-    @Override
-    public BlockData createBlockData(String input) {
-        return null;
+        return configuration;
     }
 
     @Override
     public boolean canDiscoverElement(Player player, EditableElement element) {
-        return false;
+        return EasyArmorStandsEvents.DISCOVER_ELEMENT.invoker().onDiscoverElement(player, element);
     }
 
     @Override
     public boolean canSelectElement(Player player, EditableElement element) {
-        return false;
+        return EasyArmorStandsEvents.SELECT_ELEMENT.invoker().onSelectElement(player, element);
     }
 
     @Override
     public boolean canCreateElement(Player player, ElementType type, PropertyContainer properties) {
-        return false;
+        return EasyArmorStandsEvents.CREATE_ELEMENT.invoker().onCreateElement(player, type, properties);
     }
 
     @Override
     public boolean canDestroyElement(Player player, DestroyableElement element) {
-        return false;
+        return EasyArmorStandsEvents.DESTROY_ELEMENT.invoker().onDestroyElement(player, element);
     }
 
     @Override
     public <T> boolean canChangeProperty(Player player, Element element, Property<T> property, T value) {
-        return false;
-    }
-
-    @Override
-    public EntityType getArmorStandType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getBlockDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getItemDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getTextDisplayType() {
-        return null;
-    }
-
-    @Override
-    public EntityType getInteractionType() {
-        return null;
+        PropertyChange<T> change = new PropertyChange<>(property, value);
+        return EasyArmorStandsEvents.CHANGE_PROPERTY.invoker().onChangeProperty(player, element, change);
     }
 
     @Override
     public void onStartSession(Session session) {
+        EasyArmorStandsEvents.SESSION_STARTED.invoker().onSessionStarted(session);
     }
 
     @Override
     public void onStopSession(Session session) {
+        EasyArmorStandsEvents.SESSION_STOPPED.invoker().onSessionStopped(session);
     }
 
     @Override
     public void onElementInitialize(DefaultEntityElement element) {
-
+        EasyArmorStandsEvents.INITIALIZE_DEFAULT_ELEMENT.invoker().onInitializeDefaultElement(element);
     }
 }

@@ -39,9 +39,14 @@ public class EasyArmorStandsMod implements EasyArmorStandsCommonProvider {
 
     private void onStopped(ServerStoppedEvent event) {
         if (eas != null) {
-            eas.platform().close();
+            eas.close();
             eas = null;
         }
+    }
+
+    @Override
+    public boolean hasEasyArmorStands() {
+        return eas != null;
     }
 
     @Override

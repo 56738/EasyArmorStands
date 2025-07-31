@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 public class SimpleEntityElementProvider implements EntityElementProvider {
     private final EasyArmorStandsCommon eas;
@@ -14,8 +15,10 @@ public class SimpleEntityElementProvider implements EntityElementProvider {
     }
 
     @Override
-    public Element getElement(@NotNull Entity entity) {
-        // TODO ignore players
+    public @Nullable Element getElement(@NotNull Entity entity) {
+        if (entity.getType().equals(eas.platform().getPlayerType())) {
+            return null;
+        }
         return new SimpleEntityElementType(eas, entity.getType()).getElement(entity);
     }
 

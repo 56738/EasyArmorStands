@@ -4,19 +4,21 @@ import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.injection.ParameterInjector;
 import org.incendo.cloud.util.annotation.AnnotationAccessor;
 
-public class ObjectInjector<C, T> implements ParameterInjector<C, T> {
-    private final T value;
+import java.util.function.Supplier;
 
-    private ObjectInjector(T value) {
-        this.value = value;
+public class ObjectInjector<C, T> implements ParameterInjector<C, T> {
+    private final Supplier<T> supplier;
+
+    private ObjectInjector(Supplier<T> supplier) {
+        this.supplier = supplier;
     }
 
-    public static <C, T> ParameterInjector<C, T> injector(T value) {
-        return new ObjectInjector<>(value);
+    public static <C, T> ObjectInjector<C, T> injector(Supplier<T> supplier) {
+        return new ObjectInjector<>(supplier);
     }
 
     @Override
     public T create(CommandContext<C> context, AnnotationAccessor annotationAccessor) {
-        return value;
+        return supplier.get();
     }
 }

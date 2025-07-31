@@ -11,6 +11,8 @@ dependencies {
     })
 
     api(project(":easyarmorstands-modded-api"))
+
+    modImplementation(libs.fabric.api)
 }
 
 loom {

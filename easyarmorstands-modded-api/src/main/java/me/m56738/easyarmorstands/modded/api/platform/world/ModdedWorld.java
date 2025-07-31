@@ -20,6 +20,10 @@ public interface ModdedWorld extends World {
 
     @Override
     default Block getBlock(Vector3ic position) {
-        return new ModdedBlockImpl(getNative(), new BlockPos(position.x(), position.y(), position.z()));
+        return getBlock(new BlockPos(position.x(), position.y(), position.z()));
+    }
+
+    default Block getBlock(BlockPos position) {
+        return new ModdedBlockImpl(getNative(), position);
     }
 }
