@@ -6,7 +6,9 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.command.parser.BlockDataParser;
+import me.m56738.easyarmorstands.common.permission.CommonPermissions;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.clipboard.PaperClipboardListener;
 import me.m56738.easyarmorstands.paper.editor.PaperSessionListener;
 import me.m56738.easyarmorstands.paper.element.PaperDisplayElementListener;
@@ -25,7 +27,9 @@ import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStandsCommonProvider {
     private @Nullable EasyArmorStandsCommon eas;
@@ -36,7 +40,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         PaperPlatformImpl platform = new PaperPlatformImpl(this);
 
-        PaperPermissions.registerAll(platform);
+        PaperPermissions.registerAll(CommonPermissions.createPermissions(
+                Arrays.stream(org.bukkit.entity.EntityType.values())
+                        .map(PaperEntityType::fromNative)
+                        .collect(Collectors.toList())));
 
         eas = new EasyArmorStandsCommon(platform, getPluginMeta().getVersion());
         getServer().getPluginManager().registerEvents(new PaperSessionListener(this, eas, eas.sessionListener()), this);

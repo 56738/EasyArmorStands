@@ -7,7 +7,6 @@ import org.jspecify.annotations.Nullable;
 public interface EntityElementType extends ElementType {
     EntityType getEntityType();
 
-    // TODO nullable?
     @Nullable
     EntityElement getElement(Entity entity);
 }

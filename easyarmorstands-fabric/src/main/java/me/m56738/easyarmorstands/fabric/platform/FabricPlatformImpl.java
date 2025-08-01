@@ -7,17 +7,20 @@ import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
-import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.config.Configuration;
 import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsEvents;
 import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsEvents.PropertyChange;
 import me.m56738.easyarmorstands.fabric.config.FabricConfiguration;
-import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlockDataImpl;
+import me.m56738.easyarmorstands.fabric.platform.entity.FabricCommandSenderImpl;
+import me.m56738.easyarmorstands.fabric.platform.entity.FabricPlayerImpl;
+import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedCommandSender;
+import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedPlayer;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 public class FabricPlatformImpl extends ModdedPlatformImpl {
     private final FabricConfiguration configuration;
@@ -30,6 +33,16 @@ public class FabricPlatformImpl extends ModdedPlatformImpl {
     @Override
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public ModdedPlayer getPlayer(ServerPlayer nativePlayer) {
+        return new FabricPlayerImpl(this, nativePlayer);
+    }
+
+    @Override
+    public ModdedCommandSender getCommandSender(CommandSourceStack stack) {
+        return new FabricCommandSenderImpl(stack);
     }
 
     @Override

@@ -35,8 +35,6 @@ public interface CommonPlatform extends Platform {
 
     Collection<Entity> getAllEntities(World world);
 
-    Collection<EntityType> getAllEntityTypes();
-
     void openSpawnMenu(Player player);
 
     boolean canDiscoverElement(Player player, EditableElement element);

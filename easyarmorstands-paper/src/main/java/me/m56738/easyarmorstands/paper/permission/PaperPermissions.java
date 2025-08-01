@@ -1,99 +1,43 @@
 package me.m56738.easyarmorstands.paper.permission;
 
-import me.m56738.easyarmorstands.api.platform.entity.EntityType;
-import me.m56738.easyarmorstands.common.permission.Child;
-import me.m56738.easyarmorstands.common.permission.Children;
-import me.m56738.easyarmorstands.common.permission.Description;
-import me.m56738.easyarmorstands.common.permission.Permissions;
-import me.m56738.easyarmorstands.common.platform.CommonPlatform;
+import me.m56738.easyarmorstands.common.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
-import org.intellij.lang.annotations.MagicConstant;
-import org.jspecify.annotations.Nullable;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-public class PaperPermissions {
-    private static final Map<String, Permission> registeredPermissions = new HashMap<>();
+public final class PaperPermissions {
+    private static final Map<String, org.bukkit.permissions.Permission> registeredPermissions = new HashMap<>();
 
-    public static void registerAll(CommonPlatform platform) {
-        try {
-            for (Field field : Permissions.class.getDeclaredFields()) {
-                int modifiers = field.getModifiers();
-                if (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                    register(field);
-                }
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-
-        for (EntityType entityType : platform.getAllEntityTypes()) {
-            register(entityType, Permissions.SPAWN, "spawning");
-            register(entityType, Permissions.DESTROY, "destroying");
-            register(entityType, Permissions.EDIT, "editing");
-        }
+    private PaperPermissions() {
     }
 
-    public static String entityType(
-            @MagicConstant(valuesFromClass = Permissions.class) String prefix,
-            EntityType type) {
-        return prefix + "." + type.name().toLowerCase(Locale.ROOT).replace("_", "");
-    }
-
-    private static void register(
-            EntityType type,
-            @MagicConstant(valuesFromClass = Permissions.class) String owner,
-            String verb) {
-        String name = entityType(owner, type);
-        Map<String, Boolean> children = new HashMap<>(1);
-        children.put(owner, true);
-        register(new Permission(
-                name,
-                "Allow " + verb + " entities of type " + type,
-                children));
-    }
-
-    public static @Nullable Permission register(Permission permission) {
-        try {
-            Bukkit.getPluginManager().addPermission(permission);
-        } catch (IllegalArgumentException e) {
-            return null;
+    public static void registerAll(Collection<Permission> permissions) {
+        for (Permission permission : permissions) {
+            register(permission);
         }
-        registeredPermissions.put(permission.getName(), permission);
-        return permission;
     }
 
     public static void unregisterAll() {
-        for (Permission permission : registeredPermissions.values()) {
+        for (org.bukkit.permissions.Permission permission : registeredPermissions.values()) {
             Bukkit.getPluginManager().removePermission(permission);
         }
         registeredPermissions.clear();
     }
 
-    public static void unregister(Permission permission) {
-        registeredPermissions.remove(permission.getName(), permission);
-        Bukkit.getPluginManager().removePermission(permission);
+    public static void register(Permission permission) {
+        org.bukkit.permissions.Permission nativePermission = new org.bukkit.permissions.Permission(
+                permission.name(), permission.description(), permission.children());
+        try {
+            Bukkit.getPluginManager().addPermission(nativePermission);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        registeredPermissions.put(permission.name(), nativePermission);
     }
 
-    private static void register(Field field) throws ReflectiveOperationException {
-        String name = (String) field.get(null);
-
-        Description descriptionAnnotation = field.getDeclaredAnnotation(Description.class);
-        String description = descriptionAnnotation != null ? descriptionAnnotation.value() : null;
-
-        Children childrenAnnotation = field.getDeclaredAnnotation(Children.class);
-        Map<String, Boolean> children = new HashMap<>();
-        if (childrenAnnotation != null) {
-            for (Child child : childrenAnnotation.value()) {
-                children.put(child.value(), true);
-            }
-        }
-
-        register(new Permission(name, description, children));
+    public static void unregister(Permission permission) {
+        Bukkit.getPluginManager().removePermission(registeredPermissions.remove(permission.name()));
     }
 }

@@ -46,7 +46,6 @@ adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" 
 adventure-platform-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-platform-mod" }
 adventure-platform-mod-shared = { module = "net.kyori:adventure-platform-mod-shared", version.ref = "adventure-platform-mod" }
 adventure-platform-neoforge = { module = "net.kyori:adventure-platform-neoforge", version.ref = "adventure-platform-mod" }
-adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
 apiguardian-api = { module = "org.apiguardian:apiguardian-api", version.ref = "apiguardian" }
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
@@ -60,7 +59,6 @@ cloud-minecraft-modded-common = { module = "org.incendo:cloud-minecraft-modded-c
 cloud-neoforge = { module = "org.incendo:cloud-neoforge", version.ref = "cloud-minecraft-modded" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
 commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
-configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }

@@ -41,7 +41,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -139,13 +138,6 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     @Override
     public Collection<Entity> getAllEntities(World world) {
         return List.of();
-    }
-
-    @Override
-    public Collection<EntityType> getAllEntityTypes() {
-        return Arrays.stream(org.bukkit.entity.EntityType.values())
-                .map(PaperEntityType::fromNative)
-                .collect(Collectors.toList());
     }
 
     @Override

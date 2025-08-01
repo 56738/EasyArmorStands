@@ -165,11 +165,6 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     }
 
     @Override
-    public Collection<EntityType> getAllEntityTypes() {
-        return List.of();
-    }
-
-    @Override
     public Entity spawnEntity(EntityType type, Location location, Consumer<Entity> config) {
         throw new UnsupportedOperationException(); // TODO
     }

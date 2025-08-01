@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.common.editor.SessionListener;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
@@ -51,7 +52,7 @@ public class GlobalCommands {
     @Command("give")
     @Permission(Permissions.GIVE)
     @CommandDescription("easyarmorstands.command.description.give")
-    public void give(PlayerCommandSource source, Platform platform) {
+    public void give(PlayerCommandSource source, Platform platform, SessionListener sessionListener) {
         Player sender = source.source();
         sender.giveItem(platform.createTool());
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
@@ -60,7 +61,7 @@ public class GlobalCommands {
             sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
         }
         sender.sendMessage(Message.hint("easyarmorstands.hint.deselect-entity"));
-//        sessionListener.updateHeldItem(sender); TODO
+        sessionListener.updateHeldItem(sender);
     }
 
 //    @Command("reload") TODO
@@ -90,8 +91,6 @@ public class GlobalCommands {
         CommandSender sender = source.source();
         String version = eas.version();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
-//        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion()))); TODO
-//        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
 
         if (sender instanceof Player player) {
             Session session = sessionManager.getSession(player);

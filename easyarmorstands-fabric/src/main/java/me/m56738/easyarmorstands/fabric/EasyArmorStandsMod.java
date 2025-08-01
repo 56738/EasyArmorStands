@@ -3,13 +3,12 @@ package me.m56738.easyarmorstands.fabric;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
-import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsEvents;
 import me.m56738.easyarmorstands.fabric.element.FabricEntityElementListener;
 import me.m56738.easyarmorstands.fabric.platform.FabricPlatformImpl;
-import me.m56738.easyarmorstands.fabric.platform.command.FabricSenderMapper;
 import me.m56738.easyarmorstands.fabric.session.FabricSessionListener;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.easyarmorstands.modded.platform.command.MainThreadExecutor;
+import me.m56738.easyarmorstands.modded.platform.command.ModdedSenderMapper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -31,7 +30,7 @@ public class EasyArmorStandsMod implements ModInitializer, EasyArmorStandsCommon
     public void onInitialize() {
         FabricServerCommandManager<CommandSource> commandManager = new FabricServerCommandManager<>(
                 ExecutionCoordinator.coordinatorFor(executor),
-                new FabricSenderMapper(this));
+                new ModdedSenderMapper(this));
 
         EasyArmorStandsCommon.registerCommands(commandManager, this);
 
