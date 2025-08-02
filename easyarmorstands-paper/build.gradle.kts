@@ -27,10 +27,7 @@ dependencies {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.1")
-        javaLauncher = project.javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     processResources {
@@ -46,11 +43,12 @@ tasks {
 
     shadowJar {
         val prefix = "me.m56738.easyarmorstands.lib"
-        relocate("org.incendo.cloud", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
+        relocate("net.kyori.option", "$prefix.kyori.option")
         relocate("org.bstats", "$prefix.bstats")
+        relocate("org.incendo.cloud", "$prefix.cloud")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
         relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
         dependencies {
