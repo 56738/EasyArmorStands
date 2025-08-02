@@ -68,9 +68,4 @@ tasks {
         isFailOnError = true
         (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:all,-missing", "-quiet")
     }
-
-    withType<AbstractArchiveTask>().configureEach {
-        isPreserveFileTimestamps = false
-        isReproducibleFileOrder = true
-    }
 }
