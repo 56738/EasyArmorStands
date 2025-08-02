@@ -1,6 +1,6 @@
 plugins {
     id("easyarmorstands.base")
-    id("easyarmorstands.bundle")
+    id("easyarmorstands.resources")
     alias(libs.plugins.fabric.loom)
 }
 
@@ -11,8 +11,9 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.mappings.get()}@zip")
     })
 
+    resources(project(":easyarmorstands-assets"))
     implementation(project(":easyarmorstands-modded"))
-    implementation(project(":easyarmorstands-fabric-api"))
+    implementation(project(":easyarmorstands-fabric-api", configuration = "namedElements"))
 
     modImplementation(libs.adventure.platform.fabric)
     modImplementation(libs.cloud.fabric)
@@ -21,7 +22,6 @@ dependencies {
     modImplementation(libs.fabric.permissions.api)
     modImplementation(libs.gizmo.fabric)
 
-    bundle(project(":easyarmorstands-assets"))
     include(project(":easyarmorstands-fabric-api"))
     include(project(":easyarmorstands-fabric-repack"))
     include(project(":easyarmorstands-common"))
@@ -41,6 +41,18 @@ loom {
         register("easyarmorstands") {
             sourceSet("main")
             sourceSet("client")
+        }
+    }
+    runConfigs {
+        named("client") {
+            configName = "Fabric Client"
+            isIdeConfigGenerated = true
+            appendProjectPathToConfigName = false
+        }
+        named("server") {
+            configName = "Fabric Server"
+            isIdeConfigGenerated = true
+            appendProjectPathToConfigName = false
         }
     }
 }

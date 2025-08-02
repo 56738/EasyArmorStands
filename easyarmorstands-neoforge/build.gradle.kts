@@ -1,6 +1,6 @@
 plugins {
     id("easyarmorstands.base")
-    id("easyarmorstands.bundle")
+    id("easyarmorstands.resources")
     alias(libs.plugins.moddev)
 }
 
@@ -18,6 +18,16 @@ neoForge {
             sourceSet(sourceSets["main"])
         }
     }
+    runs {
+        register("client") {
+            client()
+            ideName = "NeoForge Client"
+        }
+        register("server") {
+            server()
+            ideName = "NeoForge Server"
+        }
+    }
 }
 
 dependencies {
@@ -28,7 +38,7 @@ dependencies {
     implementation(libs.gizmo.neoforge)
     implementation(libs.neoforge)
 
-    bundle(project(":easyarmorstands-assets"))
+    resources(project(":easyarmorstands-assets"))
     jarJar(project(":easyarmorstands-neoforge-api"))
     jarJar(project(":easyarmorstands-modded"))
     jarJar(project(":easyarmorstands-modded-api"))
@@ -57,6 +67,7 @@ sourceSets {
     main {
         resources {
             srcDir(generateModMetadata)
+            srcDir(tasks.jarJar)
         }
     }
 }
@@ -68,6 +79,7 @@ tasks {
         manifest {
             attributes["Automatic-Module-Name"] = "me.m56738.easyarmorstands.neoforge"
         }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     val staticJar by registering(Copy::class) {
