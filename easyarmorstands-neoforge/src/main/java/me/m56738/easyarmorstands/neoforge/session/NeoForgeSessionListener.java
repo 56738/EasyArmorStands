@@ -30,6 +30,8 @@ public class NeoForgeSessionListener extends ModdedSessionListener {
 
     @Override
     public void register() {
+        NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.EntityInteractSpecific.class,
+                e -> apply(e, handleClick(e.getEntity(), e.getLevel(), ClickContext.Type.RIGHT_CLICK, e.getTarget(), null)));
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.EntityInteract.class,
                 e -> apply(e, handleClick(e.getEntity(), e.getLevel(), ClickContext.Type.RIGHT_CLICK, e.getTarget(), null)));
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.RightClickBlock.class,
@@ -50,6 +52,9 @@ public class NeoForgeSessionListener extends ModdedSessionListener {
                 if (slot != lastSlot.slot) {
                     lastSlot.slot = slot;
                     handleUpdateItem(player);
+                }
+                if (player.swinging && player.swingTime == 0) {
+                    handleClick(player, player.level(), ClickContext.Type.LEFT_CLICK, null, null);
                 }
             }
         });
