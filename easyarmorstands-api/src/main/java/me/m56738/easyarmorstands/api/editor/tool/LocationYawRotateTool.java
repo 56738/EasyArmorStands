@@ -65,7 +65,7 @@ class LocationYawRotateTool implements AxisRotateTool {
             originalOffset.rotateY(change, offsetChange).sub(originalOffset);
 
             Location location = originalLocation
-                    .withPosition(offsetChange)
+                    .withOffset(offsetChange)
                     .withYaw(originalLocation.yaw() - (float) Math.toDegrees(change));
             locationProperty.setValue(location);
         }

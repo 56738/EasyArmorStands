@@ -18,14 +18,6 @@ neoForge {
             sourceSet(sourceSets["main"])
         }
     }
-    runs {
-        register("client") {
-            client()
-        }
-        register("server") {
-            server()
-        }
-    }
 }
 
 dependencies {

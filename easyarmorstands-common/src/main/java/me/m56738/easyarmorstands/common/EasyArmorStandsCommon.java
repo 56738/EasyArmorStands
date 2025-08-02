@@ -166,6 +166,7 @@ public class EasyArmorStandsCommon implements EasyArmorStands {
                 .registerInjector(EasyArmorStandsCommon.class, injector(provider::getEasyArmorStands))
                 .registerInjector(HistoryManager.class, injector(() -> provider.getEasyArmorStands().historyManager()))
                 .registerInjector(SessionManager.class, injector(() -> provider.getEasyArmorStands().sessionManager()))
+                .registerInjector(SessionListener.class, injector(() -> provider.getEasyArmorStands().sessionListener()))
                 .registerInjector(ClipboardManager.class, injector(() -> provider.getEasyArmorStands().clipboardManager()))
                 .registerInjector(Platform.class, injector(() -> provider.getEasyArmorStands().platform()))
                 .registerInjector(ValueNode.class, new ValueNodeInjector())

@@ -71,7 +71,7 @@ class LocationPitchRotateTool implements AxisRotateTool {
                     .sub(originalOffset);
 
             Location location = originalLocation
-                    .withPosition(offsetChange)
+                    .withOffset(offsetChange)
                     .withPitch(originalLocation.pitch() + (float) Math.toDegrees(change));
             locationProperty.setValue(location);
         }
