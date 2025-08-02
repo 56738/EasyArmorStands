@@ -1,16 +1,29 @@
 package me.m56738.easyarmorstands.common.permission;
 
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.KeyedPropertyType;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 public class CommonPermissions {
     public static Set<Permission> createPermissions(Iterable<EntityType> entityTypes) {
@@ -30,6 +43,13 @@ public class CommonPermissions {
             permissions.add(create(entityType, Permissions.DESTROY, "destroying"));
             permissions.add(create(entityType, Permissions.EDIT, "editing"));
         }
+        permissions.addAll(createAll(EntityPropertyTypes.class));
+        permissions.addAll(createAll(ArmorStandPropertyTypes.class));
+        permissions.addAll(createAll(DisplayPropertyTypes.class));
+        permissions.addAll(createAll(BlockDisplayPropertyTypes.class));
+        permissions.addAll(createAll(ItemDisplayPropertyTypes.class));
+        permissions.addAll(createAll(TextDisplayPropertyTypes.class));
+        permissions.addAll(createAll(InteractionPropertyTypes.class));
         return permissions;
     }
 
@@ -37,6 +57,40 @@ public class CommonPermissions {
             @MagicConstant(valuesFromClass = Permissions.class) String prefix,
             EntityType type) {
         return prefix + "." + type.name().toLowerCase(Locale.ROOT).replace("_", "");
+    }
+
+    private static List<Permission> createAll(Class<?> typeHolder) {
+        return Arrays.stream(typeHolder.getDeclaredFields())
+                .filter(field -> {
+                    int modifiers = field.getModifiers();
+                    return Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+                })
+                .flatMap(field -> {
+                    Object value;
+                    try {
+                        value = field.get(null);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (value instanceof PropertyType<?> propertyType) {
+                        return Stream.ofNullable(create(propertyType));
+                    } else if (value instanceof KeyedPropertyType<?, ?> keyedPropertyType) {
+                        return keyedPropertyType.getAll().stream()
+                                .flatMap(type -> Stream.ofNullable(create(type)));
+                    } else {
+                        return Stream.of();
+                    }
+                })
+                .toList();
+    }
+
+    private static @Nullable Permission create(PropertyType<?> type) {
+        String permission = type.permission();
+        if (permission != null) {
+            return new Permission(permission, null, Map.of());
+        } else {
+            return null;
+        }
     }
 
     private static Permission create(

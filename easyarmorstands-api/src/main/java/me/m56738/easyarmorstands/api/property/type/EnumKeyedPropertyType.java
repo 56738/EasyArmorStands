@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Objects;
 import java.util.function.Function;
@@ -19,5 +21,10 @@ public final class EnumKeyedPropertyType<K extends Enum<K>, V> implements KeyedP
     @Override
     public @NotNull PropertyType<V> get(@NotNull K key) {
         return Objects.requireNonNull(map.get(key));
+    }
+
+    @Override
+    public @NotNull Collection<PropertyType<V>> getAll() {
+        return Collections.unmodifiableCollection(map.values());
     }
 }
