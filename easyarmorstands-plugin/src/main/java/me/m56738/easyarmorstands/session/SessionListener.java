@@ -38,6 +38,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -176,12 +177,17 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     public void updateHeldItem(Player player) {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            if (session.isToolRequired() && !isHoldingTool(player)) {
-                manager.stopSession(player);
-            }
+            updateHeldItem(session);
         } else if (isHoldingTool(player)) {
             session = manager.startSession(player);
             session.setToolRequired(true);
+        }
+    }
+
+    public void updateHeldItem(SessionImpl session) {
+        Player player = session.player();
+        if (session.isToolRequired() && !isHoldingTool(player)) {
+            manager.stopSession(player);
         }
     }
 
@@ -313,6 +319,10 @@ public class SessionListener implements Listener, SwapHandItemsListener {
     public void update() {
         expireEntries(suppressClick);
         expireEntries(suppressArmSwing);
+
+        for (SessionImpl session : new ArrayList<>(manager.getAllSessions())) {
+            updateHeldItem(session);
+        }
     }
 
     private void expireEntries(Map<Player, Integer> map) {

@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -92,6 +94,10 @@ public class SessionManagerImpl implements SessionManager {
         for (SessionImpl session : sessions) {
             Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
         }
+    }
+
+    public Collection<SessionImpl> getAllSessions() {
+        return Collections.unmodifiableCollection(sessions.values());
     }
 
     @Override
