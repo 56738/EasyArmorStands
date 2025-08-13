@@ -38,7 +38,7 @@ public class SessionManagerImpl implements SessionManager {
     public @NotNull SessionImpl startSession(@NotNull Player player) {
         SessionImpl session = new SessionImpl(new EasPlayer(player));
         ElementSelectionNode node = new ElementSelectionNodeImpl(session);
-        node.addSource(new EntityElementDiscoverySource());
+        node.addSource(new EntityElementDiscoverySource(player));
         session.pushNode(node);
         startSession(session);
         return session;

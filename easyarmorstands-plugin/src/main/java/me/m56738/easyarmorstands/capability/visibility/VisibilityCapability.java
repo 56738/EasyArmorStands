@@ -8,4 +8,6 @@ import org.bukkit.plugin.Plugin;
 @Capability(name = "Entity visibility", optional = true)
 public interface VisibilityCapability {
     void hideEntity(Player player, Plugin plugin, Entity entity);
+
+    boolean isNotHidden(Player player, Entity entity);
 }

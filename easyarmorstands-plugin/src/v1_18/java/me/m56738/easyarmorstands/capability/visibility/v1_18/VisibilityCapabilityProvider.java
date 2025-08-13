@@ -13,6 +13,7 @@ public class VisibilityCapabilityProvider implements CapabilityProvider<Visibili
         try {
             Player.class.getDeclaredMethod("hideEntity", Plugin.class, Entity.class);
             Player.class.getDeclaredMethod("showEntity", Plugin.class, Entity.class);
+            Player.class.getDeclaredMethod("canSee", Entity.class);
             return true;
         } catch (Throwable e) {
             return false;
@@ -31,10 +32,14 @@ public class VisibilityCapabilityProvider implements CapabilityProvider<Visibili
 
     @SuppressWarnings("deprecation")
     private static class VisibilityCapabilityImpl implements VisibilityCapability {
-
         @Override
         public void hideEntity(Player player, Plugin plugin, Entity entity) {
             player.hideEntity(plugin, entity);
+        }
+
+        @Override
+        public boolean isNotHidden(Player player, Entity entity) {
+            return player.canSee(entity);
         }
     }
 }

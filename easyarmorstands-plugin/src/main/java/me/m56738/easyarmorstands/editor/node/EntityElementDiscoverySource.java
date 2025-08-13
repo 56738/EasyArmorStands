@@ -11,24 +11,27 @@ import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class EntityElementDiscoverySource implements ElementDiscoverySource {
+    private final Player player;
     private final EntityElementProviderRegistryImpl providerRegistry;
 
-    public EntityElementDiscoverySource() {
-        this(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry());
+    public EntityElementDiscoverySource(@NotNull Player player) {
+        this(player, EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry());
     }
 
-    public EntityElementDiscoverySource(@NotNull EntityElementProviderRegistryImpl providerRegistry) {
+    public EntityElementDiscoverySource(@NotNull Player player, @NotNull EntityElementProviderRegistryImpl providerRegistry) {
+        this.player = player;
         this.providerRegistry = providerRegistry;
     }
 
     public @NotNull ElementDiscoveryEntry getEntry(@NotNull Entity entity) {
-        return new EntityElementDiscoveryEntry(this, entity);
+        return new EntityElementDiscoveryEntry(this, player, entity);
     }
 
     public @Nullable Element getElement(@NotNull Entity entity) {
