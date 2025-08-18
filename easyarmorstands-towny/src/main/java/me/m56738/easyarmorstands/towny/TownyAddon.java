@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.towny;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -16,7 +15,7 @@ public class TownyAddon implements Addon {
 
     @Override
     public void enable() {
-        privilegeChecker = new TownyPrivilegeChecker(TownyAPI.getInstance());
+        privilegeChecker = new TownyPrivilegeChecker();
         EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
     }
 

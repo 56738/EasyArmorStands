@@ -64,7 +64,6 @@ integration:
     enabled: true
   Towny:
     enabled: true
-    allow-wilderness: true
   TrainCarts:
     enabled: true
   WorldGuard:
