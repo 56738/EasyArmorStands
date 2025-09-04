@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 # Installation
 
-**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.7
+**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.8
 
 Download the latest `.jar` file and place it in your `plugins` folder.
 
