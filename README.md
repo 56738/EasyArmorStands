@@ -243,6 +243,10 @@ Use `/eas reload` to reload all configuration files.
 
 ## Localization
 
+Please submit translations on [Weblate](https://hosted.weblate.org/projects/easyarmorstands/v2/).
+
+### Use your own translations
+
 * Copy the
   [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
   into `plugins/EasyArmorStands/messages_XX.properties`.
