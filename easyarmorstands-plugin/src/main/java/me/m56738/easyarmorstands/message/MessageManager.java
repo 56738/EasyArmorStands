@@ -53,10 +53,10 @@ public class MessageManager {
         Path path = plugin.getDataFolder().toPath();
         Path defaultLocalePath = path.resolve("messages.properties");
         if (Files.exists(defaultLocalePath)) {
-            registry.registerAll(Locale.US, defaultLocalePath, false);
+            registry.registerAll(Locale.US, defaultLocalePath, true);
         } else {
             ResourceBundle bundle = ResourceBundle.getBundle("me.m56738.easyarmorstands.messages", Locale.US, UTF8ResourceBundleControl.get());
-            registry.registerAll(Locale.US, bundle, false);
+            registry.registerAll(Locale.US, bundle, true);
         }
 
         // Load other locales from custom messages_*.properties
