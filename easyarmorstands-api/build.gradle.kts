@@ -6,5 +6,5 @@ plugins {
 dependencies {
     compileOnly(libs.bukkit)
     compileOnly(libs.jetbrains.annotations)
-    api(project(":easyarmorstands-api-dependencies", configuration = "shadow"))
+    compileOnlyApi(project(":easyarmorstands-api-dependencies", configuration = "shadow"))
 }

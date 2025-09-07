@@ -31,7 +31,7 @@ dependencies {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.8")
         javaLauncher = project.javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(21)
         }
@@ -46,6 +46,7 @@ tasks {
 
     shadowJar {
         mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 
     val staticJar by registering(Copy::class) {

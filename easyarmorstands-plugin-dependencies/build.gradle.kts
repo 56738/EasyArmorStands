@@ -41,5 +41,6 @@ tasks {
             exclude(dependency("com.google.code.gson:gson"))
         }
         mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
