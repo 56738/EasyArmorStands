@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +38,7 @@ public class CommonSessionManager implements SessionManager {
     public @NotNull SessionImpl startSession(@NotNull Player player) {
         SessionImpl session = new SessionImpl(eas, player);
         ElementSelectionNode node = new ElementSelectionNodeImpl(eas.getPlatform(), session);
-        node.addSource(new EntityElementDiscoverySource(eas.getPlatform(), eas.getEntityElementProviderRegistry()));
+        node.addSource(new EntityElementDiscoverySource(eas.getPlatform(), eas.getEntityElementProviderRegistry(), player));
         session.pushNode(node);
         startSession(session);
         return session;
@@ -82,6 +84,10 @@ public class CommonSessionManager implements SessionManager {
         for (SessionImpl session : sessions) {
             eas.getPlatform().onStopSession(session);
         }
+    }
+
+    public Collection<SessionImpl> getAllSessions() {
+        return Collections.unmodifiableCollection(sessions.values());
     }
 
     @Override

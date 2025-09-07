@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.paper.api.platform.entity;
 
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.platform.world.Location;
@@ -28,6 +29,11 @@ public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
     @Override
     default boolean isCreativeMode() {
         return getNative().getGameMode() == GameMode.CREATIVE;
+    }
+
+    @Override
+    default boolean isHidden(Entity entity) {
+        return !getNative().canSee(PaperEntity.toNative(entity));
     }
 
     @Override

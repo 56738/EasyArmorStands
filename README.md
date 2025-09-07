@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 # Installation
 
-**Supported Minecraft versions:** Paper 1.21.7
+**Supported Minecraft versions:** Paper 1.21.8
 
 Download the latest `.jar` file and place it in your `plugins` folder.
 
@@ -242,6 +242,10 @@ The most important options are documented [in the wiki](https://github.com/56738
 Use `/eas reload` to reload all configuration files.
 
 ## Localization
+
+Please submit translations on [Weblate](https://hosted.weblate.org/projects/easyarmorstands/v3/).
+
+### Use your own translations
 
 * Copy the
   [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)

@@ -79,12 +79,17 @@ public class SessionListener {
     public void updateHeldItem(Player player) {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
-            if (session.isToolRequired() && !isHoldingTool(player)) {
-                manager.stopSession(player);
-            }
+            updateHeldItem(session);
         } else if (isHoldingTool(player)) {
             session = manager.startSession(player);
             session.setToolRequired(true);
+        }
+    }
+
+    public void updateHeldItem(SessionImpl session) {
+        Player player = session.player();
+        if (session.isToolRequired() && !isHoldingTool(player)) {
+            manager.stopSession(player);
         }
     }
 
@@ -94,6 +99,10 @@ public class SessionListener {
 
     public void update() {
         expireEntries(suppressClick);
+
+        for (SessionImpl session : manager.getAllSessions()) {
+            updateHeldItem(session);
+        }
     }
 
     private void expireEntries(Map<Player, Integer> map) {

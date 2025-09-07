@@ -10,6 +10,8 @@ public interface Player extends Entity, CommandSender {
 
     boolean isCreativeMode();
 
+    boolean isHidden(Entity entity);
+
     Location getEyeLocation();
 
     void giveItem(Item item);

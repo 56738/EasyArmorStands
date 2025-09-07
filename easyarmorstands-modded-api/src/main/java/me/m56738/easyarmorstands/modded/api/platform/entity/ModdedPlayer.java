@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.modded.api.platform.entity;
 
+import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.platform.world.Location;
@@ -7,7 +8,6 @@ import me.m56738.easyarmorstands.modded.api.platform.inventory.ModdedItem;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -34,6 +34,11 @@ public interface ModdedPlayer extends ModdedCommandSender, ModdedEntity, Player 
     @Override
     default boolean isCreativeMode() {
         return getNative().gameMode() == GameType.CREATIVE;
+    }
+
+    @Override
+    default boolean isHidden(Entity entity) {
+        return false;
     }
 
     @Override
@@ -113,6 +118,6 @@ public interface ModdedPlayer extends ModdedCommandSender, ModdedEntity, Player 
 
     @Override
     default void remove() {
-        getNative().remove(Entity.RemovalReason.KILLED);
+        getNative().remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
     }
 }

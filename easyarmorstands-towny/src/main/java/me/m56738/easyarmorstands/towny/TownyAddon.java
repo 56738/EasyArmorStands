@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.towny;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import me.m56738.easyarmorstands.paper.addon.Addon;
 import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.paper.addon.Addon;
 import org.bukkit.event.HandlerList;
 
 public class TownyAddon implements Addon {
@@ -20,7 +19,7 @@ public class TownyAddon implements Addon {
 
     @Override
     public void enable() {
-        privilegeChecker = new TownyPrivilegeChecker(TownyAPI.getInstance());
+        privilegeChecker = new TownyPrivilegeChecker();
         plugin.getServer().getPluginManager().registerEvents(privilegeChecker, plugin);
     }
 

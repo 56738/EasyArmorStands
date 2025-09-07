@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.platform.world.World;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -18,14 +19,16 @@ import java.util.function.Consumer;
 public class EntityElementDiscoverySource implements ElementDiscoverySource {
     private final CommonPlatform platform;
     private final CommonEntityElementProviderRegistry providerRegistry;
+    private final Player player;
 
-    public EntityElementDiscoverySource(CommonPlatform platform, CommonEntityElementProviderRegistry providerRegistry) {
+    public EntityElementDiscoverySource(CommonPlatform platform, CommonEntityElementProviderRegistry providerRegistry, Player player) {
         this.platform = platform;
         this.providerRegistry = providerRegistry;
+        this.player = player;
     }
 
     public ElementDiscoveryEntry getEntry(Entity entity) {
-        return new EntityElementDiscoveryEntry(this, entity);
+        return new EntityElementDiscoveryEntry(this, player, entity);
     }
 
     public @Nullable Element getElement(Entity entity) {

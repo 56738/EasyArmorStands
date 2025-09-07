@@ -13,6 +13,9 @@ public class Transformations {
         return ConfigurationTransformation.versionedBuilder()
                 .versionKey("_version", "config")
                 .addVersion(0, initialTransform())
+                .addVersion(1, ConfigurationTransformation.builder()
+                        .addAction(path("integration", "Towny", "allow-wilderness"), TransformAction.remove())
+                        .build())
                 .build();
     }
 

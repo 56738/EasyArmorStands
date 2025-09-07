@@ -1,48 +1,21 @@
 package me.m56738.easyarmorstands.towny;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.paper.api.region.RegionListener;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class TownyPrivilegeChecker extends RegionListener {
-    private final TownyAPI towny;
-
-    public TownyPrivilegeChecker(TownyAPI towny) {
-        this.towny = towny;
-    }
-
     @Override
     public boolean isAllowed(Player player, Location location, boolean silent) {
-        TownBlock block = towny.getTownBlock(location);
-        if (block == null) {
-            return true; // TODO allowWilderness
-        }
-
-        Resident resident = towny.getResident(player);
-        if (resident == null) {
-            return false;
-        }
-
-        if (block.hasResident(resident) || block.hasTrustedResident(resident)) {
-            return true;
-        }
-
-        Town town = block.getTownOrNull();
-        if (town == null) {
-            return false;
-        }
-
-        return town.hasResident(resident);
+        return TownyActionEventExecutor.canSwitch(player, location, Material.BLAZE_ROD, silent);
     }
 
     @Override

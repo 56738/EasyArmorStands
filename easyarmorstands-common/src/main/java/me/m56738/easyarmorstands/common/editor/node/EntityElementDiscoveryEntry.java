@@ -4,20 +4,27 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
+import me.m56738.easyarmorstands.api.platform.entity.Player;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 public class EntityElementDiscoveryEntry implements ElementDiscoveryEntry {
     private final EntityElementDiscoverySource source;
+    private final Player player;
     private final Entity entity;
 
-    public EntityElementDiscoveryEntry(EntityElementDiscoverySource source, Entity entity) {
+    public EntityElementDiscoveryEntry(EntityElementDiscoverySource source, Player player, Entity entity) {
         this.source = source;
+        this.player = player;
         this.entity = entity;
     }
 
     @Override
-    public SelectableElement getElement() {
+    public @Nullable SelectableElement getElement() {
+        if (player.isHidden(entity)) {
+            return null;
+        }
         Element element = source.getElement(entity);
         if (element instanceof SelectableElement) {
             return (SelectableElement) element;

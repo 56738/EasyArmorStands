@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.config.integration;
 
 import me.m56738.easyarmorstands.config.integration.lands.LandsConfig;
-import me.m56738.easyarmorstands.config.integration.towny.TownyConfig;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
@@ -26,7 +25,7 @@ public class IntegrationConfig {
     @Setting("Residence")
     public IntegrationEntryConfig residence;
     @Setting("Towny")
-    public TownyConfig towny;
+    public IntegrationEntryConfig towny;
     @Setting("HeadDatabase")
     public IntegrationEntryConfig headDatabase;
     @Setting("TrainCarts")
