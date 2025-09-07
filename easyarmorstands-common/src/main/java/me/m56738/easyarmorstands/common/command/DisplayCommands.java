@@ -79,7 +79,7 @@ public class DisplayCommands {
     public void setBlock(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                          @Argument("value") BlockData value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
             if (property == null) {
@@ -102,7 +102,7 @@ public class DisplayCommands {
     public void setBlockBrightness(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                                    @Argument("value") @Range(min = "0", max = "15") int blockLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -129,7 +129,7 @@ public class DisplayCommands {
     public void setSkyBrightness(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                                  @Argument("value") @Range(min = "0", max = "15") int skyLight) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Location location = properties.get(EntityPropertyTypes.LOCATION).getValue();
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
@@ -155,7 +155,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setLocalBrightness(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -179,7 +179,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setDefaultBrightness(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Brightness>> property = properties.getOrNull(DisplayPropertyTypes.BRIGHTNESS);
             if (property == null) {
@@ -202,7 +202,7 @@ public class DisplayCommands {
     public void setBoxWidth(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                             @Argument("width") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> widthProperty = properties.getOrNull(DisplayPropertyTypes.BOX_WIDTH);
             if (widthProperty == null) {
@@ -229,7 +229,7 @@ public class DisplayCommands {
     public void setBoxHeight(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                              @Argument("height") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> heightProperty = properties.getOrNull(DisplayPropertyTypes.BOX_HEIGHT);
             if (heightProperty == null) {
@@ -255,7 +255,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void removeBox(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
 
             int success = 0;
@@ -316,7 +316,7 @@ public class DisplayCommands {
     public void setText(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                         @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
             if (property == null) {
@@ -339,7 +339,7 @@ public class DisplayCommands {
     public void setTextWidth(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                              @Argument("value") int value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Integer> property = properties.getOrNull(TextDisplayPropertyTypes.LINE_WIDTH);
             if (property == null) {
@@ -362,7 +362,7 @@ public class DisplayCommands {
     public void setTextBackground(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                                   @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -385,7 +385,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetTextBackground(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -407,7 +407,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void hideTextBackground(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -431,7 +431,7 @@ public class DisplayCommands {
     public void hideTextBackground(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                                    @Argument("value") @Range(min = "0", max = "255") int alpha) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
             if (property == null) {
@@ -461,7 +461,7 @@ public class DisplayCommands {
     public void setGlowColor(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                              @Argument("value") TextColor color) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
@@ -484,7 +484,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetGlowColor(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
             if (property == null) {
@@ -571,7 +571,7 @@ public class DisplayCommands {
             allActions.addAll(actions);
         }
 
-        eas.historyManager().getHistory(sender)
+        eas.getHistoryManager().getHistory(sender)
                 .push(allActions, Message.component("easyarmorstands.history.converted-armor-stand"));
 
         if (!foundArmorStand) {
@@ -593,7 +593,7 @@ public class DisplayCommands {
             session.returnToNode(groupRootNode);
             for (Element element : createdElements) {
                 if (element instanceof EditableElement editableElement) {
-                    if (eas.platform().canSelectElement(sender, editableElement)) {
+                    if (eas.getPlatform().canSelectElement(sender, editableElement)) {
                         group.addMember(editableElement);
                     }
                 }
@@ -643,7 +643,7 @@ public class DisplayCommands {
 
         ElementType type = eas.getItemDisplayType();
 
-        if (!eas.platform().canCreateElement(sender, type, properties)) {
+        if (!eas.getPlatform().canCreateElement(sender, type, properties)) {
             return;
         }
 
@@ -663,7 +663,7 @@ public class DisplayCommands {
     public void setViewRange(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                              @Argument("value") float value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Float> property = properties.getOrNull(DisplayPropertyTypes.VIEW_RANGE);
             if (property == null) {

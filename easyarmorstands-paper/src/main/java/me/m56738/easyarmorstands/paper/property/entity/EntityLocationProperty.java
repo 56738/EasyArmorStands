@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
@@ -13,9 +14,11 @@ import org.jspecify.annotations.Nullable;
 public class EntityLocationProperty implements Property<Location> {
     private static final double HEIGHT_LIMIT = 20000000;
     private static final double COORDINATE_LIMIT = 30000000;
+    private final PaperPlatform platform;
     private final Entity entity;
 
-    public EntityLocationProperty(Entity entity) {
+    public EntityLocationProperty(PaperPlatform platform, Entity entity) {
+        this.platform = platform;
         this.entity = entity;
     }
 
@@ -26,7 +29,7 @@ public class EntityLocationProperty implements Property<Location> {
 
     @Override
     public Location getValue() {
-        return PaperLocationAdapter.fromNative(entity.getLocation());
+        return PaperLocationAdapter.fromNative(platform, entity.getLocation());
     }
 
     @Override

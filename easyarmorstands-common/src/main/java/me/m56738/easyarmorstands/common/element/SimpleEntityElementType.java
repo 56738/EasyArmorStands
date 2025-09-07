@@ -36,7 +36,7 @@ public class SimpleEntityElementType implements EntityElementType {
 
     public SimpleEntityElement getElement(@NotNull Entity entity) {
         SimpleEntityElement element = createInstance(entity);
-        eas.platform().onElementInitialize(element);
+        eas.getPlatform().onElementInitialize(element);
         return element;
     }
 
@@ -48,7 +48,7 @@ public class SimpleEntityElementType implements EntityElementType {
         }
         Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        Entity entity = eas.platform().spawnEntity(entityType, location, configurator);
+        Entity entity = eas.getPlatform().spawnEntity(entityType, location, configurator);
         SimpleEntityElement element = configurator.getElement();
         if (element != null) {
             entity.setLocation(location);

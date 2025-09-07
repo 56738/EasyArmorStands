@@ -8,10 +8,6 @@ import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.GameMode;
 
 public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
-    static PaperPlayer fromNative(org.bukkit.entity.Player nativePlayer) {
-        return new PaperPlayerImpl(nativePlayer);
-    }
-
     static org.bukkit.entity.Player toNative(Player player) {
         return ((PaperPlayer) player).getNative();
     }
@@ -36,7 +32,7 @@ public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
 
     @Override
     default Location getEyeLocation() {
-        return PaperLocationAdapter.fromNative(getNative().getEyeLocation());
+        return PaperLocationAdapter.fromNative(getPlatform(), getNative().getEyeLocation());
     }
 
     @Override
@@ -46,11 +42,11 @@ public interface PaperPlayer extends PaperCommandSender, PaperEntity, Player {
 
     @Override
     default Item getItemInMainHand() {
-        return PaperItem.fromNative(getNative().getInventory().getItemInMainHand());
+        return getPlatform().getItem(getNative().getInventory().getItemInMainHand());
     }
 
     @Override
     default Item getItemInOffHand() {
-        return PaperItem.fromNative(getNative().getInventory().getItemInOffHand());
+        return getPlatform().getItem(getNative().getInventory().getItemInOffHand());
     }
 }

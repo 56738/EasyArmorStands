@@ -67,7 +67,7 @@ public class DisplayScaleTool implements ScaleTool {
         @Override
         public void setChange(double change) {
             originalScale.mul((float) change, scale);
-            Configuration configuration = eas.platform().getConfiguration();
+            Configuration configuration = eas.getPlatform().getConfiguration();
             scale.x = (float) configuration.clampDisplayEntityScale(scale.x);
             scale.y = (float) configuration.clampDisplayEntityScale(scale.y);
             scale.z = (float) configuration.clampDisplayEntityScale(scale.z);
@@ -84,7 +84,7 @@ public class DisplayScaleTool implements ScaleTool {
 
         @Override
         public void setValue(double value) {
-            Configuration configuration = eas.platform().getConfiguration();
+            Configuration configuration = eas.getPlatform().getConfiguration();
             scale.set(configuration.clampDisplayEntityScale(value));
             scaleProperty.setValue(scale);
         }

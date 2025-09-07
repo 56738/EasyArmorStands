@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.fabric.platform.entity;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatform;
 import me.m56738.easyarmorstands.modded.platform.entity.ModdedCommandSenderImpl;
 import net.minecraft.commands.CommandSourceStack;
 
@@ -9,8 +10,8 @@ import java.util.Objects;
 public class FabricCommandSenderImpl extends ModdedCommandSenderImpl {
     private final CommandSourceStack stack;
 
-    public FabricCommandSenderImpl(CommandSourceStack stack) {
-        super(stack);
+    public FabricCommandSenderImpl(ModdedPlatform platform, CommandSourceStack stack) {
+        super(platform, stack);
         this.stack = stack;
     }
 

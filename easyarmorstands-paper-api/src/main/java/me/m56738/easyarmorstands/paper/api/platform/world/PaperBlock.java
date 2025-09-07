@@ -3,12 +3,9 @@ package me.m56738.easyarmorstands.paper.api.platform.world;
 import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
 import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.BlockData;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatformHolder;
 
-public interface PaperBlock extends Block {
-    static PaperBlock fromNative(org.bukkit.block.Block nativeBlock) {
-        return new PaperBlockImpl(nativeBlock);
-    }
-
+public interface PaperBlock extends Block, PaperPlatformHolder {
     static org.bukkit.block.Block toNative(Block block) {
         return ((PaperBlock) block).getNative();
     }
@@ -17,7 +14,7 @@ public interface PaperBlock extends Block {
 
     @Override
     default BlockData getBlockData() {
-        return PaperBlockData.fromNative(getNative().getBlockData());
+        return getPlatform().getBlockData(getNative().getBlockData());
     }
 
     @Override

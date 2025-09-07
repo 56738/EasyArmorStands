@@ -16,7 +16,7 @@ public class SimpleEntityElementProvider implements EntityElementProvider {
 
     @Override
     public @Nullable Element getElement(@NotNull Entity entity) {
-        if (entity.getType().equals(eas.platform().getPlayerType())) {
+        if (entity.getType().equals(eas.getPlatform().getPlayerType())) {
             return null;
         }
         return new SimpleEntityElementType(eas, entity.getType()).getElement(entity);

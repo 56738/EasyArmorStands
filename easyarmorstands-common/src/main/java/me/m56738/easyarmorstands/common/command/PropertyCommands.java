@@ -71,7 +71,7 @@ public final class PropertyCommands {
                     Element element = context.get(ElementProcessor.elementKey());
                     Player sender = context.sender().source();
                     EasyArmorStands eas = context.inject(EasyArmorStands.class).orElseThrow();
-                    try (ManagedChangeContext changeContext = eas.changeContext().create(sender)) {
+                    try (ManagedChangeContext changeContext = eas.getChangeContextFactory().create(sender)) {
                         PropertyContainer properties = changeContext.getProperties(element);
                         if (!valueCommand.isSupported(properties)) {
                             valueCommand.sendNotSupported(sender);

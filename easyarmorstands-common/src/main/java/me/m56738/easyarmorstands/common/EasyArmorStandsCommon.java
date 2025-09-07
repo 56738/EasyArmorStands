@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.platform.Platform;
 import me.m56738.easyarmorstands.common.clipboard.Clipboard;
 import me.m56738.easyarmorstands.common.clipboard.ClipboardManager;
@@ -164,11 +165,11 @@ public class EasyArmorStandsCommon implements EasyArmorStands {
         parameterInjectorRegistry
                 .registerInjector(EasyArmorStands.class, injector(provider::getEasyArmorStands))
                 .registerInjector(EasyArmorStandsCommon.class, injector(provider::getEasyArmorStands))
-                .registerInjector(HistoryManager.class, injector(() -> provider.getEasyArmorStands().historyManager()))
-                .registerInjector(SessionManager.class, injector(() -> provider.getEasyArmorStands().sessionManager()))
-                .registerInjector(SessionListener.class, injector(() -> provider.getEasyArmorStands().sessionListener()))
-                .registerInjector(ClipboardManager.class, injector(() -> provider.getEasyArmorStands().clipboardManager()))
-                .registerInjector(Platform.class, injector(() -> provider.getEasyArmorStands().platform()))
+                .registerInjector(HistoryManager.class, injector(() -> provider.getEasyArmorStands().getHistoryManager()))
+                .registerInjector(SessionManager.class, injector(() -> provider.getEasyArmorStands().getSessionManager()))
+                .registerInjector(SessionListener.class, injector(() -> provider.getEasyArmorStands().getSessionListener()))
+                .registerInjector(ClipboardManager.class, injector(() -> provider.getEasyArmorStands().getClipboardManager()))
+                .registerInjector(Platform.class, injector(() -> provider.getEasyArmorStands().getPlatform()))
                 .registerInjector(ValueNode.class, new ValueNodeInjector())
                 .registerInjector(SessionImpl.class, new SessionInjector())
                 .registerInjector(Clipboard.class, new ClipboardInjector())
@@ -198,44 +199,49 @@ public class EasyArmorStandsCommon implements EasyArmorStands {
     }
 
     @Override
-    public CommonPlatform platform() {
+    public CommonPlatform getPlatform() {
         return platform;
     }
 
-    public String version() {
+    public String getVersion() {
         return version;
     }
 
     @Override
-    public CommonEntityElementProviderRegistry entityElementProviderRegistry() {
+    public CommonEntityElementProviderRegistry getEntityElementProviderRegistry() {
         return entityElementProviderRegistry;
     }
 
-    public HistoryManager historyManager() {
+    public HistoryManager getHistoryManager() {
         return historyManager;
     }
 
-    public ClipboardManager clipboardManager() {
+    public ClipboardManager getClipboardManager() {
         return clipboardManager;
     }
 
     @Override
-    public CommonSessionManager sessionManager() {
+    public CommonSessionManager getSessionManager() {
         return sessionManager;
     }
 
-    public SessionListener sessionListener() {
+    public SessionListener getSessionListener() {
         return sessionListener;
     }
 
     @Override
-    public ElementSpawnRequest elementSpawnRequest(ElementType type) {
+    public ElementSpawnRequest createElementSpawnRequest(ElementType type) {
         return new ElementSpawnRequestImpl(this, type);
     }
 
     @Override
-    public ChangeContextFactory changeContext() {
+    public ChangeContextFactory getChangeContextFactory() {
         return changeContextFactory;
+    }
+
+    @Override
+    public MenuBuilder createMenuBuilder() {
+        return null; // TODO
     }
 
     public ElementType getItemDisplayType() {

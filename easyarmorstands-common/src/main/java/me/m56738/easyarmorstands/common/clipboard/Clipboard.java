@@ -34,7 +34,7 @@ public class Clipboard {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        try (ManagedChangeContext context = eas.changeContext().create(player)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(player)) {
             copier.copyProperties(context.getProperties(element), properties);
             context.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
         }

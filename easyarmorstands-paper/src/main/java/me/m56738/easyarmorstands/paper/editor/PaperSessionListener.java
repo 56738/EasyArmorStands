@@ -10,9 +10,7 @@ import me.m56738.easyarmorstands.common.editor.SessionListener;
 import me.m56738.easyarmorstands.common.history.History;
 import me.m56738.easyarmorstands.common.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.common.history.action.ElementDestroyAction;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
-import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -41,18 +39,20 @@ import java.util.Optional;
 
 public class PaperSessionListener implements Listener {
     private final Plugin plugin;
+    private final PaperPlatform platform;
     private final EasyArmorStandsCommon eas;
     private final SessionListener sessionListener;
 
-    public PaperSessionListener(Plugin plugin, EasyArmorStandsCommon eas, SessionListener sessionListener) {
+    public PaperSessionListener(Plugin plugin, PaperPlatform platform, EasyArmorStandsCommon eas, SessionListener sessionListener) {
         this.plugin = plugin;
+        this.platform = platform;
         this.eas = eas;
         this.sessionListener = sessionListener;
     }
 
     @EventHandler
     public void onSwapHand(PlayerSwapHandItemsEvent event) {
-        if (sessionListener.handleClick(PaperPlayer.fromNative(event.getPlayer()), ClickContext.Type.SWAP_HANDS)) {
+        if (sessionListener.handleClick(platform.getPlayer(event.getPlayer()), ClickContext.Type.SWAP_HANDS)) {
             event.setCancelled(true);
         }
     }
@@ -64,8 +64,8 @@ public class PaperSessionListener implements Listener {
             return;
         }
 
-        Player player = PaperPlayer.fromNative(event.getPlayer());
-        PaperBlock block = Optional.ofNullable(event.getClickedBlock()).map(PaperBlock::fromNative).orElse(null);
+        Player player = platform.getPlayer(event.getPlayer());
+        PaperBlock block = Optional.ofNullable(event.getClickedBlock()).map(platform::getBlock).orElse(null);
         if (sessionListener.handleClick(player, ClickContext.Type.LEFT_CLICK, block)) {
             event.setCancelled(true);
         }
@@ -73,11 +73,11 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler
     public void onLeftClick(EntityDamageByEntityEvent event) {
-        Entity attacker = PaperEntity.fromNative(event.getDamager());
+        Entity attacker = platform.getEntity(event.getDamager());
         if (!(attacker instanceof Player player)) {
             return;
         }
-        Entity entity = PaperEntity.fromNative(event.getEntity());
+        Entity entity = platform.getEntity(event.getEntity());
         if (sessionListener.handleClick(player, ClickContext.Type.LEFT_CLICK, entity)) {
             event.setCancelled(true);
         }
@@ -90,8 +90,8 @@ public class PaperSessionListener implements Listener {
             return;
         }
 
-        Player player = PaperPlayer.fromNative(event.getPlayer());
-        PaperBlock block = Optional.ofNullable(event.getClickedBlock()).map(PaperBlock::fromNative).orElse(null);
+        Player player = platform.getPlayer(event.getPlayer());
+        PaperBlock block = Optional.ofNullable(event.getClickedBlock()).map(platform::getBlock).orElse(null);
         if (sessionListener.handleClick(player, ClickContext.Type.RIGHT_CLICK, block)) {
             event.setCancelled(true);
         }
@@ -99,8 +99,8 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event) {
-        Player player = PaperPlayer.fromNative(event.getPlayer());
-        Entity entity = PaperEntity.fromNative(event.getRightClicked());
+        Player player = platform.getPlayer(event.getPlayer());
+        Entity entity = platform.getEntity(event.getRightClicked());
         if (sessionListener.handleClick(player, ClickContext.Type.RIGHT_CLICK, entity)) {
             event.setCancelled(true);
         }
@@ -113,19 +113,19 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Player player = PaperPlayer.fromNative(event.getPlayer());
+        Player player = platform.getPlayer(event.getPlayer());
         Bukkit.getScheduler().runTask(plugin, () -> sessionListener.updateHeldItem(player));
     }
 
     @EventHandler
     public void onHoldItem(PlayerItemHeldEvent event) {
-        Player player = PaperPlayer.fromNative(event.getPlayer());
+        Player player = platform.getPlayer(event.getPlayer());
         Bukkit.getScheduler().runTask(plugin, () -> sessionListener.updateHeldItem(player));
     }
 
     @EventHandler
     public void onPickup(EntityPickupItemEvent event) {
-        Entity entity = PaperEntity.fromNative(event.getEntity());
+        Entity entity = platform.getEntity(event.getEntity());
         if (entity instanceof Player player) {
             Bukkit.getScheduler().runTask(plugin, () -> sessionListener.updateHeldItem(player));
         }
@@ -144,12 +144,12 @@ public class PaperSessionListener implements Listener {
         if (event.getPlayer() == null) {
             return;
         }
-        Player player = PaperPlayer.fromNative(event.getPlayer());
-        Entity entity = PaperEntity.fromNative(event.getEntity());
+        Player player = platform.getPlayer(event.getPlayer());
+        Entity entity = platform.getEntity(event.getEntity());
         Bukkit.getScheduler().runTask(plugin, () -> {
-            History history = eas.historyManager().getHistory(player);
-            Clipboard clipboard = eas.clipboardManager().getClipboard(player);
-            Element element = eas.entityElementProviderRegistry().getElement(entity);
+            History history = eas.getHistoryManager().getHistory(player);
+            Clipboard clipboard = eas.getClipboardManager().getClipboard(player);
+            Element element = eas.getEntityElementProviderRegistry().getElement(entity);
             if (element != null) {
                 history.push(new ElementCreateAction(eas, element));
                 clipboard.handleAutoApply(element, player);
@@ -159,13 +159,13 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDestroyEntity(EntityDamageByEntityEvent event) {
-        Entity damager = PaperEntity.fromNative(event.getDamager());
+        Entity damager = platform.getEntity(event.getDamager());
         if (!(damager instanceof Player player)) {
             return;
         }
-        Entity entity = PaperEntity.fromNative(event.getEntity());
+        Entity entity = platform.getEntity(event.getEntity());
 
-        Element element = eas.entityElementProviderRegistry().getElement(entity);
+        Element element = eas.getEntityElementProviderRegistry().getElement(entity);
         if (element == null) {
             return;
         }
@@ -173,14 +173,14 @@ public class PaperSessionListener implements Listener {
         ElementDestroyAction action = new ElementDestroyAction(eas, element);
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isDead()) {
-                eas.historyManager().getHistory(player).push(action);
+                eas.getHistoryManager().getHistory(player).push(action);
             }
         });
     }
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
-        Player player = PaperPlayer.fromNative(event.getPlayer());
+        Player player = platform.getPlayer(event.getPlayer());
         sessionListener.suppressClick(player);
         if (sessionListener.handleDrop(player)) {
             event.setCancelled(true);
@@ -190,7 +190,7 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler
     public void onFurnaceBurn(FurnaceBurnEvent event) {
-        if (eas.platform().isTool(PaperItem.fromNative(event.getFuel()))) {
+        if (eas.getPlatform().isTool(platform.getItem(event.getFuel()))) {
             event.setBurnTime(0);
         }
     }
@@ -198,7 +198,7 @@ public class PaperSessionListener implements Listener {
     @EventHandler
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {
-            if (eas.platform().isTool(PaperItem.fromNative(item))) {
+            if (eas.getPlatform().isTool(platform.getItem(item))) {
                 event.getInventory().setResult(null);
                 break;
             }
@@ -207,6 +207,6 @@ public class PaperSessionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        sessionListener.handleQuit(PaperPlayer.fromNative(event.getPlayer()));
+        sessionListener.handleQuit(platform.getPlayer(event.getPlayer()));
     }
 }

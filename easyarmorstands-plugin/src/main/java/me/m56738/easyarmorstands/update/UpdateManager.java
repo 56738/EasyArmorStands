@@ -38,7 +38,7 @@ public class UpdateManager {
     }
 
     public void refresh() {
-        String currentVersion = plugin.getDescription().getVersion();
+        String currentVersion = plugin.getPluginMeta().getVersion();
         String latestVersion;
         try {
             latestVersion = updateChecker.fetchLatestVersion();

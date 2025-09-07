@@ -99,7 +99,7 @@ public class ClipboardCommands {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 copier.copyProperties(properties, clipboard.getProperties());

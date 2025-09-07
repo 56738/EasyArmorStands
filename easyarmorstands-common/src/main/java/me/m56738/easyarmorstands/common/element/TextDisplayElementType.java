@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class TextDisplayElementType extends DisplayElementType {
     public TextDisplayElementType(EasyArmorStandsCommon eas) {
-        super(eas, eas.platform().getTextDisplayType());
+        super(eas, eas.getPlatform().getTextDisplayType());
     }
 
     @Override

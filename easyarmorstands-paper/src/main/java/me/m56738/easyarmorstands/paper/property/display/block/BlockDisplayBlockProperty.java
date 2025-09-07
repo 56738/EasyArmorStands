@@ -4,13 +4,16 @@ import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import org.bukkit.entity.BlockDisplay;
 
 public class BlockDisplayBlockProperty implements Property<BlockData> {
+    private final PaperPlatform platform;
     private final BlockDisplay entity;
 
-    public BlockDisplayBlockProperty(BlockDisplay entity) {
+    public BlockDisplayBlockProperty(PaperPlatform platform, BlockDisplay entity) {
+        this.platform = platform;
         this.entity = entity;
     }
 
@@ -21,7 +24,7 @@ public class BlockDisplayBlockProperty implements Property<BlockData> {
 
     @Override
     public BlockData getValue() {
-        return PaperBlockData.fromNative(entity.getBlock());
+        return platform.getBlockData(entity.getBlock());
     }
 
     @Override

@@ -1,12 +1,13 @@
 package me.m56738.easyarmorstands.api.platform.entity;
 
+import me.m56738.easyarmorstands.api.platform.PlatformHolder;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 
 import java.util.Set;
 import java.util.UUID;
 
-public interface Entity {
+public interface Entity extends PlatformHolder {
     EntityType getType();
 
     UUID getUniqueId();

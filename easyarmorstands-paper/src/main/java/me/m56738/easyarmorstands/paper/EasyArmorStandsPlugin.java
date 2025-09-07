@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.command.parser.BlockDataParser;
 import me.m56738.easyarmorstands.common.permission.CommonPermissions;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.clipboard.PaperClipboardListener;
 import me.m56738.easyarmorstands.paper.editor.PaperSessionListener;
 import me.m56738.easyarmorstands.paper.element.PaperDisplayElementListener;
@@ -31,32 +30,33 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStandsCommonProvider {
+public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStandsCommonProvider, me.m56738.easyarmorstands.paper.api.EasyArmorStandsPlugin {
     private @Nullable EasyArmorStandsCommon eas;
+    private @Nullable PaperPlatformImpl platform;
 
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
 
-        PaperPlatformImpl platform = new PaperPlatformImpl(this);
+        platform = new PaperPlatformImpl(this);
 
         PaperPermissions.registerAll(CommonPermissions.createPermissions(
                 Arrays.stream(org.bukkit.entity.EntityType.values())
-                        .map(PaperEntityType::fromNative)
+                        .map(org.bukkit.entity.EntityType::name)
                         .collect(Collectors.toList())));
 
         eas = new EasyArmorStandsCommon(platform, getPluginMeta().getVersion());
-        getServer().getPluginManager().registerEvents(new PaperSessionListener(this, eas, eas.sessionListener()), this);
-        getServer().getPluginManager().registerEvents(new PaperHistoryListener(eas.historyManager()), this);
-        getServer().getPluginManager().registerEvents(new PaperClipboardListener(this, eas.clipboardManager()), this);
-        getServer().getPluginManager().registerEvents(new PaperEntityElementListener(), this);
-        getServer().getPluginManager().registerEvents(new PaperDisplayElementListener(), this);
-        getServer().getScheduler().runTaskTimer(this, eas.sessionManager()::update, 0, 1);
-        getServer().getScheduler().runTaskTimer(this, eas.sessionListener()::update, 0, 1);
+        getServer().getPluginManager().registerEvents(new PaperSessionListener(this, platform, eas, eas.getSessionListener()), this);
+        getServer().getPluginManager().registerEvents(new PaperHistoryListener(platform, eas.getHistoryManager()), this);
+        getServer().getPluginManager().registerEvents(new PaperClipboardListener(this, platform, eas.getClipboardManager()), this);
+        getServer().getPluginManager().registerEvents(new PaperEntityElementListener(platform), this);
+        getServer().getPluginManager().registerEvents(new PaperDisplayElementListener(platform), this);
+        getServer().getScheduler().runTaskTimer(this, eas.getSessionManager()::update, 0, 1);
+        getServer().getScheduler().runTaskTimer(this, eas.getSessionListener()::update, 0, 1);
 
         GlobalTranslator.translator().addSource(TranslationParser.read(getResource("assets/easyarmorstands/lang/en_us.json"), Key.key("easyarmorstands", "translation")));
 
-        PaperCommandManager<CommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper())
+        PaperCommandManager<CommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper(platform))
                 .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(this)))
                 .buildOnEnable(this);
 
@@ -85,5 +85,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public EasyArmorStandsCommon getEasyArmorStands() {
         return Objects.requireNonNull(eas);
+    }
+
+    @Override
+    public PaperPlatformImpl getPlatform() {
+        return Objects.requireNonNull(platform);
     }
 }

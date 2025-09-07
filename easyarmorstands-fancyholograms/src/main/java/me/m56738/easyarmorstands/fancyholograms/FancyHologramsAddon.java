@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.fancyholograms;
 
 import de.oliver.fancyholograms.api.FancyHologramsPlugin;
 import de.oliver.fancyholograms.api.HologramManager;
-import me.m56738.easyarmorstands.paper.addon.Addon;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscoverySource;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementType;
 import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.paper.addon.Addon;
 import org.bukkit.event.HandlerList;
 
 public class FancyHologramsAddon implements Addon {
@@ -28,7 +28,7 @@ public class FancyHologramsAddon implements Addon {
         // TODO spawn
 
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
-        HologramElementType type = new HologramElementType(plugin.getEasyArmorStands(), manager, this);
+        HologramElementType type = new HologramElementType(plugin.getEasyArmorStands(), plugin.getPlatform(), manager, this);
         HologramElementDiscoverySource discoverySource = new HologramElementDiscoverySource(type, manager);
         listener = new FancyHologramsListener(discoverySource);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);

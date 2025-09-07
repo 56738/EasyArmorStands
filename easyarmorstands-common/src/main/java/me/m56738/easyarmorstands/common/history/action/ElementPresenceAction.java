@@ -26,7 +26,7 @@ abstract class ElementPresenceAction implements Action {
 
     protected boolean create(ChangeContext context) {
         ElementType type = reference.getType();
-        if (!eas.platform().canCreateElement(context.getPlayer(), type, properties)) {
+        if (!eas.getPlatform().canCreateElement(context.getPlayer(), type, properties)) {
             return false;
         }
 
@@ -39,7 +39,7 @@ abstract class ElementPresenceAction implements Action {
         reference = element.getReference();
         UUID newId = getId(reference);
         if (oldId != null && newId != null) {
-            eas.historyManager().onEntityReplaced(oldId, newId);
+            eas.getHistoryManager().onEntityReplaced(oldId, newId);
         }
 
         return true;
@@ -55,7 +55,7 @@ abstract class ElementPresenceAction implements Action {
             return false;
         }
 
-        if (!eas.platform().canDestroyElement(context.getPlayer(), destroyableElement)) {
+        if (!eas.getPlatform().canDestroyElement(context.getPlayer(), destroyableElement)) {
             return false;
         }
 

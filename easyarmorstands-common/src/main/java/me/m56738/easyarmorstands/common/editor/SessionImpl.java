@@ -67,8 +67,8 @@ public final class SessionImpl implements Session {
         this.eas = eas;
         this.player = player;
         this.snapper = new SessionSnapper(player);
-        this.particleProvider = new GizmoParticleProvider(eas.platform().getGizmoFactory(player));
-        this.nodeProvider = new NodeProviderImpl(eas.platform(), this);
+        this.particleProvider = new GizmoParticleProvider(eas.getPlatform().getGizmoFactory(player));
+        this.nodeProvider = new NodeProviderImpl(eas.getPlatform(), this);
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class SessionImpl implements Session {
 
     @Override
     public double getScale(Vector3dc position) {
-        Configuration config = eas.platform().getConfiguration();
+        Configuration config = eas.getPlatform().getConfiguration();
         Vector3dc eyePosition = player.getEyeLocation().position();
         double minDistance = config.getEditorScaleMinDistance();
         double maxDistance = config.getEditorScaleMaxDistance();
@@ -277,11 +277,11 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return eas.platform().getConfiguration().getEditorButtonRange();
+        return eas.getPlatform().getConfiguration().getEditorButtonRange();
     }
 
     public double getLookThreshold() {
-        return eas.platform().getConfiguration().getEditorButtonThreshold();
+        return eas.getPlatform().getConfiguration().getEditorButtonThreshold();
     }
 
     @Override

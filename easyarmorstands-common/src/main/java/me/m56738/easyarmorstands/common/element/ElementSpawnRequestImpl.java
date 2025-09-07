@@ -60,7 +60,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
                 offset.y = 0;
             }
             Location location = originLocation.withOffset(offset).withYaw(originLocation.yaw() + 180);
-            Session session = eas.sessionManager().getSession(player);
+            Session session = eas.getSessionManager().getSession(player);
             if (session != null) {
                 Vector3dc position = location.position();
                 location = location.withPosition(new Vector3d(
@@ -76,7 +76,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         type.applyDefaultProperties(properties);
         properties.putAll(this.properties);
 
-        if (player != null && !eas.platform().canCreateElement(player, type, properties)) {
+        if (player != null && !eas.getPlatform().canCreateElement(player, type, properties)) {
             return null;
         }
 
@@ -86,8 +86,8 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         }
 
         if (player != null) {
-            eas.historyManager().getHistory(player).push(new ElementCreateAction(eas, element));
-            eas.clipboardManager().getClipboard(player).handleAutoApply(element, player);
+            eas.getHistoryManager().getHistory(player).push(new ElementCreateAction(eas, element));
+            eas.getClipboardManager().getClipboard(player).handleAutoApply(element, player);
         }
         return element;
     }

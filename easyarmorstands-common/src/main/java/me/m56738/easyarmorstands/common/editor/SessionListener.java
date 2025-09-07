@@ -28,7 +28,7 @@ public class SessionListener {
         if (!player.hasPermission(Permissions.EDIT)) {
             return false;
         }
-        return eas.platform().isTool(player.getItemInMainHand()) || eas.platform().isTool(player.getItemInOffHand());
+        return eas.getPlatform().isTool(player.getItemInMainHand()) || eas.getPlatform().isTool(player.getItemInOffHand());
     }
 
     public boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity, @Nullable Block block) {
@@ -60,7 +60,7 @@ public class SessionListener {
     }
 
     public boolean handleDrop(Player player) {
-        SessionImpl session = eas.sessionManager().getSession(player);
+        SessionImpl session = eas.getSessionManager().getSession(player);
         if (session != null) {
             ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
             if (node != null && node != session.getNode()) {
@@ -72,7 +72,7 @@ public class SessionListener {
     }
 
     public void handleQuit(Player player) {
-        eas.sessionManager().stopSession(player);
+        eas.getSessionManager().stopSession(player);
         suppressClick.remove(player);
     }
 

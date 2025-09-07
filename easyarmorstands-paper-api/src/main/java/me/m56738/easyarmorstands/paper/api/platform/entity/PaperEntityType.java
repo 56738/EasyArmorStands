@@ -1,13 +1,10 @@
 package me.m56738.easyarmorstands.paper.api.platform.entity;
 
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatformHolder;
 import net.kyori.adventure.text.Component;
 
-public interface PaperEntityType extends EntityType {
-    static PaperEntityType fromNative(org.bukkit.entity.EntityType nativeType) {
-        return new PaperEntityTypeImpl(nativeType);
-    }
-
+public interface PaperEntityType extends EntityType, PaperPlatformHolder {
     static org.bukkit.entity.EntityType toNative(EntityType type) {
         return ((PaperEntityType) type).getNative();
     }

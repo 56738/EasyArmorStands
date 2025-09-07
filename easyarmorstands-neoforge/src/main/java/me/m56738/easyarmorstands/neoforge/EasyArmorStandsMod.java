@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommonProvider;
 import me.m56738.easyarmorstands.common.permission.CommonPermissions;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
-import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntityType;
 import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import me.m56738.easyarmorstands.modded.platform.command.MainThreadExecutor;
 import me.m56738.easyarmorstands.modded.platform.command.ModdedSenderMapper;
@@ -14,6 +13,7 @@ import me.m56738.easyarmorstands.neoforge.permission.NeoForgePermissions;
 import me.m56738.easyarmorstands.neoforge.platform.NeoForgePlatformImpl;
 import me.m56738.easyarmorstands.neoforge.session.NeoForgeSessionListener;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -50,7 +50,7 @@ public class EasyArmorStandsMod implements EasyArmorStandsCommonProvider {
 
         permissions.registerAll(CommonPermissions.createPermissions(
                 BuiltInRegistries.ENTITY_TYPE.stream()
-                        .map(ModdedEntityType::fromNative)
+                        .map(EntityType::toShortString)
                         .collect(Collectors.toSet())));
 
         NeoForge.EVENT_BUS.addListener(this::onStarting);
@@ -79,8 +79,8 @@ public class EasyArmorStandsMod implements EasyArmorStandsCommonProvider {
 
     private void onTick(ServerTickEvent.Post event) {
         if (eas != null) {
-            eas.sessionListener().update();
-            eas.sessionManager().update();
+            eas.getSessionListener().update();
+            eas.getSessionManager().update();
         }
     }
 

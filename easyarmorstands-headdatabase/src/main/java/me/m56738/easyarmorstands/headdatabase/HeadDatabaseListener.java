@@ -7,7 +7,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.common.permission.Permissions;
 import me.m56738.easyarmorstands.paper.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,8 +25,9 @@ public class HeadDatabaseListener implements Listener {
         if (event.isEconomy() || !player.hasPermission(Permissions.OPEN)) {
             return;
         }
-        SessionManager sessionManager = plugin.getEasyArmorStands().sessionManager();
-        Session session = sessionManager.getSession(PaperPlayer.fromNative(player));
+        SessionManager sessionManager = plugin.getEasyArmorStands().getSessionManager();
+        PaperPlatform platform = plugin.getPlatform();
+        Session session = sessionManager.getSession(platform.getPlayer(player));
         if (session == null) {
             return;
         }
@@ -35,7 +36,7 @@ public class HeadDatabaseListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        ((MenuElement) element).openMenu(PaperPlayer.fromNative(player));
+        ((MenuElement) element).openMenu(platform.getPlayer(player));
         player.setItemOnCursor(event.getHead());
     }
 }

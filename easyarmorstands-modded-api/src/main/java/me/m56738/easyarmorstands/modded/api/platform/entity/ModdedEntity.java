@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.modded.api.platform.entity;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.platform.world.Location;
+import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatformHolder;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity.RemovalReason;
@@ -12,11 +13,7 @@ import org.joml.Vector3dc;
 import java.util.Set;
 import java.util.UUID;
 
-public interface ModdedEntity extends Entity {
-    static ModdedEntity fromNative(net.minecraft.world.entity.Entity nativeEntity) {
-        return new ModdedEntityImpl(nativeEntity);
-    }
-
+public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     static net.minecraft.world.entity.Entity toNative(Entity entity) {
         return ((ModdedEntity) entity).getNative();
     }
@@ -25,7 +22,7 @@ public interface ModdedEntity extends Entity {
 
     @Override
     default EntityType getType() {
-        return ModdedEntityType.fromNative(getNative().getType());
+        return getPlatform().getEntityType(getNative().getType());
     }
 
     @Override
@@ -42,7 +39,7 @@ public interface ModdedEntity extends Entity {
     default Location getLocation() {
         net.minecraft.world.entity.Entity nativeEntity = getNative();
         return Location.of(
-                ModdedWorld.fromNative(nativeEntity.level()),
+                getPlatform().getWorld(nativeEntity.level()),
                 new Vector3d(nativeEntity.getX(), nativeEntity.getY(), nativeEntity.getZ()),
                 nativeEntity.getYRot(), nativeEntity.getXRot());
     }

@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.paper.property.armorstand.ArmorStandBasePlateProperty;
@@ -33,6 +34,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class PaperEntityElementListener implements Listener {
+    private final PaperPlatform platform;
+
+    public PaperEntityElementListener(PaperPlatform platform) {
+        this.platform = platform;
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInitialize(EntityElementInitializeEvent event) {
         DefaultEntityElement element = event.getElement();
@@ -51,7 +58,7 @@ public class PaperEntityElementListener implements Listener {
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry) {
         registry.register(new EntityGlowingProperty(entity));
-        registry.register(new EntityLocationProperty(entity));
+        registry.register(new EntityLocationProperty(platform, entity));
         registry.register(new EntitySilentProperty(entity));
         registry.register(new EntityTagsProperty(entity));
         registry.register(new EntityCustomNameProperty(entity));
@@ -63,7 +70,7 @@ public class PaperEntityElementListener implements Listener {
             if (entity instanceof ArmorStand && (slot == EquipmentSlot.BODY || slot == EquipmentSlot.SADDLE)) {
                 continue;
             }
-            registry.register(new EntityEquipmentProperty(entity, slot));
+            registry.register(new EntityEquipmentProperty(platform, entity, slot));
         }
         registry.register(new EntityScaleProperty(entity));
         registry.register(new EntityAIProperty(entity));

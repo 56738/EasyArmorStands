@@ -35,7 +35,7 @@ public abstract class AbstractEntityElement implements EntityElement {
 
     @Override
     public EntityElementReference getReference() {
-        return new EntityElementReference(eas.platform(), type, entity);
+        return new EntityElementReference(eas.getPlatform(), type, entity);
     }
 
     @Override

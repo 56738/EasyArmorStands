@@ -36,7 +36,7 @@ public class GlobalCommands {
     public void showOverview(CommandSource source, EasyArmorStandsCommon eas) {
         CommandSender sender = source.source();
         if (sender.hasPermission(Permissions.VERSION)) {
-            String version = eas.version();
+            String version = eas.getVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
@@ -78,7 +78,7 @@ public class GlobalCommands {
     @CommandDescription("easyarmorstands.command.description.version")
     public void version(CommandSource source, EasyArmorStandsCommon eas) {
         CommandSender sender = source.source();
-        String version = eas.version();
+        String version = eas.getVersion();
         String url = "https://github.com/56738/EasyArmorStands";
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
@@ -89,7 +89,7 @@ public class GlobalCommands {
     @CommandDescription("easyarmorstands.command.description.debug")
     public void debug(CommandSource source, EasyArmorStandsCommon eas, SessionManager sessionManager) {
         CommandSender sender = source.source();
-        String version = eas.version();
+        String version = eas.getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
 
         if (sender instanceof Player player) {

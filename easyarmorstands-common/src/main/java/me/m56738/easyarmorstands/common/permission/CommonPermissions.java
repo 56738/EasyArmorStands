@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.common.permission;
 
-import me.m56738.easyarmorstands.api.platform.entity.EntityType;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
@@ -26,7 +25,7 @@ import java.util.TreeSet;
 import java.util.stream.Stream;
 
 public class CommonPermissions {
-    public static Set<Permission> createPermissions(Iterable<EntityType> entityTypes) {
+    public static Set<Permission> createPermissions(Iterable<String> entityTypes) {
         Set<Permission> permissions = new TreeSet<>(Comparator.comparing(Permission::name));
         try {
             for (Field field : Permissions.class.getDeclaredFields()) {
@@ -38,7 +37,7 @@ public class CommonPermissions {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
-        for (EntityType entityType : entityTypes) {
+        for (String entityType : entityTypes) {
             permissions.add(create(entityType, Permissions.SPAWN, "spawning"));
             permissions.add(create(entityType, Permissions.DESTROY, "destroying"));
             permissions.add(create(entityType, Permissions.EDIT, "editing"));
@@ -55,8 +54,8 @@ public class CommonPermissions {
 
     public static String entityType(
             @MagicConstant(valuesFromClass = Permissions.class) String prefix,
-            EntityType type) {
-        return prefix + "." + type.name().toLowerCase(Locale.ROOT).replace("_", "");
+            String type) {
+        return prefix + "." + type.toLowerCase(Locale.ROOT).replace("_", "");
     }
 
     private static List<Permission> createAll(Class<?> typeHolder) {
@@ -94,7 +93,7 @@ public class CommonPermissions {
     }
 
     private static Permission create(
-            EntityType type,
+            String type,
             @MagicConstant(valuesFromClass = Permissions.class) String owner,
             String verb) {
         String name = entityType(owner, type);

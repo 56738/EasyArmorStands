@@ -6,14 +6,17 @@ import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramProperty;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemHologramItemProperty extends HologramProperty<Item> {
+    private final PaperPlatform platform;
     private final ItemHologramData data;
 
-    public ItemHologramItemProperty(Hologram hologram, ItemHologramData data) {
+    public ItemHologramItemProperty(PaperPlatform platform, Hologram hologram, ItemHologramData data) {
         super(hologram);
+        this.platform = platform;
         this.data = data;
     }
 
@@ -24,7 +27,7 @@ public class ItemHologramItemProperty extends HologramProperty<Item> {
 
     @Override
     public @NotNull Item getValue() {
-        return PaperItem.fromNative(data.getItemStack());
+        return platform.getItem(data.getItemStack());
     }
 
     @Override

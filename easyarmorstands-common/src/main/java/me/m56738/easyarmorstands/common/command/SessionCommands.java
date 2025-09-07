@@ -117,7 +117,7 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.open.entity")
     public void open(PlayerCommandSource source, EasyArmorStands eas, @Argument("entity") Entity entity) {
         Player sender = source.source();
-        Element element = ((CommonEntityElementProviderRegistry) eas.entityElementProviderRegistry()).getElement(entity);
+        Element element = ((CommonEntityElementProviderRegistry) eas.getEntityElementProviderRegistry()).getElement(entity);
         if (element == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
             return;
@@ -145,7 +145,7 @@ public class SessionCommands {
                 .map(entityElementProviderRegistry::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
-                .filter(e -> eas.platform().canSelectElement(sender, e))
+                .filter(e -> eas.getPlatform().canSelectElement(sender, e))
                 .iterator());
     }
 
@@ -159,7 +159,7 @@ public class SessionCommands {
         for (Element element : selection.elements()) {
             ElementType type = element.getType();
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
-            if (eas.platform().canCreateElement(sender, type, properties)) {
+            if (eas.getPlatform().canCreateElement(sender, type, properties)) {
                 Element clone = type.createElement(properties);
                 if (clone != null) {
                     clones.add(clone);
@@ -184,7 +184,7 @@ public class SessionCommands {
         for (Element clone : clones) {
             actions.add(new ElementCreateAction(eas, clone));
         }
-        eas.historyManager().getHistory(sender).push(actions, description);
+        eas.getHistoryManager().getHistory(sender).push(actions, description);
     }
 
     @Command("spawn")
@@ -207,7 +207,7 @@ public class SessionCommands {
                 continue;
             }
 
-            if (!eas.platform().canDestroyElement(sender, destroyableElement)) {
+            if (!eas.getPlatform().canDestroyElement(sender, destroyableElement)) {
                 continue;
             }
 
@@ -216,7 +216,7 @@ public class SessionCommands {
         }
 
         int count = actions.size();
-        eas.historyManager().getHistory(sender)
+        eas.getHistoryManager().getHistory(sender)
                 .push(actions, Message.component("easyarmorstands.history.destroy-elements", Component.text(count)));
 
         if (count > 1) {
@@ -283,7 +283,7 @@ public class SessionCommands {
     ) {
         Player sender = source.source();
         Vector3dc position;
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(element);
             Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
             Vector3d offsetVector = new Vector3d();
@@ -311,7 +311,7 @@ public class SessionCommands {
     public void showName(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
         Component text;
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (property == null) {
@@ -330,7 +330,7 @@ public class SessionCommands {
     public void setName(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                         @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (nameProperty == null) {
@@ -356,7 +356,7 @@ public class SessionCommands {
     @RequireElementSelection
     public void clearName(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
             if (nameProperty == null) {
@@ -382,7 +382,7 @@ public class SessionCommands {
     public void setNameVisible(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                                @Argument("value") boolean visible) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Boolean> property = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME_VISIBLE);
             if (property == null) {
@@ -405,7 +405,7 @@ public class SessionCommands {
     public void setCanTick(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
                            @Argument("value") boolean canTick) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             PropertyContainer properties = context.getProperties(selection.elements());
             Property<Boolean> property = properties.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
             if (property == null) {
@@ -428,7 +428,7 @@ public class SessionCommands {
     public void setScale(PlayerCommandSource source, Element element, EasyArmorStandsCommon eas,
                          @Argument("value") double value) {
         Player sender = source.source();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             ScaleTool scaleTool = null;
             if (element instanceof EditableElement editableElement) {
                 ToolProvider tools = editableElement.getTools(context);
@@ -452,7 +452,7 @@ public class SessionCommands {
                        @Argument("value") String tag) {
         Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
@@ -483,7 +483,7 @@ public class SessionCommands {
                           @Argument(value = "value", suggestions = "selection_tags") String tag) {
         Player sender = source.source();
         List<PropertyContainer> changed = new ArrayList<>();
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             for (Element element : selection.elements()) {
                 PropertyContainer properties = context.getProperties(element);
                 Property<Set<String>> property = properties.getOrNull(EntityPropertyTypes.TAGS);
@@ -541,11 +541,11 @@ public class SessionCommands {
     public void selectTag(PlayerCommandSource source, Session session, EasyArmorStandsCommon eas,
                           @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
         Player sender = source.source();
-        selectGroup(eas, sender, session, eas.platform().getTaggedEntities(sender.getLocation().world(), tag).stream()
-                .map(eas.entityElementProviderRegistry()::getElement)
+        selectGroup(eas, sender, session, eas.getPlatform().getTaggedEntities(sender.getLocation().world(), tag).stream()
+                .map(eas.getEntityElementProviderRegistry()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
-                .filter(e -> eas.platform().canSelectElement(sender, e))
+                .filter(e -> eas.getPlatform().canSelectElement(sender, e))
                 .iterator());
     }
 
@@ -577,12 +577,12 @@ public class SessionCommands {
         }
         Player player = PlayerCommandSource.source();
         Set<String> tags = new TreeSet<>();
-        for (Entity entity : eas.platform().getAllEntities(player.getLocation().world())) {
+        for (Entity entity : eas.getPlatform().getAllEntities(player.getLocation().world())) {
             Set<String> entityTags = entity.getTags();
             if (!tags.containsAll(entityTags)) {
-                Element element = eas.entityElementProviderRegistry().getElement(entity);
+                Element element = eas.getEntityElementProviderRegistry().getElement(entity);
                 if (element instanceof EditableElement editableElement) {
-                    if (eas.platform().canDiscoverElement(player, editableElement)) {
+                    if (eas.getPlatform().canDiscoverElement(player, editableElement)) {
                         tags.addAll(entityTags);
                     }
                 }
@@ -596,7 +596,7 @@ public class SessionCommands {
         while (elements.hasNext()) {
             EditableElement element = elements.next();
             // TODO
-            if (group.getMembers().size() >= eas.platform().getConfiguration().getGroupSizeLimit()) {
+            if (group.getMembers().size() >= eas.getPlatform().getConfiguration().getGroupSizeLimit()) {
                 sender.sendMessage(Message.error("easyarmorstands.error.group-too-big"));
                 return;
             } else if (group.getMembers().size() == 1 && !sender.hasPermission(Permissions.GROUP)) {

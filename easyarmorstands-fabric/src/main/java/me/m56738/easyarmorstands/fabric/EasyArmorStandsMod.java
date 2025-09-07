@@ -61,8 +61,8 @@ public class EasyArmorStandsMod implements ModInitializer, EasyArmorStandsCommon
 
     private void onTick(MinecraftServer server) {
         if (eas != null) {
-            eas.sessionListener().update();
-            eas.sessionManager().update();
+            eas.getSessionListener().update();
+            eas.getSessionManager().update();
         }
     }
 

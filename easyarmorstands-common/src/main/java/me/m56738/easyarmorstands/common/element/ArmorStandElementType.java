@@ -10,7 +10,7 @@ public class ArmorStandElementType extends SimpleEntityElementType {
     private final EasyArmorStandsCommon eas;
 
     public ArmorStandElementType(EasyArmorStandsCommon eas) {
-        super(eas, eas.platform().getArmorStandType());
+        super(eas, eas.getPlatform().getArmorStandType());
         this.eas = eas;
     }
 

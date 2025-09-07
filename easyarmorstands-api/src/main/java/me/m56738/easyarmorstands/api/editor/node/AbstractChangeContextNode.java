@@ -13,7 +13,7 @@ public abstract class AbstractChangeContextNode extends AbstractNode {
 
     public AbstractChangeContextNode(Session session) {
         super(session);
-        this.context = session.getEasyArmorStands().changeContext().create(session.player());
+        this.context = session.getEasyArmorStands().getChangeContextFactory().create(session.player());
     }
 
     public final ChangeContext getContext() {

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.paper.element;
 import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.paper.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBillboardProperty;
 import me.m56738.easyarmorstands.paper.property.display.DisplayBrightnessProperty;
@@ -36,6 +37,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class PaperDisplayElementListener implements Listener {
+    private final PaperPlatform platform;
+
+    public PaperDisplayElementListener(PaperPlatform platform) {
+        this.platform = platform;
+    }
+
     @EventHandler
     public void onInitialize(EntityElementInitializeEvent event) {
         DefaultEntityElement element = event.getElement();
@@ -74,12 +81,12 @@ public class PaperDisplayElementListener implements Listener {
     }
 
     private void registerItemDisplayProperties(ItemDisplay entity, PropertyRegistry registry) {
-        registry.register(new ItemDisplayItemProperty(entity));
+        registry.register(new ItemDisplayItemProperty(platform, entity));
         registry.register(new ItemDisplayTransformProperty(entity));
     }
 
     private void registerBlockDisplayProperties(BlockDisplay entity, PropertyRegistry registry) {
-        registry.register(new BlockDisplayBlockProperty(entity));
+        registry.register(new BlockDisplayBlockProperty(platform, entity));
     }
 
     private void registerTextDisplayProperties(TextDisplay entity, PropertyRegistry registry) {

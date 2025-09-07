@@ -42,7 +42,7 @@ public class ModdedEntityElementInitializer {
     }
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {
-        ModdedPlatformImpl platform = (ModdedPlatformImpl) easProvider.getEasyArmorStands().platform();
+        ModdedPlatformImpl platform = (ModdedPlatformImpl) easProvider.getEasyArmorStands().getPlatform();
         registerEntityProperties(entity, registry, platform);
         if (entity instanceof LivingEntity livingEntity) {
             registerLivingEntityProperties(livingEntity, registry, platform);
@@ -57,7 +57,7 @@ public class ModdedEntityElementInitializer {
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry, ModdedPlatformImpl platform) {
         registry.register(new EntityGlowingProperty(entity));
-        registry.register(new EntityLocationProperty(entity));
+        registry.register(new EntityLocationProperty(platform, entity));
         registry.register(new EntitySilentProperty(entity));
         registry.register(new EntityTagsProperty(entity));
         registry.register(new EntityCustomNameProperty(entity, platform.getAdventure()));

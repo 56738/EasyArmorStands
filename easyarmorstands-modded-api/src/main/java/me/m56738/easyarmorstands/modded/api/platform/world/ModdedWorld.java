@@ -2,16 +2,12 @@ package me.m56738.easyarmorstands.modded.api.platform.world;
 
 import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.World;
+import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatformHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import org.joml.Vector3ic;
 
-public interface ModdedWorld extends World {
-    static ModdedWorld fromNative(Level nativeWorld) {
-        return new ModdedWorldImpl((ServerLevel) nativeWorld);
-    }
-
+public interface ModdedWorld extends World, ModdedPlatformHolder {
     static ServerLevel toNative(World world) {
         return ((ModdedWorld) world).getNative();
     }
@@ -24,6 +20,6 @@ public interface ModdedWorld extends World {
     }
 
     default Block getBlock(BlockPos position) {
-        return new ModdedBlockImpl(getNative(), position);
+        return getPlatform().getBlock(getNative(), position);
     }
 }

@@ -27,17 +27,20 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramBackgr
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramSeeThroughProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadowProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
     private final EasyArmorStandsCommon eas;
+    private final PaperPlatform platform;
     private final HologramManager manager;
     private final FancyHologramsAddon addon;
 
-    public HologramElementType(EasyArmorStandsCommon eas, HologramManager manager, FancyHologramsAddon addon) {
+    public HologramElementType(EasyArmorStandsCommon eas, PaperPlatform platform, HologramManager manager, FancyHologramsAddon addon) {
         this.eas = eas;
+        this.platform = platform;
         this.manager = manager;
         this.addon = addon;
     }
@@ -46,16 +49,16 @@ public class HologramElementType implements ElementType {
         HologramElement element = new HologramElement(eas, this, manager, hologram, addon);
         HologramData data = hologram.getData();
         element.getProperties().register(new HologramDataProperty(hologram));
-        element.getProperties().register(new HologramLocationProperty(hologram));
+        element.getProperties().register(new HologramLocationProperty(platform, hologram));
         if (data instanceof DisplayHologramData displayData) {
             element.getProperties().register(new DisplayHologramScaleProperty(hologram, displayData));
             element.getProperties().register(new DisplayHologramBillboardProperty(hologram, displayData));
         }
         if (data instanceof ItemHologramData itemData) {
-            element.getProperties().register(new ItemHologramItemProperty(hologram, itemData));
+            element.getProperties().register(new ItemHologramItemProperty(platform, hologram, itemData));
         }
         if (data instanceof BlockHologramData blockData) {
-            element.getProperties().register(new BlockHologramBlockProperty(hologram, blockData));
+            element.getProperties().register(new BlockHologramBlockProperty(platform, hologram, blockData));
         }
         if (data instanceof TextHologramData textData) {
             element.getProperties().register(new TextHologramTextProperty(hologram, textData));

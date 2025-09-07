@@ -22,18 +22,30 @@ import me.m56738.easyarmorstands.paper.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.paper.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
+import me.m56738.easyarmorstands.paper.api.platform.entity.PaperCommandSender;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
 import me.m56738.easyarmorstands.paper.config.PaperConfiguration;
+import me.m56738.easyarmorstands.paper.platform.entity.PaperCommandSenderImpl;
+import me.m56738.easyarmorstands.paper.platform.entity.PaperEntityImpl;
+import me.m56738.easyarmorstands.paper.platform.entity.PaperEntityTypeImpl;
+import me.m56738.easyarmorstands.paper.platform.entity.PaperPlayerImpl;
+import me.m56738.easyarmorstands.paper.platform.inventory.PaperItemImpl;
+import me.m56738.easyarmorstands.paper.platform.world.PaperBlockDataImpl;
+import me.m56738.easyarmorstands.paper.platform.world.PaperBlockImpl;
+import me.m56738.easyarmorstands.paper.platform.world.PaperWorldImpl;
 import me.m56738.gizmo.api.GizmoFactory;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,6 +55,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -63,7 +76,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     public Item createTool() {
         ItemStack item = ItemStack.of(Material.BLAZE_ROD);
         item.editMeta(meta -> meta.getPersistentDataContainer().set(TOOL_KEY, PersistentDataType.BYTE, (byte) 1));
-        return PaperItem.fromNative(item);
+        return getItem(item);
     }
 
     @Override
@@ -109,7 +122,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
 
     @Override
     public BlockData createBlockData(String input) {
-        return PaperBlockData.fromNative(Bukkit.createBlockData(input));
+        return getBlockData(Bukkit.createBlockData(input));
     }
 
     @Override
@@ -123,7 +136,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     public Collection<Entity> getNearbyEntities(Location location, double deltaX, double deltaY, double deltaZ) {
         org.bukkit.Location nativeLocation = PaperLocationAdapter.toNative(location);
         return nativeLocation.getNearbyEntities(deltaX, deltaY, deltaZ).stream()
-                .map(PaperEntity::fromNative)
+                .map(this::getEntity)
                 .collect(Collectors.toList());
     }
 
@@ -131,7 +144,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     public Collection<Entity> getTaggedEntities(World world, String tag) {
         return PaperWorld.toNative(world).getEntities().stream()
                 .filter(entity -> entity.getScoreboardTags().contains(tag))
-                .map(PaperEntity::fromNative)
+                .map(this::getEntity)
                 .collect(Collectors.toList());
     }
 
@@ -177,32 +190,32 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
 
     @Override
     public EntityType getPlayerType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.PLAYER);
+        return getEntityType(org.bukkit.entity.EntityType.PLAYER);
     }
 
     @Override
     public EntityType getArmorStandType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.ARMOR_STAND);
+        return getEntityType(org.bukkit.entity.EntityType.ARMOR_STAND);
     }
 
     @Override
     public EntityType getBlockDisplayType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.BLOCK_DISPLAY);
+        return getEntityType(org.bukkit.entity.EntityType.BLOCK_DISPLAY);
     }
 
     @Override
     public EntityType getItemDisplayType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.ITEM_DISPLAY);
+        return getEntityType(org.bukkit.entity.EntityType.ITEM_DISPLAY);
     }
 
     @Override
     public EntityType getTextDisplayType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.TEXT_DISPLAY);
+        return getEntityType(org.bukkit.entity.EntityType.TEXT_DISPLAY);
     }
 
     @Override
     public EntityType getInteractionType() {
-        return PaperEntityType.fromNative(org.bukkit.entity.EntityType.INTERACTION);
+        return getEntityType(org.bukkit.entity.EntityType.INTERACTION);
     }
 
     @Override
@@ -220,7 +233,47 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
         plugin.getServer().getPluginManager().callEvent(new EntityElementInitializeEvent(element));
     }
 
-    private static class SpawnedEntityConfigurator implements Consumer<org.bukkit.entity.Entity> {
+    @Override
+    public PaperEntity getEntity(org.bukkit.entity.Entity nativeEntity) {
+        return new PaperEntityImpl(this, nativeEntity);
+    }
+
+    @Override
+    public PaperPlayer getPlayer(org.bukkit.entity.Player nativePlayer) {
+        return new PaperPlayerImpl(this, nativePlayer);
+    }
+
+    @Override
+    public PaperCommandSender getCommandSender(CommandSender nativeCommandSender) {
+        return new PaperCommandSenderImpl(this, nativeCommandSender);
+    }
+
+    @Override
+    public PaperWorld getWorld(org.bukkit.World nativeWorld) {
+        return new PaperWorldImpl(this, nativeWorld);
+    }
+
+    @Override
+    public PaperItem getItem(@Nullable ItemStack nativeItem) {
+        return new PaperItemImpl(this, Objects.requireNonNullElseGet(nativeItem, ItemStack::empty));
+    }
+
+    @Override
+    public PaperEntityType getEntityType(org.bukkit.entity.EntityType nativeType) {
+        return new PaperEntityTypeImpl(this, nativeType);
+    }
+
+    @Override
+    public PaperBlock getBlock(Block nativeBlock) {
+        return new PaperBlockImpl(this, nativeBlock);
+    }
+
+    @Override
+    public PaperBlockData getBlockData(org.bukkit.block.data.BlockData nativeBlockData) {
+        return new PaperBlockDataImpl(this, nativeBlockData);
+    }
+
+    private class SpawnedEntityConfigurator implements Consumer<org.bukkit.entity.Entity> {
         private final Consumer<Entity> config;
         private @Nullable Entity entity;
 
@@ -230,7 +283,7 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
 
         @Override
         public void accept(org.bukkit.entity.Entity entity) {
-            this.entity = PaperEntity.fromNative(entity);
+            this.entity = getEntity(entity);
             config.accept(this.entity);
         }
     }

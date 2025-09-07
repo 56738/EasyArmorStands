@@ -14,13 +14,20 @@ import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntity;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntityType;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedPlayer;
 import me.m56738.easyarmorstands.modded.api.platform.inventory.ModdedItem;
+import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlock;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlockData;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
+import me.m56738.easyarmorstands.modded.platform.entity.ModdedEntityImpl;
+import me.m56738.easyarmorstands.modded.platform.entity.ModdedEntityTypeImpl;
 import me.m56738.easyarmorstands.modded.platform.inventory.ModdedItemImpl;
+import me.m56738.easyarmorstands.modded.platform.world.ModdedBlockDataImpl;
+import me.m56738.easyarmorstands.modded.platform.world.ModdedBlockImpl;
+import me.m56738.easyarmorstands.modded.platform.world.ModdedWorldImpl;
 import me.m56738.gizmo.api.GizmoFactory;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.component.DataComponents;
@@ -33,6 +40,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.Nullable;
@@ -55,6 +63,36 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     }
 
     @Override
+    public MinecraftServerAudiences getAdventure() {
+        return adventure;
+    }
+
+    @Override
+    public ModdedEntity getEntity(net.minecraft.world.entity.Entity nativeEntity) {
+        return new ModdedEntityImpl(this, nativeEntity);
+    }
+
+    @Override
+    public ModdedEntityType getEntityType(net.minecraft.world.entity.EntityType<?> nativeEntityType) {
+        return new ModdedEntityTypeImpl(this, nativeEntityType);
+    }
+
+    @Override
+    public ModdedBlockData getBlockData(BlockState nativeBlockState) {
+        return new ModdedBlockDataImpl(this, nativeBlockState);
+    }
+
+    @Override
+    public ModdedWorld getWorld(Level nativeLevel) {
+        return new ModdedWorldImpl(this, (ServerLevel) nativeLevel);
+    }
+
+    @Override
+    public ModdedBlock getBlock(Level nativeLevel, BlockPos nativeBlockPos) {
+        return new ModdedBlockImpl(this, (ServerLevel) nativeLevel, nativeBlockPos);
+    }
+
+    @Override
     public ModdedItem getItem(ItemStack nativeItem) {
         return new ModdedItemImpl(this, nativeItem);
     }
@@ -68,7 +106,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         } catch (CommandSyntaxException e) {
             throw new IllegalArgumentException(e);
         }
-        return ModdedBlockData.fromNative(result.blockState());
+        return getBlockData(result.blockState());
     }
 
     @Override
@@ -114,7 +152,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     private @Nullable Entity getEntity(UUID uniqueId, Level level) {
         net.minecraft.world.entity.Entity nativeEntity = level.getEntity(uniqueId);
         if (nativeEntity != null) {
-            return ModdedEntity.fromNative(nativeEntity);
+            return getEntity(nativeEntity);
         }
         return null;
     }
@@ -137,7 +175,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         List<Entity> entities = new ArrayList<>();
         for (net.minecraft.world.entity.Entity entity : ModdedWorld.toNative(location.world()).getAllEntities()) {
             if (box.contains(entity.position())) {
-                entities.add(ModdedEntity.fromNative(entity));
+                entities.add(getEntity(entity));
             }
         }
         return entities;
@@ -148,7 +186,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         List<Entity> entities = new ArrayList<>();
         for (net.minecraft.world.entity.Entity entity : ModdedWorld.toNative(world).getAllEntities()) {
             if (entity.getTags().contains(tag)) {
-                entities.add(ModdedEntity.fromNative(entity));
+                entities.add(getEntity(entity));
             }
         }
         return entities;
@@ -159,7 +197,7 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         ServerLevel level = ModdedWorld.toNative(world);
         List<Entity> entities = new ArrayList<>();
         for (net.minecraft.world.entity.Entity nativeEntity : level.getAllEntities()) {
-            entities.add(ModdedEntity.fromNative(nativeEntity));
+            entities.add(getEntity(nativeEntity));
         }
         return entities;
     }
@@ -176,32 +214,32 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
 
     @Override
     public EntityType getPlayerType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.PLAYER);
+        return getEntityType(net.minecraft.world.entity.EntityType.PLAYER);
     }
 
     @Override
     public EntityType getArmorStandType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.ARMOR_STAND);
+        return getEntityType(net.minecraft.world.entity.EntityType.ARMOR_STAND);
     }
 
     @Override
     public EntityType getBlockDisplayType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.BLOCK_DISPLAY);
+        return getEntityType(net.minecraft.world.entity.EntityType.BLOCK_DISPLAY);
     }
 
     @Override
     public EntityType getItemDisplayType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.ITEM_DISPLAY);
+        return getEntityType(net.minecraft.world.entity.EntityType.ITEM_DISPLAY);
     }
 
     @Override
     public EntityType getTextDisplayType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.TEXT_DISPLAY);
+        return getEntityType(net.minecraft.world.entity.EntityType.TEXT_DISPLAY);
     }
 
     @Override
     public EntityType getInteractionType() {
-        return ModdedEntityType.fromNative(net.minecraft.world.entity.EntityType.INTERACTION);
+        return getEntityType(net.minecraft.world.entity.EntityType.INTERACTION);
     }
 
     @Override
@@ -213,9 +251,5 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     public void close() {
         adventure.close();
         gizmos.close();
-    }
-
-    public MinecraftServerAudiences getAdventure() {
-        return adventure;
     }
 }

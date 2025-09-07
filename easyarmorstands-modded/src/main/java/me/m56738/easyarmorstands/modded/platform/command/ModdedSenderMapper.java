@@ -16,7 +16,7 @@ public class ModdedSenderMapper implements SenderMapper<CommandSourceStack, Comm
 
     @Override
     public CommandSource map(CommandSourceStack base) {
-        ModdedPlatform platform = (ModdedPlatform) easProvider.getEasyArmorStands().platform();
+        ModdedPlatform platform = (ModdedPlatform) easProvider.getEasyArmorStands().getPlatform();
         if (base.getEntity() instanceof ServerPlayer player) {
             return new ModdedPlayerCommandSource(base, platform.getPlayer(player));
         } else {

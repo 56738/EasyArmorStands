@@ -93,7 +93,7 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         }
 
         private double clampScale(double value) {
-            return Math.clamp(eas.platform().getConfiguration().getMinDisplayEntityScale(), eas.platform().getConfiguration().getMaxDisplayEntityScale(), value);
+            return Math.clamp(eas.getPlatform().getConfiguration().getMinDisplayEntityScale(), eas.getPlatform().getConfiguration().getMaxDisplayEntityScale(), value);
         }
 
         @Override

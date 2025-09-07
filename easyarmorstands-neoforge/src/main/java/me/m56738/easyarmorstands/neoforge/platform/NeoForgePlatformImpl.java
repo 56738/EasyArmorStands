@@ -56,7 +56,7 @@ public class NeoForgePlatformImpl extends ModdedPlatformImpl implements NeoForge
 
     @Override
     public ModdedCommandSender getCommandSender(CommandSourceStack stack) {
-        return new NeoForgeCommandSenderImpl(stack);
+        return new NeoForgeCommandSenderImpl(this, stack);
     }
 
     @Override

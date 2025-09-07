@@ -42,7 +42,7 @@ public class FabricPlatformImpl extends ModdedPlatformImpl {
 
     @Override
     public ModdedCommandSender getCommandSender(CommandSourceStack stack) {
-        return new FabricCommandSenderImpl(stack);
+        return new FabricCommandSenderImpl(this, stack);
     }
 
     @Override

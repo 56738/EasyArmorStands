@@ -64,7 +64,7 @@ public class SimpleEntityToolProvider implements ToolProvider {
     @Override
     public @Nullable ScaleTool scale(@NotNull ToolContext context) {
         if (scaleProperty != null) {
-            Configuration configuration = eas.platform().getConfiguration();
+            Configuration configuration = eas.getPlatform().getConfiguration();
             return ScaleTool.of(context, changeContext, locationProperty, scaleProperty, configuration.getMinEntityScale(), configuration.getMaxEntityScale());
         }
         return ToolProvider.super.scale(context);

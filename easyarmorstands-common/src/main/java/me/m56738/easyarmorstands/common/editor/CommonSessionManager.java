@@ -27,16 +27,16 @@ public class CommonSessionManager implements SessionManager {
         final SessionImpl old = sessions.put(session.player(), session);
         if (old != null) {
             old.stop();
-            eas.platform().onStopSession(old);
+            eas.getPlatform().onStopSession(old);
         }
-        eas.platform().onStartSession(session);
+        eas.getPlatform().onStartSession(session);
     }
 
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
         SessionImpl session = new SessionImpl(eas, player);
-        ElementSelectionNode node = new ElementSelectionNodeImpl(eas.platform(), session);
-        node.addSource(new EntityElementDiscoverySource(eas.platform(), eas.entityElementProviderRegistry()));
+        ElementSelectionNode node = new ElementSelectionNodeImpl(eas.getPlatform(), session);
+        node.addSource(new EntityElementDiscoverySource(eas.getPlatform(), eas.getEntityElementProviderRegistry()));
         session.pushNode(node);
         startSession(session);
         return session;
@@ -47,7 +47,7 @@ public class CommonSessionManager implements SessionManager {
         SessionImpl s = (SessionImpl) session;
         if (sessions.remove(session.player(), s)) {
             s.stop();
-            eas.platform().onStopSession(session);
+            eas.getPlatform().onStopSession(session);
         }
     }
 
@@ -55,7 +55,7 @@ public class CommonSessionManager implements SessionManager {
         SessionImpl session = sessions.remove(player);
         if (session != null) {
             session.stop();
-            eas.platform().onStopSession(session);
+            eas.getPlatform().onStopSession(session);
             return true;
         }
         return false;
@@ -68,7 +68,7 @@ public class CommonSessionManager implements SessionManager {
             if (!valid) {
                 iterator.remove();
                 session.stop();
-                eas.platform().onStopSession(session);
+                eas.getPlatform().onStopSession(session);
             }
         }
     }
@@ -80,7 +80,7 @@ public class CommonSessionManager implements SessionManager {
             session.stop();
         }
         for (SessionImpl session : sessions) {
-            eas.platform().onStopSession(session);
+            eas.getPlatform().onStopSession(session);
         }
     }
 

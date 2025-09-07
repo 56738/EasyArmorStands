@@ -11,7 +11,7 @@ public class InteractionElementType extends SimpleEntityElementType {
     private final EasyArmorStandsCommon eas;
 
     public InteractionElementType(EasyArmorStandsCommon eas) {
-        super(eas, eas.platform().getInteractionType());
+        super(eas, eas.getPlatform().getInteractionType());
         this.eas = eas;
     }
 

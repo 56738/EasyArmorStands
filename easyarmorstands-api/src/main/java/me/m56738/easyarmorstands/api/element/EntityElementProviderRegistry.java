@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Registry for {@link EntityElementProvider entity element providers}.
  *
- * @see EasyArmorStands#entityElementProviderRegistry()
+ * @see EasyArmorStands#getEntityElementProviderRegistry()
  */
 public interface EntityElementProviderRegistry {
     /**

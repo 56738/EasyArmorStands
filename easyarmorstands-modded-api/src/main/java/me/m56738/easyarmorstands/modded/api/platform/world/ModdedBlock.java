@@ -3,12 +3,13 @@ package me.m56738.easyarmorstands.modded.api.platform.world;
 import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
 import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.BlockData;
+import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatformHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface ModdedBlock extends Block {
+public interface ModdedBlock extends Block, ModdedPlatformHolder {
     ServerLevel getLevel();
 
     BlockPos getPos();
@@ -19,7 +20,7 @@ public interface ModdedBlock extends Block {
 
     @Override
     default BlockData getBlockData() {
-        return new ModdedBlockDataImpl(getState());
+        return getPlatform().getBlockData(getState());
     }
 
     @Override

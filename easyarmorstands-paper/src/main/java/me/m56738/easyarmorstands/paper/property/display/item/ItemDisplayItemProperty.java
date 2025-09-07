@@ -4,13 +4,16 @@ import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.entity.ItemDisplay;
 
 public class ItemDisplayItemProperty implements Property<Item> {
+    private final PaperPlatform platform;
     private final ItemDisplay entity;
 
-    public ItemDisplayItemProperty(ItemDisplay entity) {
+    public ItemDisplayItemProperty(PaperPlatform platform, ItemDisplay entity) {
+        this.platform = platform;
         this.entity = entity;
     }
 
@@ -21,7 +24,7 @@ public class ItemDisplayItemProperty implements Property<Item> {
 
     @Override
     public Item getValue() {
-        return PaperItem.fromNative(entity.getItemStack());
+        return platform.getItem(entity.getItemStack());
     }
 
     @Override

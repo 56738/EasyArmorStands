@@ -51,7 +51,7 @@ public class HistoryCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         Player sender = source.source();
         History history = historyManager.getHistory(sender);
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             for (int i = 0; i < count; i++) {
                 Action action = history.takeRedoAction();
                 if (action != null) {
@@ -75,7 +75,7 @@ public class HistoryCommands {
                      @Range(min = "1", max = "10") @Argument(value = "count") @Default("1") int count) {
         Player sender = source.source();
         History history = historyManager.getHistory(sender);
-        try (ManagedChangeContext context = eas.changeContext().create(sender)) {
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
             for (int i = 0; i < count; i++) {
                 Action action = history.takeUndoAction();
                 if (action != null) {

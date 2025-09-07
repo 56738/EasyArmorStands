@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A request to spawn an element.
  *
- * @see me.m56738.easyarmorstands.api.EasyArmorStands#elementSpawnRequest(ElementType) Creating a request
+ * @see me.m56738.easyarmorstands.api.EasyArmorStands#createElementSpawnRequest(ElementType) Creating a request
  */
 public interface ElementSpawnRequest {
     /**

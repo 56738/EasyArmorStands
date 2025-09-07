@@ -11,7 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 /**
- * Use {@link EasyArmorStands#changeContext()} to create a change context.
+ * Use {@link EasyArmorStands#getChangeContextFactory()} to create a change context.
  * <p>
  * Change contexts enforce permissions and keep track of changes.
  * Changes are committed to the history when the context is closed.

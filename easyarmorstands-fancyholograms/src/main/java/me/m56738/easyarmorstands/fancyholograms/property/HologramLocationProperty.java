@@ -4,12 +4,16 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperLocationAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramLocationProperty extends HologramProperty<Location> {
-    public HologramLocationProperty(Hologram hologram) {
+    private final PaperPlatform platform;
+
+    public HologramLocationProperty(PaperPlatform platform, Hologram hologram) {
         super(hologram);
+        this.platform = platform;
     }
 
     @Override
@@ -19,7 +23,7 @@ public class HologramLocationProperty extends HologramProperty<Location> {
 
     @Override
     public @NotNull Location getValue() {
-        return PaperLocationAdapter.fromNative(hologram.getData().getLocation());
+        return PaperLocationAdapter.fromNative(platform, hologram.getData().getLocation());
     }
 
     @Override
