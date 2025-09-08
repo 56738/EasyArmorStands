@@ -243,16 +243,16 @@ Use `/eas reload` to reload all configuration files.
 
 ## Localization
 
-Please submit translations on [Weblate](https://hosted.weblate.org/projects/easyarmorstands/v2/).
+[![Translation status](https://hosted.weblate.org/widget/easyarmorstands/v2/svg-badge.svg)](https://hosted.weblate.org/engage/easyarmorstands/)
+
+Please submit translations on [Weblate](https://hosted.weblate.org/engage/easyarmorstands/).
 
 ### Use your own translations
 
 * Copy the
-  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
-  into `plugins/EasyArmorStands/messages_XX.properties`.
-* Replace `XX` with the language, for example: `messages_de.properties`.
+  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-assets/src/main/resources/assets/easyarmorstands/lang/en_us.json)
+  into `plugins/EasyArmorStands/lang/XX_YY.json`.
+* Replace `XX_YY` with the in-game locale code listed in https://minecraft.wiki/w/Language#Languages.
   This makes the file only apply to players with that language.
-* To replace the default messages (sent if no matching `messages_XX.properties` file exists),
-  simply call the file `messages.properties`.
 
 Use `/eas reload` to reload all messages.

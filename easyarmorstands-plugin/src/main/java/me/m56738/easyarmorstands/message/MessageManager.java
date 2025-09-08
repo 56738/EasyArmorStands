@@ -7,35 +7,32 @@ import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessag
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.Tag;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import me.m56738.easyarmorstands.lib.kyori.adventure.translation.GlobalTranslator;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.TranslationStore;
 import me.m56738.easyarmorstands.lib.kyori.adventure.translation.Translator;
-import me.m56738.easyarmorstands.lib.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.bukkit.plugin.Plugin;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class MessageManager {
-    private static final Pattern PATTERN = Pattern.compile("messages_(.+)\\.properties");
+    private static final Pattern PATTERN = Pattern.compile("(.+)\\.json");
     private static final Key key = Key.key("easyarmorstands", "translation");
     private final Plugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final Map<MessageStyle, String> styleTemplates = new HashMap<>();
-    private TranslationStore.StringBased<MessageFormat> registry = TranslationStore.messageFormat(key);
+    private final Set<Locale> loadedLocales = new HashSet<>();
+    private PatternTranslationStore registry = new PatternTranslationStore(key);
 
     public MessageManager(Plugin plugin) {
         this.plugin = plugin;
@@ -47,28 +44,57 @@ public class MessageManager {
 
         GlobalTranslator.translator().removeSource(registry);
 
-        registry = TranslationStore.messageFormat(key);
+        registry = new PatternTranslationStore(key);
+        loadedLocales.clear();
 
-        // Load default locale from included or custom messages.properties
-        Path path = plugin.getDataFolder().toPath();
-        Path defaultLocalePath = path.resolve("messages.properties");
-        if (Files.exists(defaultLocalePath)) {
-            registry.registerAll(Locale.US, defaultLocalePath, true);
-        } else {
-            ResourceBundle bundle = ResourceBundle.getBundle("me.m56738.easyarmorstands.messages", Locale.US, UTF8ResourceBundleControl.get());
-            registry.registerAll(Locale.US, bundle, true);
+        // Convert old message files
+        Path dataPath = plugin.getDataFolder().toPath();
+        Path langPath = dataPath.resolve("lang");
+        try (Stream<Path> paths = Files.list(dataPath)) {
+            paths.forEach(path -> {
+                try {
+                    if (MessageMigrator.migrate(path, langPath)) {
+                        plugin.getLogger().info("Migrated custom messages: " + path.getFileName().toString());
+                    }
+                } catch (Exception e) {
+                    plugin.getLogger().log(Level.SEVERE, "Failed to convert old message file: " + path.getFileName().toString(), e);
+                }
+            });
+        } catch (NoSuchFileException ignored) {
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to convert old message files", e);
         }
 
-        // Load other locales from custom messages_*.properties
-        try (Stream<Path> paths = Files.list(path)) {
+        // Load custom locales
+        try (Stream<Path> paths = Files.list(langPath)) {
             paths.forEach(this::load);
         } catch (NoSuchFileException ignored) {
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load messages", e);
         }
 
+        // Load included default locales
+        try {
+            loadDefaultLocale(Locale.US);
+            loadDefaultLocale(Locale.GERMANY);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to load default messages", e);
+        }
+
         if (config.message.serverSideTranslation) {
             GlobalTranslator.translator().addSource(registry);
+        }
+    }
+
+    private void loadDefaultLocale(Locale locale) throws IOException {
+        if (loadedLocales.add(locale)) {
+            String name = "/assets/easyarmorstands/lang/" + locale.toString().toLowerCase(Locale.ROOT) + ".json";
+            InputStream resource = getClass().getResourceAsStream(name);
+            if (resource != null) {
+                registry.readLocale(resource, locale);
+            } else {
+                plugin.getLogger().warning("Default messages for locale " + locale + " are missing: " + name);
+            }
         }
     }
 
@@ -84,9 +110,13 @@ public class MessageManager {
             return;
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            registry.registerAll(locale, new PropertyResourceBundle(reader), false);
-            plugin.getLogger().info("Loaded language: " + locale);
+        if (!loadedLocales.add(locale)) {
+            return;
+        }
+
+        try {
+            registry.readLocale(path, locale);
+            plugin.getLogger().info("Loaded custom messages for language: " + locale);
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load translations from " + path.getFileName(), e);
         }

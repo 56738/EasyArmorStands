@@ -12,6 +12,7 @@ dependencies {
     compileOnlyApi(libs.jetbrains.annotations)
     compileOnlyApi(libs.checker.qual)
     api(project(":easyarmorstands-api"))
+    api(project(":easyarmorstands-assets"))
     api(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
     runtimeOnly(project(":easyarmorstands-bentobox"))
     runtimeOnly(project(":easyarmorstands-display"))
@@ -45,6 +46,7 @@ tasks {
     }
 
     shadowJar {
+        exclude("pack.mcmeta")
         mergeServiceFiles()
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
