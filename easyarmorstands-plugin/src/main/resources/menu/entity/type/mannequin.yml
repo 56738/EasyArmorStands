@@ -1,0 +1,73 @@
+_version:
+  game: 1.21.3
+height: 6
+parent: entity/living
+slots:
+  easyarmorstands:entity/ai:
+    enabled: false
+  easyarmorstands:mannequin/description:
+    column: 4
+    config:
+      property: easyarmorstands:mannequin/description
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/immovable:
+    column: 8
+    config:
+      property: easyarmorstands:mannequin/immovable
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/main_hand:
+    column: 7
+    config:
+      property: easyarmorstands:mannequin/main_hand
+    row: 1
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/cape/visible:
+    column: 7
+    config:
+      property: easyarmorstands:mannequin/part/cape/visible
+    row: 5
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/hat/visible:
+    column: 7
+    config:
+      property: easyarmorstands:mannequin/part/hat/visible
+    row: 3
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/jacket/visible:
+    column: 7
+    config:
+      property: easyarmorstands:mannequin/part/jacket/visible
+    row: 4
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/left_pants/visible:
+    column: 6
+    config:
+      property: easyarmorstands:mannequin/part/left_pants/visible
+    row: 5
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/left_sleeve/visible:
+    column: 6
+    config:
+      property: easyarmorstands:mannequin/part/left_sleeve/visible
+    row: 4
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/right_pants/visible:
+    column: 8
+    config:
+      property: easyarmorstands:mannequin/part/right_pants/visible
+    row: 5
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/part/right_sleeve/visible:
+    column: 8
+    config:
+      property: easyarmorstands:mannequin/part/right_sleeve/visible
+    row: 4
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/profile:
+    column: 6
+    config:
+      property: easyarmorstands:mannequin/profile
+    row: 1
+    type: easyarmorstands:property

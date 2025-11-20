@@ -1,5 +1,5 @@
 [versions]
-adventure-api = "4.22.0"
+adventure-api = "4.25.0"
 adventure-platform = "4.4.1"
 bentobox = "2.7.0-SNAPSHOT"
 brigadier = "1.0.17"

@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
+import me.m56738.easyarmorstands.api.Hand;
+import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
 import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
@@ -29,11 +31,21 @@ public class DefaultPropertyTypes {
         registry.register(new BooleanTogglePropertyType(key("entity/silent")));
         registry.register(new StringSetPropertyType(key("entity/tags")));
         registry.register(new BooleanTogglePropertyType(key("entity/visible")));
+        registry.register(new EnumTogglePropertyType<>(key("mannequin/main_hand"), Hand.class));
+        registry.register(new ProfilePropertyType(key("mannequin/profile")));
+        registry.register(new BooleanTogglePropertyType(key("mannequin/immovable")));
+        registry.register(new OptionalComponentPropertyType(key("mannequin/description"), "/eas description set"));
+        for (SkinPart part : SkinPart.values()) {
+            String name = part.name().toLowerCase(Locale.ROOT);
+            registry.register(new BooleanTogglePropertyType(key("mannequin/part/" + name + "/visible")));
+        }
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            registry.register(new EulerAnglePropertyType(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT))));
+            String name = part.name().toLowerCase(Locale.ROOT);
+            registry.register(new EulerAnglePropertyType(key("armor_stand/pose/" + name)));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            registry.register(new ItemPropertyType(key("entity/equipment/" + slot.name().toLowerCase(Locale.ROOT))));
+            String name = slot.name().toLowerCase(Locale.ROOT);
+            registry.register(new ItemPropertyType(key("entity/equipment/" + name)));
         }
     }
 

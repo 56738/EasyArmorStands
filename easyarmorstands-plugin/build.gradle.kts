@@ -89,9 +89,7 @@ fun registerSourceSet(name: String) {
 fun registerVersion(name: String, api: String) {
     registerSourceSet(name)
     dependencies {
-        "${name}CompileOnly"(api) {
-            exclude("net.kyori", "adventure-api")
-        }
+        "${name}CompileOnly"(api)
     }
 }
 
@@ -113,6 +111,8 @@ registerVersion("v1_19_4", "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 registerVersion("v1_20_2", "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
 registerVersion("v1_20_6", "org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
 registerVersion("v1_20_6_paper", "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+registerVersion("v1_21_10_spigot", "org.spigotmc:spigot-api:1.21.10-R0.1-SNAPSHOT")
+registerVersion("v1_21_10_paper", "io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
 
 hangarPublish {
     val versionString = project.version.toString()

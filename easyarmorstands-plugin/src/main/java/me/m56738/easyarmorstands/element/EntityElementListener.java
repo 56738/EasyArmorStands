@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
 import me.m56738.easyarmorstands.capability.lock.LockCapability;
+import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.silent.SilentCapability;
 import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
@@ -40,6 +41,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class EntityElementListener implements Listener {
@@ -56,6 +58,11 @@ public class EntityElementListener implements Listener {
         }
         if (entity instanceof ArmorStand) {
             registerArmorStandProperties((ArmorStand) entity, registry);
+        }
+
+        MannequinCapability mannequinCapability = EasyArmorStandsPlugin.getInstance().getCapability(MannequinCapability.class);
+        if (mannequinCapability != null && mannequinCapability.isMannequin(entity)) {
+            mannequinCapability.registerProperties(entity, registry);
         }
     }
 
@@ -79,9 +86,12 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
-        EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            registry.register(new EntityEquipmentProperty(entity, slot, equipmentCapability));
+        EntityEquipment equipment = entity.getEquipment();
+        if (equipment != null) {
+            EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                registry.register(new EntityEquipmentProperty(equipment, slot, equipmentCapability));
+            }
         }
         EntityScaleCapability scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
         if (scaleCapability != null) {

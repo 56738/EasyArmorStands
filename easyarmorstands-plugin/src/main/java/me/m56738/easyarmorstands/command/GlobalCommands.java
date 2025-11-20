@@ -167,7 +167,13 @@ public class GlobalCommands {
                                 .hoverEvent(Component.text(element.getClass().getName()))));
                 TextComponent.Builder builder = Component.text();
                 builder.color(NamedTextColor.GRAY);
-                element.getProperties().forEach(property -> appendPropertyDebug(builder, property));
+                element.getProperties().forEach(property -> {
+                    try {
+                        appendPropertyDebug(builder, property);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to process property: " + property.getType().key(), e);
+                    }
+                });
                 sender.sendMessage(builder);
             }
         }

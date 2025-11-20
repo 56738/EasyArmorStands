@@ -21,6 +21,7 @@ import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
+import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardListener;
@@ -70,6 +71,8 @@ import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
+import me.m56738.easyarmorstands.element.MannequinElementProvider;
+import me.m56738.easyarmorstands.element.MannequinElementType;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
@@ -108,6 +111,7 @@ import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
 import me.m56738.easyarmorstands.menu.slot.DestroySlotType;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
+import me.m56738.easyarmorstands.menu.slot.MannequinSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
@@ -214,8 +218,16 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/interaction")));
+        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/mannequin")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
+
+        MannequinCapability mannequinCapability = getCapability(MannequinCapability.class);
+        if (mannequinCapability != null) {
+            MannequinElementType<?> type = mannequinCapability.createElementType();
+            entityElementProviderRegistry.register(new MannequinElementProvider<>(type, mannequinCapability));
+            menuSlotTypeRegistry.register(new MannequinSpawnSlotType(type));
+        }
 
         menuProvider = new MenuProviderImpl();
 

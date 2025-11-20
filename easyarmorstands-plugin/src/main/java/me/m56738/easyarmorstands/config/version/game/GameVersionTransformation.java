@@ -128,6 +128,8 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                         new ItemStackTransformAction_v1_13())
                 .addAction(path("slots", "easyarmorstands:headdatabase", "config", "item"),
                         new ItemStackTransformAction_v1_13())
+                .addAction(path("slots", "easyarmorstands:spawn/mannequin", "config", "item"),
+                        new ItemStackTransformAction_v1_13())
                 .build()));
         return new GameVersionTransformation(entries);
     }

@@ -3,7 +3,7 @@ _version:
 easyarmorstands:armor_stand/arms:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: stick
   name: <lang:easyarmorstands.property.armor-stand.arms.name>
@@ -14,7 +14,7 @@ easyarmorstands:armor_stand/arms:
 easyarmorstands:armor_stand/base_plate:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: step
   name: <lang:easyarmorstands.property.armor-stand.base-plate.name>
@@ -31,11 +31,11 @@ easyarmorstands:armor_stand/can_tick:
 easyarmorstands:armor_stand/gravity:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: feather
   can-tick-warning:
-  - <yellow><lang:easyarmorstands.property.gravity.can-tick-warning>
+    - <yellow><lang:easyarmorstands.property.gravity.can-tick-warning>
   name: <lang:easyarmorstands.property.gravity.name>
   permission: easyarmorstands.property.gravity
   value:
@@ -44,7 +44,7 @@ easyarmorstands:armor_stand/gravity:
 easyarmorstands:armor_stand/invulnerable:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: golden_apple
   name: <lang:easyarmorstands.property.invulnerability.name>
@@ -55,8 +55,8 @@ easyarmorstands:armor_stand/invulnerable:
 easyarmorstands:armor_stand/lock:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.armor-stand.lock.description>
+      - <value>
+      - <lang:easyarmorstands.property.armor-stand.lock.description>
     name: <name>
     type: iron_fence
   name: <lang:easyarmorstands.property.armor-stand.lock.name>
@@ -67,8 +67,8 @@ easyarmorstands:armor_stand/lock:
 easyarmorstands:armor_stand/marker:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.armor-stand.marker.description>
+      - <value>
+      - <lang:easyarmorstands.property.armor-stand.marker.description>
     name: <name>
     type: double_plant
   name: <lang:easyarmorstands.property.armor-stand.marker.name>
@@ -98,7 +98,7 @@ easyarmorstands:armor_stand/size:
   button:
     data: 15
     description:
-    - <value>
+      - <value>
     name: <name>
     type: ink_sack
   name: <lang:easyarmorstands.property.armor-stand.size.name>
@@ -109,8 +109,8 @@ easyarmorstands:armor_stand/size:
 easyarmorstands:block_display/block:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.block-display.block.pick>
+      - <value>
+      - <lang:easyarmorstands.property.block-display.block.pick>
     name: <name>
     type: oak_stairs
   name: <lang:easyarmorstands.property.block-display.block.name>
@@ -121,8 +121,8 @@ easyarmorstands:block_display/block:
 easyarmorstands:display/billboard:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.display.billboard.description>
+      - <value>
+      - <lang:easyarmorstands.property.display.billboard.description>
     name: <name>
     type: iron_bars
   name: <lang:easyarmorstands.property.display.billboard.name>
@@ -172,8 +172,8 @@ easyarmorstands:display/view_range:
 easyarmorstands:entity/ai:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.ai.description>
+      - <value>
+      - <lang:easyarmorstands.property.ai.description>
     name: <name>
     type: redstone_block
   name: <lang:easyarmorstands.property.ai.name>
@@ -184,7 +184,7 @@ easyarmorstands:entity/ai:
 easyarmorstands:entity/custom_name:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: name_tag
   name: <lang:easyarmorstands.property.custom-name.name>
@@ -224,8 +224,8 @@ easyarmorstands:entity/equipment/saddle:
 easyarmorstands:entity/glowing:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.glow.description>
+      - <value>
+      - <lang:easyarmorstands.property.glow.description>
     name: <name>
     type: glowstone_dust
   name: <lang:easyarmorstands.property.glow.name>
@@ -236,8 +236,8 @@ easyarmorstands:entity/glowing:
 easyarmorstands:entity/location:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.glow.description>
+      - <value>
+      - <lang:easyarmorstands.property.glow.description>
     name: <name>
     type: glowstone_dust
   name: <lang:easyarmorstands.property.location.name>
@@ -253,8 +253,8 @@ easyarmorstands:entity/scale:
 easyarmorstands:entity/silent:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.silent.description>
+      - <value>
+      - <lang:easyarmorstands.property.silent.description>
     name: <name>
     type: note_block
   name: <lang:easyarmorstands.property.silent.name>
@@ -273,7 +273,7 @@ easyarmorstands:entity/tags:
 easyarmorstands:entity/visible:
   button:
     description:
-    - <value>
+      - <value>
     effect: invisibility
     name: <name>
     type: potion
@@ -288,8 +288,8 @@ easyarmorstands:fancyholograms/text:
 easyarmorstands:interaction/responsive:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.interaction.responsive.description>
+      - <value>
+      - <lang:easyarmorstands.property.interaction.responsive.description>
     name: <name>
     type: oak_pressure_plate
   name: <lang:easyarmorstands.property.interaction.responsive.name>
@@ -303,8 +303,8 @@ easyarmorstands:item_display/item:
 easyarmorstands:item_display/transform:
   button:
     description:
-    - <value>
-    - <lang:easyarmorstands.property.item-display.transform.description>
+      - <value>
+      - <lang:easyarmorstands.property.item-display.transform.description>
     name: <name>
     type: stick
   name: <lang:easyarmorstands.property.item-display.transform.name>
@@ -322,7 +322,7 @@ easyarmorstands:item_display/transform:
 easyarmorstands:text_display/alignment:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: feather
   name: <lang:easyarmorstands.property.text-display.alignment.name>
@@ -334,7 +334,7 @@ easyarmorstands:text_display/alignment:
 easyarmorstands:text_display/background:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: stone_slab
   name: <lang:easyarmorstands.property.text-display.background.name>
@@ -345,7 +345,7 @@ easyarmorstands:text_display/line_width:
 easyarmorstands:text_display/see_through:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: glowstone_dust
   name: <lang:easyarmorstands.property.text-display.see-through.name>
@@ -356,7 +356,7 @@ easyarmorstands:text_display/see_through:
 easyarmorstands:text_display/shadow:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: stone
   name: <lang:easyarmorstands.property.text-display.shadow.name>
@@ -367,10 +367,131 @@ easyarmorstands:text_display/shadow:
 easyarmorstands:text_display/text:
   button:
     description:
-    - <value>
+      - <value>
     name: <name>
     type: name_tag
   name: <lang:easyarmorstands.property.text-display.text.name>
   permission: easyarmorstands.property.display.text
   value:
     none: <i><gray><lang:easyarmorstands.property.common.none>
+easyarmorstands:mannequin/description:
+  button:
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.mannequin.description.description>
+    name: <name>
+    type: name_tag
+  name: <lang:easyarmorstands.property.mannequin.description.name>
+  permission: easyarmorstands.property.mannequin.description
+  value:
+    none: <i><gray><lang:easyarmorstands.property.common.none>
+easyarmorstands:mannequin/main_hand:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: iron_sword
+  name: <lang:easyarmorstands.property.mannequin.main-hand.name>
+  permission: easyarmorstands.property.mannequin.mainhand
+  value:
+    LEFT: <lang:easyarmorstands.property.common.hand.left>
+    RIGHT: <lang:easyarmorstands.property.common.hand.right>
+easyarmorstands:mannequin/profile:
+  button:
+    description:
+      - <lang:easyarmorstands.property.mannequin.profile.description>
+    name: <name>
+    type: player_head
+  name: <lang:easyarmorstands.property.mannequin.profile.name>
+  permission: easyarmorstands.property.mannequin.profile
+  value:
+    none: <i><gray><lang:easyarmorstands.property.common.none>
+easyarmorstands:mannequin/immovable:
+  button:
+    description:
+      - <value>
+      - <lang:easyarmorstands.property.mannequin.immovable.description>
+    name: <name>
+    type: bedrock
+  name: <lang:easyarmorstands.property.mannequin.immovable.name>
+  permission: easyarmorstands.property.mannequin.immovable
+  value:
+    disabled: <green><lang:easyarmorstands.property.mannequin.immovable.disabled>
+    enabled: <yellow><lang:easyarmorstands.property.mannequin.immovable.enabled>
+easyarmorstands:mannequin/part/cape/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: yellow_banner
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.cape>'>
+  permission: easyarmorstands.property.mannequin.part.visible.cape
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/hat/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: iron_helmet
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.hat>'>
+  permission: easyarmorstands.property.mannequin.part.visible.hat
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/jacket/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: iron_chestplate
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.jacket>'>
+  permission: easyarmorstands.property.mannequin.part.visible.jacket
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/left_sleeve/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: lever
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.left-sleeve>'>
+  permission: easyarmorstands.property.mannequin.part.visible.sleeve.left
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/right_sleeve/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: lever
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.right-sleeve>'>
+  permission: easyarmorstands.property.mannequin.part.visible.sleeve.right
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/left_pants/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: lever
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.left-pants>'>
+  permission: easyarmorstands.property.mannequin.part.visible.pants.left
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/part/right_pants/visible:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: lever
+  name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.right-pants>'>
+  permission: easyarmorstands.property.mannequin.part.visible.pants.right
+  value:
+    disabled: <red><lang:easyarmorstands.property.common.invisible>
+    enabled: <green><lang:easyarmorstands.property.common.visible>
