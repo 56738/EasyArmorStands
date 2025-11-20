@@ -5,5 +5,7 @@ plugins {
 dependencies {
     compileOnly(project(":easyarmorstands-plugin"))
     compileOnly(libs.bukkit)
-    compileOnly(libs.residence)
+    compileOnly(libs.residence) {
+        isTransitive = false
+    }
 }

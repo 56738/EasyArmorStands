@@ -23,11 +23,6 @@ repositories {
             includeGroup("com.palmergames.bukkit.towny")
         }
     }
-    maven("https://ci.athion.net/plugin/repository/tools/") {
-        mavenContent {
-            includeGroup("com.bekvon.bukkit.residence")
-        }
-    }
     maven("https://repo.fancyplugins.de/releases/") {
         mavenContent {
             includeModule("de.oliver", "FancyHolograms")
@@ -48,6 +43,7 @@ repositories {
         mavenContent {
             includeGroup("com.github.angeschossen")
             includeGroup("com.github.GriefPrevention")
+            includeGroup("com.github.Zrips")
         }
     }
 }

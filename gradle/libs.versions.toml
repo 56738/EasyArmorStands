@@ -22,7 +22,7 @@ jetbrains-annotations = "26.0.2"
 joml = "1.10.8"
 lands = "7.13.1"
 plotsquared = "7.5.2"
-residence = "4.5._13.1"
+residence = "6.0.0.1"
 run-task = "2.3.1"
 shadow = "9.1.0"
 towny = "0.101.1.7"
@@ -60,7 +60,7 @@ joml = { module = "org.joml:joml", version.ref = "joml" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
 plotsquared-bukkit = { module = "com.intellectualsites.plotsquared:plotsquared-bukkit", version.ref = "plotsquared" }
 plotsquared-core = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
-residence = { module = "com.bekvon.bukkit.residence:Residence", version.ref = "residence" }
+residence = { module = "com.github.Zrips:Residence", version.ref = "residence" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
 worldguard-v6 = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "worldguard-v6" }
