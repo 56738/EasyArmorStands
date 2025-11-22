@@ -6,7 +6,7 @@ Armor stand and display entity editor.
 
 # Installation
 
-**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.8
+**Supported Minecraft versions:** Spigot/Paper 1.8.8 to 1.21.10
 
 Download the latest `.jar` file and place it in your `plugins` folder.
 
@@ -246,6 +246,7 @@ Use `/eas reload` to reload all configuration files.
 [![Translation status](https://hosted.weblate.org/widget/easyarmorstands/v2/svg-badge.svg)](https://hosted.weblate.org/engage/easyarmorstands/)
 
 Please submit translations on [Weblate](https://hosted.weblate.org/engage/easyarmorstands/).
+If you would like to start translating to a new language, please ask on Discord.
 
 ### Use your own translations
 
