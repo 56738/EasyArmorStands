@@ -364,7 +364,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         }
 
         @Override
-        public void onUpdate(@NotNull Session session, @NotNull UpdateContext context) {
+        public void onUpdate(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull UpdateContext context) {
             context.addInput(selectInput);
             if (allowGroups && selectionBox == null) {
                 if (!groupMembers.containsKey(entry)) {

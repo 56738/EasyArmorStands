@@ -24,8 +24,6 @@ import java.util.Objects;
 public abstract class MenuNode implements Node {
     private final Session session;
     private final Map<MenuButton, Button> buttons = new HashMap<>();
-    private MenuButton targetButton;
-    private Vector3dc targetCursor;
     private boolean visible;
 
     public MenuNode(@NotNull Session session) {
@@ -61,7 +59,6 @@ public abstract class MenuNode implements Node {
 
     @Override
     public void onEnter(@NotNull EnterContext context) {
-        targetButton = null;
         visible = true;
         for (Map.Entry<MenuButton, Button> entry : buttons.entrySet()) {
             MenuButton menuButton = entry.getKey();
@@ -74,7 +71,6 @@ public abstract class MenuNode implements Node {
 
     @Override
     public void onExit(@NotNull ExitContext context) {
-        targetButton = null;
         visible = false;
         for (Button button : buttons.values()) {
             button.hidePreview();
@@ -124,10 +120,8 @@ public abstract class MenuNode implements Node {
             targetName = Component.empty();
         }
         context.setSubtitle(targetName);
-        targetButton = bestMenuButton;
-        targetCursor = bestCursor;
         if (bestMenuButton != null) {
-            bestMenuButton.onUpdate(session, context);
+            bestMenuButton.onUpdate(session, bestCursor, context);
         }
     }
 }

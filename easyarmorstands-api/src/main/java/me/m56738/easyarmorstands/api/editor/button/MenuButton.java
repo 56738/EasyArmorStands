@@ -15,8 +15,8 @@ public interface MenuButton {
     default void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
     }
 
-    default void onUpdate(@NotNull Session session, @NotNull UpdateContext context) {
-        context.addInput(new MenuButtonInput(session, this));
+    default void onUpdate(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull UpdateContext context) {
+        context.addInput(new MenuButtonInput(session, this, cursor));
     }
 
     default boolean isAlwaysFocused() {

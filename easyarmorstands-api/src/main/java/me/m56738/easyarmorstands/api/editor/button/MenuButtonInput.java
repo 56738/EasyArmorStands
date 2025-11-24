@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.api.editor.button;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
+import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
@@ -13,10 +14,12 @@ class MenuButtonInput implements Input {
     private static final Style STYLE = Style.style(NamedTextColor.GREEN);
     private final Session session;
     private final MenuButton button;
+    private final Vector3dc cursor;
 
-    public MenuButtonInput(Session session, MenuButton button) {
+    public MenuButtonInput(Session session, MenuButton button, Vector3dc cursor) {
         this.session = session;
         this.button = button;
+        this.cursor = cursor;
     }
 
     @Override
@@ -36,6 +39,6 @@ class MenuButtonInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        button.onClick(session, null);
+        button.onClick(session, cursor);
     }
 }
