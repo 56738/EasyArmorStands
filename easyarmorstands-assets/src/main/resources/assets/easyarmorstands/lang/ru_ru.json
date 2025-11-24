@@ -247,7 +247,6 @@
   "easyarmorstands.node.select-bone": "Выбрать кость",
   "easyarmorstands.node.select-entity": "Выбрать объект",
   "easyarmorstands.node.select-entity.limit-reached": "Слишком много сущностей поблизости",
-  "easyarmorstands.node.switch-mode": "Переключить",
   "easyarmorstands.node.yaw": "Вертикальный угол",
   "easyarmorstands.property.ai.description": "Объекты без ИИ не перемещаются сами.",
   "easyarmorstands.property.ai.name": "ИИ",
