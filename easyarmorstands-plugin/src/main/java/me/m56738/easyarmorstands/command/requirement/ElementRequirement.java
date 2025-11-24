@@ -24,7 +24,6 @@ public class ElementRequirement implements CommandRequirement {
             sender.sendMessage(Message.error("easyarmorstands.error.group-selected"));
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.nothing-selected"));
-            sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
         }
     }
 

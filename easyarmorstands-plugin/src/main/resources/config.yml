@@ -31,10 +31,6 @@ editor:
       range: 128.0
     range: 10.0
   tool:
-    description:
-    - <gray><lang:easyarmorstands.hint.select-entity>
-    - <gray><lang:easyarmorstands.hint.spawn-entity>
-    - <gray><lang:easyarmorstands.hint.deselect-entity>
     name: <gold><lang:easyarmorstands.tool-name>
     type: blaze_rod
 integration:

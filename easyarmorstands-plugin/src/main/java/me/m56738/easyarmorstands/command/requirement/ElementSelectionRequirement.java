@@ -20,7 +20,6 @@ public class ElementSelectionRequirement implements CommandRequirement {
     public void handle(CommandContext<EasCommandSender> context) {
         EasCommandSender sender = context.sender();
         sender.sendMessage(Message.error("easyarmorstands.error.nothing-selected"));
-        sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
     }
 
     @Override

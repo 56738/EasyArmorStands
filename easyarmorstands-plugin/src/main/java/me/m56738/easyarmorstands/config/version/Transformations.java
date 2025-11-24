@@ -16,6 +16,9 @@ public class Transformations {
                 .addVersion(1, ConfigurationTransformation.builder()
                         .addAction(path("integration", "Towny", "allow-wilderness"), TransformAction.remove())
                         .build())
+                .addVersion(2, ConfigurationTransformation.builder()
+                        .addAction(path("editor", "tool", "description"), TransformAction.remove())
+                        .build())
                 .build();
     }
 
