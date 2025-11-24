@@ -247,7 +247,6 @@
   "easyarmorstands.node.select-bone": "Wähle ein Körperteil",
   "easyarmorstands.node.select-entity": "Wähle ein Objekt",
   "easyarmorstands.node.select-entity.limit-reached": "Zu viele Objekte in der Nähe",
-  "easyarmorstands.node.switch-mode": "Umschalten",
   "easyarmorstands.node.yaw": "Gierwinkel",
   "easyarmorstands.property.ai.description": "Objekte ohne KI bewegen sich nicht von alleine.",
   "easyarmorstands.property.ai.name": "KI",
