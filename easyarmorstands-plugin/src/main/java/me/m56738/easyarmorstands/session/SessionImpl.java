@@ -293,6 +293,10 @@ public final class SessionImpl implements Session {
     }
 
     private Component createActionBar(Component value) {
+        if (!EasyArmorStandsPlugin.getInstance().getConfiguration().editor.inputHints) {
+            return value;
+        }
+
         TextComponent.Builder builder = Component.text();
         builder.append(value);
 

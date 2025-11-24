@@ -13,6 +13,7 @@ editor:
     threshold: 0.1
   discovery:
     limit: 128
+  input-hints: true
   menu:
     background:
       config:
