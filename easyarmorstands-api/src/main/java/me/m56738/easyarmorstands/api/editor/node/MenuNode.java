@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
@@ -130,16 +129,5 @@ public abstract class MenuNode implements Node {
         if (bestMenuButton != null) {
             bestMenuButton.onUpdate(session, context);
         }
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            if (targetButton != null) {
-                targetButton.onClick(session, targetCursor);
-                return true;
-            }
-        }
-        return false;
     }
 }

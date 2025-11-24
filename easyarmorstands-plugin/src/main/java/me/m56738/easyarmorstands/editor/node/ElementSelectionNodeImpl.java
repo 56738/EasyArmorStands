@@ -237,11 +237,11 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         if (!groupMembers.isEmpty()) {
             context.addInput(new ClearGroupSelectionInput(this));
         }
-        if (selectionBox == null && allowGroups) {
-            context.addInput(new StartBoxSelectionInput(this));
-        }
         if (groupMembers.isEmpty() && selectionBox == null && allowSpawn) {
             context.addInput(openSpawnMenuInput);
+        }
+        if (selectionBox == null && allowGroups) {
+            context.addInput(new StartBoxSelectionInput(this));
         }
 
         int groupSize = groupMembers.size() + selectionBoxMembers.size();

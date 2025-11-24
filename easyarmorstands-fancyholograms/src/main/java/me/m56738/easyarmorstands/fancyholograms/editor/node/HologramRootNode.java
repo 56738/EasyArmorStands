@@ -60,12 +60,12 @@ public class HologramRootNode extends PropertyMenuNode implements ElementNode {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
         toolSwitcher.onUpdate(context);
         if (allowMenu) {
             context.addInput(new OpenElementMenuInput(session, element));
         }
+        super.onUpdate(context);
         context.addInput(new ReturnInput(session));
     }
 

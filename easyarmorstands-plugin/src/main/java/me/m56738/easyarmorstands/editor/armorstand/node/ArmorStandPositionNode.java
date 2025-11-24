@@ -44,9 +44,9 @@ public class ArmorStandPositionNode extends PropertyMenuNode implements Resettab
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
         toolSwitcher.onUpdate(context);
+        super.onUpdate(context);
         context.addInput(new ReturnInput(session));
     }
 }

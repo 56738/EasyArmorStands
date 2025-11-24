@@ -43,6 +43,10 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                         new ItemStackTransformAction_v1_13())
                 .addAction(path("easyarmorstands:armor_stand/size", "button"),
                         new ItemStackTransformAction_v1_13())
+                .addAction(path("easyarmorstands:mannequin/part/cape/visible", "button"),
+                        new ItemStackTransformAction_v1_13())
+                .addAction(path("easyarmorstands:mannequin/profile", "button"),
+                        new ItemStackTransformAction_v1_13())
                 .build()));
         return new GameVersionTransformation(entries);
     }

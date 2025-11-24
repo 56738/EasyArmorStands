@@ -4,9 +4,6 @@ import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
-import me.m56738.easyarmorstands.config.version.override.BeforeMinorVersionCondition;
-import me.m56738.easyarmorstands.config.version.override.VersionOverrideCondition;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -38,26 +35,11 @@ public class SwapHandItemsCapabilityProvider implements CapabilityProvider<SwapH
     }
 
     private static class SwapHandItemsCapabilityImpl implements SwapHandItemsCapability {
-        private static final VersionOverrideCondition BEFORE_1_12 = new BeforeMinorVersionCondition(12);
-        private static final VersionOverrideCondition BEFORE_1_16 = new BeforeMinorVersionCondition(16);
         private final Map<SwapHandItemsListener, SwapListener> listeners = new HashMap<>();
         private final Plugin plugin;
-        private final Component key;
 
         public SwapHandItemsCapabilityImpl(Plugin plugin) {
             this.plugin = plugin;
-            if (BEFORE_1_12.testCondition()) {
-                key = Component.text("F");
-            } else if (BEFORE_1_16.testCondition()) {
-                key = Component.keybind("key.swapHands");
-            } else {
-                key = Component.keybind("key.swapOffhand");
-            }
-        }
-
-        @Override
-        public Component key() {
-            return key;
         }
 
         @Override

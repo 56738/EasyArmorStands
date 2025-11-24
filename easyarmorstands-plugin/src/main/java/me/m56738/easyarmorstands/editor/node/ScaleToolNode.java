@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.editor.input.tool.ActivateInput;
 import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
 import me.m56738.easyarmorstands.lib.cloud.parser.standard.DoubleParser;
 import me.m56738.easyarmorstands.lib.joml.Vector3d;
@@ -44,7 +44,7 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
         this.cursor = new Cursor3D(session);
     }
 
-    private void activate() {
+    public void activate() {
         initialDistance = distance;
         active = true;
         canActivate = false;
@@ -64,6 +64,10 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
+        if (canActivate) {
+            context.addInput(new ActivateInput(this));
+        }
+
         if (hasManualInput) {
             super.onUpdate(context);
             return;
@@ -98,17 +102,6 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
             return;
         }
         super.updateActionBar(context);
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (context.type() == ClickContext.Type.RIGHT_CLICK && !active && !hasManualInput) {
-            if (canActivate) {
-                activate();
-            }
-            return true;
-        }
-        return super.onClick(context);
     }
 
     @Override

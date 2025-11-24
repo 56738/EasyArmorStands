@@ -33,12 +33,12 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
         toolSwitcher.onUpdate(context);
         if (allowMenu && element instanceof MenuElement) {
             context.addInput(new OpenElementMenuInput(session, (MenuElement) element));
         }
+        super.onUpdate(context);
         context.addInput(new ReturnInput(session));
     }
 

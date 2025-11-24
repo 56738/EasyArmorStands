@@ -5,8 +5,6 @@ import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 
 @Capability(name = "Swap hand items", optional = true)
 public interface SwapHandItemsCapability {
-    Component key();
-
     void addListener(SwapHandItemsListener listener);
 
     void removeListener(SwapHandItemsListener listener);

@@ -398,10 +398,11 @@ easyarmorstands:mannequin/main_hand:
     RIGHT: <lang:easyarmorstands.property.common.hand.right>
 easyarmorstands:mannequin/profile:
   button:
+    data: 3
     description:
       - <lang:easyarmorstands.property.mannequin.profile.description>
     name: <name>
-    type: player_head
+    type: skull_item
   name: <lang:easyarmorstands.property.mannequin.profile.name>
   permission: easyarmorstands.property.mannequin.profile
   value:
@@ -420,10 +421,11 @@ easyarmorstands:mannequin/immovable:
     enabled: <yellow><lang:easyarmorstands.property.mannequin.immovable.enabled>
 easyarmorstands:mannequin/part/cape/visible:
   button:
+    data: 11
     description:
       - <value>
     name: <name>
-    type: yellow_banner
+    type: banner
   name: <lang:easyarmorstands.property.mannequin.part.visible.name:'<lang:easyarmorstands.mannequin.part.cape>'>
   permission: easyarmorstands.property.mannequin.part.visible.cape
   value:

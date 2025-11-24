@@ -16,6 +16,8 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
+import me.m56738.easyarmorstands.config.version.override.BeforeMinorVersionCondition;
+import me.m56738.easyarmorstands.config.version.override.VersionOverrideCondition;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
@@ -59,6 +61,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class SessionImpl implements Session {
+    private static final VersionOverrideCondition BEFORE_1_12 = new BeforeMinorVersionCondition(12);
+    private static final VersionOverrideCondition BEFORE_1_16 = new BeforeMinorVersionCondition(16);
+    private static final Component LEFT_KEY = createLeftKey();
+    private static final Component RIGHT_KEY = createRightKey();
+    private static final Component SWAP_HANDS_KEY = createSwapHandsKey();
+    private static final Component SNEAK_KEY = createSneakKey();
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
     private final Player player;
@@ -302,12 +310,12 @@ public final class SessionImpl implements Session {
 
             ClickContext.Type clickType = input.clickType();
             if (seen.add(clickType)) {
-                builder.append(createInput(createKey(clickType), input.name(), input.style()));
+                builder.append(createInput(getKey(clickType), input.name(), input.style()));
             }
         }
 
         if (offerSneaking) {
-            builder.append(createInput(Component.translatable("key.sneak"), Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
+            builder.append(createInput(SNEAK_KEY, Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
         }
 
         return builder.build();
@@ -323,15 +331,13 @@ public final class SessionImpl implements Session {
         return builder.build();
     }
 
-    private Component createKey(ClickContext.Type type) {
-        if (type == ClickContext.Type.RIGHT_CLICK) {
-            return Component.keybind("key.use");
-        } else if (type == ClickContext.Type.LEFT_CLICK) {
-            return Component.keybind("key.attack");
+    private Component getKey(ClickContext.Type type) {
+        if (type == ClickContext.Type.LEFT_CLICK) {
+            return LEFT_KEY;
+        } else if (type == ClickContext.Type.RIGHT_CLICK) {
+            return RIGHT_KEY;
         } else if (type == ClickContext.Type.SWAP_HANDS) {
-            if (swapHandItemsCapability != null) {
-                return swapHandItemsCapability.key();
-            }
+            return SWAP_HANDS_KEY;
         }
         return Component.empty();
     }
@@ -452,5 +458,39 @@ public final class SessionImpl implements Session {
 
     public void setToolRequired(boolean toolRequired) {
         this.toolRequired = toolRequired;
+    }
+
+    private static Component createLeftKey() {
+        if (BEFORE_1_12.testCondition()) {
+            return Component.translatable("easyarmorstands.input.key.left-mouse");
+        } else {
+            return Component.keybind("key.attack");
+        }
+    }
+
+    private static Component createRightKey() {
+        if (BEFORE_1_12.testCondition()) {
+            return Component.translatable("easyarmorstands.input.key.right-mouse");
+        } else {
+            return Component.keybind("key.use");
+        }
+    }
+
+    private static Component createSwapHandsKey() {
+        if (BEFORE_1_12.testCondition()) {
+            return Component.text("F");
+        } else if (BEFORE_1_16.testCondition()) {
+            return Component.keybind("key.swapHands");
+        } else {
+            return Component.keybind("key.swapOffhand");
+        }
+    }
+
+    private static Component createSneakKey() {
+        if (BEFORE_1_12.testCondition()) {
+            return Component.translatable("easyarmorstands.input.key.sneak");
+        } else {
+            return Component.translatable("key.sneak");
+        }
     }
 }

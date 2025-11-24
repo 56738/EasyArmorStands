@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.editor.input.selection;
+package me.m56738.easyarmorstands.editor.input;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
@@ -29,7 +29,7 @@ public class SwitchToolModeInput implements Input {
 
     @Override
     public ClickContext.@NotNull Type clickType() {
-        return ClickContext.Type.SWAP_HANDS;
+        return ClickContext.Type.RIGHT_CLICK;
     }
 
     @Override

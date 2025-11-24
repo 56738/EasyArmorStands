@@ -64,7 +64,9 @@ public interface Node {
      * @param context Contains accessors for relevant data.
      * @return Whether the click was handled.
      */
-    boolean onClick(@NotNull ClickContext context);
+    default boolean onClick(@NotNull ClickContext context) {
+        return false;
+    }
 
     boolean isValid();
 }

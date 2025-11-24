@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
@@ -14,14 +15,30 @@ public class OpenSpawnMenuInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.spawn");
     private static final Style STYLE = Style.style(NamedTextColor.YELLOW);
     private final Session session;
+    private final ClickContext.Type clickType;
+    private final boolean requireSneak;
 
     public OpenSpawnMenuInput(Session session) {
         this.session = session;
+
+        boolean hasSwapHands = EasyArmorStandsPlugin.getInstance().getCapability(SwapHandItemsCapability.class) != null;
+        this.clickType = hasSwapHands ? ClickContext.Type.SWAP_HANDS : ClickContext.Type.LEFT_CLICK;
+        this.requireSneak = !hasSwapHands;
     }
 
     @Override
     public ClickContext.@NotNull Type clickType() {
-        return ClickContext.Type.SWAP_HANDS;
+        return clickType;
+    }
+
+    @Override
+    public boolean requireSneak() {
+        return requireSneak;
+    }
+
+    @Override
+    public boolean allowSneak() {
+        return requireSneak;
     }
 
     @Override
@@ -32,11 +49,6 @@ public class OpenSpawnMenuInput implements Input {
     @Override
     public @NotNull Style style() {
         return STYLE;
-    }
-
-    @Override
-    public boolean allowSneak() {
-        return false;
     }
 
     @Override

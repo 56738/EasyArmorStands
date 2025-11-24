@@ -32,9 +32,9 @@ public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNo
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
         toolSwitcher.onUpdate(context);
+        super.onUpdate(context);
         context.addInput(new ReturnInput(session));
     }
 
