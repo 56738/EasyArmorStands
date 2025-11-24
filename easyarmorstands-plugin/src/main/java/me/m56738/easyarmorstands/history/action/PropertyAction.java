@@ -47,7 +47,9 @@ public class PropertyAction<T> implements Action {
         if (property == null) {
             return false;
         }
-        return property.setValue(value);
+        boolean result = property.setValue(value);
+        properties.commit();
+        return result;
     }
 
     @Override
