@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
@@ -14,6 +15,9 @@ public interface ClickContext {
     @NotNull EyeRay eyeRay();
 
     @Contract(pure = true)
+    boolean sneaking();
+
+    @Contract(pure = true)
     @NotNull Type type();
 
     @Contract(pure = true)
@@ -21,6 +25,9 @@ public interface ClickContext {
 
     @Contract(pure = true)
     @Nullable Block block();
+
+    @Contract(pure = true)
+    boolean matchesInput(@NotNull Input input);
 
     enum Type {
         LEFT_CLICK,

@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.display.editor.node;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
@@ -11,6 +10,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.lib.joml.Quaternionf;
 import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
@@ -41,18 +41,7 @@ public class DisplayShearNode extends DisplayMenuNode implements ResettableNode 
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(name);
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
-        }
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            session.popNode();
-            return true;
-        }
-        return false;
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

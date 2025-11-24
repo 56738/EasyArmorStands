@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.display.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.AddContext;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
@@ -18,13 +17,14 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.editor.box.InteractionBoxEditor;
 import me.m56738.easyarmorstands.display.element.InteractionElement;
+import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.editor.node.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class InteractionRootNode extends PropertyMenuNode implements ElementNode {
@@ -34,6 +34,7 @@ public class InteractionRootNode extends PropertyMenuNode implements ElementNode
     private final Property<Location> locationProperty;
     private final Property<Float> widthProperty;
     private final Property<Float> heightProperty;
+    private final boolean allowMenu;
 
     public InteractionRootNode(Session session, InteractionElement element) {
         super(session, session.properties(element));
@@ -43,6 +44,7 @@ public class InteractionRootNode extends PropertyMenuNode implements ElementNode
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.widthProperty = properties().get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = properties().get(DisplayPropertyTypes.BOX_HEIGHT);
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
         new ToolMenuManager(session, this, element.getTools(properties())).setMode(ToolMenuMode.GLOBAL);
         new BoxResizeToolManager(session, this, new InteractionBoxEditor(properties()));
     }
@@ -77,25 +79,16 @@ public class InteractionRootNode extends PropertyMenuNode implements ElementNode
     public void onUpdate(@NotNull UpdateContext context) {
         updateBoundingBox();
         super.onUpdate(context);
+        if (allowMenu) {
+            context.addInput(new OpenElementMenuInput(session, element));
+        }
+        context.addInput(new ReturnInput(session));
     }
 
     @Override
     public void onInactiveUpdate(@NotNull UpdateContext context) {
         updateBoundingBox();
         super.onInactiveUpdate(context);
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
-        }
-        Player player = session.player();
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
-            return true;
-        }
-        return false;
     }
 
     private void updateBoundingBox() {

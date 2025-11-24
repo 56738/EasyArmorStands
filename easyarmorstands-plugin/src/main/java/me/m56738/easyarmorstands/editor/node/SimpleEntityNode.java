@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.MenuNode;
@@ -10,8 +9,9 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleEntityNode extends MenuNode implements ElementNode {
@@ -19,6 +19,7 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
     private final Element element;
     private final ToolMenuManager toolManager;
     private final ToolMenuModeSwitcher toolSwitcher;
+    private final boolean allowMenu;
 
     public SimpleEntityNode(Session session, EditableElement element) {
         super(session);
@@ -27,27 +28,18 @@ public class SimpleEntityNode extends MenuNode implements ElementNode {
         this.toolManager = new ToolMenuManager(session, this, element.getTools(session.properties(element)));
         this.toolManager.setMode(ToolMenuMode.GLOBAL);
         this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
+        toolSwitcher.onUpdate(context);
+        if (allowMenu && element instanceof MenuElement) {
+            context.addInput(new OpenElementMenuInput(session, (MenuElement) element));
         }
-        if (element instanceof MenuElement) {
-            Player player = session.player();
-            if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-                ((MenuElement) element).openMenu(player);
-                return true;
-            }
-        }
-        return toolSwitcher.onClick(context);
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

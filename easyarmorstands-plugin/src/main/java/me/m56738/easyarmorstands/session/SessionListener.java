@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
@@ -75,7 +74,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
             return false;
         }
         if (!suppressClick.containsKey(player)) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.LEFT_CLICK, entity, block));
         }
         return true;
     }
@@ -96,7 +95,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             if (!suppressClick.containsKey(player)) {
-                session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
+                session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.RIGHT_CLICK, entity, block));
             }
             return true;
         }
@@ -126,7 +125,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         if (session == null) {
             return false;
         }
-        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
+        session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.SWAP_HANDS, null, null));
         return true;
     }
 
@@ -276,14 +275,6 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         Player player = event.getPlayer();
         suppressClick.put(player, 5);
         suppressArmSwing.put(event.getPlayer(), 5);
-        SessionImpl session = manager.getSession(player);
-        if (session != null) {
-            ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
-            if (node != null && node != session.getNode()) {
-                session.returnToNode(node);
-                event.setCancelled(true);
-            }
-        }
         Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
     }
 

@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.tool.GroupToolProvider;
@@ -66,6 +67,7 @@ public class GroupRootNode extends MenuNode {
         super.onUpdate(context);
         group.update();
         updateBox();
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

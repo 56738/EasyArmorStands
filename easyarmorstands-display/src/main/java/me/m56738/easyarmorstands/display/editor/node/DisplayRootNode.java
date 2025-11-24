@@ -13,6 +13,8 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.display.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.display.element.DisplayElement;
+import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.lib.joml.Quaternionf;
 import me.m56738.easyarmorstands.lib.joml.Vector3f;
@@ -31,6 +33,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
     private final Property<BlockData> blockDataProperty;
     private final ToolMenuManager toolManager;
     private final ToolMenuModeSwitcher toolSwitcher;
+    private final boolean allowMenu;
 
     public DisplayRootNode(Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
@@ -40,6 +43,7 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
         this.toolManager = new ToolMenuManager(session, this, element.getTools(properties()));
         this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
     }
 
     @Override
@@ -60,17 +64,18 @@ public class DisplayRootNode extends DisplayMenuNode implements ElementNode, Res
                 }
             }
         }
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
-            return true;
-        }
-        return toolSwitcher.onClick(context);
+        return false;
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(toolSwitcher.getActionBar());
+        toolSwitcher.onUpdate(context);
+        if (allowMenu) {
+            context.addInput(new OpenElementMenuInput(session, element));
+        }
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

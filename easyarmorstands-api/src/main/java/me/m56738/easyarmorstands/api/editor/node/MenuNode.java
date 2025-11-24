@@ -127,6 +127,9 @@ public abstract class MenuNode implements Node {
         context.setSubtitle(targetName);
         targetButton = bestMenuButton;
         targetCursor = bestCursor;
+        if (bestMenuButton != null) {
+            bestMenuButton.onUpdate(session, context);
+        }
     }
 
     @Override

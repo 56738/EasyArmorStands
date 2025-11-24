@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
@@ -12,6 +13,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
@@ -24,6 +26,9 @@ import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
 import me.m56738.easyarmorstands.lib.kyori.adventure.title.Title;
 import me.m56738.easyarmorstands.lib.kyori.adventure.title.TitlePart;
 import me.m56738.easyarmorstands.particle.EditorParticle;
@@ -43,7 +48,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +69,8 @@ public final class SessionImpl implements Session {
     private final ParticleProvider particleProvider;
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
+    private final List<Input> inputs = new ArrayList<>();
+    private final SwapHandItemsCapability swapHandItemsCapability = EasyArmorStandsPlugin.getInstance().getCapability(SwapHandItemsCapability.class);
     private int clickTicks = 5;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
@@ -182,6 +191,14 @@ public final class SessionImpl implements Session {
             }
             clickTicks = 5;
         }
+
+        for (Input input : inputs) {
+            if (context.matchesInput(input)) {
+                input.execute(context);
+                return true;
+            }
+        }
+
         return node.onClick(context);
     }
 
@@ -231,6 +248,9 @@ public final class SessionImpl implements Session {
             particle.updateGizmo();
         }
 
+        this.inputs.clear();
+        this.inputs.addAll(context.getInputs());
+
         updateOverlay(context);
 
         return player.isValid();
@@ -240,7 +260,7 @@ public final class SessionImpl implements Session {
         // Resend everything once per second
         // Send changes immediately
 
-        Component pendingActionBar = context.getActionBar();
+        Component pendingActionBar = createActionBar(context.getActionBar());
         Component pendingTitle = context.getTitle();
         Component pendingSubtitle = context.getSubtitle();
 
@@ -262,6 +282,58 @@ public final class SessionImpl implements Session {
             currentActionBar = pendingActionBar;
             audience.sendActionBar(currentActionBar);
         }
+    }
+
+    private Component createActionBar(Component value) {
+        TextComponent.Builder builder = Component.text();
+        builder.append(value);
+
+        boolean sneaking = player.isSneaking();
+        boolean offerSneaking = false;
+        EnumSet<ClickContext.Type> seen = EnumSet.noneOf(ClickContext.Type.class);
+        for (Input input : inputs) {
+            if (input.requireSneak() && !sneaking) {
+                offerSneaking = true;
+                continue;
+            }
+            if (!input.allowSneak() && sneaking) {
+                continue;
+            }
+
+            ClickContext.Type clickType = input.clickType();
+            if (seen.add(clickType)) {
+                builder.append(createInput(createKey(clickType), input.name(), input.style()));
+            }
+        }
+
+        if (offerSneaking) {
+            builder.append(createInput(Component.translatable("key.sneak"), Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
+        }
+
+        return builder.build();
+    }
+
+    private Component createInput(Component key, Component input, Style style) {
+        TextComponent.Builder builder = Component.text();
+        builder.append(Component.text("   ["));
+        builder.append(key);
+        builder.append(Component.text("] "));
+        builder.append(input);
+        builder.style(style);
+        return builder.build();
+    }
+
+    private Component createKey(ClickContext.Type type) {
+        if (type == ClickContext.Type.RIGHT_CLICK) {
+            return Component.keybind("key.use");
+        } else if (type == ClickContext.Type.LEFT_CLICK) {
+            return Component.keybind("key.attack");
+        } else if (type == ClickContext.Type.SWAP_HANDS) {
+            if (swapHandItemsCapability != null) {
+                return swapHandItemsCapability.key();
+            }
+        }
+        return Component.empty();
     }
 
     void stop() {

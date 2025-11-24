@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.AddContext;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
@@ -24,6 +23,8 @@ import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPartButton;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButton;
+import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
@@ -45,6 +46,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
     private final PropertyContainer container;
     private final Component name;
+    private final boolean allowMenu;
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
@@ -54,6 +56,7 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
         this.element = element;
         this.container = session.properties(element);
         this.name = Message.component("easyarmorstands.node.select-bone");
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
             ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part, element);
@@ -78,6 +81,10 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
             updateSkeleton(skeleton);
         }
         context.setActionBar(name);
+        if (allowMenu) {
+            context.addInput(new OpenElementMenuInput(session, element));
+        }
+        context.addInput(new ReturnInput(session));
     }
 
     @Override
@@ -159,16 +166,6 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
         if (skeleton != null) {
             skeleton.remove();
         }
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        Player player = session.player();
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
-            return true;
-        }
-        return super.onClick(context);
     }
 
     @Override

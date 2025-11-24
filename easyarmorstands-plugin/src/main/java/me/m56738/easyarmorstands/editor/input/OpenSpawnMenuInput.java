@@ -1,0 +1,47 @@
+package me.m56738.easyarmorstands.editor.input;
+
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Input;
+import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
+import org.jetbrains.annotations.NotNull;
+
+public class OpenSpawnMenuInput implements Input {
+    private static final Component NAME = Component.translatable("easyarmorstands.input.spawn");
+    private static final Style STYLE = Style.style(NamedTextColor.YELLOW);
+    private final Session session;
+
+    public OpenSpawnMenuInput(Session session) {
+        this.session = session;
+    }
+
+    @Override
+    public ClickContext.@NotNull Type clickType() {
+        return ClickContext.Type.SWAP_HANDS;
+    }
+
+    @Override
+    public @NotNull Component name() {
+        return NAME;
+    }
+
+    @Override
+    public @NotNull Style style() {
+        return STYLE;
+    }
+
+    @Override
+    public boolean allowSneak() {
+        return false;
+    }
+
+    @Override
+    public void execute(@NotNull ClickContext context) {
+        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
+        session.player().openInventory(menu.getInventory());
+    }
+}

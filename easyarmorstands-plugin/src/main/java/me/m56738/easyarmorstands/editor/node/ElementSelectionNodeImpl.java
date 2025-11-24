@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
@@ -14,12 +13,20 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.editor.input.OpenSpawnMenuInput;
+import me.m56738.easyarmorstands.editor.input.selection.AddElementToGroupInput;
+import me.m56738.easyarmorstands.editor.input.selection.ClearGroupSelectionInput;
+import me.m56738.easyarmorstands.editor.input.selection.RemoveElementFromGroupInput;
+import me.m56738.easyarmorstands.editor.input.selection.SelectElementInput;
+import me.m56738.easyarmorstands.editor.input.selection.SelectGroupInput;
+import me.m56738.easyarmorstands.editor.input.selection.box.CancelBoxSelectionInput;
+import me.m56738.easyarmorstands.editor.input.selection.box.ConfirmBoxSelectionInput;
+import me.m56738.easyarmorstands.editor.input.selection.box.StartBoxSelectionInput;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.lib.joml.Vector3d;
@@ -28,8 +35,6 @@ import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -43,7 +48,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class ElementSelectionNodeImpl extends MenuNode implements ElementSelectionNode {
     private final Session session;
@@ -55,6 +59,9 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
     private final Vector3d selectionBoxOrigin = new Vector3d();
     private final double selectionCursorOffset = 2.0;
     private final BoundingBoxParticle selectionBoxParticle;
+    private final OpenSpawnMenuInput openSpawnMenuInput;
+    private final boolean allowGroups;
+    private final boolean allowSpawn;
     private BoundingBox selectionBox;
     private boolean selectionBoxEditing;
     private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
@@ -68,6 +75,9 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         this.session = session;
         this.name = Message.component("easyarmorstands.node.select-entity");
         this.selectionBoxParticle = session.particleProvider().createAxisAlignedBox();
+        this.openSpawnMenuInput = new OpenSpawnMenuInput(session);
+        this.allowGroups = session.player().hasPermission(Permissions.GROUP);
+        this.allowSpawn = session.player().hasPermission(Permissions.SPAWN);
     }
 
     @Override
@@ -95,8 +105,8 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         return Collections.unmodifiableSet(new HashSet<>(sources));
     }
 
-    private void startBoxSelection(Vector3dc origin) {
-        selectionBoxOrigin.set(origin);
+    public void startBoxSelection(EyeRay eyeRay) {
+        selectionBoxOrigin.set(eyeRay.point(selectionCursorOffset));
         if (selectionBox != null) {
             session.removeParticle(selectionBoxParticle);
         }
@@ -107,7 +117,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         session.addParticle(selectionBoxParticle);
     }
 
-    private void finishBoxSelection() {
+    public void finishBoxSelection() {
         selectionBoxEditing = false;
         groupMembers.putAll(selectionBoxMembers);
         selectionBoxMembers.clear();
@@ -115,7 +125,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         // keep box visible
     }
 
-    private void cancelBoxSelection() {
+    public void cancelBoxSelection() {
         if (selectionBox == null) {
             return;
         }
@@ -123,6 +133,18 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         selectionBox = null;
         session.removeParticle(selectionBoxParticle);
         selectionBoxMembers.clear();
+    }
+
+    public void clearGroupSelection() {
+        groupMembers.clear();
+    }
+
+    public void addToGroup(ElementDiscoveryEntry discoveryEntry, SelectableElement element) {
+        groupMembers.put(discoveryEntry, element);
+    }
+
+    public void removeFromGroup(ElementDiscoveryEntry discoveryEntry, SelectableElement element) {
+        groupMembers.remove(discoveryEntry, element);
     }
 
     private BoundingBox getDiscoveryBox(EyeRay eyeRay) {
@@ -198,9 +220,29 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
             }
         }
 
+        groupMembers.values().removeIf(e -> !e.isValid());
+
+        if (selectionBoxEditing) {
+            context.addInput(new ConfirmBoxSelectionInput(this));
+        }
+        if (!groupMembers.isEmpty()) {
+            context.addInput(new SelectGroupInput(session, groupMembers.values()));
+        }
+
         super.onUpdate(context);
 
-        groupMembers.values().removeIf(e -> !e.isValid());
+        if (selectionBox != null) {
+            context.addInput(new CancelBoxSelectionInput(this));
+        }
+        if (!groupMembers.isEmpty()) {
+            context.addInput(new ClearGroupSelectionInput(this));
+        }
+        if (selectionBox == null && allowGroups) {
+            context.addInput(new StartBoxSelectionInput(this));
+        }
+        if (groupMembers.isEmpty() && selectionBox == null && allowSpawn) {
+            context.addInput(openSpawnMenuInput);
+        }
 
         int groupSize = groupMembers.size() + selectionBoxMembers.size();
         if (groupSize == 0) {
@@ -222,14 +264,6 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
 
     private boolean isButtonLimitReached() {
         return buttonLimit > 0 && buttonCount >= buttonLimit;
-    }
-
-    private SelectableElement getElement(ElementDiscoveryEntry entry) {
-        ElementEntry elementEntry = entries.get(entry);
-        if (elementEntry == null || elementEntry.button == null) {
-            return entry.getElement();
-        }
-        return elementEntry.button.element;
     }
 
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
@@ -255,89 +289,6 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         entries.clear();
         buttonCount = 0;
         cancelBoxSelection();
-    }
-
-    private Consumer<Vector3dc> getEntityClickHandler(Entity entity) {
-        for (ElementDiscoverySource source : sources) {
-            if (source instanceof EntityElementDiscoverySource) {
-                ElementDiscoveryEntry entry = ((EntityElementDiscoverySource) source).getEntry(entity);
-                SelectableElement element = getElement(entry);
-                if (element != null) {
-                    return cursor -> onClickElement(entry, element, cursor);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        Player player = session.player();
-        if (context.type() == ClickContext.Type.RIGHT_CLICK && selectionBoxEditing) {
-            finishBoxSelection();
-            return true;
-        }
-
-        if (context.type() == ClickContext.Type.RIGHT_CLICK && !player.isSneaking()) {
-            if (!groupMembers.isEmpty()) {
-                // finish group selection
-                int groupSize = groupMembers.size();
-                if (groupSize > 1) {
-                    Group group = new Group(session);
-                    for (SelectableElement element : groupMembers.values()) {
-                        group.addMember(element);
-                    }
-                    session.pushNode(new GroupRootNode(group));
-                } else {
-                    SelectableElement element = groupMembers.values().iterator().next();
-                    session.pushNode(element.createNode(session));
-                }
-                return true;
-            }
-        }
-
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            if (selectionBox != null) {
-                cancelBoxSelection();
-                return true;
-            }
-
-            if (!groupMembers.isEmpty()) {
-                // cancel group selection
-                groupMembers.clear();
-                return true;
-            }
-
-            if (player.hasPermission(Permissions.SPAWN)) {
-                // open spawn menu
-                Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(player);
-                player.openInventory(menu.getInventory());
-                return true;
-            }
-        }
-
-        if (super.onClick(context)) {
-            return true;
-        }
-
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            Entity entity = context.entity();
-            if (entity != null) {
-                Consumer<Vector3dc> entityClickHandler = getEntityClickHandler(entity);
-                if (entityClickHandler != null) {
-                    entityClickHandler.accept(null);
-                    return true;
-                }
-            }
-
-            if (player.isSneaking() && !selectionBoxEditing && player.hasPermission(Permissions.GROUP)) {
-                // start box selection
-                startBoxSelection(context.eyeRay().point(selectionCursorOffset));
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -380,27 +331,6 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         return true;
     }
 
-    private void onClickElement(ElementDiscoveryEntry entry, SelectableElement element, @Nullable Vector3dc cursor) {
-        if (groupMembers.remove(entry) != null) {
-            return;
-        }
-
-        ChangeContext context = new EasPlayer(session.player());
-        if (!context.canEditElement(element)) {
-            return;
-        }
-
-        if (session.player().isSneaking() && session.player().hasPermission(Permissions.GROUP)) {
-            if (groupMembers.size() < groupLimit) {
-                groupMembers.put(entry, element);
-            }
-            return;
-        }
-
-        Node node = element.createNode(session);
-        session.pushNode(node, cursor);
-    }
-
     private static class ElementEntry {
         private static final ElementEntry EMPTY = new ElementEntry(null);
 
@@ -415,11 +345,17 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         private final ElementDiscoveryEntry entry;
         private final SelectableElement element;
         private final Button button;
+        private final SelectElementInput selectInput;
+        private final AddElementToGroupInput addToGroupInput;
+        private final RemoveElementFromGroupInput removeFromGroupInput;
 
         private ElementButton(ElementDiscoveryEntry entry, Session session, SelectableElement element) {
             this.entry = entry;
             this.element = element;
             this.button = element.createButton(session);
+            this.selectInput = new SelectElementInput(session, element);
+            this.addToGroupInput = new AddElementToGroupInput(ElementSelectionNodeImpl.this, entry, element);
+            this.removeFromGroupInput = new RemoveElementFromGroupInput(ElementSelectionNodeImpl.this, entry, element);
         }
 
         @Override
@@ -428,8 +364,17 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         }
 
         @Override
-        public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-            onClickElement(entry, element, cursor);
+        public void onUpdate(@NotNull Session session, @NotNull UpdateContext context) {
+            context.addInput(selectInput);
+            if (allowGroups && selectionBox == null) {
+                if (!groupMembers.containsKey(entry)) {
+                    if (groupMembers.size() < groupLimit) {
+                        context.addInput(addToGroupInput);
+                    }
+                } else {
+                    context.addInput(removeFromGroupInput);
+                }
+            }
         }
 
         @Override

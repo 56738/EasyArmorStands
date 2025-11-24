@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,12 @@ public interface MenuButton {
 
     @NotNull Component getName();
 
-    void onClick(@NotNull Session session, @Nullable Vector3dc cursor);
+    default void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
+    }
+
+    default void onUpdate(@NotNull Session session, @NotNull UpdateContext context) {
+        context.addInput(new MenuButtonInput(session, this));
+    }
 
     default boolean isAlwaysFocused() {
         return false;
