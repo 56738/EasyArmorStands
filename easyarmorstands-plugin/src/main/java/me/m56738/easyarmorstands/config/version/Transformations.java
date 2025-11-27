@@ -19,6 +19,9 @@ public class Transformations {
                 .addVersion(2, ConfigurationTransformation.builder()
                         .addAction(path("editor", "tool", "description"), TransformAction.remove())
                         .build())
+                .addVersion(3, ConfigurationTransformation.builder()
+                        .addAction(path("editor", "input-hints"), (p, v) -> new Object[]{"editor", "input-hints", "enabled"})
+                        .build())
                 .build();
     }
 

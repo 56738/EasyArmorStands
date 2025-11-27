@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.transformation.ConfigurationTransformation;
 import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
+import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -25,9 +26,23 @@ public class GameVersionTransformation implements ConfigurationTransformation {
 
     public static GameVersionTransformation config() {
         List<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(new Version(1, 12, 0), ConfigurationTransformation.builder()
+                .addAction(path("editor", "input-hints", "left-click-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.attack>"))
+                .addAction(path("editor", "input-hints", "right-click-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.use>"))
+                .addAction(path("editor", "input-hints", "sneak-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<lang:key.sneak>"))
+                .addAction(path("editor", "input-hints", "swap-hands-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.swapHands>"))
+                .build()));
         entries.add(new Entry(new Version(1, 13, 0), ConfigurationTransformation.builder()
                 .addAction(path("editor", "menu", "background", "config", "item"),
                         new ItemStackTransformAction_v1_13())
+                .build()));
+        entries.add(new Entry(new Version(1, 16, 0), ConfigurationTransformation.builder()
+                .addAction(path("editor", "input-hints", "swap-hands-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.swapOffhand>"))
                 .build()));
         return new GameVersionTransformation(entries);
     }
