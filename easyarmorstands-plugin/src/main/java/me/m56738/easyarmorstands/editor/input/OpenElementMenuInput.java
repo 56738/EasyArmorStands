@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.editor.input;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
@@ -17,7 +18,7 @@ public class OpenElementMenuInput implements Input {
     private final Session session;
     private final MenuElement element;
     private final ClickContext.Type clickType;
-    private final boolean requireSneak;
+    private final Category category;
 
     public OpenElementMenuInput(Session session, MenuElement element) {
         this.session = session;
@@ -25,7 +26,7 @@ public class OpenElementMenuInput implements Input {
 
         boolean hasSwapHands = EasyArmorStandsPlugin.getInstance().getCapability(SwapHandItemsCapability.class) != null;
         this.clickType = hasSwapHands ? ClickContext.Type.SWAP_HANDS : ClickContext.Type.LEFT_CLICK;
-        this.requireSneak = !hasSwapHands;
+        this.category = hasSwapHands ? Category.PRIMARY : Category.SECONDARY;
     }
 
     @Override
@@ -34,13 +35,8 @@ public class OpenElementMenuInput implements Input {
     }
 
     @Override
-    public boolean requireSneak() {
-        return requireSneak;
-    }
-
-    @Override
-    public boolean allowSneak() {
-        return requireSneak;
+    public Category category() {
+        return category;
     }
 
     @Override

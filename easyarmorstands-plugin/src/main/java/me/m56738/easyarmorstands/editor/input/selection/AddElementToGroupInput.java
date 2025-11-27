@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.editor.input.selection;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
@@ -39,8 +40,8 @@ public class AddElementToGroupInput implements Input {
     }
 
     @Override
-    public boolean requireSneak() {
-        return true;
+    public Category category() {
+        return Category.SECONDARY;
     }
 
     @Override

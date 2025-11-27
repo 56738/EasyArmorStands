@@ -74,7 +74,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
             return false;
         }
         if (!suppressClick.containsKey(player)) {
-            session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.LEFT_CLICK, entity, block));
+            session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.LEFT_CLICK, entity, block));
         }
         return true;
     }
@@ -95,7 +95,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         SessionImpl session = manager.getSession(player);
         if (session != null) {
             if (!suppressClick.containsKey(player)) {
-                session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.RIGHT_CLICK, entity, block));
+                session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.RIGHT_CLICK, entity, block));
             }
             return true;
         }
@@ -125,7 +125,7 @@ public class SessionListener implements Listener, SwapHandItemsListener {
         if (session == null) {
             return false;
         }
-        session.handleClick(new ClickContextImpl(session.eyeRay(), player.isSneaking(), ClickContext.Type.SWAP_HANDS, null, null));
+        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
         return true;
     }
 

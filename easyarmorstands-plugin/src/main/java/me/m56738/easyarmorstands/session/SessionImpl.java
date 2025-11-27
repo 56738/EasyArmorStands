@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -13,11 +14,9 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
-import me.m56738.easyarmorstands.config.version.override.BeforeMinorVersionCondition;
-import me.m56738.easyarmorstands.config.version.override.VersionOverrideCondition;
+import me.m56738.easyarmorstands.config.InputHintsConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
@@ -31,6 +30,9 @@ import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.Tag;
+import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import me.m56738.easyarmorstands.lib.kyori.adventure.title.Title;
 import me.m56738.easyarmorstands.lib.kyori.adventure.title.TitlePart;
 import me.m56738.easyarmorstands.particle.EditorParticle;
@@ -61,12 +63,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class SessionImpl implements Session {
-    private static final VersionOverrideCondition BEFORE_1_12 = new BeforeMinorVersionCondition(12);
-    private static final VersionOverrideCondition BEFORE_1_16 = new BeforeMinorVersionCondition(16);
-    private static final Component LEFT_KEY = createLeftKey();
-    private static final Component RIGHT_KEY = createRightKey();
-    private static final Component SWAP_HANDS_KEY = createSwapHandsKey();
-    private static final Component SNEAK_KEY = createSneakKey();
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Node> nodeStack = new LinkedList<>();
     private final Player player;
@@ -78,7 +74,6 @@ public final class SessionImpl implements Session {
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private final List<Input> inputs = new ArrayList<>();
-    private final SwapHandItemsCapability swapHandItemsCapability = EasyArmorStandsPlugin.getInstance().getCapability(SwapHandItemsCapability.class);
     private int clickTicks = 5;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
@@ -86,6 +81,8 @@ public final class SessionImpl implements Session {
     private Component currentActionBar = Component.empty();
     private int overlayTicks;
     private boolean toolRequired;
+    private Category inputCategory = Category.PRIMARY;
+    private boolean hasSecondaryInputs;
 
     public SessionImpl(EasPlayer context) {
         this.player = context.get();
@@ -200,14 +197,18 @@ public final class SessionImpl implements Session {
             clickTicks = 5;
         }
 
+        if (node.onClick(context)) {
+            return true;
+        }
+
         for (Input input : inputs) {
-            if (context.matchesInput(input)) {
+            if (input.category() == inputCategory && input.clickType() == context.type()) {
                 input.execute(context);
                 return true;
             }
         }
 
-        return node.onClick(context);
+        return false;
     }
 
     @Override
@@ -256,8 +257,21 @@ public final class SessionImpl implements Session {
             particle.updateGizmo();
         }
 
-        this.inputs.clear();
-        this.inputs.addAll(context.getInputs());
+        inputs.clear();
+        inputs.addAll(context.getInputs());
+
+        hasSecondaryInputs = false;
+        for (Input input : inputs) {
+            if (input.category() == Category.SECONDARY) {
+                hasSecondaryInputs = true;
+                break;
+            }
+        }
+
+        inputCategory = Category.PRIMARY;
+        if (player.isSneaking() && hasSecondaryInputs) {
+            inputCategory = Category.SECONDARY;
+        }
 
         updateOverlay(context);
 
@@ -293,55 +307,48 @@ public final class SessionImpl implements Session {
     }
 
     private Component createActionBar(Component value) {
-        if (!EasyArmorStandsPlugin.getInstance().getConfiguration().editor.inputHints) {
+        InputHintsConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.inputHints;
+        if (!config.enabled) {
             return value;
         }
 
         TextComponent.Builder builder = Component.text();
         builder.append(value);
 
-        boolean sneaking = player.isSneaking();
-        boolean offerSneaking = false;
         EnumSet<ClickContext.Type> seen = EnumSet.noneOf(ClickContext.Type.class);
         for (Input input : inputs) {
-            if (input.requireSneak() && !sneaking) {
-                offerSneaking = true;
-                continue;
-            }
-            if (!input.allowSneak() && sneaking) {
+            if (input.category() != inputCategory) {
                 continue;
             }
 
             ClickContext.Type clickType = input.clickType();
             if (seen.add(clickType)) {
-                builder.append(createInput(getKey(clickType), input.name(), input.style()));
+                builder.append(createInput(config, getKey(config, clickType), input.name(), input.style()));
             }
         }
 
-        if (offerSneaking) {
-            builder.append(createInput(SNEAK_KEY, Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
+        if (inputCategory == Category.PRIMARY && hasSecondaryInputs) {
+            builder.append(createInput(config, config.sneakKey, Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
         }
 
         return builder.build();
     }
 
-    private Component createInput(Component key, Component input, Style style) {
-        TextComponent.Builder builder = Component.text();
-        builder.append(Component.text("   ["));
-        builder.append(key);
-        builder.append(Component.text("] "));
-        builder.append(input);
-        builder.style(style);
-        return builder.build();
+    private Component createInput(InputHintsConfig config, Component key, Component input, Style style) {
+        TagResolver resolver = TagResolver.builder()
+                .tag("key", Tag.selfClosingInserting(key))
+                .tag("input", Tag.selfClosingInserting(input))
+                .build();
+        return MiniMessage.miniMessage().deserialize(config.format, resolver).applyFallbackStyle(style);
     }
 
-    private Component getKey(ClickContext.Type type) {
+    private Component getKey(InputHintsConfig config, ClickContext.Type type) {
         if (type == ClickContext.Type.LEFT_CLICK) {
-            return LEFT_KEY;
+            return config.leftClickKey;
         } else if (type == ClickContext.Type.RIGHT_CLICK) {
-            return RIGHT_KEY;
+            return config.rightClickKey;
         } else if (type == ClickContext.Type.SWAP_HANDS) {
-            return SWAP_HANDS_KEY;
+            return config.swapHandsKey;
         }
         return Component.empty();
     }
@@ -462,39 +469,5 @@ public final class SessionImpl implements Session {
 
     public void setToolRequired(boolean toolRequired) {
         this.toolRequired = toolRequired;
-    }
-
-    private static Component createLeftKey() {
-        if (BEFORE_1_12.testCondition()) {
-            return Component.translatable("easyarmorstands.input.key.left-mouse");
-        } else {
-            return Component.keybind("key.attack");
-        }
-    }
-
-    private static Component createRightKey() {
-        if (BEFORE_1_12.testCondition()) {
-            return Component.translatable("easyarmorstands.input.key.right-mouse");
-        } else {
-            return Component.keybind("key.use");
-        }
-    }
-
-    private static Component createSwapHandsKey() {
-        if (BEFORE_1_12.testCondition()) {
-            return Component.text("F");
-        } else if (BEFORE_1_16.testCondition()) {
-            return Component.keybind("key.swapHands");
-        } else {
-            return Component.keybind("key.swapOffhand");
-        }
-    }
-
-    private static Component createSneakKey() {
-        if (BEFORE_1_12.testCondition()) {
-            return Component.translatable("easyarmorstands.input.key.sneak");
-        } else {
-            return Component.translatable("key.sneak");
-        }
     }
 }

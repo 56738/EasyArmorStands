@@ -39,11 +39,6 @@ public class SelectElementInput implements Input {
     }
 
     @Override
-    public boolean allowSneak() {
-        return false;
-    }
-
-    @Override
     public void execute(@NotNull ClickContext context) {
         ChangeContext changeContext = new EasPlayer(session.player());
         if (!changeContext.canEditElement(element)) {

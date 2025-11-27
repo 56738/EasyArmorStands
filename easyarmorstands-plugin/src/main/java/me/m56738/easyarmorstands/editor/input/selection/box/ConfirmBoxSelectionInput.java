@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfirmBoxSelectionInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.select.box.confirm");
-    private static final Style STYLE = Style.style(NamedTextColor.BLUE);
+    private static final Style STYLE = Style.style(NamedTextColor.AQUA);
     private final ElementSelectionNodeImpl node;
 
     public ConfirmBoxSelectionInput(ElementSelectionNodeImpl node) {

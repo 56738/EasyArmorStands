@@ -40,11 +40,6 @@ public class SelectGroupInput implements Input {
     }
 
     @Override
-    public boolean allowSneak() {
-        return false;
-    }
-
-    @Override
     public void execute(@NotNull ClickContext context) {
         int size = elements.size();
         if (size > 1) {

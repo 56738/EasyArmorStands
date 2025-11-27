@@ -28,21 +28,14 @@ public interface Input {
     ClickContext.@NotNull Type clickType();
 
     /**
-     * Whether this input can only be triggered while the player is sneaking.
+     * The category of this input.
+     * <p>
+     * Primary inputs are visible by default. If the player sneaks, secondary inputs will be displayed instead.
      *
-     * @return true if sneaking is required
+     * @return the category
      */
-    default boolean requireSneak() {
-        return false;
-    }
-
-    /**
-     * Whether this input may be triggered while the player is sneaking.
-     *
-     * @return false if sneaking should prevent triggering this input
-     */
-    default boolean allowSneak() {
-        return true;
+    default Category category() {
+        return Category.PRIMARY;
     }
 
     /**

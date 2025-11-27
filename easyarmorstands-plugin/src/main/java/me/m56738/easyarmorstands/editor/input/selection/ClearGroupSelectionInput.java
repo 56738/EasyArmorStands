@@ -33,11 +33,6 @@ public class ClearGroupSelectionInput implements Input {
     }
 
     @Override
-    public boolean allowSneak() {
-        return false;
-    }
-
-    @Override
     public void execute(@NotNull ClickContext context) {
         node.clearGroupSelection();
     }

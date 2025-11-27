@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.editor.input;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
@@ -33,8 +34,8 @@ public class SwitchToolModeInput implements Input {
     }
 
     @Override
-    public boolean requireSneak() {
-        return true;
+    public Category category() {
+        return Category.SECONDARY;
     }
 
     @Override
