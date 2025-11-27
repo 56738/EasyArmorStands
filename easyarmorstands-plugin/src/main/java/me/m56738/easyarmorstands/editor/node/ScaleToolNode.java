@@ -64,10 +64,6 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        if (canActivate) {
-            context.addInput(new ActivateInput(this));
-        }
-
         if (hasManualInput) {
             super.onUpdate(context);
             return;
@@ -87,6 +83,10 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
             cursorLineParticle.setColor(canActivate ? ParticleColor.GRAY : ParticleColor.RED);
         }
 
+        if (canActivate) {
+            context.addInput(new ActivateInput(this));
+        }
+
         cursorLineParticle.setFromTo(position, delta.add(position));
         super.onUpdate(context);
     }
@@ -102,6 +102,11 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
             return;
         }
         super.updateActionBar(context);
+    }
+
+    @Override
+    protected boolean canConfirm() {
+        return active;
     }
 
     @Override

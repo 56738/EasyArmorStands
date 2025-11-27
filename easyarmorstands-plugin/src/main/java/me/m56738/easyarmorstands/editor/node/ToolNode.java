@@ -30,7 +30,9 @@ public abstract class ToolNode implements Node {
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         updateActionBar(context);
-        context.addInput(new ConfirmInput(session));
+        if (canConfirm()) {
+            context.addInput(new ConfirmInput(session));
+        }
         context.addInput(new AbortInput(session, toolSession));
     }
 
@@ -43,6 +45,10 @@ public abstract class ToolNode implements Node {
             builder.append(state);
         }
         context.setActionBar(builder);
+    }
+
+    protected boolean canConfirm() {
+        return true;
     }
 
     @Override
