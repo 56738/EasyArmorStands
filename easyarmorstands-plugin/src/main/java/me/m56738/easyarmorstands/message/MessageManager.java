@@ -75,8 +75,9 @@ public class MessageManager {
 
         // Load included default locales
         try {
-            loadDefaultLocale(Locale.US);
-            loadDefaultLocale(Locale.GERMANY);
+            loadDefaultLocale(new Locale("en", "us"));
+            loadDefaultLocale(new Locale("de", "de"));
+            loadDefaultLocale(new Locale("ru", "ru"));
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load default messages", e);
         }
