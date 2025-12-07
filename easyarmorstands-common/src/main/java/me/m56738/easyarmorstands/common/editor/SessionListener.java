@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.common.editor;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.platform.entity.Entity;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Block;
@@ -57,18 +56,6 @@ public class SessionListener {
 
     public boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity) {
         return handleClick(player, type, entity, null);
-    }
-
-    public boolean handleDrop(Player player) {
-        SessionImpl session = eas.getSessionManager().getSession(player);
-        if (session != null) {
-            ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
-            if (node != null && node != session.getNode()) {
-                session.returnToNode(node);
-                return true;
-            }
-        }
-        return false;
     }
 
     public void handleQuit(Player player) {

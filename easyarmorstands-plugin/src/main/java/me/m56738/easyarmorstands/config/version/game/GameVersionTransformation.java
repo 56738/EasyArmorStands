@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.config.version.game;
 
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.config.version.Version;
 import me.m56738.easyarmorstands.config.version.game.v1_13.ItemStackTransformAction_v1_13;
 import org.bukkit.Bukkit;
@@ -25,9 +26,23 @@ public class GameVersionTransformation implements ConfigurationTransformation {
 
     public static GameVersionTransformation config() {
         List<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(new Version(1, 12, 0), ConfigurationTransformation.builder()
+                .addAction(path("editor", "input-hints", "left-click-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.attack>"))
+                .addAction(path("editor", "input-hints", "right-click-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.use>"))
+                .addAction(path("editor", "input-hints", "sneak-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<lang:key.sneak>"))
+                .addAction(path("editor", "input-hints", "swap-hands-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.swapHands>"))
+                .build()));
         entries.add(new Entry(new Version(1, 13, 0), ConfigurationTransformation.builder()
                 .addAction(path("editor", "menu", "background", "config", "item"),
                         new ItemStackTransformAction_v1_13())
+                .build()));
+        entries.add(new Entry(new Version(1, 16, 0), ConfigurationTransformation.builder()
+                .addAction(path("editor", "input-hints", "swap-hands-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.swapOffhand>"))
                 .build()));
         return new GameVersionTransformation(entries);
     }
@@ -42,6 +57,10 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                 .addAction(path("easyarmorstands:armor_stand/marker", "button"),
                         new ItemStackTransformAction_v1_13())
                 .addAction(path("easyarmorstands:armor_stand/size", "button"),
+                        new ItemStackTransformAction_v1_13())
+                .addAction(path("easyarmorstands:mannequin/part/cape/visible", "button"),
+                        new ItemStackTransformAction_v1_13())
+                .addAction(path("easyarmorstands:mannequin/profile", "button"),
                         new ItemStackTransformAction_v1_13())
                 .build()));
         return new GameVersionTransformation(entries);
@@ -127,6 +146,8 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                 .addAction(path("slots", "easyarmorstands:armor_stand/part/head", "config", "item"),
                         new ItemStackTransformAction_v1_13())
                 .addAction(path("slots", "easyarmorstands:headdatabase", "config", "item"),
+                        new ItemStackTransformAction_v1_13())
+                .addAction(path("slots", "easyarmorstands:spawn/mannequin", "config", "item"),
                         new ItemStackTransformAction_v1_13())
                 .build()));
         return new GameVersionTransformation(entries);

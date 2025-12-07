@@ -182,9 +182,6 @@ public class PaperSessionListener implements Listener {
     public void onDrop(PlayerDropItemEvent event) {
         Player player = platform.getPlayer(event.getPlayer());
         sessionListener.suppressClick(player);
-        if (sessionListener.handleDrop(player)) {
-            event.setCancelled(true);
-        }
         Bukkit.getScheduler().runTask(plugin, () -> sessionListener.updateHeldItem(player));
     }
 

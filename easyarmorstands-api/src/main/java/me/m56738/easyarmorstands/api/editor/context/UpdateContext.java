@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -20,4 +21,6 @@ public interface UpdateContext {
     void setTitle(@NotNull ComponentLike title);
 
     void setSubtitle(@NotNull ComponentLike subtitle);
+
+    void addInput(@NotNull Input input);
 }

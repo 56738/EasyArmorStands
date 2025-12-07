@@ -2,14 +2,19 @@ package me.m56738.easyarmorstands.common.editor.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.common.editor.SessionImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2dc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UpdateContextImpl implements UpdateContext {
     private final @NotNull SessionImpl session;
+    private final @NotNull List<@NotNull Input> inputs = new ArrayList<>();
     private EyeRay eyeRay;
     private @NotNull Component actionBar = Component.empty();
     private @NotNull Component title = Component.empty();
@@ -57,5 +62,14 @@ public class UpdateContextImpl implements UpdateContext {
     @Override
     public void setSubtitle(@NotNull ComponentLike subtitle) {
         this.subtitle = subtitle.asComponent();
+    }
+
+    @Override
+    public void addInput(@NotNull Input input) {
+        inputs.add(input);
+    }
+
+    public @NotNull List<@NotNull Input> getInputs() {
+        return inputs;
     }
 }

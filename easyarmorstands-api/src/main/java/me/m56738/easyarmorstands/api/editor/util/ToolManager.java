@@ -36,6 +36,10 @@ public class ToolManager {
         setMode(ToolMode.LOCAL);
     }
 
+    public Session getSession() {
+        return session;
+    }
+
     public boolean hasMode(ToolMode mode) {
         List<MenuButton> buttons = new ArrayList<>();
         collectButtons(mode, buttons);

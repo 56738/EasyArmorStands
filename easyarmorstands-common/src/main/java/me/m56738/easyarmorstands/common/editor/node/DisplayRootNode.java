@@ -14,6 +14,8 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.common.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.element.DisplayElement;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
@@ -29,6 +31,7 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
     private final @Nullable Property<BlockData> blockDataProperty;
     private final ToolManager toolManager;
     private final ToolModeSwitcher toolModeSwitcher;
+    private final boolean allowMenu;
 
     public DisplayRootNode(Session session, DisplayElement element) {
         super(session, element);
@@ -38,6 +41,7 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
         this.blockDataProperty = getProperties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
         this.toolManager = new ToolManager(session, this, element.getTools(getContext()));
         this.toolModeSwitcher = new ToolModeSwitcher(this.toolManager);
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
     }
 
     @Override
@@ -58,17 +62,18 @@ public class DisplayRootNode extends DisplayNode implements ElementNode, Resetta
                 }
             }
         }
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            element.openMenu(player);
-            return true;
-        }
-        return toolModeSwitcher.onClick(context);
+        return false;
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolModeSwitcher.getActionBar());
+        toolModeSwitcher.onUpdate(context);
+        if (allowMenu) {
+            context.addInput(new OpenElementMenuInput(session, element));
+        }
+        super.onUpdate(context);
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

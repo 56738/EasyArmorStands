@@ -31,6 +31,7 @@ public class ItemStackTransformAction_v1_13 implements TransformAction {
     };
 
     private static final List<String> COLORED_TYPES = Arrays.asList(
+            "banner",
             "wool",
             "concrete",
             "stained_glass",

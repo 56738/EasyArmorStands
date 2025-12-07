@@ -41,4 +41,13 @@ slots:
         type: name_tag
     row: 0
     type: easyarmorstands:spawn/text_display
+  easyarmorstands:spawn/mannequin:
+    column: 5
+    config:
+      item:
+        data: 3
+        name: <type>
+        type: skull_item
+    row: 0
+    type: easyarmorstands:spawn/mannequin
 title: <lang:easyarmorstands.menu.spawn.title>

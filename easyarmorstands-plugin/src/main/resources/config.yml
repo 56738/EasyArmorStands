@@ -2,9 +2,11 @@
 # https://github.com/56738/EasyArmorStands/wiki/Configuration
 #
 # Do not edit the _version section, this is used to automatically update your config.
+#
+# Do not add comments to this file, they will be removed when the config is saved.
 
 _version:
-  config: 0
+  config: 3
   game: 1.8.8
 editor:
   button:
@@ -13,6 +15,13 @@ editor:
     threshold: 0.1
   discovery:
     limit: 128
+  input-hints:
+    enabled: true
+    format: '  [<key>] <input>'
+    left-click-key: <lang:easyarmorstands.input.key.left-mouse>
+    right-click-key: <lang:easyarmorstands.input.key.right-mouse>
+    sneak-key: <lang:easyarmorstands.input.key.sneak>
+    swap-hands-key: F
   menu:
     background:
       config:
@@ -31,10 +40,6 @@ editor:
       range: 128.0
     range: 10.0
   tool:
-    description:
-    - <gray><lang:easyarmorstands.hint.select-entity>
-    - <gray><lang:easyarmorstands.hint.spawn-entity>
-    - <gray><lang:easyarmorstands.hint.deselect-entity>
     name: <gold><lang:easyarmorstands.tool-name>
     type: blaze_rod
 integration:

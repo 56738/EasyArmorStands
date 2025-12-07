@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.paper.platform;
 
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.DefaultEntityElement;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
@@ -27,6 +28,7 @@ import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.api.platform.profile.PaperProfile;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
@@ -36,6 +38,7 @@ import me.m56738.easyarmorstands.paper.platform.entity.PaperEntityImpl;
 import me.m56738.easyarmorstands.paper.platform.entity.PaperEntityTypeImpl;
 import me.m56738.easyarmorstands.paper.platform.entity.PaperPlayerImpl;
 import me.m56738.easyarmorstands.paper.platform.inventory.PaperItemImpl;
+import me.m56738.easyarmorstands.paper.platform.profile.PaperProfileImpl;
 import me.m56738.easyarmorstands.paper.platform.world.PaperBlockDataImpl;
 import me.m56738.easyarmorstands.paper.platform.world.PaperBlockImpl;
 import me.m56738.easyarmorstands.paper.platform.world.PaperWorldImpl;
@@ -271,6 +274,11 @@ public class PaperPlatformImpl implements PaperPlatform, CommonPlatform {
     @Override
     public PaperBlockData getBlockData(org.bukkit.block.data.BlockData nativeBlockData) {
         return new PaperBlockDataImpl(this, nativeBlockData);
+    }
+
+    @Override
+    public PaperProfile getProfile(ResolvableProfile nativeProfile) {
+        return new PaperProfileImpl(this, nativeProfile);
     }
 
     private class SpawnedEntityConfigurator implements Consumer<org.bukkit.entity.Entity> {

@@ -74,7 +74,7 @@ permissions:
     - easyarmorstands.select
     - easyarmorstands.snap
   easyarmorstands.creative:
-    description: "Allow spawning and editing armor stands and display entities"
+    description: "Allow spawning and editing armor stands, display entities and mannequins"
     children:
     - easyarmorstands.survival
     - easyarmorstands.clone
@@ -85,10 +85,12 @@ permissions:
     - easyarmorstands.destroy.blockdisplay
     - easyarmorstands.destroy.interaction
     - easyarmorstands.destroy.itemdisplay
+    - easyarmorstands.destroy.mannequin
     - easyarmorstands.destroy.textdisplay
     - easyarmorstands.edit.blockdisplay
     - easyarmorstands.edit.interaction
     - easyarmorstands.edit.itemdisplay
+    - easyarmorstands.edit.mannequin
     - easyarmorstands.edit.textdisplay
     - easyarmorstands.position
     - easyarmorstands.property.ai
@@ -113,6 +115,17 @@ permissions:
     - easyarmorstands.property.glow
     - easyarmorstands.property.interaction.responsive
     - easyarmorstands.property.invulnerable
+    - easyarmorstands.property.mannequin.description
+    - easyarmorstands.property.mannequin.immovable
+    - easyarmorstands.property.mannequin.mainhand
+    - easyarmorstands.property.mannequin.part.visible.cape
+    - easyarmorstands.property.mannequin.part.visible.hat
+    - easyarmorstands.property.mannequin.part.visible.jacket
+    - easyarmorstands.property.mannequin.part.visible.pants.left
+    - easyarmorstands.property.mannequin.part.visible.pants.right
+    - easyarmorstands.property.mannequin.part.visible.sleeve.left
+    - easyarmorstands.property.mannequin.part.visible.sleeve.right
+    - easyarmorstands.property.mannequin.profile
     - easyarmorstands.property.name
     - easyarmorstands.property.name.visible
     - easyarmorstands.property.silent
@@ -121,5 +134,6 @@ permissions:
     - easyarmorstands.spawn.blockdisplay
     - easyarmorstands.spawn.interaction
     - easyarmorstands.spawn.itemdisplay
+    - easyarmorstands.spawn.mannequin
     - easyarmorstands.spawn.textdisplay
     - easyarmorstands.undo

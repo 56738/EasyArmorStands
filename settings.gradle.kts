@@ -11,6 +11,7 @@ pluginManagement {
 
 include("easyarmorstands-api")
 include("easyarmorstands-assets")
+include("easyarmorstands-assets")
 include("easyarmorstands-bentobox")
 include("easyarmorstands-common")
 include("easyarmorstands-fabric")

@@ -4,13 +4,14 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
-import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.platform.entity.Player;
 import me.m56738.easyarmorstands.api.platform.world.Block;
 import me.m56738.easyarmorstands.api.platform.world.BlockData;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.common.editor.input.OpenElementMenuInput;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.permission.Permissions;
@@ -20,15 +21,17 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class HologramRootNode extends AbstractElementNode<HologramElement> implements ElementNode {
+public class HologramRootNode extends AbstractElementNode<HologramElement> {
     private final ToolModeSwitcher toolModeSwitcher;
     private final @Nullable Property<BlockData> blockDataProperty;
+    private final boolean allowMenu;
 
     public HologramRootNode(Session session, HologramElement element) {
         super(session, element);
         this.toolModeSwitcher = new ToolModeSwitcher(
                 new ToolManager(session, this, element.getTools(getContext())));
         this.blockDataProperty = getProperties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
+        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
     }
 
     @Override
@@ -49,16 +52,17 @@ public class HologramRootNode extends AbstractElementNode<HologramElement> imple
                 }
             }
         }
-        if (context.type() == ClickContext.Type.LEFT_CLICK && player.hasPermission(Permissions.OPEN)) {
-            getElement().openMenu(player);
-            return true;
-        }
-        return toolModeSwitcher.onClick(context);
+        return false;
     }
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolModeSwitcher.getActionBar());
+        toolModeSwitcher.onUpdate(context);
+        if (allowMenu) {
+            context.addInput(new OpenElementMenuInput(getSession(), getElement()));
+        }
+        super.onUpdate(context);
+        context.addInput(new ReturnInput(getSession()));
     }
 }

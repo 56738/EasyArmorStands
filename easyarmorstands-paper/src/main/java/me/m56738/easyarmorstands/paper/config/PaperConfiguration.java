@@ -57,4 +57,9 @@ public class PaperConfiguration implements Configuration {
     public int getGroupSizeLimit() {
         return 64;
     }
+
+    @Override
+    public boolean isShowInputHints() {
+        return true;
+    }
 }

@@ -20,15 +20,6 @@ If you get stuck, refer to the detailed instructions below.
 
 [![Demo video](https://i.ytimg.com/vi/dQZkB3mez-0/0.jpg)](https://youtu.be/dQZkB3mez-0)
 
-## Controls
-
-* Right-click: Select
-* Left-click: Go back
-* Left-click: Open menu
-* Q: Deselect entity
-* Shift: Disable snapping
-* F: Switch between local/global/scale modes
-
 ## Editing entities
 
 Hold the tool and right-click an entity to select it.
@@ -42,7 +33,7 @@ You can abort your changes and restore the previous position by left-clicking in
 Right-click a circle to use the **Rotate** tool.
 This works just like the Move tool.
 
-Some entities let you switch between local and global mode by pressing F.
+Some entities let you switch between local and global mode.
 Local mode is affected by the rotation, for example, you can use it to move an armor stand along its arms.
 Global mode uses global coordinates.
 
@@ -77,11 +68,7 @@ Format the name using [MiniMessage](https://docs.advntr.dev/minimessage/format.h
 
 ## Display entities
 
-Display entities can be edited just like armor stand bones.
-
-Additionally, they can be scaled.
-Enter the **Scale** mode by right-clicking without looking at anything,
-just like switching between local and global mode.
+Display entities can be moved, rotated and scaled.
 
 Use the menu to place an item into an item display.
 
@@ -117,7 +104,7 @@ After selecting the entities you want to edit, right-click anywhere without hold
 
 <img alt="Menu" src="https://cdn.56738.me/easyarmorstands/menu2.png" width="50%" align="right" />
 
-The menu can be accessed by left-clicking while no bone or tool is selected.
+The menu can be accessed by pressing F.
 Group selections do not support the menu.
 
 On the bottom left, you can edit the entity equipment slots (armor, held items).
@@ -243,16 +230,17 @@ Use `/eas reload` to reload all configuration files.
 
 ## Localization
 
-Please submit translations on [Weblate](https://hosted.weblate.org/projects/easyarmorstands/v3/).
+[![Translation status](https://hosted.weblate.org/widget/easyarmorstands/v3/svg-badge.svg)](https://hosted.weblate.org/engage/easyarmorstands/)
+
+Please submit translations on [Weblate](https://hosted.weblate.org/engage/easyarmorstands/).
+If you would like to start translating to a new language, please ask on Discord.
 
 ### Use your own translations
 
 * Copy the
-  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-plugin/src/main/resources/me/m56738/easyarmorstands/messages.properties)
-  into `plugins/EasyArmorStands/messages_XX.properties`.
-* Replace `XX` with the language, for example: `messages_de.properties`.
+  [default messages](https://raw.githubusercontent.com/56738/EasyArmorStands/main/easyarmorstands-assets/src/main/resources/assets/easyarmorstands/lang/en_us.json)
+  into `plugins/EasyArmorStands/lang/XX_YY.json`.
+* Replace `XX_YY` with the in-game locale code listed in https://minecraft.wiki/w/Language#Languages.
   This makes the file only apply to players with that language.
-* To replace the default messages (sent if no matching `messages_XX.properties` file exists),
-  simply call the file `messages.properties`.
 
 Use `/eas reload` to reload all messages.

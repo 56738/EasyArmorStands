@@ -56,11 +56,6 @@ public class GlobalCommands {
         Player sender = source.source();
         sender.giveItem(platform.createTool());
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
-        sender.sendMessage(Message.hint("easyarmorstands.hint.select-entity"));
-        if (sender.hasPermission(Permissions.SPAWN)) {
-            sender.sendMessage(Message.hint("easyarmorstands.hint.spawn-entity"));
-        }
-        sender.sendMessage(Message.hint("easyarmorstands.hint.deselect-entity"));
         sessionListener.updateHeldItem(sender);
     }
 

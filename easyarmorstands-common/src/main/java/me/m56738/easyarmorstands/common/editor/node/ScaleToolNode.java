@@ -1,13 +1,13 @@
 package me.m56738.easyarmorstands.common.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
+import me.m56738.easyarmorstands.common.editor.input.tool.ActivateInput;
 import me.m56738.easyarmorstands.common.message.Message;
 import me.m56738.easyarmorstands.common.platform.command.CommandSource;
 import me.m56738.easyarmorstands.common.util.Cursor3D;
@@ -44,7 +44,7 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
         this.cursor = new Cursor3D(session);
     }
 
-    private void activate() {
+    public void activate() {
         initialDistance = distance;
         active = true;
         canActivate = false;
@@ -83,6 +83,10 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
             cursorLineParticle.setColor(canActivate ? ParticleColor.GRAY : ParticleColor.RED);
         }
 
+        if (canActivate) {
+            context.addInput(new ActivateInput(this));
+        }
+
         cursorLineParticle.setFromTo(position, delta.add(position));
         super.onUpdate(context);
     }
@@ -101,14 +105,8 @@ public class ScaleToolNode extends ToolNode implements ValueNode<Double> {
     }
 
     @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (context.type() == ClickContext.Type.RIGHT_CLICK && !active && !hasManualInput) {
-            if (canActivate) {
-                activate();
-            }
-            return true;
-        }
-        return super.onClick(context);
+    protected boolean canConfirm() {
+        return active;
     }
 
     @Override

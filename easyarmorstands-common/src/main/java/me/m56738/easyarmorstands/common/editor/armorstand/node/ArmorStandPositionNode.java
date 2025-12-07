@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.common.editor.armorstand.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.AbstractElementNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
@@ -13,6 +12,7 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.common.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.common.editor.OffsetProvider;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.editor.node.ToolModeSwitcher;
 import me.m56738.easyarmorstands.common.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.common.element.ArmorStandElement;
@@ -43,19 +43,9 @@ public class ArmorStandPositionNode extends AbstractElementNode<ArmorStandElemen
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        super.onUpdate(context);
         context.setActionBar(toolModeSwitcher.getActionBar());
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
-        }
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            session.popNode();
-            return true;
-        }
-        return toolModeSwitcher.onClick(context);
+        toolModeSwitcher.onUpdate(context);
+        super.onUpdate(context);
+        context.addInput(new ReturnInput(session));
     }
 }

@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.group.Group;
 import me.m56738.easyarmorstands.common.group.GroupMember;
 import me.m56738.easyarmorstands.common.group.tool.GroupToolProvider;
@@ -66,6 +67,7 @@ public class GroupRootNode extends AbstractChangeContextNode {
         super.onUpdate(context);
         group.update();
         updateBox();
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

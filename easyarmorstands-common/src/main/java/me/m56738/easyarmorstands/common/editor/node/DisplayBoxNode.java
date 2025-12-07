@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.common.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.util.ToolManager;
 import me.m56738.easyarmorstands.api.editor.util.ToolMode;
 import me.m56738.easyarmorstands.common.editor.box.DisplayBoxEditor;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.editor.tool.BoxToolProvider;
 import me.m56738.easyarmorstands.common.element.DisplayElement;
 import me.m56738.easyarmorstands.common.message.Message;
@@ -32,17 +32,6 @@ public class DisplayBoxNode extends DisplayNode {
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(name);
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
-        }
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            session.popNode();
-            return true;
-        }
-        return false;
+        context.addInput(new ReturnInput(session));
     }
 }

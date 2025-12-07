@@ -14,6 +14,7 @@ dependencies {
     compileOnlyApi(libs.checker.qual)
     compileOnlyApi(libs.apiguardian.api)
     api(libs.cloud.annotations)
+    api(project(":easyarmorstands-assets"))
     api(project(":easyarmorstands-paper"))
     runtimeOnly(project(":easyarmorstands-bentobox"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))
@@ -31,7 +32,7 @@ dependencies {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.8")
         javaLauncher = project.javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(21)
         }
@@ -49,7 +50,9 @@ tasks {
     }
 
     shadowJar {
+        exclude("pack.mcmeta")
         mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 
     val staticJar by registering(Copy::class) {

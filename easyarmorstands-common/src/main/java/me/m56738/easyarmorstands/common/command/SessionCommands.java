@@ -22,6 +22,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.common.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.common.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.common.command.requirement.RequireElement;
@@ -396,6 +397,67 @@ public class SessionCommands {
             sender.sendMessage(Message.success("easyarmorstands.success.changed-name-visibility",
                     property.getType().getValueComponent(visible)));
         }
+    }
+
+    @Command("description")
+    @PropertyPermission("easyarmorstands:mannequin/description")
+    @CommandDescription("easyarmorstands.command.description.description")
+    @RequireElementSelection
+    public void showDescription(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> property = properties.getOrNull(MannequinPropertyTypes.DESCRIPTION);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.description-unsupported"));
+                return;
+            }
+            Component text = property.getValue().orElse(null);
+            showText(sender, MannequinPropertyTypes.DESCRIPTION.name(), text, "/eas description set");
+        }
+    }
+
+    @Command("description set <value>")
+    @PropertyPermission("easyarmorstands:mannequin/description")
+    @CommandDescription("easyarmorstands.command.description.description.set")
+    @RequireElementSelection
+    public void setDescription(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas,
+                               @Argument("value") @Decoder.MiniMessage @Greedy Component description) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> property = properties.getOrNull(MannequinPropertyTypes.DESCRIPTION);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.description-unsupported"));
+                return;
+            }
+            if (!property.setValue(Optional.of(description))) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+        }
+        sender.sendMessage(Message.success("easyarmorstands.success.changed-description", description.colorIfAbsent(NamedTextColor.WHITE)));
+    }
+
+    @Command("description clear")
+    @PropertyPermission("easyarmorstands:mannequin/description")
+    @CommandDescription("easyarmorstands.command.description.description.clear")
+    @RequireElementSelection
+    public void clearDescription(PlayerCommandSource source, ElementSelection selection, EasyArmorStandsCommon eas) {
+        Player sender = source.source();
+        try (ManagedChangeContext context = eas.getChangeContextFactory().create(sender)) {
+            PropertyContainer properties = context.getProperties(selection.elements());
+            Property<Optional<Component>> property = properties.getOrNull(MannequinPropertyTypes.DESCRIPTION);
+            if (property == null) {
+                sender.sendMessage(Message.error("easyarmorstands.error.description-unsupported"));
+                return;
+            }
+            if (!property.setValue(Optional.empty())) {
+                sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+                return;
+            }
+        }
+        sender.sendMessage(Message.success("easyarmorstands.success.removed-description"));
     }
 
     @Command("cantick <value>")

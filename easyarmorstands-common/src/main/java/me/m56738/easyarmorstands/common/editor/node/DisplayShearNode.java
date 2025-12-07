@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.common.editor.node;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.common.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.common.element.DisplayElement;
 import me.m56738.easyarmorstands.common.element.DisplayToolProvider;
 import net.kyori.adventure.text.Component;
@@ -39,18 +39,7 @@ public class DisplayShearNode extends DisplayNode implements ResettableNode {
     public void onUpdate(@NotNull UpdateContext context) {
         super.onUpdate(context);
         context.setActionBar(name);
-    }
-
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (super.onClick(context)) {
-            return true;
-        }
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            session.popNode();
-            return true;
-        }
-        return false;
+        context.addInput(new ReturnInput(session));
     }
 
     @Override

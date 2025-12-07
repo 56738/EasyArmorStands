@@ -30,4 +30,6 @@ public interface Configuration {
     int getSelectionButtonLimit();
 
     int getGroupSizeLimit();
+
+    boolean isShowInputHints();
 }

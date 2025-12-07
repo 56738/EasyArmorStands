@@ -1,11 +1,13 @@
 package me.m56738.easyarmorstands.paper.api.platform;
 
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.m56738.easyarmorstands.api.platform.Platform;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperCommandSender;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntity;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperEntityType;
 import me.m56738.easyarmorstands.paper.api.platform.entity.PaperPlayer;
 import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
+import me.m56738.easyarmorstands.paper.api.platform.profile.PaperProfile;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlock;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperBlockData;
 import me.m56738.easyarmorstands.paper.api.platform.world.PaperWorld;
@@ -35,4 +37,6 @@ public interface PaperPlatform extends Platform {
     PaperBlock getBlock(Block nativeBlock);
 
     PaperBlockData getBlockData(BlockData nativeBlockData);
+
+    PaperProfile getProfile(ResolvableProfile profile);
 }

@@ -4,6 +4,8 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.input.Category;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
@@ -25,6 +27,12 @@ import me.m56738.easyarmorstands.common.group.node.GroupRootNode;
 import me.m56738.easyarmorstands.common.particle.EditorParticle;
 import me.m56738.easyarmorstands.common.particle.GizmoParticleProvider;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +44,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +65,7 @@ public final class SessionImpl implements Session {
     private final ParticleProvider particleProvider;
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
     private final NodeProvider nodeProvider;
+    private final List<Input> inputs = new ArrayList<>();
     private int clickTicks = 5;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
@@ -62,6 +73,8 @@ public final class SessionImpl implements Session {
     private Component currentActionBar = Component.empty();
     private int overlayTicks;
     private boolean toolRequired;
+    private Category inputCategory = Category.PRIMARY;
+    private boolean hasSecondaryInputs;
 
     public SessionImpl(EasyArmorStandsCommon eas, Player player) {
         this.eas = eas;
@@ -176,7 +189,19 @@ public final class SessionImpl implements Session {
             }
             clickTicks = 5;
         }
-        return node.onClick(context);
+
+        if (node.onClick(context)) {
+            return true;
+        }
+
+        for (Input input : inputs) {
+            if (input.category() == inputCategory && input.clickType() == context.type()) {
+                input.execute(context);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -225,6 +250,22 @@ public final class SessionImpl implements Session {
             particle.updateGizmo();
         }
 
+        inputs.clear();
+        inputs.addAll(context.getInputs());
+
+        hasSecondaryInputs = false;
+        for (Input input : inputs) {
+            if (input.category() == Category.SECONDARY) {
+                hasSecondaryInputs = true;
+                break;
+            }
+        }
+
+        inputCategory = Category.PRIMARY;
+        if (player.isSneaking() && hasSecondaryInputs) {
+            inputCategory = Category.SECONDARY;
+        }
+
         updateOverlay(context);
 
         return player.isValid();
@@ -234,7 +275,7 @@ public final class SessionImpl implements Session {
         // Resend everything once per second
         // Send changes immediately
 
-        Component pendingActionBar = context.getActionBar();
+        Component pendingActionBar = createActionBar(context.getActionBar());
         Component pendingTitle = context.getTitle();
         Component pendingSubtitle = context.getSubtitle();
 
@@ -256,6 +297,52 @@ public final class SessionImpl implements Session {
             currentActionBar = pendingActionBar;
             player.sendActionBar(currentActionBar);
         }
+    }
+
+    private Component createActionBar(Component value) {
+        if (!getEasyArmorStands().getPlatform().getConfiguration().isShowInputHints()) {
+            return value;
+        }
+
+        TextComponent.Builder builder = Component.text();
+        builder.append(value);
+
+        EnumSet<ClickContext.Type> seen = EnumSet.noneOf(ClickContext.Type.class);
+        for (Input input : inputs) {
+            if (input.category() != inputCategory) {
+                continue;
+            }
+
+            ClickContext.Type clickType = input.clickType();
+            if (seen.add(clickType)) {
+                builder.append(createInput(getKey(clickType), input.name(), input.style()));
+            }
+        }
+
+        if (inputCategory == Category.PRIMARY && hasSecondaryInputs) {
+            builder.append(createInput(Component.translatable("key.sneak"), Component.translatable("easyarmorstands.input.more"), Style.style(NamedTextColor.GRAY)));
+        }
+
+        return builder.build();
+    }
+
+    private Component createInput(Component key, Component input, Style style) {
+        TagResolver resolver = TagResolver.builder()
+                .tag("key", Tag.selfClosingInserting(key))
+                .tag("input", Tag.selfClosingInserting(input))
+                .build();
+        return MiniMessage.miniMessage().deserialize("  [<key>] <input>", resolver).applyFallbackStyle(style);
+    }
+
+    private Component getKey(ClickContext.Type type) {
+        if (type == ClickContext.Type.LEFT_CLICK) {
+            return Component.keybind("key.attack");
+        } else if (type == ClickContext.Type.RIGHT_CLICK) {
+            return Component.keybind("key.use");
+        } else if (type == ClickContext.Type.SWAP_HANDS) {
+            return Component.keybind("key.swapHands");
+        }
+        return Component.empty();
     }
 
     public void stop() {

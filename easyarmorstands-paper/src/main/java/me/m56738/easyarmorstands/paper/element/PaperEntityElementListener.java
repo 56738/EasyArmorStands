@@ -26,9 +26,21 @@ import me.m56738.easyarmorstands.paper.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.paper.property.entity.EntityScaleProperty;
 import me.m56738.easyarmorstands.paper.property.entity.EntitySilentProperty;
 import me.m56738.easyarmorstands.paper.property.entity.EntityTagsProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.MannequinDescriptionProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.MannequinImmovableProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.MannequinMainHandProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.MannequinProfileProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinCapeVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinHatVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinJacketVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinLeftPantsVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinLeftSleeveVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinRightPantsVisibleProperty;
+import me.m56738.easyarmorstands.paper.property.mannequin.part.MannequinRightSleeveVisibleProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mannequin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -53,6 +65,9 @@ public class PaperEntityElementListener implements Listener {
         }
         if (entity instanceof ArmorStand) {
             registerArmorStandProperties((ArmorStand) entity, registry);
+        }
+        if (entity instanceof Mannequin) {
+            registerMannequinProperties((Mannequin) entity, registry);
         }
     }
 
@@ -89,5 +104,19 @@ public class PaperEntityElementListener implements Listener {
         for (ArmorStandPart part : ArmorStandPart.values()) {
             registry.register(new ArmorStandPoseProperty(entity, part));
         }
+    }
+
+    private void registerMannequinProperties(Mannequin entity, PropertyRegistry registry) {
+        registry.register(new MannequinMainHandProperty(entity));
+        registry.register(new MannequinProfileProperty(platform, entity));
+        registry.register(new MannequinImmovableProperty(entity));
+        registry.register(new MannequinDescriptionProperty(entity));
+        registry.register(new MannequinCapeVisibleProperty(entity));
+        registry.register(new MannequinJacketVisibleProperty(entity));
+        registry.register(new MannequinLeftSleeveVisibleProperty(entity));
+        registry.register(new MannequinRightSleeveVisibleProperty(entity));
+        registry.register(new MannequinLeftPantsVisibleProperty(entity));
+        registry.register(new MannequinRightPantsVisibleProperty(entity));
+        registry.register(new MannequinHatVisibleProperty(entity));
     }
 }

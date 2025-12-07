@@ -1,11 +1,12 @@
 package me.m56738.easyarmorstands.common.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
+import me.m56738.easyarmorstands.common.editor.input.tool.AbortInput;
+import me.m56738.easyarmorstands.common.editor.input.tool.ConfirmInput;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,10 @@ public abstract class ToolNode implements Node {
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
         updateActionBar(context);
+        if (canConfirm()) {
+            context.addInput(new ConfirmInput(session));
+        }
+        context.addInput(new AbortInput(session, toolSession));
     }
 
     protected void updateActionBar(@NotNull UpdateContext context) {
@@ -42,18 +47,8 @@ public abstract class ToolNode implements Node {
         context.setActionBar(builder);
     }
 
-    @Override
-    public boolean onClick(@NotNull ClickContext context) {
-        if (context.type() == ClickContext.Type.LEFT_CLICK) {
-            toolSession.revert();
-            session.popNode();
-            return true;
-        }
-        if (context.type() == ClickContext.Type.RIGHT_CLICK) {
-            session.popNode();
-            return true;
-        }
-        return false;
+    protected boolean canConfirm() {
+        return true;
     }
 
     @Override

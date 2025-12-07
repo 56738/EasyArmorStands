@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
-    api(project(":easyarmorstands-api"))
+    compileOnlyApi(project(":easyarmorstands-api"))
 }
