@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.Hand;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.platform.profile.Profile;
+import me.m56738.easyarmorstands.api.property.renderer.ValueRenderer;
 import net.kyori.adventure.text.Component;
 
 import java.util.Locale;
@@ -21,7 +22,8 @@ public final class MannequinPropertyTypes {
     public static final PropertyType<Profile> PROFILE = PropertyType.build(b -> b
             .key(key(EasyArmorStands.NAMESPACE, "mannequin/profile"))
             .name(translatable("easyarmorstands.property.mannequin.profile.name"))
-            .permission("easyarmorstands.property.mannequin.profile"));
+            .permission("easyarmorstands.property.mannequin.profile")
+            .renderer(ValueRenderer.profile()));
     public static final PropertyType<Boolean> IMMOVABLE = PropertyType.build(b -> b
             .key(key(EasyArmorStands.NAMESPACE, "mannequin/immovable"))
             .name(translatable("easyarmorstands.property.mannequin.immovable.name"))
@@ -33,8 +35,8 @@ public final class MannequinPropertyTypes {
     public static final KeyedPropertyType<SkinPart, Boolean> SKIN_PART_VISIBLE = new EnumKeyedPropertyType<>(SkinPart.class,
             part -> PropertyType.build(b -> b
                     .key(key(EasyArmorStands.NAMESPACE, "mannequin/part/" + part.name().toLowerCase(Locale.ROOT) + "/visible"))
-                    .name(translatable("easyarmorstands.property.mannequin.part.visible.name", translatable("easyarmorstands.mannequin.part." + part.name().toLowerCase(Locale.ROOT))))
-                    .permission("easyarmorstands.property.mannequin.part.visible." + part.name().toLowerCase(Locale.ROOT))));
+                    .name(translatable("easyarmorstands.property.mannequin.part.visible.name", translatable("easyarmorstands.mannequin.part." + part.name().toLowerCase(Locale.ROOT).replace("_", "-"))))
+                    .permission("easyarmorstands.property.mannequin.part.visible." + part.name().toLowerCase(Locale.ROOT).replace("_", ""))));
 
     private MannequinPropertyTypes() {
     }

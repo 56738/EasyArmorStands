@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.paper.property.display.text;
 
 import me.m56738.easyarmorstands.api.platform.entity.display.TextAlignment;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.TextDisplay;
 
-public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
-    private final TextDisplay entity;
-
+public class TextDisplayAlignmentProperty extends EntityProperty<TextDisplay, TextAlignment> {
     public TextDisplayAlignmentProperty(TextDisplay entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -35,10 +33,5 @@ public class TextDisplayAlignmentProperty implements Property<TextAlignment> {
             case RIGHT -> TextDisplay.TextAlignment.RIGHT;
         });
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

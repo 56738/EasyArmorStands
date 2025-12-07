@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.paper.property.display.item;
 
 import me.m56738.easyarmorstands.api.platform.entity.display.ItemDisplayTransform;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.ItemDisplay;
 
-public class ItemDisplayTransformProperty implements Property<ItemDisplayTransform> {
-    private final ItemDisplay entity;
-
+public class ItemDisplayTransformProperty extends EntityProperty<ItemDisplay, ItemDisplayTransform> {
     public ItemDisplayTransformProperty(ItemDisplay entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -47,10 +45,5 @@ public class ItemDisplayTransformProperty implements Property<ItemDisplayTransfo
             case FIXED -> ItemDisplay.ItemDisplayTransform.FIXED;
         });
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

@@ -1,15 +1,13 @@
 package me.m56738.easyarmorstands.paper.property.display.interaction;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Interaction;
 
-public class InteractionWidthProperty implements Property<Float> {
-    private final Interaction entity;
-
+public class InteractionWidthProperty extends EntityProperty<Interaction, Float> {
     public InteractionWidthProperty(Interaction entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -26,10 +24,5 @@ public class InteractionWidthProperty implements Property<Float> {
     public boolean setValue(Float value) {
         entity.setInteractionWidth(value);
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

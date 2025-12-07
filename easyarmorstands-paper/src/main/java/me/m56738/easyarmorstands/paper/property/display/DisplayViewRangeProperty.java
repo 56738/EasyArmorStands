@@ -1,15 +1,13 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Display;
 
-public class DisplayViewRangeProperty implements Property<Float> {
-    private final Display entity;
-
+public class DisplayViewRangeProperty extends EntityProperty<Display, Float> {
     public DisplayViewRangeProperty(Display entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -26,10 +24,5 @@ public class DisplayViewRangeProperty implements Property<Float> {
     public boolean setValue(Float value) {
         entity.setViewRange(value);
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

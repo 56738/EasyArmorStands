@@ -1,16 +1,15 @@
 package me.m56738.easyarmorstands.paper.property.armorstand;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.ArmorStand;
 
-public class ArmorStandVisibilityProperty implements Property<Boolean> {
+public class ArmorStandVisibilityProperty extends EntityProperty<ArmorStand, Boolean> {
     public static final PropertyType<Boolean> TYPE = EntityPropertyTypes.VISIBLE;
-    private final ArmorStand entity;
 
     public ArmorStandVisibilityProperty(ArmorStand entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -27,10 +26,5 @@ public class ArmorStandVisibilityProperty implements Property<Boolean> {
     public boolean setValue(Boolean value) {
         entity.setVisible(value);
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

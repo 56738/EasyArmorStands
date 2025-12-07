@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.paper.property.armorstand;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class ArmorStandLockProperty implements Property<Boolean> {
-    private final ArmorStand entity;
-
+public class ArmorStandLockProperty extends EntityProperty<ArmorStand, Boolean> {
     public ArmorStandLockProperty(ArmorStand entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -42,10 +40,5 @@ public class ArmorStandLockProperty implements Property<Boolean> {
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

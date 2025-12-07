@@ -1,20 +1,19 @@
 package me.m56738.easyarmorstands.paper.property.armorstand;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.EulerAngles;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 
-public class ArmorStandPoseProperty implements Property<EulerAngles> {
-    private final ArmorStand entity;
+public class ArmorStandPoseProperty extends EntityProperty<ArmorStand, EulerAngles> {
     private final ArmorStandPart part;
     private final PropertyType<EulerAngles> type;
 
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
-        this.entity = entity;
+        super(entity);
         this.part = part;
         this.type = ArmorStandPropertyTypes.POSE.get(part);
     }
@@ -49,10 +48,5 @@ public class ArmorStandPoseProperty implements Property<EulerAngles> {
             case RIGHT_LEG -> entity.setRightLegPose(pose);
         }
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import me.m56738.easyarmorstands.api.property.renderer.ValueRenderer;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;

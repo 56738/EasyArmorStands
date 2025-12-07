@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.paper.property.entity;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Entity;
@@ -8,11 +7,9 @@ import org.bukkit.entity.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EntityTagsProperty implements Property<Set<String>> {
-    private final Entity entity;
-
+public class EntityTagsProperty extends EntityProperty<Entity, Set<String>> {
     public EntityTagsProperty(Entity entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -49,10 +46,5 @@ public class EntityTagsProperty implements Property<Set<String>> {
         }
 
         return changed;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

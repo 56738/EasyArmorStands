@@ -1,18 +1,16 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
 import me.m56738.easyarmorstands.api.platform.entity.display.Brightness;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Display;
 
 import java.util.Optional;
 
-public class DisplayBrightnessProperty implements Property<Optional<Brightness>> {
-    private final Display entity;
-
+public class DisplayBrightnessProperty extends EntityProperty<Display, Optional<Brightness>> {
     public DisplayBrightnessProperty(Display entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -32,10 +30,5 @@ public class DisplayBrightnessProperty implements Property<Optional<Brightness>>
                 .map(brightness -> new Display.Brightness(brightness.block(), brightness.sky()))
                 .orElse(null));
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

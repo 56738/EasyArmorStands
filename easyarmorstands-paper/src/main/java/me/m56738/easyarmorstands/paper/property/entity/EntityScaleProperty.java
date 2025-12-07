@@ -1,17 +1,14 @@
 package me.m56738.easyarmorstands.paper.property.entity;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
 
-public class EntityScaleProperty implements Property<Double> {
-    private final LivingEntity entity;
-
+public class EntityScaleProperty extends EntityProperty<LivingEntity, Double> {
     public EntityScaleProperty(LivingEntity entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -38,10 +35,5 @@ public class EntityScaleProperty implements Property<Double> {
         } else {
             return false;
         }
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

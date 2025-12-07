@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.KeyedPropertyType;
+import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import org.intellij.lang.annotations.MagicConstant;
@@ -49,6 +50,7 @@ public class CommonPermissions {
         permissions.addAll(createAll(ItemDisplayPropertyTypes.class));
         permissions.addAll(createAll(TextDisplayPropertyTypes.class));
         permissions.addAll(createAll(InteractionPropertyTypes.class));
+        permissions.addAll(createAll(MannequinPropertyTypes.class));
         return permissions;
     }
 

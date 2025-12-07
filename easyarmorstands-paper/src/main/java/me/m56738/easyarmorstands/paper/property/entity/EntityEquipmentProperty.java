@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.paper.property.entity;
 
 import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
@@ -10,15 +9,14 @@ import me.m56738.easyarmorstands.paper.api.platform.inventory.PaperItem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 
-public class EntityEquipmentProperty implements Property<Item> {
+public class EntityEquipmentProperty extends EntityProperty<LivingEntity, Item> {
     private final PaperPlatform platform;
-    private final LivingEntity entity;
     private final org.bukkit.inventory.EquipmentSlot nativeSlot;
     private final PropertyType<Item> type;
 
     public EntityEquipmentProperty(PaperPlatform platform, LivingEntity entity, EquipmentSlot slot) {
+        super(entity);
         this.platform = platform;
-        this.entity = entity;
         this.nativeSlot = org.bukkit.inventory.EquipmentSlot.valueOf(slot.name());
         this.type = EntityPropertyTypes.EQUIPMENT.get(slot);
     }
@@ -47,10 +45,5 @@ public class EntityEquipmentProperty implements Property<Item> {
         } else {
             return false;
         }
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

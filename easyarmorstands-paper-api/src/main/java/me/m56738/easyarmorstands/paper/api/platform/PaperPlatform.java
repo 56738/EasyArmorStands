@@ -38,5 +38,6 @@ public interface PaperPlatform extends Platform {
 
     PaperBlockData getBlockData(BlockData nativeBlockData);
 
+    @SuppressWarnings("UnstableApiUsage")
     PaperProfile getProfile(ResolvableProfile profile);
 }

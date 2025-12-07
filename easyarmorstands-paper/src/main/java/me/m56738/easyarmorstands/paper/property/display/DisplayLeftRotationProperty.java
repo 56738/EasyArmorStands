@@ -1,17 +1,15 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionfc;
 
-public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
-    private final Display entity;
-
+public class DisplayLeftRotationProperty extends EntityProperty<Display, Quaternionfc> {
     public DisplayLeftRotationProperty(Display entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -30,10 +28,5 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
         transformation.getLeftRotation().set(value);
         entity.setTransformation(transformation);
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

@@ -4,16 +4,16 @@ import me.m56738.easyarmorstands.api.platform.inventory.EquipmentSlot;
 import me.m56738.easyarmorstands.api.platform.inventory.Item;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.modded.api.platform.ModdedPlatform;
 import me.m56738.easyarmorstands.modded.api.platform.inventory.ModdedItem;
-import me.m56738.easyarmorstands.modded.platform.ModdedPlatformImpl;
 import net.minecraft.world.entity.LivingEntity;
 
 public class EntityEquipmentProperty extends EntityProperty<LivingEntity, Item> {
     private final EquipmentSlot slot;
-    private final ModdedPlatformImpl platform;
+    private final ModdedPlatform platform;
     private final net.minecraft.world.entity.EquipmentSlot nativeSlot;
 
-    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, ModdedPlatformImpl platform) {
+    public EntityEquipmentProperty(LivingEntity entity, EquipmentSlot slot, ModdedPlatform platform) {
         super(entity);
         this.slot = slot;
         this.platform = platform;

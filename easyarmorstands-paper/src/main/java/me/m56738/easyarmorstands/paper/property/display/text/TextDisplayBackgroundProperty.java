@@ -1,20 +1,19 @@
 package me.m56738.easyarmorstands.paper.property.display.text;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.TextDisplay;
 
 import java.util.Optional;
 
-public class TextDisplayBackgroundProperty implements Property<Optional<Color>> {
+public class TextDisplayBackgroundProperty extends EntityProperty<TextDisplay, Optional<Color>> {
     private static final int DEFAULT_COLOR = 0x40000000;
-    private final TextDisplay entity;
 
     public TextDisplayBackgroundProperty(TextDisplay entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -41,10 +40,5 @@ public class TextDisplayBackgroundProperty implements Property<Optional<Color>> 
         entity.setDefaultBackground(value.isEmpty());
         entity.setBackgroundColor(value.map(PaperColorAdapter::toNative).orElse(null));
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

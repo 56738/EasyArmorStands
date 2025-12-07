@@ -14,12 +14,14 @@ import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntity;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedEntityType;
 import me.m56738.easyarmorstands.modded.api.platform.entity.ModdedPlayer;
 import me.m56738.easyarmorstands.modded.api.platform.inventory.ModdedItem;
+import me.m56738.easyarmorstands.modded.api.platform.profile.ModdedProfile;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlock;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedBlockData;
 import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
 import me.m56738.easyarmorstands.modded.platform.entity.ModdedEntityImpl;
 import me.m56738.easyarmorstands.modded.platform.entity.ModdedEntityTypeImpl;
 import me.m56738.easyarmorstands.modded.platform.inventory.ModdedItemImpl;
+import me.m56738.easyarmorstands.modded.platform.profile.ModdedProfileImpl;
 import me.m56738.easyarmorstands.modded.platform.world.ModdedBlockDataImpl;
 import me.m56738.easyarmorstands.modded.platform.world.ModdedBlockImpl;
 import me.m56738.easyarmorstands.modded.platform.world.ModdedWorldImpl;
@@ -38,6 +40,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -95,6 +98,11 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     @Override
     public ModdedBlock getBlock(Level nativeLevel, BlockPos nativeBlockPos) {
         return new ModdedBlockImpl(this, (ServerLevel) nativeLevel, nativeBlockPos);
+    }
+
+    @Override
+    public ModdedProfile getProfile(ResolvableProfile nativeProfile) {
+        return new ModdedProfileImpl(this, nativeProfile);
     }
 
     @Override

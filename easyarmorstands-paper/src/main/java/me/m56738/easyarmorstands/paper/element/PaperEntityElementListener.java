@@ -60,14 +60,14 @@ public class PaperEntityElementListener implements Listener {
 
     private void registerProperties(Entity entity, PropertyRegistry registry) {
         registerEntityProperties(entity, registry);
-        if (entity instanceof LivingEntity) {
-            registerLivingEntityProperties((LivingEntity) entity, registry);
+        if (entity instanceof LivingEntity livingEntity) {
+            registerLivingEntityProperties(livingEntity, registry);
         }
-        if (entity instanceof ArmorStand) {
-            registerArmorStandProperties((ArmorStand) entity, registry);
+        if (entity instanceof ArmorStand armorStand) {
+            registerArmorStandProperties(armorStand, registry);
         }
-        if (entity instanceof Mannequin) {
-            registerMannequinProperties((Mannequin) entity, registry);
+        if (entity instanceof Mannequin mannequin) {
+            registerMannequinProperties(mannequin, registry);
         }
     }
 

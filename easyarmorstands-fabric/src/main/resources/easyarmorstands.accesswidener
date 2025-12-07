@@ -1,4 +1,12 @@
 accessWidener v2 named
+accessible field net/minecraft/world/entity/Avatar DATA_PLAYER_MODE_CUSTOMISATION Lnet/minecraft/network/syncher/EntityDataAccessor;
+accessible field net/minecraft/world/entity/decoration/ArmorStand disabledSlots I
 accessible method net/minecraft/world/entity/decoration/ArmorStand setMarker (Z)V
 accessible method net/minecraft/world/entity/decoration/ArmorStand setSmall (Z)V
-accessible field net/minecraft/world/entity/decoration/ArmorStand disabledSlots I
+accessible method net/minecraft/world/entity/decoration/Mannequin getDescription ()Lnet/minecraft/network/chat/Component;
+accessible method net/minecraft/world/entity/decoration/Mannequin getImmovable ()Z
+accessible method net/minecraft/world/entity/decoration/Mannequin getProfile ()Lnet/minecraft/world/item/component/ResolvableProfile;
+accessible method net/minecraft/world/entity/decoration/Mannequin setDescription (Lnet/minecraft/network/chat/Component;)V
+accessible method net/minecraft/world/entity/decoration/Mannequin setHideDescription (Z)V
+accessible method net/minecraft/world/entity/decoration/Mannequin setImmovable (Z)V
+accessible method net/minecraft/world/entity/decoration/Mannequin setProfile (Lnet/minecraft/world/item/component/ResolvableProfile;)V

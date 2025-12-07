@@ -53,6 +53,8 @@ tasks {
             exclude(dependency("com.google.code.gson:gson"))
         }
         mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        exclude("pack.mcmeta")
     }
 
     val staticJar by registering(Copy::class) {

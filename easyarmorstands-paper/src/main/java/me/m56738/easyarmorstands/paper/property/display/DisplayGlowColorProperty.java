@@ -1,19 +1,17 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.Color;
 import me.m56738.easyarmorstands.paper.api.platform.adapter.PaperColorAdapter;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Display;
 
 import java.util.Optional;
 
-public class DisplayGlowColorProperty implements Property<Optional<Color>> {
-    private final Display entity;
-
+public class DisplayGlowColorProperty extends EntityProperty<Display, Optional<Color>> {
     public DisplayGlowColorProperty(Display entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -33,10 +31,5 @@ public class DisplayGlowColorProperty implements Property<Optional<Color>> {
                 .map(PaperColorAdapter::toNative)
                 .orElse(null));
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.api.property.type;
+package me.m56738.easyarmorstands.api.property.renderer;
 
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;

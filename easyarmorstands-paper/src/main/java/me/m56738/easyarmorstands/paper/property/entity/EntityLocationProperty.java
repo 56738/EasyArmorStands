@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.paper.property.entity;
 
 import me.m56738.easyarmorstands.api.platform.world.Location;
 import me.m56738.easyarmorstands.api.property.PendingChange;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.paper.api.platform.PaperPlatform;
@@ -11,15 +10,14 @@ import org.bukkit.entity.Entity;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.Nullable;
 
-public class EntityLocationProperty implements Property<Location> {
+public class EntityLocationProperty extends EntityProperty<Entity, Location> {
     private static final double HEIGHT_LIMIT = 20000000;
     private static final double COORDINATE_LIMIT = 30000000;
     private final PaperPlatform platform;
-    private final Entity entity;
 
     public EntityLocationProperty(PaperPlatform platform, Entity entity) {
+        super(entity);
         this.platform = platform;
-        this.entity = entity;
     }
 
     @Override
@@ -38,7 +36,7 @@ public class EntityLocationProperty implements Property<Location> {
             return null;
         }
 
-        return Property.super.prepareChange(value);
+        return super.prepareChange(value);
     }
 
     @Override
@@ -52,11 +50,6 @@ public class EntityLocationProperty implements Property<Location> {
             entity.setFallDistance(0);
         }
         return ok;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 
     private boolean isValid(Location location) {

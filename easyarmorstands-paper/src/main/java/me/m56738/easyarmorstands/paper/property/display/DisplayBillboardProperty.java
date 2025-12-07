@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.paper.property.display;
 
 import me.m56738.easyarmorstands.api.platform.entity.display.Billboard;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Display;
 
-public class DisplayBillboardProperty implements Property<Billboard> {
-    private final Display entity;
-
+public class DisplayBillboardProperty extends EntityProperty<Display, Billboard> {
     public DisplayBillboardProperty(Display entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -37,10 +35,5 @@ public class DisplayBillboardProperty implements Property<Billboard> {
             case CENTER -> Display.Billboard.CENTER;
         });
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

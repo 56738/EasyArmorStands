@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.paper.property.entity;
 
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.text.Component;
@@ -8,11 +7,9 @@ import org.bukkit.entity.Entity;
 
 import java.util.Optional;
 
-public class EntityCustomNameProperty implements Property<Optional<Component>> {
-    private final Entity entity;
-
+public class EntityCustomNameProperty extends EntityProperty<Entity, Optional<Component>> {
     public EntityCustomNameProperty(Entity entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override
@@ -29,10 +26,5 @@ public class EntityCustomNameProperty implements Property<Optional<Component>> {
     public boolean setValue(Optional<Component> value) {
         entity.customName(value.orElse(null));
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return entity.isValid();
     }
 }

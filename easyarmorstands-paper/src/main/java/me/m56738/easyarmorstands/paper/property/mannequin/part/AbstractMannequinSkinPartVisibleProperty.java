@@ -1,41 +1,34 @@
 package me.m56738.easyarmorstands.paper.property.mannequin.part;
 
 import com.destroystokyo.paper.SkinParts;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.paper.property.entity.EntityProperty;
 import org.bukkit.entity.Mannequin;
-import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractMannequinSkinPartVisibleProperty implements Property<Boolean> {
-    private final Mannequin mannequin;
+public abstract class AbstractMannequinSkinPartVisibleProperty extends EntityProperty<Mannequin, Boolean> {
     private final PropertyType<Boolean> type;
 
-    public AbstractMannequinSkinPartVisibleProperty(Mannequin mannequin, PropertyType<Boolean> type) {
-        this.mannequin = mannequin;
+    public AbstractMannequinSkinPartVisibleProperty(Mannequin entity, PropertyType<Boolean> type) {
+        super(entity);
         this.type = type;
     }
 
     @Override
-    public @NotNull PropertyType<Boolean> getType() {
+    public PropertyType<Boolean> getType() {
         return type;
     }
 
     @Override
-    public @NotNull Boolean getValue() {
-        return getValue(mannequin.getSkinParts());
+    public Boolean getValue() {
+        return getValue(entity.getSkinParts());
     }
 
     @Override
-    public boolean setValue(@NotNull Boolean value) {
-        SkinParts.Mutable parts = mannequin.getSkinParts();
+    public boolean setValue(Boolean value) {
+        SkinParts.Mutable parts = entity.getSkinParts();
         setValue(parts, value);
-        mannequin.setSkinParts(parts);
+        entity.setSkinParts(parts);
         return true;
-    }
-
-    @Override
-    public boolean isValid() {
-        return mannequin.isValid();
     }
 
     protected abstract boolean getValue(SkinParts parts);
