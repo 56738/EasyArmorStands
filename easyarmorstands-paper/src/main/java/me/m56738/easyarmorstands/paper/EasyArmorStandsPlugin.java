@@ -13,7 +13,7 @@ import me.m56738.easyarmorstands.paper.editor.PaperSessionListener;
 import me.m56738.easyarmorstands.paper.element.PaperDisplayElementListener;
 import me.m56738.easyarmorstands.paper.element.PaperEntityElementListener;
 import me.m56738.easyarmorstands.paper.history.PaperHistoryListener;
-import me.m56738.easyarmorstands.paper.message.TranslationParser;
+import me.m56738.easyarmorstands.paper.message.PatternTranslationStore;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissions;
 import me.m56738.easyarmorstands.paper.platform.PaperPlatformImpl;
 import me.m56738.easyarmorstands.paper.platform.command.PaperSenderMapper;
@@ -26,7 +26,9 @@ import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jspecify.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -54,7 +56,15 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getScheduler().runTaskTimer(this, eas.getSessionManager()::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, eas.getSessionListener()::update, 0, 1);
 
-        GlobalTranslator.translator().addSource(TranslationParser.read(getResource("assets/easyarmorstands/lang/en_us.json"), Key.key("easyarmorstands", "translation")));
+        PatternTranslationStore translator = new PatternTranslationStore(Key.key("easyarmorstands", "translation"));
+        try {
+            translator.readLocale(getResource("assets/easyarmorstands/lang/en_us.json"), Locale.of("en", "us"));
+            translator.readLocale(getResource("assets/easyarmorstands/lang/de_de.json"), Locale.of("de", "de"));
+            translator.readLocale(getResource("assets/easyarmorstands/lang/ru_ru.json"), Locale.of("ru", "ru"));
+        } catch (IOException e) {
+            getSLF4JLogger().error("Failed to load translations", e);
+        }
+        GlobalTranslator.translator().addSource(translator);
 
         PaperCommandManager<CommandSource> commandManager = PaperCommandManager.builder(new PaperSenderMapper(platform))
                 .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(this)))
