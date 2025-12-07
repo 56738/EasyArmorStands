@@ -17,7 +17,7 @@ public class NeoForgeCommandSenderImpl extends ModdedCommandSenderImpl {
 
     @Override
     public boolean hasPermission(String permission) {
-        return stack.hasPermission(stack.getServer().getOperatorUserPermissionLevel());
+        return stack.hasPermission(stack.getServer().operatorUserPermissionLevel());
     }
 
     @Override

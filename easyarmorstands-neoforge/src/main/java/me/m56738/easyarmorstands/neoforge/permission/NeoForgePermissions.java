@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.neoforge.permission;
 
 import me.m56738.easyarmorstands.common.permission.Permission;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.server.permission.PermissionAPI;
 import net.neoforged.neoforge.server.permission.nodes.PermissionDynamicContext;
@@ -65,11 +66,10 @@ public class NeoForgePermissions {
         @Override
         public Boolean resolve(@Nullable ServerPlayer player, UUID playerUUID, PermissionDynamicContext<?>... context) {
             if (player != null) {
-                MinecraftServer server = player.getServer();
-                if (server != null) {
-                    if (player.hasPermissions(server.getOperatorUserPermissionLevel())) {
-                        return true;
-                    }
+                ServerLevel level = player.level();
+                MinecraftServer server = level.getServer();
+                if (player.hasPermissions(server.operatorUserPermissionLevel())) {
+                    return true;
                 }
             }
             for (Map.Entry<PermissionNode<Boolean>, Boolean> entry : getParents(name).entrySet()) {

@@ -340,7 +340,7 @@ public final class SessionImpl implements Session {
         } else if (type == ClickContext.Type.RIGHT_CLICK) {
             return Component.keybind("key.use");
         } else if (type == ClickContext.Type.SWAP_HANDS) {
-            return Component.keybind("key.swapHands");
+            return Component.keybind("key.swapOffhand");
         }
         return Component.empty();
     }

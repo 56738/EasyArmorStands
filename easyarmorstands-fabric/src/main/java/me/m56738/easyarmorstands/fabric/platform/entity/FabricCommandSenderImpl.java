@@ -17,7 +17,7 @@ public class FabricCommandSenderImpl extends ModdedCommandSenderImpl {
 
     @Override
     public boolean hasPermission(String permission) {
-        return Permissions.check(stack, permission, stack.getServer().getOperatorUserPermissionLevel());
+        return Permissions.check(stack, permission, stack.getServer().operatorUserPermissionLevel());
     }
 
     @Override

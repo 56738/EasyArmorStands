@@ -13,11 +13,7 @@ public class FabricPlayerImpl extends ModdedPlayerImpl {
 
     @Override
     public boolean hasPermission(String permission) {
-        MinecraftServer server = getNative().getServer();
-        if (server != null) {
-            return Permissions.check(getNative(), permission, server.getOperatorUserPermissionLevel());
-        } else {
-            return Permissions.check(getNative(), permission);
-        }
+        MinecraftServer server = getPlatform().getServer();
+        return Permissions.check(getNative(), permission, server.operatorUserPermissionLevel());
     }
 }

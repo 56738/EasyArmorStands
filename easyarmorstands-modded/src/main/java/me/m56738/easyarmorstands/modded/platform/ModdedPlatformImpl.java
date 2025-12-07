@@ -63,6 +63,11 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
     }
 
     @Override
+    public MinecraftServer getServer() {
+        return server;
+    }
+
+    @Override
     public MinecraftServerAudiences getAdventure() {
         return adventure;
     }
@@ -123,7 +128,8 @@ public abstract class ModdedPlatformImpl implements ModdedPlatform, CommonPlatfo
         ItemStack itemStack = ModdedItem.toNative(item);
         CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
-            return customData.contains("easyarmorstands_tool");
+            CompoundTag tag = customData.copyTag();
+            return tag.contains("easyarmorstands_tool");
         }
         return false;
     }

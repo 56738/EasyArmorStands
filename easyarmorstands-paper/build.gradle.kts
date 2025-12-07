@@ -7,8 +7,6 @@ plugins {
     alias(libs.plugins.run.paper)
 }
 
-val minecraftVersion = property("minecraftVersion")
-
 dependencies {
     compileOnly(libs.paper.api)
     compileOnlyApi(libs.checker.qual)
@@ -33,7 +31,7 @@ tasks {
     processResources {
         val props = mapOf(
             "version" to version,
-            "minecraftVersion" to minecraftVersion
+            "minecraftVersion" to libs.versions.minecraft.get()
         )
         inputs.properties(props)
         filesMatching("*.yml") {
@@ -81,11 +79,7 @@ hangarPublish {
             platforms {
                 register(Platforms.PAPER) {
                     jar.set(tasks.shadowJar.flatMap { it.archiveFile })
-                    platformVersions.set(
-                        minecraftVersion.toString()
-                            .split(",")
-                            .map { it.trim() }
-                    )
+                    platformVersions.set(listOf(libs.versions.minecraft.get()))
                     dependencies {
                         url("HeadDatabase", "https://www.spigotmc.org/resources/head-database.14280/") {
                             required.set(false)

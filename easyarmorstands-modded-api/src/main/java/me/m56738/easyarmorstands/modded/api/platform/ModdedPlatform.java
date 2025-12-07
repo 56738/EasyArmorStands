@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.modded.api.platform.world.ModdedWorld;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface ModdedPlatform extends Platform {
+    MinecraftServer getServer();
+
     MinecraftServerAudiences getAdventure();
 
     ModdedItem getItem(ItemStack nativeItem);
