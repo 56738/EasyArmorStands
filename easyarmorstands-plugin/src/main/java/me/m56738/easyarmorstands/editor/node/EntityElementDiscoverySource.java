@@ -44,6 +44,9 @@ public class EntityElementDiscoverySource implements ElementDiscoverySource {
         Vector3dc center = box.getMinPosition().add(delta, new Vector3d());
         Location location = new Location(world, center.x(), center.y(), center.z());
         for (Entity entity : world.getNearbyEntities(location, delta.x(), delta.y(), delta.z())) {
+            if (entity.equals(player)) {
+                continue;
+            }
             consumer.accept(getEntry(entity));
         }
     }

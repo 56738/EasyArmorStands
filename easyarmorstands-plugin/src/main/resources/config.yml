@@ -9,6 +9,7 @@ _version:
   config: 3
   game: 1.8.8
 editor:
+  allow-players: true
   button:
     interpolation-ticks: 1
     range: 64.0

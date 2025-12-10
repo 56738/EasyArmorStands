@@ -1,0 +1,12 @@
+_version:
+  game: 1.8.8
+parent: entity/living
+slots:
+  easyarmorstands:destroy:
+    enabled: false
+  easyarmorstands:entity/ai:
+    enabled: false
+  easyarmorstands:entity/custom_name:
+    enabled: false
+  easyarmorstands:entity/silent:
+    enabled: false

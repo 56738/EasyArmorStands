@@ -117,6 +117,9 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public boolean canDestroy(@NotNull Player player) {
+        if (entity instanceof Player) {
+            return false;
+        }
         return player.hasPermission(Permissions.entityType(Permissions.DESTROY, type.getEntityType()));
     }
 
