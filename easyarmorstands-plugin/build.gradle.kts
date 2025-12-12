@@ -194,12 +194,13 @@ hangarPublish {
     publications.register("plugin") {
         id = "EasyArmorStands"
         channel = "Release"
+        version = project.version.toString()
         changelog = provider { rootProject.file("CHANGELOG.md").readText() }
         apiKey = System.getenv("HANGAR_API_TOKEN")
         platforms {
             register(Platforms.PAPER) {
                 jar = tasks.shadowJar.flatMap { it.archiveFile }
-                platformVersions = supportedGameVersions
+                platformVersions = supportedGameVersions - listOf("1.8.9")
             }
         }
         pages {
