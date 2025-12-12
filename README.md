@@ -16,10 +16,6 @@ Use `/eas give` and follow the instructions.
 
 If you get stuck, refer to the detailed instructions below.
 
-## Demo video
-
-[![Demo video](https://i.ytimg.com/vi/dQZkB3mez-0/0.jpg)](https://youtu.be/dQZkB3mez-0)
-
 ## Editing entities
 
 Hold the tool and right-click an entity to select it.
