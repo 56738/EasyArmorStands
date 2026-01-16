@@ -37,6 +37,7 @@ public class ComponentCapabilityProvider implements CapabilityProvider<Component
             Entity.class.getMethod("customName", mapper.getComponentClass());
             ItemMeta.class.getMethod("displayName", mapper.getComponentClass());
             ItemMeta.class.getMethod("lore", List.class);
+            ItemStack.class.getMethod("displayName");
             Bukkit.class.getMethod("createInventory", InventoryHolder.class, int.class, mapper.getComponentClass());
             return true;
         } catch (Throwable e) {
