@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.editor.node;
 
+import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,6 +20,8 @@ public interface ElementSelectionNode extends Node {
     void addSource(@NotNull ElementDiscoverySource source);
 
     void removeSource(@NotNull ElementDiscoverySource source);
+
+    void updateEntry(@NotNull ElementDiscoveryEntry entry);
 
     @Unmodifiable
     @NotNull

@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
+import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
@@ -268,6 +269,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         SwapHandItemsCapability swapHandItemsCapability = getCapability(SwapHandItemsCapability.class);
         if (swapHandItemsCapability != null) {
             swapHandItemsCapability.addListener(sessionListener);
+        }
+
+        VisibilityEventCapability visibilityEventCapability = getCapability(VisibilityEventCapability.class);
+        if (visibilityEventCapability != null) {
+            visibilityEventCapability.addListener(sessionListener);
         }
 
         commandManager = getCapability(CommandCapability.class).createCommandManager();

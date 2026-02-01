@@ -179,11 +179,7 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         for (Iterator<Map.Entry<ElementDiscoveryEntry, ElementEntry>> iterator = entries.entrySet().iterator(); iterator.hasNext(); ) {
             Map.Entry<ElementDiscoveryEntry, ElementEntry> entry = iterator.next();
             if (!foundEntries.contains(entry.getKey())) {
-                ElementButton button = entry.getValue().button;
-                if (button != null) {
-                    removeButton(button);
-                    buttonCount--;
-                }
+                removeEntry(entry.getValue());
                 iterator.remove();
             }
         }
@@ -266,6 +262,14 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         return buttonLimit > 0 && buttonCount >= buttonLimit;
     }
 
+    @Override
+    public void updateEntry(@NotNull ElementDiscoveryEntry entry) {
+        entries.computeIfPresent(entry, (e, elementEntry) -> {
+            removeEntry(elementEntry);
+            return addEntry(e);
+        });
+    }
+
     private ElementEntry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
         ChangeContext context = new EasPlayer(session.player());
@@ -276,6 +280,14 @@ public class ElementSelectionNodeImpl extends MenuNode implements ElementSelecti
         addButton(button);
         buttonCount++;
         return new ElementEntry(button);
+    }
+
+    private void removeEntry(ElementEntry entry) {
+        ElementButton button = entry.button;
+        if (button != null) {
+            removeButton(button);
+            buttonCount--;
+        }
     }
 
     @Override

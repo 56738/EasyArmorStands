@@ -2,10 +2,15 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
+import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventListener;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.editor.node.EntityElementDiscoveryEntry;
+import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -42,7 +47,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SessionListener implements Listener, SwapHandItemsListener {
+public class SessionListener implements Listener, SwapHandItemsListener, VisibilityEventListener {
     private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
@@ -324,6 +329,29 @@ public class SessionListener implements Listener, SwapHandItemsListener {
                 entry.setValue(value - 1);
             } else {
                 iterator.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onVisibilityChanged(Player player, Entity entity, boolean visible) {
+        Bukkit.getScheduler().runTask(plugin, () -> updateEntityVisibility(player, entity));
+    }
+
+    private void updateEntityVisibility(Player player, Entity entity) {
+        SessionImpl session = manager.getSession(player);
+        if (session == null) {
+            return;
+        }
+        ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
+        if (node == null) {
+            return;
+        }
+        for (ElementDiscoverySource source : node.getSources()) {
+            if (source instanceof EntityElementDiscoverySource) {
+                EntityElementDiscoverySource entitySource = (EntityElementDiscoverySource) source;
+                EntityElementDiscoveryEntry entry = new EntityElementDiscoveryEntry(entitySource, player, entity);
+                node.updateEntry(entry);
             }
         }
     }
