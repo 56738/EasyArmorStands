@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.lib.cloud.bukkit.BukkitCommandManager;
 import me.m56738.easyarmorstands.lib.cloud.bukkit.CloudBukkitCapabilities;
 import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
 import me.m56738.easyarmorstands.lib.cloud.paper.LegacyPaperCommandManager;
+import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
@@ -44,7 +45,7 @@ public class CommandCapabilityProvider implements CapabilityProvider<CommandCapa
             try {
                 commandManager = new LegacyPaperCommandManager<>(
                         plugin,
-                        ExecutionCoordinator.simpleCoordinator(),
+                        ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(plugin)),
                         new CommandSenderMapper(EasyArmorStandsPlugin.getInstance().getAdventure()));
             } catch (Exception e) {
                 throw new RuntimeException(e);

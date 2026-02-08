@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.lib.cloud.CommandManager;
 import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
 import me.m56738.easyarmorstands.lib.cloud.paper.PaperCommandManager;
+import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import org.bukkit.plugin.Plugin;
 
@@ -44,7 +45,7 @@ public class CommandCapabilityProvider implements CapabilityProvider<CommandCapa
         public CommandManager<EasCommandSender> createCommandManager() {
             CommandSourceStackMapper mapper = new CommandSourceStackMapper(new CommandSenderMapper(EasyArmorStandsPlugin.getInstance().getAdventure()));
             return PaperCommandManager.builder(mapper)
-                    .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
+                    .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(plugin)))
                     .buildOnEnable(plugin);
         }
     }

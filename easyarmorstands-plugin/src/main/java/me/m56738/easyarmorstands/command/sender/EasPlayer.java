@@ -19,6 +19,7 @@ import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
 import me.m56738.easyarmorstands.lib.kyori.adventure.identity.Identity;
 import me.m56738.easyarmorstands.session.SessionImpl;
+import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -28,14 +29,12 @@ import java.util.Locale;
 
 public class EasPlayer extends EasCommandSender implements ChangeContext {
     private final @NotNull Player player;
-    private final @NotNull History history;
-    private final @NotNull Clipboard clipboard;
+    private @Nullable History history;
+    private @Nullable Clipboard clipboard;
 
     public EasPlayer(@NotNull Player player, @NotNull Audience audience) {
         super(player, audience);
         this.player = player;
-        this.history = EasyArmorStandsPlugin.getInstance().getHistory(player);
-        this.clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
     }
 
     public EasPlayer(@NotNull Player player) {
@@ -49,16 +48,24 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
 
     @Override
     public @NotNull History history() {
+        if (history == null) {
+            MainThreadExecutor.checkMainThread();
+            history = EasyArmorStandsPlugin.getInstance().getHistory(player);
+        }
         return history;
     }
 
     public @NotNull Clipboard clipboard() {
+        if (clipboard == null) {
+            MainThreadExecutor.checkMainThread();
+            clipboard = EasyArmorStandsPlugin.getInstance().getClipboard(player);
+        }
         return clipboard;
     }
 
     @Override
     public @NotNull ChangeTracker tracker() {
-        return history.getTracker();
+        return history().getTracker();
     }
 
     @Override
