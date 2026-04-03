@@ -7,8 +7,6 @@ pluginManagement {
 include("easyarmorstands-api")
 include("easyarmorstands-assets")
 include("easyarmorstands-bentobox")
-include("easyarmorstands-display")
-include("easyarmorstands-display-api")
 include("easyarmorstands-fancyholograms")
 include("easyarmorstands-griefdefender")
 include("easyarmorstands-griefprevention")

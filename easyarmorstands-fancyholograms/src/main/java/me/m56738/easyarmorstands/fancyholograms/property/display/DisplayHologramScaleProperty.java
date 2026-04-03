@@ -4,7 +4,7 @@ import de.oliver.fancyholograms.api.data.DisplayHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;

@@ -24,7 +24,6 @@ dependencies {
     api(libs.gizmo.bukkit)
     api(libs.item.nbt.api)
     runtimeOnly(project(":easyarmorstands-bentobox"))
-    runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))
     runtimeOnly(project(":easyarmorstands-griefdefender"))
     runtimeOnly(project(":easyarmorstands-griefprevention"))

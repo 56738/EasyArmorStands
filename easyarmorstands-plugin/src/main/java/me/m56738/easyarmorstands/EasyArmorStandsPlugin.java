@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
@@ -62,6 +63,16 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
+import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
+import me.m56738.easyarmorstands.command.DisplayCommands;
+import me.m56738.easyarmorstands.element.DisplayElementProvider;
+import me.m56738.easyarmorstands.element.DisplayElementType;
+import me.m56738.easyarmorstands.element.InteractionElementProvider;
+import me.m56738.easyarmorstands.element.InteractionElementType;
+import me.m56738.easyarmorstands.element.TextDisplayElementType;
+import me.m56738.easyarmorstands.menu.slot.DisplayBoxSlotType;
+import me.m56738.easyarmorstands.menu.slot.DisplaySpawnSlotType;
+import me.m56738.easyarmorstands.menu.slot.InteractionSpawnSlotType;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
@@ -108,14 +119,19 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
@@ -169,7 +185,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
     private BukkitGizmos gizmos;
-    private CommandManager<EasCommandSender> commandManager;
+    private DisplayElementType<ItemDisplay> itemDisplayType;
+    private PaperCommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
 
     public static EasyArmorStandsPlugin getInstance() {
@@ -192,10 +209,18 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         ArmorStandElementType armorStandElementType = new ArmorStandElementType();
         MannequinElementType mannequinElementType = new MannequinElementType();
+        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
+        DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
+        DisplayElementType<TextDisplay> textDisplayType = new TextDisplayElementType();
+        InteractionElementType interactionType = new InteractionElementType();
         entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
         entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
         entityElementProviderRegistry.register(new MannequinElementProvider(mannequinElementType));
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
+        entityElementProviderRegistry.register(new DisplayElementProvider<>(itemDisplayType));
+        entityElementProviderRegistry.register(new DisplayElementProvider<>(blockDisplayType));
+        entityElementProviderRegistry.register(new DisplayElementProvider<>(textDisplayType));
+        entityElementProviderRegistry.register(new InteractionElementProvider(interactionType));
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
         menuSlotTypeRegistry.register(new EntityCopySlotType());
@@ -209,13 +234,13 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorPickerSlotType());
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
         menuSlotTypeRegistry.register(new DestroySlotType());
+        menuSlotTypeRegistry.register(new DisplayBoxSlotType());
+        menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
+        menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
+        menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/text_display"), textDisplayType));
+        menuSlotTypeRegistry.register(new InteractionSpawnSlotType(interactionType));
         menuSlotTypeRegistry.register(new MannequinSpawnSlotType(mannequinElementType));
         menuSlotTypeRegistry.register(new PropertySlotType());
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/text_display")));
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/interaction")));
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/mannequin")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
 
@@ -278,6 +303,20 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorParser<>());
 
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
+                p -> new BlockDataArgumentParser<>());
+
+        if (commandManager.hasBrigadierManager()) {
+            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = commandManager.brigadierManager();
+            try {
+                BlockDataArgumentParser.registerBrigadier(brigadierManager);
+            } catch (Throwable e) {
+                getLogger().warning("Failed to register Brigadier mappings for block data arguments");
+            }
+            brigadierManager.registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
+            }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
+        }
+
         commandManager.registerCommandPreProcessor(new ElementSelectionProcessor());
         commandManager.registerCommandPreProcessor(new GroupProcessor());
         commandManager.registerCommandPreProcessor(new ElementProcessor());
@@ -298,6 +337,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
+        annotationParser.parse(new DisplayCommands(itemDisplayType));
 
         PropertyCommands.register(commandManager);
 

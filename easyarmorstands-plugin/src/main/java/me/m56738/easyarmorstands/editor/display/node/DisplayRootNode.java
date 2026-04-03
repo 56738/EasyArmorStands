@@ -1,39 +1,48 @@
-package me.m56738.easyarmorstands.fancyholograms.editor.node;
+package me.m56738.easyarmorstands.editor.display.node;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
+import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
-import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
-import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
-public class HologramRootNode extends PropertyMenuNode implements ElementNode {
+public class DisplayRootNode extends DisplayMenuNode implements ElementNode, ResettableNode {
     private final Session session;
-    private final HologramElement element;
-    private final ToolMenuModeSwitcher toolSwitcher;
+    private final DisplayElement<?> element;
+    private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
+    private final ToolMenuManager toolManager;
+    private final ToolMenuModeSwitcher toolSwitcher;
     private final boolean allowMenu;
 
-    public HologramRootNode(Session session, HologramElement element) {
+    public DisplayRootNode(Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
         this.session = session;
         this.element = element;
-        this.toolSwitcher = new ToolMenuModeSwitcher(
-                new ToolMenuManager(session, this, element.getTools(properties())));
+        this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
+        this.toolManager = new ToolMenuManager(session, this, element.getTools(properties()));
+        this.toolSwitcher = new ToolMenuModeSwitcher(this.toolManager);
         this.allowMenu = session.player().hasPermission(Permissions.OPEN);
     }
 
@@ -70,7 +79,22 @@ public class HologramRootNode extends PropertyMenuNode implements ElementNode {
     }
 
     @Override
-    public @NotNull HologramElement getElement() {
+    public @NotNull Element getElement() {
         return element;
+    }
+
+    @Override
+    public void reset() {
+        properties().get(DisplayPropertyTypes.TRANSLATION).setValue(new Vector3f());
+        properties().get(DisplayPropertyTypes.LEFT_ROTATION).setValue(new Quaternionf());
+        properties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
+        properties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
+
+        Location location = locationProperty.getValue();
+        location.setYaw(0);
+        location.setPitch(0);
+        locationProperty.setValue(location);
+
+        properties().commit();
     }
 }

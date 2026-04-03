@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.command;
 
+import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.processor.ElementProcessor;
@@ -10,6 +11,7 @@ import me.m56738.easyarmorstands.command.value.PitchCommand;
 import me.m56738.easyarmorstands.command.value.PositionCommand;
 import me.m56738.easyarmorstands.command.value.ValueCommand;
 import me.m56738.easyarmorstands.command.value.YawCommand;
+import me.m56738.easyarmorstands.command.value.DisplayScaleAxisCommand;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import net.kyori.adventure.text.Component;
@@ -26,6 +28,9 @@ public final class PropertyCommands {
         register(commandManager, new PositionCommand());
         register(commandManager, new YawCommand());
         register(commandManager, new PitchCommand());
+        for (Axis axis : Axis.values()) {
+            register(commandManager, new DisplayScaleAxisCommand(axis));
+        }
     }
 
     public static <T> void register(CommandManager<EasCommandSender> commandManager, ValueCommand<T> valueCommand) {
