@@ -25,8 +25,7 @@ run-task = "3.0.2"
 shadow = "9.4.1"
 towny = "0.102.0.12"
 traincarts = "1.21.11-v2"
-worldguard-v6 = "6.2"
-worldguard-v7 = "7.0.16"
+worldguard = "7.0.16"
 
 [libraries]
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
@@ -53,8 +52,7 @@ plotsquared-core = { module = "com.intellectualsites.plotsquared:plotsquared-cor
 residence = { module = "com.github.Zrips:Residence", version.ref = "residence" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "traincarts" }
-worldguard-v6 = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "worldguard-v6" }
-worldguard-v7 = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard-v7" }
+worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 
 [plugins]
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish-plugin" }

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":easyarmorstands-plugin"))
     compileOnly(libs.paper.api)
-    compileOnly(libs.worldguard.v6)
+    compileOnly(project(":easyarmorstands-plugin"))
+    compileOnly(libs.worldguard)
 }
