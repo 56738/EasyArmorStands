@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.display;
 
 import me.m56738.easyarmorstands.addon.AddonFactory;
-import me.m56738.easyarmorstands.capability.Priority;
+import me.m56738.easyarmorstands.addon.Priority;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 
 public class DisplayAddonFactory implements AddonFactory<DisplayAddon> {

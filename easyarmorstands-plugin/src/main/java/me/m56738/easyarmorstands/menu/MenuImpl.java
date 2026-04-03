@@ -6,9 +6,9 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuCloseListener;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -29,9 +29,8 @@ public class MenuImpl implements InventoryHolder, Menu {
     private MenuClickInterceptor currentInterceptor;
 
     public MenuImpl(Component title, MenuSlot[] slots, Locale locale) {
-        ComponentCapability capability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
         this.locale = locale;
-        this.inventory = capability.createInventory(this, slots.length, GlobalTranslator.render(title, locale));
+        this.inventory = Bukkit.createInventory(this, slots.length, GlobalTranslator.render(title, locale));
         this.slots = slots;
         updateItems();
     }

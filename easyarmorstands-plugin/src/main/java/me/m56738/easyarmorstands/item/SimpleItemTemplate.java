@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -17,6 +17,9 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public class SimpleItemTemplate implements ItemTemplate {
+    private static final Style NAME_FALLBACK_STYLE = Style.style(TextDecoration.ITALIC.withState(false));
+    private static final Style LORE_FALLBACK_STYLE = Style.style(TextDecoration.ITALIC.withState(false));
+
     private final ItemStack template;
     private final String displayName;
     private final List<String> lore;
@@ -32,13 +35,15 @@ public class SimpleItemTemplate implements ItemTemplate {
     }
 
     private Component renderName(Locale locale, TagResolver resolver) {
-        return renderer.renderName(displayName, locale, resolver);
+        return renderer.renderName(displayName, locale, resolver)
+                .applyFallbackStyle(NAME_FALLBACK_STYLE);
     }
 
     private List<Component> renderLore(Locale locale, TagResolver resolver) {
         List<Component> renderedLore = new ArrayList<>(lore.size());
         for (String line : lore) {
-            renderedLore.add(renderer.renderLore(line, locale, resolver));
+            renderedLore.add(renderer.renderLore(line, locale, resolver)
+                    .applyFallbackStyle(LORE_FALLBACK_STYLE));
         }
         return renderedLore;
     }
@@ -55,15 +60,11 @@ public class SimpleItemTemplate implements ItemTemplate {
                 .resolver(resolver)
                 .build();
 
-        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
-
         ItemStack item = template.clone();
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            if (displayName != null) {
-                componentCapability.setDisplayName(meta, renderName(locale, resolver));
-            }
-            componentCapability.setLore(meta, renderLore(locale, resolver));
+            meta.customName(renderName(locale, resolver));
+            meta.lore(renderLore(locale, resolver));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }

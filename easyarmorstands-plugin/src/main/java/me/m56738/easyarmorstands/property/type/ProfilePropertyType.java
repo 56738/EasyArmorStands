@@ -1,29 +1,30 @@
 package me.m56738.easyarmorstands.property.type;
 
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.profile.Profile;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.property.button.ProfilePropertyButton;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.object.ObjectContents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ProfilePropertyType extends ConfigurablePropertyType<Profile> {
+@SuppressWarnings("UnstableApiUsage")
+public class ProfilePropertyType extends ConfigurablePropertyType<ResolvableProfile> {
     public ProfilePropertyType(@NotNull Key key) {
-        super(key, Profile.class);
+        super(key, ResolvableProfile.class);
     }
 
     @Override
-    public @NotNull Component getValueComponent(@NotNull Profile value) {
-        return value.asComponent().style(Style.style(NamedTextColor.WHITE));
+    public @NotNull Component getValueComponent(@NotNull ResolvableProfile value) {
+        return Component.object(ObjectContents.playerHead(value)).color(NamedTextColor.WHITE);
     }
 
     @Override
-    public @Nullable MenuSlot createSlot(@NotNull Property<Profile> property, @NotNull PropertyContainer container) {
+    public @Nullable MenuSlot createSlot(@NotNull Property<ResolvableProfile> property, @NotNull PropertyContainer container) {
         return new ProfilePropertyButton(property, container, buttonTemplate);
     }
 }

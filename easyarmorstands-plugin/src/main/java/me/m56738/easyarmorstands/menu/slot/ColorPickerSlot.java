@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.capability.itemcolor.ItemColorCapability;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -121,6 +120,6 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         if (meta == null) {
             return false;
         }
-        return EasyArmorStandsPlugin.getInstance().getCapability(ItemColorCapability.class).hasColor(meta);
+        return ColorPickerContextImpl.hasColor(meta);
     }
 }

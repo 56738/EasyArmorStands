@@ -15,11 +15,6 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.persistence.PersistenceCapability;
-import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
-import me.m56738.easyarmorstands.capability.tick.TickCapability;
-import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPartButton;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButton;
@@ -29,10 +24,8 @@ import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
@@ -110,36 +103,20 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
         }
 
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        GlowCapability glowCapability = plugin.getCapability(GlowCapability.class);
-        if (glowCapability != null && !session.particleProvider().isVisibleThroughWalls()) {
-            // Entity glowing is supported and particles are not visible through walls
-            // Spawn a glowing skeleton instead
-            SpawnCapability spawnCapability = plugin.getCapability(SpawnCapability.class);
-            skeleton = spawnCapability.spawnEntity(entity.getLocation(), ArmorStand.class, e -> {
+        if (!session.particleProvider().isVisibleThroughWalls()) {
+            // Particles are not visible through walls. Spawn a glowing skeleton instead.
+            skeleton = entity.getWorld().spawn(entity.getLocation(), ArmorStand.class, e -> {
+                e.setPersistent(false);
+                e.setVisibleByDefault(false);
                 e.setVisible(false);
                 e.setBasePlate(false);
                 e.setArms(true);
                 e.setGravity(false);
-                PersistenceCapability persistenceCapability = plugin.getCapability(PersistenceCapability.class);
-                if (persistenceCapability != null) {
-                    persistenceCapability.setPersistent(e, false);
-                }
-                TickCapability tickCapability = plugin.getCapability(TickCapability.class);
-                if (tickCapability != null) {
-                    tickCapability.setCanTick(e, false);
-                }
+                e.setCanTick(false);
+                e.setGlowing(true);
                 updateSkeleton(e);
-                VisibilityCapability visibilityCapability = plugin.getCapability(VisibilityCapability.class);
-                if (visibilityCapability != null) {
-                    Player player = session.player();
-                    for (Player other : Bukkit.getOnlinePlayers()) {
-                        if (player != other) {
-                            visibilityCapability.hideEntity(other, plugin, e);
-                        }
-                    }
-                }
-                glowCapability.setGlowing(e, true);
             });
+            session.player().showEntity(plugin, skeleton);
         } else {
             skeleton = null;
         }
@@ -150,14 +127,6 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
         skeleton.setSmall(entity.isSmall());
         for (ArmorStandPart part : ArmorStandPart.values()) {
             part.setPose(skeleton, part.getPose(entity));
-        }
-    }
-
-    public void hideSkeleton(Player player) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        VisibilityCapability visibilityCapability = plugin.getCapability(VisibilityCapability.class);
-        if (skeleton != null && visibilityCapability != null) {
-            visibilityCapability.hideEntity(player, plugin, skeleton);
         }
     }
 

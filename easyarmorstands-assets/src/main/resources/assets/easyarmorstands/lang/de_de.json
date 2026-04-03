@@ -105,7 +105,6 @@
   "easyarmorstands.error.block-unsupported": "Kann den angezeigten Block von diesem Objekt nicht ändern.",
   "easyarmorstands.error.box-unsupported": "Dieses Objekt unterstützt keine benutzerdefinierte Hitbox.",
   "easyarmorstands.error.brightness-unsupported": "Die Helligkeit dieses Objekts kann nicht verändert werden.",
-  "easyarmorstands.error.can-tick-unsupported": "Die Aktualisierung von Rüstungsständern kann nur auf Paper-Servern deaktiviert werden.",
   "easyarmorstands.error.can-tick-unsupported-entity": "Die Aktualisierung kann nur für Rüstungsständer deaktiviert werden.",
   "easyarmorstands.error.cannot-add-tag": "Kann das Tag nicht hinzufügen.",
   "easyarmorstands.error.cannot-change": "Kann diese Eigenschaft nicht verändern.",

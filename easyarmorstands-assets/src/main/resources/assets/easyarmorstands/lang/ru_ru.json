@@ -105,7 +105,6 @@
   "easyarmorstands.error.block-unsupported": "Невозможно изменить отображаемый блок этой сущности.",
   "easyarmorstands.error.box-unsupported": "Эта сущность не поддерживает изменения границы.",
   "easyarmorstands.error.brightness-unsupported": "Невозможно изменить уровень света этой сущности.",
-  "easyarmorstands.error.can-tick-unsupported": "Отключение движеия стойки брони возможно только на ядрах Paper.",
   "easyarmorstands.error.can-tick-unsupported-entity": "Отключить движение можно только для стоек для брони.",
   "easyarmorstands.error.cannot-add-tag": "Невозможно добавить этот тег.",
   "easyarmorstands.error.cannot-change": "Невозможно изменить это свойство.",

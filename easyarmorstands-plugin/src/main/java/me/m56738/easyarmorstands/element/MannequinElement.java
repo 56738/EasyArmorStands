@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mannequin;
 
-public class MannequinElement<E extends Entity> extends SimpleEntityElement<E> {
-    public MannequinElement(E entity, SimpleEntityElementType<E> type) {
+public class MannequinElement extends SimpleEntityElement<Mannequin> {
+    public MannequinElement(Mannequin entity, MannequinElementType type) {
         super(entity, type);
     }
 }

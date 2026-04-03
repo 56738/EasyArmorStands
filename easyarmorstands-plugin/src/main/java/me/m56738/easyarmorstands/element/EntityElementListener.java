@@ -1,21 +1,9 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.capability.entityai.EntityAICapability;
-import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
-import me.m56738.easyarmorstands.capability.entitytag.EntityTagCapability;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.glow.GlowCapability;
-import me.m56738.easyarmorstands.capability.invulnerability.InvulnerabilityCapability;
-import me.m56738.easyarmorstands.capability.lock.LockCapability;
-import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
-import me.m56738.easyarmorstands.capability.silent.SilentCapability;
-import me.m56738.easyarmorstands.capability.tick.TickCapability;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
@@ -35,9 +23,21 @@ import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.entity.EntityScaleProperty;
 import me.m56738.easyarmorstands.property.entity.EntitySilentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityTagsProperty;
+import me.m56738.easyarmorstands.property.mannequin.MannequinDescriptionProperty;
+import me.m56738.easyarmorstands.property.mannequin.MannequinImmovableProperty;
+import me.m56738.easyarmorstands.property.mannequin.MannequinMainHandProperty;
+import me.m56738.easyarmorstands.property.mannequin.MannequinProfileProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinCapeVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinHatVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinJacketVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinLeftPantsVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinLeftSleeveVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinRightPantsVisibleProperty;
+import me.m56738.easyarmorstands.property.mannequin.part.MannequinRightSleeveVisibleProperty;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mannequin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -59,48 +59,29 @@ public class EntityElementListener implements Listener {
         if (entity instanceof ArmorStand) {
             registerArmorStandProperties((ArmorStand) entity, registry);
         }
-
-        MannequinCapability mannequinCapability = EasyArmorStandsPlugin.getInstance().getCapability(MannequinCapability.class);
-        if (mannequinCapability != null && mannequinCapability.isMannequin(entity)) {
-            mannequinCapability.registerProperties(entity, registry);
+        if (entity instanceof Mannequin) {
+            registerMannequinProperties((Mannequin) entity, registry);
         }
     }
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry) {
-        ComponentCapability componentCapability = EasyArmorStandsPlugin.getInstance().getCapability(ComponentCapability.class);
-        GlowCapability glowCapability = EasyArmorStandsPlugin.getInstance().getCapability(GlowCapability.class);
-        if (glowCapability != null) {
-            registry.register(new EntityGlowingProperty(entity, glowCapability));
-        }
+        registry.register(new EntityGlowingProperty(entity));
         registry.register(new EntityLocationProperty(entity));
-        SilentCapability silentCapability = EasyArmorStandsPlugin.getInstance().getCapability(SilentCapability.class);
-        if (silentCapability != null) {
-            registry.register(new EntitySilentProperty(entity, silentCapability));
-        }
-        EntityTagCapability tagCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTagCapability.class);
-        if (tagCapability != null) {
-            registry.register(new EntityTagsProperty(entity, tagCapability));
-        }
-        registry.register(new EntityCustomNameProperty(entity, componentCapability));
+        registry.register(new EntitySilentProperty(entity));
+        registry.register(new EntityTagsProperty(entity));
+        registry.register(new EntityCustomNameProperty(entity));
         registry.register(new EntityCustomNameVisibleProperty(entity));
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
         EntityEquipment equipment = entity.getEquipment();
         if (equipment != null) {
-            EquipmentCapability equipmentCapability = EasyArmorStandsPlugin.getInstance().getCapability(EquipmentCapability.class);
             for (EquipmentSlot slot : EquipmentSlot.values()) {
-                registry.register(new EntityEquipmentProperty(equipment, slot, equipmentCapability));
+                registry.register(new EntityEquipmentProperty(equipment, slot));
             }
         }
-        EntityScaleCapability scaleCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityScaleCapability.class);
-        if (scaleCapability != null) {
-            registry.register(new EntityScaleProperty(entity, scaleCapability));
-        }
-        EntityAICapability aiCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityAICapability.class);
-        if (aiCapability != null) {
-            registry.register(new EntityAIProperty(entity, aiCapability));
-        }
+        registry.register(new EntityScaleProperty(entity));
+        registry.register(new EntityAIProperty(entity));
     }
 
     private void registerArmorStandProperties(ArmorStand entity, PropertyRegistry registry) {
@@ -109,21 +90,26 @@ public class EntityElementListener implements Listener {
         registry.register(new ArmorStandMarkerProperty(entity));
         registry.register(new ArmorStandSizeProperty(entity));
         registry.register(new ArmorStandVisibilityProperty(entity));
-        TickCapability tickCapability = EasyArmorStandsPlugin.getInstance().getCapability(TickCapability.class);
-        if (tickCapability != null) {
-            registry.register(new ArmorStandCanTickProperty(entity, tickCapability));
-        }
+        registry.register(new ArmorStandCanTickProperty(entity));
         registry.register(new ArmorStandGravityProperty(entity));
-        InvulnerabilityCapability invulnerabilityCapability = EasyArmorStandsPlugin.getInstance().getCapability(InvulnerabilityCapability.class);
-        if (invulnerabilityCapability != null) {
-            registry.register(new ArmorStandInvulnerabilityProperty(entity, invulnerabilityCapability));
-        }
-        LockCapability lockCapability = EasyArmorStandsPlugin.getInstance().getCapability(LockCapability.class);
-        if (lockCapability != null) {
-            registry.register(new ArmorStandLockProperty(entity, lockCapability));
-        }
+        registry.register(new ArmorStandInvulnerabilityProperty(entity));
+        registry.register(new ArmorStandLockProperty(entity));
         for (ArmorStandPart part : ArmorStandPart.values()) {
             registry.register(new ArmorStandPoseProperty(entity, part));
         }
+    }
+
+    private void registerMannequinProperties(Mannequin entity, PropertyRegistry registry) {
+        registry.register(new MannequinMainHandProperty(entity));
+        registry.register(new MannequinProfileProperty(entity));
+        registry.register(new MannequinImmovableProperty(entity));
+        registry.register(new MannequinDescriptionProperty(entity));
+        registry.register(new MannequinCapeVisibleProperty(entity));
+        registry.register(new MannequinJacketVisibleProperty(entity));
+        registry.register(new MannequinLeftSleeveVisibleProperty(entity));
+        registry.register(new MannequinRightSleeveVisibleProperty(entity));
+        registry.register(new MannequinLeftPantsVisibleProperty(entity));
+        registry.register(new MannequinRightPantsVisibleProperty(entity));
+        registry.register(new MannequinHatVisibleProperty(entity));
     }
 }

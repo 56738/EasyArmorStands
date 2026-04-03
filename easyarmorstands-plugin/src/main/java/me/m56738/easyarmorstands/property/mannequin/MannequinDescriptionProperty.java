@@ -1,34 +1,34 @@
-package me.m56738.easyarmorstands.property.entity;
+package me.m56738.easyarmorstands.property.mannequin;
 
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mannequin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class EntityCustomNameProperty implements Property<Optional<Component>> {
-    private final Entity entity;
+public class MannequinDescriptionProperty implements Property<Optional<Component>> {
+    private final Mannequin entity;
 
-    public EntityCustomNameProperty(Entity entity) {
+    public MannequinDescriptionProperty(Mannequin entity) {
         this.entity = entity;
     }
 
     @Override
     public @NotNull PropertyType<Optional<Component>> getType() {
-        return EntityPropertyTypes.CUSTOM_NAME;
+        return MannequinPropertyTypes.DESCRIPTION;
     }
 
     @Override
     public @NotNull Optional<Component> getValue() {
-        return Optional.ofNullable(entity.customName());
+        return Optional.ofNullable(entity.getDescription());
     }
 
     @Override
     public boolean setValue(@NotNull Optional<Component> value) {
-        entity.customName(value.orElse(null));
+        entity.setDescription(value.orElse(null));
         return true;
     }
 }

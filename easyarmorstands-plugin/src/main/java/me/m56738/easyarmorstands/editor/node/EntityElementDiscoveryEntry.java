@@ -1,10 +1,8 @@
 package me.m56738.easyarmorstands.editor.node;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -23,9 +21,7 @@ public class EntityElementDiscoveryEntry implements ElementDiscoveryEntry {
 
     @Override
     public SelectableElement getElement() {
-        VisibilityCapability visibilityCapability = EasyArmorStandsPlugin.getInstance()
-                .getCapability(VisibilityCapability.class);
-        if (visibilityCapability != null && !visibilityCapability.isNotHidden(player, entity)) {
+        if (!player.canSee(entity)) {
             return null;
         }
 

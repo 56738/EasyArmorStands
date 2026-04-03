@@ -1,14 +1,11 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.entitytype.EntityTypeCapability;
-import me.m56738.easyarmorstands.capability.spawn.SpawnCapability;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -27,10 +24,9 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
     private final Component displayName;
 
     public SimpleEntityElementType(EntityType entityType, Class<E> entityClass) {
-        EntityTypeCapability entityTypeCapability = EasyArmorStandsPlugin.getInstance().getCapability(EntityTypeCapability.class);
         this.entityType = entityType;
         this.entityClass = entityClass;
-        this.displayName = entityTypeCapability.getName(entityType);
+        this.displayName = Component.translatable(entityType);
     }
 
     @Override
@@ -62,10 +58,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         }
         Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        E entity = EasyArmorStandsPlugin.getInstance().getCapability(SpawnCapability.class).spawnEntity(location, entityClass, configurator);
-        if (entity == null) {
-            return null;
-        }
+        E entity = location.getWorld().spawn(location, entityClass, configurator);
         SimpleEntityElement<E> element = configurator.getElement();
         if (element != null) {
             entity.teleport(location);

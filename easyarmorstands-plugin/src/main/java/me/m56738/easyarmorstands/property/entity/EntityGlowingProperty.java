@@ -3,17 +3,14 @@ package me.m56738.easyarmorstands.property.entity;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.glow.GlowCapability;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityGlowingProperty implements Property<Boolean> {
     private final Entity entity;
-    private final GlowCapability glowCapability;
 
-    public EntityGlowingProperty(Entity entity, GlowCapability glowCapability) {
+    public EntityGlowingProperty(Entity entity) {
         this.entity = entity;
-        this.glowCapability = glowCapability;
     }
 
     @Override
@@ -23,12 +20,12 @@ public class EntityGlowingProperty implements Property<Boolean> {
 
     @Override
     public @NotNull Boolean getValue() {
-        return glowCapability.isGlowing(entity);
+        return entity.isGlowing();
     }
 
     @Override
     public boolean setValue(@NotNull Boolean value) {
-        glowCapability.setGlowing(entity, value);
+        entity.setGlowing(value);
         return true;
     }
 }

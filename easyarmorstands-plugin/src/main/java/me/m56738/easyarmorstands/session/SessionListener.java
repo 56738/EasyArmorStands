@@ -5,9 +5,6 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
-import me.m56738.easyarmorstands.capability.equipment.EquipmentCapability;
-import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsListener;
-import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventListener;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoveryEntry;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
@@ -35,9 +32,10 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerShowEntityEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -45,9 +43,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-public class SessionListener implements Listener, SwapHandItemsListener, VisibilityEventListener {
+public class SessionListener implements Listener {
     private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
@@ -62,10 +61,9 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
         if (!player.hasPermission(Permissions.EDIT)) {
             return false;
         }
-        EquipmentCapability equipmentCapability = plugin.getCapability(EquipmentCapability.class);
         EntityEquipment equipment = player.getEquipment();
-        for (EquipmentSlot hand : equipmentCapability.getHands()) {
-            ItemStack item = equipmentCapability.getItem(equipment, hand);
+        for (EquipmentSlot hand : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND)) {
+            ItemStack item = equipment.getItem(hand);
             if (plugin.isTool(item)) {
                 return true;
             }
@@ -124,7 +122,6 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
         return handleRightClick(player, entity, null);
     }
 
-    @Override
     public boolean handleSwap(Player player) {
         SessionImpl session = manager.getSession(player);
         if (session == null) {
@@ -132,6 +129,13 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
         }
         session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
         return true;
+    }
+
+    @EventHandler
+    public void onSwap(PlayerSwapHandItemsEvent event) {
+        if (handleSwap(event.getPlayer())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -301,11 +305,6 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        manager.hideSkeletons(event.getPlayer());
-    }
-
-    @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         manager.stopSession(event.getPlayer());
         suppressClick.remove(event.getPlayer());
@@ -333,9 +332,18 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
         }
     }
 
-    @Override
     public void onVisibilityChanged(Player player, Entity entity, boolean visible) {
         Bukkit.getScheduler().runTask(plugin, () -> updateEntityVisibility(player, entity));
+    }
+
+    @EventHandler
+    public void onShow(PlayerShowEntityEvent event) {
+        onVisibilityChanged(event.getPlayer(), event.getEntity(), true);
+    }
+
+    @EventHandler
+    public void onHide(PlayerShowEntityEvent event) {
+        onVisibilityChanged(event.getPlayer(), event.getEntity(), false);
     }
 
     private void updateEntityVisibility(Player player, Entity entity) {

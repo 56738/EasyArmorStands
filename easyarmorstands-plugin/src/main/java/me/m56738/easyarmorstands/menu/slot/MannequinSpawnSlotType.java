@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class MannequinSpawnSlotType implements MenuSlotType {
     public static final Key KEY = Key.key("easyarmorstands", "spawn/mannequin");
-    private final MannequinElementType<?> type;
+    private final MannequinElementType type;
 
-    public MannequinSpawnSlotType(MannequinElementType<?> type) {
+    public MannequinSpawnSlotType(MannequinElementType type) {
         this.type = type;
     }
 

@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.lib.cloud.CommandManager;
@@ -109,37 +108,10 @@ public class GlobalCommands {
     @CommandDescription("easyarmorstands.command.description.debug")
     public void debug(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        CapabilityLoader loader = plugin.getCapabilityLoader();
         String version = plugin.getDescription().getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
         sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
         sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
-        for (CapabilityLoader.Entry capability : loader.getCapabilities()) {
-            Object instance = capability.getInstance();
-            int attempts = capability.getAttempts();
-            Component value;
-            if (instance != null) {
-                String packageName = capability.getType().getPackage().getName();
-                String providerName = capability.getProvider().getClass().getName();
-                if (providerName.startsWith(packageName)) {
-                    providerName = providerName.substring(packageName.length());
-                }
-                NamedTextColor color;
-                if (attempts > 1) {
-                    color = NamedTextColor.YELLOW;
-                } else {
-                    color = NamedTextColor.GREEN;
-                }
-                value = Component.text(providerName, color)
-                        .hoverEvent(Component.text(instance.getClass().getName()));
-            } else {
-                value = Component.text("Not supported", NamedTextColor.RED);
-            }
-            sender.sendMessage(debugLine(
-                    Component.text(capability.getName()).hoverEvent(Component.text(capability.getType().getName())),
-                    value
-            ));
-        }
 
         if (sender instanceof EasPlayer) {
             SessionImpl session = ((EasPlayer) sender).session();

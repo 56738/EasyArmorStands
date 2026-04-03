@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.Hand;
 import me.m56738.easyarmorstands.api.SkinPart;
-import me.m56738.easyarmorstands.api.profile.Profile;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
@@ -15,7 +15,8 @@ import java.util.Optional;
 @SuppressWarnings("PatternValidation")
 public final class MannequinPropertyTypes {
     public static final PropertyType<Hand> MAIN_HAND = get("mannequin/main_hand", Hand.class);
-    public static final PropertyType<Profile> PROFILE = get("mannequin/profile", Profile.class);
+    @SuppressWarnings("UnstableApiUsage")
+    public static final PropertyType<ResolvableProfile> PROFILE = get("mannequin/profile", ResolvableProfile.class);
     public static final PropertyType<Boolean> IMMOVABLE = get("mannequin/immovable", Boolean.class);
     public static final PropertyType<Optional<Component>> DESCRIPTION = get("mannequin/description", new TypeToken<Optional<Component>>() {
     });

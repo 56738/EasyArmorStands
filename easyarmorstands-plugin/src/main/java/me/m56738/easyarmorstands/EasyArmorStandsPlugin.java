@@ -18,12 +18,6 @@ import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
-import me.m56738.easyarmorstands.capability.CapabilityLoader;
-import me.m56738.easyarmorstands.capability.command.CommandCapability;
-import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
-import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
-import me.m56738.easyarmorstands.capability.tool.ToolCapability;
-import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardListener;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
@@ -33,6 +27,7 @@ import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
 import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ClipboardCommands;
+import me.m56738.easyarmorstands.command.CommandSourceStackMapper;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.PropertyCommands;
@@ -58,6 +53,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
+import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
@@ -81,9 +77,11 @@ import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
 import me.m56738.easyarmorstands.lib.cloud.CommandManager;
 import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
 import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
+import me.m56738.easyarmorstands.lib.cloud.execution.ExecutionCoordinator;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.MinecraftExceptionHandler;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
+import me.m56738.easyarmorstands.lib.cloud.paper.PaperCommandManager;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
 import me.m56738.easyarmorstands.lib.configurate.loader.HeaderMode;
@@ -120,21 +118,20 @@ import me.m56738.easyarmorstands.region.RegionListenerManager;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
-import me.m56738.easyarmorstands.session.SkeletonLoginListener;
 import me.m56738.easyarmorstands.update.UpdateManager;
+import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -156,8 +153,8 @@ import java.util.stream.Stream;
 
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
     private static EasyArmorStandsPlugin instance;
-    private final CapabilityLoader loader = new CapabilityLoader(this, getClassLoader());
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
+    private final NamespacedKey toolKey = new NamespacedKey(this, "tool");
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -190,14 +187,15 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
-        loader.load();
 
         propertyTypeRegistry = new PropertyTypeRegistryImpl();
         new DefaultPropertyTypes(propertyTypeRegistry);
 
         ArmorStandElementType armorStandElementType = new ArmorStandElementType();
+        MannequinElementType mannequinElementType = new MannequinElementType();
         entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
         entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
+        entityElementProviderRegistry.register(new MannequinElementProvider(mannequinElementType));
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
@@ -212,6 +210,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorPickerSlotType());
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
         menuSlotTypeRegistry.register(new DestroySlotType());
+        menuSlotTypeRegistry.register(new MannequinSpawnSlotType(mannequinElementType));
         menuSlotTypeRegistry.register(new PropertySlotType());
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/item_display")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/block_display")));
@@ -220,13 +219,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands", "spawn/mannequin")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
         menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
-
-        MannequinCapability mannequinCapability = getCapability(MannequinCapability.class);
-        if (mannequinCapability != null) {
-            MannequinElementType<?> type = mannequinCapability.createElementType();
-            entityElementProviderRegistry.register(new MannequinElementProvider<>(type, mannequinCapability));
-            menuSlotTypeRegistry.register(new MannequinSpawnSlotType(type));
-        }
 
         menuProvider = new MenuProviderImpl();
 
@@ -257,23 +249,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getPluginManager().registerEvents(historyManager, this);
         getServer().getPluginManager().registerEvents(new ClipboardListener(clipboardManager), this);
         getServer().getPluginManager().registerEvents(new EntityElementListener(), this);
-        if (!ReflectionUtil.isDeprecated(PlayerLoginEvent.class)) {
-            getServer().getPluginManager().registerEvents(new SkeletonLoginListener(sessionManager), this);
-        }
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
 
-        SwapHandItemsCapability swapHandItemsCapability = getCapability(SwapHandItemsCapability.class);
-        if (swapHandItemsCapability != null) {
-            swapHandItemsCapability.addListener(sessionListener);
-        }
-
-        VisibilityEventCapability visibilityEventCapability = getCapability(VisibilityEventCapability.class);
-        if (visibilityEventCapability != null) {
-            visibilityEventCapability.addListener(sessionListener);
-        }
-
-        commandManager = getCapability(CommandCapability.class).createCommandManager();
+        commandManager = PaperCommandManager.builder(new CommandSourceStackMapper(new CommandSenderMapper()))
+                .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(this)))
+                .buildOnEnable(this);
 
         MinecraftExceptionHandler.<EasCommandSender>createNative()
                 .defaultArgumentParsingHandler()
@@ -338,13 +319,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
 
         loadMenuTemplates();
-
-        for (CapabilityLoader.Entry entry : loader.getCapabilities()) {
-            Object capability = entry.getInstance();
-            if (capability instanceof Listener) {
-                getServer().getPluginManager().registerEvents((Listener) capability, this);
-            }
-        }
     }
 
     private Callable<BufferedReader> getDefaultConfigSource(String name) {
@@ -586,15 +560,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return clipboardManager.getClipboard(player);
     }
 
-    @Contract(pure = true)
-    public <T> T getCapability(Class<T> type) {
-        return loader.get(type);
-    }
-
-    public CapabilityLoader getCapabilityLoader() {
-        return loader;
-    }
-
     public HistoryManager getHistoryManager() {
         return historyManager;
     }
@@ -613,32 +578,16 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public ItemStack createTool(Locale locale) {
         ItemStack item = config.editor.tool.render(locale);
-        ToolCapability toolCapability = getCapability(ToolCapability.class);
-        if (toolCapability != null) {
-            toolCapability.configureTool(item);
-        }
+        item.editPersistentDataContainer(pdc ->
+                pdc.set(toolKey, PersistentDataType.BYTE, (byte) 1));
         return item;
     }
 
-    public boolean isTool(ItemStack item) {
+    public boolean isTool(@Nullable ItemStack item) {
         if (item == null) {
             return false;
         }
-        ToolCapability toolCapability = EasyArmorStandsPlugin.getInstance().getCapability(ToolCapability.class);
-        if (toolCapability != null) {
-            return toolCapability.isTool(item);
-        }
-
-        // Tool capability is not supported
-        // Match any item with the right material and any customized display name
-        if (!Objects.equals(config.editor.tool.getType(), item.getType())) {
-            return false;
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-        return meta.hasDisplayName();
+        return item.getPersistentDataContainer().has(toolKey, PersistentDataType.BYTE);
     }
 
     public EasConfig getConfiguration() {
