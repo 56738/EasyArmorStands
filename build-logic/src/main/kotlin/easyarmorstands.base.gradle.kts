@@ -36,6 +36,10 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-public/") {
         mavenContent {
             includeGroup("de.tr7zw")
+        }
+    }
+    maven("https://repo.codemc.io/repository/bentoboxworld/") {
+        mavenContent {
             includeGroup("world.bentobox")
         }
     }
