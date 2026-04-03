@@ -2,9 +2,7 @@
 adventure-api = "4.26.1"
 adventure-platform = "4.4.1"
 bentobox = "3.12.0"
-brigadier = "1.0.17"
 bstats = "3.2.1"
-bukkit = "1.8.8-R0.1-SNAPSHOT"
 checker-qual = "3.54.1"
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-SNAPSHOT"
@@ -21,7 +19,9 @@ item-nbt-api = "2.15.6"
 jetbrains-annotations = "26.1.0"
 joml = "1.10.8"
 lands = "7.25.4"
+minecraft = "1.21.11"
 minotaur = "2.9.0"
+paper = "1.21.11-R0.1-SNAPSHOT"
 plotsquared = "7.5.12"
 residence = "6.0.0.1"
 run-task = "3.0.2"
@@ -39,9 +39,7 @@ adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
 adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure-api" }
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
-brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
-bukkit = { module = "org.bukkit:bukkit", version.ref = "bukkit" }
 checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "checker-qual" }
 cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
@@ -59,6 +57,7 @@ item-nbt-api = { module = "de.tr7zw:item-nbt-api", version.ref = "item-nbt-api" 
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 joml = { module = "org.joml:joml", version.ref = "joml" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 plotsquared-bukkit = { module = "com.intellectualsites.plotsquared:plotsquared-bukkit", version.ref = "plotsquared" }
 plotsquared-core = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
 residence = { module = "com.github.Zrips:Residence", version.ref = "residence" }

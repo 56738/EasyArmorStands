@@ -3,13 +3,6 @@
   "extends": [
     "config:best-practices"
   ],
-  "ignoreDeps": [
-    "com.destroystokyo.paper:paper-api",
-    "com.mojang:brigadier",
-    "io.papermc.paper:paper-api",
-    "org.bukkit:bukkit",
-    "org.spigotmc:spigot-api"
-  ],
   "lockFileMaintenance": {
     "enabled": false
   }

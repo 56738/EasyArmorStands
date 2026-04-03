@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.bukkit)
+    compileOnly(libs.paper.api)
     compileOnly(libs.jetbrains.annotations)
     compileOnlyApi(project(":easyarmorstands-api-dependencies", configuration = "shadow"))
 }
