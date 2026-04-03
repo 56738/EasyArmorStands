@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.particle;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.lib.gizmo.api.CircleGizmo;
+import me.m56738.gizmo.api.CircleGizmo;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Vector3dc;

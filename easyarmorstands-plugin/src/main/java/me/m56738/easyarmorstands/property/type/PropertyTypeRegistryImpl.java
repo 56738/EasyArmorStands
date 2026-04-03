@@ -3,12 +3,12 @@ package me.m56738.easyarmorstands.property.type;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.Map;
 import java.util.TreeMap;

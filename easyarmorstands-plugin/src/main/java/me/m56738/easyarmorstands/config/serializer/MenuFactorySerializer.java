@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.config.serializer;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializer;
 import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 

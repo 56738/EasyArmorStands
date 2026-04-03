@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.command.requirement;
 
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.lib.cloud.Command;
-import me.m56738.easyarmorstands.lib.cloud.annotations.BuilderModifier;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.annotations.BuilderModifier;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

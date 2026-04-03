@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.particle;
 
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
-import me.m56738.easyarmorstands.lib.gizmo.api.GizmoFactory;
+import me.m56738.gizmo.api.GizmoFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class GizmoParticleProvider implements ParticleProvider {

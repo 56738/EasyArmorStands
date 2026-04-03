@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Cursor;
-import me.m56738.easyarmorstands.lib.gizmo.api.cursor.Intersection;
 import me.m56738.easyarmorstands.util.Util;
+import me.m56738.gizmo.api.cursor.Cursor;
+import me.m56738.gizmo.api.cursor.Intersection;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;

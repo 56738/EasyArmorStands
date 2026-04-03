@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.config.version.game.v1_13;
 
-import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.NodePath;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.NodePath;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.transformation.TransformAction;
 
 import java.util.Arrays;
 import java.util.List;

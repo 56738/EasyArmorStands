@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.display.property.type;
 
-import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -10,6 +8,8 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Display.Brightness;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.Optional;
 

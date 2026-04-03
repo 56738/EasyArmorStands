@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.config.version.game;
 
-import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
-import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.NodePath;
-import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import io.leangen.geantyref.TypeToken;
+import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.NodePath;
+import org.spongepowered.configurate.transformation.TransformAction;
 
 import java.util.Objects;
 

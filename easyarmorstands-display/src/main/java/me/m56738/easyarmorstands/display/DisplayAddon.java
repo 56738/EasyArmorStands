@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.display;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.Axis;
@@ -19,17 +20,16 @@ import me.m56738.easyarmorstands.display.menu.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.display.menu.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.display.menu.InteractionSpawnSlotType;
 import me.m56738.easyarmorstands.display.property.display.DefaultDisplayPropertyTypes;
-import me.m56738.easyarmorstands.lib.cloud.CommandManager;
-import me.m56738.easyarmorstands.lib.cloud.brigadier.BrigadierManagerHolder;
-import me.m56738.easyarmorstands.lib.cloud.brigadier.CloudBrigadierManager;
-import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.TextDisplay;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.brigadier.BrigadierManagerHolder;
+import org.incendo.cloud.brigadier.CloudBrigadierManager;
+import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 
 public class DisplayAddon implements Addon {
     private final DisplayElementType<ItemDisplay> itemDisplayType;

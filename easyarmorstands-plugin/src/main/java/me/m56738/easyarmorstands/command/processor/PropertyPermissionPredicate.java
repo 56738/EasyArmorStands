@@ -4,12 +4,12 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.lib.cloud.key.CloudKey;
-import me.m56738.easyarmorstands.lib.cloud.permission.Permission;
-import me.m56738.easyarmorstands.lib.cloud.permission.PredicatePermission;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.permission.Permission;
+import org.incendo.cloud.permission.PredicatePermission;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 

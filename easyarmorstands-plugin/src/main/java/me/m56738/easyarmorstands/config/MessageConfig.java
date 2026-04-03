@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.config;
 
-import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.message.MessageStyle;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Map;
 

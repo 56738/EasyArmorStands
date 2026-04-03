@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.config.version;
 
 import me.m56738.easyarmorstands.config.MessageConfig;
 import me.m56738.easyarmorstands.config.version.game.ReplaceTransformAction;
-import me.m56738.easyarmorstands.lib.configurate.NodePath;
-import me.m56738.easyarmorstands.lib.configurate.transformation.ConfigurationTransformation;
-import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
+import org.spongepowered.configurate.NodePath;
+import org.spongepowered.configurate.transformation.ConfigurationTransformation;
+import org.spongepowered.configurate.transformation.TransformAction;
 
-import static me.m56738.easyarmorstands.lib.configurate.NodePath.path;
+import static org.spongepowered.configurate.NodePath.path;
 
 public class Transformations {
     public static ConfigurationTransformation.Versioned config() {
