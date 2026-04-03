@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.config.version;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 
@@ -18,6 +19,17 @@ public class Version implements Comparable<Version> {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
+    }
+
+    public static @Nullable Version tryParse(@Nullable String version) {
+        if (version == null) {
+            return null;
+        }
+        try {
+            return parse(version);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static Version parse(String version) {

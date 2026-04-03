@@ -334,7 +334,12 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         addonManager.enable();
 
-        loadUpdateChecker();
+        try {
+            loadUpdateChecker();
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Failed to initialize update checks");
+        }
+
         loadMenuTemplates();
 
         for (CapabilityLoader.Entry entry : loader.getCapabilities()) {
@@ -436,7 +441,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
         if (config.updateCheck.enabled) {
             if (updateManager == null) {
-                updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY, 108349);
+                updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY);
             }
         } else {
             if (updateManager != null) {
