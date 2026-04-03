@@ -404,7 +404,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     private void loadUpdateChecker() {
-        if (getDescription().getVersion().endsWith("-SNAPSHOT")) {
+        if (getPluginMeta().getVersion().endsWith("-SNAPSHOT")) {
             return;
         }
         if (config.updateCheck.enabled) {
