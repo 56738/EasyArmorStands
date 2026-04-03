@@ -17,7 +17,7 @@ jobs:
       - name: Build
         run: ./gradlew build
       - name: Publish to repository
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/v2' }}
         run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_MGDevUsername: ${{ secrets.MAVEN_USERNAME }}
