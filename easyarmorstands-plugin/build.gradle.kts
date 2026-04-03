@@ -39,9 +39,13 @@ tasks {
     }
 
     processResources {
-        inputs.property("version", version)
+        val props = mapOf(
+            "version" to version,
+            "minecraftVersion" to libs.versions.minecraft.get()
+        )
+        inputs.properties(props)
         filesMatching("*.yml") {
-            expand("version" to version)
+            expand(props)
         }
     }
 
