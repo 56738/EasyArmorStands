@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.api.editor.tool;
 
 import me.m56738.easyarmorstands.api.editor.Snapper;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public interface MoveToolSession extends ToolSession {
     void setChange(@NotNull Vector3dc change);

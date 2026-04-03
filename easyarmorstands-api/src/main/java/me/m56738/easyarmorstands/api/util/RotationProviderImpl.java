@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.util;
 
-import me.m56738.easyarmorstands.lib.joml.Quaterniond;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
 
 class RotationProviderImpl implements RotationProvider {
     static final RotationProviderImpl IDENTITY = new RotationProviderImpl(new Quaterniond());

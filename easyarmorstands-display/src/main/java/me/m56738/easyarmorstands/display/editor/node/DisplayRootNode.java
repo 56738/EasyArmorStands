@@ -16,8 +16,6 @@ import me.m56738.easyarmorstands.display.element.DisplayElement;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
-import me.m56738.easyarmorstands.lib.joml.Quaternionf;
-import me.m56738.easyarmorstands.lib.joml.Vector3f;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Location;
@@ -25,6 +23,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class DisplayRootNode extends DisplayMenuNode implements ElementNode, ResettableNode {
     private final Session session;

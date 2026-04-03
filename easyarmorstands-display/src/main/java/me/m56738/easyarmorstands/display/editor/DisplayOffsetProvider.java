@@ -5,12 +5,12 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
-import me.m56738.easyarmorstands.lib.joml.Quaterniond;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import me.m56738.easyarmorstands.util.EasMath;
 import org.bukkit.Location;
+import org.joml.Quaterniond;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3fc;
 
 public class DisplayOffsetProvider implements OffsetProvider {
     private final Property<Location> locationProperty;

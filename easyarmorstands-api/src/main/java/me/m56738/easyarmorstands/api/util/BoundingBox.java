@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.api.util;
 
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Arrays;
 

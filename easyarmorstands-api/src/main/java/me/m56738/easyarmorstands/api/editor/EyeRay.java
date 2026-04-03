@@ -1,16 +1,16 @@
 package me.m56738.easyarmorstands.api.editor;
 
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.lib.joml.Intersectiond;
-import me.m56738.easyarmorstands.lib.joml.Matrix4dc;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Intersectiond;
+import org.joml.Matrix4dc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface EyeRay {

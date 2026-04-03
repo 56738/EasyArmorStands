@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.api.particle;
 
 import me.m56738.easyarmorstands.api.Axis;
-import me.m56738.easyarmorstands.lib.joml.Quaterniond;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface LineParticle extends ColoredParticle {

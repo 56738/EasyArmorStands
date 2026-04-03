@@ -12,9 +12,6 @@ dependencies {
         isTransitive = false
     }
     api(libs.configurate.yaml)
-    api(libs.joml) {
-        exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
-    }
     api(libs.gizmo.bukkit)
     api(libs.item.nbt.api)
 }
@@ -27,7 +24,6 @@ tasks {
         relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
         relocate("org.bstats", "$prefix.bstats")
-        relocate("org.joml", "$prefix.joml")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
         relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
         relocate("de.tr7zw.changeme.nbtapi", "$prefix.nbtapi")

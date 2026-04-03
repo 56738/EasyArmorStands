@@ -19,7 +19,6 @@ import me.m56738.easyarmorstands.capability.entityscale.EntityScaleCapability;
 import me.m56738.easyarmorstands.capability.entitysize.EntitySizeCapability;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -27,6 +26,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import java.util.Objects;
 

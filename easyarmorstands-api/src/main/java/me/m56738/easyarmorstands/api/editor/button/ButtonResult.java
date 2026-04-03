@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.api.editor.button;
 
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3dc;
 
 @ApiStatus.NonExtendable
 public interface ButtonResult {

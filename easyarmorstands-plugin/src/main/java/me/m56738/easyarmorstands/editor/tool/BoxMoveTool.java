@@ -6,9 +6,6 @@ import me.m56738.easyarmorstands.api.editor.tool.MoveToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
@@ -16,6 +13,9 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaterniondc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class BoxMoveTool implements MoveTool {
     private final BoundingBoxEditor editor;

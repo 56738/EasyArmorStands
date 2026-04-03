@@ -45,8 +45,6 @@ import me.m56738.easyarmorstands.lib.cloud.bukkit.data.MultipleEntitySelector;
 import me.m56738.easyarmorstands.lib.cloud.bukkit.data.SingleEntitySelector;
 import me.m56738.easyarmorstands.lib.cloud.context.CommandContext;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.annotation.specifier.Decoder;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
@@ -64,6 +62,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.Collections;

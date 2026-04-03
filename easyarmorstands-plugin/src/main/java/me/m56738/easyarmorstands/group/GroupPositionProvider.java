@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.group;
 
 import me.m56738.easyarmorstands.api.util.PositionProvider;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3dc;
 
 public class GroupPositionProvider implements PositionProvider {
     private final Group group;

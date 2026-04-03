@@ -29,8 +29,6 @@ import me.m56738.easyarmorstands.editor.input.selection.box.ConfirmBoxSelectionI
 import me.m56738.easyarmorstands.editor.input.selection.box.StartBoxSelectionInput;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.node.GroupRootNode;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -38,6 +36,8 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Collections;
 import java.util.HashMap;

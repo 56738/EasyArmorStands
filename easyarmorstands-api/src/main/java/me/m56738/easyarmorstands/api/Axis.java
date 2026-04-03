@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.api;
 
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.lib.joml.Vector3d;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.joml.Vector3f;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public enum Axis {
     X("X", ParticleColor.RED, new Vector3d(1, 0, 0)) {

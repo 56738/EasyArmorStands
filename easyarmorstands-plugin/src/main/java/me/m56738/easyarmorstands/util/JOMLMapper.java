@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.util;
 
-import me.m56738.easyarmorstands.lib.joml.Quaternionf;
-import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
-import me.m56738.easyarmorstands.lib.joml.Vector3f;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
+import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

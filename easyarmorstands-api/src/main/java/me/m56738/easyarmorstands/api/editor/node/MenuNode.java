@@ -8,9 +8,9 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

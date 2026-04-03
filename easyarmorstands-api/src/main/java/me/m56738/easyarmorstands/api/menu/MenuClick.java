@@ -1,7 +1,6 @@
 package me.m56738.easyarmorstands.api.menu;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.lib.joml.Matrix4dc;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.entity.Player;
@@ -10,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4dc;
 
 import java.util.Locale;
 
