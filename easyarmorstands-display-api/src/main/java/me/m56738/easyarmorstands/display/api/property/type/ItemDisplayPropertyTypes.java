@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.display.api.property.type;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.bukkit.inventory.ItemStack;
 

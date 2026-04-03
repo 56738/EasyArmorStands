@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.Hand;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Locale;

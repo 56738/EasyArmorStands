@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.command.annotation;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.KeyPattern;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

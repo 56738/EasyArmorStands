@@ -26,9 +26,9 @@ import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButt
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;

@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.message.Message;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 

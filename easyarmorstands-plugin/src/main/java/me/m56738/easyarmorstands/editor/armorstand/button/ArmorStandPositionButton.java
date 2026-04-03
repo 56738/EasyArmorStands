@@ -14,7 +14,7 @@ import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPositionNode;
 import me.m56738.easyarmorstands.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

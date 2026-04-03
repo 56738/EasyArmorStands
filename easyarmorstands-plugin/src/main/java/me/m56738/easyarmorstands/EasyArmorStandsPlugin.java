@@ -20,10 +20,10 @@ import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
-import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardListener;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
@@ -94,9 +94,6 @@ import me.m56738.easyarmorstands.lib.configurate.yaml.NodeStyle;
 import me.m56738.easyarmorstands.lib.configurate.yaml.YamlConfigurationLoader;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.lib.gizmo.bukkit.api.BukkitGizmos;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.menu.ColorPickerMenuContext;
 import me.m56738.easyarmorstands.menu.ColorPicketContextWrapper;
 import me.m56738.easyarmorstands.menu.ElementMenuContext;
@@ -126,6 +123,8 @@ import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.session.SkeletonLoginListener;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -173,7 +172,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private HistoryManager historyManager;
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
-    private BukkitAudiences adventure;
     private BukkitGizmos gizmos;
     private CommandManager<EasCommandSender> commandManager;
     private AnnotationParser<EasCommandSender> annotationParser;
@@ -245,7 +243,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public void onEnable() {
         new Metrics(this, 17911);
-        adventure = BukkitAudiences.create(this);
         gizmos = BukkitGizmos.create(this);
 
         loadProperties();
@@ -375,9 +372,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         if (gizmos != null) {
             gizmos.close();
         }
-        if (adventure != null) {
-            adventure.close();
-        }
     }
 
     public void reload() {
@@ -441,7 +435,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
         if (config.updateCheck.enabled) {
             if (updateManager == null) {
-                updateManager = new UpdateManager(this, adventure, Permissions.UPDATE_NOTIFY);
+                updateManager = new UpdateManager(this, Permissions.UPDATE_NOTIFY);
             }
         } else {
             if (updateManager != null) {
@@ -603,10 +597,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public HistoryManager getHistoryManager() {
         return historyManager;
-    }
-
-    public BukkitAudiences getAdventure() {
-        return adventure;
     }
 
     public BukkitGizmos getGizmos() {

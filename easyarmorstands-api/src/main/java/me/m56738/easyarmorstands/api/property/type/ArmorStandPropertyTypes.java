@@ -4,8 +4,8 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 

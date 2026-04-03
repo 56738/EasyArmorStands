@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.display.adapter;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.TextDisplay;
 
 public abstract class TextDisplayAdapter {

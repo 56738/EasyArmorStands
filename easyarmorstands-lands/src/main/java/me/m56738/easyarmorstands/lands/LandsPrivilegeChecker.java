@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.lands;
 import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.flags.type.RoleFlag;
 import me.angeschossen.lands.api.land.Area;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
@@ -41,19 +40,16 @@ public class LandsPrivilegeChecker implements RegionPrivilegeChecker {
 
     @Override
     public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.lands.deny-create"));
+        player.sendMessage(Message.error("easyarmorstands.error.lands.deny-create"));
     }
 
     @Override
     public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.lands.deny-destroy"));
+        player.sendMessage(Message.error("easyarmorstands.error.lands.deny-destroy"));
     }
 
     @Override
     public void sendEditError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.lands.deny-select"));
+        player.sendMessage(Message.error("easyarmorstands.error.lands.deny-select"));
     }
 }

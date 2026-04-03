@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.residence;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
@@ -37,19 +36,16 @@ public class ResidencePrivilegeChecker implements RegionPrivilegeChecker {
 
     @Override
     public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.residence.deny-create"));
+        player.sendMessage(Message.error("easyarmorstands.error.residence.deny-create"));
     }
 
     @Override
     public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.residence.deny-destroy"));
+        player.sendMessage(Message.error("easyarmorstands.error.residence.deny-destroy"));
     }
 
     @Override
     public void sendEditError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.residence.deny-select"));
+        player.sendMessage(Message.error("easyarmorstands.error.residence.deny-select"));
     }
 }

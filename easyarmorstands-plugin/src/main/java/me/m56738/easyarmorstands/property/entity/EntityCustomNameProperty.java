@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.capability.component.ComponentCapability;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 

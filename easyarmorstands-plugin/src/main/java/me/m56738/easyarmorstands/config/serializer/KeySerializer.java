@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.config.serializer;
 
 import me.m56738.easyarmorstands.lib.configurate.serialize.ScalarSerializer;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;

@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.Tag;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;

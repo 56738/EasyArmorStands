@@ -12,10 +12,10 @@ import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
 import me.m56738.easyarmorstands.lib.cloud.parser.standard.DoubleParser;
 import me.m56738.easyarmorstands.lib.joml.Vector3d;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Cursor3D;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 

@@ -8,7 +8,7 @@ import me.m56738.easyarmorstands.api.util.EasFormat;
 import me.m56738.easyarmorstands.lib.joml.Math;
 import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

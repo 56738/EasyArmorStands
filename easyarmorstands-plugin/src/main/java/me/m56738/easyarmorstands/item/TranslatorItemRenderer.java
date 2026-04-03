@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.renderer.TranslatableComponentRenderer;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
+import net.kyori.adventure.translation.GlobalTranslator;
 
 import java.util.Locale;
 

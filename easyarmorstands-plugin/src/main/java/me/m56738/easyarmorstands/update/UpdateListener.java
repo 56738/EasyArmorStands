@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.update;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,11 +8,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class UpdateListener implements Listener {
     private final UpdateManager updateManager;
-    private final BukkitAudiences adventure;
 
-    public UpdateListener(UpdateManager updateManager, BukkitAudiences adventure) {
+    public UpdateListener(UpdateManager updateManager) {
         this.updateManager = updateManager;
-        this.adventure = adventure;
     }
 
     @EventHandler
@@ -23,7 +19,6 @@ public class UpdateListener implements Listener {
         if (!player.hasPermission(Permissions.UPDATE_NOTIFY)) {
             return;
         }
-        Audience audience = adventure.player(player);
-        updateManager.notify(audience);
+        updateManager.notify(player);
     }
 }

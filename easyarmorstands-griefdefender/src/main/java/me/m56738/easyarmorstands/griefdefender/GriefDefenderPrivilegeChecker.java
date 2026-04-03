@@ -3,7 +3,6 @@ package me.m56738.easyarmorstands.griefdefender;
 import com.griefdefender.api.Core;
 import com.griefdefender.api.claim.Claim;
 import com.griefdefender.api.claim.TrustTypes;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
@@ -39,19 +38,16 @@ public class GriefDefenderPrivilegeChecker implements RegionPrivilegeChecker {
 
     @Override
     public void sendCreateError(@NotNull Player player, @NotNull PropertyContainer properties) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-create"));
+        player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-create"));
     }
 
     @Override
     public void sendDestroyError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-destroy"));
+        player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-destroy"));
     }
 
     @Override
     public void sendEditError(@NotNull Player player, @NotNull Element element) {
-        EasyArmorStandsPlugin.getInstance().getAdventure().player(player)
-                .sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-select"));
+        player.sendMessage(Message.error("easyarmorstands.error.griefdefender.deny-select"));
     }
 }

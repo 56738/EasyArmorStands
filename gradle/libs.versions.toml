@@ -1,6 +1,4 @@
 [versions]
-adventure-api = "4.26.1"
-adventure-platform = "4.4.1"
 bentobox = "3.12.0"
 bstats = "3.2.1"
 checker-qual = "3.54.1"
@@ -32,12 +30,6 @@ worldguard-v6 = "6.2"
 worldguard-v7 = "7.0.16"
 
 [libraries]
-adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
-adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
-adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
-adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-api" }
-adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-api" }
-adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure-api" }
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "checker-qual" }

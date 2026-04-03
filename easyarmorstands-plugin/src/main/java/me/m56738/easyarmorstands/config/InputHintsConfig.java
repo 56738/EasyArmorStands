@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config;
 
 import me.m56738.easyarmorstands.lib.configurate.objectmapping.ConfigSerializable;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 
 @ConfigSerializable
 public class InputHintsConfig {

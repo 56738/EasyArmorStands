@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandSpawnSlotType implements MenuSlotType {

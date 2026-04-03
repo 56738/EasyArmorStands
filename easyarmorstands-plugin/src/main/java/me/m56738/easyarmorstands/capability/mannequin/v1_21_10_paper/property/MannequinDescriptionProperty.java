@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.capability.mannequin.v1_21_10_paper.property;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.NativeComponentMapper;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Mannequin;
 import org.jetbrains.annotations.NotNull;
 

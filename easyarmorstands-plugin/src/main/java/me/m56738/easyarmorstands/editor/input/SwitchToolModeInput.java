@@ -4,9 +4,9 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import org.jetbrains.annotations.NotNull;
 
 public class SwitchToolModeInput implements Input {

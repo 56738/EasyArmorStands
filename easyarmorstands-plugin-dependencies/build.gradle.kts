@@ -4,11 +4,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.adventure.platform.bukkit)
-    api(libs.adventure.text.minimessage)
-    api(libs.adventure.text.serializer.gson)
-    api(libs.adventure.text.serializer.legacy)
-    api(libs.adventure.text.serializer.plain)
     api(libs.bstats)
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
@@ -31,7 +26,6 @@ tasks {
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
-        relocate("net.kyori", "$prefix.kyori")
         relocate("org.bstats", "$prefix.bstats")
         relocate("org.joml", "$prefix.joml")
         relocate("org.spongepowered.configurate", "$prefix.configurate")

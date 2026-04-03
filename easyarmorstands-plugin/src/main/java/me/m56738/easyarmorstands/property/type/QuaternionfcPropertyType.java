@@ -3,9 +3,9 @@ package me.m56738.easyarmorstands.property.type;
 import me.m56738.easyarmorstands.lib.joml.Quaterniond;
 import me.m56738.easyarmorstands.lib.joml.Quaternionf;
 import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.Util;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class QuaternionfcPropertyType extends ConfigurablePropertyType<Quaternionfc> {

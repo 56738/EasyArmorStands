@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.message;
 
 import com.google.gson.stream.JsonReader;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.TranslatableComponent;
-import me.m56738.easyarmorstands.lib.kyori.adventure.translation.AbstractTranslationStore;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.translation.AbstractTranslationStore;
 import org.jetbrains.annotations.NotNullByDefault;
 import org.jetbrains.annotations.Nullable;
 

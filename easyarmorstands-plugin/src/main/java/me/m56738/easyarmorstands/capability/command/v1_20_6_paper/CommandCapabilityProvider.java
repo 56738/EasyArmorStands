@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.capability.command.v1_20_6_paper;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.capability.CapabilityProvider;
 import me.m56738.easyarmorstands.capability.Priority;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
@@ -43,7 +42,7 @@ public class CommandCapabilityProvider implements CapabilityProvider<CommandCapa
 
         @Override
         public CommandManager<EasCommandSender> createCommandManager() {
-            CommandSourceStackMapper mapper = new CommandSourceStackMapper(new CommandSenderMapper(EasyArmorStandsPlugin.getInstance().getAdventure()));
+            CommandSourceStackMapper mapper = new CommandSourceStackMapper(new CommandSenderMapper());
             return PaperCommandManager.builder(mapper)
                     .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(plugin)))
                     .buildOnEnable(plugin);

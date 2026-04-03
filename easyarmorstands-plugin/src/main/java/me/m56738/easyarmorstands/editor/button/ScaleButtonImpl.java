@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.editor.node.ScaleToolNode;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

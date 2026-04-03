@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.editor.node.AxisMoveToolNode;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class AxisMoveButtonImpl extends AxisToolButton implements AxisMoveButton {

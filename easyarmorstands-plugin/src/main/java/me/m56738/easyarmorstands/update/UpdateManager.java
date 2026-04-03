@@ -1,11 +1,10 @@
 package me.m56738.easyarmorstands.update;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.audience.Audience;
-import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitAudiences;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.event.ClickEvent;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -17,7 +16,6 @@ import java.util.logging.Level;
 
 public class UpdateManager {
     private final Plugin plugin;
-    private final BukkitAudiences adventure;
     private final String permission;
     private final ModrinthVersionFetcher updateChecker;
     private final String modrinthUrl;
@@ -25,13 +23,12 @@ public class UpdateManager {
     private final BukkitTask timer;
     private String latestVersion;
 
-    public UpdateManager(Plugin plugin, BukkitAudiences adventure, String permission) {
+    public UpdateManager(Plugin plugin, String permission) {
         this.plugin = plugin;
-        this.adventure = adventure;
         this.permission = permission;
         this.updateChecker = new ModrinthVersionFetcher(getLoader(), getGameVersion());
         this.modrinthUrl = "https://modrinth.com/plugin/easyarmorstands";
-        this.listener = new UpdateListener(this, adventure);
+        this.listener = new UpdateListener(this);
         this.timer = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::refresh, 0, 20 * 60 * 60 * 24);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
@@ -79,7 +76,7 @@ public class UpdateManager {
         // Latest version changed, notify
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission(permission)) {
-                notify(adventure.player(player), latestVersion);
+                notify(player, latestVersion);
             }
         }
         plugin.getLogger().info("EasyArmorStands v" + latestVersion + " is available");

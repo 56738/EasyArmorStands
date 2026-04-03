@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

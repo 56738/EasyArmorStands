@@ -1,13 +1,12 @@
 package me.m56738.easyarmorstands.display.adapter;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.TextDisplay;
 
 public class LegacyTextDisplayAdapter extends TextDisplayAdapter {
     private static final LegacyTextDisplayAdapter instance = new LegacyTextDisplayAdapter();
-    private final LegacyComponentSerializer serializer = BukkitComponentSerializer.legacy();
+    private final LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
 
     private LegacyTextDisplayAdapter() {
     }

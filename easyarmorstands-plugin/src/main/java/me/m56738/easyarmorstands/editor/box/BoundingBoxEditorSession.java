@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.editor.box;
 
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.lib.joml.Vector3dc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 

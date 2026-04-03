@@ -13,8 +13,8 @@ import me.m56738.easyarmorstands.display.element.DisplayToolProvider;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.lib.joml.Quaternionf;
 import me.m56738.easyarmorstands.lib.joml.Quaternionfc;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 public class DisplayShearNode extends DisplayMenuNode implements ResettableNode {

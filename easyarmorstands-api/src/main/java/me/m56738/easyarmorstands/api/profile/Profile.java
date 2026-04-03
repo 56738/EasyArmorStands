@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.profile;
 
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

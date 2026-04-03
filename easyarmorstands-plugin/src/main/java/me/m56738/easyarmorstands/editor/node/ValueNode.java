@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.editor.node;
 
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 public interface ValueNode<T> extends Node {

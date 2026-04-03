@@ -7,9 +7,9 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import org.jetbrains.annotations.NotNull;
 
 public class SelectElementInput implements Input {

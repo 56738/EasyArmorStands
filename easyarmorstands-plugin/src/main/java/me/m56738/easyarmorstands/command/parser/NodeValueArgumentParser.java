@@ -7,9 +7,9 @@ import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParseResult;
 import me.m56738.easyarmorstands.lib.cloud.parser.ArgumentParser;
 import me.m56738.easyarmorstands.lib.cloud.suggestion.Suggestion;
 import me.m56738.easyarmorstands.lib.cloud.suggestion.SuggestionProvider;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.util.ComponentMessageThrowable;
 import me.m56738.easyarmorstands.message.Message;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.util.ComponentMessageThrowable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.config.serializer;
 
 import me.m56738.easyarmorstands.lib.configurate.serialize.ScalarSerializer;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;

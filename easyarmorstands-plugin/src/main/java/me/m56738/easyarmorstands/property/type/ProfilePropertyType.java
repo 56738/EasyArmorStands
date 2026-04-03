@@ -4,11 +4,11 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.profile.Profile;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.lib.kyori.adventure.key.Key;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.NamedTextColor;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.Style;
 import me.m56738.easyarmorstands.property.button.ProfilePropertyButton;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

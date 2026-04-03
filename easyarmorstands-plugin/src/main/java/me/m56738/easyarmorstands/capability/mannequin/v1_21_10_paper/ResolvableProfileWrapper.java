@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.capability.mannequin.v1_21_10_paper;
 
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import me.m56738.easyarmorstands.api.profile.Profile;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.object.ObjectContents;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.object.PlayerHeadObjectContents;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.object.ObjectContents;
+import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

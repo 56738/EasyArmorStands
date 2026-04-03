@@ -7,8 +7,8 @@ import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.ToolSession;
 import me.m56738.easyarmorstands.editor.input.tool.AbortInput;
 import me.m56738.easyarmorstands.editor.input.tool.ConfirmInput;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
-import me.m56738.easyarmorstands.lib.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ToolNode implements Node {
