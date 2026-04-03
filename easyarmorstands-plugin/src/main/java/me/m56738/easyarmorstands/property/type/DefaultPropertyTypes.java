@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
-import me.m56738.easyarmorstands.api.Hand;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.MainHand;
 
 import java.util.Locale;
 
@@ -31,7 +31,7 @@ public class DefaultPropertyTypes {
         registry.register(new BooleanTogglePropertyType(key("entity/silent")));
         registry.register(new StringSetPropertyType(key("entity/tags")));
         registry.register(new BooleanTogglePropertyType(key("entity/visible")));
-        registry.register(new EnumTogglePropertyType<>(key("mannequin/main_hand"), Hand.class));
+        registry.register(new EnumTogglePropertyType<>(key("mannequin/main_hand"), MainHand.class));
         registry.register(new ProfilePropertyType(key("mannequin/profile")));
         registry.register(new BooleanTogglePropertyType(key("mannequin/immovable")));
         registry.register(new OptionalComponentPropertyType(key("mannequin/description"), "/eas description set"));

@@ -1,32 +1,20 @@
 package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
+import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandArmsProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandBasePlateProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandCanTickProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandGravityProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandInvulnerabilityProperty;
+import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandMarkerProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandSizeProperty;
-import me.m56738.easyarmorstands.property.armorstand.ArmorStandVisibilityProperty;
-import me.m56738.easyarmorstands.property.entity.EntityAIProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameProperty;
-import me.m56738.easyarmorstands.property.entity.EntityCustomNameVisibleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
-import me.m56738.easyarmorstands.property.entity.EntityGlowingProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
 import me.m56738.easyarmorstands.property.entity.EntityScaleProperty;
-import me.m56738.easyarmorstands.property.entity.EntitySilentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityTagsProperty;
-import me.m56738.easyarmorstands.property.mannequin.MannequinDescriptionProperty;
-import me.m56738.easyarmorstands.property.mannequin.MannequinImmovableProperty;
-import me.m56738.easyarmorstands.property.mannequin.MannequinMainHandProperty;
-import me.m56738.easyarmorstands.property.mannequin.MannequinProfileProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinCapeVisibleProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinHatVisibleProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinJacketVisibleProperty;
@@ -65,12 +53,12 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerEntityProperties(Entity entity, PropertyRegistry registry) {
-        registry.register(new EntityGlowingProperty(entity));
+        registry.register(Property.of(EntityPropertyTypes.GLOWING, entity::isGlowing, entity::setGlowing));
         registry.register(new EntityLocationProperty(entity));
-        registry.register(new EntitySilentProperty(entity));
+        registry.register(Property.of(EntityPropertyTypes.SILENT, entity::isSilent, entity::setSilent));
         registry.register(new EntityTagsProperty(entity));
-        registry.register(new EntityCustomNameProperty(entity));
-        registry.register(new EntityCustomNameVisibleProperty(entity));
+        registry.register(Property.ofNullable(EntityPropertyTypes.CUSTOM_NAME, entity::customName, entity::customName));
+        registry.register(Property.of(EntityPropertyTypes.CUSTOM_NAME_VISIBLE, entity::isCustomNameVisible, entity::setCustomNameVisible));
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
@@ -81,29 +69,32 @@ public class EntityElementListener implements Listener {
             }
         }
         registry.register(new EntityScaleProperty(entity));
-        registry.register(new EntityAIProperty(entity));
+        registry.register(Property.of(EntityPropertyTypes.AI, entity::hasAI, entity::setAI));
     }
 
     private void registerArmorStandProperties(ArmorStand entity, PropertyRegistry registry) {
-        registry.register(new ArmorStandArmsProperty(entity));
-        registry.register(new ArmorStandBasePlateProperty(entity));
-        registry.register(new ArmorStandMarkerProperty(entity));
-        registry.register(new ArmorStandSizeProperty(entity));
-        registry.register(new ArmorStandVisibilityProperty(entity));
-        registry.register(new ArmorStandCanTickProperty(entity));
-        registry.register(new ArmorStandGravityProperty(entity));
-        registry.register(new ArmorStandInvulnerabilityProperty(entity));
+        registry.register(Property.of(ArmorStandPropertyTypes.ARMS, entity::hasArms, entity::setArms));
+        registry.register(Property.of(ArmorStandPropertyTypes.BASE_PLATE, entity::hasBasePlate, entity::setBasePlate));
+        registry.register(Property.of(ArmorStandPropertyTypes.MARKER, entity::isMarker, entity::setMarker));
+        registry.register(Property.of(ArmorStandPropertyTypes.SIZE,
+                () -> ArmorStandSize.get(entity),
+                size -> entity.setSmall(size.isSmall())));
+        registry.register(Property.of(EntityPropertyTypes.VISIBLE, entity::isVisible, entity::setVisible));
+        registry.register(Property.of(ArmorStandPropertyTypes.CAN_TICK, entity::canTick, entity::setCanTick));
+        registry.register(Property.of(ArmorStandPropertyTypes.GRAVITY, entity::hasGravity, entity::setGravity));
+        registry.register(Property.of(ArmorStandPropertyTypes.INVULNERABLE, entity::isInvulnerable, entity::setInvulnerable));
         registry.register(new ArmorStandLockProperty(entity));
         for (ArmorStandPart part : ArmorStandPart.values()) {
             registry.register(new ArmorStandPoseProperty(entity, part));
         }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private void registerMannequinProperties(Mannequin entity, PropertyRegistry registry) {
-        registry.register(new MannequinMainHandProperty(entity));
-        registry.register(new MannequinProfileProperty(entity));
-        registry.register(new MannequinImmovableProperty(entity));
-        registry.register(new MannequinDescriptionProperty(entity));
+        registry.register(Property.of(MannequinPropertyTypes.MAIN_HAND, entity::getMainHand, entity::setMainHand));
+        registry.register(Property.of(MannequinPropertyTypes.PROFILE, entity::getProfile, entity::setProfile));
+        registry.register(Property.of(MannequinPropertyTypes.IMMOVABLE, entity::isImmovable, entity::setImmovable));
+        registry.register(Property.ofNullable(MannequinPropertyTypes.DESCRIPTION, entity::getDescription, entity::setDescription));
         registry.register(new MannequinCapeVisibleProperty(entity));
         registry.register(new MannequinJacketVisibleProperty(entity));
         registry.register(new MannequinLeftSleeveVisibleProperty(entity));
