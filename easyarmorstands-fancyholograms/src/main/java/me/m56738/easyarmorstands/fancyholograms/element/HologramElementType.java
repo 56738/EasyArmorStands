@@ -25,7 +25,6 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadow
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -33,12 +32,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
     private final HologramManager manager;
-    private final JOMLMapper mapper;
     private final FancyHologramsAddon addon;
 
-    public HologramElementType(HologramManager manager, JOMLMapper mapper, FancyHologramsAddon addon) {
+    public HologramElementType(HologramManager manager, FancyHologramsAddon addon) {
         this.manager = manager;
-        this.mapper = mapper;
         this.addon = addon;
     }
 
@@ -49,7 +46,7 @@ public class HologramElementType implements ElementType {
         element.getProperties().register(new HologramLocationProperty(hologram));
         if (data instanceof DisplayHologramData) {
             DisplayHologramData displayData = (DisplayHologramData) data;
-            element.getProperties().register(new DisplayHologramScaleProperty(hologram, displayData, mapper));
+            element.getProperties().register(new DisplayHologramScaleProperty(hologram, displayData));
             element.getProperties().register(new DisplayHologramBillboardProperty(hologram, displayData));
         }
         if (data instanceof ItemHologramData) {

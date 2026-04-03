@@ -3,19 +3,17 @@ package me.m56738.easyarmorstands.display.property.display;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
 public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
     private final Display entity;
-    private final JOMLMapper mapper;
 
-    public DisplayLeftRotationProperty(Display entity, JOMLMapper mapper) {
+    public DisplayLeftRotationProperty(Display entity) {
         this.entity = entity;
-        this.mapper = mapper;
     }
 
     @Override
@@ -25,17 +23,17 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
 
     @Override
     public @NotNull Quaternionfc getValue() {
-        return mapper.getLeftRotation(entity.getTransformation());
+        return entity.getTransformation().getLeftRotation();
     }
 
     @Override
     public boolean setValue(@NotNull Quaternionfc value) {
         Transformation transformation = entity.getTransformation();
-        entity.setTransformation((Transformation) mapper.getTransformation(
-                mapper.getTranslation(transformation),
-                value,
-                mapper.getScale(transformation),
-                mapper.getRightRotation(transformation)));
+        entity.setTransformation(new Transformation(
+                transformation.getTranslation(),
+                new Quaternionf(value),
+                transformation.getScale(),
+                transformation.getRightRotation()));
         return true;
     }
 }

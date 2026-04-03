@@ -25,7 +25,6 @@ import me.m56738.easyarmorstands.display.property.display.text.TextDisplayLineWi
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplaySeeThroughProperty;
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplayShadowProperty;
 import me.m56738.easyarmorstands.display.property.display.text.TextDisplayTextProperty;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -36,12 +35,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class DisplayListener implements Listener {
-    private final JOMLMapper mapper;
-
-    public DisplayListener(JOMLMapper mapper) {
-        this.mapper = mapper;
-    }
-
     @EventHandler
     public void onInitialize(EntityElementInitializeEvent event) {
         ConfigurableEntityElement<?> element = event.getElement();
@@ -67,10 +60,10 @@ public class DisplayListener implements Listener {
     }
 
     private void registerDisplayProperties(Display entity, PropertyRegistry registry) {
-        registry.register(new DisplayTranslationProperty(entity, mapper));
-        registry.register(new DisplayLeftRotationProperty(entity, mapper));
-        registry.register(new DisplayScaleProperty(entity, mapper));
-        registry.register(new DisplayRightRotationProperty(entity, mapper));
+        registry.register(new DisplayTranslationProperty(entity));
+        registry.register(new DisplayLeftRotationProperty(entity));
+        registry.register(new DisplayScaleProperty(entity));
+        registry.register(new DisplayRightRotationProperty(entity));
         registry.register(new DisplayBillboardProperty(entity));
         registry.register(new DisplayBrightnessProperty(entity));
         registry.register(new DisplayWidthProperty(entity));

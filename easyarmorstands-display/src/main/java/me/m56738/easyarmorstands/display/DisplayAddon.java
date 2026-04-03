@@ -25,7 +25,6 @@ import me.m56738.easyarmorstands.lib.cloud.brigadier.BrigadierManagerHolder;
 import me.m56738.easyarmorstands.lib.cloud.brigadier.CloudBrigadierManager;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
 import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
@@ -84,15 +83,8 @@ public class DisplayAddon implements Addon {
 
     @Override
     public void enable() {
-        JOMLMapper mapper;
-        try {
-            mapper = new JOMLMapper();
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        plugin.getServer().getPluginManager().registerEvents(new DisplayListener(mapper), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new DisplayListener(), plugin);
 
         EntityElementProviderRegistry registry = plugin.entityElementProviderRegistry();
         registry.register(new DisplayElementProvider<>(itemDisplayType));

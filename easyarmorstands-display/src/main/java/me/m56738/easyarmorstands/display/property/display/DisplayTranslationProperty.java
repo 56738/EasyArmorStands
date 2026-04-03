@@ -3,19 +3,17 @@ package me.m56738.easyarmorstands.display.property.display;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.util.JOMLMapper;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayTranslationProperty implements Property<Vector3fc> {
     private final Display entity;
-    private final JOMLMapper mapper;
 
-    public DisplayTranslationProperty(Display entity, JOMLMapper mapper) {
+    public DisplayTranslationProperty(Display entity) {
         this.entity = entity;
-        this.mapper = mapper;
     }
 
     @Override
@@ -25,17 +23,17 @@ public class DisplayTranslationProperty implements Property<Vector3fc> {
 
     @Override
     public @NotNull Vector3fc getValue() {
-        return mapper.getTranslation(entity.getTransformation());
+        return entity.getTransformation().getTranslation();
     }
 
     @Override
     public boolean setValue(@NotNull Vector3fc value) {
         Transformation transformation = entity.getTransformation();
-        entity.setTransformation((Transformation) mapper.getTransformation(
-                value,
-                mapper.getLeftRotation(transformation),
-                mapper.getScale(transformation),
-                mapper.getRightRotation(transformation)));
+        entity.setTransformation(new Transformation(
+                new Vector3f(value),
+                transformation.getLeftRotation(),
+                transformation.getScale(),
+                transformation.getRightRotation()));
         return true;
     }
 }
