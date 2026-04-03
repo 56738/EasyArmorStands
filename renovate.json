@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "ignoreDeps": [
+    "com.destroystokyo.paper:paper-api",
+    "com.mojang:brigadier",
+    "io.papermc.paper:paper-api",
+    "org.bukkit:bukkit",
+    "org.spigotmc:spigot-api"
   ]
 }
