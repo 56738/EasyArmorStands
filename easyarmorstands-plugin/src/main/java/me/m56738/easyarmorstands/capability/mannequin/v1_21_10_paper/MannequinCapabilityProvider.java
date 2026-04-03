@@ -19,7 +19,6 @@ import me.m56738.easyarmorstands.capability.mannequin.v1_21_10_paper.property.pa
 import me.m56738.easyarmorstands.capability.mannequin.v1_21_10_paper.property.part.MannequinRightPantsVisibleProperty;
 import me.m56738.easyarmorstands.capability.mannequin.v1_21_10_paper.property.part.MannequinRightSleeveVisibleProperty;
 import me.m56738.easyarmorstands.element.MannequinElementType;
-import me.m56738.easyarmorstands.util.NativeComponentMapper;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -66,14 +65,10 @@ public class MannequinCapabilityProvider implements CapabilityProvider<Mannequin
         @Override
         public void registerProperties(Entity entity, PropertyRegistry registry) {
             Mannequin mannequin = (Mannequin) entity;
-            NativeComponentMapper mapper = NativeComponentMapper.getInstance();
-
             registry.register(new MannequinMainHandProperty(mannequin));
             registry.register(new MannequinProfileProperty(mannequin));
             registry.register(new MannequinImmovableProperty(mannequin));
-            if (mapper != null) {
-                registry.register(new MannequinDescriptionProperty(mannequin, mapper));
-            }
+            registry.register(new MannequinDescriptionProperty(mannequin));
             registerModelPartProperties(mannequin, registry);
         }
 
