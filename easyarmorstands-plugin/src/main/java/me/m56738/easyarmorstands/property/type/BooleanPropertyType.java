@@ -11,7 +11,7 @@ public class BooleanPropertyType extends ConfigurablePropertyType<Boolean> {
     private Component disabled;
 
     public BooleanPropertyType(@NotNull Key key) {
-        super(key, Boolean.class);
+        super(key);
     }
 
     @Override

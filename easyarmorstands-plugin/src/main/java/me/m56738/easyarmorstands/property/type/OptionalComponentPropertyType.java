@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.property.button.OptionalComponentButton;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -19,8 +18,7 @@ public class OptionalComponentPropertyType extends ConfigurablePropertyType<Opti
     private Component none;
 
     public OptionalComponentPropertyType(@NotNull Key key, String command) {
-        super(key, new TypeToken<Optional<Component>>() {
-        });
+        super(key);
         this.command = command;
     }
 

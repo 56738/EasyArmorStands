@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.display.property.type;
 
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -19,8 +18,7 @@ public class BrightnessPropertyType extends ConfigurablePropertyType<Optional<Br
     private Component none;
 
     public BrightnessPropertyType(@NotNull Key key) {
-        super(key, new TypeToken<Optional<Brightness>>() {
-        });
+        super(key);
     }
 
     @Override

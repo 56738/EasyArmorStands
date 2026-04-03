@@ -10,7 +10,7 @@ import org.joml.Quaternionfc;
 
 public class QuaternionfcPropertyType extends ConfigurablePropertyType<Quaternionfc> {
     public QuaternionfcPropertyType(@NotNull Key key) {
-        super(key, Quaternionfc.class);
+        super(key);
     }
 
     @Override

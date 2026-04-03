@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EulerAnglePropertyType extends ConfigurablePropertyType<EulerAngle> {
     public EulerAnglePropertyType(@NotNull Key key) {
-        super(key, EulerAngle.class);
+        super(key);
     }
 
     @Override

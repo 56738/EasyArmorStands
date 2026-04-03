@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.headdatabase;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import org.bukkit.event.HandlerList;
 
 public class HeadDatabaseAddon implements Addon {
@@ -16,7 +15,7 @@ public class HeadDatabaseAddon implements Addon {
     @Override
     public void enable() {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new HeadDatabaseSlotType());
+        plugin.menuSlotTypeRegistry().register(new HeadDatabaseSlotType());
         listener = new HeadDatabaseListener(plugin);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }

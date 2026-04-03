@@ -1,11 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
-import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
+import com.google.common.reflect.TypeToken;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -17,8 +12,6 @@ public interface PropertyType<T> extends Keyed {
     static @NotNull TypeToken<PropertyType<?>> type() {
         return PropertyTypeTypeToken.INSTANCE;
     }
-
-    @NotNull TypeToken<T> getValueType();
 
     @Nullable String getPermission();
 
@@ -60,14 +53,7 @@ public interface PropertyType<T> extends Keyed {
         return PlainTextComponentSerializer.plainText().serialize(getValueComponent(value));
     }
 
-    default void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
-    }
-
     default @NotNull T cloneValue(@NotNull T value) {
         return value;
-    }
-
-    default @Nullable MenuSlot createSlot(@NotNull Property<T> property, @NotNull PropertyContainer container) {
-        return null;
     }
 }

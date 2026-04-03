@@ -13,7 +13,7 @@ public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyTyp
     private final EnumMap<T, Component> valueNames;
 
     public EnumPropertyType(@NotNull Key key, Class<T> type) {
-        super(key, type);
+        super(key);
         this.valueNames = new EnumMap<>(type);
         this.values = type.getEnumConstants();
     }

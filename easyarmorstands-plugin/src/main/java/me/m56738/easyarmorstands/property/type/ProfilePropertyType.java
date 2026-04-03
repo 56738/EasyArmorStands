@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class ProfilePropertyType extends ConfigurablePropertyType<ResolvableProfile> {
     public ProfilePropertyType(@NotNull Key key) {
-        super(key, ResolvableProfile.class);
+        super(key);
     }
 
     @Override

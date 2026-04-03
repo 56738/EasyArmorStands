@@ -13,7 +13,7 @@ public class ComponentPropertyType extends ConfigurablePropertyType<Component> {
     private final String command;
 
     public ComponentPropertyType(@NotNull Key key, String command) {
-        super(key, Component.class);
+        super(key);
         this.command = command;
     }
 

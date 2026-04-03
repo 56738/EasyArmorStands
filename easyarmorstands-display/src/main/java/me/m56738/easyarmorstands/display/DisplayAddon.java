@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.Axis;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
@@ -46,11 +45,11 @@ public class DisplayAddon implements Addon {
         textDisplayType = new TextDisplayElementType();
         interactionType = new InteractionElementType();
 
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/text_display"), textDisplayType));
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new DisplayBoxSlotType());
-        EasyArmorStands.get().menuSlotTypeRegistry().register(new InteractionSpawnSlotType(interactionType));
+        plugin.menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
+        plugin.menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
+        plugin.menuSlotTypeRegistry().register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/text_display"), textDisplayType));
+        plugin.menuSlotTypeRegistry().register(new DisplayBoxSlotType());
+        plugin.menuSlotTypeRegistry().register(new InteractionSpawnSlotType(interactionType));
 
         new DefaultDisplayPropertyTypes(plugin.propertyTypeRegistry());
     }

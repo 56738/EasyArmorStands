@@ -5,14 +5,14 @@ import me.m56738.easyarmorstands.api.menu.MenuSlotContext;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.property.type.MenuPropertyType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PropertySlotFactory<T> implements MenuSlotFactory {
-    private final PropertyType<T> type;
+    private final MenuPropertyType<T> type;
 
-    public PropertySlotFactory(PropertyType<T> type) {
+    public PropertySlotFactory(MenuPropertyType<T> type) {
         this.type = type;
     }
 

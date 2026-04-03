@@ -86,7 +86,6 @@ import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurateException;
 import me.m56738.easyarmorstands.lib.configurate.loader.HeaderMode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
 import me.m56738.easyarmorstands.lib.configurate.util.MapFactories;
 import me.m56738.easyarmorstands.lib.configurate.yaml.NodeStyle;
 import me.m56738.easyarmorstands.lib.configurate.yaml.YamlConfigurationLoader;
@@ -623,12 +622,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return entityElementProviderRegistry;
     }
 
-    @Override
     public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
         return Objects.requireNonNull(menuSlotTypeRegistry);
     }
 
-    @Override
     public @NotNull MenuProvider menuProvider() {
         return Objects.requireNonNull(menuProvider);
     }
@@ -646,11 +643,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull PropertyTypeRegistry propertyTypeRegistry() {
         return Objects.requireNonNull(propertyTypeRegistry);
-    }
-
-    @Override
-    public @NotNull TypeSerializerCollection serializers() {
-        return EasSerializers.serializers();
     }
 
     @Override

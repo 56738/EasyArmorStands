@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.property.type;
 
 import me.m56738.easyarmorstands.lib.configurate.CommentedConfigurationNode;
 import me.m56738.easyarmorstands.lib.configurate.serialize.SerializationException;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -20,8 +19,7 @@ public class StringSetPropertyType extends ConfigurablePropertyType<Set<String>>
     private String multiple;
 
     public StringSetPropertyType(@NotNull Key key) {
-        super(key, new TypeToken<Set<String>>() {
-        });
+        super(key);
     }
 
     @Override

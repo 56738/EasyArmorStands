@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.lib.configurate.ConfigurationNode;
@@ -15,7 +15,7 @@ public class MenuSlotTypeSerializer implements TypeSerializer<MenuSlotType> {
     private final MenuSlotTypeRegistry registry;
 
     public MenuSlotTypeSerializer() {
-        this(EasyArmorStands.get().menuSlotTypeRegistry());
+        this(EasyArmorStandsPlugin.getInstance().menuSlotTypeRegistry());
     }
 
     public MenuSlotTypeSerializer(MenuSlotTypeRegistry registry) {

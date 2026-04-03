@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import com.google.common.reflect.TypeToken;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
@@ -17,7 +17,7 @@ import java.util.Set;
 @SuppressWarnings("PatternValidation")
 public class EntityPropertyTypes {
     public static final @NotNull PropertyType<Boolean> AI = get("entity/ai", Boolean.class);
-    public static final @NotNull PropertyType<Optional<Component>> CUSTOM_NAME = get("entity/custom_name", new TypeToken<Optional<Component>>() {
+    public static final @NotNull PropertyType<Optional<Component>> CUSTOM_NAME = get("entity/custom_name", new TypeToken<>() {
     });
     public static final @NotNull PropertyType<Boolean> CUSTOM_NAME_VISIBLE = get("entity/custom_name/visible", Boolean.class);
     public static final @NotNull KeyedPropertyType<EquipmentSlot, ItemStack> EQUIPMENT = new EnumKeyedPropertyType<>(EquipmentSlot.class,
@@ -26,7 +26,7 @@ public class EntityPropertyTypes {
     public static final @NotNull PropertyType<Location> LOCATION = get("entity/location", Location.class);
     public static final @NotNull PropertyType<Double> SCALE = get("entity/scale", Double.class);
     public static final @NotNull PropertyType<Boolean> SILENT = get("entity/silent", Boolean.class);
-    public static final @NotNull PropertyType<Set<String>> TAGS = get("entity/tags", new TypeToken<Set<String>>() {
+    public static final @NotNull PropertyType<Set<String>> TAGS = get("entity/tags", new TypeToken<>() {
     });
     public static final @NotNull PropertyType<Boolean> VISIBLE = get("entity/visible", Boolean.class);
 
@@ -38,6 +38,6 @@ public class EntityPropertyTypes {
     }
 
     private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.get(type));
+        return get(name, TypeToken.of(type));
     }
 }

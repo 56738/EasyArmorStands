@@ -49,9 +49,12 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
         if (currentConfig == null) {
             return;
         }
+        if (!(type instanceof ConfigurablePropertyType<?> configurableType)) {
+            return;
+        }
         Key key = type.key();
         try {
-            type.load(currentConfig.node(key.asString()));
+            configurableType.load(currentConfig.node(key.asString()));
         } catch (ConfigurateException e) {
             throw e;
         } catch (Exception e) {

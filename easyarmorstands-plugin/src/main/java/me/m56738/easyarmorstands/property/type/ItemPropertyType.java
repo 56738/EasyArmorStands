@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemPropertyType extends ConfigurablePropertyType<ItemStack> {
     public ItemPropertyType(@NotNull Key key) {
-        super(key, ItemStack.class);
+        super(key);
     }
 
     @Override

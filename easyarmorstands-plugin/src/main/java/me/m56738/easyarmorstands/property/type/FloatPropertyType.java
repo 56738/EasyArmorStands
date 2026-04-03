@@ -14,7 +14,7 @@ public class FloatPropertyType extends ConfigurablePropertyType<Float> {
     private NumberFormat format = Util.OFFSET_FORMAT;
 
     public FloatPropertyType(@NotNull Key key) {
-        super(key, Float.class);
+        super(key);
     }
 
     @Override

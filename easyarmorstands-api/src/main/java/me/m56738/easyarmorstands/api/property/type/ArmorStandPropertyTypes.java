@@ -1,9 +1,9 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import com.google.common.reflect.TypeToken;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.util.EulerAngle;
@@ -32,6 +32,6 @@ public class ArmorStandPropertyTypes {
     }
 
     private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.get(type));
+        return get(name, TypeToken.of(type));
     }
 }

@@ -5,6 +5,4 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
-    compileOnly(libs.jetbrains.annotations)
-    compileOnlyApi(project(":easyarmorstands-api-dependencies", configuration = "shadow"))
 }

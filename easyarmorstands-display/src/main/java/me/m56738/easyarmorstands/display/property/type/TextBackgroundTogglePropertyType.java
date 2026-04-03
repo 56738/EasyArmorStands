@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.display.property.button.TextBackgroundToggleButton;
-import me.m56738.easyarmorstands.lib.geantyref.TypeToken;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.type.ConfigurablePropertyType;
 import net.kyori.adventure.key.Key;
@@ -19,8 +18,7 @@ import java.util.Optional;
 
 public class TextBackgroundTogglePropertyType extends ConfigurablePropertyType<Optional<Color>> {
     public TextBackgroundTogglePropertyType(@NotNull Key key) {
-        super(key, new TypeToken<Optional<Color>>() {
-        });
+        super(key);
     }
 
     @Override

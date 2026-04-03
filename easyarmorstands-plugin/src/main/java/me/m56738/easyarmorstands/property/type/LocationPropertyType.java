@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LocationPropertyType extends ConfigurablePropertyType<Location> {
     public LocationPropertyType(@NotNull Key key) {
-        super(key, Location.class);
+        super(key);
     }
 
     @Override

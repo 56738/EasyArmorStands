@@ -6,11 +6,8 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
-import me.m56738.easyarmorstands.api.menu.MenuProvider;
-import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
-import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -30,19 +27,10 @@ public interface EasyArmorStands {
     @NotNull EntityElementProviderRegistry entityElementProviderRegistry();
 
     @Contract(pure = true)
-    @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry();
-
-    @Contract(pure = true)
-    @NotNull MenuProvider menuProvider();
-
-    @Contract(pure = true)
     @NotNull SessionManager sessionManager();
 
     @Contract(pure = true)
     @NotNull ElementSpawnRequest elementSpawnRequest(ElementType type);
-
-    @Contract(pure = true)
-    @NotNull TypeSerializerCollection serializers();
 
     @Contract(pure = true)
     @NotNull RegionPrivilegeManager regionPrivilegeManager();

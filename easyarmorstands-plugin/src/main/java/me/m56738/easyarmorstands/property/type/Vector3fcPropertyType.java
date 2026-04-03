@@ -10,7 +10,7 @@ import org.joml.Vector3fc;
 
 public class Vector3fcPropertyType extends ConfigurablePropertyType<Vector3fc> {
     public Vector3fcPropertyType(@NotNull Key key) {
-        super(key, Vector3fc.class);
+        super(key);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class DoublePropertyType extends ConfigurablePropertyType<Double> {
     private NumberFormat format = Util.OFFSET_FORMAT;
 
     public DoublePropertyType(@NotNull Key key) {
-        super(key, Double.class);
+        super(key);
     }
 
     @Override

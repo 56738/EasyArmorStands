@@ -5,7 +5,6 @@ pluginManagement {
 }
 
 include("easyarmorstands-api")
-include("easyarmorstands-api-dependencies")
 include("easyarmorstands-assets")
 include("easyarmorstands-bentobox")
 include("easyarmorstands-display")

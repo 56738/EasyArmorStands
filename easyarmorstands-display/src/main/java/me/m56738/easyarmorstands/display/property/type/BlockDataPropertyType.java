@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockDataPropertyType extends ConfigurablePropertyType<BlockData> {
     public BlockDataPropertyType(@NotNull Key key) {
-        super(key, BlockData.class);
+        super(key);
     }
 
     @Override

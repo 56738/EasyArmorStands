@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IntegerPropertyType extends ConfigurablePropertyType<Integer> {
     public IntegerPropertyType(@NotNull Key key) {
-        super(key, Integer.class);
+        super(key);
     }
 
     @Override
