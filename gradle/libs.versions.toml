@@ -1,5 +1,5 @@
 [versions]
-bentobox = "3.12.0"
+bentobox = "3.13.0"
 bstats = "3.2.1"
 checker-qual = "3.55.1"
 cloud = "2.0.0"
