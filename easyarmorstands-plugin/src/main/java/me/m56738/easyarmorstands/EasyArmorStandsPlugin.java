@@ -299,6 +299,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .registerInjector(Element.class, new ElementInjector())
                 .registerInjector(ElementSelection.class, new ElementSelectionInjector())
                 .registerInjector(SessionListener.class, ParameterInjector.constantInjector(sessionListener))
+                .registerInjector(ElementTypeRegistry.class, ParameterInjector.constantInjector(elementTypeRegistry))
                 .registerInjector(new TypeToken<>() {
                 }, ParameterInjector.constantInjector(help));
 

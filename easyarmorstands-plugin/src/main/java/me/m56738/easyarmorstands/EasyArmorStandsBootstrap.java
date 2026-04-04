@@ -77,14 +77,14 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
-        // TODO
-//        annotationParser.parse(new DisplayCommands(itemDisplayType));
+        annotationParser.parse(new DisplayCommands());
         try {
             annotationParser.parseContainers(getClass().getClassLoader());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        // TODO
 //        PropertyCommands.register(commandManager);
 
         result = new BootstrapResult(executor, commandManager);
