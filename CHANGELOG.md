@@ -10,4 +10,8 @@ However, most new features will only be added to EasyArmorStands v3.
 
 # Improvements
 
-* Add Mannequin pose property
+* Added Mannequin pose property
+
+# Fixes
+
+* Fixed `/eas text` not working with text which contains newlines

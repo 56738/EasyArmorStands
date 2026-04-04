@@ -76,7 +76,8 @@ import static me.m56738.easyarmorstands.command.processor.ElementSelectionProces
 @Command("eas")
 public class SessionCommands {
     public static void showText(Audience audience, Component type, @Nullable Component text, String command) {
-        String serialized = MiniMessage.miniMessage().serializeOr(text, "");
+        String serialized = MiniMessage.miniMessage().serializeOr(text, "")
+                .replace("\n", "<br>");
         audience.sendMessage(Component.text()
                 .append(Message.title(type))
                 .append(Component.space())
