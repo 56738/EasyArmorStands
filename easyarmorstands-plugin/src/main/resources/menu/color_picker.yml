@@ -1,17 +1,16 @@
 _version:
-  game: 1.8.8
+  game: 1.21.3
 slots:
   easyarmorstands:color_picker/blue:
     column: 2
     config:
       axis: BLUE
       item:
-        data: 11
         description:
         - <value>
         - <color>
         name: <lang:easyarmorstands.color.blue>
-        type: wool
+        type: blue_concrete
     row: 3
     type: easyarmorstands:color_picker/axis
   easyarmorstands:color_picker/blue/decrement:
@@ -23,7 +22,6 @@ slots:
         right: -1
         shift: -100
       item:
-        data: 7
         description:
         - <value>
         - <color>
@@ -31,7 +29,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.blue>
-        type: wool
+        type: gray_concrete
     row: 3
     type: easyarmorstands:color_picker/change
   easyarmorstands:color_picker/blue/increment:
@@ -43,7 +41,6 @@ slots:
         right: 1
         shift: 100
       item:
-        data: 8
         description:
         - <value>
         - <color>
@@ -51,7 +48,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.blue>
-        type: wool
+        type: light_gray_concrete
     row: 3
     type: easyarmorstands:color_picker/change
   easyarmorstands:color_picker/green:
@@ -59,12 +56,11 @@ slots:
     config:
       axis: GREEN
       item:
-        data: 5
         description:
         - <value>
         - <color>
         name: <lang:easyarmorstands.color.green>
-        type: wool
+        type: lime_concrete
     row: 2
     type: easyarmorstands:color_picker/axis
   easyarmorstands:color_picker/green/decrement:
@@ -76,7 +72,6 @@ slots:
         right: -1
         shift: -100
       item:
-        data: 7
         description:
         - <value>
         - <color>
@@ -84,7 +79,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.green>
-        type: wool
+        type: gray_concrete
     row: 2
     type: easyarmorstands:color_picker/change
   easyarmorstands:color_picker/green/increment:
@@ -96,7 +91,6 @@ slots:
         right: 1
         shift: 100
       item:
-        data: 8
         description:
         - <value>
         - <color>
@@ -104,7 +98,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.green>
-        type: wool
+        type: light_gray_concrete
     row: 2
     type: easyarmorstands:color_picker/change
   easyarmorstands:color_picker/indicator:
@@ -116,12 +110,11 @@ slots:
     config:
       color: '#191919'
       item:
-        data: 15
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#191919><lang:easyarmorstands.color.preset.black>
-        type: wool
+        type: black_wool
     row: 3
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/blue:
@@ -129,12 +122,11 @@ slots:
     config:
       color: '#334CB2'
       item:
-        data: 11
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#334CB2><lang:easyarmorstands.color.preset.blue>
-        type: wool
+        type: blue_wool
     row: 2
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/brown:
@@ -142,12 +134,11 @@ slots:
     config:
       color: '#664C33'
       item:
-        data: 12
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#664C33><lang:easyarmorstands.color.preset.brown>
-        type: wool
+        type: brown_wool
     row: 3
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/cyan:
@@ -155,12 +146,11 @@ slots:
     config:
       color: '#4C7F99'
       item:
-        data: 9
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#4C7F99><lang:easyarmorstands.color.preset.cyan>
-        type: wool
+        type: cyan_wool
     row: 2
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/gray:
@@ -168,12 +158,11 @@ slots:
     config:
       color: '#4C4C4C'
       item:
-        data: 7
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#4C4C4C><lang:easyarmorstands.color.preset.gray>
-        type: wool
+        type: gray_wool
     row: 1
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/green:
@@ -181,12 +170,11 @@ slots:
     config:
       color: '#667F33'
       item:
-        data: 13
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#667F33><lang:easyarmorstands.color.preset.green>
-        type: wool
+        type: green_wool
     row: 3
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/light_blue:
@@ -194,12 +182,11 @@ slots:
     config:
       color: '#6699D8'
       item:
-        data: 3
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#6699D8><lang:easyarmorstands.color.preset.light-blue>
-        type: wool
+        type: light_blue_wool
     row: 0
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/lime:
@@ -207,12 +194,11 @@ slots:
     config:
       color: '#7FCC19'
       item:
-        data: 5
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#7FCC19><lang:easyarmorstands.color.preset.lime>
-        type: wool
+        type: lime_wool
     row: 1
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/magenta:
@@ -220,12 +206,11 @@ slots:
     config:
       color: '#B24CD8'
       item:
-        data: 2
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#B24CD8><lang:easyarmorstands.color.preset.magenta>
-        type: wool
+        type: magenta_wool
     row: 0
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/orange:
@@ -233,12 +218,11 @@ slots:
     config:
       color: '#D87F33'
       item:
-        data: 1
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#D87F33><lang:easyarmorstands.color.preset.orange>
-        type: wool
+        type: orange_wool
     row: 0
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/pink:
@@ -246,12 +230,11 @@ slots:
     config:
       color: '#F27FA5'
       item:
-        data: 6
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#F27FA5><lang:easyarmorstands.color.preset.pink>
-        type: wool
+        type: pink_wool
     row: 1
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/purple:
@@ -259,12 +242,11 @@ slots:
     config:
       color: '#7F3FB2'
       item:
-        data: 10
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#7F3FB2><lang:easyarmorstands.color.preset.purple>
-        type: wool
+        type: purple_wool
     row: 2
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/red:
@@ -272,12 +254,11 @@ slots:
     config:
       color: '#993333'
       item:
-        data: 14
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#993333><lang:easyarmorstands.color.preset.red>
-        type: wool
+        type: red_wool
     row: 3
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/silver:
@@ -285,12 +266,11 @@ slots:
     config:
       color: '#999999'
       item:
-        data: 8
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#999999><lang:easyarmorstands.color.preset.light-gray>
-        type: wool
+        type: light_gray_wool
     row: 2
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/white:
@@ -298,12 +278,11 @@ slots:
     config:
       color: '#FFFFFF'
       item:
-        data: 0
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#FFFFFF><lang:easyarmorstands.color.preset.white>
-        type: wool
+        type: white_wool
     row: 0
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/preset/yellow:
@@ -311,12 +290,11 @@ slots:
     config:
       color: '#E5E533'
       item:
-        data: 4
         description:
         - <lang:easyarmorstands.menu.color-picker.left-click-to-select>
         - <lang:easyarmorstands.menu.color-picker.right-click-to-mix>
         name: <#E5E533><lang:easyarmorstands.color.preset.yellow>
-        type: wool
+        type: yellow_wool
     row: 1
     type: easyarmorstands:color_picker/preset
   easyarmorstands:color_picker/red:
@@ -324,12 +302,11 @@ slots:
     config:
       axis: RED
       item:
-        data: 14
         description:
         - <value>
         - <color>
         name: <lang:easyarmorstands.color.red>
-        type: wool
+        type: red_concrete
     row: 1
     type: easyarmorstands:color_picker/axis
   easyarmorstands:color_picker/red/decrement:
@@ -341,7 +318,6 @@ slots:
         right: -1
         shift: -100
       item:
-        data: 7
         description:
         - <value>
         - <color>
@@ -349,7 +325,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.red>
-        type: wool
+        type: gray_concrete
     row: 1
     type: easyarmorstands:color_picker/change
   easyarmorstands:color_picker/red/increment:
@@ -361,7 +337,6 @@ slots:
         right: 1
         shift: 100
       item:
-        data: 8
         description:
         - <value>
         - <color>
@@ -369,7 +344,7 @@ slots:
         - <lang:easyarmorstands.menu.color-picker.change.right-click>
         - <lang:easyarmorstands.menu.color-picker.change.shift-click>
         name: <lang:easyarmorstands.color.red>
-        type: wool
+        type: light_gray_concrete
     row: 1
     type: easyarmorstands:color_picker/change
 title: <lang:easyarmorstands.menu.color-picker.title>

@@ -1,5 +1,5 @@
 _version:
-  game: 1.19.4
+  game: 1.21.3
 parent:
 - entity/display
 - entity/item_holder

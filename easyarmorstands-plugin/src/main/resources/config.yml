@@ -1,13 +1,13 @@
 # EasyArmorStands configuration
 # https://github.com/56738/EasyArmorStands/wiki/Configuration
-#
+# 
 # Do not edit the _version section, this is used to automatically update your config.
-#
+# 
 # Do not add comments to this file, they will be removed when the config is saved.
 
 _version:
   config: 3
-  game: 1.8.8
+  game: 1.21.3
 editor:
   allow-players: false
   button:
@@ -19,18 +19,17 @@ editor:
   input-hints:
     enabled: true
     format: '  [<key>] <input>'
-    left-click-key: <lang:easyarmorstands.input.key.left-mouse>
-    right-click-key: <lang:easyarmorstands.input.key.right-mouse>
-    sneak-key: <lang:easyarmorstands.input.key.sneak>
-    swap-hands-key: F
+    left-click-key: <key:key.attack>
+    right-click-key: <key:key.use>
+    sneak-key: <lang:key.sneak>
+    swap-hands-key: <key:key.swapOffhand>
   menu:
     background:
       config:
         item:
-          data: 3
-          name: ''
-          type: stained_glass_pane
           hide-tooltip: true
+          name: ''
+          type: light_blue_stained_glass_pane
       type: easyarmorstands:background
   scale:
     max-distance: 64.0

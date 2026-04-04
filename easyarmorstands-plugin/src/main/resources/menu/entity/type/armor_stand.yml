@@ -1,5 +1,5 @@
 _version:
-  game: 1.8.8
+  game: 1.21.3
 height: 6
 parent: entity/living
 slots:
@@ -55,12 +55,11 @@ slots:
     column: 7
     config:
       item:
-        data: 3
         description:
         - <lang:easyarmorstands.menu.node.left-click-to-select>
         - <lang:easyarmorstands.menu.node.right-click-to-reset>
         name: <lang:easyarmorstands.armor-stand-part.head>
-        type: skull_item
+        type: player_head
       part: HEAD
     row: 3
     type: easyarmorstands:armor_stand/part

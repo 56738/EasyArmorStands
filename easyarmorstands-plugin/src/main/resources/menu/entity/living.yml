@@ -1,5 +1,5 @@
 _version:
-  game: 1.8.8
+  game: 1.21.3
 parent: entity/item_holder
 slots:
   easyarmorstands:copy:
@@ -45,6 +45,5 @@ slots:
     column: 0
     config:
       property: easyarmorstands:entity/equipment/off_hand
-    enabled: false
     row: 3
     type: easyarmorstands:property

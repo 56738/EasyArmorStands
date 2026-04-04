@@ -1,5 +1,5 @@
 _version:
-  game: 1.8.8
+  game: 1.21.3
 parent: entity/default
 slots:
   easyarmorstands:color_picker:
@@ -17,11 +17,10 @@ slots:
     column: 1
     config:
       item:
-        data: 3
         description:
         - <lang:easyarmorstands.menu.headdb.description>
         name: <lang:easyarmorstands.menu.headdb.open>
-        type: skull_item
+        type: player_head
     row: 0
     type: easyarmorstands:headdatabase
   easyarmorstands:traincarts/model_browser:
