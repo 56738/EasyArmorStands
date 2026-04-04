@@ -10,18 +10,24 @@ import java.util.EnumMap;
 
 public class EnumPropertyType<T extends Enum<T>> extends ConfigurablePropertyType<T> {
     protected final T[] values;
+    private final Class<T> type;
     private final EnumMap<T, Component> valueNames;
 
-    public EnumPropertyType(@NotNull Key key, Class<T> type) {
+    public EnumPropertyType(@NotNull Key key, Class<T> type, T[] values) {
         super(key);
         this.valueNames = new EnumMap<>(type);
-        this.values = type.getEnumConstants();
+        this.type = type;
+        this.values = values;
+    }
+
+    public EnumPropertyType(@NotNull Key key, Class<T> type) {
+        this(key, type, type.getEnumConstants());
     }
 
     @Override
     public void load(@NotNull CommentedConfigurationNode config) throws SerializationException {
         super.load(config);
-        for (T value : values) {
+        for (T value : type.getEnumConstants()) {
             valueNames.put(value, config.node("value", value.name())
                     .get(Component.class, Component.text(value.name())));
         }

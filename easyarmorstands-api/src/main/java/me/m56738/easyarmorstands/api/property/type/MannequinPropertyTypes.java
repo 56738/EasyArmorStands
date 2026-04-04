@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.SkinPart;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Pose;
 import org.bukkit.inventory.MainHand;
 
 import java.util.Locale;
@@ -20,6 +21,7 @@ public final class MannequinPropertyTypes {
     public static final PropertyType<Boolean> IMMOVABLE = get("mannequin/immovable", Boolean.class);
     public static final PropertyType<Optional<Component>> DESCRIPTION = get("mannequin/description", new TypeToken<>() {
     });
+    public static final PropertyType<Pose> POSE = get("mannequin/pose", Pose.class);
     public static final KeyedPropertyType<SkinPart, Boolean> SKIN_PART_VISIBLE = new EnumKeyedPropertyType<>(SkinPart.class,
             part -> get("mannequin/part/" + part.name().toLowerCase(Locale.ROOT) + "/visible", Boolean.class));
 

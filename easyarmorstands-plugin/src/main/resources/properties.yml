@@ -497,3 +497,17 @@ easyarmorstands:mannequin/part/right_pants/visible:
   value:
     disabled: <red><lang:easyarmorstands.property.common.invisible>
     enabled: <green><lang:easyarmorstands.property.common.visible>
+easyarmorstands:mannequin/pose:
+  button:
+    description:
+      - <value>
+    name: <name>
+    type: armor_stand
+  name: <lang:easyarmorstands.property.mannequin.pose.name>
+  permission: easyarmorstands.property.mannequin.pose
+  value:
+    SLEEPING: <red><lang:easyarmorstands.property.mannequin.pose.sleeping>
+    STANDING: <white><lang:easyarmorstands.property.mannequin.pose.standing>
+    SWIMMING: <aqua><lang:easyarmorstands.property.mannequin.pose.swimming>
+    FALL_FLYING: <light_purple><lang:easyarmorstands.property.mannequin.pose.fall-flying>
+    SNEAKING: <gray><lang:easyarmorstands.property.mannequin.pose.sneaking>

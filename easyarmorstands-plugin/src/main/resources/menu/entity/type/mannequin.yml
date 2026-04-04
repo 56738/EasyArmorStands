@@ -5,6 +5,8 @@ parent: entity/living
 slots:
   easyarmorstands:entity/ai:
     enabled: false
+  easyarmorstands:entity/visible:
+    enabled: false
   easyarmorstands:mannequin/description:
     column: 4
     config:
@@ -64,6 +66,12 @@ slots:
     config:
       property: easyarmorstands:mannequin/part/right_sleeve/visible
     row: 4
+    type: easyarmorstands:property
+  easyarmorstands:mannequin/pose:
+    column: 6
+    config:
+      property: easyarmorstands:mannequin/pose
+    row: 0
     type: easyarmorstands:property
   easyarmorstands:mannequin/profile:
     column: 6

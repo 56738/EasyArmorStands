@@ -13,6 +13,10 @@ public class EnumTogglePropertyType<T extends Enum<T>> extends EnumPropertyType<
         super(key, type);
     }
 
+    public EnumTogglePropertyType(@NotNull Key key, Class<T> type, T[] values) {
+        super(key, type, values);
+    }
+
     @Override
     public @Nullable MenuSlot createSlot(@NotNull Property<T> property, @NotNull PropertyContainer container) {
         return new EnumToggleButton<>(property, container, buttonTemplate, values);

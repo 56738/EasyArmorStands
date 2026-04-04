@@ -126,6 +126,7 @@ public class EntityElementListener implements Listener {
         registry.register(Property.of(MannequinPropertyTypes.PROFILE, entity::getProfile, entity::setProfile));
         registry.register(Property.of(MannequinPropertyTypes.IMMOVABLE, entity::isImmovable, entity::setImmovable));
         registry.register(Property.ofNullable(MannequinPropertyTypes.DESCRIPTION, entity::getDescription, entity::setDescription));
+        registry.register(Property.of(MannequinPropertyTypes.POSE, entity::getPose, entity::setPose));
         registry.register(new MannequinCapeVisibleProperty(entity));
         registry.register(new MannequinJacketVisibleProperty(entity));
         registry.register(new MannequinLeftSleeveVisibleProperty(entity));

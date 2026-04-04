@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.property.button;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     private final T[] values;
@@ -13,7 +14,11 @@ public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     }
 
     private T getNeighbour(int offset) {
-        int index = property.getValue().ordinal() + offset;
+        int index = ArrayUtils.indexOf(values, property.getValue());
+        if (index == -1) {
+            return values[0];
+        }
+        index += offset;
         if (index >= values.length) {
             index -= values.length;
         } else if (index < 0) {

@@ -8,6 +8,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Mannequin;
+import org.bukkit.entity.Pose;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.MainHand;
@@ -51,6 +53,7 @@ public class DefaultPropertyTypes {
         registry.register(new EnumTogglePropertyType<>(key("mannequin/main_hand"), MainHand.class));
         registry.register(new ProfilePropertyType(key("mannequin/profile")));
         registry.register(new BooleanTogglePropertyType(key("mannequin/immovable")));
+        registry.register(new EnumTogglePropertyType<>(key("mannequin/pose"), Pose.class, Mannequin.validPoses().toArray(Pose[]::new)));
         registry.register(new OptionalComponentPropertyType(key("mannequin/description"), "/eas description set"));
         registry.register(new EnumTogglePropertyType<>(key("text_display/alignment"), TextDisplay.TextAlignment.class));
         registry.register(new TextBackgroundTogglePropertyType(key("text_display/background")));
