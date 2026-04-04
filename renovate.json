@@ -5,5 +5,8 @@
   ],
   "lockFileMaintenance": {
     "enabled": false
-  }
+  },
+  "ignoreDeps": [
+    "io.papermc.paper:paper-api"
+  ]
 }
