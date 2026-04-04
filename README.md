@@ -56,7 +56,7 @@ middle (where the lines meet).
 
 Use `/eas name` to edit the custom name of an armor stand.
 This is often used for holograms.
-Format the name using [MiniMessage](https://docs.advntr.dev/minimessage/format.html).
+Format the name using [MiniMessage](https://docs.papermc.io/adventure/minimessage/format/).
 
 **Hint:** If you are on 1.19.4+, you should use text displays for holograms, see below.
 
@@ -67,7 +67,7 @@ Display entities can be moved, rotated and scaled.
 Use the menu to place an item into an item display.
 
 Use `/eas text` to edit the text of a text display.
-Format the text using [MiniMessage](https://docs.advntr.dev/minimessage/format.html).
+Format the text using [MiniMessage](https://docs.papermc.io/adventure/minimessage/format/).
 This command also has some subcommands such as `/eas text background`, which can be used to change the background color.
 
 **Hint:** Set the billboard mode to `center` in the menu and reset the rotation

@@ -91,7 +91,7 @@ public class SessionCommands {
                 .append(Component.space())
                 .append(Message.chatButton("easyarmorstands.button.text.syntax-help")
                         .hoverEvent(Message.hover("easyarmorstands.click-to-open-minimessage"))
-                        .clickEvent(ClickEvent.openUrl("https://docs.advntr.dev/minimessage/format.html"))));
+                        .clickEvent(ClickEvent.openUrl("https://docs.papermc.io/adventure/minimessage/format/"))));
         if (text == null) {
             audience.sendMessage(Message.hint("easyarmorstands.hint.not-set"));
         } else {
