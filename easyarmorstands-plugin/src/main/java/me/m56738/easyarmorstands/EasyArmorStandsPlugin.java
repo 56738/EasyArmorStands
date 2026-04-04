@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
@@ -30,7 +31,6 @@ import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ComponentSuggestionMapper;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
-import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
 import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementInjector;
@@ -55,6 +55,7 @@ import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.DisplayElementProvider;
 import me.m56738.easyarmorstands.element.DisplayElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
+import me.m56738.easyarmorstands.element.ElementTypeRegistryImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
@@ -100,10 +101,8 @@ import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -160,6 +159,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private MessageManager messageManager;
     private AddonManager addonManager;
     private RegionListenerManager regionPrivilegeManager;
+    private ElementTypeRegistryImpl elementTypeRegistry;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistryImpl entityElementProviderRegistry;
     private MenuSlotTypeRegistryImpl menuSlotTypeRegistry;
@@ -169,7 +169,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private ClipboardManager clipboardManager;
     private UpdateManager updateManager;
     private BukkitGizmos gizmos;
-    private DisplayElementType<ItemDisplay> itemDisplayType;
 
     public EasyArmorStandsPlugin(
             MainThreadExecutor executor,
@@ -193,22 +192,36 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         instance = this;
         EasyArmorStandsInitializer.initialize(this);
 
+        elementTypeRegistry = new ElementTypeRegistryImpl();
         propertyTypeRegistry = new PropertyTypeRegistryImpl();
+        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
+
         new DefaultPropertyTypes(propertyTypeRegistry);
 
-        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
-        MannequinElementType mannequinElementType = new MannequinElementType();
-        itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
-        DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
-        DisplayElementType<TextDisplay> textDisplayType = new TextDisplayElementType();
-        InteractionElementType interactionType = new InteractionElementType();
-        entityElementProviderRegistry = new EntityElementProviderRegistryImpl();
-        entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
-        entityElementProviderRegistry.register(new MannequinElementProvider(mannequinElementType));
         entityElementProviderRegistry.register(new SimpleEntityElementProvider());
+
+        ArmorStandElementType armorStandElementType = new ArmorStandElementType();
+        elementTypeRegistry.register(EasyArmorStands.key("armor_stand"), armorStandElementType);
+        entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
+
+        MannequinElementType mannequinElementType = new MannequinElementType();
+        elementTypeRegistry.register(EasyArmorStands.key("mannequin"), mannequinElementType);
+        entityElementProviderRegistry.register(new MannequinElementProvider(mannequinElementType));
+
+        DisplayElementType<ItemDisplay> itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
+        elementTypeRegistry.register(EasyArmorStands.key("item_display"), itemDisplayType);
         entityElementProviderRegistry.register(new DisplayElementProvider<>(itemDisplayType));
+
+        DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
+        elementTypeRegistry.register(EasyArmorStands.key("block_display"), blockDisplayType);
         entityElementProviderRegistry.register(new DisplayElementProvider<>(blockDisplayType));
+
+        DisplayElementType<TextDisplay> textDisplayType = new TextDisplayElementType();
+        elementTypeRegistry.register(EasyArmorStands.key("text_display"), textDisplayType);
         entityElementProviderRegistry.register(new DisplayElementProvider<>(textDisplayType));
+
+        InteractionElementType interactionType = new InteractionElementType();
+        elementTypeRegistry.register(EasyArmorStands.key("interaction"), interactionType);
         entityElementProviderRegistry.register(new InteractionElementProvider(interactionType));
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
@@ -643,6 +656,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull ElementSpawnRequest elementSpawnRequest(ElementType type) {
         return new ElementSpawnRequestImpl(type);
+    }
+
+    @Override
+    public @NotNull ElementTypeRegistry elementTypeRegistry() {
+        return elementTypeRegistry;
     }
 
     @Override

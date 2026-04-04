@@ -3,22 +3,34 @@ package me.m56738.easyarmorstands.api;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
+import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface EasyArmorStands {
+    String NAMESPACE = "easyarmorstands";
+
     static @NotNull EasyArmorStands get() {
         if (EasyArmorStandsHolder.instance == null) {
             throw new IllegalStateException("EasyArmorStands not initialized");
         }
         return EasyArmorStandsHolder.instance;
     }
+
+    static @NotNull Key key(@KeyPattern.Value String value) {
+        return Key.key(NAMESPACE, value);
+    }
+
+    @Contract(pure = true)
+    @NotNull ElementTypeRegistry elementTypeRegistry();
 
     @Contract(pure = true)
     @NotNull PropertyTypeRegistry propertyTypeRegistry();
