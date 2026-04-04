@@ -15,6 +15,7 @@ dependencies {
     api(project(":easyarmorstands-api"))
     api(project(":easyarmorstands-assets"))
     api(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
+    annotationProcessor(project(":easyarmorstands-plugin-dependencies", configuration = "shadow"))
     runtimeOnly(project(":easyarmorstands-bentobox"))
     runtimeOnly(project(":easyarmorstands-display"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))

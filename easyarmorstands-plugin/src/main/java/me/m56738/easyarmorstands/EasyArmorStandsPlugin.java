@@ -20,10 +20,10 @@ import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
-import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
+import me.m56738.easyarmorstands.capability.visibilityevent.VisibilityEventCapability;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardListener;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
@@ -81,6 +81,7 @@ import me.m56738.easyarmorstands.lib.bstats.bukkit.Metrics;
 import me.m56738.easyarmorstands.lib.cloud.CommandManager;
 import me.m56738.easyarmorstands.lib.cloud.annotations.AnnotationParser;
 import me.m56738.easyarmorstands.lib.cloud.exception.InvalidCommandSenderException;
+import me.m56738.easyarmorstands.lib.cloud.injection.ParameterInjector;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.MinecraftExceptionHandler;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.RichDescription;
 import me.m56738.easyarmorstands.lib.cloud.minecraft.extras.parser.TextColorParser;
@@ -293,7 +294,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .registerInjector(SessionImpl.class, new SessionInjector())
                 .registerInjector(Clipboard.class, new ClipboardInjector())
                 .registerInjector(Element.class, new ElementInjector())
-                .registerInjector(ElementSelection.class, new ElementSelectionInjector());
+                .registerInjector(ElementSelection.class, new ElementSelectionInjector())
+                .registerInjector(SessionListener.class, ParameterInjector.constantInjector(sessionListener));
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
@@ -321,6 +323,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new SessionCommands());
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
+        try {
+            annotationParser.parseContainers(getClassLoader());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         PropertyCommands.register(commandManager);
 

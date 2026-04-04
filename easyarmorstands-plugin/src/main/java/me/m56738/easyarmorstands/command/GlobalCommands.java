@@ -76,15 +76,6 @@ public class GlobalCommands {
                 .collect(Collectors.toList());
     }
 
-    @Command("give")
-    @Permission(Permissions.GIVE)
-    @CommandDescription("easyarmorstands.command.description.give")
-    public void give(EasPlayer sender) {
-        sender.get().getInventory().addItem(EasyArmorStandsPlugin.getInstance().createTool(sender.locale()));
-        sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
-        sessionListener.updateHeldItem(sender.get());
-    }
-
     @Command("reload")
     @Permission(Permissions.RELOAD)
     @CommandDescription("easyarmorstands.command.description.reload")
