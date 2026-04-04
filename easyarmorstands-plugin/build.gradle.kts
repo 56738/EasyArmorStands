@@ -41,7 +41,7 @@ tasks {
     runServer {
         minecraftVersion(libs.versions.minecraft.get())
         javaLauncher = project.javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 
@@ -87,7 +87,7 @@ tasks {
 }
 
 val supportedGameVersions = listOf(
-    "1.21.11",
+    "26.1.1",
 )
 
 modrinth {
@@ -110,7 +110,7 @@ hangarPublish {
         platforms {
             register(Platforms.PAPER) {
                 jar = tasks.shadowJar.flatMap { it.archiveFile }
-                platformVersions = supportedGameVersions - listOf("1.8.9")
+                platformVersions = supportedGameVersions
             }
         }
         pages {
