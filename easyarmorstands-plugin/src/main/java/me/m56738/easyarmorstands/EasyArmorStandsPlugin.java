@@ -28,14 +28,7 @@ import me.m56738.easyarmorstands.color.ColorAxisSlotType;
 import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
 import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
-import me.m56738.easyarmorstands.command.ClipboardCommands;
-import me.m56738.easyarmorstands.command.CommandSourceStackMapper;
-import me.m56738.easyarmorstands.command.DisplayCommands;
-import me.m56738.easyarmorstands.command.GlobalCommands;
-import me.m56738.easyarmorstands.command.HistoryCommands;
-import me.m56738.easyarmorstands.command.PropertyCommands;
-import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.command.ComponentSuggestionMapper;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
@@ -45,19 +38,10 @@ import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementSelectionInjector;
 import me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor;
 import me.m56738.easyarmorstands.command.processor.GroupProcessor;
-import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
 import me.m56738.easyarmorstands.command.processor.SessionInjector;
 import me.m56738.easyarmorstands.command.processor.SessionProcessor;
 import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
-import me.m56738.easyarmorstands.command.requirement.CommandRequirementBuilderModifier;
 import me.m56738.easyarmorstands.command.requirement.CommandRequirementPostProcessor;
-import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
-import me.m56738.easyarmorstands.command.requirement.ElementSelectionRequirement;
-import me.m56738.easyarmorstands.command.requirement.RequireElement;
-import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
-import me.m56738.easyarmorstands.command.requirement.RequireSession;
-import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
-import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
@@ -130,13 +114,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
-import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.injection.ParameterInjector;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
-import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
@@ -171,6 +153,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
     private final NamespacedKey toolKey = new NamespacedKey(this, "tool");
+    private final PaperCommandManager.Bootstrapped<EasCommandSender> commandManager;
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
     private MenuFactory colorPickerFactory;
@@ -187,8 +170,13 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private UpdateManager updateManager;
     private BukkitGizmos gizmos;
     private DisplayElementType<ItemDisplay> itemDisplayType;
-    private PaperCommandManager<EasCommandSender> commandManager;
-    private AnnotationParser<EasCommandSender> annotationParser;
+
+    public EasyArmorStandsPlugin(
+            MainThreadExecutor executor,
+            PaperCommandManager.Bootstrapped<EasCommandSender> commandManager) {
+        executor.setPlugin(this);
+        this.commandManager = commandManager;
+    }
 
     public static EasyArmorStandsPlugin getInstance() {
         return instance;
@@ -277,9 +265,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
 
-        commandManager = PaperCommandManager.builder(new CommandSourceStackMapper(new CommandSenderMapper()))
-                .executionCoordinator(ExecutionCoordinator.coordinatorFor(new MainThreadExecutor(this)))
-                .buildOnEnable(this);
+        commandManager.onEnable();
 
         MinecraftExceptionHandler.<EasCommandSender>createNative()
                 .defaultArgumentParsingHandler()
@@ -288,8 +274,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .defaultCommandExecutionHandler()
                 .defaultInvalidSenderHandler()
                 .handler(InvalidCommandSenderException.class,
-                        (sender, e) -> Message.error("easyarmorstands.error.not-a-player"))
+                        (_, _) -> Message.error("easyarmorstands.error.not-a-player"))
                 .registerTo(commandManager);
+
+        MinecraftHelp<EasCommandSender> help = MinecraftHelp.createNative("/eas help", commandManager);
 
         commandManager.parameterInjectorRegistry()
                 .registerInjector(ValueNode.class, new ValueNodeInjector())
@@ -297,16 +285,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .registerInjector(Clipboard.class, new ClipboardInjector())
                 .registerInjector(Element.class, new ElementInjector())
                 .registerInjector(ElementSelection.class, new ElementSelectionInjector())
-                .registerInjector(SessionListener.class, ParameterInjector.constantInjector(sessionListener));
-
-        commandManager.parserRegistry().registerNamedParserSupplier("node_value",
-                p -> new NodeValueArgumentParser<>());
-
-        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
-                p -> new TextColorParser<>());
-
-        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
-                p -> new BlockDataArgumentParser<>());
+                .registerInjector(SessionListener.class, ParameterInjector.constantInjector(sessionListener))
+                .registerInjector(new TypeToken<>() {
+                }, ParameterInjector.constantInjector(help));
 
         if (commandManager.hasBrigadierManager()) {
             CloudBrigadierManager<EasCommandSender, ?> brigadierManager = commandManager.brigadierManager();
@@ -327,26 +308,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         commandManager.registerCommandPostProcessor(new CommandRequirementPostProcessor());
 
-        annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
-        annotationParser.descriptionMapper(RichDescription::translatable);
-
-        annotationParser.registerBuilderModifier(RequireSession.class, new CommandRequirementBuilderModifier<>(a -> new SessionRequirement()));
-        annotationParser.registerBuilderModifier(RequireElement.class, new CommandRequirementBuilderModifier<>(a -> new ElementRequirement()));
-        annotationParser.registerBuilderModifier(RequireElementSelection.class, new CommandRequirementBuilderModifier<>(a -> new ElementSelectionRequirement()));
-
-        annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier());
-        annotationParser.parse(new GlobalCommands(commandManager, sessionListener));
-        annotationParser.parse(new SessionCommands());
-        annotationParser.parse(new HistoryCommands());
-        annotationParser.parse(new ClipboardCommands());
-        annotationParser.parse(new DisplayCommands(itemDisplayType));
-        try {
-            annotationParser.parseContainers(getClassLoader());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        PropertyCommands.register(commandManager);
+        commandManager.appendSuggestionMapper(new ComponentSuggestionMapper());
 
         if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
             try {
@@ -616,10 +578,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public CommandManager<EasCommandSender> getCommandManager() {
         return commandManager;
-    }
-
-    public AnnotationParser<EasCommandSender> getAnnotationParser() {
-        return annotationParser;
     }
 
     public ItemStack createTool(Locale locale) {

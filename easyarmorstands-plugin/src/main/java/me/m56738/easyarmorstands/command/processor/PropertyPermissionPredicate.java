@@ -11,33 +11,44 @@ import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.permission.Permission;
 import org.incendo.cloud.permission.PredicatePermission;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
+@NullMarked
 public class PropertyPermissionPredicate implements Predicate<EasCommandSender> {
-    private final PropertyType<?> type;
+    private final Key key;
+    private @Nullable PropertyType<?> type;
 
-    public PropertyPermissionPredicate(PropertyType<?> type) {
+    private PropertyPermissionPredicate(Key key, @Nullable PropertyType<?> type) {
+        this.key = key;
         this.type = type;
     }
 
-    public static @NotNull Permission createPermission(@Subst("n:v") String value) {
+    public static Permission createPermission(@Subst("n:v") String value) {
         return createPermission(Key.key(value));
     }
 
-    public static @NotNull Permission createPermission(Key key) {
-        return createPermission(EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().get(key));
+    public static Permission createPermission(PropertyType<?> type) {
+        return createPermission(type.key(), type);
     }
 
-    public static @NotNull Permission createPermission(PropertyType<?> type) {
+    public static Permission createPermission(Key key) {
+        return createPermission(key, null);
+    }
+
+    private static Permission createPermission(Key key, @Nullable PropertyType<?> type) {
         return PredicatePermission.of(
-                CloudKey.of("property_permission_" + type.key().asString()),
-                new PropertyPermissionPredicate(type));
+                CloudKey.of("property_permission_" + key.asString()),
+                new PropertyPermissionPredicate(key, type));
     }
 
     @Override
     public boolean test(EasCommandSender sender) {
+        if (type == null) {
+            type = EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().get(key);
+        }
         if (sender instanceof EasPlayer) {
             Player player = ((EasPlayer) sender).player();
             return player.hasPermission(Permissions.EDIT) && type.canChange(player);

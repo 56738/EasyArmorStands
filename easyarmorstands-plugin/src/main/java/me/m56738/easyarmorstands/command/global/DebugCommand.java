@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.command;
+package me.m56738.easyarmorstands.command.global;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -7,101 +7,35 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.SessionImpl;
-import me.m56738.easyarmorstands.session.SessionListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.annotation.specifier.Greedy;
-import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.annotations.suggestion.Suggestions;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.help.result.CommandEntry;
-import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.annotations.processing.CommandContainer;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-@Command("eas")
-public class GlobalCommands {
-    private final CommandManager<EasCommandSender> commandManager;
-    private final MinecraftHelp<EasCommandSender> help;
-    private final SessionListener sessionListener;
-
-    public GlobalCommands(CommandManager<EasCommandSender> commandManager, SessionListener sessionListener) {
-        this.commandManager = commandManager;
-        this.help = MinecraftHelp.createNative("/eas help", commandManager);
-        this.sessionListener = sessionListener;
-    }
-
-    @Command("")
-    @Permission(Permissions.HELP)
-    @CommandDescription("easyarmorstands.command.description")
-    public void showOverview(EasCommandSender sender) {
-        if (sender.get().hasPermission(Permissions.VERSION)) {
-            String version = EasyArmorStandsPlugin.getInstance().getDescription().getVersion();
-            sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
-        } else {
-            sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
-        }
-        if (sender.get().hasPermission(Permissions.GIVE)) {
-            sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
-        }
-        sender.sendMessage(Message.hint("easyarmorstands.hint.show-help", Message.command("/eas help")));
-    }
-
-    @Command("help [query]")
-    @Permission(Permissions.HELP)
-    @CommandDescription("easyarmorstands.command.description.help")
-    public void help(EasCommandSender sender,
-                     @Argument(value = "query", suggestions = "help_queries") @Greedy String query) {
-        help.queryCommands(query != null ? query : "", sender);
-    }
-
-    @Suggestions("help_queries")
-    public List<String> suggestHelpQueries(CommandContext<EasCommandSender> ctx, String input) {
-        return commandManager.createHelpHandler().queryRootIndex(ctx.sender()).entries().stream()
-                .map(CommandEntry::syntax)
-                .collect(Collectors.toList());
-    }
-
-    @Command("reload")
-    @Permission(Permissions.RELOAD)
-    @CommandDescription("easyarmorstands.command.description.reload")
-    public void reloadConfig(EasCommandSender sender) {
-        EasyArmorStandsPlugin.getInstance().reload();
-        sender.sendMessage(Message.success("easyarmorstands.success.reloaded-config"));
-    }
-
-    @Command("version")
-    @Permission(Permissions.VERSION)
-    @CommandDescription("easyarmorstands.command.description.version")
-    public void version(EasCommandSender sender) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        String version = plugin.getDescription().getVersion();
-        String url = "https://github.com/56738/EasyArmorStands";
-        sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
-        sender.sendMessage(Component.text(url).clickEvent(ClickEvent.openUrl(url)));
-    }
-
-    @Command("debug")
+@CommandContainer
+public class DebugCommand {
+    @Command("eas debug")
     @Permission(Permissions.DEBUG)
     @CommandDescription("easyarmorstands.command.description.debug")
     public void debug(EasCommandSender sender) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        String version = plugin.getDescription().getVersion();
+        String version = plugin.getPluginMeta().getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
-        sender.sendMessage(debugLine(Component.text("Server"), Component.text(Bukkit.getVersion())));
+        sender.sendMessage(debugLine(Component.text("Server"), Component.text()
+                .append(Component.text(Bukkit.getName()))
+                .appendSpace()
+                .append(Component.text(Bukkit.getVersion()))
+                .build()));
         sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
 
         if (sender instanceof EasPlayer) {
