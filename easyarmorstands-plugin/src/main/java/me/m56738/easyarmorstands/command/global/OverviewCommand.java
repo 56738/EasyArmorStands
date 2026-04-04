@@ -18,7 +18,7 @@ public class OverviewCommand {
     @CommandDescription("easyarmorstands.command.description")
     public void showOverview(EasCommandSender sender) {
         if (sender.get().hasPermission(Permissions.VERSION)) {
-            String version = EasyArmorStandsPlugin.getInstance().getDescription().getVersion();
+            String version = EasyArmorStandsPlugin.getInstance().getPluginMeta().getVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));
