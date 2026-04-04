@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface ElementTypeRegistry {
-    void register(Key key, ElementType type);
+    void register(ElementType type);
 
     @Nullable ElementType getOrNull(Key key);
 

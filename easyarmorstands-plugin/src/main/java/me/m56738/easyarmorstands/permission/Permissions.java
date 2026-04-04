@@ -87,6 +87,9 @@ public class Permissions {
     @Description("Allow redoing changes")
     public static final String REDO = "easyarmorstands.redo";
 
+    @Description("Allow registering entities into EasyArmorStands")
+    public static final String REGISTER = "easyarmorstands.register";
+
     @Description("Allow reloading the configuration")
     public static final String RELOAD = "easyarmorstands.reload";
 

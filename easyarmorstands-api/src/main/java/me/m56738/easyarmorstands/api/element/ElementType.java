@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.element;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The type of the element.
  */
-public interface ElementType {
+public interface ElementType extends Keyed {
     /**
      * Attempt to create an element with the specified properties.
      *

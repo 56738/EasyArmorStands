@@ -1,14 +1,15 @@
 # EasyArmorStands configuration
 # https://github.com/56738/EasyArmorStands/wiki/Configuration
-# 
+#
 # Do not edit the _version section, this is used to automatically update your config.
-# 
+#
 # Do not add comments to this file, they will be removed when the config is saved.
 
 _version:
   config: 3
   game: 1.21.3
 editor:
+  allow-entities: true
   allow-players: false
   button:
     interpolation-ticks: 1

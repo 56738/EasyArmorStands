@@ -117,7 +117,7 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.open.entity")
     public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
         Entity entity = selector.single();
-        Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
+        Element element = EasyArmorStandsPlugin.getInstance().getElement(entity);
         if (element == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
             return;
@@ -140,7 +140,7 @@ public class SessionCommands {
     @RequireSession
     public void select(EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
         selectGroup(sender, session, selector.values().stream()
-                .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
+                .map(EasyArmorStandsPlugin.getInstance()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
                 .filter(sender::canEditElement)
@@ -561,7 +561,7 @@ public class SessionCommands {
     public void selectTag(EasPlayer sender, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
         selectGroup(sender, session, sender.get().getWorld().getEntities().stream()
                 .filter(entity -> entity.getScoreboardTags().contains(tag))
-                .map(EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry()::getElement)
+                .map(EasyArmorStandsPlugin.getInstance()::getElement)
                 .filter(element -> element instanceof EditableElement)
                 .map(element -> (EditableElement) element)
                 .filter(sender::canEditElement)
@@ -600,7 +600,7 @@ public class SessionCommands {
         for (Entity entity : player.get().getWorld().getEntities()) {
             Set<String> entityTags = entity.getScoreboardTags();
             if (!tags.containsAll(entityTags)) {
-                Element element = EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry().getElement(entity);
+                Element element = EasyArmorStandsPlugin.getInstance().getElement(entity);
                 if (element instanceof EditableElement) {
                     EditableElement editableElement = (EditableElement) element;
                     if (player.canDiscoverElement(editableElement)) {
@@ -674,7 +674,8 @@ public class SessionCommands {
     @RequireElement
     public void info(EasPlayer sender, Element element) {
         sender.sendMessage(Message.title("easyarmorstands.info.title"));
-        sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)));
+        sender.sendMessage(Message.hint("easyarmorstands.info.type", element.getType().getDisplayName().colorIfAbsent(NamedTextColor.WHITE)
+                .hoverEvent(Component.text(element.getType().key().asString()))));
         if (element instanceof EntityElement) {
             Entity entity = ((EntityElement<?>) element).getEntity();
             sender.sendMessage(Component.text()

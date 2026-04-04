@@ -14,8 +14,8 @@ public class ElementTypeRegistryImpl implements ElementTypeRegistry {
     private final Map<Key, ElementType> types = new TreeMap<>();
 
     @Override
-    public void register(Key key, ElementType type) {
-        types.put(key, type);
+    public void register(ElementType type) {
+        types.put(type.key(), type);
     }
 
     @Override

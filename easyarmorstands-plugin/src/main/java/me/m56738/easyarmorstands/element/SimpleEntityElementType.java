@@ -7,18 +7,20 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.permission.Permissions;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class SimpleEntityElementType<E extends Entity> implements EntityElementType<E> {
+public abstract class SimpleEntityElementType<E extends Entity> implements EntityElementType<E> {
     private final EntityType entityType;
     private final Class<E> entityClass;
     private final Component displayName;
@@ -27,6 +29,11 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
         this.entityType = entityType;
         this.entityClass = entityClass;
         this.displayName = Component.translatable(entityType);
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return entityType.key();
     }
 
     @Override
@@ -88,6 +95,7 @@ public class SimpleEntityElementType<E extends Entity> implements EntityElementT
 
         @Override
         public void accept(E entity) {
+            entity.getPersistentDataContainer().set(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING, SimpleEntityElementType.this.key().asString());
             element = SimpleEntityElementType.this.getElement(entity);
             if (element != null) {
                 copyProperties(properties, element.getProperties());

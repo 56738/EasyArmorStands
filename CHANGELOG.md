@@ -11,6 +11,12 @@ However, most new features will only be added to EasyArmorStands v3.
 # Improvements
 
 * Added Mannequin pose property
+* Added `editor.allow-entities` to config
+    * If true (default), any entity can be edited (as long as you have permission to edit the entity type)
+    * If false, only entities created using EasyArmorStands can be edited
+    * Entities created before EasyArmorStands v3 must be registered using `/eas register ...`
+* Added `/eas register ...` and `/eas unregister ...`
+  * Allows marking (or unmarking) entities as created by EasyArmorStands
 
 # Fixes
 

@@ -7,6 +7,7 @@ import de.oliver.fancyholograms.api.data.HologramData;
 import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -25,12 +26,15 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadow
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import me.m56738.easyarmorstands.permission.Permissions;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
+    public static final Key KEY = EasyArmorStands.key("fancyholograms");
+
     private final HologramManager manager;
     private final FancyHologramsAddon addon;
 
@@ -95,5 +99,10 @@ public class HologramElementType implements ElementType {
     @Override
     public @NotNull Component getDisplayName() {
         return Component.text("Hologram");
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return KEY;
     }
 }

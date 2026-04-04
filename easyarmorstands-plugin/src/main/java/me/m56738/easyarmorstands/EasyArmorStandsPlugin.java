@@ -7,11 +7,14 @@ import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElement;
+import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
@@ -49,19 +52,19 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
+import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
-import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
-import me.m56738.easyarmorstands.element.DisplayElementProvider;
+import me.m56738.easyarmorstands.element.DefaultEntityElementProvider;
+import me.m56738.easyarmorstands.element.DefaultEntityElementType;
 import me.m56738.easyarmorstands.element.DisplayElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.ElementTypeRegistryImpl;
+import me.m56738.easyarmorstands.element.EntityElementKeys;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
-import me.m56738.easyarmorstands.element.InteractionElementProvider;
 import me.m56738.easyarmorstands.element.InteractionElementType;
-import me.m56738.easyarmorstands.element.MannequinElementProvider;
 import me.m56738.easyarmorstands.element.MannequinElementType;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.element.TextDisplayElementType;
@@ -110,6 +113,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.CommandManager;
@@ -198,31 +202,42 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         new DefaultPropertyTypes(propertyTypeRegistry);
 
-        entityElementProviderRegistry.register(new SimpleEntityElementProvider());
-
         ArmorStandElementType armorStandElementType = new ArmorStandElementType();
-        elementTypeRegistry.register(EasyArmorStands.key("armor_stand"), armorStandElementType);
-        entityElementProviderRegistry.register(new ArmorStandElementProvider(armorStandElementType));
+        elementTypeRegistry.register(armorStandElementType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(armorStandElementType));
 
         MannequinElementType mannequinElementType = new MannequinElementType();
-        elementTypeRegistry.register(EasyArmorStands.key("mannequin"), mannequinElementType);
-        entityElementProviderRegistry.register(new MannequinElementProvider(mannequinElementType));
+        elementTypeRegistry.register(mannequinElementType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(mannequinElementType));
 
         DisplayElementType<ItemDisplay> itemDisplayType = new DisplayElementType<>(EntityType.ITEM_DISPLAY, ItemDisplay.class);
-        elementTypeRegistry.register(EasyArmorStands.key("item_display"), itemDisplayType);
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(itemDisplayType));
+        elementTypeRegistry.register(itemDisplayType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(itemDisplayType));
 
         DisplayElementType<BlockDisplay> blockDisplayType = new DisplayElementType<>(EntityType.BLOCK_DISPLAY, BlockDisplay.class);
-        elementTypeRegistry.register(EasyArmorStands.key("block_display"), blockDisplayType);
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(blockDisplayType));
+        elementTypeRegistry.register(blockDisplayType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(blockDisplayType));
 
         DisplayElementType<TextDisplay> textDisplayType = new TextDisplayElementType();
-        elementTypeRegistry.register(EasyArmorStands.key("text_display"), textDisplayType);
-        entityElementProviderRegistry.register(new DisplayElementProvider<>(textDisplayType));
+        elementTypeRegistry.register(textDisplayType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(textDisplayType));
 
         InteractionElementType interactionType = new InteractionElementType();
-        elementTypeRegistry.register(EasyArmorStands.key("interaction"), interactionType);
-        entityElementProviderRegistry.register(new InteractionElementProvider(interactionType));
+        elementTypeRegistry.register(interactionType);
+        entityElementProviderRegistry.register(new SimpleEntityElementProvider<>(interactionType));
+
+        for (EntityType entityType : EntityType.values()) {
+            Class<? extends Entity> entityClass = entityType.getEntityClass();
+            if (entityClass == null) {
+                continue;
+            }
+            if (elementTypeRegistry.getOrNull(entityType.key()) != null) {
+                continue;
+            }
+            DefaultEntityElementType<? extends Entity> type = new DefaultEntityElementType<>(entityType, entityClass);
+            elementTypeRegistry.register(type);
+            entityElementProviderRegistry.register(new DefaultEntityElementProvider<>(type));
+        }
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
         menuSlotTypeRegistry.register(new EntityCopySlotType());
@@ -677,6 +692,42 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity) {
         return new EntityElementReferenceImpl<>(type, entity);
+    }
+
+    @Override
+    public @Nullable Element getElement(Entity entity) {
+        if (!entity.isValid()) {
+            return null;
+        }
+        if (entity.hasMetadata("gizmo")) {
+            return null;
+        }
+        return entityElementProviderRegistry.getElement(entity);
+    }
+
+    @Override
+    public void setEntityElementProvider(Entity entity, EntityElementProvider provider) {
+        PersistentDataContainer pdc = entity.getPersistentDataContainer();
+        if (provider != null) {
+            pdc.set(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING, provider.key().asString());
+        } else {
+            pdc.remove(EntityElementKeys.ELEMENT_TYPE);
+        }
+        EasyArmorStandsPlugin.getInstance().refreshEntity(entity);
+    }
+
+    @Override
+    public void refreshEntity(Entity entity) {
+        for (SessionImpl session : sessionManager.getAllSessions()) {
+            ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
+            if (node != null) {
+                for (ElementDiscoverySource source : node.getSources()) {
+                    if (source instanceof EntityElementDiscoverySource entitySource) {
+                        node.updateEntry(entitySource.getEntry(entity));
+                    }
+                }
+            }
+        }
     }
 
     private interface ConfigProcessor {

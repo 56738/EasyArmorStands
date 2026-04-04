@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.command.element.display;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -32,6 +31,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -62,7 +62,7 @@ public class ConvertCommand {
             Session session,
             ElementSelection selection,
             ElementTypeRegistry elementTypeRegistry) {
-        ElementType itemDisplayType = elementTypeRegistry.get(EasyArmorStands.key("item_display"));
+        ElementType itemDisplayType = elementTypeRegistry.get(EntityType.ITEM_DISPLAY.key());
 
         List<Element> createdElements = new ArrayList<>();
         List<Action> allActions = new ArrayList<>();

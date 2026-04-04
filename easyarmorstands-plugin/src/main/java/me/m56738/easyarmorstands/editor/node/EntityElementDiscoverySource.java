@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -19,15 +18,9 @@ import java.util.function.Consumer;
 
 public class EntityElementDiscoverySource implements ElementDiscoverySource {
     private final Player player;
-    private final EntityElementProviderRegistryImpl providerRegistry;
 
     public EntityElementDiscoverySource(@NotNull Player player) {
-        this(player, EasyArmorStandsPlugin.getInstance().entityElementProviderRegistry());
-    }
-
-    public EntityElementDiscoverySource(@NotNull Player player, @NotNull EntityElementProviderRegistryImpl providerRegistry) {
         this.player = player;
-        this.providerRegistry = providerRegistry;
     }
 
     public @NotNull ElementDiscoveryEntry getEntry(@NotNull Entity entity) {
@@ -35,7 +28,7 @@ public class EntityElementDiscoverySource implements ElementDiscoverySource {
     }
 
     public @Nullable Element getElement(@NotNull Entity entity) {
-        return providerRegistry.getElement(entity);
+        return EasyArmorStandsPlugin.getInstance().getElement(entity);
     }
 
     @Override

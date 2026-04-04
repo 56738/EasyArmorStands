@@ -56,7 +56,11 @@ public class DebugCommand {
             if (element != null) {
                 sender.sendMessage(Component.text("Selected element: ", NamedTextColor.GOLD)
                         .append(Component.text(element.getClass().getSimpleName(), NamedTextColor.GREEN)
-                                .hoverEvent(Component.text(element.getClass().getName()))));
+                                .hoverEvent(Component.text()
+                                        .append(Component.text(element.getType().key().asString()))
+                                        .appendNewline()
+                                        .append(Component.text(element.getClass().getName()))
+                                        .build())));
                 TextComponent.Builder builder = Component.text();
                 builder.color(NamedTextColor.GRAY);
                 element.getProperties().forEach(property -> {

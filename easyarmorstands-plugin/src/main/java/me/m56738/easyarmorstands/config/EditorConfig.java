@@ -12,5 +12,6 @@ public class EditorConfig {
     public EditorScaleConfig scale;
     public EditorSelectionConfig selection;
     public SimpleItemTemplate tool;
+    public boolean allowEntities;
     public boolean allowPlayers;
 }

@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.node.EntityElementDiscoveryEntry;
 import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -249,7 +248,7 @@ public class SessionListener implements Listener {
     public void onPlaceEntity(Player player, Entity entity) {
         Bukkit.getScheduler().runTask(plugin, () -> {
             EasPlayer context = new EasPlayer(player);
-            Element element = plugin.entityElementProviderRegistry().getElement(entity);
+            Element element = plugin.getElement(entity);
             if (element != null) {
                 context.history().push(new ElementCreateAction(element));
                 context.clipboard().handleAutoApply(element, context);
@@ -266,7 +265,7 @@ public class SessionListener implements Listener {
         Player player = (Player) damager;
         Entity entity = event.getEntity();
 
-        Element element = plugin.entityElementProviderRegistry().getElement(entity);
+        Element element = plugin.getElement(entity);
         if (element == null) {
             return;
         }
@@ -356,10 +355,8 @@ public class SessionListener implements Listener {
             return;
         }
         for (ElementDiscoverySource source : node.getSources()) {
-            if (source instanceof EntityElementDiscoverySource) {
-                EntityElementDiscoverySource entitySource = (EntityElementDiscoverySource) source;
-                EntityElementDiscoveryEntry entry = new EntityElementDiscoveryEntry(entitySource, player, entity);
-                node.updateEntry(entry);
+            if (source instanceof EntityElementDiscoverySource entitySource) {
+                node.updateEntry(entitySource.getEntry(entity));
             }
         }
     }
