@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.residence;
 
-import com.bekvon.bukkit.residence.Residence;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -15,7 +14,7 @@ public class ResidenceAddon implements Addon {
 
     @Override
     public void enable() {
-        privilegeChecker = new ResidencePrivilegeChecker(Residence.getInstance());
+        privilegeChecker = new ResidencePrivilegeChecker();
         EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
     }
 

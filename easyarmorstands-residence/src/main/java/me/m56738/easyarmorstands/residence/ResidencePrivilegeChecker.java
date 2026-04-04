@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.residence;
 
-import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -13,16 +12,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ResidencePrivilegeChecker implements RegionPrivilegeChecker {
-    private final Residence residencePlugin;
-
-    public ResidencePrivilegeChecker(Residence residencePlugin) {
-        this.residencePlugin = residencePlugin;
-    }
-
     @Override
     public boolean isAllowed(Player player, Location location) {
         try {
-            FlagPermissions perms = residencePlugin.getPermsByLoc(location);
+            FlagPermissions perms = FlagPermissions.getPerms(location, player);
             return perms.playerHas(player, Flags.build, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);
