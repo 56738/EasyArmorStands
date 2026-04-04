@@ -30,11 +30,13 @@ import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ClipboardCommands;
 import me.m56738.easyarmorstands.command.CommandSourceStackMapper;
+import me.m56738.easyarmorstands.command.DisplayCommands;
 import me.m56738.easyarmorstands.command.GlobalCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
 import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
 import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
@@ -63,26 +65,21 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
-import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
-import me.m56738.easyarmorstands.command.DisplayCommands;
-import me.m56738.easyarmorstands.element.DisplayElementProvider;
-import me.m56738.easyarmorstands.element.DisplayElementType;
-import me.m56738.easyarmorstands.element.InteractionElementProvider;
-import me.m56738.easyarmorstands.element.InteractionElementType;
-import me.m56738.easyarmorstands.element.TextDisplayElementType;
-import me.m56738.easyarmorstands.menu.slot.DisplayBoxSlotType;
-import me.m56738.easyarmorstands.menu.slot.DisplaySpawnSlotType;
-import me.m56738.easyarmorstands.menu.slot.InteractionSpawnSlotType;
 import me.m56738.easyarmorstands.editor.node.ValueNode;
 import me.m56738.easyarmorstands.element.ArmorStandElementProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
+import me.m56738.easyarmorstands.element.DisplayElementProvider;
+import me.m56738.easyarmorstands.element.DisplayElementType;
 import me.m56738.easyarmorstands.element.ElementSpawnRequestImpl;
 import me.m56738.easyarmorstands.element.EntityElementListener;
 import me.m56738.easyarmorstands.element.EntityElementProviderRegistryImpl;
 import me.m56738.easyarmorstands.element.EntityElementReferenceImpl;
+import me.m56738.easyarmorstands.element.InteractionElementProvider;
+import me.m56738.easyarmorstands.element.InteractionElementType;
 import me.m56738.easyarmorstands.element.MannequinElementProvider;
 import me.m56738.easyarmorstands.element.MannequinElementType;
 import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
+import me.m56738.easyarmorstands.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.ColorPickerMenuContext;
@@ -98,8 +95,11 @@ import me.m56738.easyarmorstands.menu.slot.ArmorStandSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlotType;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
 import me.m56738.easyarmorstands.menu.slot.DestroySlotType;
+import me.m56738.easyarmorstands.menu.slot.DisplayBoxSlotType;
+import me.m56738.easyarmorstands.menu.slot.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
+import me.m56738.easyarmorstands.menu.slot.InteractionSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.MannequinSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
@@ -134,6 +134,7 @@ import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
 import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.injection.ParameterInjector;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
@@ -295,7 +296,8 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .registerInjector(SessionImpl.class, new SessionInjector())
                 .registerInjector(Clipboard.class, new ClipboardInjector())
                 .registerInjector(Element.class, new ElementInjector())
-                .registerInjector(ElementSelection.class, new ElementSelectionInjector());
+                .registerInjector(ElementSelection.class, new ElementSelectionInjector())
+                .registerInjector(SessionListener.class, ParameterInjector.constantInjector(sessionListener));
 
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
                 p -> new NodeValueArgumentParser<>());
@@ -338,6 +340,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         annotationParser.parse(new HistoryCommands());
         annotationParser.parse(new ClipboardCommands());
         annotationParser.parse(new DisplayCommands(itemDisplayType));
+        try {
+            annotationParser.parseContainers(getClassLoader());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         PropertyCommands.register(commandManager);
 
