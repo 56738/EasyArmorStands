@@ -22,6 +22,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -47,6 +48,9 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
 
     @Override
     public void bootstrap(BootstrapContext context) {
+        TranslationManager translationManager = new TranslationManager();
+        translationManager.load(context.getDataDirectory(), context.getLogger());
+
         MainThreadExecutor executor = new MainThreadExecutor(null);
         PaperCommandManager.Bootstrapped<EasCommandSender> commandManager = PaperCommandManager.builder(new CommandSourceStackMapper(new CommandSenderMapper()))
                 .executionCoordinator(ExecutionCoordinator.coordinatorFor(executor))
@@ -87,7 +91,7 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
         // TODO
 //        PropertyCommands.register(commandManager);
 
-        result = new BootstrapResult(executor, commandManager);
+        result = new BootstrapResult(executor, translationManager, commandManager);
     }
 
     private static Suggestion createSuggestion(CommandEntry<EasCommandSender> entry) {
@@ -110,11 +114,12 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
             throw new IllegalStateException("Bootstrap was not successful");
         }
 
-        return new EasyArmorStandsPlugin(result.executor, result.commandManager);
+        return new EasyArmorStandsPlugin(result.executor, result.translationManager, result.commandManager);
     }
 
     private record BootstrapResult(
             MainThreadExecutor executor,
+            TranslationManager translationManager,
             PaperCommandManager.Bootstrapped<EasCommandSender> commandManager) {
     }
 }

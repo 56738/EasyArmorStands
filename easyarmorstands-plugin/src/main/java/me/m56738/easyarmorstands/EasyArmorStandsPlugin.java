@@ -92,6 +92,7 @@ import me.m56738.easyarmorstands.menu.slot.MannequinSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.PropertySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
+import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
@@ -156,6 +157,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private static EasyArmorStandsPlugin instance;
     private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
     private final NamespacedKey toolKey = new NamespacedKey(this, "tool");
+    private final TranslationManager translationManager;
     private final PaperCommandManager.Bootstrapped<EasCommandSender> commandManager;
     private EasConfig config;
     private MenuFactory spawnMenuFactory;
@@ -176,8 +178,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public EasyArmorStandsPlugin(
             MainThreadExecutor executor,
+            TranslationManager translationManager,
             PaperCommandManager.Bootstrapped<EasCommandSender> commandManager) {
         executor.setPlugin(this);
+        this.translationManager = translationManager;
         this.commandManager = commandManager;
     }
 
@@ -264,7 +268,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuProvider = new MenuProviderImpl();
 
         loadConfig();
-        messageManager = new MessageManager(this);
+        messageManager = new MessageManager();
         messageManager.load(config);
 
         regionPrivilegeManager = new RegionListenerManager();
@@ -389,6 +393,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadConfig();
         loadProperties();
         messageManager.load(config);
+        translationManager.load(getDataPath(), getComponentLogger());
         loadMenuTemplates();
         addonManager.reload();
     }

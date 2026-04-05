@@ -59,8 +59,8 @@ tasks {
 
     shadowJar {
         val prefix = "me.m56738.easyarmorstands.lib"
-        relocate("org.incendo.cloud", "$prefix.cloud")
-        relocate("io.leangen.geantyref", "$prefix.geantyref")
+//        relocate("org.incendo.cloud", "$prefix.cloud")
+//        relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
         relocate("net.kyori.option", "$prefix.kyori.option")
