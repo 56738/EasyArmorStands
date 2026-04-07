@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.menu.slot;
+package me.m56738.easyarmorstands.menu.button;
 
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
@@ -7,39 +7,48 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import me.m56738.easyarmorstands.api.util.ItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
-import java.util.Locale;
+import java.util.List;
 
-public class SpawnSlot implements MenuSlot {
+public class SpawnButton implements MenuButton {
+    private final Player player;
     private final ElementType type;
-    private final ItemTemplate template;
-    private final TagResolver resolver;
+    private final Material icon;
 
-    public SpawnSlot(ElementType type, ItemTemplate template, TagResolver resolver) {
+    public SpawnButton(Player player, ElementType type, Material icon) {
+        this.player = player;
         this.type = type;
-        this.template = template;
-        this.resolver = resolver;
+        this.icon = icon;
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
-        return template.render(locale, resolver);
+    public Material icon() {
+        return icon;
     }
 
     @Override
-    public void onClick(@NotNull MenuClick click) {
-        if (click.isLeftClick()) {
+    public Component name() {
+        return type.getDisplayName();
+    }
+
+    @Override
+    public List<Component> description() {
+        return List.of();
+    }
+
+    @Override
+    public void onClick(MenuClickContext context) {
+        if (context.isLeftClick()) {
             ElementSpawnRequest spawnRequest = EasyArmorStands.get().elementSpawnRequest(type);
-            spawnRequest.setPlayer(click.player());
+            spawnRequest.setPlayer(player);
             Element element = spawnRequest.spawn();
 
-            Session session = click.session();
+            Session session = EasyArmorStands.get().sessionManager().getSession(player);
             if (session != null) {
                 ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
                 if (selectionNode != null) {
@@ -49,7 +58,7 @@ public class SpawnSlot implements MenuSlot {
                 }
             }
 
-            click.close();
+            context.closeMenu();
         }
     }
 }

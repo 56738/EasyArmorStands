@@ -14,7 +14,7 @@ public class MenuCreator {
     private final Locale locale;
     private final Map<Integer, MenuSlot> slotFactories = new TreeMap<>();
     private Component title = Component.empty();
-    private int height;
+    private int height = 1;
     private MenuSlot background;
 
     public MenuCreator(Locale locale) {

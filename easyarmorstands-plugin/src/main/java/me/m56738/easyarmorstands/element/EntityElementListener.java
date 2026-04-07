@@ -2,8 +2,12 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.ConfigurableEntityElement;
+import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
+import me.m56738.easyarmorstands.api.event.menu.SpawnMenuOpenEvent;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -14,6 +18,7 @@ import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
+import me.m56738.easyarmorstands.menu.button.SpawnButton;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandLockProperty;
 import me.m56738.easyarmorstands.property.armorstand.ArmorStandPoseProperty;
 import me.m56738.easyarmorstands.property.display.DisplayLeftRotationProperty;
@@ -33,14 +38,17 @@ import me.m56738.easyarmorstands.property.mannequin.part.MannequinLeftPantsVisib
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinLeftSleeveVisibleProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinRightPantsVisibleProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinRightSleeveVisibleProperty;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mannequin;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,6 +57,19 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class EntityElementListener implements Listener {
+    @EventHandler
+    public void onSpawnMenuOpen(SpawnMenuOpenEvent event) {
+        ElementTypeRegistry elementTypeRegistry = EasyArmorStands.get().elementTypeRegistry();
+        Player player = event.getPlayer();
+        MenuBuilder builder = event.getBuilder();
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ARMOR_STAND.getKey()), Material.ARMOR_STAND));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ITEM_DISPLAY.getKey()), Material.STICK));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.BLOCK_DISPLAY.getKey()), Material.STONE));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.TEXT_DISPLAY.getKey()), Material.NAME_TAG));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.INTERACTION.getKey()), Material.TARGET));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.MANNEQUIN.getKey()), Material.PLAYER_HEAD));
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInitialize(EntityElementInitializeEvent event) {
         ConfigurableEntityElement<?> element = event.getElement();

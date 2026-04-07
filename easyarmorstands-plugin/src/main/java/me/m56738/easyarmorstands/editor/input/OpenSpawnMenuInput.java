@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
-import me.m56738.easyarmorstands.api.menu.Menu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -36,7 +35,6 @@ public class OpenSpawnMenuInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createSpawnMenu(session.player());
-        session.player().openInventory(menu.getInventory());
+        EasyArmorStandsPlugin.getInstance().openSpawnMenu(session.player());
     }
 }
