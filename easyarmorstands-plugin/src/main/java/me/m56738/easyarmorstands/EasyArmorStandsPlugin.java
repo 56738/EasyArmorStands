@@ -646,7 +646,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         } else {
             addProperties(builder, new TrackedPropertyContainer(element, new EasPlayer(player)));
         }
-        Menu menu = builder.build(player.locale());
+        Menu menu = builder.build(element.getType().getDisplayName(), player.locale());
         player.openInventory(menu.getInventory());
     }
 

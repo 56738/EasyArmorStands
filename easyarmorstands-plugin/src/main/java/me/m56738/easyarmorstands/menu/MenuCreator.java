@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -13,7 +13,7 @@ import java.util.TreeMap;
 public class MenuCreator {
     private final Locale locale;
     private final Map<Integer, MenuSlot> slotFactories = new TreeMap<>();
-    private String titleTemplate;
+    private Component title = Component.empty();
     private int height;
     private MenuSlot background;
 
@@ -27,8 +27,8 @@ public class MenuCreator {
         return old;
     }
 
-    public void setTitleTemplate(@NotNull String titleTemplate) {
-        this.titleTemplate = titleTemplate;
+    public void setTitle(@NotNull Component title) {
+        this.title = title;
     }
 
     public void setHeight(int height) {
@@ -42,7 +42,7 @@ public class MenuCreator {
     }
 
     public @NotNull Menu build() {
-        Objects.requireNonNull(titleTemplate, "Title not set");
+        Objects.requireNonNull(title, "Title not set");
         MenuSlot[] slots = new MenuSlot[height * 9];
         for (Map.Entry<Integer, MenuSlot> entry : slotFactories.entrySet()) {
             slots[entry.getKey()] = entry.getValue();
@@ -52,6 +52,6 @@ public class MenuCreator {
                 slots[i] = background;
             }
         }
-        return new MenuImpl(MiniMessage.miniMessage().deserialize(titleTemplate), slots, locale);
+        return new MenuImpl(title, slots, locale);
     }
 }

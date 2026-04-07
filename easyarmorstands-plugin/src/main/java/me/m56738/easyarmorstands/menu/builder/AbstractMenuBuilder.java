@@ -11,6 +11,7 @@ import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.menu.MenuCreator;
 import net.kyori.adventure.permission.PermissionChecker;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
@@ -29,9 +30,9 @@ public abstract class AbstractMenuBuilder implements MenuBuilder {
 
     protected abstract void build(List<MenuButton> buttons, MenuCreator creator);
 
-    public Menu build(Locale locale) {
+    public Menu build(Component title, Locale locale) {
         MenuCreator creator = new MenuCreator(locale);
-        creator.setTitleTemplate("");
+        creator.setTitle(title);
         creator.setBackground(EasyArmorStandsPlugin.getInstance().getConfiguration().editor.menu.background.createSlot(new MenuSlotContext() {
             @Override
             public Player player() {
