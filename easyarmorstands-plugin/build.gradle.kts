@@ -17,12 +17,8 @@ dependencies {
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras)
     api(libs.cloud.paper)
-    api(libs.commodore) {
-        isTransitive = false
-    }
     api(libs.configurate.yaml)
     api(libs.gizmo.bukkit)
-    api(libs.item.nbt.api)
     annotationProcessor(libs.cloud.annotations)
     runtimeOnly(project(":easyarmorstands-bentobox"))
     runtimeOnly(project(":easyarmorstands-fancyholograms"))

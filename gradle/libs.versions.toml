@@ -4,7 +4,6 @@ bstats = "3.2.1"
 checker-qual = "3.55.1"
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-SNAPSHOT"
-commodore = "2.2"
 configurate = "4.2.0"
 fancyholograms = "2.9.1"
 gizmo = "1.0.0"
@@ -13,7 +12,6 @@ griefprevention = "18.0.0"
 hangar-publish-plugin = "0.1.4"
 headdatabase-api = "1.3.2"
 huskclaims = "1.5.10"
-item-nbt-api = "2.15.6"
 lands = "7.25.4"
 minecraft = "26.1.1"
 minotaur = "2.9.0"
@@ -33,8 +31,6 @@ checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "ch
 cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
-commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
-configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 fancyholograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
 gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" }
@@ -42,7 +38,6 @@ griefdefender-api = { module = "com.griefdefender:api", version.ref = "griefdefe
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 headdatabase-api = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabase-api" }
 huskclaims-bukkit = { module = "net.william278.huskclaims:huskclaims-bukkit", version.ref = "huskclaims" }
-item-nbt-api = { module = "de.tr7zw:item-nbt-api", version.ref = "item-nbt-api" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 plotsquared-bukkit = { module = "com.intellectualsites.plotsquared:plotsquared-bukkit", version.ref = "plotsquared" }
