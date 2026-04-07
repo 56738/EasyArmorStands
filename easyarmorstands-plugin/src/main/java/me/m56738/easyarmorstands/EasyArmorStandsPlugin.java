@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
-import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
@@ -22,6 +21,10 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -77,12 +80,12 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.MenuProviderImpl;
 import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.SimpleMenuContext;
+import me.m56738.easyarmorstands.menu.builder.AbstractMenuBuilder;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPartSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandPositionSlotType;
 import me.m56738.easyarmorstands.menu.slot.ArmorStandSpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlotType;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
-import me.m56738.easyarmorstands.menu.slot.DestroySlotType;
 import me.m56738.easyarmorstands.menu.slot.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.menu.slot.DisplaySpawnSlotType;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
@@ -94,7 +97,9 @@ import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
+import me.m56738.easyarmorstands.property.type.MenuPropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
 import me.m56738.easyarmorstands.session.SessionImpl;
@@ -141,11 +146,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -155,7 +158,6 @@ import java.util.stream.Stream;
 
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
     private static EasyArmorStandsPlugin instance;
-    private final Map<Class<?>, MenuFactory> entityMenuFactories = new HashMap<>();
     private final NamespacedKey toolKey = new NamespacedKey(this, "tool");
     private final TranslationManager translationManager;
     private final PaperCommandManager.Bootstrapped<EasCommandSender> commandManager;
@@ -254,7 +256,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
         menuSlotTypeRegistry.register(new ColorPickerSlotType());
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
-        menuSlotTypeRegistry.register(new DestroySlotType());
         menuSlotTypeRegistry.register(new DisplayBoxSlotType());
         menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/block_display"), blockDisplayType));
         menuSlotTypeRegistry.register(new DisplaySpawnSlotType(Key.key("easyarmorstands", "spawn/item_display"), itemDisplayType));
@@ -464,19 +465,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private void loadMenuTemplates() {
         spawnMenuFactory = loadMenuTemplate("spawn");
         colorPickerFactory = loadMenuTemplate("color_picker");
-        MenuFactory defaultEntityMenuFactory = loadMenuTemplate("entity/default");
-        MenuFactory livingEntityMenuFactory = loadMenuTemplate("entity/living");
-        for (EntityType type : EntityType.values()) {
-            MenuFactory factory = loadMenuTemplate("entity/type/" + type.name().toLowerCase(Locale.ROOT));
-            if (factory == null) {
-                if (type.isAlive()) {
-                    factory = livingEntityMenuFactory;
-                } else {
-                    factory = defaultEntityMenuFactory;
-                }
-            }
-            entityMenuFactories.put(type.getEntityClass(), factory);
-        }
     }
 
     public MenuFactory loadMenuTemplate(String name) {
@@ -649,10 +637,24 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         player.openInventory(menu.getInventory());
     }
 
-    public void openEntityMenu(Player player, Session session, EntityElement<?> element) {
-        MenuFactory factory = entityMenuFactories.get(element.getType().getEntityClass());
-        if (factory != null) {
-            openMenu(player, session, factory, element);
+    public void openElementMenu(Player player, Session session, AbstractMenuBuilder builder, Element element) {
+        if (session != null) {
+            addProperties(builder, session.properties(element));
+        } else {
+            addProperties(builder, new TrackedPropertyContainer(element, new EasPlayer(player)));
+        }
+        Menu menu = builder.build(player.locale());
+        player.openInventory(menu.getInventory());
+    }
+
+    private void addProperties(MenuBuilder builder, PropertyContainer container) {
+        container.forEach(property -> addProperty(builder, property));
+    }
+
+    private <T> void addProperty(MenuBuilder builder, Property<T> property) {
+        PropertyType<T> type = property.getType();
+        if (type instanceof MenuPropertyType<T> menuPropertyType) {
+            menuPropertyType.addToMenu(builder, property);
         }
     }
 

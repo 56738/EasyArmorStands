@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property;
 
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -63,5 +64,12 @@ public interface Property<T> {
 
     default boolean canChange(Player player) {
         return true;
+    }
+
+    default void commit() {
+        commit(null);
+    }
+
+    default void commit(@Nullable Component description) {
     }
 }

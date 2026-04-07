@@ -71,7 +71,7 @@ public class DefaultPropertyTypes {
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             String name = slot.name().toLowerCase(Locale.ROOT);
-            registry.register(new ItemPropertyType(key("entity/equipment/" + name)));
+            registry.register(new EquipmentPropertyType(key("entity/equipment/" + name), slot));
         }
     }
 

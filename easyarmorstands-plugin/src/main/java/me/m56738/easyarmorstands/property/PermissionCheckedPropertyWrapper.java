@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.context.ChangeContext;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,5 +68,10 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     @Override
     public boolean canChange(@NotNull Player player) {
         return hasPermission();
+    }
+
+    @Override
+    public void commit(@Nullable Component description) {
+        property.commit(description);
     }
 }

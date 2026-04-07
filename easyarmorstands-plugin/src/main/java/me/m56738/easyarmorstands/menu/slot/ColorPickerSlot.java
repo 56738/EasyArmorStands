@@ -109,7 +109,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot));
+        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot.getProperty()));
         menu.addCloseListener((p, m) -> element.openMenu(p));
         player.openInventory(menu.getInventory());
     }

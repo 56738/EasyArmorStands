@@ -2,8 +2,6 @@ package me.m56738.easyarmorstands.color;
 
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Color;
@@ -15,15 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class ColorPickerContextImpl implements ColorPickerContext {
     private final Property<ItemStack> property;
-    private final PropertyContainer container;
 
-    public ColorPickerContextImpl(Property<ItemStack> property, PropertyContainer container) {
+    public ColorPickerContextImpl(Property<ItemStack> property) {
         this.property = property;
-        this.container = container;
-    }
-
-    public ColorPickerContextImpl(ItemPropertySlot slot) {
-        this(slot.getProperty(), slot.getContainer());
     }
 
     @Override
@@ -54,7 +46,7 @@ public class ColorPickerContextImpl implements ColorPickerContext {
         if (setColor(meta, color)) {
             item.setItemMeta(meta);
             property.setValue(item);
-            container.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
+            property.commit(Message.component("easyarmorstands.history.changed-color", Util.formatColor(color)));
         }
     }
 

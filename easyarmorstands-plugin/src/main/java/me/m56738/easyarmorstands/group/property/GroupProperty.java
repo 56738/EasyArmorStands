@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.group.property;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,5 +88,12 @@ public class GroupProperty<T> implements Property<T> {
             }
         }
         return false;
+    }
+
+    @Override
+    public void commit(@Nullable Component description) {
+        for (Property<T> property : properties) {
+            property.commit(description);
+        }
     }
 }

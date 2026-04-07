@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.inventory.ItemStack;
@@ -14,19 +13,13 @@ import java.util.Locale;
 
 public class ItemPropertySlot implements MenuSlot {
     private final Property<ItemStack> property;
-    private final PropertyContainer container;
 
-    public ItemPropertySlot(Property<ItemStack> property, PropertyContainer container) {
+    public ItemPropertySlot(Property<ItemStack> property) {
         this.property = property;
-        this.container = container;
     }
 
     public Property<ItemStack> getProperty() {
         return property;
-    }
-
-    public PropertyContainer getContainer() {
-        return container;
     }
 
     @Override
@@ -53,7 +46,7 @@ public class ItemPropertySlot implements MenuSlot {
             click.queueTask(() -> {
                 ItemStack item = click.menu().getInventory().getItem(click.index());
                 if (property.setValue(Util.wrapItem(item))) {
-                    container.commit();
+                    property.commit();
                 } else {
                     // Failed to change the property, revert changes
                     // Put the placed item back into the cursor
@@ -75,7 +68,7 @@ public class ItemPropertySlot implements MenuSlot {
             ItemStack itemInProperty = property.getValue();
             if (property.setValue(itemInCursor)) {
                 click.player().setItemOnCursor(itemInProperty);
-                container.commit();
+                property.commit();
                 click.menu().updateItem(click.index());
             }
         });
