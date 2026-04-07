@@ -1,29 +1,29 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class GravityToggleButton extends BooleanToggleButton {
-    private final Property<Boolean> canTickProperty;
-    private final List<String> canTickWarning;
+    private final @Nullable Property<Boolean> canTickProperty;
+    private final List<Component> canTickWarning;
 
-    public GravityToggleButton(Property<Boolean> property, PropertyContainer container, SimpleItemTemplate item, List<String> canTickWarning) {
-        super(property, container, item);
-        this.canTickProperty = container.getOrNull(ArmorStandPropertyTypes.CAN_TICK);
+    public GravityToggleButton(Property<Boolean> property, @Nullable Property<Boolean> canTickProperty, MenuIcon icon, List<Component> description, List<Component> canTickWarning) {
+        super(property, icon, description);
+        this.canTickProperty = canTickProperty;
         this.canTickWarning = canTickWarning;
     }
 
     @Override
-    protected SimpleItemTemplate prepareTemplate(SimpleItemTemplate template) {
-        template = super.prepareTemplate(template);
+    protected void populateDescription(List<Component> description) {
         if (canTickProperty != null && property.getValue() && !canTickProperty.getValue()) {
-            template = template.appendLore(canTickWarning);
+            description.addAll(canTickWarning);
         }
-        return template;
     }
 
     @Override

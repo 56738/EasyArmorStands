@@ -1,24 +1,28 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NullMarked;
 
-public class ItemDisplayPropertyTypes {
-    public static final PropertyType<ItemStack> ITEM = get("item_display/item", ItemStack.class);
-    public static final PropertyType<ItemDisplayTransform> TRANSFORM = get("item_display/transform", ItemDisplayTransform.class);
+import java.util.Locale;
+
+import static me.m56738.easyarmorstands.api.EasyArmorStands.key;
+import static net.kyori.adventure.text.Component.translatable;
+
+@NullMarked
+public final class ItemDisplayPropertyTypes {
+    public static final PropertyType<ItemStack> ITEM = PropertyType.builder(key("item_display/item"), ItemStack.class)
+            .name(translatable("easyarmorstands.property.item-display.item.name"))
+            .formatter(new ItemStackFormatter())
+            .permission("easyarmorstands.property.display.item")
+            .build();
+    public static final PropertyType<ItemDisplayTransform> TRANSFORM = PropertyType.builder(key("item_display/transform"), ItemDisplayTransform.class)
+            .name(translatable("easyarmorstands.property.item-display.transform.name"))
+            .formatter(value -> translatable("easyarmorstands.property.item-display.transform." + value.name().toLowerCase(Locale.ROOT).replace("_", "-")))
+            .permission("easyarmorstands.property.display.item.transform")
+            .build();
 
     private ItemDisplayPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

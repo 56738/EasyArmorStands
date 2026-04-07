@@ -1,37 +1,71 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
+import me.m56738.easyarmorstands.api.formatter.EulerAngleFormatter;
 import org.bukkit.util.EulerAngle;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 
+import static me.m56738.easyarmorstands.api.EasyArmorStands.key;
+import static net.kyori.adventure.text.Component.translatable;
+
 @SuppressWarnings("PatternValidation")
-public class ArmorStandPropertyTypes {
-    public static final @NotNull PropertyType<Boolean> ARMS = get("armor_stand/arms", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> BASE_PLATE = get("armor_stand/base_plate", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> CAN_TICK = get("armor_stand/can_tick", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> GRAVITY = get("armor_stand/gravity", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> INVULNERABLE = get("armor_stand/invulnerable", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> LOCK = get("armor_stand/lock", Boolean.class);
-    public static final @NotNull PropertyType<Boolean> MARKER = get("armor_stand/marker", Boolean.class);
-    public static final @NotNull KeyedPropertyType<ArmorStandPart, EulerAngle> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
-            part -> get("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT), EulerAngle.class));
-    public static final @NotNull PropertyType<ArmorStandSize> SIZE = get("armor_stand/size", ArmorStandSize.class);
+@NullMarked
+public final class ArmorStandPropertyTypes {
+    public static final PropertyType<Boolean> ARMS = PropertyType.builder(key("armor_stand/arms"), Boolean.class)
+            .name(translatable("easyarmorstands.property.armor-stand.arms.name"))
+            .formatter(BooleanFormatter.visibility())
+            .permission("easyarmorstands.property.armorstand.arms")
+            .build();
+    public static final PropertyType<Boolean> BASE_PLATE = PropertyType.builder(key("armor_stand/base_plate"), Boolean.class)
+            .name(translatable("easyarmorstands.property.armor-stand.base-plate.name"))
+            .formatter(BooleanFormatter.visibility())
+            .permission("easyarmorstands.property.armorstand.baseplate")
+            .build();
+    public static final PropertyType<Boolean> CAN_TICK = PropertyType.builder(key("armor_stand/can_tick"), Boolean.class)
+            .name(translatable("easyarmorstands.property.armor-stand.can-tick.name"))
+            .formatter(BooleanFormatter.toggle())
+            .permission("easyarmorstands.property.armorstand.cantick")
+            .build();
+    public static final PropertyType<Boolean> GRAVITY = PropertyType.builder(key("armor_stand/gravity"), Boolean.class)
+            .name(translatable("easyarmorstands.property.gravity.name"))
+            .formatter(BooleanFormatter.toggle())
+            .permission("easyarmorstands.property.gravity")
+            .build();
+    public static final PropertyType<Boolean> INVULNERABLE = PropertyType.builder(key("armor_stand/invulnerable"), Boolean.class)
+            .name(translatable("easyarmorstands.property.invulnerability.name"))
+            .formatter(BooleanFormatter.translatable(
+                    "easyarmorstands.property.invulnerability.enabled",
+                    "easyarmorstands.property.invulnerability.disabled"))
+            .permission("easyarmorstands.property.invulnerable")
+            .build();
+    public static final PropertyType<Boolean> LOCK = PropertyType.builder(key("armor_stand/lock"), Boolean.class)
+            .name(translatable("easyarmorstands.property.armor-stand.lock.name"))
+            .formatter(BooleanFormatter.translatable(
+                    "easyarmorstands.property.armor-stand.lock.enabled",
+                    "easyarmorstands.property.armor-stand.lock.disabled"))
+            .permission("easyarmorstands.property.armorstand.lock")
+            .build();
+    public static final PropertyType<Boolean> MARKER = PropertyType.builder(key("armor_stand/marker"), Boolean.class)
+            .name(translatable("easyarmorstands.property.armor-stand.marker.name"))
+            .formatter(BooleanFormatter.toggle())
+            .permission("easyarmorstands.property.armorstand.marker")
+            .build();
+    public static final KeyedPropertyType<ArmorStandPart, EulerAngle> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
+            part -> PropertyType.builder(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT)), EulerAngle.class)
+                    .name(translatable("easyarmorstands.property.armor-stand.pose.name", part.displayName()))
+                    .formatter(new EulerAngleFormatter())
+                    .permission("easyarmorstands.property.armorstand.pose." + part.name().toLowerCase(Locale.ROOT).replace("_", ""))
+                    .build());
+    public static final PropertyType<ArmorStandSize> SIZE = PropertyType.builder(key("armor_stand/size"), ArmorStandSize.class)
+            .name(translatable("easyarmorstands.property.armor-stand.size.name"))
+            .formatter(ArmorStandSize::displayName)
+            .permission("easyarmorstands.property.armorstand.size")
+            .build();
 
     private ArmorStandPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

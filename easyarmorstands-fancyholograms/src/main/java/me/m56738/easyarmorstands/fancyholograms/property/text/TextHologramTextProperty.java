@@ -4,7 +4,7 @@ import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.fancyholograms.property.type.TextHologramTextPropertyType;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramPropertyTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class TextHologramTextProperty implements Property<List<String>> {
 
     @Override
     public @NotNull PropertyType<List<String>> getType() {
-        return TextHologramTextPropertyType.INSTANCE;
+        return HologramPropertyTypes.TEXT;
     }
 
     @Override

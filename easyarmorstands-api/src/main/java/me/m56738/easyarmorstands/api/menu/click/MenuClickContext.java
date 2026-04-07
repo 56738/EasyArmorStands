@@ -7,5 +7,9 @@ public interface MenuClickContext {
 
     boolean isLeftClick();
 
+    boolean isRightClick();
+
+    boolean isShiftClick();
+
     void closeMenu();
 }

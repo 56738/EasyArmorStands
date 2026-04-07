@@ -1,42 +1,45 @@
 package me.m56738.easyarmorstands.property.button;
 
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.inventory.ItemStack;
+import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class PropertyButton<T> implements MenuSlot {
+@NullMarked
+public abstract class PropertyButton<T> implements MenuButton {
     protected final Property<T> property;
-    protected final PropertyContainer container;
-    private final SimpleItemTemplate itemTemplate;
+    private final MenuIcon icon;
+    private final List<Component> description;
 
-    public PropertyButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item) {
+    public PropertyButton(Property<T> property, MenuIcon icon, List<Component> description) {
         this.property = property;
-        this.container = container;
-        this.itemTemplate = item;
-    }
-
-    protected SimpleItemTemplate prepareTemplate(SimpleItemTemplate template) {
-        return template;
-    }
-
-    protected void prepareTagResolver(TagResolver.Builder builder) {
-        PropertyType<T> type = property.getType();
-        builder.tag("name", Tag.selfClosingInserting(type.getName()));
-        builder.tag("value", Tag.selfClosingInserting(type.getValueComponent(property.getValue())));
+        this.icon = icon;
+        this.description = description;
     }
 
     @Override
-    public ItemStack getItem(Locale locale) {
-        SimpleItemTemplate template = prepareTemplate(itemTemplate);
-        TagResolver.Builder resolver = TagResolver.builder();
-        prepareTagResolver(resolver);
-        return template.render(locale, resolver.build());
+    public MenuIcon icon() {
+        return icon;
+    }
+
+    @Override
+    public Component name() {
+        return property.getType().getName();
+    }
+
+    @Override
+    public List<Component> description() {
+        List<Component> description = new ArrayList<>();
+        populateDescription(description);
+        return description;
+    }
+
+    protected void populateDescription(List<Component> description) {
+        description.add(property.getType().getValueComponent(property.getValue()));
+        description.addAll(this.description);
     }
 }

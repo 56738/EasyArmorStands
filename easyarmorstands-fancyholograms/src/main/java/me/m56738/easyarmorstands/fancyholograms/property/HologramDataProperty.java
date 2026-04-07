@@ -4,7 +4,6 @@ import de.oliver.fancyholograms.api.data.HologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramDataProperty implements Property<HologramData> {
@@ -16,7 +15,7 @@ public class HologramDataProperty implements Property<HologramData> {
 
     @Override
     public @NotNull PropertyType<HologramData> getType() {
-        return HologramDataPropertyType.INSTANCE;
+        return HologramPropertyTypes.DATA;
     }
 
     @Override

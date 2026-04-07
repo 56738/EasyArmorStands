@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.event.menu.SpawnMenuOpenEvent;
 import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -62,12 +63,12 @@ public class EntityElementListener implements Listener {
         ElementTypeRegistry elementTypeRegistry = EasyArmorStands.get().elementTypeRegistry();
         Player player = event.getPlayer();
         MenuBuilder builder = event.getBuilder();
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ARMOR_STAND.getKey()), Material.ARMOR_STAND));
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ITEM_DISPLAY.getKey()), Material.STICK));
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.BLOCK_DISPLAY.getKey()), Material.STONE));
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.TEXT_DISPLAY.getKey()), Material.NAME_TAG));
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.INTERACTION.getKey()), Material.TARGET));
-        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.MANNEQUIN.getKey()), Material.PLAYER_HEAD));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ARMOR_STAND.getKey()), MenuIcon.of(Material.ARMOR_STAND)));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.ITEM_DISPLAY.getKey()), MenuIcon.of(Material.STICK)));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.BLOCK_DISPLAY.getKey()), MenuIcon.of(Material.STONE)));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.TEXT_DISPLAY.getKey()), MenuIcon.of(Material.NAME_TAG)));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.INTERACTION.getKey()), MenuIcon.of(Material.TARGET)));
+        builder.addButton(new SpawnButton(player, elementTypeRegistry.get(EntityType.MANNEQUIN.getKey()), MenuIcon.of(Material.PLAYER_HEAD)));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

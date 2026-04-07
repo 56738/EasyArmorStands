@@ -22,12 +22,9 @@ import me.m56738.easyarmorstands.api.event.menu.ElementMenuOpenEvent;
 import me.m56738.easyarmorstands.api.event.menu.SpawnMenuOpenEvent;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -94,7 +91,6 @@ import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
-import me.m56738.easyarmorstands.property.type.MenuPropertyType;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
 import me.m56738.easyarmorstands.session.SessionImpl;
@@ -268,8 +264,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         new Metrics(this, 17911);
         gizmos = BukkitGizmos.create(this);
 
-        loadProperties();
-
         sessionManager = new SessionManagerImpl();
         historyManager = new HistoryManager();
         clipboardManager = new ClipboardManager();
@@ -377,7 +371,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public void reload() {
         loadConfig();
-        loadProperties();
         messageManager.load(config);
         translationManager.load(getDataPath(), getComponentLogger());
         loadMenuTemplates();
@@ -395,21 +388,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             @Override
             public void apply(CommentedConfigurationNode node) throws ConfigurateException {
                 config = node.get(EasConfig.class);
-            }
-        });
-    }
-
-    private void loadProperties() {
-        loadConfig("properties.yml", new ConfigProcessor() {
-            @Override
-            public void process(CommentedConfigurationNode node) throws ConfigurateException {
-                GameVersionTransformation.properties().apply(node);
-                Transformations.properties().apply(node);
-            }
-
-            @Override
-            public void apply(CommentedConfigurationNode node) throws ConfigurateException {
-                propertyTypeRegistry.load(node);
             }
         });
     }
@@ -631,25 +609,15 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public void openElementMenu(Player player, Session session, AbstractMenuBuilder builder, Element element) {
+        PropertyContainer container;
         if (session != null) {
-            addProperties(builder, session.properties(element));
+            container = session.properties(element);
         } else {
-            addProperties(builder, new TrackedPropertyContainer(element, new EasPlayer(player)));
+            container = new TrackedPropertyContainer(element, new EasPlayer(player));
         }
         new ElementMenuOpenEvent(player, element, builder).callEvent();
         Menu menu = builder.build(element.getType().getDisplayName(), player.locale());
         player.openInventory(menu.getInventory());
-    }
-
-    private void addProperties(MenuBuilder builder, PropertyContainer container) {
-        container.forEach(property -> addProperty(builder, property));
-    }
-
-    private <T> void addProperty(MenuBuilder builder, Property<T> property) {
-        PropertyType<T> type = property.getType();
-        if (type instanceof MenuPropertyType<T> menuPropertyType) {
-            menuPropertyType.addToMenu(builder, property);
-        }
     }
 
     @Override

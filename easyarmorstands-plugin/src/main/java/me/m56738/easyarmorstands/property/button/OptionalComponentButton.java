@@ -1,32 +1,33 @@
 package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
+import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.SessionCommands;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Optional;
 
+@NullMarked
 public class OptionalComponentButton extends PropertyButton<Optional<Component>> {
     private final String command;
 
-    public OptionalComponentButton(Property<Optional<Component>> property, PropertyContainer container, SimpleItemTemplate item, String command) {
-        super(property, container, item);
+    public OptionalComponentButton(Property<Optional<Component>> property, MenuIcon icon, List<Component> description, String command) {
+        super(property, icon, description);
         this.command = command;
     }
 
     @Override
-    public void onClick(@NotNull MenuClick click) {
-        if (click.isShiftClick()) {
-            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
-                    .handlePropertyShiftClick(property, click);
-        } else if (click.isLeftClick()) {
-            click.close();
-            SessionCommands.showText(click, property.getType().getName(), property.getValue().orElse(null), command);
+    public void onClick(MenuClickContext context) {
+        if (context.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
+                    .handlePropertyShiftClick(property);
+        } else if (context.isLeftClick()) {
+            context.closeMenu();
+            SessionCommands.showText(context.player(), property.getType().getName(), property.getValue().orElse(null), command);
         }
     }
 }

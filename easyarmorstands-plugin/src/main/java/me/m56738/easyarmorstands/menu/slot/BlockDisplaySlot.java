@@ -1,48 +1,43 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
+import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.property.button.PropertyButton;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
+@NullMarked
 public class BlockDisplaySlot extends PropertyButton<BlockData> {
-    public BlockDisplaySlot(Property<BlockData> property, PropertyContainer container, SimpleItemTemplate item) {
-        super(property, container, item);
-    }
-
-    private ItemStack getItem(Material material) {
-        if (!material.isItem()) {
-            return null;
-        }
-        ItemStack item = new ItemStack(material);
-        if (item.getItemMeta() == null) {
-            return null;
-        }
-        return item;
+    public BlockDisplaySlot(Property<BlockData> property, MenuIcon icon, List<Component> description) {
+        super(property, icon, description);
     }
 
     @Override
-    protected SimpleItemTemplate prepareTemplate(SimpleItemTemplate template) {
+    public MenuIcon icon() {
         BlockData blockData = property.getValue();
         Material material = blockData.getMaterial();
-        ItemStack item = getItem(material);
-        if (item != null) {
-            return super.prepareTemplate(template).withTemplate(item);
+        if (!material.isItem()) {
+            return super.icon();
         }
-        return super.prepareTemplate(template);
+        return MenuIcon.of(material);
     }
 
     @Override
-    public void onClick(@NotNull MenuClick click) {
-        if (click.isShiftClick()) {
-            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
-                    .handlePropertyShiftClick(property, click);
+    protected void populateDescription(List<Component> description) {
+        super.populateDescription(description);
+    }
+
+    @Override
+    public void onClick(MenuClickContext context) {
+        if (context.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
+                    .handlePropertyShiftClick(property);
         }
     }
 }

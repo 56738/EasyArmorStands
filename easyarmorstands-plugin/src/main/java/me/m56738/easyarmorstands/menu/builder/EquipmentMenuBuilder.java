@@ -5,9 +5,8 @@ import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.menu.MenuCreator;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
-import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
+import me.m56738.easyarmorstands.menu.slot.EquipmentPropertySlot;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
-import me.m56738.easyarmorstands.property.type.EquipmentPropertyType;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.EnumMap;
@@ -27,9 +26,8 @@ public class EquipmentMenuBuilder extends AbstractMenuBuilder {
             } else if (button.category() == MenuButtonCategory.SHORTCUT) {
                 shortcutQueue.add(button);
             } else if (button instanceof MenuSlotButton menuSlotButton
-                    && menuSlotButton.getSlot() instanceof ItemPropertySlot itemPropertySlot
-                    && itemPropertySlot.getProperty().getType() instanceof EquipmentPropertyType equipmentPropertyType) {
-                equipmentButtons.put(equipmentPropertyType.getSlot(), button);
+                    && menuSlotButton.getSlot() instanceof EquipmentPropertySlot equipmentPropertySlot) {
+                equipmentButtons.put(equipmentPropertySlot.getSlot(), button);
             } else {
                 defaultQueue.add(button);
             }

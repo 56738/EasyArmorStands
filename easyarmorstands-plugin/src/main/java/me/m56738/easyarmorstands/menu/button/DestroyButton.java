@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.menu.button;
 
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
@@ -21,8 +22,8 @@ public class DestroyButton implements MenuButton {
     }
 
     @Override
-    public Material icon() {
-        return Material.TNT;
+    public MenuIcon icon() {
+        return MenuIcon.of(Material.TNT);
     }
 
     @Override

@@ -1,21 +1,19 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
+import org.jspecify.annotations.NullMarked;
 
-public class InteractionPropertyTypes {
-    public static final PropertyType<Boolean> RESPONSIVE = get("interaction/responsive", Boolean.class);
+import static me.m56738.easyarmorstands.api.EasyArmorStands.key;
+import static net.kyori.adventure.text.Component.translatable;
+
+@NullMarked
+public final class InteractionPropertyTypes {
+    public static final PropertyType<Boolean> RESPONSIVE = PropertyType.builder(key("interaction/responsive"), Boolean.class)
+            .name(translatable("easyarmorstands.property.interaction.responsive.name"))
+            .formatter(BooleanFormatter.toggle())
+            .permission("easyarmorstands.property.interaction.responsive")
+            .build();
 
     private InteractionPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

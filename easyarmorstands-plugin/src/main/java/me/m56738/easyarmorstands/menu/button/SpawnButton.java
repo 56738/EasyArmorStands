@@ -8,9 +8,9 @@ import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -18,16 +18,16 @@ import java.util.List;
 public class SpawnButton implements MenuButton {
     private final Player player;
     private final ElementType type;
-    private final Material icon;
+    private final MenuIcon icon;
 
-    public SpawnButton(Player player, ElementType type, Material icon) {
+    public SpawnButton(Player player, ElementType type, MenuIcon icon) {
         this.player = player;
         this.type = type;
         this.icon = icon;
     }
 
     @Override
-    public Material icon() {
+    public MenuIcon icon() {
         return icon;
     }
 

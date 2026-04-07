@@ -7,12 +7,12 @@ import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +44,7 @@ public class MenuSlotButton implements MenuButton {
     }
 
     @Override
-    public Material icon() {
+    public MenuIcon icon() {
         throw new UnsupportedOperationException();
     }
 

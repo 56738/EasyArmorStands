@@ -1,15 +1,17 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.List;
 
 public class EnumToggleButton<T extends Enum<T>> extends ToggleButton<T> {
     private final T[] values;
 
-    public EnumToggleButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item, T[] values) {
-        super(property, container, item);
+    public EnumToggleButton(Property<T> property, MenuIcon icon, List<Component> description, T[] values) {
+        super(property, icon, description);
         this.values = values;
     }
 

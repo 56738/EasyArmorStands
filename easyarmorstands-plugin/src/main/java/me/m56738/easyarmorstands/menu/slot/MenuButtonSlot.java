@@ -50,7 +50,7 @@ public class MenuButtonSlot implements MenuSlot {
         if (button instanceof MenuSlotButton menuSlotButton) {
             return menuSlotButton.getItem(locale);
         }
-        ItemStack item = ItemStack.of(button.icon());
+        ItemStack item = button.icon().asItem().clone();
         item.setData(DataComponentTypes.CUSTOM_NAME, format(button.name(), MessageStyle.BUTTON_NAME, locale));
         item.setData(DataComponentTypes.LORE, ItemLore.lore(button.description().stream()
                 .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
@@ -73,6 +73,16 @@ public class MenuButtonSlot implements MenuSlot {
             @Override
             public boolean isLeftClick() {
                 return click.isLeftClick();
+            }
+
+            @Override
+            public boolean isRightClick() {
+                return click.isRightClick();
+            }
+
+            @Override
+            public boolean isShiftClick() {
+                return click.isShiftClick();
             }
 
             @Override

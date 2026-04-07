@@ -31,7 +31,7 @@ public class ItemPropertySlot implements MenuSlot {
     public void onClick(@NotNull MenuClick click) {
         if (click.isShiftClick()) {
             EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
-                    .handlePropertyShiftClick(property, click);
+                    .handlePropertyShiftClick(property);
             return;
         }
 

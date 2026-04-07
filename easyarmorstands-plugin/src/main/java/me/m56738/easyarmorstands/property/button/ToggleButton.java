@@ -1,16 +1,19 @@
 package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
+import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import me.m56738.easyarmorstands.message.Message;
-import org.jetbrains.annotations.NotNull;
+import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
+@NullMarked
 public abstract class ToggleButton<T> extends PropertyButton<T> {
-    public ToggleButton(Property<T> property, PropertyContainer container, SimpleItemTemplate item) {
-        super(property, container, item);
+    public ToggleButton(Property<T> property, MenuIcon icon, List<Component> description) {
+        super(property, icon, description);
     }
 
     public abstract T getNextValue();
@@ -22,24 +25,23 @@ public abstract class ToggleButton<T> extends PropertyButton<T> {
     }
 
     @Override
-    public void onClick(@NotNull MenuClick click) {
+    public void onClick(MenuClickContext context) {
         boolean changed;
-        if (click.isShiftClick()) {
-            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
-                    .handlePropertyShiftClick(property, click);
+        if (context.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
+                    .handlePropertyShiftClick(property);
             return;
-        } else if (click.isLeftClick()) {
+        } else if (context.isLeftClick()) {
             changed = setValue(getNextValue());
-        } else if (click.isRightClick()) {
+        } else if (context.isRightClick()) {
             changed = setValue(getPreviousValue());
         } else {
             return;
         }
         if (changed) {
-            container.commit();
-            click.updateItem();
+            property.commit();
         } else {
-            click.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+            context.player().sendMessage(Message.error("easyarmorstands.error.cannot-change"));
         }
     }
 }

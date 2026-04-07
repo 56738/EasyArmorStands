@@ -11,8 +11,7 @@ import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscoverySource;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementType;
-import me.m56738.easyarmorstands.fancyholograms.property.type.HologramDataPropertyType;
-import me.m56738.easyarmorstands.fancyholograms.property.type.TextHologramTextPropertyType;
+import me.m56738.easyarmorstands.fancyholograms.property.HologramPropertyTypes;
 import org.bukkit.event.HandlerList;
 
 public class FancyHologramsAddon implements Addon {
@@ -36,8 +35,8 @@ public class FancyHologramsAddon implements Addon {
     public void enable() {
         load();
 
-        EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(HologramDataPropertyType.INSTANCE);
-        EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(TextHologramTextPropertyType.INSTANCE);
+        EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(HologramPropertyTypes.DATA);
+        EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().register(HologramPropertyTypes.TEXT);
 
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
         HologramElementType type = new HologramElementType(manager, this);

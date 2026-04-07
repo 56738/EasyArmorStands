@@ -1,15 +1,16 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 
+import java.util.List;
 import java.util.Optional;
 
 public class TextBackgroundToggleButton extends ToggleButton<Optional<Color>> {
-    public TextBackgroundToggleButton(Property<Optional<Color>> property, PropertyContainer container, SimpleItemTemplate item) {
-        super(property, container, item);
+    public TextBackgroundToggleButton(Property<Optional<Color>> property, MenuIcon icon, List<Component> description) {
+        super(property, icon, description);
     }
 
     @Override
