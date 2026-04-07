@@ -8,21 +8,20 @@ import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
-import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandPartNode extends PropertyMenuNode implements ResettableNode {
+public class ArmorStandPartNode extends ArmorStandNode implements ResettableNode {
     private final Session session;
     private final ArmorStandPart part;
     private final ToolMenuManager toolManager;
     private final ToolMenuModeSwitcher toolSwitcher;
 
     public ArmorStandPartNode(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
-        super(session, container);
+        super(session, container, element);
         this.session = session;
         this.part = part;
         this.toolManager = new ToolMenuManager(session, this,

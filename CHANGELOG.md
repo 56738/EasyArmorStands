@@ -16,7 +16,8 @@ However, most new features will only be added to EasyArmorStands v3.
     * If false, only entities created using EasyArmorStands can be edited
     * Entities created before EasyArmorStands v3 must be registered using `/eas register ...`
 * Added `/eas register ...` and `/eas unregister ...`
-  * Allows marking (or unmarking) entities as created by EasyArmorStands
+    * Allows marking (or unmarking) entities as created by EasyArmorStands
+* Allow opening menu while an armor stand bone is selected
 
 # Fixes
 

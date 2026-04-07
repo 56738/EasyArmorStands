@@ -10,20 +10,19 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
-import me.m56738.easyarmorstands.editor.node.PropertyMenuNode;
 import me.m56738.easyarmorstands.editor.node.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandPositionNode extends PropertyMenuNode implements ResettableNode {
+public class ArmorStandPositionNode extends ArmorStandNode implements ResettableNode {
     private final Session session;
     private final ToolMenuManager toolManager;
     private final ToolMenuModeSwitcher toolSwitcher;
 
     public ArmorStandPositionNode(Session session, PropertyContainer properties, OffsetProvider offsetProvider, ArmorStandElement element) {
-        super(session, properties);
+        super(session, properties, element);
         this.session = session;
         this.toolManager = new ToolMenuManager(session, this,
                 new DelegateToolProvider(element.getTools(properties),
