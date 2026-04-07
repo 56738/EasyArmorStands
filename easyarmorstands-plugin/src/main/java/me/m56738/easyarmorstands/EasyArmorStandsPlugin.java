@@ -2,6 +2,8 @@ package me.m56738.easyarmorstands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemAttributeModifiers;
 import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -18,10 +20,10 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuProvider;
 import me.m56738.easyarmorstands.api.menu.MenuSlotTypeRegistry;
-import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
@@ -112,6 +114,8 @@ import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.key.Key;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -602,10 +606,15 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return commandManager;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public ItemStack createTool(Locale locale) {
         ItemStack item = config.editor.tool.render(locale);
         item.editPersistentDataContainer(pdc ->
                 pdc.set(toolKey, PersistentDataType.BYTE, (byte) 1));
+        item.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes()
+                .addModifier(Attribute.BLOCK_INTERACTION_RANGE, new AttributeModifier(EasyArmorStands.key("no_block_interaction"), -1, AttributeModifier.Operation.MULTIPLY_SCALAR_1))
+                .addModifier(Attribute.ENTITY_INTERACTION_RANGE, new AttributeModifier(EasyArmorStands.key("no_entity_interaction"), -1, AttributeModifier.Operation.MULTIPLY_SCALAR_1))
+                .build());
         return item;
     }
 
