@@ -1,6 +1,7 @@
 # Improvements
 
 * Added 26.1 support
+* Allow opening menu while an armor stand bone is selected
 
 # Fixes
 

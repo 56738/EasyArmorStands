@@ -7,12 +7,10 @@ import me.m56738.easyarmorstands.api.editor.context.AddContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.MenuNode;
 import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.capability.glow.GlowCapability;
@@ -23,12 +21,10 @@ import me.m56738.easyarmorstands.capability.visibility.VisibilityCapability;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPartButton;
 import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButton;
-import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -38,28 +34,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
-public class ArmorStandRootNode extends MenuNode implements ElementNode, ResettableNode {
+public class ArmorStandRootNode extends ArmorStandNode implements ElementNode, ResettableNode {
     private final Session session;
     private final ArmorStand entity;
     private final ArmorStandElement element;
     private final ArmorStandPositionButton positionButton;
     private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
-    private final PropertyContainer container;
     private final Component name;
-    private final boolean allowMenu;
     private ArmorStand skeleton;
 
     public ArmorStandRootNode(Session session, ArmorStand entity, ArmorStandElement element) {
-        super(session);
+        super(session, session.properties(element), element);
         this.session = session;
         this.entity = entity;
         this.element = element;
-        this.container = session.properties(element);
         this.name = Message.component("easyarmorstands.node.select-bone");
-        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, container, part, element);
+            ArmorStandPartButton partButton = new ArmorStandPartButton(session, properties(), part, element);
             addButton(partButton);
             partButtons.put(part, partButton);
         }
@@ -68,8 +60,8 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
                 session,
                 ParticleColor.WHITE,
                 Message.component("easyarmorstands.node.position"),
-                container,
-                new ArmorStandOffsetProvider(element, container),
+                properties(),
+                new ArmorStandOffsetProvider(element, properties()),
                 element);
         addButton(positionButton);
     }
@@ -81,9 +73,6 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
             updateSkeleton(skeleton);
         }
         context.setActionBar(name);
-        if (allowMenu) {
-            context.addInput(new OpenElementMenuInput(session, element));
-        }
         context.addInput(new ReturnInput(session));
     }
 
@@ -180,14 +169,14 @@ public class ArmorStandRootNode extends MenuNode implements ElementNode, Resetta
 
     @Override
     public void reset() {
-        Property<Location> locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        Property<Location> locationProperty = properties().get(EntityPropertyTypes.LOCATION);
         Location location = locationProperty.getValue();
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
         for (ArmorStandPart part : ArmorStandPart.values()) {
-            container.get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+            properties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
         }
-        container.commit();
+        properties().commit();
     }
 }
