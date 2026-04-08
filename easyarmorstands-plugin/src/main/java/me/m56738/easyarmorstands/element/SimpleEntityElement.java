@@ -17,10 +17,6 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.node.SimpleEntityNode;
-import me.m56738.easyarmorstands.menu.builder.AbstractMenuBuilder;
-import me.m56738.easyarmorstands.menu.builder.DefaultMenuBuilder;
-import me.m56738.easyarmorstands.menu.builder.EquipmentMenuBuilder;
-import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -101,15 +97,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(@NotNull Player player) {
-        Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-        AbstractMenuBuilder builder;
-        if (entity instanceof LivingEntity livingEntity && livingEntity.getEquipment() != null) {
-            builder = new EquipmentMenuBuilder();
-        } else {
-            builder = new DefaultMenuBuilder();
-        }
-        builder.addButton(new DestroyButton(this));
-        EasyArmorStandsPlugin.getInstance().openElementMenu(player, session, builder, this);
+        EasyArmorStandsPlugin.getInstance().openElementMenu(player, this);
     }
 
     @Override

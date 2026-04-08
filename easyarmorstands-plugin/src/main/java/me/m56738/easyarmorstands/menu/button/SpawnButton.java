@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -24,6 +25,11 @@ public class SpawnButton implements MenuButton {
         this.player = player;
         this.type = type;
         this.icon = icon;
+    }
+
+    @Override
+    public Key key() {
+        return type.key();
     }
 
     @Override

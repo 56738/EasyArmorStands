@@ -1,12 +1,15 @@
 package me.m56738.easyarmorstands.menu.button;
 
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
+import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
@@ -15,10 +18,16 @@ import java.util.List;
 
 @NullMarked
 public class DestroyButton implements MenuButton {
+    private static final Key KEY = EasyArmorStands.key("destroy");
     private final DestroyableElement element;
 
     public DestroyButton(DestroyableElement element) {
         this.element = element;
+    }
+
+    @Override
+    public Key key() {
+        return KEY;
     }
 
     @Override
@@ -34,6 +43,11 @@ public class DestroyButton implements MenuButton {
     @Override
     public List<Component> description() {
         return List.of(Component.translatable("easyarmorstands.menu.destroy.description"));
+    }
+
+    @Override
+    public MenuButtonCategory category() {
+        return MenuButtonCategory.HEADER;
     }
 
     @Override

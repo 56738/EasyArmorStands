@@ -24,14 +24,6 @@ editor:
     right-click-key: <key:key.use>
     sneak-key: <lang:key.sneak>
     swap-hands-key: <key:key.swapOffhand>
-  menu:
-    background:
-      config:
-        item:
-          hide-tooltip: true
-          name: ''
-          type: light_blue_stained_glass_pane
-      type: easyarmorstands:background
   scale:
     max-distance: 64.0
     min-distance: 5.0

@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.command.ClipboardCommands;
 import me.m56738.easyarmorstands.command.CommandSourceStackMapper;
 import me.m56738.easyarmorstands.command.DisplayCommands;
 import me.m56738.easyarmorstands.command.HistoryCommands;
+import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
@@ -88,8 +89,7 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
             throw new RuntimeException(e);
         }
 
-        // TODO
-//        PropertyCommands.register(commandManager);
+        PropertyCommands.register(commandManager);
 
         result = new BootstrapResult(executor, translationManager, commandManager);
     }

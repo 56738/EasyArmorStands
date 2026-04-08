@@ -90,6 +90,7 @@ public class MenuButtonSlot implements MenuSlot {
                 click.close();
             }
         });
+        click.updateItem();
     }
 
     private Component format(Component component, MessageStyle style, Locale locale) {

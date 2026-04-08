@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,22 +26,29 @@ import java.util.Locale;
 
 @NullMarked
 public class MenuSlotButton implements MenuButton {
+    private final Key key;
     private final MenuSlot slot;
 
-    private MenuSlotButton(MenuSlot slot) {
+    private MenuSlotButton(Key key, MenuSlot slot) {
+        this.key = key;
         this.slot = slot;
     }
 
-    public static MenuButton toButton(MenuSlot slot) {
+    public static MenuButton toButton(Key key, MenuSlot slot) {
         if (slot instanceof MenuButtonSlot menuButtonSlot) {
             return menuButtonSlot.getButton();
         } else {
-            return new MenuSlotButton(slot);
+            return new MenuSlotButton(key, slot);
         }
     }
 
     public MenuSlot getSlot() {
         return slot;
+    }
+
+    @Override
+    public Key key() {
+        return key;
     }
 
     @Override

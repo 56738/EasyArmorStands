@@ -57,7 +57,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.EnumSet;
+
 public class EntityElementListener implements Listener {
+    private static final EnumSet<EquipmentSlot> DEFAULT_SLOTS = EnumSet.of(
+            EquipmentSlot.HEAD,
+            EquipmentSlot.CHEST,
+            EquipmentSlot.LEGS,
+            EquipmentSlot.FEET,
+            EquipmentSlot.HAND,
+            EquipmentSlot.OFF_HAND);
+
     @EventHandler
     public void onSpawnMenuOpen(SpawnMenuOpenEvent event) {
         ElementTypeRegistry elementTypeRegistry = EasyArmorStands.get().elementTypeRegistry();
@@ -118,11 +128,20 @@ public class EntityElementListener implements Listener {
         EntityEquipment equipment = entity.getEquipment();
         if (equipment != null) {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
-                registry.register(new EntityEquipmentProperty(equipment, slot));
+                if (hasSlot(entity, slot)) {
+                    registry.register(new EntityEquipmentProperty(equipment, slot));
+                }
             }
         }
         registry.register(new EntityScaleProperty(entity));
         registry.register(Property.of(EntityPropertyTypes.AI, entity::hasAI, entity::setAI));
+    }
+
+    private boolean hasSlot(LivingEntity entity, EquipmentSlot slot) {
+        if (entity.getType() == EntityType.ARMOR_STAND) {
+            return DEFAULT_SLOTS.contains(slot);
+        }
+        return entity.canUseEquipmentSlot(slot);
     }
 
     private void registerArmorStandProperties(ArmorStand entity, PropertyRegistry registry) {
