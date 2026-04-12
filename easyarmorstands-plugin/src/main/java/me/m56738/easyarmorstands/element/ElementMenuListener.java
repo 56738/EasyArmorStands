@@ -7,8 +7,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
+import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.event.menu.ElementMenuOpenEvent;
 import me.m56738.easyarmorstands.api.menu.MenuBuilder;
+import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -26,6 +28,7 @@ import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.DisplayBoxButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
+import me.m56738.easyarmorstands.menu.slot.ColorPickerSlot;
 import me.m56738.easyarmorstands.menu.slot.EntityCopyButton;
 import me.m56738.easyarmorstands.menu.slot.EquipmentPropertySlot;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -129,6 +132,10 @@ public class ElementMenuListener implements Listener {
             if (session != null) {
                 builder.addButton(new DisplayBoxButton(session, new DisplayBoxNode(session, container)));
             }
+        }
+
+        if (element instanceof MenuElement menuElement && player.hasPermission(Permissions.COLOR)) {
+            builder.addButton(MenuSlotButton.toButton(ColorPickerSlot.KEY, new ColorPickerSlot(menuElement), MenuButtonCategory.HEADER));
         }
     }
 

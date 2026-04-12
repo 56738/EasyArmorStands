@@ -4,6 +4,9 @@ import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuFactory;
 import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
 import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
+import me.m56738.easyarmorstands.menu.layout.MenuLayout;
+import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
+import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -17,7 +20,7 @@ public class MenuFactorySerializer implements TypeSerializer<MenuFactory> {
         MenuFactoryBuilderImpl factory = new MenuFactoryBuilderImpl();
         factory.setTitleTemplate(node.node("title").getString());
         factory.setHeight(node.node("height").getInt());
-        factory.setBackground(node.node("background").get(MenuSlotFactory.class));
+        factory.setBackground(_ -> MenuButtonSlot.toSlot(MenuLayout.createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE)));
         for (ConfigurationNode slotNode : node.node("slots").childrenMap().values()) {
             if (!slotNode.node("enabled").getBoolean(true)) {
                 continue;

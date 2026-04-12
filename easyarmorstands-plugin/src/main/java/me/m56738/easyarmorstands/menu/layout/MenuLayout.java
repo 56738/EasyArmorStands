@@ -76,7 +76,7 @@ public class MenuLayout {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static MenuButton createBackground(Material material) {
+    public static MenuButton createBackground(Material material) {
         ItemStack item = ItemStack.of(material);
         item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
                 .hideTooltip(true)

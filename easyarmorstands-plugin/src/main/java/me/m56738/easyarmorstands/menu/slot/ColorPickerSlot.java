@@ -1,53 +1,46 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
-import me.m56738.easyarmorstands.item.SimpleItemTemplate;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Color;
+import me.m56738.easyarmorstands.message.MessageStyle;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
 public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
-    private final SimpleItemTemplate itemTemplate;
-    private final SimpleItemTemplate activeItemTemplate;
-    private final TagResolver resolver;
+    public static final Key KEY = EasyArmorStands.key("color_picker");
     private final MenuElement element;
     private boolean active;
 
-    public ColorPickerSlot(SimpleItemTemplate itemTemplate, SimpleItemTemplate activeItemTemplate, TagResolver resolver, MenuElement element) {
-        this.itemTemplate = itemTemplate;
-        this.activeItemTemplate = activeItemTemplate;
-        this.resolver = resolver;
+    public ColorPickerSlot(MenuElement element) {
         this.element = element;
     }
 
-    private SimpleItemTemplate getItemTemplate() {
-        return active ? activeItemTemplate : itemTemplate;
-    }
-
     @Override
+    @SuppressWarnings("UnstableApiUsage")
     public ItemStack getItem(Locale locale) {
-        ItemStack item = getItemTemplate().render(locale, resolver);
+        ItemStack item = ItemStack.of(Material.BRUSH);
+        ItemLore.Builder lore = ItemLore.lore();
         if (active) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta != null) {
-                LeatherArmorMeta armorMeta = (LeatherArmorMeta) meta;
-                armorMeta.setColor(Color.YELLOW);
-                item.setItemMeta(meta);
-            }
+            item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+            lore.addLine(MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.click-target"), MessageStyle.BUTTON_DESCRIPTION, locale));
         }
+        item.setData(DataComponentTypes.CUSTOM_NAME, MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.open"), MessageStyle.BUTTON_NAME, locale));
+        item.setData(DataComponentTypes.LORE, lore.build());
         return item;
     }
 
@@ -100,8 +93,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         }
 
         MenuSlot slot = click.slot();
-        if (slot instanceof ItemPropertySlot) {
-            ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
+        if (slot instanceof ItemPropertySlot itemSlot) {
             if (isApplicable(itemSlot)) {
                 open(click.player(), itemSlot);
             }
