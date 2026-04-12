@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -23,6 +24,7 @@ import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
+import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.DisplayBoxButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlot;
@@ -125,6 +127,10 @@ public class ElementMenuListener implements Listener {
             if (session != null) {
                 builder.addButton(new DisplayBoxButton(session, new DisplayBoxNode(session, container)));
             }
+        }
+
+        if (element instanceof DestroyableElement destroyableElement && player.hasPermission(Permissions.DESTROY)) {
+            builder.addButton(new DestroyButton(destroyableElement));
         }
 
         if (element instanceof MenuElement menuElement && player.hasPermission(Permissions.COLOR)) {
