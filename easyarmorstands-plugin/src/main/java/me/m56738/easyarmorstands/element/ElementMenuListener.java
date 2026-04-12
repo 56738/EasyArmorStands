@@ -88,13 +88,13 @@ public class ElementMenuListener implements Listener {
         populator.addButton(BlockDisplayPropertyTypes.BLOCK, BlockDataHandler::new, Material.OAK_STAIRS, Component.translatable("easyarmorstands.property.block-display.block.pick"));
         populator.addButton(DisplayPropertyTypes.BILLBOARD, EnumHandler.provider(Display.Billboard.class), Material.IRON_BARS, Component.translatable("easyarmorstands.property.display.billboard.description"));
         populator.addButton(EntityPropertyTypes.AI, Material.REDSTONE_BLOCK, Component.translatable("easyarmorstands.property.ai.description"));
-        populator.addButton(EntityPropertyTypes.CUSTOM_NAME, OptionalComponentHandler::new, Material.NAME_TAG);
+        populator.addButton(EntityPropertyTypes.CUSTOM_NAME, OptionalComponentHandler.provider("/eas name"), Material.NAME_TAG);
         populator.addButton(EntityPropertyTypes.GLOWING, Material.GLOWSTONE_DUST, Component.translatable("easyarmorstands.property.glow.description"));
         populator.addButton(EntityPropertyTypes.SILENT, Material.NOTE_BLOCK, Component.translatable("easyarmorstands.property.silent.description"));
         populator.addButton(EntityPropertyTypes.VISIBLE, Material.POTION);
         populator.addButton(InteractionPropertyTypes.RESPONSIVE, Material.OAK_PRESSURE_PLATE, Component.translatable("easyarmorstands.property.interaction.responsive.description"));
         populator.addButton(ItemDisplayPropertyTypes.TRANSFORM, EnumHandler.provider(ItemDisplay.ItemDisplayTransform.class), Material.STICK, Component.translatable("easyarmorstands.property.item-display.transform.description"));
-        populator.addButton(MannequinPropertyTypes.DESCRIPTION, OptionalComponentHandler::new, Material.NAME_TAG, Component.translatable("easyarmorstands.property.mannequin.description.description"));
+        populator.addButton(MannequinPropertyTypes.DESCRIPTION, OptionalComponentHandler.provider("/eas description"), Material.NAME_TAG, Component.translatable("easyarmorstands.property.mannequin.description.description"));
         populator.addButton(MannequinPropertyTypes.IMMOVABLE, Material.BEDROCK, Component.translatable("easyarmorstands.property.mannequin.immovable.description"));
         populator.addButton(MannequinPropertyTypes.MAIN_HAND, EnumHandler.provider(MainHand.class), Material.IRON_SWORD);
         populator.addButton(MannequinPropertyTypes.SKIN_PART_VISIBLE.get(SkinPart.CAPE), Material.BLUE_BANNER);
@@ -110,7 +110,7 @@ public class ElementMenuListener implements Listener {
         populator.addButton(TextDisplayPropertyTypes.BACKGROUND, TextBackgroundHandler::new, Material.STONE_SLAB);
         populator.addButton(TextDisplayPropertyTypes.SEE_THROUGH, Material.GLOWSTONE_DUST);
         populator.addButton(TextDisplayPropertyTypes.SHADOW, Material.STONE);
-        populator.addButton(TextDisplayPropertyTypes.TEXT, ComponentHandler::new, Material.NAME_TAG);
+        populator.addButton(TextDisplayPropertyTypes.TEXT, ComponentHandler.provider("/eas text"), Material.NAME_TAG);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             Property<ItemStack> property = container.getOrNull(EntityPropertyTypes.EQUIPMENT.get(slot));

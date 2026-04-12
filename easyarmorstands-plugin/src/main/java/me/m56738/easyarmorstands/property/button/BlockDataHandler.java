@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -15,6 +16,10 @@ public class BlockDataHandler implements ButtonHandler {
 
     @Override
     public void onClick(MenuClickContext context) {
+        if (context.isShiftClick()) {
+            EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
+                    .handlePropertyShiftClick(property);
+        }
     }
 
     @Override
