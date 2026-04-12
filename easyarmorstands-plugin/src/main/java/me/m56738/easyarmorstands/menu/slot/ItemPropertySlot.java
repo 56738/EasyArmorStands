@@ -1,14 +1,19 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.MenuClick;
 import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.GameMode;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Locale;
 
 public class ItemPropertySlot implements MenuSlot {
@@ -22,9 +27,24 @@ public class ItemPropertySlot implements MenuSlot {
         return property;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public ItemStack getItem(Locale locale) {
-        return Util.wrapItem(property.getValue());
+        ItemStack item = Util.wrapItem(property.getValue());
+        if (item.isEmpty()) {
+            item = MenuButtonSlot.createItem(
+                    MenuIcon.of(Material.GLASS_PANE),
+                    property.getType().getName(),
+                    List.of(),
+                    locale);
+        } else {
+            item.setData(DataComponentTypes.ITEM_NAME, Component.text()
+                    .append(MenuButtonSlot.format(property.getType().getName(), MessageStyle.BUTTON_NAME, locale))
+                    .append(Component.text(": ", MenuButtonSlot.FALLBACK_STYLE))
+                    .append(item.effectiveName())
+                    .build());
+        }
+        return item;
     }
 
     @Override
@@ -36,25 +56,6 @@ public class ItemPropertySlot implements MenuSlot {
         }
 
         if (!property.canChange(click.player())) {
-            return;
-        }
-
-        if (click.player().getGameMode() == GameMode.CREATIVE) {
-            // Allow the click event and set the property later
-            // Might duplicate items if two players interact in the same tick, so only do this in creative mode
-            click.allow();
-            click.queueTask(() -> {
-                ItemStack item = click.menu().getInventory().getItem(click.index());
-                if (property.setValue(Util.wrapItem(item))) {
-                    property.commit();
-                } else {
-                    // Failed to change the property, revert changes
-                    // Put the placed item back into the cursor
-                    click.player().setItemOnCursor(item);
-                    // Refresh the item in the menu
-                    click.menu().updateItem(click.index());
-                }
-            });
             return;
         }
 
