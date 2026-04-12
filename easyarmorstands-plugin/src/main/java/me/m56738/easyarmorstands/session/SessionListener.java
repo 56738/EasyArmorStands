@@ -315,6 +315,7 @@ public class SessionListener implements Listener, SwapHandItemsListener, Visibil
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         manager.hideSkeletons(event.getPlayer());
+        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(event.getPlayer()));
     }
 
     @EventHandler
