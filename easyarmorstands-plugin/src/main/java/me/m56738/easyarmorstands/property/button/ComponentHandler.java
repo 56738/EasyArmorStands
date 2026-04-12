@@ -27,6 +27,7 @@ public class ComponentHandler implements ButtonHandler {
             EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
                     .handlePropertyShiftClick(property);
         } else if (context.isLeftClick()) {
+            context.closeMenu();
             SessionCommands.showText(context.player(), property.getType().getName(), property.getValue(), command);
         }
     }
