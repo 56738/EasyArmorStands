@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.event.menu.ElementMenuOpenEvent;
 import me.m56738.easyarmorstands.api.menu.MenuBuilder;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
@@ -25,7 +26,9 @@ import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.DisplayBoxButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
+import me.m56738.easyarmorstands.menu.slot.EntityCopyButton;
 import me.m56738.easyarmorstands.menu.slot.EquipmentPropertySlot;
+import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.button.BlockDataHandler;
 import me.m56738.easyarmorstands.property.button.BooleanHandler;
@@ -40,8 +43,10 @@ import me.m56738.easyarmorstands.property.button.TextBackgroundHandler;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Mannequin;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,7 +61,8 @@ public class ElementMenuListener implements Listener {
     public void onElementMenuOpen(ElementMenuOpenEvent event) {
         Element element = event.getElement();
         MenuBuilder builder = event.getBuilder();
-        TrackedPropertyContainer container = new TrackedPropertyContainer(element, new EasPlayer(event.getPlayer()));
+        Player player = event.getPlayer();
+        TrackedPropertyContainer container = new TrackedPropertyContainer(element, new EasPlayer(player));
         if (element instanceof DestroyableElement destroyableElement) {
             builder.addButton(new DestroyButton(destroyableElement));
         }
@@ -110,8 +116,16 @@ public class ElementMenuListener implements Listener {
             }
         }
 
+        if (element instanceof EntityElement<?> entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
+            Entity entity = entityElement.getEntity();
+            ItemStack item = EntityCopyButton.createSpawnEgg(entity);
+            if (item != null) {
+                builder.addButton(new EntityCopyButton(entity, element.getType(), item));
+            }
+        }
+
         if (container.getOrNull(DisplayPropertyTypes.BOX_WIDTH) != null) {
-            Session session = EasyArmorStands.get().sessionManager().getSession(event.getPlayer());
+            Session session = EasyArmorStands.get().sessionManager().getSession(player);
             if (session != null) {
                 builder.addButton(new DisplayBoxButton(session, new DisplayBoxNode(session, container)));
             }

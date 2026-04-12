@@ -80,7 +80,6 @@ import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
-import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
@@ -231,7 +230,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
-        menuSlotTypeRegistry.register(new EntityCopySlotType());
         menuSlotTypeRegistry.register(new ColorAxisSlotType());
         menuSlotTypeRegistry.register(new ColorAxisChangeSlotType());
         menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
