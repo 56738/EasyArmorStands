@@ -370,7 +370,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     private void loadConfig(String name, ConfigProcessor configProcessor) {
         try {
-            loadMergedConfig(name, configProcessor);
+            loadMergedConfig(name, configProcessor, true);
             return;
         } catch (ConfigurateException e) {
             getLogger().severe("Failed to load " + name + ": " + e.getMessage());
@@ -450,7 +450,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         String configName = "menu/" + name + ".yml";
         CommentedConfigurationNode node = fallback
                 ? loadDefaultConfig(configName, processor)
-                : loadMergedConfig(configName, processor);
+                : loadMergedConfig(configName, processor, false);
         CommentedConfigurationNode parentsNode = node.node("parent");
         if (!parentsNode.virtual()) {
             List<String> parents = parentsNode.getList(String.class);
@@ -463,7 +463,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return node;
     }
 
-    private CommentedConfigurationNode loadMergedConfig(String name, ConfigProcessor configProcessor) throws ConfigurateException {
+    private CommentedConfigurationNode loadMergedConfig(String name, ConfigProcessor configProcessor, boolean create) throws ConfigurateException {
         CommentedConfigurationNode defaultNode = loadDefaultConfig(name, new ConfigProcessor() {
             @Override
             public void process(CommentedConfigurationNode node) throws ConfigurateException {
@@ -488,8 +488,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .build();
 
         CommentedConfigurationNode node = loader.load();
+        boolean exists = !node.empty();
 
-        if (!node.empty()) {
+        if (exists) {
             configProcessor.process(node);
         }
 
@@ -497,7 +498,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
         configProcessor.apply(node);
 
-        if (!node.empty()) {
+        if (exists || create) {
             loader.save(node);
         }
 
