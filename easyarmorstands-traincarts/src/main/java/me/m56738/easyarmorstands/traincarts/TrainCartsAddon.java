@@ -2,8 +2,11 @@ package me.m56738.easyarmorstands.traincarts;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
+import org.bukkit.event.HandlerList;
 
 public class TrainCartsAddon implements Addon {
+    private TrainCartsAddonListener listener;
+
     @Override
     public String name() {
         return "TrainCarts";
@@ -12,11 +15,13 @@ public class TrainCartsAddon implements Addon {
     @Override
     public void enable() {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        plugin.menuSlotTypeRegistry().register(new TrainCartsModelListingSlotType());
+        listener = new TrainCartsAddonListener();
+        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
     @Override
     public void disable() {
+        HandlerList.unregisterAll(listener);
     }
 
     @Override
