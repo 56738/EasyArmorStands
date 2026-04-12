@@ -85,6 +85,7 @@ public class GiveCommand {
                 // found an empty hotbar slot, move the tool into it
                 inventory.clear(i);
                 inventory.setItem(j, item);
+                inventory.setHeldItemSlot(j);
                 return true;
             }
 
