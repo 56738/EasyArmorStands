@@ -122,7 +122,7 @@ public class ElementMenuListener implements Listener {
             }
         }
 
-        if (container.getOrNull(DisplayPropertyTypes.BOX_WIDTH) != null) {
+        if (element instanceof DisplayElement<?>) {
             Session session = EasyArmorStands.get().sessionManager().getSession(player);
             if (session != null) {
                 builder.addButton(new DisplayBoxButton(session, new DisplayBoxNode(session, container)));
