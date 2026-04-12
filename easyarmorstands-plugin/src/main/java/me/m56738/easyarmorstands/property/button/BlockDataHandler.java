@@ -21,6 +21,9 @@ public class BlockDataHandler implements ButtonHandler {
     public MenuIcon modifyIcon(MenuIcon icon) {
         BlockData data = property.getValue();
         Material material = data.getPlacementMaterial();
+        if (material.isAir()) {
+            material = Material.GLASS_PANE;
+        }
         if (material.isItem()) {
             return MenuIcon.of(icon.asItem().withType(material));
         } else {
