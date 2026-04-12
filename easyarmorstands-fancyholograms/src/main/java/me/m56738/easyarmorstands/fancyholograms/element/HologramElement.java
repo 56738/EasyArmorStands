@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import me.m56738.easyarmorstands.menu.factory.MenuFactory;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -74,11 +73,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public void openMenu(@NotNull Player player) {
-        MenuFactory factory = addon.getMenuFactory(hologram.getData());
-        if (factory != null) {
-            Session session = EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
-            EasyArmorStandsPlugin.getInstance().openMenu(player, session, factory, this);
-        }
+        EasyArmorStandsPlugin.getInstance().openElementMenu(player, this);
     }
 
     @Override

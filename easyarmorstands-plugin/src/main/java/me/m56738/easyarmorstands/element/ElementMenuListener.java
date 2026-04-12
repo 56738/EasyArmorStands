@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
@@ -23,16 +22,13 @@ import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
-import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.DisplayBoxButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlot;
 import me.m56738.easyarmorstands.menu.slot.EntityCopyButton;
 import me.m56738.easyarmorstands.menu.slot.EquipmentPropertySlot;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.button.BlockDataHandler;
 import me.m56738.easyarmorstands.property.button.BooleanHandler;
 import me.m56738.easyarmorstands.property.button.ButtonHandler;
@@ -65,10 +61,7 @@ public class ElementMenuListener implements Listener {
         Element element = event.getElement();
         MenuBuilder builder = event.getBuilder();
         Player player = event.getPlayer();
-        TrackedPropertyContainer container = new TrackedPropertyContainer(element, new EasPlayer(player));
-        if (element instanceof DestroyableElement destroyableElement) {
-            builder.addButton(new DestroyButton(destroyableElement));
-        }
+        PropertyContainer container = event.getProperties();
         MenuPopulator populator = new MenuPopulator(builder, container);
         populator.addButton(ArmorStandPropertyTypes.ARMS, Material.STICK);
         populator.addButton(ArmorStandPropertyTypes.BASE_PLATE, Material.STONE_SLAB);

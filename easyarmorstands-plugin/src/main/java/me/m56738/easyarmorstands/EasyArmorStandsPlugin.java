@@ -5,7 +5,6 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
-import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
@@ -17,10 +16,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.event.menu.ElementMenuOpenEvent;
 import me.m56738.easyarmorstands.api.event.menu.SpawnMenuOpenEvent;
-import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
-import me.m56738.easyarmorstands.menu.Menu;
-import me.m56738.easyarmorstands.menu.factory.MenuFactory;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistry;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
@@ -70,18 +66,22 @@ import me.m56738.easyarmorstands.element.SimpleEntityElementProvider;
 import me.m56738.easyarmorstands.element.TextDisplayElementType;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
-import me.m56738.easyarmorstands.menu.color.ColorPickerMenuContext;
-import me.m56738.easyarmorstands.menu.color.ColorPicketContextWrapper;
-import me.m56738.easyarmorstands.menu.ElementMenuContext;
+import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuButtonCollector;
 import me.m56738.easyarmorstands.menu.MenuListener;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistryImpl;
+import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
+import me.m56738.easyarmorstands.menu.color.ColorPickerMenuContext;
+import me.m56738.easyarmorstands.menu.color.ColorPicketContextWrapper;
+import me.m56738.easyarmorstands.menu.factory.MenuFactory;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistry;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.property.type.DefaultPropertyTypes;
 import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.region.RegionListenerManager;
@@ -573,14 +573,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         return menu;
     }
 
-    public void openMenu(Player player, Session session, MenuFactory factory, Element element) {
-        Menu menu = factory.createMenu(new ElementMenuContext(new EasPlayer(player), session, element));
-        player.openInventory(menu.getInventory());
-    }
-
     public void openElementMenu(Player player, Element element) {
         MenuButtonCollector collector = new MenuButtonCollector();
-        new ElementMenuOpenEvent(player, element, collector).callEvent();
+        PropertyContainer properties = new TrackedPropertyContainer(element, new EasPlayer(player));
+        new ElementMenuOpenEvent(player, element, collector, properties).callEvent();
         MenuLayout layout;
         if (collector.getButtons().stream()
                 .anyMatch(MenuLayoutRule.equipmentSlot(EquipmentSlot.HEAD)::matches)) {
