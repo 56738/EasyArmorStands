@@ -6,6 +6,7 @@ Bukkit and Spigot servers, as well as older server versions, are no longer suppo
 This significantly reduces the maintenance effort and makes it easier to use features introduced in new versions.
 
 EasyArmorStands v2 can still be used on Bukkit/Spigot/Paper 1.8.8 to 1.21.11.
+It will still receive bug fixes and some new features.
 However, most new features will only be added to EasyArmorStands v3.
 
 # Improvements
@@ -18,6 +19,15 @@ However, most new features will only be added to EasyArmorStands v3.
 * Added `/eas register ...` and `/eas unregister ...`
     * Allows marking (or unmarking) entities as created by EasyArmorStands
 * Allow opening menu while an armor stand bone is selected
+* Restructure menu
+* Add names to equipment slots in the menu
+
+# Changes
+
+* Removed menus from configuration
+    * Menus can no longer be customized
+    * Menus are built dynamically instead
+    * This allows other plugins to add menu buttons without requiring config changes
 
 # Fixes
 
