@@ -80,9 +80,7 @@ import me.m56738.easyarmorstands.menu.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlotType;
-import me.m56738.easyarmorstands.menu.slot.DisplayBoxSlotType;
 import me.m56738.easyarmorstands.menu.slot.EntityCopySlotType;
-import me.m56738.easyarmorstands.menu.slot.FallbackSlotType;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
@@ -97,7 +95,6 @@ import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
@@ -240,9 +237,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
         menuSlotTypeRegistry.register(new ColorPickerSlotType());
         menuSlotTypeRegistry.register(new ColorPresetSlotType());
-        menuSlotTypeRegistry.register(new DisplayBoxSlotType());
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:traincarts/model_browser")));
-        menuSlotTypeRegistry.register(new FallbackSlotType(Key.key("easyarmorstands:headdatabase")));
 
         loadConfig();
         messageManager = new MessageManager();
