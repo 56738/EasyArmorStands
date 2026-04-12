@@ -92,10 +92,11 @@ public class MenuButtonSlot implements MenuSlot {
     @SuppressWarnings("UnstableApiUsage")
     public static ItemStack createItem(MenuIcon icon, Component name, List<Component> description, Locale locale) {
         ItemStack item = icon.asItem().clone();
-        item.setData(DataComponentTypes.ITEM_NAME, format(name, MessageStyle.BUTTON_NAME, locale));
+        item.setData(DataComponentTypes.CUSTOM_NAME, format(name, MessageStyle.BUTTON_NAME, locale));
         item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
                 .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
                 .toList()));
+        item.unsetData(DataComponentTypes.POTION_CONTENTS);
         return item;
     }
 

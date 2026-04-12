@@ -9,6 +9,7 @@ import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -38,10 +39,10 @@ public class ItemPropertySlot implements MenuSlot {
                     List.of(),
                     locale);
         } else {
-            item.setData(DataComponentTypes.ITEM_NAME, Component.text()
+            item.setData(DataComponentTypes.CUSTOM_NAME, Component.text()
                     .append(MenuButtonSlot.format(property.getType().getName(), MessageStyle.BUTTON_NAME, locale))
                     .append(Component.text(": ", MenuButtonSlot.FALLBACK_STYLE))
-                    .append(item.effectiveName())
+                    .append(item.effectiveName().applyFallbackStyle(TextDecoration.ITALIC.withState(false)))
                     .build());
         }
         return item;
