@@ -18,6 +18,9 @@ However, most new features will only be added to EasyArmorStands v3.
     * Entities created before EasyArmorStands v3 must be registered using `/eas register ...`
 * Added `/eas register ...` and `/eas unregister ...`
     * Allows marking (or unmarking) entities as created by EasyArmorStands
+* Using `/eas clone` or `/eas undo`/`redo` uses full entity data
+    * Requires the `easyarmorstands.copy.entity` permission
+    * The whole entity is cloned, including properties not supported by EasyArmorStands
 * Allow opening menu while an armor stand bone is selected
 * Restructure menu
 * Add names to equipment slots in the menu

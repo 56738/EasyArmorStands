@@ -155,7 +155,12 @@ public class SessionCommands {
             ElementType type = element.getType();
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
             if (sender.canCreateElement(type, properties)) {
-                Element clone = type.createElement(properties);
+                Element clone;
+                if (element instanceof EntityElement<?> entityElement && sender.permissions().test(Permissions.COPY_ENTITY)) {
+                    clone = cloneEntity(entityElement);
+                } else {
+                    clone = type.createElement(properties);
+                }
                 if (clone != null) {
                     clones.add(clone);
                 }
@@ -180,6 +185,12 @@ public class SessionCommands {
             actions.add(new ElementCreateAction(clone));
         }
         sender.history().push(actions, description);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private <E extends Entity> EntityElement<E> cloneEntity(EntityElement<E> element) {
+        E copy = element.getType().getEntityClass().cast(element.getEntity().copy(element.getEntity().getLocation()));
+        return element.getType().getElement(copy);
     }
 
     @Command("spawn")
