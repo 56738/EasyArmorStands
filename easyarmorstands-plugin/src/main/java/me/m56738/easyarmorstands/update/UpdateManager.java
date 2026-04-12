@@ -62,7 +62,7 @@ public class UpdateManager {
             plugin.getLogger().log(Level.WARNING, "Failed to check for updates", e);
             return;
         }
-        if (latestVersion == null || latestVersion.equals(currentVersion)) {
+        if (latestVersion == null || latestVersion.compareTo(currentVersion) <= 0) {
             // No update available
             return;
         }
