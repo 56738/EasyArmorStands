@@ -84,7 +84,7 @@ tasks {
 }
 
 val supportedGameVersions = listOf(
-    "26.1.1",
+    "26.1.2",
 )
 
 modrinth {
