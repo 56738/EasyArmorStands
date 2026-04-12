@@ -12,41 +12,10 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
-    private final @Nullable MethodHandle customModelDataSetter;
-    private final @Nullable MethodHandle hideTooltipSetter;
-
-    public ItemTemplateSerializer() {
-        customModelDataSetter = findCustomModelDataSetter();
-        hideTooltipSetter = findHideTooltipSetter();
-    }
-
-    @SuppressWarnings("JavaLangInvokeHandleSignature")
-    private static MethodHandle findCustomModelDataSetter() {
-        try {
-            return MethodHandles.lookup().findVirtual(ItemMeta.class, "setCustomModelData",
-                    MethodType.methodType(void.class, Integer.class));
-        } catch (ReflectiveOperationException e) {
-            return null;
-        }
-    }
-
-    @SuppressWarnings("JavaLangInvokeHandleSignature")
-    private static MethodHandle findHideTooltipSetter() {
-        try {
-            return MethodHandles.lookup().findVirtual(ItemMeta.class, "setHideTooltip",
-                    MethodType.methodType(void.class, boolean.class));
-        } catch (ReflectiveOperationException e) {
-            return null;
-        }
-    }
-
     @Override
     public ItemTemplate deserialize(Type type, ConfigurationNode node) throws SerializationException {
         ConfigurationNode dataNode = node.node("data");
@@ -60,20 +29,8 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
                 data);
         ItemMeta meta = template.getItemMeta();
         if (meta != null) {
-            if (customModelDataSetter != null) {
-                try {
-                    customModelDataSetter.invoke(meta, node.node("custom-model-data").get(Integer.class));
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            if (hideTooltipSetter != null) {
-                try {
-                    hideTooltipSetter.invoke(meta, node.node("hide-tooltip").getBoolean());
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            meta.setCustomModelData(node.node("custom-model-data").get(Integer.class));
+            meta.setHideTooltip(node.node("hide-tooltip").getBoolean());
             template.setItemMeta(meta);
         }
         String name = node.node("name").getString();
