@@ -14,6 +14,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -637,6 +638,12 @@ public class SessionCommands {
             sender.sendMessage(Message.success("easyarmorstands.success.entity-selected.multiple", Component.text(size)));
         } else if (size == 1) {
             sender.sendMessage(Message.success("easyarmorstands.success.entity-selected"));
+            EditableElement element = group.getMembers().iterator().next().getElement();
+            if (element instanceof SelectableElement selectableElement) {
+                Node node = selectableElement.createNode(session);
+                session.pushNode(node);
+                return;
+            }
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
             return;
