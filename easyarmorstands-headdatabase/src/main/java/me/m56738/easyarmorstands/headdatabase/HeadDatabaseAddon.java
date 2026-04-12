@@ -15,7 +15,6 @@ public class HeadDatabaseAddon implements Addon {
     @Override
     public void enable() {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        plugin.menuSlotTypeRegistry().register(new HeadDatabaseSlotType());
         listener = new HeadDatabaseListener(plugin);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }

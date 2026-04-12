@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.event.menu.ElementMenuOpenEvent;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,13 @@ public class HeadDatabaseListener implements Listener {
 
     public HeadDatabaseListener(EasyArmorStandsPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onOpenMenu(ElementMenuOpenEvent event) {
+        if (event.getPlayer().hasPermission("headdb.open")) {
+            event.getBuilder().addButton(new HeadDatabaseButton());
+        }
     }
 
     @EventHandler
