@@ -1,7 +1,5 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;

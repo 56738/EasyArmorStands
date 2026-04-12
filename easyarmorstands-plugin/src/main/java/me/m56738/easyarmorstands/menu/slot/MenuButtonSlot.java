@@ -2,8 +2,7 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;

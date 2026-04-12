@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.editor.node.NodeFactory;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;

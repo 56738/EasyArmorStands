@@ -1,7 +1,7 @@
-package me.m56738.easyarmorstands.menu;
+package me.m56738.easyarmorstands.menu.color;
 
-import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.menu.SimpleMenuContext;
 import org.jetbrains.annotations.Nullable;
 
 public class ColorPickerMenuContext extends SimpleMenuContext {

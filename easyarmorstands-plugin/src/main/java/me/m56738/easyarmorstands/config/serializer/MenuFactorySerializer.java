@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
+import me.m56738.easyarmorstands.menu.Menu;
+import me.m56738.easyarmorstands.menu.factory.MenuFactory;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
 import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilderImpl;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;

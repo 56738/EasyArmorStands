@@ -8,7 +8,7 @@ import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
+import me.m56738.easyarmorstands.menu.factory.MenuFactory;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscoverySource;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementType;
 import me.m56738.easyarmorstands.fancyholograms.property.HologramPropertyTypes;

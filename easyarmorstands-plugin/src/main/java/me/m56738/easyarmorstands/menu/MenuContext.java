@@ -1,5 +1,6 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.menu.slot.MenuSlotContext;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable

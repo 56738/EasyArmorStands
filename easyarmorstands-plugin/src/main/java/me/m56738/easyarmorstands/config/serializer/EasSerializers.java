@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
+import me.m56738.easyarmorstands.menu.factory.MenuFactory;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import net.kyori.adventure.key.Key;

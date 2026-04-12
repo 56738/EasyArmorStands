@@ -1,6 +1,5 @@
-package me.m56738.easyarmorstands.menu;
+package me.m56738.easyarmorstands.menu.color;
 
-import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

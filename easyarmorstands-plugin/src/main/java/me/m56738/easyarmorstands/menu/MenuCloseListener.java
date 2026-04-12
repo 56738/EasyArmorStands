@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

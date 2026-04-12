@@ -1,5 +1,8 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.menu.click.MenuClick;
+import me.m56738.easyarmorstands.menu.click.MenuClickInterceptor;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;

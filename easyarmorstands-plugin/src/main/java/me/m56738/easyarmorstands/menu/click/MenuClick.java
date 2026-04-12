@@ -1,6 +1,8 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu.click;
 
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.menu.Menu;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.entity.Player;

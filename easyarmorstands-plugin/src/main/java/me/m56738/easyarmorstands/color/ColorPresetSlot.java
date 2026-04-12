@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;

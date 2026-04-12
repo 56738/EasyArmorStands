@@ -1,8 +1,6 @@
 package me.m56738.easyarmorstands.menu.factory;
 
-import me.m56738.easyarmorstands.api.menu.MenuFactory;
-import me.m56738.easyarmorstands.api.menu.MenuFactoryBuilder;
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

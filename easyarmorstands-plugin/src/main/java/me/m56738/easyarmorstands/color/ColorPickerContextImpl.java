@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
-import me.m56738.easyarmorstands.api.menu.ColorPickerContext;
+import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;

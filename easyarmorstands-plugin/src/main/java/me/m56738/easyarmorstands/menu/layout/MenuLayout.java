@@ -5,7 +5,7 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
-import me.m56738.easyarmorstands.api.menu.Menu;
+import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.menu.MenuCreator;

@@ -1,7 +1,9 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
+import me.m56738.easyarmorstands.menu.factory.MenuFactoryBuilder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,11 +1,9 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
-import me.m56738.easyarmorstands.api.menu.MenuCloseListener;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
+import me.m56738.easyarmorstands.menu.click.MenuClickInterceptor;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Bukkit;

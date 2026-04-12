@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu.color;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;

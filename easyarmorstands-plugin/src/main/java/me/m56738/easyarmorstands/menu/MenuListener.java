@@ -1,11 +1,10 @@
 package me.m56738.easyarmorstands.menu;
 
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuClick;
-import me.m56738.easyarmorstands.api.menu.MenuClickInterceptor;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
+import me.m56738.easyarmorstands.menu.click.MenuClickInterceptor;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;

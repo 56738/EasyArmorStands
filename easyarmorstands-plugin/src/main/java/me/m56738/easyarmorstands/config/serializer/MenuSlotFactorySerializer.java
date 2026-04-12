@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.api.menu.MenuSlotFactory;
-import me.m56738.easyarmorstands.api.menu.MenuSlotType;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
+import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;

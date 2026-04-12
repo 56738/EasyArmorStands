@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.api.menu.Menu;
-import me.m56738.easyarmorstands.api.menu.MenuSlot;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 

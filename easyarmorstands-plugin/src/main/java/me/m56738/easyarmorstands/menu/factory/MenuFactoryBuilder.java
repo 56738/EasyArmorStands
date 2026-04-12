@@ -1,5 +1,6 @@
-package me.m56738.easyarmorstands.api.menu;
+package me.m56738.easyarmorstands.menu.factory;
 
+import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
