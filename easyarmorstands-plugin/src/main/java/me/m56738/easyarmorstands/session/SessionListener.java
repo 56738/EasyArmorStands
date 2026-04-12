@@ -21,17 +21,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerHideEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShowEntityEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -205,8 +207,10 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
-    public void onPickup(PlayerPickupItemEvent event) {
-        Player player = event.getPlayer();
+    public void onPickup(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
         Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
     }
 
@@ -245,10 +249,15 @@ public class SessionListener implements Listener {
         onRightClick(event);
     }
 
-    public void onPlaceEntity(Player player, Entity entity) {
+    @EventHandler
+    public void onEntityPlace(EntityPlaceEvent event) {
+        Player player = event.getPlayer();
+        if (player == null) {
+            return;
+        }
         Bukkit.getScheduler().runTask(plugin, () -> {
             EasPlayer context = new EasPlayer(player);
-            Element element = plugin.getElement(entity);
+            Element element = plugin.getElement(event.getEntity());
             if (element != null) {
                 context.history().push(new ElementCreateAction(element));
                 context.clipboard().handleAutoApply(element, context);
@@ -341,7 +350,7 @@ public class SessionListener implements Listener {
     }
 
     @EventHandler
-    public void onHide(PlayerShowEntityEvent event) {
+    public void onHide(PlayerHideEntityEvent event) {
         onVisibilityChanged(event.getPlayer(), event.getEntity(), false);
     }
 

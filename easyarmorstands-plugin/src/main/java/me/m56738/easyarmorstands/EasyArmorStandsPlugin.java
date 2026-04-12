@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.adapter.EntityPlaceAdapter;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
@@ -91,7 +90,6 @@ import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.MainThreadExecutor;
-import me.m56738.easyarmorstands.util.ReflectionUtil;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
@@ -308,14 +306,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         commandManager.registerCommandPostProcessor(new CommandRequirementPostProcessor());
 
         commandManager.appendSuggestionMapper(new ComponentSuggestionMapper());
-
-        if (ReflectionUtil.hasClass("org.bukkit.event.entity.EntityPlaceEvent")) {
-            try {
-                EntityPlaceAdapter.enable(this, sessionListener);
-            } catch (ReflectiveOperationException e) {
-                getLogger().log(Level.WARNING, "Failed to listen to entity place event", e);
-            }
-        }
 
         addonManager.enable();
 
