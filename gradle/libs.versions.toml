@@ -1,5 +1,5 @@
 [versions]
-bentobox = "3.13.0"
+bentobox = "3.14.1"
 bstats = "3.2.1"
 checker-qual = "3.55.1"
 cloud = "2.0.0"
@@ -20,7 +20,7 @@ plotsquared = "7.5.12"
 residence = "6.0.0.1"
 run-task = "3.0.2"
 shadow = "9.4.1"
-towny = "0.102.0.12"
+towny = "0.102.0.13"
 traincarts = "1.21.11-v2"
 worldguard = "7.0.16"
 
