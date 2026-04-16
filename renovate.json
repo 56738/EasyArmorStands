@@ -8,5 +8,13 @@
   },
   "ignoreDeps": [
     "io.papermc.paper:paper-api"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.incendo:cloud-*"
+      ],
+      "allowedVersions": "!/SNAPSHOT/"
+    }
   ]
 }
