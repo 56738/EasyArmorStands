@@ -39,10 +39,13 @@ public class PropertyButton<T> implements MenuButton {
     }
 
     @Override
+    public Component value() {
+        return property.getType().getValueComponent(property.getValue());
+    }
+
+    @Override
     public List<Component> description() {
-        List<Component> description = new ArrayList<>();
-        description.add(property.getType().getValueComponent(property.getValue()));
-        description.addAll(this.description);
+        List<Component> description = new ArrayList<>(this.description);
         handler.modifyDescription(description);
         return description;
     }

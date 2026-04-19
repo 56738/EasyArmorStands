@@ -2,14 +2,15 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
-import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -50,7 +51,7 @@ public class MenuButtonSlot implements MenuSlot {
         if (button instanceof MenuSlotButton menuSlotButton) {
             return menuSlotButton.getItem(locale);
         }
-        return createItem(button.icon(), button.name(), button.description(), locale);
+        return createItem(button.icon(), button.name(), button.value(), button.description(), locale);
     }
 
     @Override
@@ -89,9 +90,9 @@ public class MenuButtonSlot implements MenuSlot {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static ItemStack createItem(MenuIcon icon, Component name, List<Component> description, Locale locale) {
+    public static ItemStack createItem(MenuIcon icon, Component name, Component value, List<Component> description, Locale locale) {
         ItemStack item = icon.asItem().clone();
-        item.setData(DataComponentTypes.CUSTOM_NAME, format(name, MessageStyle.BUTTON_NAME, locale));
+        item.setData(DataComponentTypes.CUSTOM_NAME, formatCustomName(name, value, locale));
         item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
                 .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
                 .toList()));
@@ -99,7 +100,22 @@ public class MenuButtonSlot implements MenuSlot {
         return item;
     }
 
+    public static Component formatCustomName(Component name, Component value, Locale locale) {
+        TextComponent.Builder builder = Component.text()
+                .append(format(name, MessageStyle.BUTTON_NAME, locale));
+        if (value != Component.empty()) {
+            builder.append(Component.text(": ", FALLBACK_STYLE));
+            builder.append(GlobalTranslator.render(value, locale)
+                    .applyFallbackStyle(TextDecoration.ITALIC.withState(false)));
+        }
+        return builder.build();
+    }
+
     public static Component format(Component component, MessageStyle style, Locale locale) {
-        return GlobalTranslator.render(Message.format(style, component), locale).applyFallbackStyle(FALLBACK_STYLE);
+        return render(Message.format(style, component), locale);
+    }
+
+    public static Component render(Component component, Locale locale) {
+        return GlobalTranslator.render(component, locale).applyFallbackStyle(FALLBACK_STYLE);
     }
 }

@@ -2,13 +2,11 @@ package me.m56738.easyarmorstands.menu.slot;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.message.MessageStyle;
+import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -35,14 +33,12 @@ public class ItemPropertySlot implements MenuSlot {
             item = MenuButtonSlot.createItem(
                     MenuIcon.of(Material.GLASS_PANE),
                     property.getType().getName(),
+                    Component.empty(),
                     List.of(),
                     locale);
         } else {
-            item.setData(DataComponentTypes.CUSTOM_NAME, Component.text()
-                    .append(MenuButtonSlot.format(property.getType().getName(), MessageStyle.BUTTON_NAME, locale))
-                    .append(Component.text(": ", MenuButtonSlot.FALLBACK_STYLE))
-                    .append(item.effectiveName().applyFallbackStyle(TextDecoration.ITALIC.withState(false)))
-                    .build());
+            item.setData(DataComponentTypes.CUSTOM_NAME,
+                    MenuButtonSlot.formatCustomName(property.getType().getName(), item.effectiveName(), locale));
         }
         return item;
     }

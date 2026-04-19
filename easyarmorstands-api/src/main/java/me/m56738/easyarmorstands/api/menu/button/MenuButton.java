@@ -11,6 +11,10 @@ public interface MenuButton extends Keyed {
 
     Component name();
 
+    default Component value() {
+        return Component.empty();
+    }
+
     List<Component> description();
 
     default MenuButtonCategory category() {
