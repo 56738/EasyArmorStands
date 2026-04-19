@@ -21,9 +21,8 @@ However, most new features will only be added to EasyArmorStands v3.
 * Using `/eas clone` or `/eas undo`/`redo` uses full entity data
     * Requires the `easyarmorstands.copy.entity` permission
     * The whole entity is cloned, including properties not supported by EasyArmorStands
-* Allow opening menu while an armor stand bone is selected
-* Restructure menu
-* Add names to equipment slots in the menu
+* Restructured menu
+* Added names to equipment slots in the menu
 
 # Changes
 
@@ -31,7 +30,3 @@ However, most new features will only be added to EasyArmorStands v3.
     * Menus can no longer be customized
     * Menus are built dynamically instead
     * This allows other plugins to add menu buttons without requiring config changes
-
-# Fixes
-
-* Fixed `/eas text` not working with text which contains newlines
