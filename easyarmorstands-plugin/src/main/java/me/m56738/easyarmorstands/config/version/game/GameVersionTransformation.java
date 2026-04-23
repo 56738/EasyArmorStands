@@ -35,6 +35,8 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                         TransformAction.set(TypeToken.get(String.class), "<lang:key.sneak>"))
                 .addAction(path("editor", "input-hints", "swap-hands-key"),
                         TransformAction.set(TypeToken.get(String.class), "<key:key.swapHands>"))
+                .addAction(path("editor", "input-hints", "drop-key"),
+                        TransformAction.set(TypeToken.get(String.class), "<key:key.drop>"))
                 .build()));
         entries.add(new Entry(new Version(1, 13, 0), ConfigurationTransformation.builder()
                 .addAction(path("editor", "menu", "background", "config", "item"),

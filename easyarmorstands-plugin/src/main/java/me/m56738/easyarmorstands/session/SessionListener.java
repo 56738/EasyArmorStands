@@ -133,6 +133,14 @@ public class SessionListener implements Listener {
         return true;
     }
 
+    public boolean handleDrop(Player player) {
+        SessionImpl session = manager.getSession(player);
+        if (session == null) {
+            return false;
+        }
+        return session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.DROP, null, null));
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(event.getPlayer()));
@@ -298,7 +306,11 @@ public class SessionListener implements Listener {
         Player player = event.getPlayer();
         suppressClick.put(player, 5);
         suppressArmSwing.put(event.getPlayer(), 5);
-        Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
+        if (handleDrop(player)) {
+            event.setCancelled(true);
+        } else {
+            Bukkit.getScheduler().runTask(plugin, () -> updateHeldItem(player));
+        }
     }
 
     @EventHandler

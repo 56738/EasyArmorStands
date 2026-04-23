@@ -19,6 +19,7 @@ editor:
     limit: 128
   input-hints:
     enabled: true
+    drop-key: <key:key.drop>
     format: '  [<key>] <input>'
     left-click-key: <key:key.attack>
     right-click-key: <key:key.use>
