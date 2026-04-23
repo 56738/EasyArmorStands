@@ -72,7 +72,7 @@
   "easyarmorstands.command.description.position.set": "Teleport the selected entity",
   "easyarmorstands.command.description.position.show": "Show the position of the selected entity",
   "easyarmorstands.command.description.redo": "Redo a change",
-  "easyarmorstands.command.description.register": "Register the entity from EasyArmorStands",
+  "easyarmorstands.command.description.register": "Register the entity into EasyArmorStands",
   "easyarmorstands.command.description.reload": "Reload the configuration",
   "easyarmorstands.command.description.reset": "Reset the value of the selected tool",
   "easyarmorstands.command.description.scale.set": "Rescale the selected entity",
