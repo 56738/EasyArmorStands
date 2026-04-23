@@ -11,4 +11,5 @@ public class InputHintsConfig {
     public Component leftClickKey;
     public Component swapHandsKey;
     public Component sneakKey;
+    public Component dropKey;
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SwitchToolModeInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.switch-mode");
-    private static final Style STYLE = Style.style(NamedTextColor.YELLOW);
+    private static final Style STYLE = Style.style(NamedTextColor.AQUA);
     private final ToolMenuModeSwitcher switcher;
 
     public SwitchToolModeInput(ToolMenuModeSwitcher switcher) {
@@ -30,12 +30,7 @@ public class SwitchToolModeInput implements Input {
 
     @Override
     public ClickContext.@NotNull Type clickType() {
-        return ClickContext.Type.RIGHT_CLICK;
-    }
-
-    @Override
-    public Category category() {
-        return Category.SECONDARY;
+        return ClickContext.Type.DROP;
     }
 
     @Override

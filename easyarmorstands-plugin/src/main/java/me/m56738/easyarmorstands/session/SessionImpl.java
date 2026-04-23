@@ -349,6 +349,8 @@ public final class SessionImpl implements Session {
             return config.rightClickKey;
         } else if (type == ClickContext.Type.SWAP_HANDS) {
             return config.swapHandsKey;
+        } else if (type == ClickContext.Type.DROP) {
+            return config.dropKey;
         }
         return Component.empty();
     }

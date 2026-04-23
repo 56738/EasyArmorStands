@@ -18,6 +18,7 @@ editor:
     limit: 128
   input-hints:
     enabled: true
+    drop-key: Q
     format: '  [<key>] <input>'
     left-click-key: <lang:easyarmorstands.input.key.left-mouse>
     right-click-key: <lang:easyarmorstands.input.key.right-mouse>
