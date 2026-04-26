@@ -445,6 +445,9 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
 
         @Override
         public void onUpdate(ButtonHandlerContext context) {
+            if (selectionBoxEditing) {
+                return;
+            }
             if (!groupMembers.containsKey(entry)) {
                 if (groupMembers.size() < groupLimit) {
                     context.addInput(addToGroupInput);
