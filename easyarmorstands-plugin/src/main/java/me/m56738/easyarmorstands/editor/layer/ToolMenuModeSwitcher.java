@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.editor.layer;
 
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.editor.input.SwitchToolModeInput;
 import net.kyori.adventure.text.Component;
 

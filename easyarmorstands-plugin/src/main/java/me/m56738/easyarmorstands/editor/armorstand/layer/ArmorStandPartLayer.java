@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ResettableLayer;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;

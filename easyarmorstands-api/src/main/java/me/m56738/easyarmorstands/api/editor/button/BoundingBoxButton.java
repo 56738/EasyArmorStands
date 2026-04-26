@@ -61,13 +61,14 @@ public final class BoundingBoxButton implements Button {
     }
 
     @Override
-    public void updatePreview(boolean focused) {
+    public void updatePreview(boolean focused, boolean selected) {
         pointParticle.setPosition(position);
         pointParticle.setRotation(rotation);
-        pointParticle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
+        pointParticle.setColor(Button.color(focused, selected, ParticleColor.WHITE));
         pointParticle.setSize(scale / 16);
         boxParticle.setBoundingBox(box);
-        boolean showBox = focused && !box.getMinPosition().equals(box.getMaxPosition());
+        boxParticle.setColor(Button.color(focused, selected, ParticleColor.WHITE));
+        boolean showBox = (focused || selected) && !box.getMinPosition().equals(box.getMaxPosition());
         if (previewVisible && showBox != boxVisible) {
             if (showBox) {
                 session.addParticle(boxParticle);

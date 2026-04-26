@@ -47,6 +47,7 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
+import me.m56738.easyarmorstands.editor.layer.ElementSelectionLayerImpl;
 import me.m56738.easyarmorstands.editor.layer.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.editor.layer.ValueLayer;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
@@ -351,6 +352,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         translationManager.load(getDataPath(), getComponentLogger());
         loadMenuTemplates();
         addonManager.reload();
+        for (SessionImpl session : sessionManager.getAllSessions()) {
+            if (session.getLayer() instanceof ElementSelectionLayerImpl layer) {
+                layer.refresh();
+            }
+        }
     }
 
     private void loadConfig() {
@@ -657,7 +663,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             if (layer != null) {
                 for (ElementDiscoverySource source : layer.getSources()) {
                     if (source instanceof EntityElementDiscoverySource entitySource) {
-                        layer.updateEntry(entitySource.getEntry(entity));
+                        layer.refreshEntry(entitySource.getEntry(entity));
                     }
                 }
             }

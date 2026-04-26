@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.editor.display.layer;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.api.editor.util.ToolMenuMode;
+import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
+import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.editor.display.DisplayBoxEditor;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;

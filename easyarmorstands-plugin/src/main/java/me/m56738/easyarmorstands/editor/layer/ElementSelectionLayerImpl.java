@@ -8,8 +8,8 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
-import me.m56738.easyarmorstands.api.editor.layer.MenuLayer;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
@@ -22,11 +22,11 @@ import me.m56738.easyarmorstands.editor.input.OpenSpawnMenuInput;
 import me.m56738.easyarmorstands.editor.input.selection.AddElementToGroupInput;
 import me.m56738.easyarmorstands.editor.input.selection.ClearGroupSelectionInput;
 import me.m56738.easyarmorstands.editor.input.selection.RemoveElementFromGroupInput;
-import me.m56738.easyarmorstands.editor.input.selection.SelectElementInput;
 import me.m56738.easyarmorstands.editor.input.selection.SelectGroupInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.CancelBoxSelectionInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.ConfirmBoxSelectionInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.StartBoxSelectionInput;
+import me.m56738.easyarmorstands.editor.node.MenuButtonNode;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.message.Message;
@@ -39,6 +39,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +52,7 @@ import java.util.Set;
 
 public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelectionLayer {
     private final Session session;
-    private final Map<ElementDiscoveryEntry, ElementEntry> entries = new HashMap<>();
+    private final Map<ElementDiscoveryEntry, Entry> entries = new HashMap<>();
     private final Component name;
     private final Set<ElementDiscoverySource> sources = new LinkedHashSet<>();
     private final Map<ElementDiscoveryEntry, SelectableElement> groupMembers = new LinkedHashMap<>();
@@ -176,8 +177,8 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         }
 
         // Process removed entries
-        for (Iterator<Map.Entry<ElementDiscoveryEntry, ElementEntry>> iterator = entries.entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<ElementDiscoveryEntry, ElementEntry> entry = iterator.next();
+        for (Iterator<Map.Entry<ElementDiscoveryEntry, Entry>> iterator = entries.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<ElementDiscoveryEntry, Entry> entry = iterator.next();
             if (!foundEntries.contains(entry.getKey())) {
                 removeEntry(entry.getValue());
                 iterator.remove();
@@ -195,17 +196,16 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         if (selectionBox != null) {
             selectionBoxParticle.setBoundingBox(selectionBox);
             selectionBoxMembers.values().removeIf(e -> !e.isValid() || !e.getBoundingBox().overlaps(selectionBox));
-            for (ElementEntry entry : entries.values()) {
-                ElementButton button = entry.button;
-                if (button != null) {
-                    SelectableElement element = button.element;
+            for (Entry entry : entries.values()) {
+                if (entry instanceof ElementEntry elementEntry) {
+                    SelectableElement element = elementEntry.element;
                     if (element.getBoundingBox().overlaps(selectionBox)) {
                         if (groupMembers.size() + selectionBoxMembers.size() < groupLimit) {
-                            selectionBoxMembers.putIfAbsent(button.entry, element);
+                            selectionBoxMembers.putIfAbsent(entry.discoveryEntry, element);
                         } else {
                             break;
                         }
-                        groupMembers.remove(button.entry);
+                        groupMembers.remove(entry.discoveryEntry);
                     }
                 }
             }
@@ -223,6 +223,10 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         }
         if (!groupMembers.isEmpty()) {
             context.addInput(new SelectGroupInput(session, groupMembers.values()));
+        }
+
+        for (Entry entry : entries.values()) {
+            entry.update();
         }
 
         super.onUpdate(context);
@@ -262,30 +266,38 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         return buttonLimit > 0 && buttonCount >= buttonLimit;
     }
 
+    public void refresh() {
+        List<ElementDiscoveryEntry> savedEntries = new ArrayList<>(entries.keySet());
+        entries.values().forEach(this::removeEntry);
+        entries.clear();
+        for (ElementDiscoveryEntry entry : savedEntries) {
+            entries.put(entry, addEntry(entry));
+        }
+    }
+
     @Override
-    public void updateEntry(@NotNull ElementDiscoveryEntry entry) {
+    public void refreshEntry(@NotNull ElementDiscoveryEntry entry) {
         entries.computeIfPresent(entry, (e, elementEntry) -> {
             removeEntry(elementEntry);
             return addEntry(e);
         });
     }
 
-    private ElementEntry addEntry(ElementDiscoveryEntry entry) {
+    private Entry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
         ChangeContext context = new EasPlayer(session.player());
         if (element == null || !context.canDiscoverElement(element)) {
-            return ElementEntry.EMPTY;
+            return new Entry(entry);
         }
-        ElementButton button = new ElementButton(entry, session, element);
-        addButton(button);
         buttonCount++;
-        return new ElementEntry(button);
+        Entry elementEntry = new ElementEntry(entry, element);
+        elementEntry.show();
+        return elementEntry;
     }
 
-    private void removeEntry(ElementEntry entry) {
-        ElementButton button = entry.button;
-        if (button != null) {
-            removeButton(button);
+    private void removeEntry(Entry entry) {
+        entry.hide();
+        if (entry instanceof ElementEntry) {
             buttonCount--;
         }
     }
@@ -293,10 +305,8 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
     @Override
     public void onExit(@NotNull ExitContext context) {
         super.onExit(context);
-        for (ElementEntry entry : entries.values()) {
-            if (entry.button != null) {
-                removeButton(entry.button);
-            }
+        for (Entry entry : entries.values()) {
+            entry.hide();
         }
         entries.clear();
         buttonCount = 0;
@@ -343,29 +353,92 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         return true;
     }
 
-    private static class ElementEntry {
-        private static final ElementEntry EMPTY = new ElementEntry(null);
+    private class Entry {
+        protected final @NotNull ElementDiscoveryEntry discoveryEntry;
 
-        private final @Nullable ElementButton button;
+        private Entry(@NotNull ElementDiscoveryEntry discoveryEntry) {
+            this.discoveryEntry = discoveryEntry;
+        }
 
-        private ElementEntry(@Nullable ElementButton button) {
-            this.button = button;
+        public void show() {
+        }
+
+        public void hide() {
+        }
+
+        public void update() {
         }
     }
 
-    private class ElementButton implements MenuButton {
+    private class ElementEntry extends Entry {
+        private final @NotNull Node node;
+        private final @NotNull Node groupNode;
+        private final @NotNull SelectableElement element;
+        private boolean showingGroup;
+
+        private ElementEntry(@NotNull ElementDiscoveryEntry discoveryEntry, @NotNull SelectableElement element) {
+            super(discoveryEntry);
+            this.element = element;
+            this.node = element.createNode(session);
+            this.groupNode = new MenuButtonNode(new GroupButton(discoveryEntry, session, element));
+        }
+
+        @Override
+        public void show() {
+            showingGroup = shouldShowGroup();
+            if (showingGroup) {
+                addNode(groupNode);
+            } else {
+                addNode(node);
+            }
+        }
+
+        @Override
+        public void hide() {
+            if (showingGroup) {
+                removeNode(groupNode);
+            } else {
+                removeNode(node);
+            }
+        }
+
+        @Override
+        public void update() {
+            if (showingGroup == shouldShowGroup()) {
+                return;
+            }
+            if (showingGroup) {
+                showingGroup = false;
+                removeNode(groupNode);
+                addNode(node);
+            } else {
+                showingGroup = true;
+                removeNode(node);
+                addNode(groupNode);
+            }
+        }
+
+        private boolean shouldShowGroup() {
+            if (!allowGroups) {
+                return false;
+            }
+            return selectionBox != null
+                    || !groupMembers.isEmpty()
+                    || session.player().isSneaking();
+        }
+    }
+
+    private class GroupButton implements MenuButton {
         private final ElementDiscoveryEntry entry;
         private final SelectableElement element;
         private final Button button;
-        private final SelectElementInput selectInput;
         private final AddElementToGroupInput addToGroupInput;
         private final RemoveElementFromGroupInput removeFromGroupInput;
 
-        private ElementButton(ElementDiscoveryEntry entry, Session session, SelectableElement element) {
+        private GroupButton(ElementDiscoveryEntry entry, Session session, SelectableElement element) {
             this.entry = entry;
             this.element = element;
             this.button = element.createButton(session);
-            this.selectInput = new SelectElementInput(session, element);
             this.addToGroupInput = new AddElementToGroupInput(ElementSelectionLayerImpl.this, entry, element);
             this.removeFromGroupInput = new RemoveElementFromGroupInput(ElementSelectionLayerImpl.this, entry, element);
         }
@@ -377,15 +450,12 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
 
         @Override
         public void onUpdate(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull UpdateContext context) {
-            context.addInput(selectInput);
-            if (allowGroups && selectionBox == null) {
-                if (!groupMembers.containsKey(entry)) {
-                    if (groupMembers.size() < groupLimit) {
-                        context.addInput(addToGroupInput);
-                    }
-                } else {
-                    context.addInput(removeFromGroupInput);
+            if (!groupMembers.containsKey(entry)) {
+                if (groupMembers.size() < groupLimit) {
+                    context.addInput(addToGroupInput);
                 }
+            } else {
+                context.addInput(removeFromGroupInput);
             }
         }
 
@@ -395,7 +465,7 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         }
 
         @Override
-        public boolean isAlwaysFocused() {
+        public boolean isSelected() {
             return groupMembers.containsKey(entry) || selectionBoxMembers.containsKey(entry);
         }
     }

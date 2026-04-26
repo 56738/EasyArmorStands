@@ -383,7 +383,7 @@ public class SessionListener implements Listener {
         }
         for (ElementDiscoverySource source : layer.getSources()) {
             if (source instanceof EntityElementDiscoverySource entitySource) {
-                layer.updateEntry(entitySource.getEntry(entity));
+                layer.refreshEntry(entitySource.getEntry(entity));
             }
         }
     }

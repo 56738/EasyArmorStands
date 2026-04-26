@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.api.editor.util;
+package me.m56738.easyarmorstands.editor.util;
 
 import net.kyori.adventure.text.Component;
 

@@ -23,6 +23,7 @@ However, most new features will only be added to EasyArmorStands v3.
     * The whole entity is cloned, including properties not supported by EasyArmorStands
 * Restructured menu
 * Added names to equipment slots in the menu
+* Group selection uses a different color for selected entities
 
 # Changes
 
@@ -30,3 +31,19 @@ However, most new features will only be added to EasyArmorStands v3.
     * Menus can no longer be customized
     * Menus are built dynamically instead
     * This allows other plugins to add menu buttons without requiring config changes
+* Armor stand parts can be selected immediately
+    * Previously, the armor stand had to be selected before a part could be selected.
+    * Now, buttons for all parts are added to the element selection.
+    * The old behavior can be restored by disabling `editor.flatten-armor-stands` in the config.
+    * If you use armor stands to display items/models, consider converting them to item displays using `/eas convert`
+      instead of disabling this.
+
+# API changes
+
+* Renamed `Node` to `Layer`.
+    * The editor consists of a stack of layers.
+    * Only the top layer is considered active.
+* Introduced a new concept called `Node`.
+    * Nodes can be added to layers.
+    * Nodes can contain buttons.
+    * For example, a `SelectableElement` provides a node which is added to the element selection layer.

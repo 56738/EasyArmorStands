@@ -1,9 +1,8 @@
-package me.m56738.easyarmorstands.api.editor.util;
+package me.m56738.easyarmorstands.editor.util;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
-import me.m56738.easyarmorstands.api.editor.layer.MenuLayer;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -13,6 +12,7 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
+import me.m56738.easyarmorstands.editor.layer.MenuLayer;
 
 import java.util.ArrayList;
 import java.util.List;

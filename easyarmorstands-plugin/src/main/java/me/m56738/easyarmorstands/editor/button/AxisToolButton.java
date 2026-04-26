@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.editor.button;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.editor.tool.AxisTool;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
@@ -61,11 +62,11 @@ public abstract class AxisToolButton implements LayerFactoryButton {
     }
 
     @Override
-    public void updatePreview(boolean focused) {
+    public void updatePreview(boolean focused, boolean selected) {
         particle.setCenter(position);
         particle.setRotation(rotation);
         particle.setAxis(axis);
-        particle.setColor(focused ? ParticleColor.YELLOW : color);
+        particle.setColor(Button.color(focused, selected, color));
         particle.setLength(length * scale);
         particle.setWidth(Util.LINE_WIDTH * scale);
     }

@@ -19,7 +19,7 @@ public interface MenuButton {
         context.addInput(new MenuButtonInput(session, this, cursor));
     }
 
-    default boolean isAlwaysFocused() {
+    default boolean isSelected() {
         return false;
     }
 }

@@ -1,9 +1,12 @@
 package me.m56738.easyarmorstands.api.editor;
 
+import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.layer.LayerProvider;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.Element;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
@@ -93,4 +96,6 @@ public interface Session {
 
     @Contract(pure = true)
     @NotNull Snapper snapper();
+
+    @NotNull Node createElementNode(SelectableElement element, Button button);
 }

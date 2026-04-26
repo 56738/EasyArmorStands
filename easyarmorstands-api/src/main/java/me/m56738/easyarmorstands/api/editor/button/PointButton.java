@@ -62,7 +62,7 @@ public final class PointButton implements Button {
     }
 
     @Override
-    public void updatePreview(boolean focused) {
+    public void updatePreview(boolean focused, boolean selected) {
         particle.setPosition(position);
         particle.setSize(scale / 16);
         if (rotationProvider != null) {
@@ -71,7 +71,7 @@ public final class PointButton implements Button {
         } else {
             particle.setBillboard(true);
         }
-        particle.setColor(focused ? ParticleColor.YELLOW : color);
+        particle.setColor(Button.color(focused, selected, color));
     }
 
     @Override

@@ -8,7 +8,6 @@ import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
 import me.m56738.easyarmorstands.api.editor.layer.ResettableLayer;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
@@ -129,11 +128,6 @@ public class ArmorStandRootLayer extends ArmorStandLayer implements ElementLayer
     @Override
     public boolean isValid() {
         return entity.isValid();
-    }
-
-    @Override
-    public @NotNull Element getElement() {
-        return element;
     }
 
     @Override

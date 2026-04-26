@@ -21,7 +21,7 @@ public interface ElementSelectionLayer extends Layer {
 
     void removeSource(@NotNull ElementDiscoverySource source);
 
-    void updateEntry(@NotNull ElementDiscoveryEntry entry);
+    void refreshEntry(@NotNull ElementDiscoveryEntry entry);
 
     @Unmodifiable
     @NotNull

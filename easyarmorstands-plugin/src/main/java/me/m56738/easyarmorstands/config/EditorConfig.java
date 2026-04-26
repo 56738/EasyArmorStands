@@ -14,4 +14,5 @@ public class EditorConfig {
     public SimpleItemTemplate tool;
     public boolean allowEntities;
     public boolean allowPlayers;
+    public boolean flattenArmorStands;
 }

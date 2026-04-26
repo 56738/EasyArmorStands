@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
+import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
@@ -88,12 +89,12 @@ public class ArmorStandPartButton implements LayerFactoryButton {
     }
 
     @Override
-    public void updatePreview(boolean focused) {
+    public void updatePreview(boolean focused, boolean selected) {
         particle.setRotation(rotation);
         particle.setCenter(center);
         particle.setLength(center.distance(end) * 2);
         particle.setWidth(Util.LINE_WIDTH * scale);
-        particle.setColor(focused ? ParticleColor.YELLOW : ParticleColor.WHITE);
+        particle.setColor(Button.color(focused, selected, ParticleColor.WHITE));
     }
 
     @Override

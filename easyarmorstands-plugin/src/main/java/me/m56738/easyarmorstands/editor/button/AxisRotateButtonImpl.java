@@ -61,7 +61,7 @@ public class AxisRotateButtonImpl implements LayerFactoryButton, AxisRotateButto
     }
 
     @Override
-    public void updatePreview(boolean focused) {
+    public void updatePreview(boolean focused, boolean selected) {
         particle.setCenter(position);
         particle.setRotation(rotation);
         particle.setAxis(axis);
