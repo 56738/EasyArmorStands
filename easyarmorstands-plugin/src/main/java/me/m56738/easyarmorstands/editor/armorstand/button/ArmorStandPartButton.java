@@ -7,22 +7,17 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
-import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.editor.armorstand.layer.ArmorStandPartLayer;
-import me.m56738.easyarmorstands.editor.button.LayerFactoryButton;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -30,10 +25,8 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public class ArmorStandPartButton implements LayerFactoryButton {
+public class ArmorStandPartButton implements Button {
     private final Session session;
-    private final PropertyContainer container;
-    private final ArmorStandPart part;
     private final ArmorStandPartInfo partInfo;
     private final ArmorStandElement element;
     private final Vector3d start = new Vector3d();
@@ -48,8 +41,6 @@ public class ArmorStandPartButton implements LayerFactoryButton {
 
     public ArmorStandPartButton(Session session, PropertyContainer container, ArmorStandPart part, ArmorStandElement element) {
         this.session = session;
-        this.container = container;
-        this.part = part;
         this.partInfo = ArmorStandPartInfo.of(part);
         this.element = element;
         this.particle = session.particleProvider().createLine();
@@ -81,7 +72,7 @@ public class ArmorStandPartButton implements LayerFactoryButton {
     }
 
     @Override
-    public void intersect(@NotNull EyeRay ray, @NotNull Consumer<@NotNull ButtonResult> results) {
+    public void intersect(EyeRay ray, Consumer<ButtonResult> results) {
         Vector3dc intersection = ray.intersectLine(start, end, scale);
         if (intersection != null) {
             results.accept(ButtonResult.of(intersection));
@@ -105,15 +96,5 @@ public class ArmorStandPartButton implements LayerFactoryButton {
     @Override
     public void hidePreview() {
         session.removeParticle(particle);
-    }
-
-    @Override
-    public @NotNull Component getName() {
-        return partInfo.getDisplayName();
-    }
-
-    @Override
-    public Layer createLayer() {
-        return new ArmorStandPartLayer(session, container, part, element);
     }
 }

@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.editor.interaction.layer;
+package me.m56738.easyarmorstands.editor.display.layer;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.AddContext;
@@ -6,63 +6,58 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
-import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.interaction.InteractionBoxEditor;
-import me.m56738.easyarmorstands.element.InteractionElement;
-import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
-import me.m56738.easyarmorstands.editor.input.ReturnInput;
-import me.m56738.easyarmorstands.editor.layer.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
-import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-public class InteractionRootLayer extends PropertyLayer implements ElementLayer {
+public class DisplayLayer extends PropertyLayer {
     private final Session session;
-    private final InteractionElement element;
     private final BoundingBoxParticle boxParticle;
     private final Property<Location> locationProperty;
     private final Property<Float> widthProperty;
     private final Property<Float> heightProperty;
-    private final boolean allowMenu;
+    private boolean showBoundingBoxIfInactive;
+    private boolean canShow;
+    private boolean isVisible;
+    private boolean isActive;
 
-    public InteractionRootLayer(Session session, InteractionElement element) {
-        super(session, session.properties(element));
+    public DisplayLayer(Session session, PropertyContainer container) {
+        super(session, container);
         this.session = session;
-        this.element = element;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
-        this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
-        this.widthProperty = properties().get(DisplayPropertyTypes.BOX_WIDTH);
-        this.heightProperty = properties().get(DisplayPropertyTypes.BOX_HEIGHT);
-        this.allowMenu = session.player().hasPermission(Permissions.OPEN);
-        new ToolMenuManager(session, this, element.getTools(properties())).setMode(ToolMenuMode.GLOBAL);
-        new BoxResizeToolManager(session, this, new InteractionBoxEditor(properties()));
+        this.locationProperty = container.get(EntityPropertyTypes.LOCATION);
+        this.widthProperty = container.get(DisplayPropertyTypes.BOX_WIDTH);
+        this.heightProperty = container.get(DisplayPropertyTypes.BOX_HEIGHT);
     }
 
     @Override
     public void onAdd(@NotNull AddContext context) {
+        canShow = true;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
-        session.addParticle(boxParticle);
     }
 
     @Override
     public void onRemove(@NotNull RemoveContext context) {
-        session.removeParticle(boxParticle);
+        canShow = false;
+        if (isVisible) {
+            session.removeParticle(boxParticle);
+            isVisible = false;
+        }
     }
 
     @Override
     public void onEnter(@NotNull EnterContext context) {
+        isActive = true;
         boxParticle.setColor(ParticleColor.WHITE);
         updateBoundingBox();
         super.onEnter(context);
@@ -70,6 +65,7 @@ public class InteractionRootLayer extends PropertyLayer implements ElementLayer 
 
     @Override
     public void onExit(@NotNull ExitContext context) {
+        isActive = false;
         boxParticle.setColor(ParticleColor.GRAY);
         updateBoundingBox();
         super.onExit(context);
@@ -79,10 +75,6 @@ public class InteractionRootLayer extends PropertyLayer implements ElementLayer 
     public void onUpdate(@NotNull UpdateContext context) {
         updateBoundingBox();
         super.onUpdate(context);
-        if (allowMenu) {
-            context.addInput(new OpenElementMenuInput(session, element));
-        }
-        context.addInput(new ReturnInput(session));
     }
 
     @Override
@@ -96,11 +88,25 @@ public class InteractionRootLayer extends PropertyLayer implements ElementLayer 
         float height = heightProperty.getValue();
         Location location = locationProperty.getValue();
         Vector3d position = Util.toVector3d(location);
-        boxParticle.setBoundingBox(BoundingBox.of(position, width, height));
+        boolean visible = canShow && width != 0 && height != 0 && (isActive || showBoundingBoxIfInactive);
+        if (visible) {
+            boxParticle.setBoundingBox(BoundingBox.of(position, width, height));
+        }
+        if (isVisible != visible) {
+            isVisible = visible;
+            if (visible) {
+                session.addParticle(boxParticle);
+            } else {
+                session.removeParticle(boxParticle);
+            }
+        }
     }
 
-    @Override
-    public @NotNull InteractionElement getElement() {
-        return element;
+    public boolean isShowBoundingBoxIfInactive() {
+        return showBoundingBoxIfInactive;
+    }
+
+    public void setShowBoundingBoxIfInactive(boolean showBoundingBoxIfInactive) {
+        this.showBoundingBoxIfInactive = showBoundingBoxIfInactive;
     }
 }

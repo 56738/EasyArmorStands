@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
-import me.m56738.easyarmorstands.editor.layer.PropertyMenuLayer;
+import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
 import me.m56738.easyarmorstands.editor.layer.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
@@ -20,7 +20,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class HologramRootLayer extends PropertyMenuLayer implements ElementLayer {
+public class HologramRootLayer extends PropertyLayer implements ElementLayer {
     private final Session session;
     private final HologramElement element;
     private final ToolMenuModeSwitcher toolSwitcher;

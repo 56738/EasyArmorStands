@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.editor.layer;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
+import me.m56738.easyarmorstands.api.editor.layer.AbstractLayer;
 import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -13,7 +14,7 @@ import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleEntityLayer extends MenuLayer implements ElementLayer {
+public class SimpleEntityLayer extends AbstractLayer implements ElementLayer {
     private final Session session;
     private final Element element;
     private final ToolMenuManager toolManager;

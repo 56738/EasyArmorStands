@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.editor.layer.MenuLayer;
+import me.m56738.easyarmorstands.api.editor.layer.AbstractLayer;
 import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
@@ -18,7 +18,7 @@ import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.tool.GroupToolProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class GroupRootLayer extends MenuLayer {
+public class GroupRootLayer extends AbstractLayer {
     private final Session session;
     private final Group group;
     private final BoundingBoxParticle boxParticle;

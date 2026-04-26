@@ -8,16 +8,16 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.element.DisplayToolProvider;
-import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
-public class DisplayShearLayer extends DisplayMenuLayer implements ResettableLayer {
+public class DisplayShearLayer extends DisplayLayer implements ResettableLayer {
     private final Session session;
     private final Component name;
     private final Property<Quaternionfc> rightRotationProperty;
@@ -30,7 +30,7 @@ public class DisplayShearLayer extends DisplayMenuLayer implements ResettableLay
         DisplayToolProvider tools = element.getTools(properties);
         for (Axis axis : Axis.values()) {
             // TODO use ToolMenuManager
-            addButton(session.menuEntryProvider()
+            addNode(session.nodeProvider()
                     .axisRotate()
                     .setTool(tools.shear(ToolContext.of(tools.position(), tools.rotation()), axis))
                     .build());

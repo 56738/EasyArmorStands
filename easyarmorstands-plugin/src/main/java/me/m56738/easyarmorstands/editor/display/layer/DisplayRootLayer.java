@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class DisplayRootLayer extends DisplayMenuLayer implements ElementLayer, ResettableLayer {
+public class DisplayRootLayer extends DisplayLayer implements ElementLayer, ResettableLayer {
     private final Session session;
     private final DisplayElement<?> element;
     private final Property<Location> locationProperty;

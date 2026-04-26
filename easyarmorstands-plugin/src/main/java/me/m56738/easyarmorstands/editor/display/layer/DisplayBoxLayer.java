@@ -14,7 +14,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
-public class DisplayBoxLayer extends DisplayMenuLayer {
+public class DisplayBoxLayer extends DisplayLayer {
     private final Session session;
     private final Component name;
 

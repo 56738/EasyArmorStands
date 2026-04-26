@@ -8,14 +8,11 @@ import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
 import me.m56738.easyarmorstands.api.editor.layer.ResettableLayer;
-import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
-import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPartButton;
-import me.m56738.easyarmorstands.editor.armorstand.button.ArmorStandPositionButton;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
+import me.m56738.easyarmorstands.editor.node.ArmorStandNode;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
@@ -24,14 +21,9 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumMap;
-
 public class ArmorStandRootLayer extends ArmorStandLayer implements ElementLayer, ResettableLayer {
     private final Session session;
     private final ArmorStand entity;
-    private final ArmorStandElement element;
-    private final ArmorStandPositionButton positionButton;
-    private final EnumMap<ArmorStandPart, ArmorStandPartButton> partButtons = new EnumMap<>(ArmorStandPart.class);
     private final Component name;
     private ArmorStand skeleton;
 
@@ -39,23 +31,8 @@ public class ArmorStandRootLayer extends ArmorStandLayer implements ElementLayer
         super(session, session.properties(element), element);
         this.session = session;
         this.entity = entity;
-        this.element = element;
         this.name = Message.component("easyarmorstands.node.select-bone");
-
-        for (ArmorStandPart part : ArmorStandPart.values()) {
-            ArmorStandPartButton partButton = new ArmorStandPartButton(session, properties(), part, element);
-            addButton(partButton);
-            partButtons.put(part, partButton);
-        }
-
-        positionButton = new ArmorStandPositionButton(
-                session,
-                ParticleColor.WHITE,
-                Message.component("easyarmorstands.node.position"),
-                properties(),
-                new ArmorStandOffsetProvider(element, properties()),
-                element);
-        addButton(positionButton);
+        addNode(new ArmorStandNode(session, element));
     }
 
     @Override
@@ -74,14 +51,6 @@ public class ArmorStandRootLayer extends ArmorStandLayer implements ElementLayer
         if (skeleton != null) {
             updateSkeleton(skeleton);
         }
-    }
-
-    public ArmorStandPositionButton getPositionButton() {
-        return positionButton;
-    }
-
-    public ArmorStandPartButton getPartButton(ArmorStandPart part) {
-        return partButtons.get(part);
     }
 
     @Override

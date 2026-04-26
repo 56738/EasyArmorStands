@@ -4,12 +4,14 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.button.ButtonHandler;
+import me.m56738.easyarmorstands.api.editor.button.ButtonHandlerContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.api.editor.input.Input;
+import me.m56738.easyarmorstands.api.editor.layer.AbstractLayer;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
+import me.m56738.easyarmorstands.api.editor.node.ButtonNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
@@ -27,7 +29,6 @@ import me.m56738.easyarmorstands.editor.input.selection.SelectGroupInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.CancelBoxSelectionInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.ConfirmBoxSelectionInput;
 import me.m56738.easyarmorstands.editor.input.selection.box.StartBoxSelectionInput;
-import me.m56738.easyarmorstands.editor.node.MenuButtonNode;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.message.Message;
@@ -35,7 +36,6 @@ import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelectionLayer {
+public class ElementSelectionLayerImpl extends AbstractLayer implements ElementSelectionLayer {
     private final Session session;
     private final Map<ElementDiscoveryEntry, Entry> entries = new HashMap<>();
     private final Component name;
@@ -381,7 +381,8 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
             super(discoveryEntry);
             this.element = element;
             this.node = element.createNode(session);
-            this.groupNode = new MenuButtonNode(new GroupButton(discoveryEntry, session, element));
+            Button button = element.createButton(session);
+            this.groupNode = new ButtonNode(button, new GroupButtonHandler(discoveryEntry, element));
         }
 
         @Override
@@ -429,34 +430,27 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         }
     }
 
-    private class GroupButton implements MenuButton {
+    private class GroupButtonHandler implements ButtonHandler {
         private final ElementDiscoveryEntry entry;
         private final SelectableElement element;
-        private final Button button;
         private final AddElementToGroupInput addToGroupInput;
         private final RemoveElementFromGroupInput removeFromGroupInput;
 
-        private GroupButton(ElementDiscoveryEntry entry, Session session, SelectableElement element) {
+        private GroupButtonHandler(ElementDiscoveryEntry entry, SelectableElement element) {
             this.entry = entry;
             this.element = element;
-            this.button = element.createButton(session);
             this.addToGroupInput = new AddElementToGroupInput(ElementSelectionLayerImpl.this, entry, element);
             this.removeFromGroupInput = new RemoveElementFromGroupInput(ElementSelectionLayerImpl.this, entry, element);
         }
 
         @Override
-        public @NotNull Button getButton() {
-            return button;
-        }
-
-        @Override
-        public void collectInputs(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull List<@NotNull Input> inputs) {
+        public void onUpdate(ButtonHandlerContext context) {
             if (!groupMembers.containsKey(entry)) {
                 if (groupMembers.size() < groupLimit) {
-                    inputs.add(addToGroupInput);
+                    context.addInput(addToGroupInput);
                 }
             } else {
-                inputs.add(removeFromGroupInput);
+                context.addInput(removeFromGroupInput);
             }
         }
 

@@ -2,7 +2,8 @@ package me.m56738.easyarmorstands.editor.util;
 
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.button.MenuButton;
+import me.m56738.easyarmorstands.api.editor.layer.AbstractLayer;
+import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -12,7 +13,6 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.editor.layer.MenuLayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ import java.util.Objects;
 
 public class ToolMenuManager {
     private final Session session;
-    private final MenuLayer menuLayer;
+    private final AbstractLayer layer;
     private final ToolProvider toolProvider;
-    private final List<MenuButton> buttons = new ArrayList<>();
+    private final List<Node> nodes = new ArrayList<>();
     private ToolMenuMode mode = null;
 
-    public ToolMenuManager(Session session, MenuLayer menuLayer, ToolProvider toolProvider) {
+    public ToolMenuManager(Session session, AbstractLayer layer, ToolProvider toolProvider) {
         this.session = session;
-        this.menuLayer = menuLayer;
+        this.layer = layer;
         this.toolProvider = toolProvider;
         for (ToolMenuMode mode : ToolMenuMode.values()) {
             if (setMode(mode)) {
@@ -42,9 +42,9 @@ public class ToolMenuManager {
     }
 
     public boolean hasMode(ToolMenuMode mode) {
-        List<MenuButton> buttons = new ArrayList<>();
-        collectButtons(mode, buttons);
-        return !buttons.isEmpty();
+        List<Node> nodes = new ArrayList<>();
+        collectNodes(mode, nodes);
+        return !nodes.isEmpty();
     }
 
     public ToolMenuMode getMode() {
@@ -77,13 +77,13 @@ public class ToolMenuManager {
         return ToolContext.of(positionProvider, rotationProvider);
     }
 
-    private void collectButtons(ToolMenuMode mode, List<MenuButton> buttons) {
+    private void collectNodes(ToolMenuMode mode, List<Node> nodes) {
         ToolContext context = createToolContext();
 
         if (mode == ToolMenuMode.SCALE) {
             ScaleTool scaleTool = toolProvider.scale(context);
             if (scaleTool != null && scaleTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                nodes.add(session.nodeProvider()
                         .scale()
                         .setTool(scaleTool)
                         .setPriority(1)
@@ -92,7 +92,7 @@ public class ToolMenuManager {
             for (Axis axis : Axis.values()) {
                 AxisScaleTool axisScaleTool = toolProvider.scale(context, axis);
                 if (axisScaleTool != null && axisScaleTool.canUse(session.player())) {
-                    buttons.add(session.menuEntryProvider()
+                    nodes.add(session.nodeProvider()
                             .axisScale()
                             .setTool(axisScaleTool)
                             .build());
@@ -103,7 +103,7 @@ public class ToolMenuManager {
 
         MoveTool moveTool = toolProvider.move(context);
         if (moveTool != null && moveTool.canUse(session.player())) {
-            buttons.add(session.menuEntryProvider()
+            nodes.add(session.nodeProvider()
                     .move()
                     .setTool(moveTool)
                     .setPriority(1)
@@ -112,14 +112,14 @@ public class ToolMenuManager {
         for (Axis axis : Axis.values()) {
             AxisMoveTool axisMoveTool = toolProvider.move(context, axis);
             if (axisMoveTool != null && axisMoveTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                nodes.add(session.nodeProvider()
                         .axisMove()
                         .setTool(axisMoveTool)
                         .build());
             }
             AxisRotateTool axisRotateTool = toolProvider.rotate(context, axis);
             if (axisRotateTool != null && axisRotateTool.canUse(session.player())) {
-                buttons.add(session.menuEntryProvider()
+                nodes.add(session.nodeProvider()
                         .axisRotate()
                         .setTool(axisRotateTool)
                         .build());
@@ -130,17 +130,17 @@ public class ToolMenuManager {
     public boolean setMode(ToolMenuMode mode) {
         this.mode = Objects.requireNonNull(mode);
 
-        for (MenuButton button : buttons) {
-            menuLayer.removeButton(button);
+        for (Node node : nodes) {
+            layer.removeNode(node);
         }
-        buttons.clear();
+        nodes.clear();
 
-        collectButtons(mode, buttons);
+        collectNodes(mode, nodes);
 
-        for (MenuButton button : buttons) {
-            menuLayer.addButton(button);
+        for (Node node : nodes) {
+            layer.addNode(node);
         }
 
-        return !buttons.isEmpty();
+        return !nodes.isEmpty();
     }
 }

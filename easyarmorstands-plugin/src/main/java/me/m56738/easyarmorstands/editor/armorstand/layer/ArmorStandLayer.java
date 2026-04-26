@@ -5,12 +5,12 @@ import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
-import me.m56738.easyarmorstands.editor.layer.PropertyMenuLayer;
+import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandLayer extends PropertyMenuLayer implements ElementLayer {
+public class ArmorStandLayer extends PropertyLayer implements ElementLayer {
     private final Session session;
     private final ArmorStandElement element;
     private final boolean allowMenu;

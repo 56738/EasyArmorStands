@@ -4,14 +4,15 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.layer.LayerProvider;
+import me.m56738.easyarmorstands.api.editor.node.ButtonNode;
 import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.particle.Particle;
@@ -21,8 +22,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.InputHintsConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
-import me.m56738.easyarmorstands.editor.button.ElementButton;
-import me.m56738.easyarmorstands.editor.node.MenuButtonNode;
+import me.m56738.easyarmorstands.editor.button.ElementButtonHandler;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.particle.EditorParticle;
@@ -76,7 +76,7 @@ public final class SessionImpl implements Session {
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
-    private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
+    private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private final LayerProvider layerProvider = new LayerProviderImpl(this);
     private final List<Input> inputs = new ArrayList<>();
     private int clickTicks = 5;
@@ -462,8 +462,8 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public @NotNull MenuButtonProvider menuEntryProvider() {
-        return menuButtonProvider;
+    public @NotNull NodeProvider nodeProvider() {
+        return nodeProvider;
     }
 
     @Override
@@ -478,7 +478,7 @@ public final class SessionImpl implements Session {
 
     @Override
     public @NotNull Node createElementNode(SelectableElement element, Button button) {
-        return new MenuButtonNode(new ElementButton(this, element, button));
+        return new ButtonNode(button, new ElementButtonHandler(this, element));
     }
 
     public boolean isToolRequired() {

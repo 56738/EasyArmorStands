@@ -14,7 +14,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayBoxLayer;
-import me.m56738.easyarmorstands.editor.display.layer.DisplayMenuLayer;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayLayer;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayShearLayer;
 import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.message.Message;
@@ -435,7 +435,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        DisplayMenuLayer layer = new DisplayShearLayer(session, properties, (DisplayElement<?>) element);
+        DisplayLayer layer = new DisplayShearLayer(session, properties, (DisplayElement<?>) element);
         session.pushLayer(layer);
     }
 
