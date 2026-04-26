@@ -7,7 +7,9 @@ import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.LateUpdateContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.layer.NodeLayer;
 import me.m56738.easyarmorstands.api.editor.node.Node;
 import me.m56738.easyarmorstands.api.editor.node.NodeHideContext;
@@ -16,6 +18,7 @@ import me.m56738.easyarmorstands.editor.node.MenuButtonNode;
 import net.kyori.adventure.text.Component;
 import org.joml.Vector3dc;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +30,9 @@ public abstract class MenuLayer implements NodeLayer {
     private final Session session;
     private final Map<Node, NodeState> nodes = new HashMap<>();
     private final Map<MenuButton, MenuButtonNode> buttons = new HashMap<>();
+    private final Map<MenuButton, Button> allButtons = new HashMap<>();
     private boolean visible;
+    private @Nullable FocusedButton focusedButton;
 
     public MenuLayer(Session session) {
         this.session = session;
@@ -92,13 +97,11 @@ public abstract class MenuLayer implements NodeLayer {
     @Override
     public void onUpdate(UpdateContext context) {
         EyeRay ray = context.eyeRay();
-        Button bestButton = null;
-        MenuButton bestMenuButton = null;
-        Vector3dc bestCursor = null;
+        focusedButton = null;
         int bestPriority = Integer.MIN_VALUE;
         double bestDistance = Double.POSITIVE_INFINITY;
         List<ButtonResult> results = new ArrayList<>();
-        Map<MenuButton, Button> allButtons = new HashMap<>();
+        allButtons.clear();
         for (NodeState node : nodes.values()) {
             allButtons.putAll(node.buttons);
         }
@@ -115,29 +118,61 @@ public abstract class MenuLayer implements NodeLayer {
                 }
                 double distance = position.distanceSquared(ray.origin());
                 if (priority > bestPriority || distance < bestDistance) {
-                    bestButton = button;
-                    bestMenuButton = menuButton;
-                    bestCursor = position;
+                    focusedButton = new FocusedButton(button, menuButton, position);
                     bestPriority = priority;
                     bestDistance = distance;
                 }
             }
             results.clear();
         }
+        if (focusedButton != null) {
+            focusedButton.menuButton.collectInputs(session, focusedButton.cursor, focusedButton.inputs);
+            for (Input input : focusedButton.inputs) {
+                context.addInput(input);
+            }
+        }
+    }
+
+    @Override
+    public void onLateUpdate(LateUpdateContext context) {
+        if (focusedButton != null) {
+            boolean anyAvailable = false;
+            for (Input input : focusedButton.inputs) {
+                if (context.isInputAvailable(input)) {
+                    anyAvailable = true;
+                    break;
+                }
+            }
+            if (!anyAvailable) {
+                focusedButton = null;
+            }
+        }
+
+        Button bestButton = focusedButton != null ? focusedButton.button : null;
         for (Map.Entry<MenuButton, Button> entry : allButtons.entrySet()) {
             MenuButton menuButton = entry.getKey();
             Button button = entry.getValue();
             button.updatePreview(button == bestButton, menuButton.isSelected());
         }
         Component targetName;
-        if (bestButton != null) {
-            targetName = bestMenuButton.getName();
+        if (focusedButton != null) {
+            targetName = focusedButton.menuButton.getName();
         } else {
             targetName = Component.empty();
         }
         context.setSubtitle(targetName);
-        if (bestMenuButton != null) {
-            bestMenuButton.onUpdate(session, bestCursor, context);
+    }
+
+    private class FocusedButton {
+        private final Button button;
+        private final MenuButton menuButton;
+        private final Vector3dc cursor;
+        private final List<Input> inputs = new ArrayList<>();
+
+        private FocusedButton(Button button, MenuButton menuButton, Vector3dc cursor) {
+            this.button = button;
+            this.menuButton = menuButton;
+            this.cursor = cursor;
         }
     }
 

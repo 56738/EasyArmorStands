@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.session.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
+import me.m56738.easyarmorstands.api.editor.context.LateUpdateContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.session.SessionImpl;
@@ -10,11 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2dc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class UpdateContextImpl implements UpdateContext {
+public class UpdateContextImpl implements UpdateContext, LateUpdateContext {
     private final @NotNull SessionImpl session;
     private final @NotNull List<@NotNull Input> inputs = new ArrayList<>();
+    private final @NotNull Set<@NotNull Input> availableInputs = new HashSet<>();
     private EyeRay eyeRay;
     private @NotNull Component actionBar = Component.empty();
     private @NotNull Component title = Component.empty();
@@ -65,11 +69,20 @@ public class UpdateContextImpl implements UpdateContext {
     }
 
     @Override
+    public boolean isInputAvailable(@NotNull Input input) {
+        return availableInputs.contains(input);
+    }
+
+    @Override
     public void addInput(@NotNull Input input) {
         inputs.add(input);
     }
 
     public @NotNull List<@NotNull Input> getInputs() {
         return inputs;
+    }
+
+    public @NotNull Set<@NotNull Input> getAvailableInputs() {
+        return availableInputs;
     }
 }

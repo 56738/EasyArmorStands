@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.api.editor.context.AddContext;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.EnterContext;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
+import me.m56738.easyarmorstands.api.editor.context.LateUpdateContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,14 @@ public interface Layer {
      * @param context Contains accessors for relevant data.
      */
     void onUpdate(@NotNull UpdateContext context);
+
+    /**
+     * Called after {@link #onUpdate}.
+     *
+     * @param context Contains accessors for relevant data.
+     */
+    default void onLateUpdate(@NotNull LateUpdateContext context) {
+    }
 
     /**
      * Called every tick while this layer is inactive (not on the top of the stack).

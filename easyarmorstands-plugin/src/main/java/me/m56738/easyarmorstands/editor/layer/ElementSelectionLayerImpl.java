@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
+import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -449,13 +450,13 @@ public class ElementSelectionLayerImpl extends MenuLayer implements ElementSelec
         }
 
         @Override
-        public void onUpdate(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull UpdateContext context) {
+        public void collectInputs(@NotNull Session session, @Nullable Vector3dc cursor, @NotNull List<@NotNull Input> inputs) {
             if (!groupMembers.containsKey(entry)) {
                 if (groupMembers.size() < groupLimit) {
-                    context.addInput(addToGroupInput);
+                    inputs.add(addToGroupInput);
                 }
             } else {
-                context.addInput(removeFromGroupInput);
+                inputs.add(removeFromGroupInput);
             }
         }
 

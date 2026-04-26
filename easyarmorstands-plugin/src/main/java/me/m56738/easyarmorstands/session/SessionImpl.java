@@ -278,16 +278,21 @@ public final class SessionImpl implements Session {
             inputCategory = Category.SECONDARY;
         }
 
-        updateOverlay(context);
+        Component pendingActionBar = createActionBar(context.getActionBar(), context.getAvailableInputs());
+
+        if (currentLayer != null) {
+            currentLayer.onLateUpdate(context);
+        }
+
+        updateOverlay(context, pendingActionBar);
 
         return player.isValid();
     }
 
-    private void updateOverlay(UpdateContextImpl context) {
+    private void updateOverlay(UpdateContextImpl context, Component pendingActionBar) {
         // Resend everything once per second
         // Send changes immediately
 
-        Component pendingActionBar = createActionBar(context.getActionBar());
         Component pendingTitle = context.getTitle();
         Component pendingSubtitle = context.getSubtitle();
 
@@ -311,7 +316,7 @@ public final class SessionImpl implements Session {
         }
     }
 
-    private Component createActionBar(Component value) {
+    private Component createActionBar(Component value, Set<Input> availableInputs) {
         InputHintsConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.inputHints;
         if (!config.enabled) {
             return value;
@@ -328,6 +333,7 @@ public final class SessionImpl implements Session {
 
             ClickContext.Type clickType = input.clickType();
             if (seen.add(clickType)) {
+                availableInputs.add(input);
                 builder.append(createInput(config, getKey(config, clickType), input.name(), input.style()));
             }
         }
