@@ -20,7 +20,7 @@ public interface MenuLayoutRule {
     }
 
     static MenuLayoutRule matchAll() {
-        return _ -> true;
+        return b -> true;
     }
 
     boolean matches(MenuButton button);

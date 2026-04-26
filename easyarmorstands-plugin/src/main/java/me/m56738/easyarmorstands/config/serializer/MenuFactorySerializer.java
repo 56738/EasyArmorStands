@@ -20,7 +20,7 @@ public class MenuFactorySerializer implements TypeSerializer<MenuFactory> {
         MenuFactoryBuilderImpl factory = new MenuFactoryBuilderImpl();
         factory.setTitleTemplate(node.node("title").getString());
         factory.setHeight(node.node("height").getInt());
-        factory.setBackground(_ -> MenuButtonSlot.toSlot(MenuLayout.createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE)));
+        factory.setBackground(context -> MenuButtonSlot.toSlot(MenuLayout.createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE)));
         for (ConfigurationNode slotNode : node.node("slots").childrenMap().values()) {
             if (!slotNode.node("enabled").getBoolean(true)) {
                 continue;

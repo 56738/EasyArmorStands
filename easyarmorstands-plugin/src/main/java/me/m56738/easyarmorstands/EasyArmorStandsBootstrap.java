@@ -58,7 +58,7 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
                 .buildBootstrapped(context);
 
         commandManager.parserRegistry().registerSuggestionProvider("help_queries",
-                SuggestionProvider.blocking((ctx, _) -> commandManager.createHelpHandler()
+                SuggestionProvider.blocking((ctx, input) -> commandManager.createHelpHandler()
                         .queryRootIndex(ctx.sender())
                         .entries()
                         .stream()

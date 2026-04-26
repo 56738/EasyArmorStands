@@ -271,7 +271,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .defaultCommandExecutionHandler()
                 .defaultInvalidSenderHandler()
                 .handler(InvalidCommandSenderException.class,
-                        (_, _) -> Message.error("easyarmorstands.error.not-a-player"))
+                        (formatter, context) -> Message.error("easyarmorstands.error.not-a-player"))
                 .registerTo(commandManager);
 
         MinecraftHelp<EasCommandSender> help = MinecraftHelp.createNative("/eas help", commandManager);
