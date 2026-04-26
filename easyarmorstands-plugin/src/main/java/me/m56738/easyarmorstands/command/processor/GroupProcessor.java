@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.command.processor;
 
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
@@ -25,9 +25,9 @@ public class GroupProcessor implements CommandPreprocessor<EasCommandSender> {
         CommandContext<EasCommandSender> commandContext = context.commandContext();
         SessionImpl session = commandContext.getOrDefault(sessionKey(), null);
         if (session != null) {
-            GroupRootNode node = session.findNode(GroupRootNode.class);
-            if (node != null) {
-                commandContext.set(KEY, node.getGroup());
+            GroupRootLayer layer = session.findLayer(GroupRootLayer.class);
+            if (layer != null) {
+                commandContext.set(KEY, layer.getGroup());
             }
         }
     }

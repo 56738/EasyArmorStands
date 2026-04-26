@@ -34,6 +34,6 @@ public class ReturnInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        session.popNode();
+        session.popLayer();
     }
 }

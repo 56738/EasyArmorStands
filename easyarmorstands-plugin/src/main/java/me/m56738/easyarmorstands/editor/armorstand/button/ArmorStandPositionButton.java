@@ -4,21 +4,21 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
-import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPositionNode;
-import me.m56738.easyarmorstands.editor.node.NodeFactory;
+import me.m56738.easyarmorstands.editor.armorstand.layer.ArmorStandPositionLayer;
+import me.m56738.easyarmorstands.editor.layer.LayerFactory;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3dc;
 
-public class ArmorStandPositionButton implements MenuButton, NodeFactory {
+public class ArmorStandPositionButton implements MenuButton, LayerFactory {
     private final Session session;
     private final ParticleColor color;
     private final Component name;
@@ -52,11 +52,11 @@ public class ArmorStandPositionButton implements MenuButton, NodeFactory {
 
     @Override
     public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-        session.pushNode(createNode(), cursor);
+        session.pushLayer(createLayer(), cursor);
     }
 
     @Override
-    public Node createNode() {
-        return new ArmorStandPositionNode(session, container, offsetProvider, element);
+    public Layer createLayer() {
+        return new ArmorStandPositionLayer(session, container, offsetProvider, element);
     }
 }

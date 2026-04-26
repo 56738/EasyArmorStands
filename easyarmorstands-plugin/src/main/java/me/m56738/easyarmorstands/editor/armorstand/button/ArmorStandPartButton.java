@@ -6,15 +6,15 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.particle.LineParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandPartNode;
-import me.m56738.easyarmorstands.editor.button.NodeFactoryButton;
+import me.m56738.easyarmorstands.editor.armorstand.layer.ArmorStandPartLayer;
+import me.m56738.easyarmorstands.editor.button.LayerFactoryButton;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
@@ -29,7 +29,7 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public class ArmorStandPartButton implements NodeFactoryButton {
+public class ArmorStandPartButton implements LayerFactoryButton {
     private final Session session;
     private final PropertyContainer container;
     private final ArmorStandPart part;
@@ -112,7 +112,7 @@ public class ArmorStandPartButton implements NodeFactoryButton {
     }
 
     @Override
-    public Node createNode() {
-        return new ArmorStandPartNode(session, container, part, element);
+    public Layer createLayer() {
+        return new ArmorStandPartLayer(session, container, part, element);
     }
 }

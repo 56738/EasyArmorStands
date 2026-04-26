@@ -12,7 +12,7 @@ import me.m56738.easyarmorstands.command.PropertyCommands;
 import me.m56738.easyarmorstands.command.SessionCommands;
 import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
-import me.m56738.easyarmorstands.command.parser.NodeValueArgumentParser;
+import me.m56738.easyarmorstands.command.parser.LayerValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
 import me.m56738.easyarmorstands.command.requirement.CommandRequirementBuilderModifier;
 import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
@@ -65,7 +65,7 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
                         .map(EasyArmorStandsBootstrap::createSuggestion)
                         .toList()));
         commandManager.parserRegistry().registerNamedParserSupplier("node_value",
-                p -> new NodeValueArgumentParser<>());
+                p -> new LayerValueArgumentParser<>());
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
                 p -> new TextColorParser<>());
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),

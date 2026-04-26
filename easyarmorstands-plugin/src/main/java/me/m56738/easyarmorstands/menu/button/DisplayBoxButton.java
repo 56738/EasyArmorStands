@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu.button;
 
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
@@ -17,11 +17,11 @@ public class DisplayBoxButton implements MenuButton {
     private static final Key KEY = EasyArmorStands.key("display/box");
 
     private final Session session;
-    private final Node node;
+    private final Layer layer;
 
-    public DisplayBoxButton(Session session, Node node) {
+    public DisplayBoxButton(Session session, Layer layer) {
         this.session = session;
-        this.node = node;
+        this.layer = layer;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DisplayBoxButton implements MenuButton {
     public void onClick(MenuClickContext context) {
         if (context.isLeftClick()) {
             context.closeMenu();
-            session.pushNode(node);
+            session.pushLayer(layer);
         }
     }
 }

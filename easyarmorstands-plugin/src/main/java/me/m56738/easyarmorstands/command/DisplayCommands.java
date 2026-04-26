@@ -13,9 +13,9 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
-import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
-import me.m56738.easyarmorstands.editor.display.node.DisplayMenuNode;
-import me.m56738.easyarmorstands.editor.display.node.DisplayShearNode;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayBoxLayer;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayMenuLayer;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayShearLayer;
 import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
@@ -237,7 +237,7 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        session.pushNode(new DisplayBoxNode(session, properties));
+        session.pushLayer(new DisplayBoxLayer(session, properties));
     }
 
     @Command("text")
@@ -435,8 +435,8 @@ public class DisplayCommands {
             return;
         }
         PropertyContainer properties = new TrackedPropertyContainer(element, sender);
-        DisplayMenuNode node = new DisplayShearNode(session, properties, (DisplayElement<?>) element);
-        session.pushNode(node);
+        DisplayMenuLayer layer = new DisplayShearLayer(session, properties, (DisplayElement<?>) element);
+        session.pushLayer(layer);
     }
 
     @Command("viewrange <value>")

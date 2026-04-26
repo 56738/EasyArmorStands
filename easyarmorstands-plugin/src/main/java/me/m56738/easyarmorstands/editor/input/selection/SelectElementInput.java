@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.editor.input.selection;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.context.ChangeContext;
@@ -44,7 +44,7 @@ public class SelectElementInput implements Input {
         if (!changeContext.canEditElement(element)) {
             return;
         }
-        Node node = element.createNode(session);
-        session.pushNode(node);
+        Layer layer = element.createLayer(session);
+        session.pushLayer(layer);
     }
 }

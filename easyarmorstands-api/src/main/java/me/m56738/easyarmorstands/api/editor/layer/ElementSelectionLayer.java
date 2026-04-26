@@ -1,0 +1,33 @@
+package me.m56738.easyarmorstands.api.editor.layer;
+
+import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
+import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
+import me.m56738.easyarmorstands.api.element.SelectableElement;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
+
+@ApiStatus.NonExtendable
+public interface ElementSelectionLayer extends Layer {
+    @Contract(pure = true)
+    double getRange();
+
+    void setRange(double range);
+
+    void addSource(@NotNull ElementDiscoverySource source);
+
+    void removeSource(@NotNull ElementDiscoverySource source);
+
+    void updateEntry(@NotNull ElementDiscoveryEntry entry);
+
+    @Unmodifiable
+    @NotNull
+    Iterable<ElementDiscoverySource> getSources();
+
+    boolean selectElement(@NotNull SelectableElement element);
+
+    boolean selectElements(@NotNull List<? extends SelectableElement> elements);
+}

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.editor.input.tool;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
-import me.m56738.easyarmorstands.editor.node.ScaleToolNode;
+import me.m56738.easyarmorstands.editor.layer.ScaleToolLayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 public class ActivateInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.tool.start");
     private static final Style STYLE = Style.style(NamedTextColor.YELLOW);
-    private final ScaleToolNode node;
+    private final ScaleToolLayer layer;
 
-    public ActivateInput(ScaleToolNode node) {
-        this.node = node;
+    public ActivateInput(ScaleToolLayer layer) {
+        this.layer = layer;
     }
 
     @Override
@@ -34,6 +34,6 @@ public class ActivateInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        node.activate();
+        layer.activate();
     }
 }

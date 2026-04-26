@@ -3,12 +3,12 @@ package me.m56738.easyarmorstands.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.display.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.editor.display.DisplayRotationProvider;
-import me.m56738.easyarmorstands.editor.display.node.DisplayRootNode;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayRootLayer;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.Display;
@@ -32,8 +32,8 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     @Override
-    public @NotNull Node createNode(@NotNull Session session) {
-        return new DisplayRootNode(session, this);
+    public @NotNull Layer createLayer(@NotNull Session session) {
+        return new DisplayRootLayer(session, this);
     }
 
     @Override

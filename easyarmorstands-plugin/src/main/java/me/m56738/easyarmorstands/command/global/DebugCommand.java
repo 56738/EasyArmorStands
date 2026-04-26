@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.command.global;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
@@ -44,11 +44,11 @@ public class DebugCommand {
             if (session != null) {
                 sender.sendMessage(Component.text("Current session:", NamedTextColor.GOLD));
                 boolean first = true;
-                for (Node node : session.getNodeStack()) {
+                for (Layer layer : session.getLayerStack()) {
                     sender.sendMessage(
                             Component.text("* ", first ? NamedTextColor.GREEN : NamedTextColor.GRAY)
-                                    .append(Component.text(node.getClass().getSimpleName())
-                                            .hoverEvent(Component.text(node.getClass().getName()))));
+                                    .append(Component.text(layer.getClass().getSimpleName())
+                                            .hoverEvent(Component.text(layer.getClass().getName()))));
                     first = false;
                 }
                 element = session.getElement();

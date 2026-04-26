@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.AxisRotateButton;
 import me.m56738.easyarmorstands.api.editor.button.ButtonResult;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.particle.CircleParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.AxisRotateToolNode;
+import me.m56738.easyarmorstands.editor.layer.AxisRotateToolLayer;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton {
+public class AxisRotateButtonImpl implements LayerFactoryButton, AxisRotateButton {
     private final Session session;
     private final AxisRotateTool tool;
     private final Vector3d position = new Vector3d();
@@ -86,7 +86,7 @@ public class AxisRotateButtonImpl implements NodeFactoryButton, AxisRotateButton
     }
 
     @Override
-    public @NotNull Node createNode() {
-        return new AxisRotateToolNode(session, tool.start(), radius, length, name, color, position, rotation, axis);
+    public @NotNull Layer createLayer() {
+        return new AxisRotateToolLayer(session, tool.start(), radius, length, name, color, position, rotation, axis);
     }
 }

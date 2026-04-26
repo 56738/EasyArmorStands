@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.AxisMoveButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.AxisMoveToolNode;
+import me.m56738.easyarmorstands.editor.layer.AxisMoveToolLayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,8 +18,8 @@ public class AxisMoveButtonImpl extends AxisToolButton implements AxisMoveButton
     }
 
     @Override
-    public @NotNull Node createNode() {
+    public @NotNull Layer createLayer() {
         update();
-        return new AxisMoveToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
+        return new AxisMoveToolLayer(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
     }
 }

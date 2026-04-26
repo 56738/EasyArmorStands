@@ -4,14 +4,14 @@ import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
-import me.m56738.easyarmorstands.editor.armorstand.node.ArmorStandRootNode;
+import me.m56738.easyarmorstands.editor.armorstand.layer.ArmorStandRootLayer;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +34,8 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     }
 
     @Override
-    public @NotNull Node createNode(@NotNull Session session) {
-        return new ArmorStandRootNode(session, entity, this);
+    public @NotNull Layer createLayer(@NotNull Session session) {
+        return new ArmorStandRootLayer(session, entity, this);
     }
 
     @Override

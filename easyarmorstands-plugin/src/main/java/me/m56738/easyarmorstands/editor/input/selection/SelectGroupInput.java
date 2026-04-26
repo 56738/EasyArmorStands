@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -47,10 +47,10 @@ public class SelectGroupInput implements Input {
             for (SelectableElement element : elements) {
                 group.addMember(element);
             }
-            session.pushNode(new GroupRootNode(group));
+            session.pushLayer(new GroupRootLayer(group));
         } else {
             SelectableElement element = elements.iterator().next();
-            session.pushNode(element.createNode(session));
+            session.pushLayer(element.createLayer(session));
         }
     }
 }

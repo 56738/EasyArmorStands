@@ -23,7 +23,7 @@ import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.display.node.DisplayBoxNode;
+import me.m56738.easyarmorstands.editor.display.layer.DisplayBoxLayer;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.DisplayBoxButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
@@ -125,7 +125,7 @@ public class ElementMenuListener implements Listener {
         if (element instanceof DisplayElement<?>) {
             Session session = EasyArmorStands.get().sessionManager().getSession(player);
             if (session != null) {
-                builder.addButton(new DisplayBoxButton(session, new DisplayBoxNode(session, container)));
+                builder.addButton(new DisplayBoxButton(session, new DisplayBoxLayer(session, container)));
             }
         }
 

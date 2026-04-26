@@ -4,10 +4,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MenuButton;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.AxisMoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.AxisMoveToolNode;
+import me.m56738.easyarmorstands.editor.layer.AxisMoveToolLayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public class BoxResizeButton implements MenuButton {
 
     @Override
     public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-        Node node = new AxisMoveToolNode(session, tool.start(), name, color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis());
-        session.pushNode(node, cursor);
+        Layer layer = new AxisMoveToolLayer(session, tool.start(), name, color, 3, tool.getPosition(), tool.getRotation(), tool.getAxis());
+        session.pushLayer(layer, cursor);
     }
 }

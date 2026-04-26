@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.editor.input.selection.box;
 
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
+import me.m56738.easyarmorstands.editor.layer.ElementSelectionLayerImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 public class ConfirmBoxSelectionInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.select.box.confirm");
     private static final Style STYLE = Style.style(NamedTextColor.AQUA);
-    private final ElementSelectionNodeImpl node;
+    private final ElementSelectionLayerImpl layer;
 
-    public ConfirmBoxSelectionInput(ElementSelectionNodeImpl node) {
-        this.node = node;
+    public ConfirmBoxSelectionInput(ElementSelectionLayerImpl layer) {
+        this.layer = layer;
     }
 
     @Override
@@ -34,6 +34,6 @@ public class ConfirmBoxSelectionInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        node.finishBoxSelection();
+        layer.finishBoxSelection();
     }
 }

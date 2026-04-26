@@ -7,9 +7,9 @@ import me.m56738.easyarmorstands.api.editor.button.MenuButtonProvider;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
-import me.m56738.easyarmorstands.api.editor.node.ElementNode;
-import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.api.editor.node.NodeProvider;
+import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
+import me.m56738.easyarmorstands.api.editor.layer.LayerProvider;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.particle.Particle;
 import me.m56738.easyarmorstands.api.particle.ParticleProvider;
@@ -19,7 +19,7 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.InputHintsConfig;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.group.GroupMember;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.particle.EditorParticle;
 import me.m56738.easyarmorstands.particle.GizmoParticleProvider;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 
 public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
-    private final LinkedList<Node> nodeStack = new LinkedList<>();
+    private final LinkedList<Layer> layerStack = new LinkedList<>();
     private final Player player;
     private final Audience audience;
     private final ChangeContext context;
@@ -72,7 +72,7 @@ public final class SessionImpl implements Session {
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
     private final MenuButtonProvider menuButtonProvider = new MenuButtonProviderImpl(this);
-    private final NodeProvider nodeProvider = new NodeProviderImpl(this);
+    private final LayerProvider layerProvider = new LayerProviderImpl(this);
     private final List<Input> inputs = new ArrayList<>();
     private int clickTicks = 5;
     private boolean valid = true;
@@ -93,20 +93,20 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public Node getNode() {
-        return nodeStack.peek();
+    public Layer getLayer() {
+        return layerStack.peek();
     }
 
-    public @UnmodifiableView List<Node> getNodeStack() {
-        return Collections.unmodifiableList(nodeStack);
+    public @UnmodifiableView List<Layer> getLayerStack() {
+        return Collections.unmodifiableList(layerStack);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends Node> @Nullable T findNode(@NotNull Class<T> type) {
-        for (Node node : nodeStack) {
-            if (type.isAssignableFrom(node.getClass())) {
-                return (T) node;
+    public <T extends Layer> @Nullable T findLayer(@NotNull Class<T> type) {
+        for (Layer layer : layerStack) {
+            if (type.isAssignableFrom(layer.getClass())) {
+                return (T) layer;
             }
         }
         return null;
@@ -126,56 +126,56 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public void pushNode(@NotNull Node node) {
-        pushNode(node, null);
+    public void pushLayer(@NotNull Layer layer) {
+        pushLayer(layer, null);
     }
 
     @Override
-    public void pushNode(@NotNull Node node, @Nullable Vector3dc cursor) {
+    public void pushLayer(@NotNull Layer layer, @Nullable Vector3dc cursor) {
         if (!valid) {
             return;
         }
-        if (!nodeStack.isEmpty()) {
-            nodeStack.peek().onExit(ExitContextImpl.INSTANCE);
+        if (!layerStack.isEmpty()) {
+            layerStack.peek().onExit(ExitContextImpl.INSTANCE);
         }
-        nodeStack.push(node);
-        node.onAdd(AddContextImpl.INSTANCE);
-        node.onEnter(new EnterContextImpl(this, cursor));
+        layerStack.push(layer);
+        layer.onAdd(AddContextImpl.INSTANCE);
+        layer.onEnter(new EnterContextImpl(this, cursor));
     }
 
     @Override
-    public void popNode() {
+    public void popLayer() {
         if (!valid) {
             return;
         }
-        Node removed = nodeStack.pop();
+        Layer removed = layerStack.pop();
         removed.onExit(ExitContextImpl.INSTANCE);
         removed.onRemove(RemoveContextImpl.INSTANCE);
-        if (!nodeStack.isEmpty()) {
-            nodeStack.peek().onEnter(new EnterContextImpl(this, null));
+        if (!layerStack.isEmpty()) {
+            layerStack.peek().onEnter(new EnterContextImpl(this, null));
         }
     }
 
     @Override
-    public void returnToNode(@NotNull Node target) {
-        int count = nodeStack.indexOf(target);
+    public void returnToLayer(@NotNull Layer target) {
+        int count = layerStack.indexOf(target);
         for (int i = 0; i < count; i++) {
-            popNode();
+            popLayer();
         }
     }
 
     @Override
-    public void clearNodes() {
+    public void clearLayers() {
         if (!valid) {
             return;
         }
-        if (!nodeStack.isEmpty()) {
-            nodeStack.peek().onExit(ExitContextImpl.INSTANCE);
+        if (!layerStack.isEmpty()) {
+            layerStack.peek().onExit(ExitContextImpl.INSTANCE);
         }
-        for (Node node : nodeStack) {
-            node.onRemove(RemoveContextImpl.INSTANCE);
+        for (Layer layer : layerStack) {
+            layer.onRemove(RemoveContextImpl.INSTANCE);
         }
-        nodeStack.clear();
+        layerStack.clear();
     }
 
     private boolean hasClickCooldown(ClickContext.Type type) {
@@ -186,8 +186,8 @@ public final class SessionImpl implements Session {
         if (!valid) {
             return false;
         }
-        Node node = nodeStack.peek();
-        if (node == null) {
+        Layer layer = layerStack.peek();
+        if (layer == null) {
             return false;
         }
         if (hasClickCooldown(context.type())) {
@@ -197,7 +197,7 @@ public final class SessionImpl implements Session {
             clickTicks = 5;
         }
 
-        if (node.onClick(context)) {
+        if (layer.onClick(context)) {
             return true;
         }
 
@@ -213,9 +213,9 @@ public final class SessionImpl implements Session {
 
     @Override
     public Element getElement() {
-        for (Node node : nodeStack) {
-            if (node instanceof ElementNode) {
-                return ((ElementNode) node).getElement();
+        for (Layer layer : layerStack) {
+            if (layer instanceof ElementLayer) {
+                return ((ElementLayer) layer).getElement();
             }
         }
         return null;
@@ -223,11 +223,11 @@ public final class SessionImpl implements Session {
 
     @Override
     public @NotNull List<Element> getElements() {
-        for (Node node : nodeStack) {
-            if (node instanceof ElementNode) {
-                return Collections.singletonList(((ElementNode) node).getElement());
-            } else if (node instanceof GroupRootNode) {
-                return ((GroupRootNode) node).getGroup().getMembers().stream().map(GroupMember::getElement).collect(Collectors.toList());
+        for (Layer layer : layerStack) {
+            if (layer instanceof ElementLayer) {
+                return Collections.singletonList(((ElementLayer) layer).getElement());
+            } else if (layer instanceof GroupRootLayer) {
+                return ((GroupRootLayer) layer).getGroup().getMembers().stream().map(GroupMember::getElement).collect(Collectors.toList());
             }
         }
         return Collections.emptyList();
@@ -238,18 +238,18 @@ public final class SessionImpl implements Session {
             clickTicks--;
         }
 
-        while (!nodeStack.isEmpty() && !nodeStack.peek().isValid()) {
-            popNode();
+        while (!layerStack.isEmpty() && !layerStack.peek().isValid()) {
+            popLayer();
         }
 
         UpdateContextImpl context = new UpdateContextImpl(this);
-        Node currentNode = nodeStack.peek();
-        if (currentNode != null) {
-            currentNode.onUpdate(context);
+        Layer currentLayer = layerStack.peek();
+        if (currentLayer != null) {
+            currentLayer.onUpdate(context);
         }
-        for (Node node : nodeStack) {
-            if (node != currentNode) {
-                node.onInactiveUpdate(context);
+        for (Layer layer : layerStack) {
+            if (layer != currentLayer) {
+                layer.onInactiveUpdate(context);
             }
         }
 
@@ -356,14 +356,14 @@ public final class SessionImpl implements Session {
     }
 
     void stop() {
-        Node currentNode = nodeStack.peek();
-        if (currentNode != null) {
-            currentNode.onExit(ExitContextImpl.INSTANCE);
+        Layer currentLayer = layerStack.peek();
+        if (currentLayer != null) {
+            currentLayer.onExit(ExitContextImpl.INSTANCE);
         }
-        for (Node node : nodeStack) {
-            node.onRemove(RemoveContextImpl.INSTANCE);
+        for (Layer layer : layerStack) {
+            layer.onRemove(RemoveContextImpl.INSTANCE);
         }
-        nodeStack.clear();
+        layerStack.clear();
         audience.clearTitle();
         audience.sendActionBar(Component.empty());
         for (EditorParticle particle : particles) {
@@ -456,8 +456,8 @@ public final class SessionImpl implements Session {
     }
 
     @Override
-    public @NotNull NodeProvider nodeProvider() {
-        return nodeProvider;
+    public @NotNull LayerProvider layerProvider() {
+        return layerProvider;
     }
 
     @Override

@@ -3,11 +3,11 @@ package me.m56738.easyarmorstands.element;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
-import me.m56738.easyarmorstands.editor.interaction.node.InteractionRootNode;
+import me.m56738.easyarmorstands.editor.interaction.layer.InteractionRootLayer;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.Interaction;
@@ -31,8 +31,8 @@ public class InteractionElement extends SimpleEntityElement<Interaction> {
     }
 
     @Override
-    public @NotNull Node createNode(@NotNull Session session) {
-        return new InteractionRootNode(session, this);
+    public @NotNull Layer createLayer(@NotNull Session session) {
+        return new InteractionRootLayer(session, this);
     }
 
     @Override

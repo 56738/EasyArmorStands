@@ -2,11 +2,11 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
+import me.m56738.easyarmorstands.editor.layer.EntityElementDiscoverySource;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -377,13 +377,13 @@ public class SessionListener implements Listener {
         if (session == null) {
             return;
         }
-        ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
-        if (node == null) {
+        ElementSelectionLayer layer = session.findLayer(ElementSelectionLayer.class);
+        if (layer == null) {
             return;
         }
-        for (ElementDiscoverySource source : node.getSources()) {
+        for (ElementDiscoverySource source : layer.getSources()) {
             if (source instanceof EntityElementDiscoverySource entitySource) {
-                node.updateEntry(entitySource.getEntry(entity));
+                layer.updateEntry(entitySource.getEntry(entity));
             }
         }
     }

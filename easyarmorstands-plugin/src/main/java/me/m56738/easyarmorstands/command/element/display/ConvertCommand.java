@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.command.element.display;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
@@ -19,7 +19,7 @@ import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
@@ -134,11 +134,11 @@ public class ConvertCommand {
             sender.sendMessage(Message.success("easyarmorstands.success.armor-stand-converted.multiple", Component.text(count)));
         }
 
-        GroupRootNode groupRootNode = session.findNode(GroupRootNode.class);
-        if (groupRootNode != null) {
+        GroupRootLayer groupRootLayer = session.findLayer(GroupRootLayer.class);
+        if (groupRootLayer != null) {
             // Add created entities to the selected group
-            Group group = groupRootNode.getGroup();
-            session.returnToNode(groupRootNode);
+            Group group = groupRootLayer.getGroup();
+            session.returnToLayer(groupRootLayer);
             ChangeContext context = new EasPlayer(session.player());
             for (Element element : createdElements) {
                 if (element instanceof EditableElement editableElement) {
@@ -149,9 +149,9 @@ public class ConvertCommand {
             }
         } else {
             // Select the created elements
-            ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
-            if (selectionNode != null) {
-                selectionNode.selectElements(createdElements.stream()
+            ElementSelectionLayer selectionLayer = session.findLayer(ElementSelectionLayer.class);
+            if (selectionLayer != null) {
+                selectionLayer.selectElements(createdElements.stream()
                         .filter(element -> element instanceof SelectableElement)
                         .map(element -> (SelectableElement) element)
                         .toList());

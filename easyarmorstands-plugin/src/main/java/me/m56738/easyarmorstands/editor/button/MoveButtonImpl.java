@@ -4,10 +4,10 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.MoveButton;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.MoveToolNode;
+import me.m56738.easyarmorstands.editor.layer.MoveToolLayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,11 +43,11 @@ public class MoveButtonImpl implements MoveButton {
 
     @Override
     public void onClick(@NotNull Session session, @Nullable Vector3dc cursor) {
-        session.pushNode(createNode(), cursor);
+        session.pushLayer(createLayer(), cursor);
     }
 
     @Override
-    public @NotNull Node createNode() {
-        return new MoveToolNode(session, tool.start(), name, tool.getPosition());
+    public @NotNull Layer createLayer() {
+        return new MoveToolLayer(session, tool.start(), name, tool.getPosition());
     }
 }

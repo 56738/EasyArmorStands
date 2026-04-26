@@ -38,6 +38,6 @@ public class AbortInput implements Input {
     @Override
     public void execute(@NotNull ClickContext context) {
         toolSession.revert();
-        session.popNode();
+        session.popLayer();
     }
 }

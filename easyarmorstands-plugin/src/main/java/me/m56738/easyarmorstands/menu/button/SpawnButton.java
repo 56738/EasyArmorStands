@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.menu.button;
 
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
 import me.m56738.easyarmorstands.api.element.ElementType;
@@ -56,10 +56,10 @@ public class SpawnButton implements MenuButton {
 
             Session session = EasyArmorStands.get().sessionManager().getSession(player);
             if (session != null) {
-                ElementSelectionNode selectionNode = session.findNode(ElementSelectionNode.class);
-                if (selectionNode != null) {
+                ElementSelectionLayer selectionLayer = session.findLayer(ElementSelectionLayer.class);
+                if (selectionLayer != null) {
                     if (element instanceof SelectableElement) {
-                        selectionNode.selectElement((SelectableElement) element);
+                        selectionLayer.selectElement((SelectableElement) element);
                     }
                 }
             }

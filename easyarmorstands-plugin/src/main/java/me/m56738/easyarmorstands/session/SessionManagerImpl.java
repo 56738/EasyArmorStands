@@ -2,12 +2,12 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.editor.node.ElementSelectionNodeImpl;
-import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
+import me.m56738.easyarmorstands.editor.layer.ElementSelectionLayerImpl;
+import me.m56738.easyarmorstands.editor.layer.EntityElementDiscoverySource;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +35,9 @@ public class SessionManagerImpl implements SessionManager {
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
         SessionImpl session = new SessionImpl(new EasPlayer(player));
-        ElementSelectionNode node = new ElementSelectionNodeImpl(session);
-        node.addSource(new EntityElementDiscoverySource(player));
-        session.pushNode(node);
+        ElementSelectionLayer layer = new ElementSelectionLayerImpl(session);
+        layer.addSource(new EntityElementDiscoverySource(player));
+        session.pushLayer(layer);
         startSession(session);
         return session;
     }

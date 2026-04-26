@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.command;
 
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
-import me.m56738.easyarmorstands.api.editor.node.Node;
-import me.m56738.easyarmorstands.api.editor.node.ResettableNode;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
+import me.m56738.easyarmorstands.api.editor.layer.ResettableLayer;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
@@ -27,9 +27,9 @@ import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.editor.layer.ValueLayer;
 import me.m56738.easyarmorstands.group.Group;
-import me.m56738.easyarmorstands.group.node.GroupRootNode;
+import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.message.Message;
@@ -640,16 +640,16 @@ public class SessionCommands {
             sender.sendMessage(Message.success("easyarmorstands.success.entity-selected"));
             EditableElement element = group.getMembers().iterator().next().getElement();
             if (element instanceof SelectableElement selectableElement) {
-                Node node = selectableElement.createNode(session);
-                session.pushNode(node);
+                Layer layer = selectableElement.createLayer(session);
+                session.pushLayer(layer);
                 return;
             }
         } else {
             sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
             return;
         }
-        GroupRootNode node = new GroupRootNode(group);
-        session.pushNode(node);
+        GroupRootLayer layer = new GroupRootLayer(group);
+        session.pushLayer(layer);
     }
 
     @Command("reset")
@@ -657,13 +657,13 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.reset")
     @RequireSession
     public void reset(EasPlayer sender, Session session) {
-        Node node = session.getNode();
-        if (!(node instanceof ResettableNode)) {
+        Layer layer = session.getLayer();
+        if (!(layer instanceof ResettableLayer)) {
             sender.sendMessage(Message.error("easyarmorstands.error.reset-unsupported"));
             return;
         }
-        ResettableNode resettableNode = (ResettableNode) node;
-        resettableNode.reset();
+        ResettableLayer resettableLayer = (ResettableLayer) layer;
+        resettableLayer.reset();
         sender.sendMessage(Message.success("easyarmorstands.success.reset-value"));
     }
 
@@ -673,13 +673,13 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.set")
     public void set(
             EasCommandSender sender,
-            ValueNode node,
+            ValueLayer layer,
             @Argument(value = "value", parserName = "node_value") Object value
     ) {
-        node.setValue(value);
+        layer.setValue(value);
         sender.sendMessage(Message.success("easyarmorstands.success.changed-value",
-                node.getName(),
-                node.formatValue(value)));
+                layer.getName(),
+                layer.formatValue(value)));
     }
 
     @Command("info")

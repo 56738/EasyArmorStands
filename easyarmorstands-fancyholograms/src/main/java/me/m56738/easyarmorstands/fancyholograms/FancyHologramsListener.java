@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.fancyholograms;
 
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElementDiscoverySource;
 import org.bukkit.event.EventHandler;
@@ -15,9 +15,9 @@ public class FancyHologramsListener implements Listener {
 
     @EventHandler
     public void onSessionStart(SessionStartEvent event) {
-        ElementSelectionNode node = event.getSession().findNode(ElementSelectionNode.class);
-        if (node != null) {
-            node.addSource(discoverySource);
+        ElementSelectionLayer layer = event.getSession().findLayer(ElementSelectionLayer.class);
+        if (layer != null) {
+            layer.addSource(discoverySource);
         }
     }
 }

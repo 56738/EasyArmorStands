@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.element;
 
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * A source which can discover elements inside a bounding box.
  *
- * @see me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode#addSource(ElementDiscoverySource) Registering sources
+ * @see ElementSelectionLayer#addSource(ElementDiscoverySource) Registering sources
  */
 public interface ElementDiscoverySource {
     /**

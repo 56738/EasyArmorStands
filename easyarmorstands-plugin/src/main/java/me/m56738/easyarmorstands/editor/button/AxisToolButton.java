@@ -17,7 +17,7 @@ import org.joml.Vector3dc;
 
 import java.util.function.Consumer;
 
-public abstract class AxisToolButton implements NodeFactoryButton {
+public abstract class AxisToolButton implements LayerFactoryButton {
     private final Session session;
     private final AxisTool<?> tool;
     private final Vector3d position = new Vector3d();

@@ -6,7 +6,7 @@ import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
@@ -18,7 +18,7 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
-import me.m56738.easyarmorstands.fancyholograms.editor.node.HologramRootNode;
+import me.m56738.easyarmorstands.fancyholograms.editor.layer.HologramRootLayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
@@ -62,8 +62,8 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
     }
 
     @Override
-    public @NotNull Node createNode(@NotNull Session session) {
-        return new HologramRootNode(session, this);
+    public @NotNull Layer createLayer(@NotNull Session session) {
+        return new HologramRootLayer(session, this);
     }
 
     @Override

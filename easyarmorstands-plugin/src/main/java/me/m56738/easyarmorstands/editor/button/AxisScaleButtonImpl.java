@@ -2,10 +2,10 @@ package me.m56738.easyarmorstands.editor.button;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.AxisScaleButton;
-import me.m56738.easyarmorstands.api.editor.node.Node;
+import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
-import me.m56738.easyarmorstands.editor.node.AxisScaleToolNode;
+import me.m56738.easyarmorstands.editor.layer.AxisScaleToolLayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,8 +18,8 @@ public class AxisScaleButtonImpl extends AxisToolButton implements AxisScaleButt
     }
 
     @Override
-    public @NotNull Node createNode() {
+    public @NotNull Layer createLayer() {
         update();
-        return new AxisScaleToolNode(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
+        return new AxisScaleToolLayer(getSession(), tool.start(), getName(), getColor(), getLength(), getPosition(), getRotation(), getAxis());
     }
 }

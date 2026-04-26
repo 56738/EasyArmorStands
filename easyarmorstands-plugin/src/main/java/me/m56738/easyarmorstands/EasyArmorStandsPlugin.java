@@ -5,7 +5,7 @@ import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.EasyArmorStandsInitializer;
-import me.m56738.easyarmorstands.api.editor.node.ElementSelectionNode;
+import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
@@ -38,7 +38,7 @@ import me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor;
 import me.m56738.easyarmorstands.command.processor.GroupProcessor;
 import me.m56738.easyarmorstands.command.processor.SessionInjector;
 import me.m56738.easyarmorstands.command.processor.SessionProcessor;
-import me.m56738.easyarmorstands.command.processor.ValueNodeInjector;
+import me.m56738.easyarmorstands.command.processor.ValueLayerInjector;
 import me.m56738.easyarmorstands.command.requirement.CommandRequirementPostProcessor;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -47,8 +47,8 @@ import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.serializer.EasSerializers;
 import me.m56738.easyarmorstands.config.version.Transformations;
 import me.m56738.easyarmorstands.config.version.game.GameVersionTransformation;
-import me.m56738.easyarmorstands.editor.node.EntityElementDiscoverySource;
-import me.m56738.easyarmorstands.editor.node.ValueNode;
+import me.m56738.easyarmorstands.editor.layer.EntityElementDiscoverySource;
+import me.m56738.easyarmorstands.editor.layer.ValueLayer;
 import me.m56738.easyarmorstands.element.ArmorStandElementType;
 import me.m56738.easyarmorstands.element.DefaultEntityElementProvider;
 import me.m56738.easyarmorstands.element.DefaultEntityElementType;
@@ -276,7 +276,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         MinecraftHelp<EasCommandSender> help = MinecraftHelp.createNative("/eas help", commandManager);
 
         commandManager.parameterInjectorRegistry()
-                .registerInjector(ValueNode.class, new ValueNodeInjector())
+                .registerInjector(ValueLayer.class, new ValueLayerInjector())
                 .registerInjector(SessionImpl.class, new SessionInjector())
                 .registerInjector(Clipboard.class, new ClipboardInjector())
                 .registerInjector(Element.class, new ElementInjector())
@@ -653,11 +653,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public void refreshEntity(Entity entity) {
         for (SessionImpl session : sessionManager.getAllSessions()) {
-            ElementSelectionNode node = session.findNode(ElementSelectionNode.class);
-            if (node != null) {
-                for (ElementDiscoverySource source : node.getSources()) {
+            ElementSelectionLayer layer = session.findLayer(ElementSelectionLayer.class);
+            if (layer != null) {
+                for (ElementDiscoverySource source : layer.getSources()) {
                     if (source instanceof EntityElementDiscoverySource entitySource) {
-                        node.updateEntry(entitySource.getEntry(entity));
+                        layer.updateEntry(entitySource.getEntry(entity));
                     }
                 }
             }
