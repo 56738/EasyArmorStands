@@ -84,6 +84,7 @@ tasks {
 }
 
 val supportedGameVersions = listOf(
+    "1.21.11",
     "26.1.2",
 )
 
