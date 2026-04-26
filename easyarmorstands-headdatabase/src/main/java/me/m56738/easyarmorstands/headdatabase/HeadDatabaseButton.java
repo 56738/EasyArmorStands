@@ -40,7 +40,7 @@ public class HeadDatabaseButton implements MenuButton {
 
     @Override
     public List<Component> description() {
-        return List.of(Component.text("easyarmorstands.menu.headdb.description"));
+        return List.of(Component.translatable("easyarmorstands.menu.headdb.description"));
     }
 
     @Override
