@@ -49,6 +49,7 @@ import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mannequin;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
@@ -92,6 +93,9 @@ public class EntityElementListener implements Listener {
         if (entity instanceof LivingEntity) {
             registerLivingEntityProperties((LivingEntity) entity, registry);
         }
+        if (entity instanceof Mob) {
+            registerMobProperties((Mob) entity, registry);
+        }
         if (entity instanceof ArmorStand) {
             registerArmorStandProperties((ArmorStand) entity, registry);
         }
@@ -134,6 +138,9 @@ public class EntityElementListener implements Listener {
             }
         }
         registry.register(new EntityScaleProperty(entity));
+    }
+
+    private void registerMobProperties(Mob entity, PropertyRegistry registry) {
         registry.register(Property.of(EntityPropertyTypes.AI, entity::hasAI, entity::setAI));
     }
 
