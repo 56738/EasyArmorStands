@@ -179,7 +179,7 @@ public final class SessionImpl implements Session {
     }
 
     private boolean hasClickCooldown(ClickContext.Type type) {
-        return type != ClickContext.Type.SWAP_HANDS;
+        return type != ClickContext.Type.SWAP_HANDS && type != ClickContext.Type.DROP;
     }
 
     public boolean handleClick(ClickContextImpl context) {
