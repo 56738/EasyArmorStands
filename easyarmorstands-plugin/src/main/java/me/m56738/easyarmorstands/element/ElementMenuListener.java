@@ -30,6 +30,7 @@ import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
 import me.m56738.easyarmorstands.menu.slot.ColorPickerSlot;
 import me.m56738.easyarmorstands.menu.slot.EntityCopyButton;
 import me.m56738.easyarmorstands.menu.slot.EquipmentPropertySlot;
+import me.m56738.easyarmorstands.menu.slot.ItemPropertySlot;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.button.BlockDataHandler;
 import me.m56738.easyarmorstands.property.button.BooleanHandler;
@@ -112,6 +113,12 @@ public class ElementMenuListener implements Listener {
             if (property != null) {
                 builder.addButton(MenuSlotButton.toButton(property.getType().key(), new EquipmentPropertySlot(property, slot)));
             }
+        }
+
+        Property<ItemStack> itemDisplayItemProperty = container.getOrNull(ItemDisplayPropertyTypes.ITEM);
+        if (itemDisplayItemProperty != null) {
+            builder.addButton(MenuSlotButton.toButton(itemDisplayItemProperty.getType().key(),
+                    new ItemPropertySlot(itemDisplayItemProperty)));
         }
 
         if (element instanceof EntityElement<?> entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
