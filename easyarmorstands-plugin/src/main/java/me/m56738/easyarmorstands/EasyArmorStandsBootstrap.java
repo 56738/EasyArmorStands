@@ -1,6 +1,8 @@
 package me.m56738.easyarmorstands;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -70,6 +72,11 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
                 p -> new TextColorParser<>());
         commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
                 p -> new BlockDataArgumentParser<>());
+
+        commandManager.brigadierManager().registerMapping(new TypeToken<BlockDataArgumentParser<EasCommandSender>>() {
+        }, builder -> builder.to(a -> ArgumentTypes.blockState()));
+        commandManager.brigadierManager().registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
+        }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
 
         AnnotationParser<EasCommandSender> annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
         annotationParser.descriptionMapper(RichDescription::translatable);

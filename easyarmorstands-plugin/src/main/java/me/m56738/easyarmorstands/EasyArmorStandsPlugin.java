@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.addon.AddonManager;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
@@ -28,7 +27,6 @@ import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
 import me.m56738.easyarmorstands.color.ColorPresetSlotType;
 import me.m56738.easyarmorstands.color.ColorSlot;
 import me.m56738.easyarmorstands.command.ComponentSuggestionMapper;
-import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
 import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementInjector;
@@ -107,12 +105,10 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.brigadier.CloudBrigadierManager;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
 import org.incendo.cloud.injection.ParameterInjector;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
-import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -286,17 +282,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 .registerInjector(ElementTypeRegistry.class, ParameterInjector.constantInjector(elementTypeRegistry))
                 .registerInjector(new TypeToken<>() {
                 }, ParameterInjector.constantInjector(help));
-
-        if (commandManager.hasBrigadierManager()) {
-            CloudBrigadierManager<EasCommandSender, ?> brigadierManager = commandManager.brigadierManager();
-            try {
-                BlockDataArgumentParser.registerBrigadier(brigadierManager);
-            } catch (Throwable e) {
-                getLogger().warning("Failed to register Brigadier mappings for block data arguments");
-            }
-            brigadierManager.registerMapping(new TypeToken<TextColorParser<EasCommandSender>>() {
-            }, builder -> builder.cloudSuggestions().toConstant(StringArgumentType.greedyString()));
-        }
 
         commandManager.registerCommandPreProcessor(new ElementSelectionProcessor());
         commandManager.registerCommandPreProcessor(new GroupProcessor());
