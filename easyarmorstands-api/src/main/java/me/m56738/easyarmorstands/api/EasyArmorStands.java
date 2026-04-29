@@ -55,10 +55,6 @@ public interface EasyArmorStands {
 
     /**
      * Attempts to resolve the entity into an element.
-     * <p>
-     * If an element provider is {@link #setEntityElementProvider stored inside the entity}, it will be used.
-     * <p>
-     * Otherwise, {@link EntityElementProvider#isApplicable} will be used to determine the correct provider.
      *
      * @param entity the entity to resolve
      * @return the element or {@code null}

@@ -23,7 +23,7 @@ public class SimpleEntityElementProvider<E extends Entity> implements EntityElem
     }
 
     @Override
-    public boolean isApplicable(Entity entity) {
+    public boolean canDetect(Entity entity) {
         if (!EasyArmorStandsPlugin.getInstance().getConfiguration().editor.allowEntities) {
             return false;
         }

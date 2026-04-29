@@ -41,7 +41,7 @@ public class EntityElementProviderRegistryImpl implements EntityElementProviderR
         }
         for (List<EntityElementProvider> providers : providersByPriority.values()) {
             for (EntityElementProvider provider : providers) {
-                if (provider.isApplicable(entity)) {
+                if (provider.canDetect(entity)) {
                     element = provider.getElement(entity);
                     if (element != null) {
                         return element;

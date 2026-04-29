@@ -17,14 +17,16 @@ public interface EntityElementProvider extends Keyed {
      * @param entity the entity
      * @return whether this provider is responsible for resolving the passed entity into an element
      */
-    boolean isApplicable(@NotNull Entity entity);
+    default boolean canDetect(@NotNull Entity entity) {
+        return true;
+    }
 
     /**
      * Attempts to create an element instance which represents the specified entity.
      * <p>
      * Returns {@code null} if this provider cannot create an element for the entity.
      * <p>
-     * May be called even if {@link #isApplicable} returns false, for example, if {@link me.m56738.easyarmorstands.api.EasyArmorStands#setEntityElementProvider(Entity, EntityElementProvider) the entity references this provider}.
+     * May be called even if {@link #canDetect} returns false, for example, if {@link me.m56738.easyarmorstands.api.EasyArmorStands#setEntityElementProvider(Entity, EntityElementProvider) the entity references this provider}.
      *
      * @param entity the entity
      * @return the element instance or {@code null}
