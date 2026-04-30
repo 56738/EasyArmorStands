@@ -22,6 +22,9 @@ public class Transformations {
                 .addVersion(3, ConfigurationTransformation.builder()
                         .addAction(path("editor", "input-hints"), (p, v) -> new Object[]{"editor", "input-hints", "enabled"})
                         .build())
+                .addVersion(4, ConfigurationTransformation.builder()
+                        .addAction(path("message", "server-side-translation"), TransformAction.remove())
+                        .build())
                 .build();
     }
 

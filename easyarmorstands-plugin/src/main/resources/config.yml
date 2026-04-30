@@ -6,7 +6,7 @@
 # Do not add comments to this file, they will be removed when the config is saved.
 
 _version:
-  config: 3
+  config: 4
   game: 1.21.3
 editor:
   allow-entities: true
@@ -86,6 +86,5 @@ message:
     success: <green><message>
     title: '<gold><message>:'
     warning: <yellow><message>
-  server-side-translation: true
 update-check:
   enabled: true

@@ -9,10 +9,9 @@ import java.util.Map;
 @ConfigSerializable
 public class MessageConfig {
     public Map<MessageStyle, String> format;
-    public boolean serverSideTranslation; // TODO remove?
 
     public static TypeToken<Map<MessageStyle, String>> formatType() {
-        return new TypeToken<Map<MessageStyle, String>>() {
+        return new TypeToken<>() {
         };
     }
 }
