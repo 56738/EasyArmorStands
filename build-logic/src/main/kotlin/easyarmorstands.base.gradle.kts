@@ -4,7 +4,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://repo.56738.me")
+    maven("https://repo.56738.me/repository/maven-public/")
     maven("https://maven.enginehub.org/repo/") {
         mavenContent {
             includeGroupByRegex("com\\.sk89q\\..*")

@@ -22,7 +22,8 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_MGDevUsername: ${{ secrets.MAVEN_USERNAME }}
           ORG_GRADLE_PROJECT_MGDevPassword: ${{ secrets.MAVEN_PASSWORD }}
-          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+          ORG_GRADLE_PROJECT_m56738Username: ${{ secrets.MAVEN_M56738_USERNAME }}
+          ORG_GRADLE_PROJECT_m56738Password: ${{ secrets.MAVEN_M56738_PASSWORD }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: Package
