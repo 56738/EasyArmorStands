@@ -1,7 +1,6 @@
 [versions]
 bentobox = "3.15.0"
 bstats = "3.2.1"
-checker-qual = "3.55.1"
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-beta.15"
 configurate = "4.2.0"
@@ -27,7 +26,6 @@ worldguard = "7.0.16"
 [libraries]
 bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
-checker-qual = { module = "org.checkerframework:checker-qual", version.ref = "checker-qual" }
 cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }

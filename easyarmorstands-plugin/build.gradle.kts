@@ -10,7 +10,6 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
-    compileOnlyApi(libs.checker.qual)
     api(project(":easyarmorstands-api"))
     api(project(":easyarmorstands-assets"))
     api(libs.bstats)
