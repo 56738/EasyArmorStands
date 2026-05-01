@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.editor;
 
 import me.m56738.easyarmorstands.api.editor.button.Button;
+import me.m56738.easyarmorstands.api.editor.input.InputProvider;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.layer.LayerProvider;
 import me.m56738.easyarmorstands.api.editor.node.Node;
@@ -93,6 +94,9 @@ public interface Session {
 
     @Contract(pure = true)
     @NotNull LayerProvider layerProvider();
+
+    @Contract(pure = true)
+    @NotNull InputProvider inputProvider();
 
     @Contract(pure = true)
     @NotNull Snapper snapper();

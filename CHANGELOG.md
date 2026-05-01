@@ -42,12 +42,13 @@ However, most new features will only be added to EasyArmorStands v3.
 
 # API changes
 
-* Adventure and JOML are no longer relocated.
+* Adventure and JOML are no longer relocated
     * They are already part of Paper.
-* Renamed `Node` to `Layer`.
+* Renamed `Node` to `Layer`
     * The editor consists of a stack of layers.
     * Only the top layer is considered active.
-* Introduced a new concept called `Node`.
+* Introduced a new concept called `Node`
     * Nodes can be added to layers.
     * Nodes can contain buttons.
     * For example, a `SelectableElement` provides a node which is added to the element selection layer.
+* Added `InputProvider`

@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Category;
 import me.m56738.easyarmorstands.api.editor.input.Input;
+import me.m56738.easyarmorstands.api.editor.input.InputProvider;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.editor.layer.LayerProvider;
@@ -77,6 +78,7 @@ public final class SessionImpl implements Session {
     private final ParticleProvider particleProvider;
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
     private final LayerProvider layerProvider = new LayerProviderImpl(this);
+    private final InputProvider inputProvider = new InputProviderImpl(this);
     private final List<Input> inputs = new ArrayList<>();
     private int clickTicks = 5;
     private boolean valid = true;
@@ -468,6 +470,11 @@ public final class SessionImpl implements Session {
     @Override
     public @NotNull LayerProvider layerProvider() {
         return layerProvider;
+    }
+
+    @Override
+    public @NotNull InputProvider inputProvider() {
+        return inputProvider;
     }
 
     @Override
