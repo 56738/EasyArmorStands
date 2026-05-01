@@ -6,7 +6,6 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public class EditorConfig {
     public EditorDiscoveryConfig discovery;
-    public EditorMenuConfig menu;
     public EditorButtonConfig button;
     public InputHintsConfig inputHints;
     public EditorScaleConfig scale;

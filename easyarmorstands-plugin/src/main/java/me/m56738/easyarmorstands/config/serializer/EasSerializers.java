@@ -1,8 +1,5 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import me.m56738.easyarmorstands.menu.factory.MenuFactory;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotFactory;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotType;
 import me.m56738.easyarmorstands.api.util.ItemTemplate;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import net.kyori.adventure.key.Key;
@@ -22,9 +19,6 @@ public class EasSerializers {
             .register(ItemTemplate.class, new ItemTemplateSerializer())
             .register(Key.class, new KeySerializer())
             .register(Material.class, new MaterialSerializer())
-            .register(MenuFactory.class, new MenuFactorySerializer())
-            .register(MenuSlotFactory.class, new MenuSlotFactorySerializer())
-            .register(MenuSlotType.class, new MenuSlotTypeSerializer())
             .register(PropertyTypeSerializer.TYPE, new PropertyTypeSerializer())
             .register(MessageStyle.class, new MessageStyleSerializer())
             .build();

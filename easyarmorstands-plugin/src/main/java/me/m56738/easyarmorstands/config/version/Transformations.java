@@ -24,6 +24,7 @@ public class Transformations {
                         .build())
                 .addVersion(4, ConfigurationTransformation.builder()
                         .addAction(path("message", "server-side-translation"), TransformAction.remove())
+                        .addAction(path("editor", "menu"), TransformAction.remove())
                         .build())
                 .build();
     }

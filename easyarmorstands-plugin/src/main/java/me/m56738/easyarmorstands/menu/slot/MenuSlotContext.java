@@ -3,9 +3,7 @@ package me.m56738.easyarmorstands.menu.slot;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import net.kyori.adventure.permission.PermissionChecker;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +26,4 @@ public interface MenuSlotContext {
     @NotNull PermissionChecker permissions();
 
     @NotNull Locale locale();
-
-    @NotNull TagResolver resolver();
-
-    @Nullable ColorPickerContext colorPicker();
 }

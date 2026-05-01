@@ -67,8 +67,6 @@ import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistry;
-import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistryImpl;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
@@ -135,7 +133,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private ElementTypeRegistryImpl elementTypeRegistry;
     private PropertyTypeRegistryImpl propertyTypeRegistry;
     private EntityElementProviderRegistryImpl entityElementProviderRegistry;
-    private MenuSlotTypeRegistryImpl menuSlotTypeRegistry;
     private SessionManagerImpl sessionManager;
     private HistoryManager historyManager;
     private ClipboardManager clipboardManager;
@@ -208,8 +205,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
             elementTypeRegistry.register(type);
             entityElementProviderRegistry.register(new DefaultEntityElementProvider<>(type));
         }
-
-        menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
 
         loadConfig();
         messageManager = new MessageManager();
@@ -496,10 +491,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     @Override
     public @NotNull EntityElementProviderRegistryImpl entityElementProviderRegistry() {
         return entityElementProviderRegistry;
-    }
-
-    public @NotNull MenuSlotTypeRegistry menuSlotTypeRegistry() {
-        return Objects.requireNonNull(menuSlotTypeRegistry);
     }
 
     @Override
