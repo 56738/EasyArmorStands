@@ -216,11 +216,11 @@ Players with the `easyarmorstands.bentobox.bypass` permission bypass this restri
 
 # Configuration
 
-Configuration files, including all menu layouts, are automatically generated in the plugin folder.
+The configuration file is automatically generated in the plugin folder.
 
 The most important options are documented [in the wiki](https://github.com/56738/EasyArmorStands/wiki/Configuration).
 
-Use `/eas reload` to reload all configuration files.
+Use `/eas reload` to reload the configuration file.
 
 ## Localization
 
