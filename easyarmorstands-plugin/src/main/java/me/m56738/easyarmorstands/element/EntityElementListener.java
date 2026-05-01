@@ -28,8 +28,10 @@ import me.m56738.easyarmorstands.property.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.display.DisplayTranslationProperty;
 import me.m56738.easyarmorstands.property.display.item.ItemDisplayItemProperty;
 import me.m56738.easyarmorstands.property.display.text.TextDisplayBackgroundProperty;
+import me.m56738.easyarmorstands.property.entity.EntityComponentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityLocationProperty;
+import me.m56738.easyarmorstands.property.entity.EntityOptionalComponentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityScaleProperty;
 import me.m56738.easyarmorstands.property.entity.EntityTagsProperty;
 import me.m56738.easyarmorstands.property.mannequin.part.MannequinCapeVisibleProperty;
@@ -124,7 +126,7 @@ public class EntityElementListener implements Listener {
         registry.register(new EntityLocationProperty(entity));
         registry.register(Property.of(EntityPropertyTypes.SILENT, entity::isSilent, entity::setSilent));
         registry.register(new EntityTagsProperty(entity));
-        registry.register(Property.ofNullable(EntityPropertyTypes.CUSTOM_NAME, entity::customName, entity::customName));
+        registry.register(new EntityOptionalComponentProperty(EntityPropertyTypes.CUSTOM_NAME, entity, entity::customName, entity::customName));
         registry.register(Property.of(EntityPropertyTypes.CUSTOM_NAME_VISIBLE, entity::isCustomNameVisible, entity::setCustomNameVisible));
     }
 
@@ -173,7 +175,7 @@ public class EntityElementListener implements Listener {
         registry.register(Property.of(MannequinPropertyTypes.MAIN_HAND, entity::getMainHand, entity::setMainHand));
         registry.register(Property.of(MannequinPropertyTypes.PROFILE, entity::getProfile, entity::setProfile));
         registry.register(Property.of(MannequinPropertyTypes.IMMOVABLE, entity::isImmovable, entity::setImmovable));
-        registry.register(Property.ofNullable(MannequinPropertyTypes.DESCRIPTION, entity::getDescription, entity::setDescription));
+        registry.register(new EntityOptionalComponentProperty(MannequinPropertyTypes.DESCRIPTION, entity, entity::getDescription, entity::setDescription));
         registry.register(Property.of(MannequinPropertyTypes.POSE, entity::getPose, entity::setPose));
         registry.register(new MannequinCapeVisibleProperty(entity));
         registry.register(new MannequinJacketVisibleProperty(entity));
@@ -212,7 +214,7 @@ public class EntityElementListener implements Listener {
         registry.register(Property.of(TextDisplayPropertyTypes.LINE_WIDTH, entity::getLineWidth, entity::setLineWidth));
         registry.register(Property.of(TextDisplayPropertyTypes.SEE_THROUGH, entity::isSeeThrough, entity::setSeeThrough));
         registry.register(Property.of(TextDisplayPropertyTypes.SHADOW, entity::isShadowed, entity::setShadowed));
-        registry.register(Property.of(TextDisplayPropertyTypes.TEXT, entity::text, entity::text));
+        registry.register(new EntityComponentProperty(TextDisplayPropertyTypes.TEXT, entity, entity::text, entity::text));
     }
 
     private void registerInteractionProperties(Interaction entity, PropertyRegistry registry) {

@@ -25,6 +25,7 @@ However, most new features will only be added to EasyArmorStands v3.
 * Added names to equipment slots in the menu
 * Group selection uses a different color for selected entities
 * Text inputs use dialogs instead of suggesting commands
+* MiniMessage tags such as `<rainbow>` or `<gradient>` are preserved when saved in an entity
 
 # Changes
 

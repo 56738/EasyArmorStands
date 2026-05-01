@@ -43,7 +43,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -75,7 +74,7 @@ import static me.m56738.easyarmorstands.command.processor.ElementSelectionProces
 @Command("eas")
 public class SessionCommands {
     public static void showText(Audience audience, Component type, @Nullable Component text, String command) {
-        String serialized = MiniMessage.miniMessage().serializeOr(text, "")
+        String serialized = EasyArmorStandsPlugin.getInstance().getMiniMessage().serializeOr(text, "")
                 .replace("\n", "<br>");
         audience.sendMessage(Component.text()
                 .append(Message.title(type))

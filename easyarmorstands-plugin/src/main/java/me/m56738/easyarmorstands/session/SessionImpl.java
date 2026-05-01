@@ -40,7 +40,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
@@ -350,7 +349,7 @@ public final class SessionImpl implements Session {
                 .tag("key", Tag.selfClosingInserting(key))
                 .tag("input", Tag.selfClosingInserting(input))
                 .build();
-        return MiniMessage.miniMessage().deserialize(config.format, resolver).applyFallbackStyle(style);
+        return EasyArmorStandsPlugin.getInstance().getMiniMessage().deserialize(config.format, resolver).applyFallbackStyle(style);
     }
 
     private Component getKey(InputHintsConfig config, ClickContext.Type type) {

@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.dialog;
 import io.papermc.paper.dialog.DialogResponseView;
 import io.papermc.paper.registry.data.dialog.input.DialogInput;
 import io.papermc.paper.registry.data.dialog.input.TextDialogInput;
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.Property;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -15,6 +16,7 @@ import java.util.Locale;
 public class TextDialogEntry implements DialogEntry {
     private final String key;
     private final Property<Component> property;
+    private final MiniMessage serializer = EasyArmorStandsPlugin.getInstance().getMiniMessage();
 
     public TextDialogEntry(String key, Property<Component> property) {
         this.key = key;
@@ -30,7 +32,7 @@ public class TextDialogEntry implements DialogEntry {
     public void populateInputs(Collection<DialogInput> inputs, Locale locale) {
         inputs.add(DialogInput.text(key, GlobalTranslator.render(property.getType().getName(), locale))
                 .multiline(TextDialogInput.MultilineOptions.create(null, 64))
-                .initial(MiniMessage.miniMessage().serialize(property.getValue()))
+                .initial(serializer.serialize(property.getValue()))
                 .maxLength(32768)
                 .build());
     }
@@ -39,7 +41,7 @@ public class TextDialogEntry implements DialogEntry {
     public void save(DialogResponseView response) {
         String text = response.getText(key);
         if (text != null) {
-            property.setValue(MiniMessage.miniMessage().deserialize(text));
+            property.setValue(serializer.deserialize(text));
         }
     }
 

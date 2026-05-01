@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.message;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.config.EasConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageManager {
-    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final MiniMessage miniMessage = EasyArmorStandsPlugin.getInstance().getMiniMessage();
     private final Map<MessageStyle, String> styleTemplates = new HashMap<>();
 
     public MessageManager() {

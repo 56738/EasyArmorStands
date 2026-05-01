@@ -82,6 +82,7 @@ import me.m56738.easyarmorstands.update.UpdateManager;
 import me.m56738.easyarmorstands.util.MainThreadExecutor;
 import me.m56738.gizmo.bukkit.api.BukkitGizmos;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.BlockDisplay;
@@ -126,6 +127,9 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private final NamespacedKey toolKey = new NamespacedKey(this, "tool");
     private final TranslationManager translationManager;
     private final PaperCommandManager.Bootstrapped<EasCommandSender> commandManager;
+    private final MiniMessage miniMessage = MiniMessage.builder()
+            .emitVirtuals(true)
+            .build();
     private EasConfig config;
     private MessageManager messageManager;
     private AddonManager addonManager;
@@ -154,6 +158,10 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
 
     public Path getConfigFolder() {
         return getDataFolder().toPath();
+    }
+
+    public MiniMessage getMiniMessage() {
+        return miniMessage;
     }
 
     @Override
