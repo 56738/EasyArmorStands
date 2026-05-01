@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.property.button;
 
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.clipboard.Clipboard;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -37,5 +38,11 @@ public class GravityHandler extends BooleanHandler {
         if (isMisconfigured()) {
             description.add(Component.translatable("easyarmorstands.property.gravity.can-tick-warning", NamedTextColor.YELLOW));
         }
+    }
+
+    @Override
+    protected void handlePropertyShiftClick(Clipboard clipboard) {
+        super.handlePropertyShiftClick(clipboard);
+        clipboard.handlePropertyShiftClick(canTickProperty);
     }
 }

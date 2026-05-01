@@ -24,6 +24,7 @@ However, most new features will only be added to EasyArmorStands v3.
 * Restructured menu
 * Added names to equipment slots in the menu
 * Group selection uses a different color for selected entities
+* Text inputs use dialogs instead of suggesting commands
 
 # Changes
 

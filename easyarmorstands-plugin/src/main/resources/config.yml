@@ -19,8 +19,8 @@ editor:
     limit: 128
   flatten-armor-stands: true
   input-hints:
-    enabled: true
     drop-key: <key:key.drop>
+    enabled: true
     format: '  [<key>] <input>'
     left-click-key: <key:key.attack>
     right-click-key: <key:key.use>
@@ -83,6 +83,7 @@ message:
     error: <red><message>
     hint: <gray><message>
     hover: <gray><message>
+    link: <aqua><u><message>
     success: <green><message>
     title: '<gold><message>:'
     warning: <yellow><message>

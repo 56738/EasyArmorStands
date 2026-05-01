@@ -3,33 +3,36 @@ package me.m56738.easyarmorstands.property.button;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.command.SessionCommands;
+import me.m56738.easyarmorstands.clipboard.Clipboard;
+import me.m56738.easyarmorstands.dialog.DialogBuilder;
+import me.m56738.easyarmorstands.dialog.OptionalTextDialogEntry;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public class OptionalComponentHandler implements ButtonHandler {
     private final Property<Optional<Component>> property;
-    private final String command;
 
-    public OptionalComponentHandler(Property<Optional<Component>> property, String command) {
+    public OptionalComponentHandler(Property<Optional<Component>> property) {
         this.property = property;
-        this.command = command;
-    }
-
-    public static Function<Property<Optional<Component>>, OptionalComponentHandler> provider(String command) {
-        return property -> new OptionalComponentHandler(property, command);
     }
 
     @Override
     public void onClick(MenuClickContext context) {
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+        Player player = context.player();
         if (context.isShiftClick()) {
-            EasyArmorStandsPlugin.getInstance().getClipboard(context.player())
-                    .handlePropertyShiftClick(property);
+            Clipboard clipboard = plugin.getClipboard(player);
+            clipboard.handlePropertyShiftClick(property);
         } else if (context.isLeftClick()) {
             context.closeMenu();
-            SessionCommands.showText(context.player(), property.getType().getName(), property.getValue().orElse(null), command);
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                DialogBuilder builder = new DialogBuilder(player.locale());
+                builder.setTitle(property.getType().getName());
+                builder.addEntry(new OptionalTextDialogEntry("text", property));
+                player.showDialog(builder.build());
+            });
         }
     }
 }

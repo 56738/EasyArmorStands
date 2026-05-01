@@ -8,6 +8,7 @@ public enum MessageStyle {
     HINT,
     CHAT_BUTTON,
     HOVER,
+    LINK,
     BUTTON_NAME,
     BUTTON_DESCRIPTION
 }
