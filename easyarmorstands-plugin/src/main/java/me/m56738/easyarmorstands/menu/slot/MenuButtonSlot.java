@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.menu.slot;
 
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
@@ -20,8 +22,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @NullMarked
 public class MenuButtonSlot implements MenuSlot {
@@ -85,6 +89,11 @@ public class MenuButtonSlot implements MenuSlot {
             public void closeMenu() {
                 click.close();
             }
+
+            @Override
+            public void updateMenu() {
+                click.menu().updateItems(slot -> true);
+            }
         });
         click.updateItem();
     }
@@ -92,11 +101,26 @@ public class MenuButtonSlot implements MenuSlot {
     @SuppressWarnings("UnstableApiUsage")
     public static ItemStack createItem(MenuIcon icon, Component name, Component value, List<Component> description, Locale locale) {
         ItemStack item = icon.asItem().clone();
+
+        if (name == Component.empty() && description.isEmpty()) {
+            item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                    .hideTooltip(true)
+                    .build());
+            return item;
+        }
+
+        Set<DataComponentType> hiddenComponents = new HashSet<>(item.getDataTypes());
+        hiddenComponents.remove(DataComponentTypes.CUSTOM_NAME);
+        hiddenComponents.remove(DataComponentTypes.LORE);
+
         item.setData(DataComponentTypes.CUSTOM_NAME, formatCustomName(name, value, locale));
         item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
                 .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
                 .toList()));
-        item.unsetData(DataComponentTypes.POTION_CONTENTS);
+
+        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                .hiddenComponents(hiddenComponents)
+                .build());
         return item;
     }
 

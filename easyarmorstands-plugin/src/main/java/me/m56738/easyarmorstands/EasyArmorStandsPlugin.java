@@ -21,11 +21,7 @@ import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardListener;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
-import me.m56738.easyarmorstands.color.ColorAxisChangeSlotType;
-import me.m56738.easyarmorstands.color.ColorAxisSlotType;
-import me.m56738.easyarmorstands.color.ColorIndicatorSlotType;
-import me.m56738.easyarmorstands.color.ColorPresetSlotType;
-import me.m56738.easyarmorstands.color.ColorSlot;
+import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.command.ComponentSuggestionMapper;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
 import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
@@ -69,9 +65,6 @@ import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuButtonCollector;
 import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
-import me.m56738.easyarmorstands.menu.color.ColorPickerMenuContext;
-import me.m56738.easyarmorstands.menu.color.ColorPicketContextWrapper;
-import me.m56738.easyarmorstands.menu.factory.MenuFactory;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import me.m56738.easyarmorstands.menu.slot.MenuSlotTypeRegistry;
@@ -115,7 +108,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.HeaderMode;
-import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.util.MapFactories;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -126,15 +118,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands {
     private static EasyArmorStandsPlugin instance;
@@ -142,7 +129,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     private final TranslationManager translationManager;
     private final PaperCommandManager.Bootstrapped<EasCommandSender> commandManager;
     private EasConfig config;
-    private MenuFactory colorPickerFactory;
     private MessageManager messageManager;
     private AddonManager addonManager;
     private RegionListenerManager regionPrivilegeManager;
@@ -224,10 +210,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
 
         menuSlotTypeRegistry = new MenuSlotTypeRegistryImpl();
-        menuSlotTypeRegistry.register(new ColorAxisSlotType());
-        menuSlotTypeRegistry.register(new ColorAxisChangeSlotType());
-        menuSlotTypeRegistry.register(new ColorIndicatorSlotType());
-        menuSlotTypeRegistry.register(new ColorPresetSlotType());
 
         loadConfig();
         messageManager = new MessageManager();
@@ -300,8 +282,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         } catch (Exception e) {
             getLogger().log(Level.WARNING, "Failed to initialize update checks");
         }
-
-        loadMenuTemplates();
     }
 
     private Callable<BufferedReader> getDefaultConfigSource(String name) {
@@ -335,7 +315,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         loadConfig();
         messageManager.load(config);
         translationManager.load(getDataPath(), getComponentLogger());
-        loadMenuTemplates();
         addonManager.reload();
         for (SessionImpl session : sessionManager.getAllSessions()) {
             if (session.getLayer() instanceof ElementSelectionLayerImpl layer) {
@@ -390,68 +369,6 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
                 updateManager = null;
             }
         }
-    }
-
-    private void loadMenuTemplates() {
-        colorPickerFactory = loadMenuTemplate("color_picker");
-    }
-
-    public MenuFactory loadMenuTemplate(String name) {
-        try {
-            return loadMenuTemplate(name, false);
-        } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to load menu \"" + name + "\": " + e.getMessage());
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Failed to load menu \"" + name + "\"", e);
-        }
-
-        try {
-            return loadMenuTemplate(name, true);
-        } catch (ConfigurateException e) {
-            getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\": " + e.getMessage());
-        } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Failed to load default menu \"" + name + "\"", e);
-        }
-
-        return null;
-    }
-
-    private MenuFactory loadMenuTemplate(String name, boolean fallback) throws ConfigurateException {
-        return loadMenuTemplate(name, new LinkedHashSet<>(), fallback).get(MenuFactory.class);
-    }
-
-    private CommentedConfigurationNode loadMenuTemplate(String name, Set<String> seen, boolean fallback) throws ConfigurateException {
-        if (!seen.add(name)) {
-            String description = Stream.concat(seen.stream(), Stream.of(name))
-                    .collect(Collectors.joining(", ", "[", "]"));
-            throw new SerializationException("Cycle detected: " + description);
-        }
-
-        ConfigProcessor processor = new ConfigProcessor() {
-            @Override
-            public void process(CommentedConfigurationNode node) throws ConfigurateException {
-                GameVersionTransformation.menu().apply(node);
-            }
-
-            @Override
-            public void apply(CommentedConfigurationNode node) {
-            }
-        };
-
-        String configName = "menu/" + name + ".yml";
-        CommentedConfigurationNode node = fallback
-                ? loadDefaultConfig(configName, processor)
-                : loadMergedConfig(configName, processor, false);
-        CommentedConfigurationNode parentsNode = node.node("parent");
-        if (!parentsNode.virtual()) {
-            List<String> parents = parentsNode.getList(String.class);
-            if (parents != null) {
-                for (String parent : parents) {
-                    node.mergeFrom(loadMenuTemplate(parent, new LinkedHashSet<>(seen), fallback));
-                }
-            }
-        }
-        return node;
     }
 
     private CommentedConfigurationNode loadMergedConfig(String name, ConfigProcessor configProcessor, boolean create) throws ConfigurateException {
@@ -558,11 +475,7 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
     }
 
     public Menu createColorPicker(Player player, ColorPickerContext context) {
-        ColorPicketContextWrapper contextWrapper = new ColorPicketContextWrapper(context);
-        ColorPickerMenuContext menuContext = new ColorPickerMenuContext(new EasPlayer(player), contextWrapper);
-        Menu menu = colorPickerFactory.createMenu(menuContext);
-        contextWrapper.subscribe(() -> menu.updateItems(slot -> slot instanceof ColorSlot));
-        return menu;
+        return ColorPicker.create(player, context);
     }
 
     public void openElementMenu(Player player, Element element) {

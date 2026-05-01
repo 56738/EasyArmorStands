@@ -12,4 +12,6 @@ public interface MenuClickContext {
     boolean isShiftClick();
 
     void closeMenu();
+
+    void updateMenu();
 }

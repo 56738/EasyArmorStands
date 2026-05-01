@@ -5,9 +5,9 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
-import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
+import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuCreator;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
@@ -27,8 +27,8 @@ import java.util.Locale;
 import java.util.Queue;
 
 public class MenuLayout {
-    private static final MenuButton PRIMARY_BACKGROUND = createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-    private static final MenuButton SECONDARY_BACKGROUND = createBackground(Material.YELLOW_STAINED_GLASS_PANE);
+    public static final MenuButton PRIMARY_BACKGROUND = createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+    public static final MenuButton SECONDARY_BACKGROUND = createBackground(Material.YELLOW_STAINED_GLASS_PANE);
     public static final MenuLayout DEFAULT = createDefault();
     public static final MenuLayout SIMPLE = createSimple();
     public static final MenuLayout EQUIPMENT = createEquipment();
