@@ -67,7 +67,7 @@ public class ElementMenuListener implements Listener {
         MenuBuilder builder = event.getBuilder();
         Player player = event.getPlayer();
         PropertyContainer container = event.getProperties();
-        MenuPopulator populator = new MenuPopulator(builder, container);
+        MenuPopulator populator = new MenuPopulator(builder, container, player);
         populator.addButton(ArmorStandPropertyTypes.ARMS, Material.STICK);
         populator.addButton(ArmorStandPropertyTypes.BASE_PLATE, Material.STONE_SLAB);
         populator.addButton(ArmorStandPropertyTypes.GRAVITY, property -> {
@@ -120,13 +120,13 @@ public class ElementMenuListener implements Listener {
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             Property<ItemStack> property = container.getOrNull(EntityPropertyTypes.EQUIPMENT.get(slot));
-            if (property != null) {
+            if (property != null && property.canChange(player)) {
                 builder.addButton(MenuSlotButton.toButton(property.getType().key(), new EquipmentPropertySlot(property, slot)));
             }
         }
 
         Property<ItemStack> itemDisplayItemProperty = container.getOrNull(ItemDisplayPropertyTypes.ITEM);
-        if (itemDisplayItemProperty != null) {
+        if (itemDisplayItemProperty != null && itemDisplayItemProperty.canChange(player)) {
             builder.addButton(MenuSlotButton.toButton(itemDisplayItemProperty.getType().key(),
                     new ItemPropertySlot(itemDisplayItemProperty)));
         }
@@ -155,10 +155,10 @@ public class ElementMenuListener implements Listener {
         }
     }
 
-    private record MenuPopulator(MenuBuilder builder, PropertyContainer container) {
+    private record MenuPopulator(MenuBuilder builder, PropertyContainer container, Player player) {
         private <T> void addButton(PropertyType<T> type, Function<Property<T>, PropertyButtonBuilder<T>> provider) {
             Property<T> property = container.getOrNull(type);
-            if (property != null) {
+            if (property != null && property.canChange(player)) {
                 builder.addButton(provider.apply(property).build());
             }
         }
