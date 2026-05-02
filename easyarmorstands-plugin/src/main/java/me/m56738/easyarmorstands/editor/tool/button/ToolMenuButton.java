@@ -25,6 +25,6 @@ public class ToolMenuButton implements ButtonHandler {
 
     @Override
     public void onUpdate(ButtonHandlerContext context) {
-        context.addInput(new SelectLayerInput(session, node::createLayer));
+        context.addInput(new SelectLayerInput(session, node::createLayer, context.cursor()));
     }
 }

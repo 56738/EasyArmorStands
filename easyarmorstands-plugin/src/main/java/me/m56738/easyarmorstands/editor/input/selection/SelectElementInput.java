@@ -14,7 +14,7 @@ public class SelectElementInput extends SelectLayerInput {
     private final SelectableElement element;
 
     public SelectElementInput(Session session, SelectableElement element, LayerFactory layerFactory) {
-        super(session, layerFactory);
+        super(session, layerFactory, null);
         this.session = session;
         this.element = element;
     }

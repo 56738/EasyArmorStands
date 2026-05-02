@@ -56,13 +56,10 @@ tasks {
         val prefix = "me.m56738.easyarmorstands.lib"
         relocate("org.incendo.cloud", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
-        relocate("me.lucko.commodore", "$prefix.commodore")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
         relocate("net.kyori.option", "$prefix.kyori.option")
         relocate("org.bstats", "$prefix.bstats")
         relocate("org.spongepowered.configurate", "$prefix.configurate")
-        relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
-        relocate("de.tr7zw.changeme.nbtapi", "$prefix.nbtapi")
         exclude("pack.mcmeta")
         mergeServiceFiles()
         archiveBaseName.set("EasyArmorStands")

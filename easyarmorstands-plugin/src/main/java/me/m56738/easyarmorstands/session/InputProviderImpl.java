@@ -39,6 +39,6 @@ public class InputProviderImpl implements InputProvider {
 
     @Override
     public Input selectLayerInput(Supplier<Layer> layerSupplier) {
-        return new SelectLayerInput(session, layerSupplier::get);
+        return new SelectLayerInput(session, layerSupplier::get, null);
     }
 }

@@ -9,16 +9,20 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3dc;
 
 public class SelectLayerInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.select");
     private static final Style STYLE = Style.style(NamedTextColor.GREEN);
     private final Session session;
     private final LayerFactory layerFactory;
+    private final @Nullable Vector3dc cursor;
 
-    public SelectLayerInput(Session session, LayerFactory layerFactory) {
+    public SelectLayerInput(Session session, LayerFactory layerFactory, @Nullable Vector3dc cursor) {
         this.session = session;
         this.layerFactory = layerFactory;
+        this.cursor = cursor;
     }
 
     @Override
@@ -39,6 +43,6 @@ public class SelectLayerInput implements Input {
     @Override
     public void execute(@NotNull ClickContext context) {
         Layer layer = layerFactory.createLayer();
-        session.pushLayer(layer);
+        session.pushLayer(layer, cursor);
     }
 }

@@ -31,7 +31,7 @@ public class BoxResizeButtonHandler implements ButtonHandler {
 
     @Override
     public void onUpdate(ButtonHandlerContext context) {
-        context.addInput(new SelectLayerInput(session, this::createLayer));
+        context.addInput(new SelectLayerInput(session, this::createLayer, context.cursor()));
     }
 
     private Layer createLayer() {

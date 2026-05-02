@@ -109,6 +109,11 @@ public abstract class AbstractLayer implements NodeLayer {
                 public void addInput(Input input) {
                     focusedButton.inputs.add(input);
                 }
+
+                @Override
+                public Vector3dc cursor() {
+                    return focusedButton.cursor;
+                }
             });
             for (Input input : focusedButton.inputs) {
                 context.addInput(input);
