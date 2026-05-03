@@ -52,6 +52,10 @@ tasks {
         }
     }
 
+    jar {
+        archiveClassifier = "dev"
+    }
+
     shadowJar {
         val prefix = "me.m56738.easyarmorstands.lib"
         relocate("org.incendo.cloud", "$prefix.cloud")
@@ -62,8 +66,7 @@ tasks {
         relocate("org.spongepowered.configurate", "$prefix.configurate")
         exclude("pack.mcmeta")
         mergeServiceFiles()
-        archiveBaseName.set("EasyArmorStands")
-        archiveClassifier.set("")
+        archiveClassifier = ""
         destinationDirectory.set(layout.buildDirectory)
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
