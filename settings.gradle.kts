@@ -6,16 +6,26 @@ pluginManagement {
 
 include("easyarmorstands-api")
 include("easyarmorstands-assets")
-include("easyarmorstands-bentobox")
-include("easyarmorstands-fancyholograms")
-include("easyarmorstands-griefdefender")
-include("easyarmorstands-griefprevention")
-include("easyarmorstands-headdatabase")
-include("easyarmorstands-huskclaims")
-include("easyarmorstands-lands")
-include("easyarmorstands-plotsquared")
 include("easyarmorstands-plugin")
-include("easyarmorstands-residence")
-include("easyarmorstands-towny")
-include("easyarmorstands-traincarts")
-include("easyarmorstands-worldguard")
+
+fun includeAt(name: String, path: String) {
+    include(name)
+    project(":$name").projectDir = file(path)
+}
+
+fun addon(name: String) {
+    includeAt("easyarmorstands-$name", "addons/$name")
+}
+
+addon("bentobox")
+addon("fancyholograms")
+addon("griefdefender")
+addon("griefprevention")
+addon("headdatabase")
+addon("huskclaims")
+addon("lands")
+addon("plotsquared")
+addon("residence")
+addon("towny")
+addon("traincarts")
+addon("worldguard")
