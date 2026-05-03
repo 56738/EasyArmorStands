@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":easyarmorstands-plugin"))
+    compileOnly(project(":"))
     compileOnly(libs.paper.api)
     compileOnly(libs.towny)
 }

@@ -27,7 +27,7 @@ jobs:
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: Package
-          path: easyarmorstands-plugin/build/EasyArmorStands-*.jar
+          path: build/EasyArmorStands-*.jar
           archive: 'false'
       - name: Update description
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
@@ -40,7 +40,7 @@ jobs:
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
         with:
           body_path: CHANGELOG.md
-          files: easyarmorstands-plugin/build/EasyArmorStands-*.jar
+          files: build/EasyArmorStands-*.jar
       - name: Publish release
         if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
         run: ./gradlew modrinth publishAllPublicationsToHangar

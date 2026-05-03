@@ -4,8 +4,6 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-include("easyarmorstands-plugin")
-
 fun includeAt(name: String, path: String) {
     include(name)
     project(":$name").projectDir = file(path)
