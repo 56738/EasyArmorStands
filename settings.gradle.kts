@@ -4,14 +4,19 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-include("easyarmorstands-api")
-include("easyarmorstands-assets")
 include("easyarmorstands-plugin")
 
 fun includeAt(name: String, path: String) {
     include(name)
     project(":$name").projectDir = file(path)
 }
+
+fun module(name: String) {
+    includeAt("easyarmorstands-$name", name)
+}
+
+module("api")
+module("assets")
 
 fun addon(name: String) {
     includeAt("easyarmorstands-$name", "addons/$name")
