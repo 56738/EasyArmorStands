@@ -7,10 +7,13 @@ import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
+import me.m56738.easyarmorstands.editor.OffsetProvider;
+import me.m56738.easyarmorstands.editor.display.BlockDisplayOffsetProvider;
 import me.m56738.easyarmorstands.editor.display.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.editor.display.DisplayRotationProvider;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayRootLayer;
 import me.m56738.easyarmorstands.util.Util;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -27,7 +30,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     public @NotNull Button createButton(@NotNull Session session) {
         PropertyContainer properties = getProperties();
         return new BoundingBoxButton(session, this,
-                new EntityPositionProvider(properties, new DisplayOffsetProvider(properties)),
+                new EntityPositionProvider(properties, getOffsetProvider(properties)),
                 new DisplayRotationProvider(properties));
     }
 
@@ -38,7 +41,15 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
 
     @Override
     public @NotNull DisplayToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new DisplayToolProvider(properties);
+        return new DisplayToolProvider(properties, getOffsetProvider(properties));
+    }
+
+    private OffsetProvider getOffsetProvider(PropertyContainer properties) {
+        if (entity instanceof BlockDisplay) {
+            return new BlockDisplayOffsetProvider(properties);
+        } else {
+            return new DisplayOffsetProvider(properties);
+        }
     }
 
     @Override

@@ -2,11 +2,13 @@ package me.m56738.easyarmorstands.element;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 public class DisplayElementType<E extends Display> extends SimpleEntityElementType<E> {
     public DisplayElementType(EntityType entityType, Class<E> entityClass) {
@@ -26,5 +28,8 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
+        if (getEntityType() == EntityType.BLOCK_DISPLAY) {
+            properties.put(DisplayPropertyTypes.TRANSLATION, new Vector3f(-0.5f));
+        }
     }
 }
