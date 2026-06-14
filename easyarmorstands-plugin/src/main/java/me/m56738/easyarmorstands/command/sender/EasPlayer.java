@@ -124,6 +124,9 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
 
     @Override
     public <T> boolean canChangeProperty(Element element, Property<T> property, T value) {
+        if (!element.isValid()) {
+            return false;
+        }
         PlayerEditPropertyEvent<T> event = new PlayerEditPropertyEvent<>(player, element, property, property.getValue(), value);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
