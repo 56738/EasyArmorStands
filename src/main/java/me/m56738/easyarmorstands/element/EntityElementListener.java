@@ -57,6 +57,7 @@ import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.EnumSet;
@@ -130,10 +131,11 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerLivingEntityProperties(LivingEntity entity, PropertyRegistry registry) {
-        if (entity.getEquipment() != null) {
+        EntityEquipment equipment = entity.getEquipment();
+        if (equipment != null) {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 if (hasSlot(entity, slot)) {
-                    registry.register(new EntityEquipmentProperty(entity, slot));
+                    registry.register(new EntityEquipmentProperty(equipment, slot));
                 }
             }
         }

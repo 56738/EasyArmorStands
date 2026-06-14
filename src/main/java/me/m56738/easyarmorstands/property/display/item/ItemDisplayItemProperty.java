@@ -27,9 +27,6 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
 
     @Override
     public boolean setValue(@NotNull ItemStack value) {
-        if (!entity.isValid()) {
-            return false;
-        }
         entity.setItemStack(value);
         return true;
     }

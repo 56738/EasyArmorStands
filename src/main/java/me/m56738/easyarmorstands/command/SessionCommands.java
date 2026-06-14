@@ -115,13 +115,6 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.open.entity")
     public void open(EasPlayer sender, @Argument("entity") SingleEntitySelector selector) {
         Entity entity = selector.single();
-        // Refuse entities that are not loaded or live in a different world: such entities
-        // are reachable through this command (UUID selectors are global) but their state
-        // cannot be safely mutated, which is a duplication vector through the menu.
-        if (!entity.isValid() || !entity.getWorld().equals(sender.get().getWorld())) {
-            sender.sendMessage(Message.error("easyarmorstands.error.entity-not-found"));
-            return;
-        }
         Element element = EasyArmorStandsPlugin.getInstance().getElement(entity);
         if (element == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.unsupported-entity"));
