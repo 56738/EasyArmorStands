@@ -1,43 +1,20 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.lib.joml.Vector3f;
 import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DisplayScaleTool implements ScaleTool {
-    private final ToolContext context;
-    private final PropertyContainer properties;
-    private final Property<Vector3fc> scaleProperty;
-
+public class DisplayScaleTool extends AbstractDisplayScaleTool<ScaleToolSession> implements ScaleTool {
     public DisplayScaleTool(ToolContext context, PropertyContainer properties) {
-        this.context = context;
-        this.properties = properties;
-        this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
-    }
-
-    @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
-    }
-
-    @Override
-    public @NotNull Quaterniondc getRotation() {
-        return context.rotation().getRotation();
+        super(context, properties);
     }
 
     @Override
@@ -45,32 +22,27 @@ public class DisplayScaleTool implements ScaleTool {
         return new SessionImpl();
     }
 
-    @Override
-    public boolean canUse(@NotNull Player player) {
-        return scaleProperty.canChange(player);
-    }
-
-    private class SessionImpl extends AbstractToolSession implements ScaleToolSession {
-        private final Vector3fc originalScale;
+    private class SessionImpl extends AbstractDisplayScaleToolSession implements ScaleToolSession {
+        private final Vector3f currentScale;
         private final float originalAverage;
-        private final Vector3f scale;
 
         public SessionImpl() {
-            super(properties);
-            this.originalScale = new Vector3f(scaleProperty.getValue());
+            super(getProperties());
+            Vector3fc originalScale = getOriginalScale();
+            this.currentScale = new Vector3f(originalScale);
             this.originalAverage = (originalScale.x() + originalScale.y() + originalScale.z()) / 3;
-            this.scale = new Vector3f(originalScale);
         }
 
         @Override
         public void setChange(double change) {
-            originalScale.mul((float) change, scale);
-            EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(scale);
-            scaleProperty.setValue(scale);
+            setScale(getOriginalScale().mul((float) change, currentScale));
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
+            if (isCloseToZero(originalAverage)) {
+                return context.snapOffset(change);
+            }
             change *= originalAverage;
             change = context.snapOffset(change);
             change /= originalAverage;
@@ -79,18 +51,13 @@ public class DisplayScaleTool implements ScaleTool {
 
         @Override
         public void setValue(double value) {
-            scale.set(EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(value));
-            scaleProperty.setValue(scale);
-        }
-
-        @Override
-        public void revert() {
-            scaleProperty.setValue(originalScale);
+            currentScale.set(value);
+            setScale(currentScale);
         }
 
         @Override
         public @Nullable Component getStatus() {
-            return Util.formatScale(scale);
+            return Util.formatScale(getScale());
         }
 
         @Override

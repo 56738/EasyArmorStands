@@ -1,48 +1,25 @@
 package me.m56738.easyarmorstands.display.editor.tool;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleToolSession;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
-import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
-import me.m56738.easyarmorstands.lib.joml.Quaterniondc;
-import me.m56738.easyarmorstands.lib.joml.Vector3dc;
 import me.m56738.easyarmorstands.lib.joml.Vector3f;
-import me.m56738.easyarmorstands.lib.joml.Vector3fc;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.Component;
 import me.m56738.easyarmorstands.lib.kyori.adventure.text.format.TextColor;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DisplayAxisScaleTool implements AxisScaleTool {
-    private final ToolContext context;
-    private final PropertyContainer properties;
-    private final Property<Vector3fc> scaleProperty;
+public class DisplayAxisScaleTool extends AbstractDisplayScaleTool<AxisScaleToolSession> implements AxisScaleTool {
     private final Axis axis;
 
     public DisplayAxisScaleTool(ToolContext context, PropertyContainer properties, Axis axis) {
-        this.context = context;
-        this.properties = properties;
-        this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
+        super(context, properties);
         this.axis = axis;
-    }
-
-    @Override
-    public @NotNull Vector3dc getPosition() {
-        return context.position().getPosition();
-    }
-
-    @Override
-    public @NotNull Quaterniondc getRotation() {
-        return context.rotation().getRotation();
     }
 
     @Override
@@ -55,29 +32,26 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
         return new SessionImpl();
     }
 
-    @Override
-    public boolean canUse(@NotNull Player player) {
-        return scaleProperty.canChange(player);
-    }
-
-    private class SessionImpl extends AbstractToolSession implements AxisScaleToolSession {
-        private final Vector3fc originalScale;
+    private class SessionImpl extends AbstractDisplayScaleToolSession implements AxisScaleToolSession {
+        private final Vector3f currentScale;
 
         public SessionImpl() {
-            super(properties);
-            this.originalScale = new Vector3f(scaleProperty.getValue());
+            super(getProperties());
+            this.currentScale = new Vector3f(getOriginalScale());
         }
 
         @Override
         public void setChange(double change) {
-            Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(axis.getValue(scaleVector) * (float) change));
-            scaleProperty.setValue(scaleVector);
+            float original = axis.getValue(getOriginalScale());
+            setValue(original * change);
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            float original = axis.getValue(originalScale);
+            float original = axis.getValue(getOriginalScale());
+            if (isCloseToZero(original)) {
+                return context.snapOffset(change);
+            }
             change *= original;
             change = context.snapOffset(change);
             change /= original;
@@ -86,19 +60,14 @@ public class DisplayAxisScaleTool implements AxisScaleTool {
 
         @Override
         public void setValue(double value) {
-            Vector3f scaleVector = new Vector3f(originalScale);
-            axis.setValue(scaleVector, EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale((float) value));
-            scaleProperty.setValue(scaleVector);
-        }
-
-        @Override
-        public void revert() {
-            scaleProperty.setValue(originalScale);
+            currentScale.set(getOriginalScale());
+            axis.setValue(currentScale, (float) value);
+            setScale(currentScale);
         }
 
         @Override
         public @Nullable Component getStatus() {
-            return Component.text(Util.SCALE_FORMAT.format(axis.getValue(scaleProperty.getValue())));
+            return Component.text(Util.SCALE_FORMAT.format(axis.getValue(getScale())));
         }
 
         @Override

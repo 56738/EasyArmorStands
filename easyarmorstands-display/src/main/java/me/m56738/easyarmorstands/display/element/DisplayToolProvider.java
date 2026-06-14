@@ -9,13 +9,13 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.display.editor.DisplayOffsetProvider;
 import me.m56738.easyarmorstands.display.editor.DisplayRotationProvider;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayAxisRotateTool;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayAxisScaleTool;
 import me.m56738.easyarmorstands.display.editor.tool.DisplayScaleTool;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
+import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.element.SimpleEntityToolProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 public class DisplayToolProvider extends SimpleEntityToolProvider implements ToolProvider {
     private final RotationProvider entityRotationProvider;
 
-    public DisplayToolProvider(PropertyContainer properties) {
+    public DisplayToolProvider(PropertyContainer properties, OffsetProvider offsetProvider) {
         super(properties);
-        positionProvider = new EntityPositionProvider(properties, new DisplayOffsetProvider(properties));
+        positionProvider = new EntityPositionProvider(properties, offsetProvider);
         rotationProvider = new DisplayRotationProvider(properties);
         entityRotationProvider = new EntityRotationProvider(properties);
     }
@@ -46,7 +46,7 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
 
     @Override
     public @Nullable AxisScaleTool scale(@NotNull ToolContext context, @NotNull Axis axis) {
-        if (context.position() == position() && context.rotation() == rotation()) {
+        if (context.rotation() == rotation()) {
             return new DisplayAxisScaleTool(context, properties, axis);
         }
         return super.scale(context, axis);

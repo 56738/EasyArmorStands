@@ -3,8 +3,10 @@ package me.m56738.easyarmorstands.display.element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.display.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.element.SimpleEntityElement;
 import me.m56738.easyarmorstands.element.SimpleEntityElementType;
+import me.m56738.easyarmorstands.lib.joml.Vector3f;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -28,5 +30,8 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
+        if (getEntityType() == EntityType.BLOCK_DISPLAY) {
+            properties.put(DisplayPropertyTypes.TRANSLATION, new Vector3f(-0.5f));
+        }
     }
 }
