@@ -23,7 +23,7 @@ repositories {
             includeGroup("com.palmergames.bukkit.towny")
         }
     }
-    maven("https://repo.fancyplugins.de/releases/") {
+    maven("https://repo.fancyinnovations.com/releases") {
         mavenContent {
             includeModule("de.oliver", "FancyHolograms")
         }
