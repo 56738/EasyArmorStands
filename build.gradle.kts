@@ -14,7 +14,9 @@ dependencies {
     api(project(":easyarmorstands-assets"))
     api(libs.bstats)
     api(libs.cloud.annotations)
-    api(libs.cloud.minecraft.extras)
+    api(libs.cloud.minecraft.extras) {
+        exclude("net.kyori")
+    }
     api(libs.cloud.paper)
     api(libs.configurate.yaml)
     api(libs.gizmo.bukkit)
