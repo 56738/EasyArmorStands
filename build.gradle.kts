@@ -38,9 +38,6 @@ dependencies {
 tasks {
     runServer {
         minecraftVersion(libs.versions.minecraft.get())
-        javaLauncher = project.javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(21)
-        }
     }
 
     processResources {
