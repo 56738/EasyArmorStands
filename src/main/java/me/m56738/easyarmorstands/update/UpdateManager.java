@@ -1,10 +1,12 @@
 package me.m56738.easyarmorstands.update;
 
+import io.papermc.paper.ServerBuildInfo;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.util.ReflectionUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -21,7 +23,7 @@ public class UpdateManager {
     private final String modrinthUrl;
     private final UpdateListener listener;
     private final BukkitTask timer;
-    private String latestVersion;
+    private ComparableVersion latestVersion;
 
     public UpdateManager(Plugin plugin, String permission) {
         this.plugin = plugin;
@@ -44,8 +46,7 @@ public class UpdateManager {
     }
 
     private String getGameVersion() {
-        String bukkitVersion = Bukkit.getBukkitVersion();
-        return bukkitVersion.substring(0, bukkitVersion.indexOf('-'));
+        return ServerBuildInfo.buildInfo().minecraftVersionId();
     }
 
     public void unregister() {
@@ -54,8 +55,8 @@ public class UpdateManager {
     }
 
     public void refresh() {
-        String currentVersion = plugin.getPluginMeta().getVersion();
-        String latestVersion;
+        ComparableVersion currentVersion = new ComparableVersion(plugin.getPluginMeta().getVersion());
+        ComparableVersion latestVersion;
         try {
             latestVersion = updateChecker.fetchLatestVersion();
         } catch (IOException e) {
@@ -76,7 +77,7 @@ public class UpdateManager {
         // Latest version changed, notify
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission(permission)) {
-                notify(player, latestVersion);
+                notify(player, latestVersion.toString());
             }
         }
         plugin.getLogger().info("EasyArmorStands v" + latestVersion + " is available");
@@ -84,12 +85,12 @@ public class UpdateManager {
     }
 
     public void notify(Audience audience) {
-        String version;
+        ComparableVersion version;
         synchronized (this) {
             version = latestVersion;
         }
         if (version != null) {
-            notify(audience, version);
+            notify(audience, version.toString());
         }
     }
 

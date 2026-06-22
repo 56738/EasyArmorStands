@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.update;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
-import me.m56738.easyarmorstands.config.version.Version;
+import org.apache.maven.artifact.versioning.ComparableVersion;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ModrinthVersionFetcher {
         this.gameVersion = gameVersion;
     }
 
-    public String fetchLatestVersion() throws IOException {
+    public ComparableVersion fetchLatestVersion() throws IOException {
         JsonArray loaders = new JsonArray();
         loaders.add(new JsonPrimitive(loader.name().toLowerCase(Locale.ROOT)));
 
@@ -31,12 +31,11 @@ public class ModrinthVersionFetcher {
         gameVersions.add(new JsonPrimitive(gameVersion));
 
         URI uri = URI.create("https://api.modrinth.com/v2/project/easyarmorstands/version?loaders="
-                + URLEncoder.encode(loaders.toString(), "UTF-8")
+                + URLEncoder.encode(loaders.toString(), StandardCharsets.UTF_8)
                 + "&game_versions="
-                + URLEncoder.encode(gameVersions.toString(), "UTF-8")
+                + URLEncoder.encode(gameVersions.toString(), StandardCharsets.UTF_8)
                 + "&include_changelog=false");
-        Version latestVersion = null;
-        String latestVersionNumber = null;
+        ComparableVersion latestVersion = null;
         try (JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(uri.toURL().openStream(), StandardCharsets.UTF_8)))) {
             reader.beginArray();
             while (reader.hasNext()) {
@@ -62,11 +61,10 @@ public class ModrinthVersionFetcher {
                     }
                 }
                 if (Objects.equals(versionType, "release") && Objects.equals(status, "listed")) {
-                    Version version = Version.tryParse(versionNumber);
-                    if (version != null) {
+                    if (versionNumber != null) {
+                        ComparableVersion version = new ComparableVersion(versionNumber);
                         if (latestVersion == null || latestVersion.compareTo(version) < 0) {
                             latestVersion = version;
-                            latestVersionNumber = versionNumber;
                         }
                     }
                 }
@@ -74,6 +72,6 @@ public class ModrinthVersionFetcher {
             }
             reader.endArray();
         }
-        return latestVersionNumber;
+        return latestVersion;
     }
 }
