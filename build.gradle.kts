@@ -70,7 +70,9 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 
-    val staticJar by registering(Copy::class) {
+    val staticJar = register<Copy>("staticJar") {
+        group = "build"
+        description = "Creates a jar archive with a static file name."
         from(shadowJar)
         into(layout.buildDirectory.dir("static"))
         rename { "EasyArmorStands.jar" }
