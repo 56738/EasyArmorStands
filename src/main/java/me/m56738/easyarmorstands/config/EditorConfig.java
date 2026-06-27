@@ -14,4 +14,5 @@ public class EditorConfig {
     public boolean allowEntities;
     public boolean allowPlayers;
     public boolean flattenArmorStands;
+    public boolean centeredPivot;
 }

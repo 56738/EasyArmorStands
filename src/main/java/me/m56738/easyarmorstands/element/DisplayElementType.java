@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
@@ -28,7 +29,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
-        if (getEntityType() == EntityType.BLOCK_DISPLAY) {
+        if (getEntityType() == EntityType.BLOCK_DISPLAY && EasyArmorStandsPlugin.getInstance().getConfiguration().editor.centeredPivot) {
             properties.put(DisplayPropertyTypes.TRANSLATION, new Vector3f(-0.5f));
         }
     }

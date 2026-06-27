@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -45,7 +46,7 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
     }
 
     private OffsetProvider getOffsetProvider(PropertyContainer properties) {
-        if (entity instanceof BlockDisplay) {
+        if (entity instanceof BlockDisplay && EasyArmorStandsPlugin.getInstance().getConfiguration().editor.centeredPivot) {
             return new BlockDisplayOffsetProvider(properties);
         } else {
             return new DisplayOffsetProvider(properties);
