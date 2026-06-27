@@ -2,8 +2,6 @@ package me.m56738.easyarmorstands.editor.display.layer;
 
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
-import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.editor.display.DisplayBoxEditor;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
@@ -25,7 +23,7 @@ public class DisplayBoxLayer extends DisplayLayer {
         setShowBoundingBoxIfInactive(true); // bounding box should remain visible while a tool layer is active
 
         DisplayBoxEditor boxEditor = new DisplayBoxEditor(properties);
-        new ToolMenuManager(session, this, new BoxToolProvider(boxEditor)).setMode(ToolMenuMode.GLOBAL);
+        addNode(session.nodeProvider().tools(new BoxToolProvider(boxEditor)));
         new BoxResizeToolManager(session, this, boxEditor);
     }
 

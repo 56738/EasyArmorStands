@@ -4,14 +4,12 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
-import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
-import me.m56738.easyarmorstands.editor.layer.ToolMenuModeSwitcher;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -23,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 public class HologramRootLayer extends PropertyLayer implements ElementLayer {
     private final Session session;
     private final HologramElement element;
-    private final ToolMenuModeSwitcher toolSwitcher;
     private final Property<BlockData> blockDataProperty;
     private final boolean allowMenu;
 
@@ -31,10 +28,9 @@ public class HologramRootLayer extends PropertyLayer implements ElementLayer {
         super(session, session.properties(element));
         this.session = session;
         this.element = element;
-        this.toolSwitcher = new ToolMenuModeSwitcher(
-                new ToolMenuManager(session, this, element.getTools(properties())));
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
         this.allowMenu = session.player().hasPermission(Permissions.OPEN);
+        addNode(session.nodeProvider().tools(element.getTools(properties())));
     }
 
     @Override
@@ -60,8 +56,6 @@ public class HologramRootLayer extends PropertyLayer implements ElementLayer {
 
     @Override
     public void onUpdate(@NotNull UpdateContext context) {
-        context.setActionBar(toolSwitcher.getActionBar());
-        toolSwitcher.onUpdate(context);
         if (allowMenu) {
             context.addInput(new OpenElementMenuInput(session, element));
         }

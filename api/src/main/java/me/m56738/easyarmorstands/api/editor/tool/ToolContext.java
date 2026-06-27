@@ -11,6 +11,10 @@ public interface ToolContext {
         return new ToolContextImpl(positionProvider, rotationProvider);
     }
 
+    static @NotNull ToolContext of(@NotNull PositionProvider positionProvider) {
+        return ToolContext.of(positionProvider, RotationProvider.identity());
+    }
+
     @NotNull PositionProvider position();
 
     @NotNull RotationProvider rotation();

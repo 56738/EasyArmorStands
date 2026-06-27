@@ -7,20 +7,18 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementLayer;
-import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
-import me.m56738.easyarmorstands.editor.interaction.InteractionBoxEditor;
-import me.m56738.easyarmorstands.element.InteractionElement;
 import me.m56738.easyarmorstands.editor.input.OpenElementMenuInput;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
+import me.m56738.easyarmorstands.editor.interaction.InteractionBoxEditor;
 import me.m56738.easyarmorstands.editor.layer.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
+import me.m56738.easyarmorstands.element.InteractionElement;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.Location;
@@ -45,7 +43,7 @@ public class InteractionRootLayer extends PropertyLayer implements ElementLayer 
         this.widthProperty = properties().get(DisplayPropertyTypes.BOX_WIDTH);
         this.heightProperty = properties().get(DisplayPropertyTypes.BOX_HEIGHT);
         this.allowMenu = session.player().hasPermission(Permissions.OPEN);
-        new ToolMenuManager(session, this, element.getTools(properties())).setMode(ToolMenuMode.GLOBAL);
+        addNode(session.nodeProvider().tools(element.getTools(properties())));
         new BoxResizeToolManager(session, this, new InteractionBoxEditor(properties()));
     }
 

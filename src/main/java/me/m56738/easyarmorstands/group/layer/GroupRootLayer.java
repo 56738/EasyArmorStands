@@ -7,8 +7,6 @@ import me.m56738.easyarmorstands.api.editor.context.ExitContext;
 import me.m56738.easyarmorstands.api.editor.context.RemoveContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.AbstractLayer;
-import me.m56738.easyarmorstands.editor.util.ToolMenuManager;
-import me.m56738.easyarmorstands.editor.util.ToolMenuMode;
 import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
@@ -22,7 +20,6 @@ public class GroupRootLayer extends AbstractLayer {
     private final Session session;
     private final Group group;
     private final BoundingBoxParticle boxParticle;
-    private final ToolMenuManager toolManager;
 
     public GroupRootLayer(Group group) {
         super(group.getSession());
@@ -30,7 +27,7 @@ public class GroupRootLayer extends AbstractLayer {
         this.group = group;
         this.boxParticle = session.particleProvider().createAxisAlignedBox();
         this.boxParticle.setColor(ParticleColor.GRAY);
-        this.toolManager = new ToolMenuManager(session, this, new GroupToolProvider(group));
+        addNode(session.nodeProvider().tools(new GroupToolProvider(group)));
     }
 
     private void updateBox() {
@@ -59,7 +56,6 @@ public class GroupRootLayer extends AbstractLayer {
     public void onEnter(@NotNull EnterContext context) {
         super.onEnter(context);
         boxParticle.setColor(ParticleColor.WHITE);
-        toolManager.setMode(ToolMenuMode.GLOBAL);
     }
 
     @Override
