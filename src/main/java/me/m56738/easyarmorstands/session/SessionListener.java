@@ -13,6 +13,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Crafter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
@@ -326,6 +328,18 @@ public class SessionListener implements Listener {
             if (plugin.isTool(item)) {
                 event.getInventory().setResult(null);
                 break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onCrafterCraft(CrafterCraftEvent event) {
+        if (event.getBlock().getState(false) instanceof Crafter crafter) {
+            for (ItemStack item : crafter.getInventory()) {
+                if (plugin.isTool(item)) {
+                    event.setCancelled(true);
+                    break;
+                }
             }
         }
     }
