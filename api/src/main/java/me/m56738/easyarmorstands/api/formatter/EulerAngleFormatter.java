@@ -6,6 +6,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.util.EulerAngle;
 
 public class EulerAngleFormatter implements ValueFormatter<EulerAngle> {
+    private static String formatAngle(double angle) {
+        return EasFormat.ANGLE_FORMAT.format(Math.toDegrees(angle));
+    }
+
     @Override
     public Component format(EulerAngle value) {
         return Component.text()
@@ -23,9 +27,5 @@ public class EulerAngleFormatter implements ValueFormatter<EulerAngle> {
         double y = Math.toDegrees(value.getY());
         double z = Math.toDegrees(value.getZ());
         return x + "," + y + "," + z;
-    }
-
-    private static String formatAngle(double angle) {
-        return EasFormat.ANGLE_FORMAT.format(Math.toDegrees(angle));
     }
 }

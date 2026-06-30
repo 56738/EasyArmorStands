@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.display;
 
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;

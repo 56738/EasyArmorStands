@@ -46,6 +46,51 @@ public class MenuButtonSlot implements MenuSlot {
         }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
+    public static ItemStack createItem(MenuIcon icon, Component name, Component value, List<Component> description, Locale locale) {
+        ItemStack item = icon.asItem().clone();
+
+        if (name == Component.empty() && description.isEmpty()) {
+            item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                    .hideTooltip(true)
+                    .build());
+            return item;
+        }
+
+        Set<DataComponentType> hiddenComponents = new HashSet<>(item.getDataTypes());
+        hiddenComponents.remove(DataComponentTypes.CUSTOM_NAME);
+        hiddenComponents.remove(DataComponentTypes.LORE);
+
+        item.setData(DataComponentTypes.CUSTOM_NAME, formatCustomName(name, value, locale));
+        item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
+                .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
+                .toList()));
+
+        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                .hiddenComponents(hiddenComponents)
+                .build());
+        return item;
+    }
+
+    public static Component formatCustomName(Component name, Component value, Locale locale) {
+        TextComponent.Builder builder = Component.text()
+                .append(format(name, MessageStyle.BUTTON_NAME, locale));
+        if (value != Component.empty()) {
+            builder.append(Component.text(": ", FALLBACK_STYLE));
+            builder.append(GlobalTranslator.render(value, locale)
+                    .applyFallbackStyle(TextDecoration.ITALIC.withState(false)));
+        }
+        return builder.build();
+    }
+
+    public static Component format(Component component, MessageStyle style, Locale locale) {
+        return render(Message.format(style, component), locale);
+    }
+
+    public static Component render(Component component, Locale locale) {
+        return GlobalTranslator.render(component, locale).applyFallbackStyle(FALLBACK_STYLE);
+    }
+
     public MenuButton getButton() {
         return button;
     }
@@ -96,50 +141,5 @@ public class MenuButtonSlot implements MenuSlot {
             }
         });
         click.updateItem();
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    public static ItemStack createItem(MenuIcon icon, Component name, Component value, List<Component> description, Locale locale) {
-        ItemStack item = icon.asItem().clone();
-
-        if (name == Component.empty() && description.isEmpty()) {
-            item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                    .hideTooltip(true)
-                    .build());
-            return item;
-        }
-
-        Set<DataComponentType> hiddenComponents = new HashSet<>(item.getDataTypes());
-        hiddenComponents.remove(DataComponentTypes.CUSTOM_NAME);
-        hiddenComponents.remove(DataComponentTypes.LORE);
-
-        item.setData(DataComponentTypes.CUSTOM_NAME, formatCustomName(name, value, locale));
-        item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
-                .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
-                .toList()));
-
-        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hiddenComponents(hiddenComponents)
-                .build());
-        return item;
-    }
-
-    public static Component formatCustomName(Component name, Component value, Locale locale) {
-        TextComponent.Builder builder = Component.text()
-                .append(format(name, MessageStyle.BUTTON_NAME, locale));
-        if (value != Component.empty()) {
-            builder.append(Component.text(": ", FALLBACK_STYLE));
-            builder.append(GlobalTranslator.render(value, locale)
-                    .applyFallbackStyle(TextDecoration.ITALIC.withState(false)));
-        }
-        return builder.build();
-    }
-
-    public static Component format(Component component, MessageStyle style, Locale locale) {
-        return render(Message.format(style, component), locale);
-    }
-
-    public static Component render(Component component, Locale locale) {
-        return GlobalTranslator.render(component, locale).applyFallbackStyle(FALLBACK_STYLE);
     }
 }

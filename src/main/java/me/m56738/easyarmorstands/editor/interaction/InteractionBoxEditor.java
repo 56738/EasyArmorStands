@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.editor.interaction;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.box.AbstractBoundingBoxEditorSession;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;

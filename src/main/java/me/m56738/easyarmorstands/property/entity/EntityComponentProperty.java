@@ -17,15 +17,15 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class EntityComponentProperty implements Property<Component> {
+    private static final MiniMessage serializer = EasyArmorStandsPlugin.getInstance().getMiniMessage();
+    private static final MiniMessage nonVirtualSerializer = MiniMessage.builder()
+            .emitVirtuals(false)
+            .build();
     private final PropertyType<Component> type;
     private final NamespacedKey key;
     private final Entity entity;
     private final Supplier<Component> getter;
     private final Consumer<Component> setter;
-    private static final MiniMessage serializer = EasyArmorStandsPlugin.getInstance().getMiniMessage();
-    private static final MiniMessage nonVirtualSerializer = MiniMessage.builder()
-            .emitVirtuals(false)
-            .build();
 
     public EntityComponentProperty(PropertyType<Component> type, Entity entity, Supplier<Component> getter, Consumer<Component> setter) {
         this.type = type;
@@ -33,23 +33,6 @@ public class EntityComponentProperty implements Property<Component> {
         this.entity = entity;
         this.getter = getter;
         this.setter = setter;
-    }
-
-    @Override
-    public PropertyType<Component> getType() {
-        return type;
-    }
-
-    @Override
-    public Component getValue() {
-        return resolveValue(entity, key, getter.get());
-    }
-
-    @Override
-    public boolean setValue(Component value) {
-        setter.accept(value);
-        saveValue(entity, key, value);
-        return true;
     }
 
     public static Component resolveValue(Entity entity, NamespacedKey key, Component realText) {
@@ -69,5 +52,22 @@ public class EntityComponentProperty implements Property<Component> {
         } else {
             pdc.remove(key);
         }
+    }
+
+    @Override
+    public PropertyType<Component> getType() {
+        return type;
+    }
+
+    @Override
+    public Component getValue() {
+        return resolveValue(entity, key, getter.get());
+    }
+
+    @Override
+    public boolean setValue(Component value) {
+        setter.accept(value);
+        saveValue(entity, key, value);
+        return true;
     }
 }

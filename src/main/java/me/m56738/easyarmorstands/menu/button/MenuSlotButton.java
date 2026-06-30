@@ -1,11 +1,11 @@
 package me.m56738.easyarmorstands.menu.button;
 
-import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
+import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;

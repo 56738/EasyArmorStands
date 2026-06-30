@@ -9,7 +9,6 @@ import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

@@ -15,6 +15,12 @@ public class MainThreadExecutor implements Executor {
         this.plugin = plugin;
     }
 
+    public static void checkMainThread() {
+        if (!Bukkit.isPrimaryThread()) {
+            throw new IllegalStateException("Must be called on main thread");
+        }
+    }
+
     public void setPlugin(@Nullable Plugin plugin) {
         this.plugin = plugin;
     }
@@ -25,12 +31,6 @@ public class MainThreadExecutor implements Executor {
             command.run();
         } else {
             plugin.getServer().getScheduler().runTask(plugin, command);
-        }
-    }
-
-    public static void checkMainThread() {
-        if (!Bukkit.isPrimaryThread()) {
-            throw new IllegalStateException("Must be called on main thread");
         }
     }
 }

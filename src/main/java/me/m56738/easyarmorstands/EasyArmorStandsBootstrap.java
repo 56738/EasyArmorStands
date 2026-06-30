@@ -49,6 +49,20 @@ import org.jspecify.annotations.Nullable;
 public class EasyArmorStandsBootstrap implements PluginBootstrap {
     private @Nullable BootstrapResult result;
 
+    private static Suggestion createSuggestion(CommandEntry<EasCommandSender> entry) {
+        Description description = entry.command().commandDescription().description();
+        String syntax = entry.syntax();
+        Component tooltip;
+        if (description instanceof RichDescription richDescription) {
+            tooltip = richDescription.contents();
+        } else if (!description.isEmpty()) {
+            tooltip = Component.text(description.textDescription());
+        } else {
+            return Suggestion.suggestion(syntax);
+        }
+        return ComponentTooltipSuggestion.suggestion(syntax, tooltip);
+    }
+
     @Override
     public void bootstrap(BootstrapContext context) {
         TranslationManager translationManager = new TranslationManager();
@@ -99,20 +113,6 @@ public class EasyArmorStandsBootstrap implements PluginBootstrap {
         PropertyCommands.register(commandManager);
 
         result = new BootstrapResult(executor, translationManager, commandManager);
-    }
-
-    private static Suggestion createSuggestion(CommandEntry<EasCommandSender> entry) {
-        Description description = entry.command().commandDescription().description();
-        String syntax = entry.syntax();
-        Component tooltip;
-        if (description instanceof RichDescription richDescription) {
-            tooltip = richDescription.contents();
-        } else if (!description.isEmpty()) {
-            tooltip = Component.text(description.textDescription());
-        } else {
-            return Suggestion.suggestion(syntax);
-        }
-        return ComponentTooltipSuggestion.suggestion(syntax, tooltip);
     }
 
     @Override

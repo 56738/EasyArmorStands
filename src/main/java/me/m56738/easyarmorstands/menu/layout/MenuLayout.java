@@ -38,43 +38,6 @@ public class MenuLayout {
         this.rules = rules;
     }
 
-    public Menu createMenu(Component title, Locale locale, Collection<MenuButton> buttons) {
-        MenuCreator creator = new MenuCreator(locale);
-        creator.setTitle(title);
-        IntSet filledSlots = new IntOpenHashSet();
-        LinkedList<MenuButton> queue = new LinkedList<>(buttons);
-        for (RuleEntry entry : rules) {
-            int row = entry.row();
-            int column = entry.column();
-            int index = 9 * row + column;
-            if (filledSlots.contains(index)) {
-                continue;
-            }
-            MenuLayoutRule rule = entry.rule();
-            MenuButton button = matchButton(rule, queue);
-            if (button != null) {
-                filledSlots.add(index);
-                creator.setSlot(index, MenuButtonSlot.toSlot(button));
-            }
-        }
-        return creator.build();
-    }
-
-    private @Nullable MenuButton matchButton(MenuLayoutRule rule, Queue<MenuButton> queue) {
-        Iterator<MenuButton> iterator = queue.iterator();
-        while (iterator.hasNext()) {
-            MenuButton button = iterator.next();
-            if (rule.matches(button)) {
-                iterator.remove();
-                return button;
-            }
-        }
-        return rule.fallback();
-    }
-
-    record RuleEntry(int row, int column, MenuLayoutRule rule) {
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     public static MenuButton createBackground(Material material) {
         ItemStack item = ItemStack.of(material);
@@ -164,5 +127,42 @@ public class MenuLayout {
             }
         }
         return builder.build();
+    }
+
+    public Menu createMenu(Component title, Locale locale, Collection<MenuButton> buttons) {
+        MenuCreator creator = new MenuCreator(locale);
+        creator.setTitle(title);
+        IntSet filledSlots = new IntOpenHashSet();
+        LinkedList<MenuButton> queue = new LinkedList<>(buttons);
+        for (RuleEntry entry : rules) {
+            int row = entry.row();
+            int column = entry.column();
+            int index = 9 * row + column;
+            if (filledSlots.contains(index)) {
+                continue;
+            }
+            MenuLayoutRule rule = entry.rule();
+            MenuButton button = matchButton(rule, queue);
+            if (button != null) {
+                filledSlots.add(index);
+                creator.setSlot(index, MenuButtonSlot.toSlot(button));
+            }
+        }
+        return creator.build();
+    }
+
+    private @Nullable MenuButton matchButton(MenuLayoutRule rule, Queue<MenuButton> queue) {
+        Iterator<MenuButton> iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            MenuButton button = iterator.next();
+            if (rule.matches(button)) {
+                iterator.remove();
+                return button;
+            }
+        }
+        return rule.fallback();
+    }
+
+    record RuleEntry(int row, int column, MenuLayoutRule rule) {
     }
 }

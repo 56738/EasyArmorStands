@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.editor.display;
 
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.util.EasMath;
 import org.bukkit.Location;

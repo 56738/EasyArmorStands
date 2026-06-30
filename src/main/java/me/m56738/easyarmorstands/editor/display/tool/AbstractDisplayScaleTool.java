@@ -88,31 +88,16 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
             this.currentDelta = new Vector3f(1);
         }
 
+        public static boolean isCloseToZero(float value) {
+            return Math.abs(value) < 1e-6;
+        }
+
         public Vector3fc getOriginalScale() {
             return originalScale;
         }
 
         public Vector3fc getScale() {
             return scaleProperty.getValue();
-        }
-
-        public static boolean isCloseToZero(float value) {
-            return Math.abs(value) < 1e-6;
-        }
-
-        private Vector3fc getDelta() {
-            currentDelta.x = getDelta(currentScale.x(), originalScale.x());
-            currentDelta.y = getDelta(currentScale.y(), originalScale.y());
-            currentDelta.z = getDelta(currentScale.z(), originalScale.z());
-            return currentDelta;
-        }
-
-        private float getDelta(float value, float original) {
-            if (isCloseToZero(original)) {
-                return 1;
-            } else {
-                return value / original;
-            }
         }
 
         public void setScale(Vector3fc scale) {
@@ -145,6 +130,21 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
                         (float) offsetChange.z,
                         currentTranslation);
                 translationProperty.setValue(currentTranslation);
+            }
+        }
+
+        private Vector3fc getDelta() {
+            currentDelta.x = getDelta(currentScale.x(), originalScale.x());
+            currentDelta.y = getDelta(currentScale.y(), originalScale.y());
+            currentDelta.z = getDelta(currentScale.z(), originalScale.z());
+            return currentDelta;
+        }
+
+        private float getDelta(float value, float original) {
+            if (isCloseToZero(original)) {
+                return 1;
+            } else {
+                return value / original;
             }
         }
 

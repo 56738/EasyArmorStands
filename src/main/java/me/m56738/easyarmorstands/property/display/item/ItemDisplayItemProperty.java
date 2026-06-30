@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.property.display.item;
 
 import me.m56738.easyarmorstands.api.property.Property;
-import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.util.Util;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;

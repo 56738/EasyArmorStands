@@ -40,53 +40,6 @@ public class EntityCopyButton implements MenuButton {
         this.item = item;
     }
 
-    @Override
-    public Key key() {
-        return KEY;
-    }
-
-    @Override
-    public MenuIcon icon() {
-        return MenuIcon.of(item);
-    }
-
-    @Override
-    public MenuButtonCategory category() {
-        return MenuButtonCategory.FOOTER;
-    }
-
-    @Override
-    public Component name() {
-        return Component.translatable("easyarmorstands.menu.copy");
-    }
-
-    @Override
-    public List<Component> description() {
-        return List.of(Component.translatable("easyarmorstands.menu.copy.description"));
-    }
-
-    @Override
-    @SuppressWarnings("UnstableApiUsage")
-    public void onClick(MenuClickContext context) {
-        Player player = context.player();
-        ItemStack cursor = Util.wrapItem(player.getItemOnCursor());
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        if (cursor.isEmpty()) {
-            plugin.getServer().getScheduler().runTask(plugin, () -> {
-                ItemStack item = createSpawnEgg(entity);
-                if (item != null) {
-                    item.setData(DataComponentTypes.ITEM_NAME,
-                            GlobalTranslator.render(Component.translatable("easyarmorstands.copy.item.name",
-                                    NamedTextColor.GOLD,
-                                    type.getDisplayName()), player.locale()));
-                    player.setItemOnCursor(item);
-                }
-            });
-        } else {
-            plugin.getServer().getScheduler().runTask(plugin, () -> player.setItemOnCursor(null));
-        }
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     public static @Nullable ItemStack createSpawnEgg(Entity entity) {
         EntitySnapshot snapshot = entity.createSnapshot();
@@ -134,5 +87,52 @@ public class EntityCopyButton implements MenuButton {
         tagField.set(meta, data);
         item.setItemMeta(meta);
         return item;
+    }
+
+    @Override
+    public Key key() {
+        return KEY;
+    }
+
+    @Override
+    public MenuIcon icon() {
+        return MenuIcon.of(item);
+    }
+
+    @Override
+    public MenuButtonCategory category() {
+        return MenuButtonCategory.FOOTER;
+    }
+
+    @Override
+    public Component name() {
+        return Component.translatable("easyarmorstands.menu.copy");
+    }
+
+    @Override
+    public List<Component> description() {
+        return List.of(Component.translatable("easyarmorstands.menu.copy.description"));
+    }
+
+    @Override
+    @SuppressWarnings("UnstableApiUsage")
+    public void onClick(MenuClickContext context) {
+        Player player = context.player();
+        ItemStack cursor = Util.wrapItem(player.getItemOnCursor());
+        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+        if (cursor.isEmpty()) {
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                ItemStack item = createSpawnEgg(entity);
+                if (item != null) {
+                    item.setData(DataComponentTypes.ITEM_NAME,
+                            GlobalTranslator.render(Component.translatable("easyarmorstands.copy.item.name",
+                                    NamedTextColor.GOLD,
+                                    type.getDisplayName()), player.locale()));
+                    player.setItemOnCursor(item);
+                }
+            });
+        } else {
+            plugin.getServer().getScheduler().runTask(plugin, () -> player.setItemOnCursor(null));
+        }
     }
 }
