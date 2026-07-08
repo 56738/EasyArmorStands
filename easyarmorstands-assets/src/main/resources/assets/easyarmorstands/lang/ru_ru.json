@@ -409,6 +409,7 @@
   "easyarmorstands.success.removed-name": "Удалено пользовательское имя.",
   "easyarmorstands.success.removed-tag": "Удален тег: %s.",
   "easyarmorstands.success.reset-value": "Сбросить выбранное свойство.",
+  "easyarmorstands.success.selected-tool": "Инструмент выбран.",
   "easyarmorstands.success.snap-changed.angle": "Установить размер шага привязки к углу на %s°",
   "easyarmorstands.success.snap-changed.position": "Установить размер шага привязки позиции на %s",
   "easyarmorstands.success.undone-change": "Отменено изменение: %s.",
