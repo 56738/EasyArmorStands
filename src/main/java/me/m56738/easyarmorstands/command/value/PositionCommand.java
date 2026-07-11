@@ -3,15 +3,12 @@ package me.m56738.easyarmorstands.command.value;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.RichDescription;
@@ -20,12 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PositionCommand extends PropertyCommand<Location> {
     public PositionCommand() {
-        super(EntityPropertyTypes.LOCATION, LocationParser.locationParser());
-    }
-
-    @Override
-    public Command.@NonNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NonNull Builder<EasCommandSender> builder) {
-        return builder.literal("position");
+        super("position", EntityPropertyTypes.LOCATION, LocationParser.locationParser());
     }
 
     @Override

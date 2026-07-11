@@ -41,6 +41,6 @@ public interface ValueCommand<T> extends Command.Builder.Applicable<EasCommandSe
     }
 
     default void sendNotSupported(@NotNull Audience audience) {
-        audience.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
+        audience.sendMessage(Message.error("easyarmorstands.error.property-not-supported"));
     }
 }

@@ -3,6 +3,8 @@ package me.m56738.easyarmorstands.command;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
+import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
@@ -10,6 +12,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.value.DisplayScaleAxisCommand;
 import me.m56738.easyarmorstands.command.value.PitchCommand;
 import me.m56738.easyarmorstands.command.value.PositionCommand;
+import me.m56738.easyarmorstands.command.value.PropertyCommand;
 import me.m56738.easyarmorstands.command.value.ValueCommand;
 import me.m56738.easyarmorstands.command.value.YawCommand;
 import me.m56738.easyarmorstands.message.Message;
@@ -31,6 +34,8 @@ public final class PropertyCommands {
         for (Axis axis : Axis.values()) {
             register(commandManager, new DisplayScaleAxisCommand(axis));
         }
+
+        register(commandManager, new PropertyCommand<>("block", BlockDisplayPropertyTypes.BLOCK, BlockDataArgumentParser.blockDataParser()));
     }
 
     public static <T> void register(CommandManager<EasCommandSender> commandManager, ValueCommand<T> valueCommand) {

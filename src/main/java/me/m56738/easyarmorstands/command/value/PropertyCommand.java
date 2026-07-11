@@ -4,18 +4,30 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.message.Message;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-public abstract class PropertyCommand<T> implements ValueCommand<T> {
+public class PropertyCommand<T> implements ValueCommand<T> {
+    private final String name;
     private final PropertyType<T> type;
     private final ParserDescriptor<EasCommandSender, T> parser;
 
-    public PropertyCommand(PropertyType<T> type, ParserDescriptor<EasCommandSender, T> parser) {
+    public PropertyCommand(String name, PropertyType<T> type, ParserDescriptor<EasCommandSender, T> parser) {
+        this.name = name;
         this.type = type;
         this.parser = parser;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -31,6 +43,16 @@ public abstract class PropertyCommand<T> implements ValueCommand<T> {
     @Override
     public @NotNull ParserDescriptor<EasCommandSender, T> getParser() {
         return parser;
+    }
+
+    @Override
+    public @NotNull Description getShowDescription() {
+        return RichDescription.of(Message.component("easyarmorstands.command.description.show-property", type.getName()));
+    }
+
+    @Override
+    public @NotNull Description getSetterDescription() {
+        return RichDescription.of(Message.component("easyarmorstands.command.description.set-property", type.getName()));
     }
 
     @Override
@@ -51,5 +73,22 @@ public abstract class PropertyCommand<T> implements ValueCommand<T> {
     @Override
     public @NotNull Component formatValue(@NotNull T value) {
         return type.getValueComponent(value);
+    }
+
+    @Override
+    public @NotNull String formatCommand(@NonNull T value) {
+        return "/eas " + name + " " + type.getValueString(value);
+    }
+
+    @Override
+    public void sendSuccess(@NotNull Audience audience, @NonNull T value) {
+        audience.sendMessage(Message.success("easyarmorstands.success.changed-property",
+                type.getName(),
+                type.getValueComponent(value)));
+    }
+
+    @Override
+    public Command.@NotNull Builder<EasCommandSender> applyToCommandBuilder(Command.@NotNull Builder<EasCommandSender> builder) {
+        return builder.literal(name);
     }
 }

@@ -4,7 +4,6 @@ import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
@@ -24,7 +23,6 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Display.Brightness;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotation.specifier.Range;
@@ -37,26 +35,6 @@ import java.util.Optional;
 
 @Command("eas")
 public class DisplayCommands {
-    @Command("block <value>")
-    @PropertyPermission("easyarmorstands:block_display/block")
-    @CommandDescription("easyarmorstands.command.description.block")
-    @RequireElementSelection
-    public void setBlock(EasPlayer sender, ElementSelection selection, @Argument("value") BlockData value) {
-        PropertyContainer properties = selection.properties(sender);
-        Property<BlockData> property = properties.getOrNull(BlockDisplayPropertyTypes.BLOCK);
-        if (property == null) {
-            sender.sendMessage(Message.error("easyarmorstands.error.block-unsupported"));
-            return;
-        }
-        if (property.setValue(value)) {
-            properties.commit();
-            sender.sendMessage(Message.success("easyarmorstands.success.changed-block",
-                    property.getType().getValueComponent(value)));
-        } else {
-            sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
-        }
-    }
-
     @Command("brightness block <value>")
     @PropertyPermission("easyarmorstands:display/brightness")
     @CommandDescription("easyarmorstands.command.description.brightness.block")
