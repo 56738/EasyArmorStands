@@ -6,7 +6,6 @@ import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import net.kyori.adventure.key.Key;
-import org.bukkit.entity.Player;
 import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.permission.Permission;
 import org.incendo.cloud.permission.PredicatePermission;
@@ -49,9 +48,8 @@ public class PropertyPermissionPredicate implements Predicate<EasCommandSender> 
         if (type == null) {
             type = EasyArmorStandsPlugin.getInstance().propertyTypeRegistry().get(key);
         }
-        if (sender instanceof EasPlayer) {
-            Player player = ((EasPlayer) sender).player();
-            return player.hasPermission(Permissions.EDIT) && type.canChange(player);
+        if (sender instanceof EasPlayer player) {
+            return player.get().hasPermission(Permissions.EDIT) && type.canChange(player.get());
         }
         return false;
     }

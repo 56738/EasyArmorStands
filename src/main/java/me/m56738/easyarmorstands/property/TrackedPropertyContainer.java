@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.property;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +19,10 @@ public class TrackedPropertyContainer extends PropertyWrapperContainer {
     private final Element element;
     private final ChangeTracker tracker;
 
-    public TrackedPropertyContainer(Element element, ChangeContext context) {
-        super(new PermissionCheckedPropertyContainer(element, context));
+    public TrackedPropertyContainer(Element element, EasPlayer player) {
+        super(new PermissionCheckedPropertyContainer(element, player));
         this.element = element;
-        this.tracker = context.tracker();
+        this.tracker = player.tracker();
     }
 
     @Override

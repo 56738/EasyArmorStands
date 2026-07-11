@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.command.util;
 
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.group.property.GroupPropertyContainer;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +23,13 @@ public class ElementSelection {
         return elements;
     }
 
-    public @NotNull PropertyContainer properties(ChangeContext context) {
+    public @NotNull PropertyContainer properties(EasPlayer player) {
         if (elements.size() == 1) {
-            return new TrackedPropertyContainer(elements.iterator().next(), context);
+            return new TrackedPropertyContainer(elements.iterator().next(), player);
         }
         List<PropertyContainer> containers = new ArrayList<>(elements.size());
         for (Element element : elements) {
-            containers.add(new TrackedPropertyContainer(element, context));
+            containers.add(new TrackedPropertyContainer(element, player));
         }
         return new GroupPropertyContainer(containers);
     }

@@ -22,7 +22,6 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.config.EasConfig;
 import me.m56738.easyarmorstands.config.InputHintsConfig;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.editor.button.ElementButtonHandler;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
@@ -36,7 +35,6 @@ import me.m56738.easyarmorstands.session.context.ExitContextImpl;
 import me.m56738.easyarmorstands.session.context.RemoveContextImpl;
 import me.m56738.easyarmorstands.session.context.UpdateContextImpl;
 import me.m56738.easyarmorstands.util.Util;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -70,9 +68,7 @@ import java.util.stream.Collectors;
 public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Layer> layerStack = new LinkedList<>();
-    private final Player player;
-    private final Audience audience;
-    private final ChangeContext context;
+    private final EasPlayer player;
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
@@ -90,12 +86,10 @@ public final class SessionImpl implements Session {
     private Category inputCategory = Category.PRIMARY;
     private boolean hasSecondaryInputs;
 
-    public SessionImpl(EasPlayer context) {
-        this.player = context.get();
-        this.audience = context;
-        this.context = context;
-        this.snapper = new SessionSnapper(player);
-        this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player));
+    public SessionImpl(EasPlayer player) {
+        this.player = player;
+        this.snapper = new SessionSnapper(player.get());
+        this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player.get()));
     }
 
     @Override
@@ -121,7 +115,7 @@ public final class SessionImpl implements Session {
     @Override
     public double getScale(Vector3dc position) {
         EasConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration();
-        Vector3d eyePosition = Util.toVector3d(player.getEyeLocation());
+        Vector3d eyePosition = Util.toVector3d(player.get().getEyeLocation());
         double minDistance = config.editor.scale.minDistance;
         double maxDistance = config.editor.scale.maxDistance;
         if (maxDistance <= minDistance) {
@@ -275,7 +269,7 @@ public final class SessionImpl implements Session {
         }
 
         inputCategory = Category.PRIMARY;
-        if (player.isSneaking() && hasSecondaryInputs) {
+        if (player.get().isSneaking() && hasSecondaryInputs) {
             inputCategory = Category.SECONDARY;
         }
 
@@ -287,7 +281,7 @@ public final class SessionImpl implements Session {
 
         updateOverlay(context, pendingActionBar);
 
-        return player.isValid();
+        return player.get().isValid();
     }
 
     private void updateOverlay(UpdateContextImpl context, Component pendingActionBar) {
@@ -300,20 +294,20 @@ public final class SessionImpl implements Session {
         boolean resendOverlay = overlayTicks <= 0;
         if (resendOverlay) {
             overlayTicks = 20;
-            audience.sendTitlePart(TitlePart.TIMES, titleTimes);
+            player.sendTitlePart(TitlePart.TIMES, titleTimes);
         }
         overlayTicks--;
 
         if (resendOverlay || !Objects.equals(currentTitle, pendingTitle) || !Objects.equals(currentSubtitle, pendingSubtitle)) {
             currentTitle = pendingTitle;
             currentSubtitle = pendingSubtitle;
-            audience.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
-            audience.sendTitlePart(TitlePart.TITLE, currentTitle);
+            player.sendTitlePart(TitlePart.SUBTITLE, currentSubtitle);
+            player.sendTitlePart(TitlePart.TITLE, currentTitle);
         }
 
         if (resendOverlay || !Objects.equals(currentActionBar, pendingActionBar)) {
             currentActionBar = pendingActionBar;
-            audience.sendActionBar(currentActionBar);
+            player.sendActionBar(currentActionBar);
         }
     }
 
@@ -376,17 +370,13 @@ public final class SessionImpl implements Session {
             layer.onRemove(RemoveContextImpl.INSTANCE);
         }
         layerStack.clear();
-        audience.clearTitle();
-        audience.sendActionBar(Component.empty());
+        player.clearTitle();
+        player.sendActionBar(Component.empty());
         for (EditorParticle particle : particles) {
             particle.hideGizmo();
         }
         particles.clear();
         valid = false;
-    }
-
-    public ChangeContext context() {
-        return context;
     }
 
     public double getRange() {
@@ -425,25 +415,25 @@ public final class SessionImpl implements Session {
 
     @Override
     public @NotNull Player player() {
-        return player;
+        return player.get();
     }
 
     @Override
     public @NotNull PropertyContainer properties(@NotNull Element element) {
-        return new TrackedPropertyContainer(element, context);
+        return new TrackedPropertyContainer(element, player);
     }
 
     @Override
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
-        Location eyeLocation = player.getEyeLocation();
+        Location eyeLocation = player.get().getEyeLocation();
         double threshold = getLookThreshold();
         return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
         double length = getRange();
-        Location eyeLocation = player.getEyeLocation();
+        Location eyeLocation = player.get().getEyeLocation();
         Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
         eyeLocation.setX(origin.x);

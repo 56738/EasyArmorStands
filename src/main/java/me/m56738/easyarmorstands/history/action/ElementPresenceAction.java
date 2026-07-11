@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntitySnapshot;
@@ -40,14 +40,14 @@ abstract class ElementPresenceAction implements Action {
         }
     }
 
-    protected boolean create(ChangeContext context) {
+    protected boolean create(EasPlayer player) {
         ElementType type = reference.getType();
-        if (!context.canCreateElement(type, properties)) {
+        if (!player.canCreateElement(type, properties)) {
             return false;
         }
 
         Element element = null;
-        if (type instanceof EntityElementType<?> entityElementType && context.permissions().test(Permissions.COPY_ENTITY)) {
+        if (type instanceof EntityElementType<?> entityElementType && player.permissions().test(Permissions.COPY_ENTITY)) {
             element = createEntity(entityElementType);
         }
         if (element == null) {
@@ -67,7 +67,7 @@ abstract class ElementPresenceAction implements Action {
         return true;
     }
 
-    protected boolean destroy(ChangeContext context) {
+    protected boolean destroy(EasPlayer player) {
         if (reference == null) {
             return false;
         }
@@ -77,7 +77,7 @@ abstract class ElementPresenceAction implements Action {
             return false;
         }
 
-        if (!context.canDestroyElement(destroyableElement)) {
+        if (!player.canDestroyElement(destroyableElement)) {
             return false;
         }
 

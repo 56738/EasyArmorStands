@@ -64,7 +64,7 @@ public class ClipboardCommands {
     @RequireElement
     public void copy(EasPlayer sender, Clipboard clipboard, Element element) {
         element.getProperties().forEach(property -> {
-            if (property.getType().canCopy(sender.player())) {
+            if (property.getType().canCopy(sender.get())) {
                 copyProperty(clipboard, property);
             }
         });

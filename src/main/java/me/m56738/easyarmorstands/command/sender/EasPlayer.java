@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.api.event.player.PlayerEditPropertyEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.ChangeTracker;
 import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.session.SessionImpl;
@@ -26,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-public class EasPlayer extends EasCommandSender implements ChangeContext {
+public class EasPlayer extends EasCommandSender {
     private final @NotNull Player player;
     private @Nullable History history;
     private @Nullable Clipboard clipboard;
@@ -41,7 +40,6 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return player;
     }
 
-    @Override
     public @NotNull History history() {
         if (history == null) {
             MainThreadExecutor.checkMainThread();
@@ -58,26 +56,18 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return clipboard;
     }
 
-    @Override
     public @NotNull ChangeTracker tracker() {
         return history().getTracker();
     }
 
-    @Override
     public @NotNull Locale locale() {
         return getOrDefault(Identity.LOCALE, Locale.US);
-    }
-
-    @Override
-    public @NotNull Player player() {
-        return player;
     }
 
     public @Nullable SessionImpl session() {
         return EasyArmorStandsPlugin.getInstance().sessionManager().getSession(player);
     }
 
-    @Override
     public boolean canCreateElement(ElementType type, PropertyContainer properties) {
         if (!type.canSpawn(player)) {
             return false;
@@ -87,7 +77,6 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return !event.isCancelled();
     }
 
-    @Override
     public boolean canDestroyElement(DestroyableElement element) {
         if (!element.canDestroy(player)) {
             return false;
@@ -97,7 +86,6 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return !event.isCancelled();
     }
 
-    @Override
     public boolean canEditElement(EditableElement element) {
         if (!element.canEdit(player)) {
             return false;
@@ -107,7 +95,6 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return !event.isCancelled();
     }
 
-    @Override
     public boolean canDiscoverElement(EditableElement element) {
         if (!element.canEdit(player)) {
             return false;
@@ -117,7 +104,6 @@ public class EasPlayer extends EasCommandSender implements ChangeContext {
         return !event.isCancelled();
     }
 
-    @Override
     public <T> boolean canChangeProperty(Element element, Property<T> property, T value) {
         if (!element.isValid()) {
             return false;

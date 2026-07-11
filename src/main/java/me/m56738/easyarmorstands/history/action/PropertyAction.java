@@ -5,7 +5,7 @@ import me.m56738.easyarmorstands.api.element.ElementReference;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.property.PermissionCheckedPropertyContainer;
 import net.kyori.adventure.text.Component;
@@ -28,21 +28,21 @@ public class PropertyAction<T> implements Action {
     }
 
     @Override
-    public boolean execute(ChangeContext context) {
-        return tryChange(newValue, context);
+    public boolean execute(EasPlayer player) {
+        return tryChange(newValue, player);
     }
 
     @Override
-    public boolean undo(ChangeContext context) {
-        return tryChange(oldValue, context);
+    public boolean undo(EasPlayer player) {
+        return tryChange(oldValue, player);
     }
 
-    private boolean tryChange(T value, ChangeContext context) {
+    private boolean tryChange(T value, EasPlayer player) {
         Element element = elementReference.getElement();
         if (element == null) {
             return false;
         }
-        PropertyContainer properties = new PermissionCheckedPropertyContainer(element, context);
+        PropertyContainer properties = new PermissionCheckedPropertyContainer(element, player);
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;

@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 class PermissionCheckedPropertyWrapper<T> implements Property<T> {
     private final Property<T> property;
     private final Element element;
-    private final ChangeContext context;
+    private final EasPlayer player;
     private Boolean hasPermissionCache;
 
-    PermissionCheckedPropertyWrapper(Property<T> property, Element element, ChangeContext context) {
+    PermissionCheckedPropertyWrapper(Property<T> property, Element element, EasPlayer player) {
         this.property = property;
         this.element = element;
-        this.context = context;
+        this.player = player;
     }
 
     private boolean hasPermission() {
@@ -27,7 +27,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
             return hasPermissionCache;
         }
 
-        boolean result = property.getType().canChange(context.player());
+        boolean result = property.getType().canChange(player.get());
         hasPermissionCache = result;
         return result;
     }
@@ -46,7 +46,7 @@ class PermissionCheckedPropertyWrapper<T> implements Property<T> {
         if (!hasPermission()) {
             return false;
         }
-        return context.canChangeProperty(element, property, value);
+        return player.canChangeProperty(element, property, value);
     }
 
     @Override

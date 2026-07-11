@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -56,12 +55,12 @@ public class DestroyButton implements MenuButton {
             return;
         }
 
-        ChangeContext changeContext = new EasPlayer(context.player());
-        if (!changeContext.canDestroyElement(element)) {
+        EasPlayer player = new EasPlayer(context.player());
+        if (!player.canDestroyElement(element)) {
             return;
         }
 
-        changeContext.history().push(new ElementDestroyAction(element));
+        player.history().push(new ElementDestroyAction(element));
         element.destroy();
         context.closeMenu();
     }

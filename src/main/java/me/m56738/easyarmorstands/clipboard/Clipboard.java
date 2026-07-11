@@ -4,7 +4,7 @@ import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
@@ -26,13 +26,13 @@ public class Clipboard {
         return properties;
     }
 
-    public void handleAutoApply(Element element, ChangeContext context) {
+    public void handleAutoApply(Element element) {
         if (this.properties.isEmpty()) {
             return;
         }
 
         PropertyCopier copier = new PropertyCopier();
-        TrackedPropertyContainer properties = new TrackedPropertyContainer(element, context);
+        TrackedPropertyContainer properties = new TrackedPropertyContainer(element, new EasPlayer(player));
         copier.copyProperties(properties, this.properties);
         properties.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
 

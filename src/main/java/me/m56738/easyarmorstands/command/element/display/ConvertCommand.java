@@ -16,7 +16,6 @@ import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.group.Group;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
@@ -139,10 +138,9 @@ public class ConvertCommand {
             // Add created entities to the selected group
             Group group = groupRootLayer.getGroup();
             session.returnToLayer(groupRootLayer);
-            ChangeContext context = new EasPlayer(session.player());
             for (Element element : createdElements) {
                 if (element instanceof EditableElement editableElement) {
-                    if (context.canEditElement(editableElement)) {
+                    if (sender.canEditElement(editableElement)) {
                         group.addMember(editableElement);
                     }
                 }
@@ -163,7 +161,7 @@ public class ConvertCommand {
         return item != null && item.getItemMeta() instanceof SkullMeta;
     }
 
-    private void convert(ChangeContext context, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<Element> elements, ElementType itemDisplayType) {
+    private void convert(EasPlayer sender, ArmorStand entity, ItemStack item, ArmorStandPart part, ItemDisplay.ItemDisplayTransform itemTransform, Matrix4dc matrix, List<Action> actions, List<Element> elements, ElementType itemDisplayType) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -190,7 +188,7 @@ public class ConvertCommand {
         properties.put(DisplayPropertyTypes.LEFT_ROTATION, transform.getUnnormalizedRotation(new Quaternionf()));
         properties.put(DisplayPropertyTypes.SCALE, transform.getScale(new Vector3d()).get(new Vector3f()));
 
-        if (!context.canCreateElement(itemDisplayType, properties)) {
+        if (!sender.canCreateElement(itemDisplayType, properties)) {
             return;
         }
 

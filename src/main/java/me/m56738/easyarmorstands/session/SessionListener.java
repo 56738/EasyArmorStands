@@ -276,7 +276,7 @@ public class SessionListener implements Listener {
             Element element = plugin.getElement(event.getEntity());
             if (element != null) {
                 context.history().push(new ElementCreateAction(element));
-                context.clipboard().handleAutoApply(element, context);
+                context.clipboard().handleAutoApply(element);
             }
         });
     }

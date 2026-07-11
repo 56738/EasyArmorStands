@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.history.action;
 
 import me.m56738.easyarmorstands.api.element.Element;
-import me.m56738.easyarmorstands.context.ChangeContext;
+import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -12,13 +12,13 @@ public class ElementCreateAction extends ElementPresenceAction {
     }
 
     @Override
-    public boolean execute(ChangeContext context) {
-        return create(context);
+    public boolean execute(EasPlayer player) {
+        return create(player);
     }
 
     @Override
-    public boolean undo(ChangeContext context) {
-        return destroy(context);
+    public boolean undo(EasPlayer player) {
+        return destroy(player);
     }
 
     @Override

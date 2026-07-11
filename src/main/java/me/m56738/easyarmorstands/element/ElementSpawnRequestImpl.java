@@ -83,7 +83,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
 
         if (player != null) {
             player.history().push(new ElementCreateAction(element));
-            player.clipboard().handleAutoApply(element, player);
+            player.clipboard().handleAutoApply(element);
         }
         return element;
     }

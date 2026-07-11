@@ -20,7 +20,6 @@ import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
-import me.m56738.easyarmorstands.context.ChangeContext;
 import me.m56738.easyarmorstands.editor.input.OpenSpawnMenuInput;
 import me.m56738.easyarmorstands.editor.input.selection.AddElementToGroupInput;
 import me.m56738.easyarmorstands.editor.input.selection.ClearGroupSelectionInput;
@@ -286,8 +285,8 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
 
     private Entry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
-        ChangeContext context = new EasPlayer(session.player());
-        if (element == null || !context.canDiscoverElement(element)) {
+        EasPlayer player = new EasPlayer(session.player());
+        if (element == null || !player.canDiscoverElement(element)) {
             return new Entry(entry);
         }
         buttonCount++;
@@ -321,8 +320,8 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
 
     @Override
     public boolean selectElement(@NotNull SelectableElement element) {
-        ChangeContext context = new EasPlayer(session.player());
-        if (!context.canEditElement(element)) {
+        EasPlayer player = new EasPlayer(session.player());
+        if (!player.canEditElement(element)) {
             return false;
         }
 
@@ -339,9 +338,9 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
         }
 
         Group group = new Group(session);
-        ChangeContext context = new EasPlayer(session.player());
+        EasPlayer player = new EasPlayer(session.player());
         for (SelectableElement element : elements) {
-            if (context.canEditElement(element)) {
+            if (player.canEditElement(element)) {
                 group.addMember(element);
             }
         }
