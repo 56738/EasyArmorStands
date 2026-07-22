@@ -17,6 +17,7 @@ import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ItemFramePropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
 import me.m56738.easyarmorstands.menu.button.SpawnButton;
@@ -26,7 +27,6 @@ import me.m56738.easyarmorstands.property.display.DisplayLeftRotationProperty;
 import me.m56738.easyarmorstands.property.display.DisplayRightRotationProperty;
 import me.m56738.easyarmorstands.property.display.DisplayScaleProperty;
 import me.m56738.easyarmorstands.property.display.DisplayTranslationProperty;
-import me.m56738.easyarmorstands.property.display.item.ItemDisplayItemProperty;
 import me.m56738.easyarmorstands.property.display.text.TextDisplayBackgroundProperty;
 import me.m56738.easyarmorstands.property.entity.EntityComponentProperty;
 import me.m56738.easyarmorstands.property.entity.EntityEquipmentProperty;
@@ -49,6 +49,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mannequin;
 import org.bukkit.entity.Mob;
@@ -118,6 +119,9 @@ public class EntityElementListener implements Listener {
         }
         if (entity instanceof Interaction) {
             registerInteractionProperties((Interaction) entity, registry);
+        }
+        if (entity instanceof ItemFrame itemFrame) {
+            registerItemFrameProperties(itemFrame, registry);
         }
     }
 
@@ -200,7 +204,7 @@ public class EntityElementListener implements Listener {
     }
 
     private void registerItemDisplayProperties(ItemDisplay entity, PropertyRegistry registry) {
-        registry.register(new ItemDisplayItemProperty(entity));
+        registry.register(Property.of(ItemDisplayPropertyTypes.ITEM, entity::getItemStack, entity::setItemStack));
         registry.register(Property.of(ItemDisplayPropertyTypes.TRANSFORM, entity::getItemDisplayTransform, entity::setItemDisplayTransform));
     }
 
@@ -221,5 +225,11 @@ public class EntityElementListener implements Listener {
         registry.register(Property.of(DisplayPropertyTypes.BOX_WIDTH, entity::getInteractionWidth, entity::setInteractionWidth));
         registry.register(Property.of(DisplayPropertyTypes.BOX_HEIGHT, entity::getInteractionHeight, entity::setInteractionHeight));
         registry.register(Property.of(InteractionPropertyTypes.RESPONSIVE, entity::isResponsive, entity::setResponsive));
+    }
+
+    private void registerItemFrameProperties(ItemFrame entity, PropertyRegistry registry) {
+        registry.register(Property.of(ItemFramePropertyTypes.ITEM, entity::getItem, item -> entity.setItem(item, false)));
+        registry.register(Property.of(ItemFramePropertyTypes.FIXED, entity::isFixed, entity::setFixed));
+        registry.register(Property.of(EntityPropertyTypes.VISIBLE, entity::isVisible, entity::setVisible));
     }
 }

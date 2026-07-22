@@ -13,7 +13,7 @@ import static net.kyori.adventure.text.Component.translatable;
 @NullMarked
 public final class ItemDisplayPropertyTypes {
     public static final PropertyType<ItemStack> ITEM = PropertyType.builder(key("item_display/item"), ItemStack.class)
-            .name(translatable("easyarmorstands.property.item-display.item.name"))
+            .name(translatable("easyarmorstands.property.item.name"))
             .formatter(new ItemStackFormatter())
             .permission("easyarmorstands.property.display.item")
             .build();

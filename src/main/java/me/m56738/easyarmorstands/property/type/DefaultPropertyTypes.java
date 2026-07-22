@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ItemFramePropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
@@ -19,6 +20,7 @@ public class DefaultPropertyTypes {
         registerArmorStandProperties(registry);
         registerDisplayProperties(registry);
         registerMannequinProperties(registry);
+        registerItemFrameProperties(registry);
     }
 
     private void registerEntityProperties(PropertyTypeRegistry registry) {
@@ -82,5 +84,10 @@ public class DefaultPropertyTypes {
         for (SkinPart part : SkinPart.values()) {
             registry.register(MannequinPropertyTypes.SKIN_PART_VISIBLE.get(part));
         }
+    }
+
+    private void registerItemFrameProperties(PropertyTypeRegistry registry) {
+        registry.register(ItemFramePropertyTypes.FIXED);
+        registry.register(ItemFramePropertyTypes.ITEM);
     }
 }

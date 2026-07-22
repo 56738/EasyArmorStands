@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
+import me.m56738.easyarmorstands.api.property.type.ItemFramePropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
@@ -117,6 +118,7 @@ public class ElementMenuListener implements Listener {
         populator.addButton(TextDisplayPropertyTypes.SEE_THROUGH, Material.GLOWSTONE_DUST);
         populator.addButton(TextDisplayPropertyTypes.SHADOW, Material.STONE);
         populator.addButton(TextDisplayPropertyTypes.TEXT, ComponentHandler::new, Material.NAME_TAG);
+        populator.addButton(ItemFramePropertyTypes.FIXED, Material.BEDROCK);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             Property<ItemStack> property = container.getOrNull(EntityPropertyTypes.EQUIPMENT.get(slot));
@@ -129,6 +131,12 @@ public class ElementMenuListener implements Listener {
         if (itemDisplayItemProperty != null && itemDisplayItemProperty.canChange(player)) {
             builder.addButton(MenuSlotButton.toButton(itemDisplayItemProperty.getType().key(),
                     new ItemPropertySlot(itemDisplayItemProperty)));
+        }
+
+        Property<ItemStack> itemFrameItemProperty = container.getOrNull(ItemFramePropertyTypes.ITEM);
+        if (itemFrameItemProperty != null && itemFrameItemProperty.canChange(player)) {
+            builder.addButton(MenuSlotButton.toButton(itemFrameItemProperty.getType().key(),
+                    new ItemPropertySlot(element, itemFrameItemProperty)));
         }
 
         if (element instanceof EntityElement<?> entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
