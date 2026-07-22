@@ -136,7 +136,7 @@ public class ElementMenuListener implements Listener {
         Property<ItemStack> itemFrameItemProperty = container.getOrNull(ItemFramePropertyTypes.ITEM);
         if (itemFrameItemProperty != null && itemFrameItemProperty.canChange(player)) {
             builder.addButton(MenuSlotButton.toButton(itemFrameItemProperty.getType().key(),
-                    new ItemPropertySlot(element, itemFrameItemProperty)));
+                    new ItemPropertySlot(itemFrameItemProperty)));
         }
 
         if (element instanceof EntityElement<?> entityElement && player.hasPermission(Permissions.COPY_ENTITY)) {
