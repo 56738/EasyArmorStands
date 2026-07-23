@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.input.Input;
 import me.m56738.easyarmorstands.api.editor.input.InputProvider;
@@ -16,9 +17,11 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class InputProviderImpl implements InputProvider {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
 
-    public InputProviderImpl(Session session) {
+    public InputProviderImpl(EasyArmorStandsCommon eas, Session session) {
+        this.eas = eas;
         this.session = session;
     }
 
@@ -34,7 +37,7 @@ public class InputProviderImpl implements InputProvider {
 
     @Override
     public Input selectElementInput(SelectableElement element, Supplier<Layer> layerSupplier) {
-        return new SelectElementInput(session, element, layerSupplier::get);
+        return new SelectElementInput(eas, session, element, layerSupplier::get);
     }
 
     @Override

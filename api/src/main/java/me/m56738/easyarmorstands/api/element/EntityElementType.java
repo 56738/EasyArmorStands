@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.element;
 
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.EntityType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

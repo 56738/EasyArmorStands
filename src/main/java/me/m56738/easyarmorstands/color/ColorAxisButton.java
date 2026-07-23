@@ -5,10 +5,10 @@ import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Color;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class ColorAxisButton implements MenuButton {
 
     @Override
     public MenuIcon icon() {
-        return axis.getIcon();
+        return axis.getIcon(context.platform());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ColorAxisButton implements MenuButton {
 
     @Override
     public List<Component> description() {
-        Color color = context.getColor();
+        RGBColor color = context.getColor();
         int value = axis.get(color);
         return List.of(
                 Component.text(value),

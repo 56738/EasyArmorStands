@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.menu.click.MenuClick;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

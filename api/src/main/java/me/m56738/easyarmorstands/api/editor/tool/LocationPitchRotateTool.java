@@ -4,11 +4,10 @@ import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.util.EasConversion;
 import me.m56738.easyarmorstands.api.util.EasFormat;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniondc;
@@ -58,8 +57,8 @@ class LocationPitchRotateTool implements AxisRotateTool {
         private final Vector3d offsetChange = new Vector3d();
 
         public SessionImpl() {
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalOffset = EasConversion.fromBukkit(originalLocation.toVector()).sub(getPosition());
+            this.originalLocation = locationProperty.getValue();
+            this.originalOffset = originalLocation.position().sub(getPosition(), new Vector3d());
             this.direction = getAxis().getDirection().rotate(getRotation(), new Vector3d());
         }
 
@@ -71,15 +70,16 @@ class LocationPitchRotateTool implements AxisRotateTool {
                             direction.z(), offsetChange)
                     .sub(originalOffset);
 
-            Location location = originalLocation.clone();
-            location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
-            location.setPitch(location.getPitch() + (float) Math.toDegrees(change));
-            locationProperty.setValue(location);
+            Vector3d position = new Vector3d(originalLocation.position());
+            position.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
+            locationProperty.setValue(originalLocation
+                    .withPosition(position)
+                    .withPitch(originalLocation.pitch() + (float) Math.toDegrees(change)));
         }
 
         @Override
         public double snapChange(double change, @NotNull Snapper context) {
-            double original = Math.toRadians(originalLocation.getPitch());
+            double original = Math.toRadians(originalLocation.pitch());
             change += original;
             change = context.snapAngle(change);
             change -= original;
@@ -88,7 +88,7 @@ class LocationPitchRotateTool implements AxisRotateTool {
 
         @Override
         public void setValue(double value) {
-            setChange(value - Math.toRadians(originalLocation.getPitch()));
+            setChange(value - Math.toRadians(originalLocation.pitch()));
         }
 
         @Override
@@ -108,7 +108,7 @@ class LocationPitchRotateTool implements AxisRotateTool {
 
         @Override
         public @Nullable Component getStatus() {
-            return EasFormat.formatDegrees(locationProperty.getValue().getPitch());
+            return EasFormat.formatDegrees(locationProperty.getValue().pitch());
         }
 
         @Override

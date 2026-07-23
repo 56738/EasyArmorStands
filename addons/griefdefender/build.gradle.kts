@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":"))
+    compileOnly(project(":easyarmorstands-paper"))
     compileOnly(libs.paper.api)
     compileOnly(libs.griefdefender.api)
 }

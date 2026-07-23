@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.menu.slot;
 
 import me.m56738.easyarmorstands.menu.click.MenuClick;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -21,7 +20,7 @@ public class BackgroundSlot implements MenuSlot {
 
     @Override
     public void onClick(@NotNull MenuClick click) {
-        if (click.isRightClick() && click.cursor().getType() == Material.AIR) {
+        if (click.isRightClick() && click.cursor().isEmpty()) {
             click.close();
         }
     }

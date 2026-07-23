@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementSpawnRequest;
@@ -8,18 +9,21 @@ import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.util.EasMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 public class ElementSpawnRequestImpl implements ElementSpawnRequest {
+    private final EasyArmorStandsCommon eas;
     private final PropertyMap properties = new PropertyMap();
     private final ElementType type;
     private EasPlayer player;
 
-    public ElementSpawnRequestImpl(ElementType type) {
+    public ElementSpawnRequestImpl(EasyArmorStandsCommon eas, ElementType type) {
+        this.eas = eas;
         this.type = type;
     }
 
@@ -35,7 +39,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
 
     @Override
     public void setPlayer(@Nullable Player player) {
-        this.player = player != null ? new EasPlayer(player) : null;
+        this.player = player != null ? new EasPlayer(eas, player) : null;
     }
 
     @Override
@@ -49,23 +53,25 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         if (player != null) {
             Location originLocation;
             if (type.isSpawnedAtEyeHeight()) {
-                originLocation = player.get().getEyeLocation();
+                originLocation = player.get().eyeLocation();
             } else {
-                originLocation = player.get().getLocation();
+                originLocation = player.get().location();
             }
-            Vector offset = originLocation.getDirection().multiply(2);
+            Vector3d offset = EasMath.getDirection(originLocation).mul(2);
             if (!player.get().isFlying()) {
-                offset.setY(0);
+                offset.y = 0;
             }
-            Location location = originLocation.add(offset);
-            location.setYaw(location.getYaw() + 180);
+            Location location = originLocation
+                    .withPosition(originLocation.position().add(offset, new Vector3d()))
+                    .withYaw(originLocation.yaw() + 180);
             Session session = player.session();
             if (session != null) {
-                location.setX(session.snapper().snapPosition(location.getX()));
-                location.setY(session.snapper().snapPosition(location.getY()));
-                location.setZ(session.snapper().snapPosition(location.getZ()));
-                location.setYaw((float) session.snapper().snapAngle(location.getYaw()));
-                location.setPitch((float) session.snapper().snapAngle(location.getPitch()));
+                Vector3d position = new Vector3d(location.position());
+                session.snapper().snapPosition(position);
+                location = location
+                        .withPosition(position)
+                        .withYaw((float) session.snapper().snapAngle(location.yaw()))
+                        .withPitch((float) session.snapper().snapAngle(location.pitch()));
             }
             properties.put(EntityPropertyTypes.LOCATION, location);
         }
@@ -82,7 +88,7 @@ public class ElementSpawnRequestImpl implements ElementSpawnRequest {
         }
 
         if (player != null) {
-            player.history().push(new ElementCreateAction(element));
+            player.history().push(new ElementCreateAction(eas, element));
             player.clipboard().handleAutoApply(element);
         }
         return element;

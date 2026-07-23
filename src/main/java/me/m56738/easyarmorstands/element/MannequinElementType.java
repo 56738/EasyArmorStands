@@ -1,21 +1,22 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mannequin;
+import me.m56738.easyarmorstands.platform.entity.Mannequin;
+import me.m56738.easyarmorstands.registry.EntityTypeKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public class MannequinElementType extends SimpleEntityElementType<Mannequin> {
-    public MannequinElementType() {
-        super(EntityType.MANNEQUIN, Mannequin.class);
+    public MannequinElementType(EasyArmorStandsCommon eas) {
+        super(eas, eas.platform().getEntityType(EntityTypeKeys.MANNEQUIN), Mannequin.class);
     }
 
     @Override
     protected MannequinElement createInstance(Mannequin entity) {
-        return new MannequinElement(entity, this);
+        return new MannequinElement(eas, entity, this);
     }
 
     @Override

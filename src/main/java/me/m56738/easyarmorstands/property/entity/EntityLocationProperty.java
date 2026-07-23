@@ -4,10 +4,11 @@ import me.m56738.easyarmorstands.api.property.PendingChange;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3dc;
 
 public class EntityLocationProperty implements Property<Location> {
     private static final double HEIGHT_LIMIT = 20000000;
@@ -25,7 +26,7 @@ public class EntityLocationProperty implements Property<Location> {
 
     @Override
     public @NotNull Location getValue() {
-        return entity.getLocation();
+        return entity.location();
     }
 
     @Override
@@ -51,9 +52,10 @@ public class EntityLocationProperty implements Property<Location> {
     }
 
     private boolean isValid(@NotNull Location location) {
-        return isValid(location.getX(), COORDINATE_LIMIT) &&
-                isValid(location.getY(), HEIGHT_LIMIT) &&
-                isValid(location.getZ(), COORDINATE_LIMIT);
+        Vector3dc position = location.position();
+        return isValid(position.x(), COORDINATE_LIMIT) &&
+                isValid(position.y(), HEIGHT_LIMIT) &&
+                isValid(position.z(), COORDINATE_LIMIT);
     }
 
     private boolean isValid(double value, double limit) {

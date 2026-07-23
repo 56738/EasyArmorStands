@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.menu.click;
 
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.platform.entity.Player;
 
 public interface MenuClickContext {
     Player player();

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
 import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 import static me.m56738.easyarmorstands.api.EasyArmorStands.key;

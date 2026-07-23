@@ -1,12 +1,20 @@
 package me.m56738.easyarmorstands.griefprevention;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.api.region.RegionPrivilegeChecker;
+import org.bukkit.plugin.Plugin;
 
 public class GriefPreventionAddon implements Addon {
+    private final Plugin plugin;
+    private final EasyArmorStandsPaperImpl eas;
+
     private RegionPrivilegeChecker privilegeChecker;
+
+    public GriefPreventionAddon(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        this.plugin = plugin;
+        this.eas = eas;
+    }
 
     @Override
     public String name() {
@@ -16,12 +24,12 @@ public class GriefPreventionAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new GriefPreventionPrivilegeChecker();
-        EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
+        eas.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
     }
 
     @Override
     public void disable() {
-        EasyArmorStands.get().regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+        eas.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
     }
 
     @Override

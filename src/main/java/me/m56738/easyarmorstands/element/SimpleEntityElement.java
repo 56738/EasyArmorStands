@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -18,24 +18,24 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.layer.SimpleEntityLayer;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.LivingEntity;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.Objects;
 
 public class SimpleEntityElement<E extends Entity> implements ConfigurableEntityElement<E>, SelectableElement, MenuElement, DestroyableElement, EditableElement {
+    protected final EasyArmorStandsCommon eas;
     private final E entity;
     private final SimpleEntityElementType<E> type;
     private final PropertyRegistry properties = PropertyRegistry.create(this);
 
-    public SimpleEntityElement(E entity, SimpleEntityElementType<E> type) {
+    public SimpleEntityElement(EasyArmorStandsCommon eas, E entity, SimpleEntityElementType<E> type) {
+        this.eas = eas;
         this.entity = entity;
         this.type = type;
     }
@@ -62,22 +62,21 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new SimpleEntityToolProvider(properties);
+        return new SimpleEntityToolProvider(eas, properties);
     }
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        Vector3d position = Util.toVector3d(entity.getLocation());
-        double width = entity.getWidth();
-        double height = entity.getHeight();
+        Vector3dc position = entity.location().position();
+        double width = entity.width();
+        double height = entity.height();
         return BoundingBox.of(position, width, height);
     }
 
     public double getScale() {
         if (entity instanceof LivingEntity livingEntity) {
-            AttributeInstance attribute = livingEntity.getAttribute(Attribute.SCALE);
-            if (attribute != null) {
-                return attribute.getValue();
+            if (livingEntity.hasScaleAttribute()) {
+                return livingEntity.getScaleAttribute();
             }
         }
         return 1;
@@ -97,7 +96,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public void openMenu(@NotNull Player player) {
-        EasyArmorStandsPlugin.getInstance().openElementMenu(player, this);
+        eas.openElementMenu(player, this);
     }
 
     @Override
@@ -120,7 +119,7 @@ public class SimpleEntityElement<E extends Entity> implements ConfigurableEntity
 
     @Override
     public @NotNull Component getName() {
-        return Component.text(Util.getId(entity.getUniqueId()));
+        return Component.text(Util.getId(entity.uniqueId()));
     }
 
     @Override

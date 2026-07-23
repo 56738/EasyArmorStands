@@ -14,10 +14,9 @@ import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class DisplayLayer extends PropertyLayer {
     private final Session session;
@@ -87,7 +86,7 @@ public class DisplayLayer extends PropertyLayer {
         float width = widthProperty.getValue();
         float height = heightProperty.getValue();
         Location location = locationProperty.getValue();
-        Vector3d position = Util.toVector3d(location);
+        Vector3dc position = location.position();
         boolean visible = canShow && width != 0 && height != 0 && (isActive || showBoundingBoxIfInactive);
         if (visible) {
             boxParticle.setBoundingBox(BoundingBox.of(position, width, height));

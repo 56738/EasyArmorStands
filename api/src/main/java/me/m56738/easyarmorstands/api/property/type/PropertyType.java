@@ -1,12 +1,11 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
 import me.m56738.easyarmorstands.api.formatter.ValueFormatter;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,10 +16,6 @@ public interface PropertyType<T> extends Keyed {
 
     static <T> Builder<T> builder(Key key, Class<T> type) {
         return PropertyType.builder(key);
-    }
-
-    static @NotNull TypeToken<PropertyType<?>> type() {
-        return PropertyTypeTypeToken.INSTANCE;
     }
 
     @Nullable String getPermission();

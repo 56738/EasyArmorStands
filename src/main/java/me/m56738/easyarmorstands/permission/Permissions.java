@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.permission;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
-import org.bukkit.permissions.Permission;
+import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.platform.entity.EntityType;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.Field;
@@ -135,70 +134,45 @@ public class Permissions {
     @Child(VERSION)
     public static final String EDIT = "easyarmorstands.edit";
 
-    // ---
-    private static final Map<String, Permission> registeredPermissions = new HashMap<>();
-
     private Permissions() {
     }
 
-    public static void registerAll() {
+    public static void registerAll(Platform platform, PermissionRegistrar registrar) {
         try {
             for (Field field : Permissions.class.getDeclaredFields()) {
                 int modifiers = field.getModifiers();
                 if (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                    register(field);
+                    register(field, registrar);
                 }
             }
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
 
-        for (EntityType entityType : EntityType.values()) {
-            register(entityType, SPAWN, "spawning");
-            register(entityType, DESTROY, "destroying");
-            register(entityType, EDIT, "editing");
+        for (EntityType entityType : platform.getEntityTypes()) {
+            register(entityType, SPAWN, "spawning", registrar);
+            register(entityType, DESTROY, "destroying", registrar);
+            register(entityType, EDIT, "editing", registrar);
         }
     }
 
     public static String entityType(
             @MagicConstant(valuesFromClass = Permissions.class) String prefix,
             EntityType type) {
-        return prefix + "." + type.name().toLowerCase(Locale.ROOT).replace("_", "");
+        return prefix + "." + type.key().value().toLowerCase(Locale.ROOT).replace("_", "");
     }
 
-    private static void register(EntityType type, String owner, String verb) {
+    private static void register(EntityType type, String owner, String verb, PermissionRegistrar registrar) {
         String name = entityType(owner, type);
         Map<String, Boolean> children = new HashMap<>(1);
         children.put(owner, true);
-        register(new Permission(
+        registrar.registerPermission(
                 name,
                 "Allow " + verb + " entities of type " + type,
-                children));
+                children);
     }
 
-    public static Permission register(Permission permission) {
-        try {
-            Bukkit.getPluginManager().addPermission(permission);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        registeredPermissions.put(permission.getName(), permission);
-        return permission;
-    }
-
-    public static void unregisterAll() {
-        for (Permission permission : registeredPermissions.values()) {
-            Bukkit.getPluginManager().removePermission(permission);
-        }
-        registeredPermissions.clear();
-    }
-
-    public static void unregister(Permission permission) {
-        registeredPermissions.remove(permission.getName(), permission);
-        Bukkit.getPluginManager().removePermission(permission);
-    }
-
-    private static void register(Field field) throws ReflectiveOperationException {
+    private static void register(Field field, PermissionRegistrar registrar) throws ReflectiveOperationException {
         String name = (String) field.get(null);
 
         Description descriptionAnnotation = field.getDeclaredAnnotation(Description.class);
@@ -212,6 +186,6 @@ public class Permissions {
             }
         }
 
-        register(new Permission(name, description, children));
+        registrar.registerPermission(name, description, children);
     }
 }

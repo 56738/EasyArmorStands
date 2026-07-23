@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
@@ -7,8 +8,8 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class ElementCreateAction extends ElementPresenceAction {
-    public ElementCreateAction(@NotNull Element element) {
-        super(element);
+    public ElementCreateAction(@NotNull EasyArmorStandsCommon eas, @NotNull Element element) {
+        super(eas, element);
     }
 
     @Override

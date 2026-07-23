@@ -13,7 +13,7 @@ public interface ElementTypeRegistry {
     default ElementType get(Key key) {
         ElementType elementType = getOrNull(key);
         if (elementType == null) {
-            throw new UnknownElementTypeException(key, null);
+            throw new UnknownElementTypeException(key);
         }
         return elementType;
     }

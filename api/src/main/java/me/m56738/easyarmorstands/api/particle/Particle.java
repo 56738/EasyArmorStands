@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.particle;
 
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

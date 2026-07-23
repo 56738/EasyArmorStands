@@ -11,7 +11,7 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.editor.tool.DelegateToolProvider;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandPositionLayer extends ArmorStandLayer implements ResettableLayer {
@@ -28,10 +28,9 @@ public class ArmorStandPositionLayer extends ArmorStandLayer implements Resettab
     @Override
     public void reset() {
         Property<Location> locationProperty = properties().get(EntityPropertyTypes.LOCATION);
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue()
+                .withYaw(0)
+                .withPitch(0));
         properties().commit();
     }
 

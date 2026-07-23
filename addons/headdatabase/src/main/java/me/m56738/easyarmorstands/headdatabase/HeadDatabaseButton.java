@@ -1,15 +1,17 @@
 package me.m56738.easyarmorstands.headdatabase;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.paper.entity.PaperPlayer;
+import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -18,14 +20,21 @@ import java.util.List;
 public class HeadDatabaseButton implements MenuButton {
     private static final Key KEY = EasyArmorStands.key("headdatabase");
 
+    private final EasyArmorStandsCommon eas;
+
+    public HeadDatabaseButton(EasyArmorStandsCommon eas) {
+        this.eas = eas;
+    }
+
     @Override
     public Key key() {
         return KEY;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public MenuIcon icon() {
-        return MenuIcon.of(Material.PLAYER_HEAD);
+        return MenuIcon.of(PaperItemType.fromNative(ItemType.PLAYER_HEAD));
     }
 
     @Override
@@ -48,11 +57,10 @@ public class HeadDatabaseButton implements MenuButton {
         if (!context.isLeftClick()) {
             return;
         }
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         Player player = context.player();
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        eas.platform().getScheduler().runTask(() -> {
             player.setItemOnCursor(null);
-            player.performCommand("headdb");
+            PaperPlayer.toNative(player).performCommand("headdb");
         });
     }
 }

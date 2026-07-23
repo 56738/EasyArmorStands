@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.element.ArmorStandPartToolProvider;
-import org.bukkit.util.EulerAngle;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandPartLayer extends ArmorStandLayer implements ResettableLayer {
@@ -31,7 +31,7 @@ public class ArmorStandPartLayer extends ArmorStandLayer implements ResettableLa
 
     @Override
     public void reset() {
-        properties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(EulerAngle.ZERO);
+        properties().get(ArmorStandPropertyTypes.POSE.get(part)).setValue(Rotations.ZERO);
         properties().commit();
     }
 }

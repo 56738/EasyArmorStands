@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.menu.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
@@ -8,9 +9,9 @@ import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -18,9 +19,11 @@ import java.util.List;
 @NullMarked
 public class DestroyButton implements MenuButton {
     private static final Key KEY = EasyArmorStands.key("destroy");
+    private final EasyArmorStandsCommon eas;
     private final DestroyableElement element;
 
-    public DestroyButton(DestroyableElement element) {
+    public DestroyButton(EasyArmorStandsCommon eas, DestroyableElement element) {
+        this.eas = eas;
         this.element = element;
     }
 
@@ -31,7 +34,7 @@ public class DestroyButton implements MenuButton {
 
     @Override
     public MenuIcon icon() {
-        return MenuIcon.of(Material.TNT);
+        return MenuIcon.of(eas.platform().getItemType(ItemTypeKeys.TNT));
     }
 
     @Override
@@ -55,12 +58,12 @@ public class DestroyButton implements MenuButton {
             return;
         }
 
-        EasPlayer player = new EasPlayer(context.player());
+        EasPlayer player = new EasPlayer(eas, context.player());
         if (!player.canDestroyElement(element)) {
             return;
         }
 
-        player.history().push(new ElementDestroyAction(element));
+        player.history().push(new ElementDestroyAction(eas, element));
         element.destroy();
         context.closeMenu();
     }

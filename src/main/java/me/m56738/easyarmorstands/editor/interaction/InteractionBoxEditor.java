@@ -8,9 +8,9 @@ import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.editor.box.AbstractBoundingBoxEditorSession;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -52,14 +52,12 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
 
     private class SessionImpl extends AbstractBoundingBoxEditorSession {
         private final Location originalLocation;
-        private final Vector3dc originalPosition;
         private final float originalWidth;
         private final float originalHeight;
 
         private SessionImpl() {
             super(properties);
-            this.originalLocation = locationProperty.getValue().clone();
-            this.originalPosition = Util.toVector3d(this.originalLocation);
+            this.originalLocation = locationProperty.getValue();
             this.originalWidth = widthProperty.getValue();
             this.originalHeight = heightProperty.getValue();
         }
@@ -71,9 +69,8 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
 
         @Override
         public boolean setCenter(Vector3dc center) {
-            Vector3d delta = center.sub(0, getHeight() / 2, 0, new Vector3d()).sub(originalPosition);
-            Location location = originalLocation.clone();
-            location.add(delta.x(), delta.y(), delta.z());
+            Vector3d delta = center.sub(0, getHeight() / 2, 0, new Vector3d()).sub(originalLocation.position());
+            Location location = originalLocation.withPosition(originalLocation.position().add(delta, new Vector3d()));
             return locationProperty.setValue(location);
         }
 

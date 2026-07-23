@@ -12,7 +12,7 @@ import me.m56738.easyarmorstands.api.property.type.ItemFramePropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.MannequinPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
-import org.bukkit.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 
 public class DefaultPropertyTypes {
     public DefaultPropertyTypes(PropertyTypeRegistry registry) {

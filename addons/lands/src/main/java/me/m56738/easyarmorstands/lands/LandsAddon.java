@@ -6,25 +6,29 @@ import me.angeschossen.lands.api.flags.enums.RoleFlagCategory;
 import me.angeschossen.lands.api.flags.type.Flags;
 import me.angeschossen.lands.api.flags.type.RoleFlag;
 import me.angeschossen.lands.api.role.Role;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.config.integration.lands.LandsFlagConfig;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import me.m56738.easyarmorstands.paper.api.region.RegionPrivilegeChecker;
+import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Locale;
 
 public class LandsAddon implements Addon {
     private static final String FLAG_NAME = "easyarmorstands_edit";
 
-    private final EasyArmorStandsPlugin plugin;
+    private final Plugin plugin;
+    private final EasyArmorStandsPaperImpl eas;
     private final LandsIntegration integration;
 
     private RegionPrivilegeChecker privilegeChecker;
     private RoleFlag flag;
 
-    public LandsAddon() {
-        this.plugin = EasyArmorStandsPlugin.getInstance();
+    public LandsAddon(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        this.plugin = plugin;
         this.integration = LandsIntegration.of(plugin);
+        this.eas = eas;
         integration.onLoad(this::onLoad);
     }
 
@@ -38,8 +42,8 @@ public class LandsAddon implements Addon {
     }
 
     private void configureFlag() {
-        LandsFlagConfig flagConfig = plugin.getConfiguration().integration.lands.flag;
-        flag.setIcon(flagConfig.icon.render(Locale.US));
+        LandsFlagConfig flagConfig = eas.getConfiguration().integration.lands.flag;
+        flag.setIcon(PaperItemStack.toNative(flagConfig.icon.render(Locale.US)));
         flag.setDisplayName(flagConfig.displayName);
         flag.setDescription(flagConfig.description);
         flag.setDisplay(flagConfig.display);
@@ -54,12 +58,12 @@ public class LandsAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new LandsPrivilegeChecker(integration, flag);
-        plugin.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
+        eas.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
     }
 
     @Override
     public void disable() {
-        plugin.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+        eas.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
     }
 
     @Override

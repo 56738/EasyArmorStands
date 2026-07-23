@@ -6,11 +6,11 @@ import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
@@ -68,8 +68,8 @@ public class MenuSlotButton implements MenuButton {
         throw new UnsupportedOperationException();
     }
 
-    public ItemStack getItem(Locale locale) {
-        return Util.wrapItem(slot.getItem(locale));
+    public @Nullable ItemStack getItem(Locale locale) {
+        return slot.getItem(locale);
     }
 
     @Override

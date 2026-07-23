@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
-    compileOnly(project(":"))
+    compileOnly(project(":easyarmorstands-paper"))
     compileOnly(libs.fancyholograms)
 }

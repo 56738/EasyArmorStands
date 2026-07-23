@@ -3,10 +3,8 @@ package me.m56738.easyarmorstands.property.display;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.entity.Display;
-import org.bukkit.util.Transformation;
+import me.m56738.easyarmorstands.platform.entity.Display;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
 
 public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
@@ -23,17 +21,12 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
 
     @Override
     public @NotNull Quaternionfc getValue() {
-        return entity.getTransformation().getLeftRotation();
+        return entity.getLeftRotation();
     }
 
     @Override
     public boolean setValue(@NotNull Quaternionfc value) {
-        Transformation transformation = entity.getTransformation();
-        entity.setTransformation(new Transformation(
-                transformation.getTranslation(),
-                new Quaternionf(value),
-                transformation.getScale(),
-                transformation.getRightRotation()));
+        entity.setLeftRotation(value);
         return true;
     }
 }

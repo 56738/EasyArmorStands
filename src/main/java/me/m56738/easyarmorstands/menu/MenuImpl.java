@@ -1,16 +1,15 @@
 package me.m56738.easyarmorstands.menu;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.menu.click.MenuClickInterceptor;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.inventory.Inventory;
+import me.m56738.easyarmorstands.platform.inventory.InventoryHolder;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,16 +18,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-public class MenuImpl implements InventoryHolder, Menu {
+public class MenuImpl implements Menu, InventoryHolder {
+    private final EasyArmorStandsCommon eas;
     private final Inventory inventory;
     private final MenuSlot[] slots;
     private final Locale locale;
     private final List<MenuCloseListener> closeListeners = new ArrayList<>();
     private MenuClickInterceptor currentInterceptor;
 
-    public MenuImpl(Component title, MenuSlot[] slots, Locale locale) {
+    public MenuImpl(EasyArmorStandsCommon eas, Component title, MenuSlot[] slots, Locale locale) {
+        this.eas = eas;
         this.locale = locale;
-        this.inventory = Bukkit.createInventory(this, slots.length, GlobalTranslator.render(title, locale));
+        this.inventory = eas.platform().getInventoryFactory().createInventory(this, GlobalTranslator.render(title, locale), slots.length);
         this.slots = slots;
         updateItems();
     }
@@ -108,8 +109,7 @@ public class MenuImpl implements InventoryHolder, Menu {
 
     @Override
     public void queueTask(@NotNull Runnable task) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        plugin.getServer().getScheduler().runTask(plugin, task);
+        eas.platform().getScheduler().runTask(task);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class MenuImpl implements InventoryHolder, Menu {
         for (MenuCloseListener listener : closeListeners) {
             listener.onClose(player, this);
         }
-        if (inventory.equals(player.getOpenInventory().getTopInventory())) {
+        if (player.isInventoryOpen(inventory)) {
             player.closeInventory();
         }
     }

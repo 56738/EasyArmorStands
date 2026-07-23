@@ -5,7 +5,8 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.entity.Display;
+import me.m56738.easyarmorstands.platform.entity.Display;
+import me.m56738.easyarmorstands.platform.paper.PaperAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class DisplayHologramBillboardProperty implements Property<Display.Billboard> {
@@ -24,12 +25,12 @@ public class DisplayHologramBillboardProperty implements Property<Display.Billbo
 
     @Override
     public @NotNull Display.Billboard getValue() {
-        return data.getBillboard();
+        return PaperAdapter.fromNative(data.getBillboard());
     }
 
     @Override
     public boolean setValue(@NotNull Display.Billboard value) {
-        data.setBillboard(value);
+        data.setBillboard(PaperAdapter.toNative(value));
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

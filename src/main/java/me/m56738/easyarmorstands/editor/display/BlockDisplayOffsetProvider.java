@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.EasMath;
-import org.bukkit.Location;
 import org.joml.Quaterniond;
 import org.joml.Quaternionfc;
 import org.joml.Vector3d;
@@ -38,6 +38,6 @@ public class BlockDisplayOffsetProvider implements OffsetProvider {
                 .mul(scaleProperty.getValue())
                 .rotate(new Quaterniond(leftRotationProperty.getValue()))
                 .add(translationProperty.getValue())
-                .rotate(EasMath.getEntityRotation(location.getYaw(), location.getPitch(), currentRotation));
+                .rotate(EasMath.getEntityRotation(location.yaw(), location.pitch(), currentRotation));
     }
 }

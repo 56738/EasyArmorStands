@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.config.version.game;
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.config.version.Version;
 import me.m56738.easyarmorstands.config.version.game.v1_13.ItemStackTransformAction_v1_13;
-import org.bukkit.Bukkit;
+import me.m56738.easyarmorstands.platform.Platform;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.transformation.ConfigurationTransformation;
@@ -17,14 +17,17 @@ import static org.spongepowered.configurate.NodePath.path;
 public class GameVersionTransformation implements ConfigurationTransformation {
     private static final Version MAX_TARGET_VERSION = new Version(1, 21, 3);
 
+    private final Platform platform;
     private final List<Entry> entries;
-    private final Version targetVersion = getTargetVersion();
+    private final Version targetVersion;
 
-    private GameVersionTransformation(List<Entry> entries) {
+    private GameVersionTransformation(Platform platform, List<Entry> entries) {
+        this.platform = platform;
         this.entries = entries;
+        this.targetVersion = getTargetVersion();
     }
 
-    public static GameVersionTransformation config() {
+    public static GameVersionTransformation config(Platform platform) {
         List<Entry> entries = new ArrayList<>();
         entries.add(new Entry(new Version(1, 12, 0), ConfigurationTransformation.builder()
                 .addAction(path("editor", "input-hints", "left-click-key"),
@@ -46,10 +49,10 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                 .addAction(path("editor", "input-hints", "swap-hands-key"),
                         TransformAction.set(TypeToken.get(String.class), "<key:key.swapOffhand>"))
                 .build()));
-        return new GameVersionTransformation(entries);
+        return new GameVersionTransformation(platform, entries);
     }
 
-    public static GameVersionTransformation properties() {
+    public static GameVersionTransformation properties(Platform platform) {
         List<Entry> entries = new ArrayList<>();
         entries.add(new Entry(new Version(1, 13, 0), ConfigurationTransformation.builder()
                 .addAction(path("easyarmorstands:armor_stand/base_plate", "button"),
@@ -65,10 +68,10 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                 .addAction(path("easyarmorstands:mannequin/profile", "button"),
                         new ItemStackTransformAction_v1_13())
                 .build()));
-        return new GameVersionTransformation(entries);
+        return new GameVersionTransformation(platform, entries);
     }
 
-    public static GameVersionTransformation menu() {
+    public static GameVersionTransformation menu(Platform platform) {
         List<Entry> entries = new ArrayList<>();
         entries.add(new Entry(new Version(1, 9, 0), ConfigurationTransformation.builder()
                 .addAction(path("slots", "easyarmorstands:entity/equipment/off_hand", "enabled"),
@@ -152,22 +155,16 @@ public class GameVersionTransformation implements ConfigurationTransformation {
                 .addAction(path("slots", "easyarmorstands:spawn/mannequin", "config", "item"),
                         new ItemStackTransformAction_v1_13())
                 .build()));
-        return new GameVersionTransformation(entries);
+        return new GameVersionTransformation(platform, entries);
     }
 
-    private static Version getTargetVersion() {
-        Version serverVersion = getServerVersion();
+    private Version getTargetVersion() {
+        Version serverVersion = Version.parse(platform.getGameVersion());
         if (serverVersion.compareTo(MAX_TARGET_VERSION) > 0) {
             return MAX_TARGET_VERSION;
         } else {
             return serverVersion;
         }
-    }
-
-    private static Version getServerVersion() {
-        String bukkitVersion = Bukkit.getBukkitVersion();
-        String version = bukkitVersion.substring(0, bukkitVersion.indexOf('-'));
-        return Version.parse(version);
     }
 
     @Override

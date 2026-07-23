@@ -3,13 +3,13 @@ package me.m56738.easyarmorstands.property.display.text;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
-import org.bukkit.Color;
-import org.bukkit.entity.TextDisplay;
+import me.m56738.easyarmorstands.platform.color.ARGBColor;
+import me.m56738.easyarmorstands.platform.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextDisplayBackgroundProperty implements Property<Optional<Color>> {
+public class TextDisplayBackgroundProperty implements Property<Optional<ARGBColor>> {
     private static final int DEFAULT_COLOR = 0x40000000;
     private final TextDisplay entity;
 
@@ -18,27 +18,27 @@ public class TextDisplayBackgroundProperty implements Property<Optional<Color>> 
     }
 
     @Override
-    public @NotNull PropertyType<Optional<Color>> getType() {
+    public @NotNull PropertyType<Optional<ARGBColor>> getType() {
         return TextDisplayPropertyTypes.BACKGROUND;
     }
 
     @Override
-    public @NotNull Optional<Color> getValue() {
+    public @NotNull Optional<ARGBColor> getValue() {
         if (entity.isDefaultBackground()) {
             return Optional.empty();
         }
-        Color color = entity.getBackgroundColor();
+        ARGBColor color = entity.getBackgroundColor();
         if (color == null) {
-            color = Color.WHITE;
-        } else if (color.asARGB() == DEFAULT_COLOR) {
+            color = ARGBColor.WHITE;
+        } else if (color.value() == DEFAULT_COLOR) {
             return Optional.empty();
         }
         return Optional.of(color);
     }
 
     @Override
-    public boolean setValue(@NotNull Optional<Color> value) {
-        entity.setDefaultBackground(!value.isPresent());
+    public boolean setValue(@NotNull Optional<ARGBColor> value) {
+        entity.setDefaultBackground(value.isEmpty());
         entity.setBackgroundColor(value.orElse(null));
         return true;
     }

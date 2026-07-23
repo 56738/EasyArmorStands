@@ -32,3 +32,9 @@ addon("residence")
 addon("towny")
 addon("traincarts")
 addon("worldguard")
+
+includeAt("easyarmorstands-platform", "platform")
+includeAt("easyarmorstands-platform-paper", "platform/paper")
+
+includeAt("easyarmorstands-paper", "paper")
+includeAt("easyarmorstands-paper-api", "paper/api")

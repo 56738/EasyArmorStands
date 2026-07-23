@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.api.property.type;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
-import me.m56738.easyarmorstands.api.formatter.EulerAngleFormatter;
-import org.bukkit.util.EulerAngle;
+import me.m56738.easyarmorstands.api.formatter.RotationsFormatter;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
@@ -54,10 +54,10 @@ public final class ArmorStandPropertyTypes {
             .formatter(BooleanFormatter.toggle())
             .permission("easyarmorstands.property.armorstand.marker")
             .build();
-    public static final KeyedPropertyType<ArmorStandPart, EulerAngle> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
-            part -> PropertyType.builder(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT)), EulerAngle.class)
+    public static final KeyedPropertyType<ArmorStandPart, Rotations> POSE = new EnumKeyedPropertyType<>(ArmorStandPart.class,
+            part -> PropertyType.builder(key("armor_stand/pose/" + part.name().toLowerCase(Locale.ROOT)), Rotations.class)
                     .name(translatable("easyarmorstands.property.armor-stand.pose.name", part.displayName()))
-                    .formatter(new EulerAngleFormatter())
+                    .formatter(new RotationsFormatter())
                     .permission("easyarmorstands.property.armorstand.pose." + part.name().toLowerCase(Locale.ROOT).replace("_", ""))
                     .build());
     public static final PropertyType<ArmorStandSize> SIZE = PropertyType.builder(key("armor_stand/size"), ArmorStandSize.class)

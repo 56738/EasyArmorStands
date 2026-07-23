@@ -2,12 +2,13 @@ package me.m56738.easyarmorstands.menu.layout;
 
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
-import org.bukkit.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.menu.button.MenuButtonFactory;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
 public interface MenuLayoutRule {
-    static MenuLayoutRule background(MenuButton button) {
+    static MenuLayoutRule background(MenuButtonFactory button) {
         return new BackgroundRule(button);
     }
 
@@ -25,7 +26,7 @@ public interface MenuLayoutRule {
 
     boolean matches(MenuButton button);
 
-    default @Nullable MenuButton fallback() {
+    default @Nullable MenuButtonFactory fallback() {
         return null;
     }
 }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
@@ -14,11 +15,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ChangeTracker {
+    private final EasyArmorStandsCommon eas;
     private final History history;
     private final Map<ChangeKey<?>, Object> originalValues = new HashMap<>();
     private final Map<ChangeKey<?>, Object> pendingValues = new HashMap<>();
 
-    public ChangeTracker(History history) {
+    public ChangeTracker(EasyArmorStandsCommon eas, History history) {
+        this.eas = eas;
         this.history = history;
     }
 
@@ -40,7 +43,7 @@ public class ChangeTracker {
 
     public <T> void recordChange(Element element, Property<T> property, T oldValue, T value) {
         PropertyType<T> type = property.getType();
-        ChangeKey<T> key = new ChangeKey<>(element, type);
+        ChangeKey<T> key = new ChangeKey<>(eas, element, type);
         originalValues.putIfAbsent(key, type.cloneValue(oldValue));
         pendingValues.put(key, type.cloneValue(value));
     }

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.display.tool;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleTool;
 import me.m56738.easyarmorstands.api.editor.tool.ScaleToolSession;
@@ -13,8 +14,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public class DisplayScaleTool extends AbstractDisplayScaleTool<ScaleToolSession> implements ScaleTool {
-    public DisplayScaleTool(ToolContext context, PropertyContainer properties) {
-        super(context, properties);
+    public DisplayScaleTool(EasyArmorStandsCommon eas, ToolContext context, PropertyContainer properties) {
+        super(eas, context, properties);
     }
 
     @Override

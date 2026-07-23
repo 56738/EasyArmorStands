@@ -1,56 +1,57 @@
 package me.m56738.easyarmorstands.menu.layout;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuCreator;
 import me.m56738.easyarmorstands.menu.button.DestroyButton;
+import me.m56738.easyarmorstands.menu.button.MenuButtonFactory;
 import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
 import me.m56738.easyarmorstands.menu.slot.MenuButtonSlot;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemType;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.Set;
 
 public class MenuLayout {
-    public static final MenuButton PRIMARY_BACKGROUND = createBackground(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-    public static final MenuButton SECONDARY_BACKGROUND = createBackground(Material.YELLOW_STAINED_GLASS_PANE);
-    public static final MenuLayout DEFAULT = createDefault();
-    public static final MenuLayout SIMPLE = createSimple();
-    public static final MenuLayout EQUIPMENT = createEquipment();
+    public static final MenuButtonFactory PRIMARY_BACKGROUND = createBackground(ItemTypeKeys.LIGHT_BLUE_STAINED_GLASS_PANE);
+    public static final MenuButtonFactory SECONDARY_BACKGROUND = createBackground(ItemTypeKeys.YELLOW_STAINED_GLASS_PANE);
+    private final EasyArmorStandsCommon eas;
     private final List<RuleEntry> rules;
 
-    MenuLayout(List<RuleEntry> rules) {
+    MenuLayout(EasyArmorStandsCommon eas, List<RuleEntry> rules) {
+        this.eas = eas;
         this.rules = rules;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    public static MenuButton createBackground(Material material) {
-        ItemStack item = ItemStack.of(material);
-        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hideTooltip(true)
-                .build());
+    public static MenuButtonFactory createBackground(Key itemTypeKey) {
+        return e -> createBackground(e.platform().getItemType(itemTypeKey));
+    }
+
+    public static MenuButton createBackground(ItemType itemType) {
+        ItemStack item = itemType.createItemStack().withHideTooltip(true);
         return MenuSlotButton.toButton(
                 EasyArmorStands.key("background"),
                 new BackgroundSlot(item));
     }
 
-    private static MenuLayout createDefault() {
-        MenuLayoutBuilder builder = new MenuLayoutBuilder();
+    public static MenuLayout createDefault(EasyArmorStandsCommon eas) {
+        MenuLayoutBuilder builder = new MenuLayoutBuilder(eas);
         builder.addRule(0, 8, b -> b instanceof DestroyButton);
         for (int column = 0; column < 9; column++) {
             builder.addRule(0, column, MenuLayoutRule.category(MenuButtonCategory.HEADER));
@@ -77,8 +78,8 @@ public class MenuLayout {
         return builder.build();
     }
 
-    private static MenuLayout createEquipment() {
-        MenuLayoutBuilder builder = new MenuLayoutBuilder();
+    public static MenuLayout createEquipment(EasyArmorStandsCommon eas) {
+        MenuLayoutBuilder builder = new MenuLayoutBuilder(eas);
         builder.addRule(0, 8, b -> b instanceof DestroyButton);
         for (int column = 0; column < 9; column++) {
             builder.addRule(0, column, MenuLayoutRule.category(MenuButtonCategory.HEADER));
@@ -114,8 +115,8 @@ public class MenuLayout {
         return builder.build();
     }
 
-    private static MenuLayout createSimple() {
-        MenuLayoutBuilder builder = new MenuLayoutBuilder();
+    public static MenuLayout createSimple(EasyArmorStandsCommon eas) {
+        MenuLayoutBuilder builder = new MenuLayoutBuilder(eas);
         for (int row = 0; row < 6; row++) {
             for (int column = 0; column < 9; column++) {
                 builder.addRule(row, column, MenuLayoutRule.matchAll());
@@ -130,9 +131,9 @@ public class MenuLayout {
     }
 
     public Menu createMenu(Component title, Locale locale, Collection<MenuButton> buttons) {
-        MenuCreator creator = new MenuCreator(locale);
+        MenuCreator creator = new MenuCreator(eas, locale);
         creator.setTitle(title);
-        IntSet filledSlots = new IntOpenHashSet();
+        Set<Integer> filledSlots = new HashSet<>();
         LinkedList<MenuButton> queue = new LinkedList<>(buttons);
         for (RuleEntry entry : rules) {
             int row = entry.row();
@@ -160,7 +161,11 @@ public class MenuLayout {
                 return button;
             }
         }
-        return rule.fallback();
+        MenuButtonFactory fallback = rule.fallback();
+        if (fallback != null) {
+            return fallback.create(eas);
+        }
+        return null;
     }
 
     record RuleEntry(int row, int column, MenuLayoutRule rule) {

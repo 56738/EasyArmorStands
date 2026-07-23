@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.ButtonHandler;
 import me.m56738.easyarmorstands.api.editor.button.ButtonHandlerContext;
@@ -12,9 +13,9 @@ public class ElementButtonHandler implements ButtonHandler {
     private final SelectableElement element;
     private final SelectElementInput selectInput;
 
-    public ElementButtonHandler(Session session, SelectableElement element) {
+    public ElementButtonHandler(EasyArmorStandsCommon eas, Session session, SelectableElement element) {
         this.element = element;
-        this.selectInput = new SelectElementInput(session, element, () -> element.createLayer(session));
+        this.selectInput = new SelectElementInput(eas, session, element, () -> element.createLayer(session));
     }
 
     @Override

@@ -1,9 +1,5 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import io.papermc.paper.datacomponent.DataComponentType;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemLore;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
@@ -11,21 +7,19 @@ import me.m56738.easyarmorstands.menu.button.MenuSlotButton;
 import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.message.MessageStyle;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 @NullMarked
 public class MenuButtonSlot implements MenuSlot {
@@ -46,30 +40,19 @@ public class MenuButtonSlot implements MenuSlot {
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public static ItemStack createItem(MenuIcon icon, Component name, Component value, List<Component> description, Locale locale) {
-        ItemStack item = icon.asItem().clone();
+        ItemStack item = icon.asItem();
 
         if (name == Component.empty() && description.isEmpty()) {
-            item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                    .hideTooltip(true)
-                    .build());
-            return item;
+            return item.withHideTooltip(true);
         }
 
-        Set<DataComponentType> hiddenComponents = new HashSet<>(item.getDataTypes());
-        hiddenComponents.remove(DataComponentTypes.CUSTOM_NAME);
-        hiddenComponents.remove(DataComponentTypes.LORE);
-
-        item.setData(DataComponentTypes.CUSTOM_NAME, formatCustomName(name, value, locale));
-        item.setData(DataComponentTypes.LORE, ItemLore.lore(description.stream()
-                .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
-                .toList()));
-
-        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hiddenComponents(hiddenComponents)
-                .build());
-        return item;
+        return item
+                .withCustomName(formatCustomName(name, value, locale))
+                .withLore(description.stream()
+                        .map(c -> format(c, MessageStyle.BUTTON_DESCRIPTION, locale))
+                        .toList())
+                .withHiddenComponents();
     }
 
     public static Component formatCustomName(Component name, Component value, Locale locale) {

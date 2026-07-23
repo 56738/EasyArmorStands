@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.node;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -17,11 +18,13 @@ import me.m56738.easyarmorstands.element.ArmorStandElement;
 import me.m56738.easyarmorstands.message.Message;
 
 public class ArmorStandNode implements Node {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final ArmorStandElement element;
     private final PropertyContainer properties;
 
-    public ArmorStandNode(Session session, ArmorStandElement element) {
+    public ArmorStandNode(EasyArmorStandsCommon eas, Session session, ArmorStandElement element) {
+        this.eas = eas;
         this.session = session;
         this.element = element;
         this.properties = session.properties(element);
@@ -30,6 +33,7 @@ public class ArmorStandNode implements Node {
     @Override
     public void onShow(NodeShowContext context) {
         context.addButton(createPositionButton(), new ArmorStandPositionButtonHandler(
+                eas,
                 session,
                 Message.component("easyarmorstands.node.position"),
                 properties,
@@ -38,7 +42,7 @@ public class ArmorStandNode implements Node {
 
         for (ArmorStandPart part : ArmorStandPart.values()) {
             context.addButton(createPartButton(part),
-                    new ArmorStandPartButtonHandler(session, element, properties, part));
+                    new ArmorStandPartButtonHandler(eas, session, element, properties, part));
         }
     }
 

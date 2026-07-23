@@ -1,20 +1,16 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.api.util.ItemTemplate;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.util.ItemTemplate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 public class SimpleItemTemplate implements ItemTemplate {
     private static final Style NAME_FALLBACK_STYLE = Style.style(TextDecoration.ITALIC.withState(false));
@@ -27,7 +23,7 @@ public class SimpleItemTemplate implements ItemTemplate {
     private final ItemRenderer renderer;
 
     public SimpleItemTemplate(ItemStack template, String displayName, List<String> lore, TagResolver resolver, ItemRenderer renderer) {
-        this.template = template.clone();
+        this.template = template;
         this.displayName = displayName;
         this.lore = Collections.unmodifiableList(new ArrayList<>(lore));
         this.resolver = resolver;
@@ -60,57 +56,8 @@ public class SimpleItemTemplate implements ItemTemplate {
                 .resolver(resolver)
                 .build();
 
-        ItemStack item = template.clone();
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.customName(renderName(locale, resolver));
-            meta.lore(renderLore(locale, resolver));
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
-    public SimpleItemTemplate appendLore(List<String> lore) {
-        List<String> newLore = new ArrayList<>(this.lore.size() + lore.size());
-        newLore.addAll(this.lore);
-        newLore.addAll(lore);
-        return new SimpleItemTemplate(template, displayName, newLore, resolver, renderer);
-    }
-
-    public SimpleItemTemplate editMeta(Consumer<ItemMeta> consumer) {
-        ItemStack newTemplate = template.clone();
-        ItemMeta meta = newTemplate.getItemMeta();
-        if (meta != null) {
-            consumer.accept(meta);
-            newTemplate.setItemMeta(meta);
-        }
-        return new SimpleItemTemplate(newTemplate, displayName, lore, resolver, renderer);
-    }
-
-    public SimpleItemTemplate addResolver(TagResolver resolver) {
-        return new SimpleItemTemplate(template, displayName, lore, TagResolver.resolver(
-                this.resolver,
-                resolver), renderer);
-    }
-
-    public SimpleItemTemplate withTemplate(ItemStack template) {
-        return new SimpleItemTemplate(template, displayName, lore, resolver, renderer);
-    }
-
-    public SimpleItemTemplate withFallbackTemplate(ItemStack template) {
-        if (this.template.getType() != Material.AIR && this.template.getAmount() != 0) {
-            // already have a template
-            return this;
-        }
-        return withTemplate(template);
-    }
-
-    public SimpleItemTemplate withRenderer(ItemRenderer renderer) {
-        return new SimpleItemTemplate(template, displayName, lore, resolver, renderer);
-    }
-
-    public Material getType() {
-        return template.getType();
+        return template
+                .withCustomName(renderName(locale, resolver))
+                .withLore(renderLore(locale, resolver));
     }
 }

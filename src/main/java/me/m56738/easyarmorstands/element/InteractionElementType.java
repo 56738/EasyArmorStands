@@ -1,20 +1,21 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.InteractionPropertyTypes;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Interaction;
+import me.m56738.easyarmorstands.platform.entity.Interaction;
+import me.m56738.easyarmorstands.registry.EntityTypeKeys;
 import org.jetbrains.annotations.NotNull;
 
 public class InteractionElementType extends SimpleEntityElementType<Interaction> {
-    public InteractionElementType() {
-        super(EntityType.INTERACTION, Interaction.class);
+    public InteractionElementType(EasyArmorStandsCommon eas) {
+        super(eas, eas.platform().getEntityType(EntityTypeKeys.INTERACTION), Interaction.class);
     }
 
     @Override
     protected InteractionElement createInstance(Interaction entity) {
-        return new InteractionElement(entity, this);
+        return new InteractionElement(eas, entity, this);
     }
 
     @Override

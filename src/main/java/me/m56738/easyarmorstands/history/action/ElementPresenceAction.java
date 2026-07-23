@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
@@ -13,23 +13,24 @@ import me.m56738.easyarmorstands.api.property.PropertyMap;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntitySnapshot;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.EntitySnapshot;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
-@SuppressWarnings("UnstableApiUsage")
 abstract class ElementPresenceAction implements Action {
+    private final EasyArmorStandsCommon eas;
     private final PropertyContainer properties;
     private final @Nullable EntitySnapshot snapshot;
     private ElementReference reference;
 
-    public ElementPresenceAction(@NotNull Element element) {
+    public ElementPresenceAction(@NotNull EasyArmorStandsCommon eas, @NotNull Element element) {
+        this.eas = eas;
         this.properties = new PropertyMap(element.getProperties());
         this.snapshot = getSnapshot(element);
-        this.reference = element.getReference();
+        this.reference = element.getReference(eas.referenceProvider());
     }
 
     private static @Nullable EntitySnapshot getSnapshot(Element element) {
@@ -58,10 +59,10 @@ abstract class ElementPresenceAction implements Action {
         }
 
         UUID oldId = getId(reference);
-        reference = element.getReference();
+        reference = element.getReference(eas.referenceProvider());
         UUID newId = getId(reference);
         if (oldId != null && newId != null) {
-            EasyArmorStandsPlugin.getInstance().getHistoryManager().onEntityReplaced(oldId, newId);
+            eas.getHistoryManager().onEntityReplaced(oldId, newId);
         }
 
         return true;

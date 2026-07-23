@@ -2,11 +2,12 @@ package me.m56738.easyarmorstands.session;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.platform.world.World;
+import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import me.m56738.gizmo.api.cursor.Cursor;
 import me.m56738.gizmo.api.cursor.Intersection;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4d;
@@ -29,14 +30,14 @@ public class EyeRayImpl implements EyeRay {
 
     public EyeRayImpl(World world, Location location, double length, double threshold) {
         this.world = world;
-        this.origin = Util.toVector3d(location);
-        this.direction = Util.toVector3d(location.getDirection());
+        this.origin = location.position();
+        this.direction = EasMath.getDirection(location);
         this.target = origin.fma(length, direction, new Vector3d());
         this.length = length;
         this.cursor = Cursor.of(origin, target);
         this.threshold = threshold;
-        this.yaw = location.getYaw();
-        this.pitch = location.getPitch();
+        this.yaw = location.yaw();
+        this.pitch = location.pitch();
         this.matrix = Util.toMatrix4d(location);
     }
 

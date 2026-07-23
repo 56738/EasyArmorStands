@@ -1,72 +1,61 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import net.kyori.adventure.util.RGBLike;
 
 public enum ColorAxis {
-    RED(Message.component("easyarmorstands.color.red"), Color::getRed, Color::setRed, Color.RED, NamedTextColor.RED, DyeColor.RED, MenuIcon.of(Material.RED_CONCRETE)),
-    GREEN(Message.component("easyarmorstands.color.green"), Color::getGreen, Color::setGreen, Color.LIME, NamedTextColor.GREEN, DyeColor.LIME, MenuIcon.of(Material.LIME_CONCRETE)),
-    BLUE(Message.component("easyarmorstands.color.blue"), Color::getBlue, Color::setBlue, Color.BLUE, NamedTextColor.BLUE, DyeColor.BLUE, MenuIcon.of(Material.BLUE_CONCRETE));
+    RED(Message.component("easyarmorstands.color.red").color(NamedTextColor.RED), RGBLike::red, RGBColor::withRed, RGBColor.RED, ItemTypeKeys.RED_CONCRETE),
+    GREEN(Message.component("easyarmorstands.color.green").color(NamedTextColor.GREEN), RGBLike::green, RGBColor::withGreen, RGBColor.GREEN, ItemTypeKeys.LIME_CONCRETE),
+    BLUE(Message.component("easyarmorstands.color.blue").color(NamedTextColor.BLUE), RGBLike::blue, RGBColor::withBlue, RGBColor.BLUE, ItemTypeKeys.BLUE_CONCRETE);
 
     private final Component displayName;
     private final Getter getter;
     private final Setter setter;
-    private final Color color;
-    private final TextColor textColor;
-    private final DyeColor dyeColor;
-    private final MenuIcon icon;
+    private final RGBColor color;
+    private final Key itemTypeKey;
 
-    ColorAxis(Component displayName, Getter getter, Setter setter, Color color, TextColor textColor, DyeColor dyeColor, MenuIcon icon) {
-        this.displayName = displayName.color(textColor);
+    ColorAxis(Component displayName, Getter getter, Setter setter, RGBColor color, Key itemTypeKey) {
+        this.displayName = displayName;
         this.getter = getter;
         this.setter = setter;
         this.color = color;
-        this.textColor = textColor;
-        this.dyeColor = dyeColor;
-        this.icon = icon;
+        this.itemTypeKey = itemTypeKey;
     }
 
     public Component getDisplayName() {
         return displayName;
     }
 
-    public int get(Color color) {
+    public int get(RGBLike color) {
         return getter.get(color);
     }
 
-    public Color set(Color color, int value) {
+    public RGBColor set(RGBColor color, int value) {
         return setter.set(color, value);
     }
 
-    public Color getColor() {
+    public RGBColor getColor() {
         return color;
     }
 
-    public TextColor getTextColor() {
-        return textColor;
-    }
-
-    public DyeColor getDyeColor() {
-        return dyeColor;
-    }
-
-    public MenuIcon getIcon() {
-        return icon;
+    public MenuIcon getIcon(Platform platform) {
+        return MenuIcon.of(platform.getItemType(itemTypeKey));
     }
 
     @FunctionalInterface
     private interface Getter {
-        int get(Color color);
+        int get(RGBLike color);
     }
 
     @FunctionalInterface
     private interface Setter {
-        Color set(Color color, int value);
+        RGBColor set(RGBColor color, int value);
     }
 }

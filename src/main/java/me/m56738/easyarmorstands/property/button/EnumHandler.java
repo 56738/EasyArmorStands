@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
 
 import java.util.Collection;
@@ -9,21 +10,21 @@ import java.util.function.Function;
 public class EnumHandler<T> extends ToggleHandler<T> {
     private final List<T> values;
 
-    public EnumHandler(Property<T> property, List<T> values) {
-        super(property);
+    public EnumHandler(EasyArmorStandsCommon eas, Property<T> property, List<T> values) {
+        super(eas, property);
         this.values = values;
     }
 
-    public static <T> Function<Property<T>, EnumHandler<T>> provider(Collection<T> values) {
-        return property -> new EnumHandler<>(property, List.copyOf(values));
+    public static <T> Function<Property<T>, EnumHandler<T>> provider(EasyArmorStandsCommon eas, Collection<T> values) {
+        return property -> new EnumHandler<>(eas, property, List.copyOf(values));
     }
 
-    public static <T> Function<Property<T>, EnumHandler<T>> provider(T[] values) {
-        return EnumHandler.provider(List.of(values));
+    public static <T> Function<Property<T>, EnumHandler<T>> provider(EasyArmorStandsCommon eas, T[] values) {
+        return EnumHandler.provider(eas, List.of(values));
     }
 
-    public static <T extends Enum<T>> Function<Property<T>, EnumHandler<T>> provider(Class<T> type) {
-        return EnumHandler.provider(type.getEnumConstants());
+    public static <T extends Enum<T>> Function<Property<T>, EnumHandler<T>> provider(EasyArmorStandsCommon eas, Class<T> type) {
+        return EnumHandler.provider(eas, type.getEnumConstants());
     }
 
     @Override

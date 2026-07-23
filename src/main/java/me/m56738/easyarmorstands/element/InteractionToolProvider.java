@@ -10,7 +10,7 @@ import me.m56738.easyarmorstands.api.util.PositionProvider;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.box.BoxCenterPositionProvider;
 import me.m56738.easyarmorstands.editor.interaction.InteractionBoxEditor;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

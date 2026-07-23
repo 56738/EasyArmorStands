@@ -1,17 +1,11 @@
 package me.m56738.easyarmorstands.util;
 
+import me.m56738.easyarmorstands.platform.color.RGBColor;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.util.RGBLike;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Matrix3d;
 import org.joml.Matrix3dc;
@@ -74,11 +68,11 @@ public class Util {
         return format3D(angle, ANGLE_FORMAT);
     }
 
-    public static Component formatAngle(EulerAngle angle) {
+    public static Component formatAngle(Rotations angle) {
         return formatAngle(new Vector3d(
-                Math.toDegrees(angle.getX()),
-                Math.toDegrees(angle.getY()),
-                Math.toDegrees(angle.getZ())));
+                angle.x(),
+                angle.y(),
+                angle.z()));
     }
 
     public static Component formatRotation(Quaterniondc rotation) {
@@ -116,45 +110,39 @@ public class Util {
                 .build();
     }
 
-    public static Quaterniond fromEuler(EulerAngle angle, Quaterniond dest) {
-        dest.rotationZYX(-angle.getZ(), -angle.getY(), angle.getX());
+    public static Quaterniond fromEuler(Rotations angle, Quaterniond dest) {
+        dest.rotationZYX(-Math.toRadians(angle.z()), -Math.toRadians(angle.y()), Math.toRadians(angle.x()));
         return dest;
     }
 
-    public static EulerAngle toEuler(Quaterniondc rotation) {
+    public static Rotations toEuler(Quaterniondc rotation) {
         Vector3d dest = new Vector3d();
         rotation.getEulerAnglesZYX(dest);
-        return new EulerAngle(dest.x, -dest.y, -dest.z);
+        return Rotations.ofDegrees(Math.toDegrees(dest.x), -Math.toDegrees(dest.y), -Math.toDegrees(dest.z));
     }
 
+    @Deprecated
     public static Vector3d toVector3d(Location location) {
-        return new Vector3d(location.getX(), location.getY(), location.getZ());
+        return new Vector3d(location.position());
     }
 
+    @Deprecated
     public static Vector3d toVector3d(Location location, Vector3d dest) {
-        return dest.set(location.getX(), location.getY(), location.getZ());
-    }
-
-    public static Vector3d toVector3d(Vector vector) {
-        return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
+        return dest.set(location.position());
     }
 
     public static Matrix4d toMatrix4d(Location location) {
         return new Matrix4d()
-                .translation(Util.toVector3d(location))
-                .rotateY(-Math.toRadians(location.getYaw()))
-                .rotateX(Math.toRadians(location.getPitch()));
+                .translation(location.position())
+                .rotateY(-Math.toRadians(location.yaw()))
+                .rotateX(Math.toRadians(location.pitch()));
     }
 
     public static Matrix3dc getRotation(Location location, Matrix3d dest) {
         return dest.rotationZYX(
                 0,
-                -Math.toRadians(location.getYaw()),
-                Math.toRadians(location.getPitch()));
-    }
-
-    public static Color toColor(RGBLike color) {
-        return Color.fromRGB(color.red(), color.green(), color.blue());
+                -Math.toRadians(location.yaw()),
+                Math.toRadians(location.pitch()));
     }
 
     public static String getId(UUID uniqueId) {
@@ -181,11 +169,11 @@ public class Util {
     }
 
     public static Quaterniond getRoundedYawRotation(Location location, Quaterniond dest) {
-        return getRoundedYawRotation(location.getYaw(), dest);
+        return getRoundedYawRotation(location.yaw(), dest);
     }
 
     public static Quaterniond getRoundedYawRotation(Entity entity, Quaterniond dest) {
-        return getRoundedYawRotation(entity.getLocation(), dest);
+        return getRoundedYawRotation(entity.location(), dest);
     }
 
     public static Quaternionf getRoundedYawRotation(float yaw, Quaternionf dest) {
@@ -193,11 +181,11 @@ public class Util {
     }
 
     public static Quaternionf getRoundedYawRotation(Location location, Quaternionf dest) {
-        return getRoundedYawRotation(location.getYaw(), dest);
+        return getRoundedYawRotation(location.yaw(), dest);
     }
 
     public static Quaternionf getRoundedYawRotation(Entity entity, Quaternionf dest) {
-        return getRoundedYawRotation(entity.getLocation(), dest);
+        return getRoundedYawRotation(entity.location(), dest);
     }
 
     public static Quaterniond getRoundedYawPitchRotation(float yaw, float pitch, Quaterniond dest) {
@@ -205,11 +193,11 @@ public class Util {
     }
 
     public static Quaterniond getRoundedYawPitchRotation(Location location, Quaterniond dest) {
-        return getRoundedYawPitchRotation(location.getYaw(), location.getPitch(), dest);
+        return getRoundedYawPitchRotation(location.yaw(), location.pitch(), dest);
     }
 
     public static Quaterniond getRoundedYawPitchRotation(Entity entity, Quaterniond dest) {
-        return getRoundedYawPitchRotation(entity.getLocation(), dest);
+        return getRoundedYawPitchRotation(entity.location(), dest);
     }
 
     public static Quaternionf getRoundedYawPitchRotation(float yaw, float pitch, Quaternionf dest) {
@@ -217,41 +205,25 @@ public class Util {
     }
 
     public static Quaternionf getRoundedYawPitchRotation(Location location, Quaternionf dest) {
-        return getRoundedYawPitchRotation(location.getYaw(), location.getPitch(), dest);
+        return getRoundedYawPitchRotation(location.yaw(), location.pitch(), dest);
     }
 
     public static Quaternionf getRoundedYawPitchRotation(Entity entity, Quaternionf dest) {
-        return getRoundedYawPitchRotation(entity.getLocation(), dest);
+        return getRoundedYawPitchRotation(entity.location(), dest);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <E extends Entity> Class<E> getEntityClass(E entity) {
-        return (Class<E>) entity.getType().getEntityClass();
-    }
-
-    public static Component formatColor(Color color) {
+    public static Component formatColor(RGBColor color) {
         if (color == null) {
-            color = Color.BLACK;
+            color = RGBColor.of(0);
         }
-        String red = String.format("%02X", color.getRed());
-        String green = String.format("%02X", color.getGreen());
-        String blue = String.format("%02X", color.getBlue());
+        String red = String.format("%02X", color.red());
+        String green = String.format("%02X", color.green());
+        String blue = String.format("%02X", color.blue());
         return Component.text()
                 .content("#")
                 .append(Component.text(red, NamedTextColor.RED))
                 .append(Component.text(green, NamedTextColor.GREEN))
                 .append(Component.text(blue, NamedTextColor.BLUE))
                 .build();
-    }
-
-    public static @NotNull ItemStack getEmptyItem() {
-        return new ItemStack(Material.AIR, 0);
-    }
-
-    public static @NotNull ItemStack wrapItem(@Nullable ItemStack item) {
-        if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) {
-            return getEmptyItem();
-        }
-        return item;
     }
 }

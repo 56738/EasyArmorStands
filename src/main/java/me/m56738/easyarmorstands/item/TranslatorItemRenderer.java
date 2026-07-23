@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.item;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
@@ -18,7 +18,7 @@ class TranslatorItemRenderer implements ItemRenderer {
     }
 
     private Component render(String input, Locale locale, TagResolver resolver) {
-        return renderer.render(EasyArmorStandsPlugin.getInstance().getMiniMessage().deserialize(input, resolver), locale);
+        return renderer.render(EasyArmorStandsCommon.miniMessage().deserialize(input, resolver), locale);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.menu.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
@@ -7,19 +8,21 @@ import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 
 import java.util.List;
 
 public class DisplayBoxButton implements MenuButton {
     private static final Key KEY = EasyArmorStands.key("display/box");
 
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final Layer layer;
 
-    public DisplayBoxButton(Session session, Layer layer) {
+    public DisplayBoxButton(EasyArmorStandsCommon eas, Session session, Layer layer) {
+        this.eas = eas;
         this.session = session;
         this.layer = layer;
     }
@@ -32,7 +35,7 @@ public class DisplayBoxButton implements MenuButton {
 
     @Override
     public MenuIcon icon() {
-        return MenuIcon.of(Material.BLACK_STAINED_GLASS);
+        return MenuIcon.of(eas.platform().getItemType(ItemTypeKeys.BLACK_STAINED_GLASS));
     }
 
     @Override

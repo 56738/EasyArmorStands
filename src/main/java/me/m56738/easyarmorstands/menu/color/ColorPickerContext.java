@@ -1,13 +1,16 @@
 package me.m56738.easyarmorstands.menu.color;
 
-import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.color.RGBColor;
+import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public interface ColorPickerContext {
+    @NotNull Platform platform();
+
     @NotNull ItemStack item();
 
-    @NotNull Color getColor();
+    @NotNull RGBColor getColor();
 
-    void setColor(@NotNull Color color);
+    void setColor(@NotNull RGBColor color);
 }

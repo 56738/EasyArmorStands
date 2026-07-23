@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.ArmorStandSize;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.BoundingBoxButton;
@@ -16,16 +16,15 @@ import me.m56738.easyarmorstands.editor.armorstand.ArmorStandOffsetProvider;
 import me.m56738.easyarmorstands.editor.armorstand.ArmorStandRotationProvider;
 import me.m56738.easyarmorstands.editor.armorstand.layer.ArmorStandRootLayer;
 import me.m56738.easyarmorstands.editor.node.ArmorStandNode;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.ArmorStand;
+import me.m56738.easyarmorstands.platform.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
     private final ArmorStand entity;
 
-    public ArmorStandElement(ArmorStand entity, SimpleEntityElementType<ArmorStand> type) {
-        super(entity, type);
+    public ArmorStandElement(EasyArmorStandsCommon eas, ArmorStand entity, SimpleEntityElementType<ArmorStand> type) {
+        super(eas, entity, type);
         this.entity = entity;
     }
 
@@ -39,26 +38,26 @@ public class ArmorStandElement extends SimpleEntityElement<ArmorStand> {
 
     @Override
     public @NotNull Node createNode(@NotNull Session session) {
-        if (EasyArmorStandsPlugin.getInstance().getConfiguration().editor.flattenArmorStands) {
-            return new ArmorStandNode(session, this);
+        if (eas.getConfiguration().editor.flattenArmorStands) {
+            return new ArmorStandNode(eas, session, this);
         }
         return super.createNode(session);
     }
 
     @Override
     public @NotNull Layer createLayer(@NotNull Session session) {
-        return new ArmorStandRootLayer(session, entity, this);
+        return new ArmorStandRootLayer(eas, session, entity, this);
     }
 
     @Override
     public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new ArmorStandToolProvider(properties);
+        return new ArmorStandToolProvider(eas, properties);
     }
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
         ArmorStandSize size = ArmorStandSize.get(entity);
-        Vector3d position = Util.toVector3d(entity.getLocation());
+        Vector3dc position = entity.location().position();
         double scale = getScale();
         double width = size.getWidth() * scale;
         double height = size.getHeight() * scale;

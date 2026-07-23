@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import org.bukkit.block.data.BlockData;
+import me.m56738.easyarmorstands.platform.block.BlockData;
 import org.jspecify.annotations.NullMarked;
 
 import static me.m56738.easyarmorstands.api.EasyArmorStands.key;

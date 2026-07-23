@@ -1,15 +1,16 @@
 package me.m56738.easyarmorstands.session;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.SessionManager;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
-import me.m56738.easyarmorstands.api.event.session.SessionStartEvent;
-import me.m56738.easyarmorstands.api.event.session.SessionStopEvent;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.editor.layer.ElementSelectionLayerImpl;
 import me.m56738.easyarmorstands.editor.layer.EntityElementDiscoverySource;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.event.EventDispatcher;
+import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,22 +22,31 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SessionManagerImpl implements SessionManager {
+    private final EventDispatcher eventDispatcher;
+    private final SessionToolProvider toolProvider;
+    private final EasyArmorStandsCommon eas;
     private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
+
+    public SessionManagerImpl(EventDispatcher eventDispatcher, SessionToolProvider toolProvider, EasyArmorStandsCommon eas) {
+        this.eventDispatcher = eventDispatcher;
+        this.toolProvider = toolProvider;
+        this.eas = eas;
+    }
 
     public void startSession(SessionImpl session) {
         final SessionImpl old = sessions.put(session.player(), session);
         if (old != null) {
             old.stop();
-            Bukkit.getPluginManager().callEvent(new SessionStopEvent(old));
+            eventDispatcher.dispatchSessionStop(old);
         }
-        Bukkit.getPluginManager().callEvent(new SessionStartEvent(session));
+        eventDispatcher.dispatchSessionStart(session);
     }
 
     @Override
     public @NotNull SessionImpl startSession(@NotNull Player player) {
-        SessionImpl session = new SessionImpl(new EasPlayer(player));
-        ElementSelectionLayer layer = new ElementSelectionLayerImpl(session);
-        layer.addSource(new EntityElementDiscoverySource(player));
+        SessionImpl session = new SessionImpl(eas, new EasPlayer(eas, player));
+        ElementSelectionLayer layer = new ElementSelectionLayerImpl(eas, session);
+        layer.addSource(new EntityElementDiscoverySource(eas, player));
         session.pushLayer(layer);
         startSession(session);
         return session;
@@ -47,7 +57,7 @@ public class SessionManagerImpl implements SessionManager {
         SessionImpl s = (SessionImpl) session;
         if (sessions.remove(session.player(), s)) {
             s.stop();
-            Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
+            eventDispatcher.dispatchSessionStop(session);
         }
     }
 
@@ -55,7 +65,7 @@ public class SessionManagerImpl implements SessionManager {
         SessionImpl session = sessions.remove(player);
         if (session != null) {
             session.stop();
-            Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
+            eventDispatcher.dispatchSessionStop(session);
             return true;
         }
         return false;
@@ -68,7 +78,7 @@ public class SessionManagerImpl implements SessionManager {
             if (!valid) {
                 iterator.remove();
                 session.stop();
-                Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
+                eventDispatcher.dispatchSessionStop(session);
             }
         }
     }
@@ -80,7 +90,7 @@ public class SessionManagerImpl implements SessionManager {
             session.stop();
         }
         for (SessionImpl session : sessions) {
-            Bukkit.getPluginManager().callEvent(new SessionStopEvent(session));
+            eventDispatcher.dispatchSessionStop(session);
         }
     }
 
@@ -91,5 +101,30 @@ public class SessionManagerImpl implements SessionManager {
     @Override
     public @Nullable SessionImpl getSession(@NotNull Player player) {
         return sessions.get(player);
+    }
+
+    public boolean isHoldingTool(Player player) {
+        if (!player.hasPermission(Permissions.EDIT)) {
+            return false;
+        }
+        return toolProvider.isTool(player.getEquipment(EquipmentSlot.HAND))
+                || toolProvider.isTool(player.getEquipment(EquipmentSlot.OFF_HAND));
+    }
+
+    public void updateHeldItem(Player player) {
+        SessionImpl session = getSession(player);
+        if (session != null) {
+            updateHeldItem(session);
+        } else if (isHoldingTool(player)) {
+            session = startSession(player);
+            session.setToolRequired(true);
+        }
+    }
+
+    public void updateHeldItem(SessionImpl session) {
+        Player player = session.player();
+        if (session.isToolRequired() && !isHoldingTool(player)) {
+            stopSession(player);
+        }
     }
 }

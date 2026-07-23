@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
@@ -7,7 +8,6 @@ import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Color;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -18,9 +18,9 @@ public class ColorPresetButton implements MenuButton {
     private final Key key;
     private final MenuIcon icon;
     private final Component name;
-    private final Color color;
+    private final RGBColor color;
 
-    public ColorPresetButton(ColorPickerContext context, Key key, MenuIcon icon, Component name, Color color) {
+    public ColorPresetButton(ColorPickerContext context, Key key, MenuIcon icon, Component name, RGBColor color) {
         this.context = context;
         this.key = key;
         this.icon = icon;
@@ -60,7 +60,8 @@ public class ColorPresetButton implements MenuButton {
         if (context.isLeftClick()) {
             this.context.setColor(color);
         } else if (context.isRightClick()) {
-            this.context.setColor(this.context.getColor().mixColors(color));
+            // TODO readd color mixing
+//            this.context.setColor(this.context.getColor().mixColors(color));
         }
         context.updateMenu();
     }

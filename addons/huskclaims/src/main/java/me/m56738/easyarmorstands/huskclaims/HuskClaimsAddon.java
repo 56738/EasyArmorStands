@@ -1,18 +1,26 @@
 package me.m56738.easyarmorstands.huskclaims;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.Addon;
 import net.kyori.adventure.key.Key;
 import net.william278.huskclaims.api.BukkitHuskClaimsAPI;
 import net.william278.huskclaims.libraries.cloplib.operation.OperationType;
 import net.william278.huskclaims.libraries.cloplib.operation.OperationTypeRegistry;
+import org.bukkit.plugin.Plugin;
 
 public class HuskClaimsAddon implements Addon {
     private static final Key EDIT = EasyArmorStands.key("edit");
+    private final Plugin plugin;
+    private final EasyArmorStandsPaperImpl eas;
     private OperationTypeRegistry operationTypeRegistry;
     private OperationType operationType;
     private HuskClaimsPrivilegeChecker privilegeChecker;
+
+    public HuskClaimsAddon(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        this.plugin = plugin;
+        this.eas = eas;
+    }
 
     @Override
     public String name() {
@@ -31,13 +39,13 @@ public class HuskClaimsAddon implements Addon {
         }
 
         privilegeChecker = new HuskClaimsPrivilegeChecker(api, operationType);
-        EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
+        eas.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
     }
 
     @Override
     public void disable() {
         if (privilegeChecker != null) {
-            EasyArmorStands.get().regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+            eas.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
             privilegeChecker = null;
         }
 

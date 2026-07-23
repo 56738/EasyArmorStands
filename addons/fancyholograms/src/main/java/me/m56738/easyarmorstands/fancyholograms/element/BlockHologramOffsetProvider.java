@@ -5,8 +5,8 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.OffsetProvider;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.EasMath;
-import org.bukkit.Location;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -28,6 +28,6 @@ public class BlockHologramOffsetProvider implements OffsetProvider {
         Location location = locationProperty.getValue();
         return currentOffset.set(0.5)
                 .mul(scaleProperty.getValue())
-                .rotate(EasMath.getEntityRotation(location.getYaw(), location.getPitch(), currentRotation));
+                .rotate(EasMath.getEntityRotation(location, currentRotation));
     }
 }

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.util;
 
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -10,6 +10,16 @@ public class EasMath {
     private static final Vector3d temp = new Vector3d();
 
     private EasMath() {
+    }
+
+    public static Vector3d getDirection(Location location) {
+        float yaw = Math.toRadians(location.yaw());
+        float pitch = Math.toRadians(location.pitch());
+        double xz = Math.cos(pitch);
+        double x = -xz * Math.sin(yaw);
+        double y = -Math.sin(pitch);
+        double z = xz * Math.cos(yaw);
+        return new Vector3d(x, y, z);
     }
 
     public static double wrapDegrees(double degrees) {
@@ -36,7 +46,7 @@ public class EasMath {
     }
 
     public static Quaterniond getEntityRotation(Location location, Quaterniond dest) {
-        return getEntityRotation(location.getYaw(), location.getPitch(), dest);
+        return getEntityRotation(location.yaw(), location.pitch(), dest);
     }
 
     public static Quaterniond getInverseEntityRotation(float yaw, float pitch, Quaterniond dest) {

@@ -1,17 +1,13 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
-import io.papermc.paper.datacomponent.item.ResolvableProfile;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.platform.entity.Pose;
+import me.m56738.easyarmorstands.platform.profile.Profile;
+import me.m56738.easyarmorstands.platform.util.MainHand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.object.ObjectContents;
-import org.bukkit.entity.Pose;
-import org.bukkit.inventory.MainHand;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
@@ -31,8 +27,7 @@ public final class MannequinPropertyTypes {
             })
             .permission("easyarmorstands.property.mannequin.mainhand")
             .build();
-    @SuppressWarnings("UnstableApiUsage")
-    public static final PropertyType<ResolvableProfile> PROFILE = PropertyType.builder(key("mannequin/profile"), ResolvableProfile.class)
+    public static final PropertyType<Profile> PROFILE = PropertyType.builder(key("mannequin/profile"), Profile.class)
             .name(translatable("easyarmorstands.property.mannequin.profile.name"))
             .formatter(value -> Component.object(ObjectContents.playerHead(value)))
             .permission("easyarmorstands.property.mannequin.profile")
@@ -71,13 +66,5 @@ public final class MannequinPropertyTypes {
                     .build());
 
     private MannequinPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

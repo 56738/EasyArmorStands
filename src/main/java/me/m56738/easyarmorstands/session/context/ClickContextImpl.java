@@ -2,8 +2,8 @@ package me.m56738.easyarmorstands.session.context;
 
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

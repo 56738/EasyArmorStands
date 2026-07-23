@@ -1,11 +1,19 @@
 package me.m56738.easyarmorstands.residence;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.Addon;
+import org.bukkit.plugin.Plugin;
 
 public class ResidenceAddon implements Addon {
+    private final Plugin plugin;
+    private final EasyArmorStandsPaperImpl eas;
+
     private ResidencePrivilegeChecker privilegeChecker;
+
+    public ResidenceAddon(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        this.plugin = plugin;
+        this.eas = eas;
+    }
 
     @Override
     public String name() {
@@ -15,12 +23,12 @@ public class ResidenceAddon implements Addon {
     @Override
     public void enable() {
         privilegeChecker = new ResidencePrivilegeChecker();
-        EasyArmorStands.get().regionPrivilegeManager().registerPrivilegeChecker(EasyArmorStandsPlugin.getInstance(), privilegeChecker);
+        eas.regionPrivilegeManager().registerPrivilegeChecker(plugin, privilegeChecker);
     }
 
     @Override
     public void disable() {
-        EasyArmorStands.get().regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
+        eas.regionPrivilegeManager().unregisterPrivilegeChecker(privilegeChecker);
     }
 
     @Override

@@ -1,45 +1,41 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemLore;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.MenuElement;
-import me.m56738.easyarmorstands.color.ColorPickerContextImpl;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.click.MenuClick;
 import me.m56738.easyarmorstands.menu.click.MenuClickInterceptor;
 import me.m56738.easyarmorstands.message.MessageStyle;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Locale;
 
 public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     public static final Key KEY = EasyArmorStands.key("color_picker");
+    private final EasyArmorStandsCommon eas;
     private final MenuElement element;
     private boolean active;
 
-    public ColorPickerSlot(MenuElement element) {
+    public ColorPickerSlot(EasyArmorStandsCommon eas, MenuElement element) {
+        this.eas = eas;
         this.element = element;
     }
 
     @Override
-    @SuppressWarnings("UnstableApiUsage")
     public ItemStack getItem(Locale locale) {
-        ItemStack item = ItemStack.of(Material.BRUSH);
-        ItemLore.Builder lore = ItemLore.lore();
+        ItemStack item = eas.platform().getItemType(ItemTypeKeys.BRUSH).createItemStack();
         if (active) {
-            item.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-            lore.addLine(MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.click-target"), MessageStyle.BUTTON_DESCRIPTION, locale));
+            item = item.withEnchantmentGlintOverride(true);
+            item = item.withLore(List.of(MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.click-target"), MessageStyle.BUTTON_DESCRIPTION, locale)));
         }
-        item.setData(DataComponentTypes.CUSTOM_NAME, MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.open"), MessageStyle.BUTTON_NAME, locale));
-        item.setData(DataComponentTypes.LORE, lore.build());
+        item = item.withCustomName(MenuButtonSlot.format(Component.translatable("easyarmorstands.menu.color-picker.open"), MessageStyle.BUTTON_NAME, locale));
         return item;
     }
 
@@ -51,7 +47,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
             return;
         }
 
-        if (!click.isLeftClick() || click.cursor().getType() != Material.AIR) {
+        if (!click.isLeftClick() || !click.cursor().isEmpty()) {
             return;
         }
 
@@ -61,8 +57,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         int foundSlots = 0;
         for (int i = 0; i < size; i++) {
             MenuSlot slot = menu.getSlot(i);
-            if (slot instanceof ItemPropertySlot) {
-                ItemPropertySlot itemSlot = (ItemPropertySlot) slot;
+            if (slot instanceof ItemPropertySlot itemSlot) {
                 if (isApplicable(itemSlot)) {
                     foundSlot = itemSlot;
                     foundSlots++;
@@ -87,7 +82,7 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
         active = false;
         click.updateItem(this);
 
-        if (!click.isLeftClick() || click.cursor().getType() != Material.AIR) {
+        if (!click.isLeftClick() || !click.cursor().isEmpty()) {
             return;
         }
 
@@ -100,17 +95,13 @@ public class ColorPickerSlot implements MenuSlot, MenuClickInterceptor {
     }
 
     private void open(Player player, ItemPropertySlot itemSlot) {
-        Menu menu = EasyArmorStandsPlugin.getInstance().createColorPicker(player, new ColorPickerContextImpl(itemSlot.getProperty()));
+        Menu menu = eas.createColorPicker(player, itemSlot.getProperty());
         menu.addCloseListener((p, m) -> element.openMenu(p));
         player.openInventory(menu.getInventory());
     }
 
     private boolean isApplicable(ItemPropertySlot slot) {
         ItemStack item = slot.getProperty().getValue();
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) {
-            return false;
-        }
-        return ColorPickerContextImpl.hasColor(meta);
+        return eas.isColorPickerSupported(item);
     }
 }

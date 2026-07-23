@@ -1,31 +1,31 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
-import me.m56738.easyarmorstands.api.event.element.EntityElementInitializeEvent;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.EntityType;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public abstract class SimpleEntityElementType<E extends Entity> implements EntityElementType<E> {
+    protected final EasyArmorStandsCommon eas;
     private final EntityType entityType;
     private final Class<E> entityClass;
     private final Component displayName;
 
-    public SimpleEntityElementType(EntityType entityType, Class<E> entityClass) {
+    public SimpleEntityElementType(EasyArmorStandsCommon eas, EntityType entityType, Class<E> entityClass) {
+        this.eas = eas;
         this.entityType = entityType;
         this.entityClass = entityClass;
         this.displayName = Component.translatable(entityType);
@@ -47,13 +47,14 @@ public abstract class SimpleEntityElementType<E extends Entity> implements Entit
     }
 
     protected SimpleEntityElement<E> createInstance(E entity) {
-        return new SimpleEntityElement<>(entity, this);
+        return new SimpleEntityElement<>(eas, entity, this);
     }
 
     @Override
     public SimpleEntityElement<E> getElement(@NotNull E entity) {
         SimpleEntityElement<E> element = createInstance(entity);
-        Bukkit.getPluginManager().callEvent(new EntityElementInitializeEvent(element));
+        new EntityElementPopulator(eas.platform()).registerProperties(element);
+        eas.eventDispatcher().dispatchEntityElementInitialize(element);
         return element;
     }
 
@@ -65,7 +66,8 @@ public abstract class SimpleEntityElementType<E extends Entity> implements Entit
         }
         Location location = locationProperty.getValue();
         SpawnedEntityConfigurator configurator = new SpawnedEntityConfigurator(properties);
-        E entity = location.getWorld().spawn(location, entityClass, configurator);
+        @SuppressWarnings("unchecked")
+        E entity = (E) location.world().spawn(location, entityType, e -> configurator.accept((E) e));
         SimpleEntityElement<E> element = configurator.getElement();
         if (element != null) {
             entity.teleport(location);
@@ -95,7 +97,8 @@ public abstract class SimpleEntityElementType<E extends Entity> implements Entit
 
         @Override
         public void accept(E entity) {
-            entity.getPersistentDataContainer().set(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING, SimpleEntityElementType.this.key().asString());
+            // TODO
+//            PaperEntity.toNative(entity).getPersistentDataContainer().set(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING, SimpleEntityElementType.this.key().asString());
             element = SimpleEntityElementType.this.getElement(entity);
             if (element != null) {
                 copyProperties(properties, element.getProperties());

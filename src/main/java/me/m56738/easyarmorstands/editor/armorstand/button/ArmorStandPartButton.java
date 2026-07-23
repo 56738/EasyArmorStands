@@ -14,10 +14,10 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.element.ArmorStandElement;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.util.EulerAngle;
 import org.joml.Math;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -35,7 +35,7 @@ public class ArmorStandPartButton implements Button {
     private final Quaterniond rotation = new Quaterniond();
     private final LineParticle particle;
     private final Property<Location> locationProperty;
-    private final Property<EulerAngle> poseProperty;
+    private final Property<Rotations> poseProperty;
     private final Property<ArmorStandSize> sizeProperty;
     private double scale = 1;
 
@@ -53,15 +53,16 @@ public class ArmorStandPartButton implements Button {
     @Override
     public void update() {
         Location location = locationProperty.getValue();
+        Vector3dc position = location.position();
         ArmorStandSize size = sizeProperty.getValue();
         double scale = element.getScale();
         this.scale = Math.max(1, scale); // make sure the button doesn't get too small
         // rotation = combination of yaw and pose
-        Util.fromEuler(poseProperty.getValue(), rotation).rotateLocalY(-Math.toRadians(location.getYaw()));
+        Util.fromEuler(poseProperty.getValue(), rotation).rotateLocalY(-Math.toRadians(location.yaw()));
         // start = where the bone is attached to the armor stand, depends on yaw
         partInfo.getOffset(size, scale)
-                .rotateY(-Math.toRadians(location.getYaw()), start)
-                .add(location.getX(), location.getY(), location.getZ());
+                .rotateY(-Math.toRadians(location.yaw()), start)
+                .add(position.x(), position.y(), position.z());
         // end = where the bone ends, depends on yaw and pose
         partInfo.getLength(size, scale)
                 .rotate(rotation, end)

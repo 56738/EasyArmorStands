@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api;
 
+import me.m56738.easyarmorstands.platform.entity.ArmorStand;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -20,8 +20,12 @@ public enum ArmorStandSize {
         this.displayName = displayName;
     }
 
+    public static @NotNull ArmorStandSize get(boolean small) {
+        return small ? SMALL : NORMAL;
+    }
+
     public static @NotNull ArmorStandSize get(@NotNull ArmorStand entity) {
-        return entity.isSmall() ? SMALL : NORMAL;
+        return get(entity.isSmall());
     }
 
     @Override

@@ -1,8 +1,8 @@
 package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
-import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.entity.ItemDisplay.ItemDisplayTransform;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;

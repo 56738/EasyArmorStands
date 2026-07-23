@@ -5,7 +5,8 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemHologramItemProperty implements Property<ItemStack> {
@@ -24,12 +25,12 @@ public class ItemHologramItemProperty implements Property<ItemStack> {
 
     @Override
     public @NotNull ItemStack getValue() {
-        return data.getItemStack();
+        return PaperItemStack.fromNative(data.getItemStack());
     }
 
     @Override
     public boolean setValue(@NotNull ItemStack value) {
-        data.setItemStack(value);
+        data.setItemStack(PaperItemStack.toNative(value));
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

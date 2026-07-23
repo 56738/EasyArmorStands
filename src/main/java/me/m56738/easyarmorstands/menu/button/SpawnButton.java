@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.menu.button;
 
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.Element;
@@ -10,18 +10,20 @@ import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
 public class SpawnButton implements MenuButton {
+    private final EasyArmorStandsCommon eas;
     private final Player player;
     private final ElementType type;
     private final MenuIcon icon;
 
-    public SpawnButton(Player player, ElementType type, MenuIcon icon) {
+    public SpawnButton(EasyArmorStandsCommon eas, Player player, ElementType type, MenuIcon icon) {
+        this.eas = eas;
         this.player = player;
         this.type = type;
         this.icon = icon;
@@ -50,11 +52,11 @@ public class SpawnButton implements MenuButton {
     @Override
     public void onClick(MenuClickContext context) {
         if (context.isLeftClick()) {
-            ElementSpawnRequest spawnRequest = EasyArmorStands.get().elementSpawnRequest(type);
+            ElementSpawnRequest spawnRequest = eas.elementSpawnRequest(type);
             spawnRequest.setPlayer(player);
             Element element = spawnRequest.spawn();
 
-            Session session = EasyArmorStands.get().sessionManager().getSession(player);
+            Session session = eas.sessionManager().getSession(player);
             if (session != null) {
                 ElementSelectionLayer selectionLayer = session.findLayer(ElementSelectionLayer.class);
                 if (selectionLayer != null) {

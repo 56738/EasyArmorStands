@@ -1,14 +1,12 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider.Priority;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
-import net.kyori.adventure.key.InvalidKeyException;
+import me.m56738.easyarmorstands.platform.entity.Entity;
 import net.kyori.adventure.key.Key;
-import org.bukkit.entity.Entity;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,10 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 public class EntityElementProviderRegistryImpl implements EntityElementProviderRegistry {
+    private final EasyArmorStandsCommon eas;
     private final Map<Key, EntityElementProvider> providers = new HashMap<>();
     private final Map<Priority, List<EntityElementProvider>> providersByPriority = new LinkedHashMap<>();
 
-    public EntityElementProviderRegistryImpl() {
+    public EntityElementProviderRegistryImpl(EasyArmorStandsCommon eas) {
+        this.eas = eas;
         for (Priority priority : Priority.values()) {
             providersByPriority.put(priority, new ArrayList<>());
         }
@@ -59,7 +59,7 @@ public class EntityElementProviderRegistryImpl implements EntityElementProviderR
         for (List<EntityElementProvider> providers : providersByPriority.values()) {
             for (EntityElementProvider provider : providers) {
                 if (provider.getElement(entity) != null) {
-                    EasyArmorStandsPlugin.getInstance().setEntityElementProvider(entity, provider);
+                    eas.setEntityElementProvider(entity, provider);
                     return provider;
                 }
             }
@@ -76,23 +76,10 @@ public class EntityElementProviderRegistryImpl implements EntityElementProviderR
     }
 
     private @Nullable EntityElementProvider getReferencedProvider(Entity entity) {
-        Key providerKey = getReferencedProviderKey(entity);
+        Key providerKey = eas.getEntityElementProvider(entity);
         if (providerKey == null) {
             return null;
         }
         return providers.get(providerKey);
-    }
-
-    @SuppressWarnings("PatternValidation")
-    private @Nullable Key getReferencedProviderKey(Entity entity) {
-        String providerName = entity.getPersistentDataContainer().get(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING);
-        if (providerName == null) {
-            return null;
-        }
-        try {
-            return Key.key(providerName);
-        } catch (InvalidKeyException e) {
-            return null;
-        }
     }
 }

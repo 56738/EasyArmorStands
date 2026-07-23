@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.command.util;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
@@ -13,9 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class ElementSelection {
+    private final EasyArmorStandsCommon eas;
     private final Collection<Element> elements;
 
-    public ElementSelection(Collection<Element> elements) {
+    public ElementSelection(EasyArmorStandsCommon eas, Collection<Element> elements) {
+        this.eas = eas;
         this.elements = Collections.unmodifiableCollection(elements);
     }
 
@@ -25,11 +28,11 @@ public class ElementSelection {
 
     public @NotNull PropertyContainer properties(EasPlayer player) {
         if (elements.size() == 1) {
-            return new TrackedPropertyContainer(elements.iterator().next(), player);
+            return new TrackedPropertyContainer(eas, elements.iterator().next(), player);
         }
         List<PropertyContainer> containers = new ArrayList<>(elements.size());
         for (Element element : elements) {
-            containers.add(new TrackedPropertyContainer(element, player));
+            containers.add(new TrackedPropertyContainer(eas, element, player));
         }
         return new GroupPropertyContainer(containers);
     }

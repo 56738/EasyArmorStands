@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyWrapperContainer;
@@ -19,8 +20,8 @@ public class TrackedPropertyContainer extends PropertyWrapperContainer {
     private final Element element;
     private final ChangeTracker tracker;
 
-    public TrackedPropertyContainer(Element element, EasPlayer player) {
-        super(new PermissionCheckedPropertyContainer(element, player));
+    public TrackedPropertyContainer(EasyArmorStandsCommon eas, Element element, EasPlayer player) {
+        super(new PermissionCheckedPropertyContainer(eas, element, player));
         this.element = element;
         this.tracker = player.tracker();
     }

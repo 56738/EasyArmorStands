@@ -4,14 +4,14 @@ import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.util.EulerAngle;
+import me.m56738.easyarmorstands.platform.entity.ArmorStand;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorStandPoseProperty implements Property<EulerAngle> {
+public class ArmorStandPoseProperty implements Property<Rotations> {
     private final ArmorStand entity;
     private final ArmorStandPart part;
-    private final PropertyType<EulerAngle> type;
+    private final PropertyType<Rotations> type;
 
     public ArmorStandPoseProperty(ArmorStand entity, ArmorStandPart part) {
         this.entity = entity;
@@ -20,17 +20,17 @@ public class ArmorStandPoseProperty implements Property<EulerAngle> {
     }
 
     @Override
-    public @NotNull PropertyType<EulerAngle> getType() {
+    public @NotNull PropertyType<Rotations> getType() {
         return type;
     }
 
     @Override
-    public @NotNull EulerAngle getValue() {
+    public @NotNull Rotations getValue() {
         return part.getPose(entity);
     }
 
     @Override
-    public boolean setValue(@NotNull EulerAngle value) {
+    public boolean setValue(@NotNull Rotations value) {
         part.setPose(entity, value);
         return true;
     }

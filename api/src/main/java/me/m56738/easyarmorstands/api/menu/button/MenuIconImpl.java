@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.api.menu.button;
 
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 
 record MenuIconImpl(ItemStack item) implements MenuIcon {
     @Override

@@ -17,13 +17,13 @@ import me.m56738.easyarmorstands.editor.display.layer.DisplayLayer;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayShearLayer;
 import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
+import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.color.ARGBColor;
+import me.m56738.easyarmorstands.platform.color.RGBColor;
+import me.m56738.easyarmorstands.platform.entity.Display.Brightness;
+import me.m56738.easyarmorstands.platform.util.Location;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Display.Brightness;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotation.specifier.Range;
 import org.incendo.cloud.annotations.Argument;
@@ -48,8 +48,8 @@ public class DisplayCommands {
             return;
         }
         int skyLight = property.getValue()
-                .map(Brightness::getSkyLight)
-                .orElseGet(() -> (int) location.getBlock().getLightFromSky());
+                .map(Brightness::skyLight)
+                .orElseGet(() -> location.world().getBlock(location).skyLight());
         Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
         if (property.setValue(brightness)) {
             properties.commit();
@@ -73,8 +73,8 @@ public class DisplayCommands {
             return;
         }
         int blockLight = property.getValue()
-                .map(Brightness::getSkyLight)
-                .orElseGet(() -> (int) location.getBlock().getLightFromBlocks());
+                .map(Brightness::skyLight)
+                .orElseGet(() -> location.world().getBlock(location).blockLight());
         Optional<Brightness> brightness = Optional.of(new Brightness(blockLight, skyLight));
         if (property.setValue(brightness)) {
             properties.commit();
@@ -96,8 +96,8 @@ public class DisplayCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.brightness-unsupported"));
             return;
         }
-        Block block = sender.get().getLocation().getBlock();
-        Optional<Brightness> brightness = Optional.of(new Brightness(block.getLightFromBlocks(), block.getLightFromSky()));
+        Block block = sender.get().world().getBlock(sender.get().location());
+        Optional<Brightness> brightness = Optional.of(new Brightness(block.blockLight(), block.skyLight()));
         if (property.setValue(brightness)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-brightness",
@@ -214,7 +214,7 @@ public class DisplayCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.box-unsupported"));
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+        PropertyContainer properties = session.properties(element);
         session.pushLayer(new DisplayBoxLayer(session, properties));
     }
 
@@ -278,12 +278,12 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setTextBackground(EasPlayer sender, ElementSelection selection, @Argument("value") TextColor color) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<ARGBColor>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+        Optional<ARGBColor> value = Optional.of(ARGBColor.of(0xFF000000 | color.value()));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
@@ -299,7 +299,7 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetTextBackground(EasPlayer sender, ElementSelection selection) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<ARGBColor>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
@@ -319,12 +319,12 @@ public class DisplayCommands {
     @RequireElementSelection
     public void hideTextBackground(EasPlayer sender, ElementSelection selection) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<ARGBColor>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Optional<Color> value = Optional.of(Color.fromARGB(0));
+        Optional<ARGBColor> value = Optional.of(ARGBColor.of(0));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background",
@@ -340,18 +340,18 @@ public class DisplayCommands {
     @RequireElementSelection
     public void hideTextBackground(EasPlayer sender, ElementSelection selection, @Argument("value") @Range(min = "0", max = "255") int alpha) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
+        Property<Optional<ARGBColor>> property = properties.getOrNull(TextDisplayPropertyTypes.BACKGROUND);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.text-background-unsupported"));
             return;
         }
-        Optional<Color> oldValue = property.getValue();
+        Optional<ARGBColor> oldValue = property.getValue();
         if (!oldValue.isPresent()) {
             sender.sendMessage(Message.error("easyarmorstands.error.cannot-change"));
             return;
         }
 
-        Optional<Color> value = oldValue.map(v -> v.setAlpha(alpha));
+        Optional<ARGBColor> value = oldValue.map(v -> v.withAlpha(alpha));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-text-background-alpha",
@@ -367,12 +367,12 @@ public class DisplayCommands {
     @RequireElementSelection
     public void setGlowColor(EasPlayer sender, ElementSelection selection, @Argument("value") TextColor color) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
+        Property<Optional<RGBColor>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.glow-color-unsupported"));
             return;
         }
-        Optional<Color> value = Optional.of(Color.fromRGB(color.value()));
+        Optional<RGBColor> value = Optional.of(RGBColor.of(color.value()));
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-glow-color",
@@ -388,12 +388,12 @@ public class DisplayCommands {
     @RequireElementSelection
     public void resetGlowColor(EasPlayer sender, ElementSelection selection) {
         PropertyContainer properties = selection.properties(sender);
-        Property<Optional<Color>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
+        Property<Optional<RGBColor>> property = properties.getOrNull(DisplayPropertyTypes.GLOW_COLOR);
         if (property == null) {
             sender.sendMessage(Message.error("easyarmorstands.error.glow-color-unsupported"));
             return;
         }
-        Optional<Color> value = Optional.empty();
+        Optional<RGBColor> value = Optional.empty();
         if (property.setValue(value)) {
             properties.commit();
             sender.sendMessage(Message.success("easyarmorstands.success.changed-glow-color",
@@ -412,7 +412,7 @@ public class DisplayCommands {
             sender.sendMessage(Message.error("easyarmorstands.error.shearing-unsupported"));
             return;
         }
-        PropertyContainer properties = new TrackedPropertyContainer(element, sender);
+        PropertyContainer properties = session.properties(element);
         DisplayLayer layer = new DisplayShearLayer(session, properties, (DisplayElement<?>) element);
         session.pushLayer(layer);
     }

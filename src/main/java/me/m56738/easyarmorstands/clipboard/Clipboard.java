@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.clipboard;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyMap;
@@ -7,18 +8,20 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.util.PropertyCopier;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Clipboard {
+    private final EasyArmorStandsCommon eas;
     private final Player player;
     private final PropertyMap properties = new PropertyMap();
 
-    Clipboard(Player player) {
+    Clipboard(EasyArmorStandsCommon eas, Player player) {
+        this.eas = eas;
         this.player = player;
     }
 
@@ -32,7 +35,7 @@ public class Clipboard {
         }
 
         PropertyCopier copier = new PropertyCopier();
-        TrackedPropertyContainer properties = new TrackedPropertyContainer(element, new EasPlayer(player));
+        TrackedPropertyContainer properties = new TrackedPropertyContainer(eas, element, new EasPlayer(eas, player));
         copier.copyProperties(properties, this.properties);
         properties.commit(Message.component("easyarmorstands.history.clipboard-pasted-automatically"));
 
@@ -50,7 +53,7 @@ public class Clipboard {
         }
     }
 
-    void removeDisallowed() {
+    public void removeDisallowed() {
         List<PropertyType<?>> types = new ArrayList<>();
         properties.forEach(property -> types.add(property.getType()));
 

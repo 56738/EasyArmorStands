@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.command.sender;
 
+import me.m56738.easyarmorstands.platform.command.CommandSender;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.util.TriState;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

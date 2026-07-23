@@ -20,10 +20,9 @@ import me.m56738.easyarmorstands.editor.layer.BoxResizeToolManager;
 import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
 import me.m56738.easyarmorstands.element.InteractionElement;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 public class InteractionRootLayer extends PropertyLayer implements ElementLayer {
     private final Session session;
@@ -93,7 +92,7 @@ public class InteractionRootLayer extends PropertyLayer implements ElementLayer 
         float width = widthProperty.getValue();
         float height = heightProperty.getValue();
         Location location = locationProperty.getValue();
-        Vector3d position = Util.toVector3d(location);
+        Vector3dc position = location.position();
         boxParticle.setBoundingBox(BoundingBox.of(position, width, height));
     }
 

@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.display.tool;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Snapper;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -17,8 +18,8 @@ import org.joml.Vector3f;
 public class DisplayAxisScaleTool extends AbstractDisplayScaleTool<AxisScaleToolSession> implements AxisScaleTool {
     private final Axis axis;
 
-    public DisplayAxisScaleTool(ToolContext context, PropertyContainer properties, Axis axis) {
-        super(context, properties);
+    public DisplayAxisScaleTool(EasyArmorStandsCommon eas, ToolContext context, PropertyContainer properties, Axis axis) {
+        super(eas, context, properties);
         this.axis = axis;
     }
 

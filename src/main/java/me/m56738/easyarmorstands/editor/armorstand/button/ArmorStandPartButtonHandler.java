@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.armorstand.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.ArmorStandPart;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.ButtonHandler;
@@ -13,13 +14,15 @@ import me.m56738.easyarmorstands.util.ArmorStandPartInfo;
 import net.kyori.adventure.text.Component;
 
 public class ArmorStandPartButtonHandler implements ButtonHandler {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final ArmorStandElement element;
     private final PropertyContainer container;
     private final ArmorStandPart part;
     private final ArmorStandPartInfo partInfo;
 
-    public ArmorStandPartButtonHandler(Session session, ArmorStandElement element, PropertyContainer container, ArmorStandPart part) {
+    public ArmorStandPartButtonHandler(EasyArmorStandsCommon eas, Session session, ArmorStandElement element, PropertyContainer container, ArmorStandPart part) {
+        this.eas = eas;
         this.session = session;
         this.element = element;
         this.container = container;
@@ -29,7 +32,7 @@ public class ArmorStandPartButtonHandler implements ButtonHandler {
 
     @Override
     public void onUpdate(ButtonHandlerContext context) {
-        context.addInput(new SelectElementInput(session, element, this::createLayer));
+        context.addInput(new SelectElementInput(eas, session, element, this::createLayer));
     }
 
     @Override

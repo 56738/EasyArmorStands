@@ -1,9 +1,11 @@
 package me.m56738.easyarmorstands.command;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
+import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
@@ -27,8 +29,8 @@ public final class PropertyCommands {
     private PropertyCommands() {
     }
 
-    public static void register(CommandManager<EasCommandSender> commandManager) {
-        register(commandManager, new PositionCommand());
+    public static void register(CommandManager<EasCommandSender> commandManager, ArgumentParserProvider parserProvider) {
+        register(commandManager, new PositionCommand(parserProvider));
         register(commandManager, new YawCommand());
         register(commandManager, new PitchCommand());
         for (Axis axis : Axis.values()) {
@@ -71,8 +73,9 @@ public final class PropertyCommands {
                 .required("value", valueCommand.getParser())
                 .senderType(EasPlayer.class)
                 .handler(context -> {
+                    EasyArmorStandsCommon eas = context.inject(EasyArmorStandsCommon.class).orElseThrow();
                     Element element = context.get(ElementProcessor.elementKey());
-                    PropertyContainer properties = new TrackedPropertyContainer(element, context.sender());
+                    PropertyContainer properties = new TrackedPropertyContainer(eas, element, context.sender());
                     if (!valueCommand.isSupported(properties)) {
                         valueCommand.sendNotSupported(context.sender());
                         return;

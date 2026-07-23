@@ -1,11 +1,20 @@
 package me.m56738.easyarmorstands.headdatabase;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.Addon;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 
 public class HeadDatabaseAddon implements Addon {
+    private final Plugin plugin;
+    private final EasyArmorStandsPaperImpl eas;
+
     private HeadDatabaseListener listener;
+
+    public HeadDatabaseAddon(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        this.plugin = plugin;
+        this.eas = eas;
+    }
 
     @Override
     public String name() {
@@ -14,8 +23,7 @@ public class HeadDatabaseAddon implements Addon {
 
     @Override
     public void enable() {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        listener = new HeadDatabaseListener(plugin);
+        listener = new HeadDatabaseListener(eas);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 

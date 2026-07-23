@@ -1,15 +1,16 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.api.formatter.NumberFormatter;
+import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
 import me.m56738.easyarmorstands.api.formatter.QuaternionfcFormatter;
+import me.m56738.easyarmorstands.api.formatter.RGBColorFormatter;
 import me.m56738.easyarmorstands.api.formatter.Vector3fcFormatter;
+import me.m56738.easyarmorstands.platform.entity.Display.Billboard;
+import me.m56738.easyarmorstands.platform.entity.Display.Brightness;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Color;
-import org.bukkit.entity.Display.Billboard;
-import org.bukkit.entity.Display.Brightness;
 import org.joml.Quaternionfc;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NullMarked;
@@ -46,9 +47,9 @@ public final class DisplayPropertyTypes {
             .name(translatable("easyarmorstands.property.display.brightness.name"))
             .formatter(value -> value
                     .<Component>map(brightness -> text()
-                            .append(translatable("easyarmorstands.property.display.brightness.sky", NamedTextColor.GOLD, text(brightness.getSkyLight())))
+                            .append(translatable("easyarmorstands.property.display.brightness.sky", NamedTextColor.GOLD, text(brightness.skyLight())))
                             .append(text(", "))
-                            .append(translatable("easyarmorstands.property.display.brightness.block", NamedTextColor.YELLOW, text(brightness.getBlockLight())))
+                            .append(translatable("easyarmorstands.property.display.brightness.block", NamedTextColor.YELLOW, text(brightness.blockLight())))
                             .build())
                     .orElseGet(() -> translatable("easyarmorstands.property.display.brightness.default", NamedTextColor.GRAY, TextDecoration.ITALIC)))
             .permission("easyarmorstands.property.display.brightness")
@@ -73,14 +74,10 @@ public final class DisplayPropertyTypes {
             .formatter(new Vector3fcFormatter())
             .permission("easyarmorstands.property.display.translation")
             .build();
-    public static final PropertyType<Optional<Color>> GLOW_COLOR = PropertyType.<Optional<Color>>builder(key("display/glowing/color"))
+    public static final PropertyType<Optional<RGBColor>> GLOW_COLOR = PropertyType.<Optional<RGBColor>>builder(key("display/glowing/color"))
             .name(translatable("easyarmorstands.property.display.glow.color.name"))
-            .formatter(value -> value
-                    .<Component>map(color -> {
-                        TextColor textColor = TextColor.color(color.asRGB());
-                        return Component.text(textColor.asHexString(), textColor);
-                    })
-                    .orElseGet(() -> Component.translatable("easyarmorstands.property.display.glow.color.default", NamedTextColor.WHITE)))
+            .formatter(new OptionalFormatter<>(new RGBColorFormatter(),
+                    Component.translatable("easyarmorstands.property.display.glow.color.default", NamedTextColor.WHITE)))
             .permission("easyarmorstands.property.display.glow.color")
             .build();
     public static final PropertyType<Float> VIEW_RANGE = PropertyType.builder(key("display/view_range"), Float.class)

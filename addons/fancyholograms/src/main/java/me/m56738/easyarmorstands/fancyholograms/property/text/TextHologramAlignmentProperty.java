@@ -5,7 +5,8 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.property.type.TextDisplayPropertyTypes;
-import org.bukkit.entity.TextDisplay;
+import me.m56738.easyarmorstands.platform.entity.TextDisplay;
+import me.m56738.easyarmorstands.platform.paper.PaperAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class TextHologramAlignmentProperty implements Property<TextDisplay.TextAlignment> {
@@ -24,12 +25,12 @@ public class TextHologramAlignmentProperty implements Property<TextDisplay.TextA
 
     @Override
     public @NotNull TextDisplay.TextAlignment getValue() {
-        return data.getTextAlignment();
+        return PaperAdapter.fromNative(data.getTextAlignment());
     }
 
     @Override
     public boolean setValue(TextDisplay.@NotNull TextAlignment value) {
-        data.setTextAlignment(value);
+        data.setTextAlignment(PaperAdapter.toNative(value));
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

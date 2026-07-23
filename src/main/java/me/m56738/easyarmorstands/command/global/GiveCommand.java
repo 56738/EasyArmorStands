@@ -1,13 +1,12 @@
 package me.m56738.easyarmorstands.command.global;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.session.SessionListener;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
@@ -20,47 +19,45 @@ public class GiveCommand {
     @Command("eas give")
     @Permission(Permissions.GIVE)
     @CommandDescription("easyarmorstands.command.description.give")
-    public void give(EasPlayer sender, SessionListener sessionListener) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+    public void give(EasPlayer sender, EasyArmorStandsCommon eas) {
         Player player = sender.get();
         PlayerInventory inventory = player.getInventory();
 
         // if tool is already selected: do nothing
-        if (plugin.isTool(inventory.getItemInMainHand()) || plugin.isTool(inventory.getItemInOffHand())) {
+        if (eas.sessionManager().isHoldingTool(player)) {
             sendSelected(sender);
-            sessionListener.updateHeldItem(player);
+            eas.sessionManager().updateHeldItem(player);
             return;
         }
 
         // attempt to select a tool which is already in the inventory
-        if (selectExistingTool(inventory)) {
+        if (selectExistingTool(inventory, eas)) {
             sendSelected(sender);
-            sessionListener.updateHeldItem(player);
+            eas.sessionManager().updateHeldItem(player);
             return;
         }
 
         if (inventory.getItemInMainHand().isEmpty()) {
             // put the tool into the selected slot
-            inventory.setItemInMainHand(plugin.createTool(sender.locale()));
+            inventory.setItemInMainHand(eas.sessionToolProvider().createTool(sender.locale()));
         } else {
             // put the tool into any slot
-            HashMap<Integer, ItemStack> failed = inventory.addItem(plugin.createTool(sender.locale()));
+            HashMap<Integer, ItemStack> failed = inventory.addItem(eas.sessionToolProvider().createTool(sender.locale()));
             if (!failed.isEmpty()) {
                 sendFull(sender);
                 return;
             }
-            selectExistingTool(inventory);
+            selectExistingTool(inventory, eas);
         }
 
         sendAdded(sender);
-        sessionListener.updateHeldItem(player);
+        eas.sessionManager().updateHeldItem(player);
     }
 
-    private boolean selectExistingTool(PlayerInventory inventory) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
+    private boolean selectExistingTool(PlayerInventory inventory, EasyArmorStandsCommon eas) {
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if (!plugin.isTool(item)) {
+            if (!eas.sessionToolProvider().isTool(item)) {
                 continue;
             }
 

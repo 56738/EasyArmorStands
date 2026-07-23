@@ -1,13 +1,15 @@
 package me.m56738.easyarmorstands.griefdefender;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.AddonFactory;
+import me.m56738.easyarmorstands.config.EasConfig;
+import me.m56738.easyarmorstands.paper.EasyArmorStandsPaperImpl;
+import me.m56738.easyarmorstands.paper.addon.AddonFactory;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 public class GriefDefenderAddonFactory implements AddonFactory<GriefDefenderAddon> {
     @Override
-    public boolean isEnabled() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().integration.griefDefender.enabled;
+    public boolean isEnabled(EasConfig config) {
+        return config.integration.griefDefender.enabled;
     }
 
     @Override
@@ -16,7 +18,7 @@ public class GriefDefenderAddonFactory implements AddonFactory<GriefDefenderAddo
     }
 
     @Override
-    public GriefDefenderAddon create() {
-        return new GriefDefenderAddon();
+    public GriefDefenderAddon create(Plugin plugin, EasyArmorStandsPaperImpl eas) {
+        return new GriefDefenderAddon(plugin, eas);
     }
 }

@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.command.global;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.layer.Layer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -8,13 +8,13 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
@@ -27,16 +27,14 @@ public class DebugCommand {
     @Command("eas debug")
     @Permission(Permissions.DEBUG)
     @CommandDescription("easyarmorstands.command.description.debug")
-    public void debug(EasCommandSender sender) {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        String version = plugin.getPluginMeta().getVersion();
+    public void debug(EasCommandSender sender, EasyArmorStandsCommon common, Platform platform) {
+        String version = common.getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
         sender.sendMessage(debugLine(Component.text("Server"), Component.text()
-                .append(Component.text(Bukkit.getName()))
+                .append(Component.text(platform.getName()))
                 .appendSpace()
-                .append(Component.text(Bukkit.getVersion()))
+                .append(Component.text(platform.getVersion()))
                 .build()));
-        sender.sendMessage(debugLine(Component.text("Bukkit"), Component.text(Bukkit.getBukkitVersion())));
 
         if (sender instanceof EasPlayer) {
             SessionImpl session = ((EasPlayer) sender).session();

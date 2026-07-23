@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.AxisScaleTool;
@@ -22,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 public class DisplayToolProvider extends SimpleEntityToolProvider implements ToolProvider {
     private final RotationProvider entityRotationProvider;
 
-    public DisplayToolProvider(PropertyContainer properties, OffsetProvider offsetProvider) {
-        super(properties);
+    public DisplayToolProvider(EasyArmorStandsCommon eas, PropertyContainer properties, OffsetProvider offsetProvider) {
+        super(eas, properties);
         positionProvider = new EntityPositionProvider(properties, offsetProvider);
         rotationProvider = new DisplayRotationProvider(properties);
         entityRotationProvider = new EntityRotationProvider(properties);
@@ -40,13 +41,13 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
 
     @Override
     public @NotNull ScaleTool scale(@NotNull ToolContext context) {
-        return new DisplayScaleTool(context, properties);
+        return new DisplayScaleTool(eas, context, properties);
     }
 
     @Override
     public @Nullable AxisScaleTool scale(@NotNull ToolContext context, @NotNull Axis axis) {
         if (context.rotation() == rotation()) {
-            return new DisplayAxisScaleTool(context, properties, axis);
+            return new DisplayAxisScaleTool(eas, context, properties, axis);
         }
         return super.scale(context, axis);
     }

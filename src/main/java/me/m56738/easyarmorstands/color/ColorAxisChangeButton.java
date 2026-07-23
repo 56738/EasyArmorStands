@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.color;
 
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
@@ -8,7 +9,6 @@ import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Color;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class ColorAxisChangeButton implements MenuButton {
 
     @Override
     public List<Component> description() {
-        Color color = context.getColor();
+        RGBColor color = context.getColor();
         int value = axis.get(color);
         return List.of(
                 Component.text(value),
@@ -78,10 +78,10 @@ public class ColorAxisChangeButton implements MenuButton {
         } else {
             return;
         }
-        Color color = this.context.getColor();
+        RGBColor color = this.context.getColor();
         int value = axis.get(color);
         int newValue = Math.clamp(value + change, 0, 255);
-        Color newColor = axis.set(color, newValue);
+        RGBColor newColor = axis.set(color, newValue);
         this.context.setColor(newColor);
         context.updateMenu();
     }

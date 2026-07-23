@@ -6,9 +6,9 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.platform.paper.world.PaperWorld;
+import me.m56738.easyarmorstands.platform.world.World;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
@@ -29,7 +29,7 @@ public class HologramElementDiscoverySource implements ElementDiscoverySource {
         for (Hologram hologram : manager.getHolograms()) {
             HologramData data = hologram.getData();
             Location location = data.getLocation();
-            if (world == location.getWorld() && box.contains(Util.toVector3d(location, temp))) {
+            if (world.equals(PaperWorld.fromNative(location.getWorld())) && box.contains(temp.set(location.getX(), location.getY(), location.getZ()))) {
                 consumer.accept(new HologramElementDiscoveryEntry(type, hologram));
             }
         }

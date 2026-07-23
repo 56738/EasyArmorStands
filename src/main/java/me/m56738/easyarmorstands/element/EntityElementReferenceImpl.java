@@ -3,26 +3,31 @@ package me.m56738.easyarmorstands.element;
 import me.m56738.easyarmorstands.api.element.EntityElement;
 import me.m56738.easyarmorstands.api.element.EntityElementReference;
 import me.m56738.easyarmorstands.api.element.EntityElementType;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
+import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.platform.world.World;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3dc;
 
 import java.util.UUID;
 
 public class EntityElementReferenceImpl<E extends Entity> implements EntityElementReference<E> {
+    private final Platform platform;
     private final EntityElementType<E> type;
-    private final UUID worldId;
-    private final Vector position;
+    private final Key worldKey;
+    private final Vector3dc position;
     private UUID id;
 
-    public EntityElementReferenceImpl(EntityElementType<E> type, Entity entity) {
+    public EntityElementReferenceImpl(Platform platform, EntityElementType<E> type, Entity entity) {
+        Location location = entity.location();
+        this.platform = platform;
         this.type = type;
-        this.worldId = entity.getWorld().getUID();
-        this.position = entity.getLocation().toVector();
-        this.id = entity.getUniqueId();
+        this.worldKey = location.world().key();
+        this.position = location.position();
+        this.id = entity.uniqueId();
     }
 
     @Override
@@ -33,15 +38,20 @@ public class EntityElementReferenceImpl<E extends Entity> implements EntityEleme
     @Override
     public @Nullable EntityElement<E> getElement() {
         // Load chunk at the expected position
-        World world = Bukkit.getWorld(worldId);
+        World world = platform.getWorld(worldKey);
         if (world != null) {
-            world.getChunkAt(position.toLocation(world));
+            world.getChunkAt(Location.of(world, position));
         }
 
-        Entity entity = Bukkit.getEntity(id);
+        Entity entity = platform.getEntity(id);
         if (entity == null) {
             return null;
         }
+
+        if (!entity.type().equals(type.getEntityType())) {
+            return null;
+        }
+
         return type.getElement(type.getEntityClass().cast(entity));
     }
 

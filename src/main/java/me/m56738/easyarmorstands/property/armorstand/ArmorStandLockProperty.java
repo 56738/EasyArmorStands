@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.property.armorstand;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.platform.entity.ArmorStand;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandLockProperty implements Property<Boolean> {

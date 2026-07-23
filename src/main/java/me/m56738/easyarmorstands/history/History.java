@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.history.action.Action;
 import me.m56738.easyarmorstands.history.action.GroupAction;
 import net.kyori.adventure.text.Component;
@@ -13,7 +14,11 @@ import java.util.UUID;
 public class History {
     private final ArrayDeque<Action> past = new ArrayDeque<>();
     private final ArrayDeque<Action> future = new ArrayDeque<>();
-    private final ChangeTracker tracker = new ChangeTracker(this);
+    private final ChangeTracker tracker;
+
+    public History(EasyArmorStandsCommon eas) {
+        tracker = new ChangeTracker(eas, this);
+    }
 
     public ArrayDeque<Action> getPast() {
         return past;

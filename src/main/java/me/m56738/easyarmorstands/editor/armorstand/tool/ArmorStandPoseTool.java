@@ -11,12 +11,12 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.ArmorStandPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
+import me.m56738.easyarmorstands.platform.util.Rotations;
 import me.m56738.easyarmorstands.util.EasMath;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
@@ -28,7 +28,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
     private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
-    private final Property<EulerAngle> poseProperty;
+    private final Property<Rotations> poseProperty;
     private final Axis axis;
 
     public ArmorStandPoseTool(ToolContext context, PropertyContainer properties, ArmorStandPart part, Axis axis) {
@@ -66,7 +66,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
 
     private class SessionImpl extends AbstractToolSession implements AxisRotateToolSession {
         private final Vector3dc direction;
-        private final EulerAngle originalAngle;
+        private final Rotations originalAngle;
         private final Quaterniondc originalRotation;
         private final Quaterniond currentRotation = new Quaterniond();
         private double change;
@@ -77,7 +77,7 @@ public class ArmorStandPoseTool implements AxisRotateTool {
             originalRotation = Util.fromEuler(originalAngle, new Quaterniond());
             Location location = locationProperty.getValue();
             direction = axis.getDirection().rotate(
-                    EasMath.getInverseEntityYawRotation(location.getYaw(), new Quaterniond())
+                    EasMath.getInverseEntityYawRotation(location.yaw(), new Quaterniond())
                             .mul(getRotation()),
                     new Vector3d());
         }

@@ -6,10 +6,10 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.command.processor.PropertyPermissionPredicate;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
@@ -52,15 +52,13 @@ public class PitchCommand implements ValueCommand<Float> {
 
     @Override
     public @NotNull Float getValue(@NotNull PropertyContainer properties) {
-        return properties.get(EntityPropertyTypes.LOCATION).getValue().getPitch();
+        return properties.get(EntityPropertyTypes.LOCATION).getValue().pitch();
     }
 
     @Override
     public boolean setValue(@NotNull PropertyContainer properties, @NotNull Float value) {
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = property.getValue();
-        location.setPitch(value);
-        return property.setValue(location);
+        return property.setValue(property.getValue().withPitch(value));
     }
 
     @Override

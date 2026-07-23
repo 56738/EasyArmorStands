@@ -7,6 +7,7 @@ import de.oliver.fancyholograms.api.data.HologramData;
 import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementType;
@@ -26,25 +27,27 @@ import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramSeeThr
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramShadowProperty;
 import me.m56738.easyarmorstands.fancyholograms.property.text.TextHologramTextProperty;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HologramElementType implements ElementType {
     public static final Key KEY = EasyArmorStands.key("fancyholograms");
 
+    private final EasyArmorStandsCommon eas;
     private final HologramManager manager;
     private final FancyHologramsAddon addon;
 
-    public HologramElementType(HologramManager manager, FancyHologramsAddon addon) {
+    public HologramElementType(EasyArmorStandsCommon eas, HologramManager manager, FancyHologramsAddon addon) {
+        this.eas = eas;
         this.manager = manager;
         this.addon = addon;
     }
 
     public HologramElement getElement(Hologram hologram) {
-        HologramElement element = new HologramElement(this, manager, hologram, addon);
+        HologramElement element = new HologramElement(eas, this, manager, hologram, addon);
         HologramData data = hologram.getData();
         element.getProperties().register(new HologramDataProperty(hologram));
         element.getProperties().register(new HologramLocationProperty(hologram));

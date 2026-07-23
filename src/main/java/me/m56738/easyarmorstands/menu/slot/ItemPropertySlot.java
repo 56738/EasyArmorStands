@@ -1,23 +1,23 @@
 package me.m56738.easyarmorstands.menu.slot;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.menu.click.MenuClick;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
 
 public class ItemPropertySlot implements MenuSlot {
+    private final EasyArmorStandsCommon eas;
     private final Property<ItemStack> property;
 
-    public ItemPropertySlot(Property<ItemStack> property) {
+    public ItemPropertySlot(EasyArmorStandsCommon eas, Property<ItemStack> property) {
+        this.eas = eas;
         this.property = property;
     }
 
@@ -25,28 +25,25 @@ public class ItemPropertySlot implements MenuSlot {
         return property;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     @Override
     public ItemStack getItem(Locale locale) {
-        ItemStack item = Util.wrapItem(property.getValue());
+        ItemStack item = property.getValue();
         if (item.isEmpty()) {
-            item = MenuButtonSlot.createItem(
-                    MenuIcon.of(Material.GLASS_PANE),
+            return MenuButtonSlot.createItem(
+                    MenuIcon.of(eas.platform().getItemType(ItemTypeKeys.GLASS_PANE)),
                     property.getType().getName(),
                     Component.empty(),
                     List.of(),
                     locale);
         } else {
-            item.setData(DataComponentTypes.CUSTOM_NAME,
-                    MenuButtonSlot.formatCustomName(property.getType().getName(), item.effectiveName(), locale));
+            return item.withCustomName(MenuButtonSlot.formatCustomName(property.getType().getName(), item.effectiveName(), locale));
         }
-        return item;
     }
 
     @Override
     public void onClick(@NotNull MenuClick click) {
         if (click.isShiftClick()) {
-            EasyArmorStandsPlugin.getInstance().getClipboard(click.player())
+            eas.getClipboard(click.player())
                     .handlePropertyShiftClick(property);
             return;
         }

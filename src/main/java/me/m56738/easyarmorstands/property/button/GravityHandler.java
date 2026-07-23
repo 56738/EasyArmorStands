@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.property.button;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import net.kyori.adventure.text.Component;
@@ -10,8 +11,8 @@ import java.util.List;
 public class GravityHandler extends BooleanHandler {
     private final Property<Boolean> canTickProperty;
 
-    public GravityHandler(Property<Boolean> property, Property<Boolean> canTickProperty) {
-        super(property);
+    public GravityHandler(EasyArmorStandsCommon eas, Property<Boolean> property, Property<Boolean> canTickProperty) {
+        super(eas, property);
         this.canTickProperty = canTickProperty;
     }
 

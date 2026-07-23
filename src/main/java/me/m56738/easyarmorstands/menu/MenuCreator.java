@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.menu;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.menu.slot.BackgroundSlot;
 import me.m56738.easyarmorstands.menu.slot.MenuSlot;
 import net.kyori.adventure.text.Component;
@@ -11,13 +12,15 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class MenuCreator {
+    private final EasyArmorStandsCommon eas;
     private final Locale locale;
     private final Map<Integer, MenuSlot> slots = new TreeMap<>();
     private Component title = Component.empty();
     private int height = 1;
     private MenuSlot background;
 
-    public MenuCreator(Locale locale) {
+    public MenuCreator(EasyArmorStandsCommon eas, Locale locale) {
+        this.eas = eas;
         this.locale = locale;
     }
 
@@ -66,6 +69,6 @@ public class MenuCreator {
                 slots[i] = background;
             }
         }
-        return new MenuImpl(title, slots, locale);
+        return new MenuImpl(eas, title, slots, locale);
     }
 }

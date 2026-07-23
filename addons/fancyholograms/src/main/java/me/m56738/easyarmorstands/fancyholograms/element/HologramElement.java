@@ -3,7 +3,7 @@ package me.m56738.easyarmorstands.fancyholograms.element;
 import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.data.BlockHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
 import me.m56738.easyarmorstands.api.editor.button.PointButton;
@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.api.editor.tool.ToolProvider;
 import me.m56738.easyarmorstands.api.element.DestroyableElement;
 import me.m56738.easyarmorstands.api.element.EditableElement;
 import me.m56738.easyarmorstands.api.element.MenuElement;
+import me.m56738.easyarmorstands.api.element.ReferenceProvider;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.PropertyRegistry;
@@ -22,19 +23,21 @@ import me.m56738.easyarmorstands.editor.OffsetProvider;
 import me.m56738.easyarmorstands.fancyholograms.FancyHologramsAddon;
 import me.m56738.easyarmorstands.fancyholograms.editor.layer.HologramRootLayer;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.m56738.easyarmorstands.util.Util;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.paper.PaperAdapter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramElement implements SelectableElement, DestroyableElement, EditableElement, MenuElement {
+    private final EasyArmorStandsCommon eas;
     private final HologramElementType type;
     private final HologramManager manager;
     private final Hologram hologram;
     private final FancyHologramsAddon addon;
     private final PropertyRegistry properties = PropertyRegistry.create(this);
 
-    public HologramElement(HologramElementType type, HologramManager manager, Hologram hologram, FancyHologramsAddon addon) {
+    public HologramElement(EasyArmorStandsCommon eas, HologramElementType type, HologramManager manager, Hologram hologram, FancyHologramsAddon addon) {
+        this.eas = eas;
         this.type = type;
         this.manager = manager;
         this.hologram = hologram;
@@ -65,12 +68,12 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public @NotNull Layer createLayer(@NotNull Session session) {
-        return new HologramRootLayer(session, this);
+        return new HologramRootLayer(eas, session, this);
     }
 
     @Override
     public @NotNull ToolProvider getTools(@NotNull PropertyContainer properties) {
-        return new HologramToolProvider(properties, getOffsetProvider(properties));
+        return new HologramToolProvider(eas, properties, getOffsetProvider(properties));
     }
 
     private OffsetProvider getOffsetProvider(PropertyContainer properties) {
@@ -83,7 +86,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public void openMenu(@NotNull Player player) {
-        EasyArmorStandsPlugin.getInstance().openElementMenu(player, this);
+        eas.openElementMenu(player, this);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
     }
 
     @Override
-    public @NotNull HologramElementReference getReference() {
+    public @NotNull HologramElementReference getReference(ReferenceProvider provider) {
         return new HologramElementReference(type, manager, hologram.getName());
     }
 
@@ -113,6 +116,6 @@ public class HologramElement implements SelectableElement, DestroyableElement, E
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        return BoundingBox.of(Util.toVector3d(hologram.getData().getLocation()));
+        return BoundingBox.of(PaperAdapter.fromNative(hologram.getData().getLocation()).position());
     }
 }

@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.formatter;
 
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import net.kyori.adventure.text.Component;
-import org.bukkit.inventory.ItemStack;
 
 public class ItemStackFormatter implements ValueFormatter<ItemStack> {
     @Override

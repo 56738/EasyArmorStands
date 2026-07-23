@@ -1,16 +1,12 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.platform.color.ARGBColor;
+import me.m56738.easyarmorstands.api.formatter.ARGBColorFormatter;
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
-import me.m56738.easyarmorstands.api.formatter.ColorFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import me.m56738.easyarmorstands.platform.entity.TextDisplay.TextAlignment;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Color;
-import org.bukkit.entity.TextDisplay.TextAlignment;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
@@ -26,10 +22,10 @@ public final class TextDisplayPropertyTypes {
             .formatter(value -> translatable("easyarmorstands.property.text-display.alignment." + value.name().toLowerCase(Locale.ROOT)))
             .permission("easyarmorstands.property.display.text.alignment")
             .build();
-    public static final PropertyType<Optional<Color>> BACKGROUND = PropertyType.<Optional<Color>>builder(key("text_display/background"))
+    public static final PropertyType<Optional<ARGBColor>> BACKGROUND = PropertyType.<Optional<ARGBColor>>builder(key("text_display/background"))
             .name(translatable("easyarmorstands.property.text-display.background.name"))
             .formatter(new OptionalFormatter<>(
-                    new ColorFormatter(Component.translatable("easyarmorstands.property.text-display.background.none")),
+                    new ARGBColorFormatter(Component.translatable("easyarmorstands.property.text-display.background.none")),
                     Component.translatable("easyarmorstands.property.text-display.background.default", NamedTextColor.DARK_GRAY)))
             .permission("easyarmorstands.property.display.text.background")
             .build();
@@ -54,13 +50,5 @@ public final class TextDisplayPropertyTypes {
             .build();
 
     private TextDisplayPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

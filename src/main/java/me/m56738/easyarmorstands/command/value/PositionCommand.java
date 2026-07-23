@@ -3,21 +3,22 @@ package me.m56738.easyarmorstands.command.value;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
+import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3dc;
 
 public class PositionCommand extends PropertyCommand<Location> {
-    public PositionCommand() {
-        super("position", EntityPropertyTypes.LOCATION, LocationParser.locationParser());
+    public PositionCommand(ArgumentParserProvider parserProvider) {
+        super("position", EntityPropertyTypes.LOCATION, parserProvider.locationParser());
     }
 
     @Override
@@ -42,17 +43,14 @@ public class PositionCommand extends PropertyCommand<Location> {
 
     @Override
     public @NotNull String formatCommand(@NotNull Location value) {
-        return "/eas position " + value.getX() + " " + value.getY() + " " + value.getZ();
+        Vector3dc position = value.position();
+        return "/eas position " + position.x() + " " + position.y() + " " + position.z();
     }
 
     @Override
     public boolean setValue(@NotNull PropertyContainer properties, @NotNull Location value) {
         Property<Location> property = properties.get(EntityPropertyTypes.LOCATION);
-        Location location = property.getValue();
-        location.setX(value.getX());
-        location.setY(value.getY());
-        location.setZ(value.getZ());
-        return property.setValue(location);
+        return property.setValue(property.getValue().withPosition(value.position()));
     }
 
     @Override

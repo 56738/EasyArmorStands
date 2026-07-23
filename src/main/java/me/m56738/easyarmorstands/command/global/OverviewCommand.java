@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.command.global;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
@@ -16,9 +16,9 @@ public class OverviewCommand {
     @Command("eas")
     @Permission(Permissions.HELP)
     @CommandDescription("easyarmorstands.command.description")
-    public void showOverview(EasCommandSender sender) {
+    public void showOverview(EasCommandSender sender, EasyArmorStandsCommon eas) {
         if (sender.get().hasPermission(Permissions.VERSION)) {
-            String version = EasyArmorStandsPlugin.getInstance().getPluginMeta().getVersion();
+            String version = eas.getVersion();
             sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD));
         } else {
             sender.sendMessage(Component.text("EasyArmorStands", NamedTextColor.GOLD));

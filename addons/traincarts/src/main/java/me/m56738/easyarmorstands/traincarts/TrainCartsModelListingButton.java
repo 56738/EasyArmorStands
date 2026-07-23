@@ -1,17 +1,21 @@
 package me.m56738.easyarmorstands.traincarts;
 
 import com.bergerkiller.bukkit.tc.TrainCarts;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.MenuElement;
 import me.m56738.easyarmorstands.api.menu.button.MenuButton;
 import me.m56738.easyarmorstands.api.menu.button.MenuButtonCategory;
 import me.m56738.easyarmorstands.api.menu.button.MenuIcon;
 import me.m56738.easyarmorstands.api.menu.click.MenuClickContext;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.paper.entity.PaperPlayer;
+import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemStack;
+import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemType;
+import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,9 +23,14 @@ import java.util.List;
 @NullMarked
 public class TrainCartsModelListingButton implements MenuButton {
     public static final Key KEY = Key.key("easyarmorstands", "traincarts/model_browser");
+
+    private final Plugin plugin;
+    private final EasyArmorStandsCommon eas;
     private final Element element;
 
-    public TrainCartsModelListingButton(Element element) {
+    public TrainCartsModelListingButton(Plugin plugin, EasyArmorStandsCommon eas, Element element) {
+        this.plugin = plugin;
+        this.eas = eas;
         this.element = element;
     }
 
@@ -30,9 +39,10 @@ public class TrainCartsModelListingButton implements MenuButton {
         return KEY;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public MenuIcon icon() {
-        return MenuIcon.of(Material.BOOK);
+        return MenuIcon.of(PaperItemType.fromNative(ItemType.BOOK));
     }
 
     @Override
@@ -56,10 +66,9 @@ public class TrainCartsModelListingButton implements MenuButton {
             return;
         }
         Player player = context.player();
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        eas.platform().getScheduler().runTask(() -> {
             player.setItemOnCursor(null);
-            TrainCarts.plugin.getModelListing().buildDialog(player, plugin)
+            TrainCarts.plugin.getModelListing().buildDialog(PaperPlayer.toNative(player), plugin)
                     .cancelOnRootRightClick()
                     .show()
                     .thenAccept(result -> {
@@ -68,7 +77,7 @@ public class TrainCartsModelListingButton implements MenuButton {
                                 menuElement.openMenu(player);
                             } else if (result.success()) {
                                 menuElement.openMenu(player);
-                                player.setItemOnCursor(result.selectedItem());
+                                player.setItemOnCursor(PaperItemStack.fromNative(result.selectedItem()));
                             }
                         }
                     });

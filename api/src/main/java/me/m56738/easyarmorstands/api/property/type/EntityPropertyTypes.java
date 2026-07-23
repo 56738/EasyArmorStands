@@ -5,11 +5,11 @@ import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
 import me.m56738.easyarmorstands.api.formatter.LocationFormatter;
 import me.m56738.easyarmorstands.api.formatter.NumberFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
+import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.util.Location;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Location;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;

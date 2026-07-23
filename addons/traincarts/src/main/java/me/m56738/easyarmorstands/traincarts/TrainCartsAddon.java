@@ -1,11 +1,20 @@
 package me.m56738.easyarmorstands.traincarts;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
-import me.m56738.easyarmorstands.addon.Addon;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.paper.addon.Addon;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 
 public class TrainCartsAddon implements Addon {
+    private final Plugin plugin;
+    private final EasyArmorStandsCommon eas;
+
     private TrainCartsAddonListener listener;
+
+    public TrainCartsAddon(Plugin plugin, EasyArmorStandsCommon eas) {
+        this.plugin = plugin;
+        this.eas = eas;
+    }
 
     @Override
     public String name() {
@@ -14,8 +23,7 @@ public class TrainCartsAddon implements Addon {
 
     @Override
     public void enable() {
-        EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
-        listener = new TrainCartsAddonListener();
+        listener = new TrainCartsAddonListener(plugin, eas);
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 

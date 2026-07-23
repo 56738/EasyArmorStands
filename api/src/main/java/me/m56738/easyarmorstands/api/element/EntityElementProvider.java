@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.api.element;
 
+import me.m56738.easyarmorstands.platform.entity.Entity;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

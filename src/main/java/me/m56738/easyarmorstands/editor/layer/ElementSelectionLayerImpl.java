@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.editor.layer;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.api.particle.BoundingBoxParticle;
 import me.m56738.easyarmorstands.api.particle.ParticleColor;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.config.EditorConfig;
 import me.m56738.easyarmorstands.editor.input.OpenSpawnMenuInput;
 import me.m56738.easyarmorstands.editor.input.selection.AddElementToGroupInput;
 import me.m56738.easyarmorstands.editor.input.selection.ClearGroupSelectionInput;
@@ -51,6 +52,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ElementSelectionLayerImpl extends AbstractLayer implements ElementSelectionLayer {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final Map<ElementDiscoveryEntry, Entry> entries = new HashMap<>();
     private final Component name;
@@ -65,20 +67,27 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
     private final boolean allowSpawn;
     private BoundingBox selectionBox;
     private boolean selectionBoxEditing;
-    private double range = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.range;
-    private double boxSizeLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.range;
-    private int buttonLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.discovery.limit;
-    private int groupLimit = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.selection.group.limit;
+    private double range;
+    private double boxSizeLimit;
+    private int buttonLimit;
+    private int groupLimit;
     private int buttonCount;
 
-    public ElementSelectionLayerImpl(Session session) {
+    public ElementSelectionLayerImpl(EasyArmorStandsCommon eas, Session session) {
         super(session);
+        this.eas = eas;
         this.session = session;
         this.name = Message.component("easyarmorstands.node.select-entity");
         this.selectionBoxParticle = session.particleProvider().createAxisAlignedBox();
-        this.openSpawnMenuInput = new OpenSpawnMenuInput(session);
+        this.openSpawnMenuInput = new OpenSpawnMenuInput(eas, session);
         this.allowGroups = session.player().hasPermission(Permissions.GROUP);
         this.allowSpawn = session.player().hasPermission(Permissions.SPAWN);
+
+        EditorConfig config = eas.getConfiguration().editor;
+        this.range = config.selection.range;
+        this.boxSizeLimit = config.selection.group.range;
+        this.buttonLimit = config.discovery.limit;
+        this.groupLimit = config.selection.group.limit;
     }
 
     @Override
@@ -285,7 +294,7 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
 
     private Entry addEntry(ElementDiscoveryEntry entry) {
         SelectableElement element = entry.getElement();
-        EasPlayer player = new EasPlayer(session.player());
+        EasPlayer player = new EasPlayer(eas, session.player());
         if (element == null || !player.canDiscoverElement(element)) {
             return new Entry(entry);
         }
@@ -320,7 +329,7 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
 
     @Override
     public boolean selectElement(@NotNull SelectableElement element) {
-        EasPlayer player = new EasPlayer(session.player());
+        EasPlayer player = new EasPlayer(eas, session.player());
         if (!player.canEditElement(element)) {
             return false;
         }
@@ -338,7 +347,7 @@ public class ElementSelectionLayerImpl extends AbstractLayer implements ElementS
         }
 
         Group group = new Group(session);
-        EasPlayer player = new EasPlayer(session.player());
+        EasPlayer player = new EasPlayer(eas, session.player());
         for (SelectableElement element : elements) {
             if (player.canEditElement(element)) {
                 group.addMember(element);

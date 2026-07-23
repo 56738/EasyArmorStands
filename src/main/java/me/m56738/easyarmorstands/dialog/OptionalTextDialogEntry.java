@@ -1,10 +1,10 @@
 package me.m56738.easyarmorstands.dialog;
 
-import io.papermc.paper.dialog.DialogResponseView;
-import io.papermc.paper.registry.data.dialog.input.DialogInput;
-import io.papermc.paper.registry.data.dialog.input.TextDialogInput;
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.platform.dialog.DialogInput;
+import me.m56738.easyarmorstands.platform.dialog.DialogInputProvider;
+import me.m56738.easyarmorstands.platform.dialog.DialogResponseView;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class OptionalTextDialogEntry implements DialogEntry {
     private final String key;
     private final Property<Optional<Component>> property;
-    private final MiniMessage serializer = EasyArmorStandsPlugin.getInstance().getMiniMessage();
+    private final MiniMessage serializer = EasyArmorStandsCommon.miniMessage();
 
     public OptionalTextDialogEntry(String key, Property<Optional<Component>> property) {
         this.key = key;
@@ -30,16 +30,13 @@ public class OptionalTextDialogEntry implements DialogEntry {
     }
 
     @Override
-    public void populateInputs(Collection<DialogInput> inputs, Locale locale) {
+    public void populateInputs(Collection<DialogInput> inputs, Locale locale, DialogInputProvider provider) {
         String text = serializer.serialize(property.getValue().orElse(Component.empty()));
         if (property.getValue().equals(Optional.of(Component.empty()))) {
             text = "<empty>";
         }
-        inputs.add(DialogInput.text(key, GlobalTranslator.render(property.getType().getName(), locale))
-                .multiline(TextDialogInput.MultilineOptions.create(null, 64))
-                .initial(text)
-                .maxLength(32768)
-                .build());
+        Component label = GlobalTranslator.render(property.getType().getName(), locale);
+        inputs.add(provider.createText(key, label, text));
     }
 
     @Override

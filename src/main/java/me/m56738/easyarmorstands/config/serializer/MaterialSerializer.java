@@ -1,29 +1,33 @@
 package me.m56738.easyarmorstands.config.serializer;
 
-import org.bukkit.Material;
+import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.platform.inventory.ItemType;
+import net.kyori.adventure.key.Key;
 import org.spongepowered.configurate.serialize.ScalarSerializer;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-public class MaterialSerializer extends ScalarSerializer<Material> {
-    public MaterialSerializer() {
-        super(Material.class);
+public class MaterialSerializer extends ScalarSerializer<ItemType> {
+    private final Platform platform;
+
+    public MaterialSerializer(Platform platform) {
+        super(ItemType.class);
+        this.platform = platform;
     }
 
     @Override
-    public Material deserialize(Type type, Object value) throws SerializationException {
-        String name = value.toString();
-        Material material = Material.matchMaterial(name);
-        if (material == null) {
-            throw new SerializationException("Unknown material: " + name);
+    public ItemType deserialize(Type type, Object value) throws SerializationException {
+        try {
+            return platform.getItemType(Key.key(value.toString()));
+        } catch (Exception e) {
+            throw new SerializationException(e);
         }
-        return material;
     }
 
     @Override
-    protected Object serialize(Material item, Predicate<Class<?>> typeSupported) {
-        return item.name();
+    protected Object serialize(ItemType item, Predicate<Class<?>> typeSupported) {
+        return item.key().asMinimalString();
     }
 }

@@ -7,13 +7,10 @@ import me.m56738.easyarmorstands.api.element.ElementType;
 import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
-import me.m56738.easyarmorstands.api.element.EntityElementReference;
-import me.m56738.easyarmorstands.api.element.EntityElementType;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
-import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,15 +18,8 @@ import org.jetbrains.annotations.Nullable;
 public interface EasyArmorStands {
     String NAMESPACE = "easyarmorstands";
 
-    static @NotNull EasyArmorStands get() {
-        if (EasyArmorStandsHolder.instance == null) {
-            throw new IllegalStateException("EasyArmorStands not initialized");
-        }
-        return EasyArmorStandsHolder.instance;
-    }
-
-    static @NotNull NamespacedKey key(@KeyPattern.Value String value) {
-        return new NamespacedKey(NAMESPACE, value);
+    static @NotNull Key key(@KeyPattern.Value String value) {
+        return Key.key(NAMESPACE, value);
     }
 
     @Contract(pure = true)
@@ -46,12 +36,6 @@ public interface EasyArmorStands {
 
     @Contract(pure = true)
     @NotNull ElementSpawnRequest elementSpawnRequest(ElementType type);
-
-    @Contract(pure = true)
-    @NotNull RegionPrivilegeManager regionPrivilegeManager();
-
-    @Contract(pure = true)
-    @NotNull <E extends Entity> EntityElementReference<E> createReference(EntityElementType<E> type, E entity);
 
     /**
      * Attempts to resolve the entity into an element.

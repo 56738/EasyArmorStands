@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.command.processor;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
@@ -21,6 +22,12 @@ import static org.incendo.cloud.key.CloudKey.cloudKey;
 public class ElementSelectionProcessor implements CommandPreprocessor<EasCommandSender> {
     private static final CloudKey<ElementSelection> KEY = cloudKey("selection", ElementSelection.class);
 
+    private final EasyArmorStandsCommon eas;
+
+    public ElementSelectionProcessor(EasyArmorStandsCommon eas) {
+        this.eas = eas;
+    }
+
     public static CloudKey<ElementSelection> elementSelectionKey() {
         return KEY;
     }
@@ -31,13 +38,13 @@ public class ElementSelectionProcessor implements CommandPreprocessor<EasCommand
 
         Element element = commandContext.getOrDefault(elementKey(), null);
         if (element != null) {
-            commandContext.set(KEY, new ElementSelection(Collections.singleton(element)));
+            commandContext.set(KEY, new ElementSelection(eas, Collections.singleton(element)));
             return;
         }
 
         Group group = commandContext.getOrDefault(groupKey(), null);
         if (group != null) {
-            commandContext.set(KEY, new ElementSelection(group.getMembers().stream()
+            commandContext.set(KEY, new ElementSelection(eas, group.getMembers().stream()
                     .map(GroupMember::getElement)
                     .collect(Collectors.toList())));
         }

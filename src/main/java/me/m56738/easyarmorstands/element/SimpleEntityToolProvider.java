@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.MoveTool;
@@ -15,18 +15,20 @@ import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.config.LimitScaleConfig;
 import me.m56738.easyarmorstands.editor.EntityPositionProvider;
 import me.m56738.easyarmorstands.editor.EntityRotationProvider;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleEntityToolProvider implements ToolProvider {
+    protected final EasyArmorStandsCommon eas;
     protected final PropertyContainer properties;
     private final Property<Location> locationProperty;
     private final Property<Double> scaleProperty;
     protected PositionProvider positionProvider;
     protected RotationProvider rotationProvider;
 
-    public SimpleEntityToolProvider(PropertyContainer properties) {
+    public SimpleEntityToolProvider(EasyArmorStandsCommon eas, PropertyContainer properties) {
+        this.eas = eas;
         this.properties = properties;
         this.locationProperty = properties.getOrNull(EntityPropertyTypes.LOCATION);
         this.scaleProperty = properties.getOrNull(EntityPropertyTypes.SCALE);
@@ -63,7 +65,7 @@ public class SimpleEntityToolProvider implements ToolProvider {
     @Override
     public @Nullable ScaleTool scale(@NotNull ToolContext context) {
         if (scaleProperty != null) {
-            LimitScaleConfig limits = EasyArmorStandsPlugin.getInstance().getConfiguration().limits.entity;
+            LimitScaleConfig limits = eas.getConfiguration().limits.entity;
             return ScaleTool.of(context, properties, locationProperty, scaleProperty, limits.minScale, limits.maxScale);
         }
         return ToolProvider.super.scale(context);

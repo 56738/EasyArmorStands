@@ -3,9 +3,8 @@ package me.m56738.easyarmorstands.property.display.item;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.ItemDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.entity.ItemDisplay;
+import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemDisplayItemProperty implements Property<ItemStack> {
@@ -22,7 +21,7 @@ public class ItemDisplayItemProperty implements Property<ItemStack> {
 
     @Override
     public @NotNull ItemStack getValue() {
-        return Util.wrapItem(entity.getItemStack());
+        return entity.getItemStack();
     }
 
     @Override

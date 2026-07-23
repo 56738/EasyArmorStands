@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.history.action.Action;
@@ -8,10 +9,12 @@ import me.m56738.easyarmorstands.history.action.PropertyAction;
 import java.util.Objects;
 
 public class ChangeKey<T> {
+    private final EasyArmorStandsCommon eas;
     private final Element element;
     private final PropertyType<T> propertyType;
 
-    public ChangeKey(Element element, PropertyType<T> propertyType) {
+    public ChangeKey(EasyArmorStandsCommon eas, Element element, PropertyType<T> propertyType) {
+        this.eas = eas;
         this.element = element;
         this.propertyType = propertyType;
     }
@@ -30,6 +33,6 @@ public class ChangeKey<T> {
     }
 
     public Action createChangeAction(T oldValue, T value) {
-        return new PropertyAction<>(element.getReference(), propertyType, oldValue, value);
+        return new PropertyAction<>(eas, element.getReference(eas.referenceProvider()), propertyType, oldValue, value);
     }
 }

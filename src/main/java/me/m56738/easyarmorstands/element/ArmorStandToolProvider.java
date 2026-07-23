@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.element;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.tool.AxisRotateTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
@@ -8,15 +9,15 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.EntityYawRotationProvider;
-import org.bukkit.Location;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ArmorStandToolProvider extends SimpleEntityToolProvider {
     private final Property<Location> locationProperty;
 
-    public ArmorStandToolProvider(PropertyContainer properties) {
-        super(properties);
+    public ArmorStandToolProvider(EasyArmorStandsCommon eas, PropertyContainer properties) {
+        super(eas, properties);
         rotationProvider = new EntityYawRotationProvider(properties);
         locationProperty = properties.get(EntityPropertyTypes.LOCATION);
     }

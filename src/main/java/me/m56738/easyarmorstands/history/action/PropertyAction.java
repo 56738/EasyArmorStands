@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.history.action;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementReference;
 import me.m56738.easyarmorstands.api.property.Property;
@@ -15,12 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class PropertyAction<T> implements Action {
+    private final EasyArmorStandsCommon eas;
     private final ElementReference elementReference;
     private final PropertyType<T> propertyType;
     private final T oldValue;
     private final T newValue;
 
-    public PropertyAction(ElementReference elementReference, PropertyType<T> propertyType, T oldValue, T newValue) {
+    public PropertyAction(EasyArmorStandsCommon eas, ElementReference elementReference, PropertyType<T> propertyType, T oldValue, T newValue) {
+        this.eas = eas;
         this.elementReference = elementReference;
         this.propertyType = propertyType;
         this.oldValue = propertyType.cloneValue(oldValue);
@@ -42,7 +45,7 @@ public class PropertyAction<T> implements Action {
         if (element == null) {
             return false;
         }
-        PropertyContainer properties = new PermissionCheckedPropertyContainer(element, player);
+        PropertyContainer properties = new PermissionCheckedPropertyContainer(eas, element, player);
         Property<T> property = properties.getOrNull(propertyType);
         if (property == null) {
             return false;

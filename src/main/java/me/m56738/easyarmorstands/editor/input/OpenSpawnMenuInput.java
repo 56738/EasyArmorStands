@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.editor.input;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.input.Input;
@@ -12,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public class OpenSpawnMenuInput implements Input {
     private static final Component NAME = Component.translatable("easyarmorstands.input.spawn");
     private static final Style STYLE = Style.style(NamedTextColor.YELLOW);
+    private final EasyArmorStandsCommon eas;
     private final Session session;
 
-    public OpenSpawnMenuInput(Session session) {
+    public OpenSpawnMenuInput(EasyArmorStandsCommon eas, Session session) {
+        this.eas = eas;
         this.session = session;
     }
 
@@ -35,6 +37,6 @@ public class OpenSpawnMenuInput implements Input {
 
     @Override
     public void execute(@NotNull ClickContext context) {
-        EasyArmorStandsPlugin.getInstance().openSpawnMenu(session.player());
+        eas.openSpawnMenu(session.player());
     }
 }

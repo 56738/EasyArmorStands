@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.EyeRay;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.button.Button;
@@ -26,7 +26,8 @@ import me.m56738.easyarmorstands.editor.button.ElementButtonHandler;
 import me.m56738.easyarmorstands.group.GroupMember;
 import me.m56738.easyarmorstands.group.layer.GroupRootLayer;
 import me.m56738.easyarmorstands.particle.EditorParticle;
-import me.m56738.easyarmorstands.particle.GizmoParticleProvider;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import me.m56738.easyarmorstands.session.context.AddContextImpl;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -43,8 +44,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -68,13 +67,14 @@ import java.util.stream.Collectors;
 public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Layer> layerStack = new LinkedList<>();
+    private final EasyArmorStandsCommon eas;
     private final EasPlayer player;
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
     private final NodeProvider nodeProvider = new NodeProviderImpl(this);
-    private final LayerProvider layerProvider = new LayerProviderImpl(this);
-    private final InputProvider inputProvider = new InputProviderImpl(this);
+    private final LayerProvider layerProvider;
+    private final InputProvider inputProvider;
     private final List<Input> inputs = new ArrayList<>();
     private int clickTicks = 5;
     private boolean valid = true;
@@ -86,10 +86,13 @@ public final class SessionImpl implements Session {
     private Category inputCategory = Category.PRIMARY;
     private boolean hasSecondaryInputs;
 
-    public SessionImpl(EasPlayer player) {
+    public SessionImpl(EasyArmorStandsCommon eas, EasPlayer player) {
+        this.eas = eas;
         this.player = player;
         this.snapper = new SessionSnapper(player.get());
-        this.particleProvider = new GizmoParticleProvider(EasyArmorStandsPlugin.getInstance().getGizmos().player(player.get()));
+        this.particleProvider = eas.particleProviderFactory().createParticleProvider(player.get());
+        this.layerProvider = new LayerProviderImpl(eas, this);
+        this.inputProvider = new InputProviderImpl(eas, this);
     }
 
     @Override
@@ -114,8 +117,8 @@ public final class SessionImpl implements Session {
 
     @Override
     public double getScale(Vector3dc position) {
-        EasConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration();
-        Vector3d eyePosition = Util.toVector3d(player.get().getEyeLocation());
+        EasConfig config = eas.getConfiguration();
+        Vector3d eyePosition = Util.toVector3d(player.get().eyeLocation());
         double minDistance = config.editor.scale.minDistance;
         double maxDistance = config.editor.scale.maxDistance;
         if (maxDistance <= minDistance) {
@@ -312,7 +315,7 @@ public final class SessionImpl implements Session {
     }
 
     private Component createActionBar(Component value, Set<Input> availableInputs) {
-        InputHintsConfig config = EasyArmorStandsPlugin.getInstance().getConfiguration().editor.inputHints;
+        InputHintsConfig config = eas.getConfiguration().editor.inputHints;
         if (!config.enabled) {
             return value;
         }
@@ -345,7 +348,7 @@ public final class SessionImpl implements Session {
                 .tag("key", Tag.selfClosingInserting(key))
                 .tag("input", Tag.selfClosingInserting(input))
                 .build();
-        return EasyArmorStandsPlugin.getInstance().getMiniMessage().deserialize(config.format, resolver).applyFallbackStyle(style);
+        return EasyArmorStandsCommon.miniMessage().deserialize(config.format, resolver).applyFallbackStyle(style);
     }
 
     private Component getKey(InputHintsConfig config, ClickContext.Type type) {
@@ -380,11 +383,11 @@ public final class SessionImpl implements Session {
     }
 
     public double getRange() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().editor.button.range;
+        return eas.getConfiguration().editor.button.range;
     }
 
     public double getLookThreshold() {
-        return EasyArmorStandsPlugin.getInstance().getConfiguration().editor.button.threshold;
+        return eas.getConfiguration().editor.button.threshold;
     }
 
     @Override
@@ -420,27 +423,25 @@ public final class SessionImpl implements Session {
 
     @Override
     public @NotNull PropertyContainer properties(@NotNull Element element) {
-        return new TrackedPropertyContainer(element, player);
+        return new TrackedPropertyContainer(eas, element, player);
     }
 
     @Override
     public @NotNull EyeRay eyeRay() {
         double length = getRange();
-        Location eyeLocation = player.get().getEyeLocation();
+        Location eyeLocation = player.get().eyeLocation();
         double threshold = getLookThreshold();
-        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
+        return new EyeRayImpl(eyeLocation.world(), eyeLocation, length, threshold);
     }
 
     public @NotNull EyeRay eyeRay(Vector2dc cursor) {
         double length = getRange();
-        Location eyeLocation = player.get().getEyeLocation();
+        Location eyeLocation = player.get().eyeLocation();
         Matrix4dc eyeMatrix = eyeMatrix(eyeLocation);
         Vector3d origin = eyeMatrix.transformPosition(cursor.x(), cursor.y(), 0, new Vector3d());
-        eyeLocation.setX(origin.x);
-        eyeLocation.setY(origin.y);
-        eyeLocation.setZ(origin.z);
+        Location location = eyeLocation.withPosition(origin);
         double threshold = getLookThreshold();
-        return new EyeRayImpl(eyeLocation.getWorld(), eyeLocation, length, threshold);
+        return new EyeRayImpl(location.world(), location, length, threshold);
     }
 
     private Matrix4dc eyeMatrix(Location eyeLocation) {
@@ -474,7 +475,7 @@ public final class SessionImpl implements Session {
 
     @Override
     public @NotNull Node createElementNode(SelectableElement element, Button button) {
-        return new ButtonNode(button, new ElementButtonHandler(this, element));
+        return new ButtonNode(button, new ElementButtonHandler(eas, this, element));
     }
 
     public boolean isToolRequired() {

@@ -2,7 +2,7 @@ package me.m56738.easyarmorstands.api.element;
 
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.util.BoundingBox;
-import org.bukkit.World;
+import me.m56738.easyarmorstands.platform.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

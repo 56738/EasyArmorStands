@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.fancyholograms.editor.layer;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
@@ -13,19 +14,21 @@ import me.m56738.easyarmorstands.editor.layer.PropertyLayer;
 import me.m56738.easyarmorstands.fancyholograms.element.HologramElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.block.BlockData;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class HologramRootLayer extends PropertyLayer implements ElementLayer {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final HologramElement element;
     private final Property<BlockData> blockDataProperty;
     private final boolean allowMenu;
 
-    public HologramRootLayer(Session session, HologramElement element) {
+    public HologramRootLayer(EasyArmorStandsCommon eas, Session session, HologramElement element) {
         super(session, session.properties(element));
+        this.eas = eas;
         this.session = session;
         this.element = element;
         this.blockDataProperty = properties().getOrNull(BlockDisplayPropertyTypes.BLOCK);
@@ -45,7 +48,7 @@ public class HologramRootLayer extends PropertyLayer implements ElementLayer {
                 BlockData blockData = block.getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
                     properties().commit();
-                    new EasPlayer(player).sendMessage(Message.success("easyarmorstands.success.changed-block",
+                    new EasPlayer(eas, player).sendMessage(Message.success("easyarmorstands.success.changed-block",
                             blockDataProperty.getType().getValueComponent(blockData)));
                     return true;
                 }

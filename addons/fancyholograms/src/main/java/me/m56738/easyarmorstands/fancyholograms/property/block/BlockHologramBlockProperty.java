@@ -5,7 +5,8 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
-import org.bukkit.block.data.BlockData;
+import me.m56738.easyarmorstands.platform.block.BlockData;
+import me.m56738.easyarmorstands.platform.paper.block.PaperBlockData;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockHologramBlockProperty implements Property<BlockData> {
@@ -24,12 +25,12 @@ public class BlockHologramBlockProperty implements Property<BlockData> {
 
     @Override
     public @NotNull BlockData getValue() {
-        return data.getBlock().createBlockData();
+        return PaperBlockData.fromNative(data.getBlock().createBlockData());
     }
 
     @Override
     public boolean setValue(@NotNull BlockData value) {
-        data.setBlock(value.getMaterial());
+        data.setBlock(PaperBlockData.toNative(value).getMaterial());
         hologram.forceUpdate();
         hologram.refreshForViewersInWorld();
         return true;

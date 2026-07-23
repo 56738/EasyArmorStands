@@ -1,7 +1,7 @@
 package me.m56738.easyarmorstands.config.serializer;
 
 import io.leangen.geantyref.TypeToken;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyTypeException;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import net.kyori.adventure.key.Key;
@@ -16,6 +16,12 @@ public class PropertyTypeSerializer implements TypeSerializer<PropertyType<?>> {
     public static final TypeToken<PropertyType<?>> TYPE = new TypeToken<PropertyType<?>>() {
     };
 
+    private final EasyArmorStandsCommon eas;
+
+    public PropertyTypeSerializer(EasyArmorStandsCommon eas) {
+        this.eas = eas;
+    }
+
     @Override
     public PropertyType<?> deserialize(Type type, ConfigurationNode node) throws SerializationException {
         Key key = node.get(Key.class);
@@ -23,7 +29,7 @@ public class PropertyTypeSerializer implements TypeSerializer<PropertyType<?>> {
             return null;
         }
         try {
-            return EasyArmorStands.get().propertyTypeRegistry().get(key);
+            return eas.propertyTypeRegistry().get(key);
         } catch (UnknownPropertyTypeException e) {
             throw new SerializationException("Unknown property type: " + key.asString());
         }

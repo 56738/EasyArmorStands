@@ -1,14 +1,12 @@
 package me.m56738.easyarmorstands.property.entity;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.type.PropertyType;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -17,26 +15,26 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class EntityComponentProperty implements Property<Component> {
-    private static final MiniMessage serializer = EasyArmorStandsPlugin.getInstance().getMiniMessage();
+    private static final MiniMessage serializer = EasyArmorStandsCommon.miniMessage();
     private static final MiniMessage nonVirtualSerializer = MiniMessage.builder()
             .emitVirtuals(false)
             .build();
     private final PropertyType<Component> type;
-    private final NamespacedKey key;
+    private final Key key;
     private final Entity entity;
     private final Supplier<Component> getter;
     private final Consumer<Component> setter;
 
     public EntityComponentProperty(PropertyType<Component> type, Entity entity, Supplier<Component> getter, Consumer<Component> setter) {
         this.type = type;
-        this.key = new NamespacedKey(type.key().namespace(), type.key().value());
+        this.key = type.key();
         this.entity = entity;
         this.getter = getter;
         this.setter = setter;
     }
 
-    public static Component resolveValue(Entity entity, NamespacedKey key, Component realText) {
-        String miniMessageText = entity.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+    public static Component resolveValue(Entity entity, Key key, Component realText) {
+        String miniMessageText = entity.getCustomDataString(key);
         if (miniMessageText != null) {
             if (nonVirtualSerializer.deserialize(miniMessageText).equals(realText.compact())) {
                 return serializer.deserialize(miniMessageText);
@@ -45,12 +43,11 @@ public class EntityComponentProperty implements Property<Component> {
         return realText;
     }
 
-    public static void saveValue(Entity entity, NamespacedKey key, @Nullable Component value) {
-        PersistentDataContainer pdc = entity.getPersistentDataContainer();
+    public static void saveValue(Entity entity, Key key, @Nullable Component value) {
         if (value != null) {
-            pdc.set(key, PersistentDataType.STRING, serializer.serialize(value));
+            entity.setCustomDataString(key, serializer.serialize(value));
         } else {
-            pdc.remove(key);
+            entity.removeCustomData(key);
         }
     }
 

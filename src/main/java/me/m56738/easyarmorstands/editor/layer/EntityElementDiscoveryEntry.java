@@ -3,8 +3,8 @@ package me.m56738.easyarmorstands.editor.layer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoveryEntry;
 import me.m56738.easyarmorstands.api.element.SelectableElement;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.platform.entity.Entity;
+import me.m56738.easyarmorstands.platform.entity.Player;
 
 import java.util.Objects;
 

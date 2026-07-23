@@ -39,7 +39,7 @@ public interface Element {
      * @return a reference which can be used to retrieve the element
      */
     @Contract(pure = true)
-    @NotNull ElementReference getReference();
+    @NotNull ElementReference getReference(ReferenceProvider provider);
 
     @Contract(pure = true)
     boolean isValid();

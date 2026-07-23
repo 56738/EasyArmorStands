@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.editor.display.layer;
 
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
@@ -16,23 +17,25 @@ import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.DisplayElement;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
+import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.block.BlockData;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class DisplayRootLayer extends DisplayLayer implements ElementLayer, ResettableLayer {
+    private final EasyArmorStandsCommon eas;
     private final Session session;
     private final DisplayElement<?> element;
     private final Property<Location> locationProperty;
     private final Property<BlockData> blockDataProperty;
     private final boolean allowMenu;
 
-    public DisplayRootLayer(Session session, DisplayElement<?> element) {
+    public DisplayRootLayer(EasyArmorStandsCommon eas, Session session, DisplayElement<?> element) {
         super(session, session.properties(element));
+        this.eas = eas;
         this.session = session;
         this.element = element;
         this.locationProperty = properties().get(EntityPropertyTypes.LOCATION);
@@ -53,7 +56,7 @@ public class DisplayRootLayer extends DisplayLayer implements ElementLayer, Rese
                 BlockData blockData = block.getBlockData();
                 if (blockDataProperty.setValue(blockData)) {
                     properties().commit();
-                    new EasPlayer(player).sendMessage(Message.success("easyarmorstands.success.changed-block",
+                    new EasPlayer(eas, player).sendMessage(Message.success("easyarmorstands.success.changed-block",
                             blockDataProperty.getType().getValueComponent(blockData)));
                     return true;
                 }
@@ -83,10 +86,9 @@ public class DisplayRootLayer extends DisplayLayer implements ElementLayer, Rese
         properties().get(DisplayPropertyTypes.SCALE).setValue(new Vector3f(1));
         properties().get(DisplayPropertyTypes.RIGHT_ROTATION).setValue(new Quaternionf());
 
-        Location location = locationProperty.getValue();
-        location.setYaw(0);
-        location.setPitch(0);
-        locationProperty.setValue(location);
+        locationProperty.setValue(locationProperty.getValue()
+                .withYaw(0)
+                .withPitch(0));
 
         properties().commit();
     }

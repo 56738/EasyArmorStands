@@ -14,11 +14,11 @@ import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.api.util.RotationProvider;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.message.Message;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaterniond;
@@ -97,7 +97,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             Quaterniondc rotation = getRotation();
             Quaterniondc localRotation = parentRotationProvider.getRotation().conjugate(new Quaterniond())
                     .mul(rotation);
-            this.originalLocation = locationProperty.getValue().clone();
+            this.originalLocation = locationProperty.getValue();
             this.originalTranslation = new Vector3f(translationProperty.getValue());
             this.originalRotation = new Quaternionf(rotationProperty.getValue());
             this.originalOffset = Util.toVector3d(originalLocation)
@@ -119,8 +119,8 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
                             direction.z(), offsetChange)
                     .sub(originalOffset);
 
-            Location location = originalLocation.clone();
-            location.add(offsetChange.x(), offsetChange.y(), offsetChange.z());
+            Location location = originalLocation
+                    .withPosition(originalLocation.position().add(offsetChange, new Vector3d()));
 
             translationOffset.rotateAxis(change,
                             direction.x(),

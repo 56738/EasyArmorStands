@@ -1,6 +1,6 @@
 package me.m56738.easyarmorstands.editor.display.tool;
 
-import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
+import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.editor.tool.OrientedTool;
 import me.m56738.easyarmorstands.api.editor.tool.PositionedTool;
 import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
@@ -10,9 +10,9 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
+import me.m56738.easyarmorstands.platform.entity.Player;
+import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.util.Util;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -23,6 +23,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements PositionedTool<S>, OrientedTool<S> {
+    private final EasyArmorStandsCommon eas;
     private final ToolContext context;
     private final PropertyContainer properties;
     private final Property<Location> locationProperty;
@@ -30,7 +31,8 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
     private final Property<Vector3fc> scaleProperty;
     private final Property<Float> heightProperty;
 
-    public AbstractDisplayScaleTool(ToolContext context, PropertyContainer properties) {
+    public AbstractDisplayScaleTool(EasyArmorStandsCommon eas, ToolContext context, PropertyContainer properties) {
+        this.eas = eas;
         this.context = context;
         this.properties = properties;
         this.locationProperty = properties.get(EntityPropertyTypes.LOCATION);
@@ -73,7 +75,7 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
         public AbstractDisplayScaleToolSession(PropertyContainer properties) {
             super(properties);
             float height = heightProperty != null ? heightProperty.getValue() : 0;
-            this.originalLocation = locationProperty.getValue().clone();
+            this.originalLocation = locationProperty.getValue();
             this.originalTranslation = translationProperty != null ? new Vector3f(translationProperty.getValue()) : new Vector3f();
             this.currentTranslation = new Vector3f(originalTranslation);
             this.originalTranslationOffset = new Vector3f(originalTranslation)
@@ -102,7 +104,7 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
 
         public void setScale(Vector3fc scale) {
             currentScale.set(scale);
-            EasyArmorStandsPlugin.getInstance().getConfiguration().limits.displayEntity.clampScale(currentScale);
+            eas.getConfiguration().limits.displayEntity.clampScale(currentScale);
             scaleProperty.setValue(currentScale);
 
             Vector3fc delta = getDelta();
@@ -113,9 +115,8 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
             originalRotation.transform(offsetChange);
             offsetChange.sub(originalOffset);
 
-            Location location = originalLocation.clone();
-            location.add(offsetChange.x, offsetChange.y, offsetChange.z);
-            locationProperty.setValue(location);
+            locationProperty.setValue(originalLocation
+                    .withPosition(originalLocation.position().add(offsetChange, new Vector3d())));
 
             if (translationProperty != null) {
                 offsetChange.set(originalTranslationOffset);
