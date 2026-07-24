@@ -11,6 +11,10 @@ public class EasyArmorStandsHolder {
         this.eas = eas;
     }
 
+    public boolean isInitialized() {
+        return eas != null;
+    }
+
     public EasyArmorStandsCommon get() {
         if (eas == null) {
             throw new IllegalStateException();

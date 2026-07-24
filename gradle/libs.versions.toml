@@ -10,8 +10,10 @@ configurate = "4.2.0"
 fabric-api = "0.155.2+26.2"
 fabric-loader = "0.19.3"
 fabric-loom = "1.17-SNAPSHOT"
+fabric-permissions-api = "0.7.0"
 fancyholograms = "2.10.0"
 gizmo = "1.1.0"
+gizmo-modded = "1.0.0-SNAPSHOT"
 griefdefender = "2.1.1-SNAPSHOT"
 griefprevention = "18.0.0"
 gson = "2.11.0"
@@ -49,14 +51,19 @@ cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "c
 cloud-core = { module = "org.incendo:cloud-core", version.ref = "cloud" }
 cloud-fabric = { module = "org.incendo:cloud-fabric", version.ref = "cloud-minecraft-modded" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
+cloud-minecraft-modded-common = { module = "org.incendo:cloud-minecraft-modded-common", version.ref = "cloud-minecraft-modded" }
 cloud-neoforge = { module = "org.incendo:cloud-neoforge", version.ref = "cloud-minecraft-modded" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-permissions-api = { module = "me.lucko:fabric-permissions-api", version.ref = "fabric-permissions-api" }
 fancyholograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
 gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" }
 gizmo-common = { module = "me.m56738.gizmo:gizmo-common", version.ref = "gizmo" }
+gizmo-fabric = { module = "me.m56738.gizmo:gizmo-fabric", version.ref = "gizmo-modded" }
+gizmo-modded = { module = "me.m56738.gizmo:gizmo-modded", version.ref = "gizmo-modded" }
+gizmo-neoforge = { module = "me.m56738.gizmo:gizmo-neoforge", version.ref = "gizmo-modded" }
 griefdefender-api = { module = "com.griefdefender:api", version.ref = "griefdefender" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -80,6 +87,8 @@ fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish-plugin" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
+resource-factory-fabric-convention = { id = "xyz.jpenilla.resource-factory-fabric-convention", version.ref = "resource-factory" }
+resource-factory-neoforge-convention = { id = "xyz.jpenilla.resource-factory-neoforge-convention", version.ref = "resource-factory" }
 resource-factory-paper-convention = { id = "xyz.jpenilla.resource-factory-paper-convention", version.ref = "resource-factory" }
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

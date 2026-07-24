@@ -46,3 +46,7 @@ includeAt("easyarmorstands-platform-fabric", "platform/fabric")
 
 includeAt("easyarmorstands-paper", "paper")
 includeAt("easyarmorstands-paper-api", "paper/api")
+includeAt("easyarmorstands-modded", "modded")
+includeAt("easyarmorstands-modded-api", "modded/api")
+includeAt("easyarmorstands-fabric", "fabric")
+includeAt("easyarmorstands-fabric-api", "fabric/api")

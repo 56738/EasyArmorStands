@@ -11,6 +11,6 @@ record ModdedItemStackImpl(ModdedPlatform platform, ItemStack item) implements M
 
     @Override
     public ItemStack getNative() {
-        return item;
+        return item.copy();
     }
 }

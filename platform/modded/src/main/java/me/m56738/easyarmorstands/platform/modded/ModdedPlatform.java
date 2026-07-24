@@ -31,6 +31,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.decoration.Mannequin;
 import org.jspecify.annotations.Nullable;
 
@@ -153,4 +154,8 @@ public abstract class ModdedPlatform implements Platform {
     public Identifier registerCustomClickAction(BiConsumer<DialogResponseView, Audience> action, ClickCallback.Options options) {
         return clickActionRegistry.registerClickAction(action, options);
     }
+
+    public abstract boolean hasPermission(ServerPlayer player, String permission);
+
+    public abstract boolean isPermissionSet(ServerPlayer player, String permission);
 }
