@@ -9,3 +9,4 @@
     * It can be obtained by casting the EasyArmorStands plugin to `EasyArmorStandsPaperProvider`.
     * Example:
       `((EasyArmorStandsPaperProvider) Bukkit.getPluginManager().getPlugin("EasyArmorStands")).getEasyArmorStands()`
+* Moved the API to a new Maven repository: `https://repo.56738.me/repository/maven-public/`

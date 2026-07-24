@@ -12,13 +12,6 @@ java {
 
 publishing {
     repositories {
-        maven("https://ci.mg-dev.eu/plugin/repository/everything") {
-            name = "MGDev"
-            credentials(PasswordCredentials::class)
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-        }
         maven {
             name = "m56738"
             credentials(PasswordCredentials::class)
