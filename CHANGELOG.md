@@ -1,7 +1,3 @@
-# Improvements
-
-* Added item frame "item", "fixed" and "visible" properties
-
 # API changes
 
 * Introduced an abstraction layer to enable adding support for other platforms in the future.

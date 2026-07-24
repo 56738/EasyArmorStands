@@ -95,6 +95,7 @@ public class Bootstrap implements PluginBootstrap {
         commandManager.parserRegistry().registerParser(parserProvider.locationParser());
         commandManager.parserRegistry().registerParser(parserProvider.singleEntitySelector());
         commandManager.parserRegistry().registerParser(parserProvider.multipleEntitySelector());
+        commandManager.parserRegistry().registerParser(parserProvider.multiplePlayerSelector());
 
         commandManager.brigadierManager().registerMapping(new TypeToken<BlockDataArgumentParser<EasCommandSender>>() {
         }, builder -> builder.to(a -> ArgumentTypes.blockState()));

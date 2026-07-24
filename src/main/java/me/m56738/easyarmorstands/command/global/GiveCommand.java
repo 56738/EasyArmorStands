@@ -1,12 +1,16 @@
 package me.m56738.easyarmorstands.command.global;
 
 import me.m56738.easyarmorstands.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.command.util.MultiplePlayerSelector;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
+import net.kyori.adventure.audience.Audience;
+import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
@@ -16,6 +20,20 @@ import java.util.HashMap;
 
 @CommandContainer
 public class GiveCommand {
+    @Command("eas give <player>")
+    @Permission(Permissions.GIVE_OTHER)
+    @CommandDescription("easyarmorstands.command.description.give.other")
+    public void give(EasCommandSender sender, EasyArmorStandsCommon eas,
+                     @Argument("player") MultiplePlayerSelector selector) {
+        for (Player player : selector.values()) {
+            HashMap<Integer, ItemStack> failed = player.getInventory().addItem(eas.sessionToolProvider().createTool(player.locale()));
+            for (ItemStack item : failed.values()) {
+                player.dropItem(item);
+            }
+            sendAddedOther(sender, player);
+        }
+    }
+
     @Command("eas give")
     @Permission(Permissions.GIVE)
     @CommandDescription("easyarmorstands.command.description.give")
@@ -95,15 +113,19 @@ public class GiveCommand {
         return false;
     }
 
-    private void sendAdded(EasPlayer sender) {
+    private void sendAdded(Audience sender) {
         sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory"));
     }
 
-    private void sendSelected(EasPlayer sender) {
+    private void sendAddedOther(Audience sender, Player player) {
+        sender.sendMessage(Message.success("easyarmorstands.success.added-tool-to-inventory.other", player.displayName()));
+    }
+
+    private void sendSelected(Audience sender) {
         sender.sendMessage(Message.success("easyarmorstands.success.selected-tool"));
     }
 
-    private void sendFull(EasPlayer sender) {
+    private void sendFull(Audience sender) {
         sender.sendMessage(Message.error("easyarmorstands.error.inventory-full"));
     }
 }

@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
 import me.m56738.easyarmorstands.api.formatter.LocationFormatter;
 import me.m56738.easyarmorstands.api.formatter.NumberFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.util.Location;
@@ -44,6 +45,7 @@ public final class EntityPropertyTypes {
                         .name(Component.translatable("easyarmorstands.property.equipment." + name.replace("_", "-") + ".name"))
                         .formatter(new ItemStackFormatter())
                         .permission("easyarmorstands.property.equipment." + name.replace("_", ""))
+                        .canCopyPredicate(Player::isCreativeMode)
                         .build();
             });
     public static final PropertyType<Boolean> GLOWING = PropertyType.builder(key("entity/glowing"), Boolean.class)

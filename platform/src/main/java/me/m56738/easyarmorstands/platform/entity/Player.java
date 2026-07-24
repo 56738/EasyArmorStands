@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.platform.command.CommandSender;
 import me.m56738.easyarmorstands.platform.inventory.Inventory;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
+import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
@@ -32,4 +33,8 @@ public interface Player extends LivingEntity, CommandSender {
     boolean isCreativeMode();
 
     boolean isFlying();
+
+    void dropItem(ItemStack item);
+
+    Component displayName();
 }

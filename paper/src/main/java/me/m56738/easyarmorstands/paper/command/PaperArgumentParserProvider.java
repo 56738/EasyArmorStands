@@ -2,13 +2,16 @@ package me.m56738.easyarmorstands.paper.command;
 
 import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
 import me.m56738.easyarmorstands.command.util.MultipleEntitySelector;
+import me.m56738.easyarmorstands.command.util.MultiplePlayerSelector;
 import me.m56738.easyarmorstands.command.util.SingleEntitySelector;
 import me.m56738.easyarmorstands.platform.paper.PaperAdapter;
 import me.m56738.easyarmorstands.platform.paper.entity.PaperEntity;
+import me.m56738.easyarmorstands.platform.paper.entity.PaperPlayer;
 import me.m56738.easyarmorstands.platform.util.Location;
 import me.m56738.easyarmorstands.platform.util.MappedCollection;
 import org.incendo.cloud.bukkit.parser.location.LocationParser;
 import org.incendo.cloud.bukkit.parser.selector.MultipleEntitySelectorParser;
+import org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser;
 import org.incendo.cloud.bukkit.parser.selector.SingleEntitySelectorParser;
 import org.incendo.cloud.parser.ParserDescriptor;
 
@@ -36,5 +39,13 @@ public class PaperArgumentParserProvider implements ArgumentParserProvider {
                 (context, selector) ->
                         CompletableFuture.completedFuture(new MultipleEntitySelector(
                                 new MappedCollection<>(selector.values(), PaperEntity::fromNative))));
+    }
+
+    @Override
+    public <C> ParserDescriptor<C, MultiplePlayerSelector> multiplePlayerSelector() {
+        return MultiplePlayerSelectorParser.<C>multiplePlayerSelectorParser(false).mapSuccess(MultiplePlayerSelector.class,
+                (context, selector) ->
+                        CompletableFuture.completedFuture(new MultiplePlayerSelector(
+                                new MappedCollection<>(selector.values(), PaperPlayer::fromNative))));
     }
 }

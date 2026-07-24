@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.platform.paper.command.PaperCommandSender;
 import me.m56738.easyarmorstands.platform.paper.inventory.PaperInventory;
 import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemStack;
 import me.m56738.easyarmorstands.platform.paper.inventory.PaperPlayerInventory;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.jspecify.annotations.Nullable;
 
@@ -82,5 +83,15 @@ public interface PaperPlayer extends Player, PaperLivingEntity, PaperCommandSend
     @Override
     default boolean isFlying() {
         return getNative().isFlying();
+    }
+
+    @Override
+    default void dropItem(ItemStack item) {
+        getNative().dropItem(PaperItemStack.toNative(item));
+    }
+
+    @Override
+    default Component displayName() {
+        return getNative().displayName();
     }
 }

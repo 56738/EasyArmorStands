@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
 import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
+import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
@@ -14,6 +15,7 @@ public final class ItemFramePropertyTypes {
             .name(translatable("easyarmorstands.property.item.name"))
             .formatter(new ItemStackFormatter())
             .permission("easyarmorstands.property.itemframe.item")
+            .canCopyPredicate(Player::isCreativeMode)
             .build();
     public static final PropertyType<Boolean> FIXED = PropertyType.builder(key("item_frame/fixed"), Boolean.class)
             .name(translatable("easyarmorstands.property.item-frame.fixed.name"))
