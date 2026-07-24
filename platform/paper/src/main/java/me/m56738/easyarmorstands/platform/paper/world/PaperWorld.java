@@ -34,7 +34,7 @@ public interface PaperWorld extends World {
     }
 
     @Override
-    default Collection<Entity> getEntities() {
+    default Iterable<Entity> getEntities() {
         return new MappedCollection<>(getNative().getEntities(), PaperEntity::fromNative);
     }
 

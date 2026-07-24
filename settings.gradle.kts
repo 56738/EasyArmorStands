@@ -1,6 +1,12 @@
 rootProject.name = "EasyArmorStands"
 
 pluginManagement {
+    repositories {
+        maven("https://maven.fabricmc.net/")
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
     includeBuild("build-logic")
 }
 
@@ -35,6 +41,8 @@ addon("worldguard")
 
 includeAt("easyarmorstands-platform", "platform")
 includeAt("easyarmorstands-platform-paper", "platform/paper")
+includeAt("easyarmorstands-platform-modded", "platform/modded")
+includeAt("easyarmorstands-platform-fabric", "platform/fabric")
 
 includeAt("easyarmorstands-paper", "paper")
 includeAt("easyarmorstands-paper-api", "paper/api")

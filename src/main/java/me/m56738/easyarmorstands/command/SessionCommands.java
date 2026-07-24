@@ -64,11 +64,11 @@ import org.joml.Vector3dc;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import static me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor.elementSelectionKey;
 
@@ -136,12 +136,7 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.select")
     @RequireSession
     public void select(EasyArmorStandsCommon eas, EasPlayer sender, Session session, @Argument("entities") MultipleEntitySelector selector) {
-        selectGroup(eas, sender, session, selector.values().stream()
-                .map(eas::getElement)
-                .filter(element -> element instanceof EditableElement)
-                .map(element -> (EditableElement) element)
-                .filter(sender::canEditElement)
-                .iterator());
+        selectGroup(eas, sender, session, selector.values(), _ -> true);
     }
 
     @Command("clone")
@@ -569,13 +564,7 @@ public class SessionCommands {
     @CommandDescription("easyarmorstands.command.description.select.tag")
     @RequireSession
     public void selectTag(EasyArmorStandsCommon eas, EasPlayer sender, Session session, @Argument(value = "value", suggestions = "discoverable_tags") String tag) {
-        selectGroup(eas, sender, session, sender.get().world().getEntities().stream()
-                .filter(entity -> entity.getScoreboardTags().contains(tag))
-                .map(eas::getElement)
-                .filter(element -> element instanceof EditableElement)
-                .map(element -> (EditableElement) element)
-                .filter(sender::canEditElement)
-                .iterator());
+        selectGroup(eas, sender, session, sender.get().world().getEntities(), e -> e.getScoreboardTags().contains(tag));
     }
 
     @Suggestions("selection_tags")
@@ -620,10 +609,15 @@ public class SessionCommands {
         return tags;
     }
 
-    private void selectGroup(EasyArmorStandsCommon eas, EasPlayer sender, Session session, Iterator<EditableElement> elements) {
+    private void selectGroup(EasyArmorStandsCommon eas, EasPlayer sender, Session session, Iterable<Entity> entities, Predicate<Entity> filter) {
         Group group = new Group(session);
-        while (elements.hasNext()) {
-            EditableElement element = elements.next();
+        for (Entity entity : entities) {
+            if (!(eas.getElement(entity) instanceof EditableElement element)) {
+                continue;
+            }
+            if (!sender.canEditElement(element)) {
+                continue;
+            }
             if (group.getMembers().size() >= eas.getConfiguration().editor.selection.group.limit) {
                 sender.sendMessage(Message.error("easyarmorstands.error.group-too-big"));
                 return;

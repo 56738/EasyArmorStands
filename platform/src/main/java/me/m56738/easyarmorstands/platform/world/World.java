@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public interface World extends Keyed {
-    Collection<Entity> getEntities();
+    Iterable<Entity> getEntities();
 
     Entity spawn(Location location, EntityType type, Consumer<Entity> configurer);
 

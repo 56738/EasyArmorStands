@@ -1,10 +1,15 @@
 [versions]
 adventure = "5.2.0"
+adventure-platform-mod = "7.1.1"
 bentobox = "3.17.0"
 bstats = "3.2.1"
 cloud = "2.1.0"
 cloud-minecraft = "2.0.0"
+cloud-minecraft-modded = "2.0.0"
 configurate = "4.2.0"
+fabric-api = "0.155.2+26.2"
+fabric-loader = "0.19.3"
+fabric-loom = "1.17-SNAPSHOT"
 fancyholograms = "2.10.0"
 gizmo = "1.1.0"
 griefdefender = "2.1.1-SNAPSHOT"
@@ -18,6 +23,8 @@ jspecify = "1.0.0"
 lands = "7.25.4"
 minecraft = "26.2"
 minotaur = "2.9.0"
+moddev = "2.0.142"
+neoform = "26.2-2"
 paper = "26.2.build.+"
 plotsquared = "7.5.13"
 residence = "6.0.2.3"
@@ -31,6 +38,8 @@ worldguard = "7.0.17"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-platform-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-platform-mod" }
+adventure-platform-mod-shared = { module = "net.kyori:adventure-platform-mod-shared", version.ref = "adventure-platform-mod" }
 adventure-text-logger-slf4j = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
@@ -38,9 +47,13 @@ bentobox = { module = "world.bentobox:bentobox", version.ref = "bentobox" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
 cloud-core = { module = "org.incendo:cloud-core", version.ref = "cloud" }
+cloud-fabric = { module = "org.incendo:cloud-fabric", version.ref = "cloud-minecraft-modded" }
 cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-minecraft" }
+cloud-neoforge = { module = "org.incendo:cloud-neoforge", version.ref = "cloud-minecraft-modded" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fancyholograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
 gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" }
 gizmo-common = { module = "me.m56738.gizmo:gizmo-common", version.ref = "gizmo" }
@@ -52,6 +65,7 @@ huskclaims-bukkit = { module = "net.william278.huskclaims:huskclaims-bukkit", ve
 joml = { module = "org.joml:joml", version.ref = "joml" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 lands-api = { module = "com.github.angeschossen:LandsAPI", version.ref = "lands" }
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 plotsquared-bukkit = { module = "com.intellectualsites.plotsquared:plotsquared-bukkit", version.ref = "plotsquared" }
 plotsquared-core = { module = "com.intellectualsites.plotsquared:plotsquared-core", version.ref = "plotsquared" }
@@ -62,8 +76,10 @@ traincarts = { module = "com.bergerkiller.bukkit:TrainCarts", version.ref = "tra
 worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 
 [plugins]
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish-plugin" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
 resource-factory-paper-convention = { id = "xyz.jpenilla.resource-factory-paper-convention", version.ref = "resource-factory" }
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

@@ -2,9 +2,9 @@ package me.m56738.easyarmorstands.platform.paper.block;
 
 import me.m56738.easyarmorstands.platform.block.BlockData;
 import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemType;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemType;
-import org.jspecify.annotations.Nullable;
+
+import java.util.Objects;
 
 public interface PaperBlockData extends BlockData {
     static PaperBlockData fromNative(org.bukkit.block.data.BlockData data) {
@@ -23,15 +23,8 @@ public interface PaperBlockData extends BlockData {
     }
 
     @Override
-    default @Nullable PaperItemType getPlacementItemType() {
-        Material material = getNative().getPlacementMaterial();
-        if (material.isAir()) {
-            return PaperItemType.fromNative(ItemType.AIR);
-        }
-        ItemType itemType = material.asItemType();
-        if (itemType == null) {
-            return null;
-        }
-        return PaperItemType.fromNative(itemType);
+    default PaperItemType getPlacementItemType() {
+        ItemType itemType = getNative().getPlacementMaterial().asItemType();
+        return PaperItemType.fromNative(Objects.requireNonNullElse(itemType, ItemType.AIR));
     }
 }
