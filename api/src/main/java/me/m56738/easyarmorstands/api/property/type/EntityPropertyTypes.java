@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.api.formatter.NumberFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -44,6 +45,7 @@ public final class EntityPropertyTypes {
                         .name(Component.translatable("easyarmorstands.property.equipment." + name.replace("_", "-") + ".name"))
                         .formatter(new ItemStackFormatter())
                         .permission("easyarmorstands.property.equipment." + name.replace("_", ""))
+                        .canCopyPredicate(player -> player.getGameMode() == GameMode.CREATIVE)
                         .build();
             });
     public static final PropertyType<Boolean> GLOWING = PropertyType.builder(key("entity/glowing"), Boolean.class)

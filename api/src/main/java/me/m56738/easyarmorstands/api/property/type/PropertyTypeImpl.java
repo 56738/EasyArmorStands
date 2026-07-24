@@ -4,18 +4,20 @@ import me.m56738.easyarmorstands.api.formatter.StringFormatter;
 import me.m56738.easyarmorstands.api.formatter.ValueFormatter;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 @NullMarked
 record PropertyTypeImpl<T>(
         Key key,
         Component name,
         ValueFormatter<T> formatter,
-        @Nullable String permission
-) implements PropertyType<T> {
+        @Nullable String permission,
+        Predicate<Player> canCopyPredicate) implements PropertyType<T> {
     @Override
     public Component getName() {
         return name;
@@ -36,11 +38,17 @@ record PropertyTypeImpl<T>(
         return formatter.formatAsString(value);
     }
 
+    @Override
+    public boolean canCopy(Player player) {
+        return canCopyPredicate.test(player);
+    }
+
     static class Builder<T> implements PropertyType.Builder<T> {
         private final Key key;
         private Component name;
         private ValueFormatter<T> formatter = new StringFormatter<>();
         private @Nullable String permission;
+        private Predicate<Player> canCopyPredicate = p -> true;
 
         public Builder(Key key) {
             this.key = key;
@@ -66,8 +74,14 @@ record PropertyTypeImpl<T>(
         }
 
         @Override
+        public Builder<T> canCopyPredicate(Predicate<Player> predicate) {
+            this.canCopyPredicate = predicate;
+            return this;
+        }
+
+        @Override
         public PropertyType<T> build() {
-            return new PropertyTypeImpl<>(key, name, formatter, permission);
+            return new PropertyTypeImpl<>(key, name, formatter, permission, canCopyPredicate);
         }
     }
 }

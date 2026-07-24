@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.api.property.type;
 
 import me.m56738.easyarmorstands.api.formatter.ItemStackFormatter;
+import org.bukkit.GameMode;
 import org.bukkit.entity.ItemDisplay.ItemDisplayTransform;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
@@ -16,6 +17,7 @@ public final class ItemDisplayPropertyTypes {
             .name(translatable("easyarmorstands.property.item.name"))
             .formatter(new ItemStackFormatter())
             .permission("easyarmorstands.property.display.item")
+            .canCopyPredicate(player -> player.getGameMode() == GameMode.CREATIVE)
             .build();
     public static final PropertyType<ItemDisplayTransform> TRANSFORM = PropertyType.builder(key("item_display/transform"), ItemDisplayTransform.class)
             .name(translatable("easyarmorstands.property.item-display.transform.name"))

@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 public interface PropertyType<T> extends Keyed {
     static <T> Builder<T> builder(Key key) {
         return new PropertyTypeImpl.Builder<>(key);
@@ -73,6 +75,8 @@ public interface PropertyType<T> extends Keyed {
         Builder<T> formatter(ValueFormatter<T> formatter);
 
         Builder<T> permission(String permission);
+
+        Builder<T> canCopyPredicate(Predicate<Player> predicate);
 
         PropertyType<T> build();
     }
