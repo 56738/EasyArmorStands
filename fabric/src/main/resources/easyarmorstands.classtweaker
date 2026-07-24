@@ -1,0 +1,3 @@
+classTweaker v1 official
+accessible field net/minecraft/server/level/ServerPlayer language Ljava/lang/String;
+accessible field net/minecraft/world/entity/decoration/Mannequin VALID_POSES Ljava/util/Set;

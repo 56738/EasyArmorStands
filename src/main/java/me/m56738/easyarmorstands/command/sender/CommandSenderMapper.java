@@ -15,7 +15,7 @@ public class CommandSenderMapper implements SenderMapper<CommandSender, EasComma
 
     @Override
     public @NonNull EasCommandSender map(@NonNull CommandSender base) {
-        if (base instanceof Player player) {
+        if (base instanceof Player player && eas.isInitialized()) {
             return new EasPlayer(eas.get(), player);
         }
         return new EasCommandSender(base);

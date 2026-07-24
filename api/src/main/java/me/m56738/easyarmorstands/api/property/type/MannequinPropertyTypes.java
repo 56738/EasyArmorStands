@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.platform.entity.Pose;
 import me.m56738.easyarmorstands.platform.profile.Profile;
 import me.m56738.easyarmorstands.platform.util.MainHand;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.object.ObjectContents;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
@@ -29,7 +28,7 @@ public final class MannequinPropertyTypes {
             .build();
     public static final PropertyType<Profile> PROFILE = PropertyType.builder(key("mannequin/profile"), Profile.class)
             .name(translatable("easyarmorstands.property.mannequin.profile.name"))
-            .formatter(value -> Component.object(ObjectContents.playerHead(value)))
+            .formatter(Component::object)
             .permission("easyarmorstands.property.mannequin.profile")
             .build();
     public static final PropertyType<Boolean> IMMOVABLE = PropertyType.builder(key("mannequin/immovable"), Boolean.class)

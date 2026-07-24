@@ -34,11 +34,6 @@ public interface PaperCommandSender extends CommandSender, ForwardingAudience.Si
     }
 
     @Override
-    default boolean isPermissionSet(String permission) {
-        return getNative().isPermissionSet(permission);
-    }
-
-    @Override
     default void showDialog(DialogLike dialog) {
         if (dialog instanceof PaperDialog paperDialog) {
             getNative().showDialog(paperDialog.getNative());

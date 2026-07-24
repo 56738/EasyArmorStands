@@ -13,7 +13,7 @@ public interface ModdedCommandSender extends CommandSender, ModdedPlatformHolder
         if (player != null) {
             return ModdedPlayer.fromNative(platform, player);
         } else {
-            return new ModdedCommandSenderImpl(platform, stack);
+            return new ModdedCommandSourceStackImpl(platform, stack);
         }
     }
 }

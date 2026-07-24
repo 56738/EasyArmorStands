@@ -4,6 +4,4 @@ import net.kyori.adventure.audience.Audience;
 
 public interface CommandSender extends Audience {
     boolean hasPermission(String permission);
-
-    boolean isPermissionSet(String permission);
 }

@@ -3,67 +3,61 @@ package me.m56738.easyarmorstands.modded;
 import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
-import me.m56738.easyarmorstands.event.EventDispatcher;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.modded.api.EasyArmorStandsModded;
+import me.m56738.easyarmorstands.modded.particle.ModdedParticleProviderFactory;
+import me.m56738.easyarmorstands.modded.session.ModdedSessionToolProvider;
 import me.m56738.easyarmorstands.particle.ParticleProviderFactory;
-import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
+import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.incendo.cloud.CommandManager;
-import org.jspecify.annotations.Nullable;
-
-import java.nio.file.Path;
 
 public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon implements EasyArmorStandsModded {
-    private @Nullable ModdedServerGizmos gizmos;
-    private @Nullable ParticleProviderFactory particleProviderFactory;
+    public static final ComponentLogger LOGGER = ComponentLogger.logger("EasyArmorStands");
 
-    public EasyArmorStandsModdedImpl(TranslationManager translationManager, Platform platform, CommandManager<EasCommandSender> commandManager) {
+    private final ClassLoader classLoader;
+    private final ModdedServerGizmos gizmos;
+    private final ParticleProviderFactory particleProviderFactory;
+    private final ModdedSessionToolProvider sessionToolProvider;
+
+    public EasyArmorStandsModdedImpl(TranslationManager translationManager, ModdedPlatform platform, CommandManager<EasCommandSender> commandManager, ClassLoader classLoader) {
         super(translationManager, platform, commandManager);
+        this.classLoader = classLoader;
+        this.gizmos = ModdedServerGizmos.create();
+        this.particleProviderFactory = new ModdedParticleProviderFactory(gizmos);
+        this.sessionToolProvider = new ModdedSessionToolProvider(this);
     }
 
     @Override
     public ParticleProviderFactory particleProviderFactory() {
-        if (particleProviderFactory == null) {
-            throw new IllegalStateException();
-        }
         return particleProviderFactory;
     }
 
     @Override
     public SessionToolProvider sessionToolProvider() {
-        return null;
-    }
-
-    @Override
-    public Path getConfigFolder() {
-        return null;
+        return sessionToolProvider;
     }
 
     @Override
     public ComponentLogger getLogger() {
-        return null;
+        return LOGGER;
     }
 
     @Override
     public ClassLoader getClassLoader() {
-        return null;
-    }
-
-    @Override
-    public EventDispatcher eventDispatcher() {
-        return null;
+        return classLoader;
     }
 
     @Override
     public Menu createColorPicker(Player player, Property<ItemStack> property) {
-        return null;
+        throw new IllegalArgumentException(); // TODO
     }
 
     @Override
@@ -73,6 +67,12 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     @Override
     public ItemStack createEntitySpawnEgg(Entity entity) {
-        return null;
+        return ModdedItemStack.fromNative((ModdedPlatform) platform(), net.minecraft.world.item.ItemStack.EMPTY);
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        gizmos.close();
     }
 }

@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.paper.command;
 
 import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
+import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.util.MultipleEntitySelector;
 import me.m56738.easyarmorstands.command.util.MultiplePlayerSelector;
 import me.m56738.easyarmorstands.command.util.SingleEntitySelector;
@@ -19,32 +20,32 @@ import java.util.concurrent.CompletableFuture;
 
 public class PaperArgumentParserProvider implements ArgumentParserProvider {
     @Override
-    public <C> ParserDescriptor<C, Location> locationParser() {
+    public <C extends EasCommandSender> ParserDescriptor<C, Location> locationParser() {
         return LocationParser.<C>locationParser().mapSuccess(Location.class,
-                (context, location) ->
+                (_, location) ->
                         CompletableFuture.completedFuture(PaperAdapter.fromNative(location)));
     }
 
     @Override
-    public <C> ParserDescriptor<C, SingleEntitySelector> singleEntitySelector() {
+    public <C extends EasCommandSender> ParserDescriptor<C, SingleEntitySelector> singleEntitySelector() {
         return SingleEntitySelectorParser.<C>singleEntitySelectorParser().mapSuccess(SingleEntitySelector.class,
-                (context, selector) ->
+                (_, selector) ->
                         CompletableFuture.completedFuture(new SingleEntitySelector(
                                 PaperEntity.fromNative(selector.single()))));
     }
 
     @Override
-    public <C> ParserDescriptor<C, MultipleEntitySelector> multipleEntitySelector() {
+    public <C extends EasCommandSender> ParserDescriptor<C, MultipleEntitySelector> multipleEntitySelector() {
         return MultipleEntitySelectorParser.<C>multipleEntitySelectorParser().mapSuccess(MultipleEntitySelector.class,
-                (context, selector) ->
+                (_, selector) ->
                         CompletableFuture.completedFuture(new MultipleEntitySelector(
                                 new MappedCollection<>(selector.values(), PaperEntity::fromNative))));
     }
 
     @Override
-    public <C> ParserDescriptor<C, MultiplePlayerSelector> multiplePlayerSelector() {
+    public <C extends EasCommandSender> ParserDescriptor<C, MultiplePlayerSelector> multiplePlayerSelector() {
         return MultiplePlayerSelectorParser.<C>multiplePlayerSelectorParser(false).mapSuccess(MultiplePlayerSelector.class,
-                (context, selector) ->
+                (_, selector) ->
                         CompletableFuture.completedFuture(new MultiplePlayerSelector(
                                 new MappedCollection<>(selector.values(), PaperPlayer::fromNative))));
     }

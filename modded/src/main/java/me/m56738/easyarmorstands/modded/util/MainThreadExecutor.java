@@ -1,23 +1,27 @@
 package me.m56738.easyarmorstands.modded.util;
 
-import me.m56738.easyarmorstands.platform.scheduler.Scheduler;
+import net.minecraft.server.MinecraftServer;
 import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.Executor;
 
 public class MainThreadExecutor implements Executor {
-    private @Nullable Scheduler scheduler;
+    private @Nullable MinecraftServer server;
 
-    public void setScheduler(@Nullable Scheduler scheduler) {
-        this.scheduler = scheduler;
+    public MainThreadExecutor(@Nullable MinecraftServer server) {
+        this.server = server;
+    }
+
+    public void setServer(@Nullable MinecraftServer server) {
+        this.server = server;
     }
 
     @Override
     public void execute(Runnable command) {
-        if (scheduler != null) {
-            scheduler.runTask(command);
-        } else {
+        if (server == null || server.isSameThread()) {
             command.run();
+        } else {
+            server.execute(command);
         }
     }
 }

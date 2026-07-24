@@ -32,6 +32,7 @@ public interface ModdedEntitySnapshot extends EntitySnapshot, ModdedPlatformHold
         if (entity == null) {
             throw new IllegalArgumentException();
         }
+        level.addFreshEntity(entity);
         return ModdedEntity.fromNative(getPlatform(), entity);
     }
 }

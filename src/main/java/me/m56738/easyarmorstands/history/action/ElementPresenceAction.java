@@ -48,7 +48,7 @@ abstract class ElementPresenceAction implements Action {
         }
 
         Element element = null;
-        if (type instanceof EntityElementType<?> entityElementType && player.permissions().test(Permissions.COPY_ENTITY)) {
+        if (type instanceof EntityElementType<?> entityElementType && player.get().hasPermission(Permissions.COPY_ENTITY)) {
             element = createEntity(entityElementType);
         }
         if (element == null) {

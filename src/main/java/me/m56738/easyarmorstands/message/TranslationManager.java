@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,35 +24,37 @@ public class TranslationManager {
     private final Set<Locale> loadedLocales = new HashSet<>();
     private PatternTranslationStore registry = new PatternTranslationStore(key);
 
-    public void load(Path dataFolder, ComponentLogger logger) {
+    public void load(@Nullable Path dataFolder, ComponentLogger logger) {
         GlobalTranslator.translator().removeSource(registry);
 
         registry = new PatternTranslationStore(key);
         loadedLocales.clear();
 
         // Convert old message files
-        Path langPath = dataFolder.resolve("lang");
-        try (Stream<Path> paths = Files.list(dataFolder)) {
-            paths.forEach(path -> {
-                try {
-                    if (MessageMigrator.migrate(path, langPath)) {
-                        logger.info("Migrated custom messages: {}", path.getFileName().toString());
+        if (dataFolder != null) {
+            Path langPath = dataFolder.resolve("lang");
+            try (Stream<Path> paths = Files.list(dataFolder)) {
+                paths.forEach(path -> {
+                    try {
+                        if (MessageMigrator.migrate(path, langPath)) {
+                            logger.info("Migrated custom messages: {}", path.getFileName().toString());
+                        }
+                    } catch (Exception e) {
+                        logger.error("Failed to convert old message file: {}", path.getFileName().toString(), e);
                     }
-                } catch (Exception e) {
-                    logger.error("Failed to convert old message file: {}", path.getFileName().toString(), e);
-                }
-            });
-        } catch (NoSuchFileException ignored) {
-        } catch (IOException e) {
-            logger.error("Failed to convert old message files", e);
-        }
+                });
+            } catch (NoSuchFileException ignored) {
+            } catch (IOException e) {
+                logger.error("Failed to convert old message files", e);
+            }
 
-        // Load custom locales
-        try (Stream<Path> paths = Files.list(langPath)) {
-            paths.forEach(path -> loadFile(path, logger));
-        } catch (NoSuchFileException ignored) {
-        } catch (IOException e) {
-            logger.error("Failed to load messages", e);
+            // Load custom locales
+            try (Stream<Path> paths = Files.list(langPath)) {
+                paths.forEach(path -> loadFile(path, logger));
+            } catch (NoSuchFileException ignored) {
+            } catch (IOException e) {
+                logger.error("Failed to load messages", e);
+            }
         }
 
         // Load included default locales

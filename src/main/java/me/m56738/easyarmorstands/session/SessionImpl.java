@@ -195,7 +195,7 @@ public final class SessionImpl implements Session {
         }
         if (hasClickCooldown(context.type())) {
             if (clickTicks > 0) {
-                return false;
+                return true;
             }
             clickTicks = 5;
         }
@@ -211,7 +211,7 @@ public final class SessionImpl implements Session {
             }
         }
 
-        return false;
+        return context.type() != ClickContext.Type.DROP;
     }
 
     @Override

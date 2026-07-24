@@ -3,6 +3,11 @@ package me.m56738.easyarmorstands.platform.paper.inventory;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public interface PaperPlayerInventory extends PlayerInventory, PaperInventory {
     static PaperPlayerInventory fromNative(org.bukkit.inventory.PlayerInventory inventory) {
         return new PaperPlayerInventoryImpl(inventory);
@@ -12,6 +17,15 @@ public interface PaperPlayerInventory extends PlayerInventory, PaperInventory {
 
     static org.bukkit.inventory.PlayerInventory toNative(PlayerInventory inventory) {
         return ((PaperPlayerInventory) inventory).getNative();
+    }
+
+    @Override
+    default HashMap<Integer, ItemStack> addItem(ItemStack... items) {
+        return new HashMap<>(getNative().addItem(Arrays.stream(items)
+                        .map(PaperItemStack::toNative)
+                        .toArray(org.bukkit.inventory.ItemStack[]::new))
+                .entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> PaperItemStack.fromNative(e.getValue()))));
     }
 
     @Override

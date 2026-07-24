@@ -35,15 +35,6 @@ public interface PaperInventory extends Inventory {
     }
 
     @Override
-    default HashMap<Integer, ItemStack> addItem(ItemStack... items) {
-        return new HashMap<>(getNative().addItem(Arrays.stream(items)
-                        .map(PaperItemStack::toNative)
-                        .toArray(org.bukkit.inventory.ItemStack[]::new))
-                .entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> PaperItemStack.fromNative(e.getValue()))));
-    }
-
-    @Override
     default void clear(int i) {
         getNative().clear(i);
     }

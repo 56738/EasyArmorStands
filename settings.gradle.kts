@@ -1,4 +1,4 @@
-rootProject.name = "EasyArmorStands"
+rootProject.name = "easyarmorstands"
 
 pluginManagement {
     repositories {

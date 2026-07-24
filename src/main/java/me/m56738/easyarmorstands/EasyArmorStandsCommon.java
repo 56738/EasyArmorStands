@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands;
 
 import io.leangen.geantyref.TypeToken;
 import me.m56738.easyarmorstands.api.EasyArmorStands;
+import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.element.ElementDiscoverySource;
@@ -15,6 +16,15 @@ import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
+import me.m56738.easyarmorstands.command.ClipboardCommands;
+import me.m56738.easyarmorstands.command.DisplayCommands;
+import me.m56738.easyarmorstands.command.HistoryCommands;
+import me.m56738.easyarmorstands.command.PropertyCommands;
+import me.m56738.easyarmorstands.command.SessionCommands;
+import me.m56738.easyarmorstands.command.annotation.PropertyPermission;
+import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
+import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
+import me.m56738.easyarmorstands.command.parser.LayerValueArgumentParser;
 import me.m56738.easyarmorstands.command.processor.ClipboardInjector;
 import me.m56738.easyarmorstands.command.processor.ClipboardProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementInjector;
@@ -22,10 +32,18 @@ import me.m56738.easyarmorstands.command.processor.ElementProcessor;
 import me.m56738.easyarmorstands.command.processor.ElementSelectionInjector;
 import me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor;
 import me.m56738.easyarmorstands.command.processor.GroupProcessor;
+import me.m56738.easyarmorstands.command.processor.PropertyPermissionBuilderModifier;
 import me.m56738.easyarmorstands.command.processor.SessionInjector;
 import me.m56738.easyarmorstands.command.processor.SessionProcessor;
 import me.m56738.easyarmorstands.command.processor.ValueLayerInjector;
+import me.m56738.easyarmorstands.command.requirement.CommandRequirementBuilderModifier;
 import me.m56738.easyarmorstands.command.requirement.CommandRequirementPostProcessor;
+import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
+import me.m56738.easyarmorstands.command.requirement.ElementSelectionRequirement;
+import me.m56738.easyarmorstands.command.requirement.RequireElement;
+import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
+import me.m56738.easyarmorstands.command.requirement.RequireSession;
+import me.m56738.easyarmorstands.command.requirement.SessionRequirement;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
@@ -64,6 +82,8 @@ import me.m56738.easyarmorstands.message.MessageManager;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.particle.ParticleProviderFactory;
 import me.m56738.easyarmorstands.platform.Platform;
+import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.block.BlockData;
 import me.m56738.easyarmorstands.platform.entity.BlockDisplay;
 import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.entity.EntityType;
@@ -80,16 +100,28 @@ import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
+import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.description.Description;
 import org.incendo.cloud.exception.InvalidCommandSenderException;
+import org.incendo.cloud.help.result.CommandEntry;
 import org.incendo.cloud.injection.ParameterInjector;
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.minecraft.extras.parser.TextColorParser;
+import org.incendo.cloud.minecraft.extras.suggestion.ComponentTooltipSuggestion;
+import org.incendo.cloud.services.type.ConsumerService;
+import org.incendo.cloud.suggestion.Suggestion;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -136,6 +168,68 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         this.translationManager = translationManager;
         this.commandManager = commandManager;
         this.serializers = EasSerializers.serializers(this);
+    }
+
+    public static void registerCommands(CommandManager<EasCommandSender> commandManager, ArgumentParserProvider parserProvider, ClassLoader classLoader, EasyArmorStandsHolder holder) {
+        commandManager.parserRegistry().registerSuggestionProvider("help_queries",
+                SuggestionProvider.blocking((ctx, _) -> commandManager.createHelpHandler()
+                        .queryRootIndex(ctx.sender())
+                        .entries()
+                        .stream()
+                        .map(EasyArmorStandsCommon::createSuggestion)
+                        .toList()));
+        commandManager.parserRegistry().registerNamedParserSupplier("node_value",
+                _ -> new LayerValueArgumentParser<>());
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(TextColor.class),
+                _ -> new TextColorParser<>());
+        commandManager.parserRegistry().registerParserSupplier(TypeToken.get(BlockData.class),
+                _ -> new BlockDataArgumentParser<>());
+
+        commandManager.parserRegistry().registerParser(parserProvider.locationParser());
+        commandManager.parserRegistry().registerParser(parserProvider.singleEntitySelector());
+        commandManager.parserRegistry().registerParser(parserProvider.multipleEntitySelector());
+        commandManager.parserRegistry().registerParser(parserProvider.multiplePlayerSelector());
+
+        AnnotationParser<EasCommandSender> annotationParser = new AnnotationParser<>(commandManager, EasCommandSender.class);
+        annotationParser.descriptionMapper(RichDescription::translatable);
+
+        annotationParser.registerBuilderModifier(RequireSession.class, new CommandRequirementBuilderModifier<>(_ -> new SessionRequirement()));
+        annotationParser.registerBuilderModifier(RequireElement.class, new CommandRequirementBuilderModifier<>(_ -> new ElementRequirement()));
+        annotationParser.registerBuilderModifier(RequireElementSelection.class, new CommandRequirementBuilderModifier<>(_ -> new ElementSelectionRequirement()));
+
+        annotationParser.registerBuilderModifier(PropertyPermission.class, new PropertyPermissionBuilderModifier(holder));
+        annotationParser.parse(new SessionCommands());
+        annotationParser.parse(new HistoryCommands());
+        annotationParser.parse(new ClipboardCommands());
+        annotationParser.parse(new DisplayCommands());
+        try {
+            annotationParser.parseContainers(classLoader);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        PropertyCommands.register(commandManager, parserProvider);
+
+        commandManager.registerCommandPreProcessor(context -> {
+            if (!holder.isInitialized()) {
+                context.commandContext().sender().sendMessage(Component.text("EasyArmorStands failed to load", NamedTextColor.RED));
+                ConsumerService.interrupt();
+            }
+        });
+    }
+
+    private static Suggestion createSuggestion(CommandEntry<EasCommandSender> entry) {
+        Description description = entry.command().commandDescription().description();
+        String syntax = entry.syntax();
+        Component tooltip;
+        if (description instanceof RichDescription richDescription) {
+            tooltip = richDescription.contents();
+        } else if (!description.isEmpty()) {
+            tooltip = Component.text(description.textDescription());
+        } else {
+            return Suggestion.suggestion(syntax);
+        }
+        return ComponentTooltipSuggestion.suggestion(syntax, tooltip);
     }
 
     public abstract String getVersion();
@@ -228,7 +322,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
                 .defaultCommandExecutionHandler()
                 .defaultInvalidSenderHandler()
                 .handler(InvalidCommandSenderException.class,
-                        (formatter, context) -> Message.error("easyarmorstands.error.not-a-player"))
+                        (_, _) -> Message.error("easyarmorstands.error.not-a-player"))
                 .registerTo(commandManager);
 
         MinecraftHelp<EasCommandSender> help = MinecraftHelp.createNative("/eas help", commandManager);
@@ -500,7 +594,32 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
     public abstract ItemStack createEntitySpawnEgg(Entity entity);
 
     public void update() {
-        sessionManager.update();
+        if (sessionManager != null) {
+            sessionManager.update();
+        }
+    }
+
+    public boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity, @Nullable Block block) {
+        if (sessionManager == null) {
+            return false;
+        }
+        SessionImpl session = sessionManager.getSession(player);
+        if (session != null) {
+            return session.handleClick(new ClickContextImpl(session.eyeRay(), type, entity, block));
+        }
+        if (type == ClickContext.Type.RIGHT_CLICK && sessionManager.isHoldingTool(player)) {
+            session = sessionManager.startSession(player);
+            session.setToolRequired(true);
+            return true;
+        }
+        return false;
+    }
+
+    public void handleSwitchSlot(Player player) {
+        if (sessionManager == null) {
+            return;
+        }
+        sessionManager.updateHeldItem(player);
     }
 
     private interface ConfigProcessor {

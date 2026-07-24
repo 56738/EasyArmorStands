@@ -30,11 +30,8 @@ public class DebugCommand {
     public void debug(EasCommandSender sender, EasyArmorStandsCommon common, Platform platform) {
         String version = common.getVersion();
         sender.sendMessage(Component.text("EasyArmorStands v" + version, NamedTextColor.GOLD, TextDecoration.UNDERLINED));
-        sender.sendMessage(debugLine(Component.text("Server"), Component.text()
-                .append(Component.text(platform.getName()))
-                .appendSpace()
-                .append(Component.text(platform.getVersion()))
-                .build()));
+        sender.sendMessage(debugLine(Component.text(platform.getName()), Component.text(platform.getVersion())));
+        sender.sendMessage(debugLine(Component.text("Game"), Component.text(platform.getGameVersion())));
 
         if (sender instanceof EasPlayer) {
             SessionImpl session = ((EasPlayer) sender).session();

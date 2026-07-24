@@ -8,6 +8,9 @@ import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.command.ModdedCommandSender;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
+import me.m56738.easyarmorstands.platform.modded.inventory.ModdedPlayerInventory;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.Translator;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +19,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Locale;
 import java.util.Objects;
 
-public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandSender {
+public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandSender, ForwardingAudience.Single {
     ServerPlayer getNative();
 
     static ModdedPlayer fromNative(ModdedPlatform platform, ServerPlayer player) {
@@ -28,18 +31,18 @@ public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandS
     }
 
     @Override
+    default Audience audience() {
+        return getPlatform().getAdventure().audience(getNative());
+    }
+
+    @Override
     default boolean isOnline() {
         return isValid();
     }
 
     @Override
     default boolean hasPermission(String permission) {
-        return getPlatform().isPermissionSet(getNative(), permission);
-    }
-
-    @Override
-    default boolean isPermissionSet(String permission) {
-        return getPlatform().isPermissionSet(getNative(), permission);
+        return getPlatform().hasPermission(getNative(), permission);
     }
 
     @Override
@@ -54,7 +57,7 @@ public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandS
 
     @Override
     default PlayerInventory getInventory() {
-        return null; // TODO
+        return ModdedPlayerInventory.fromNative(getPlatform(), getNative().getInventory());
     }
 
     @Override
@@ -79,7 +82,7 @@ public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandS
 
     @Override
     default void closeInventory() {
-        // TODO
+        getNative().closeContainer();
     }
 
     @Override

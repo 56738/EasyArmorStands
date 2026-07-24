@@ -53,7 +53,7 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     default Location location() {
         net.minecraft.world.entity.Entity entity = getNative();
         Vector3d position = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
-        return Location.of(world(), position, entity.getYRot(), entity.getXRot());
+        return Location.of(world(), position, entity.getYHeadRot(), entity.getXRot());
     }
 
     @Override

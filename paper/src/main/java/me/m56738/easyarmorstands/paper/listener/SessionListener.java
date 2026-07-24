@@ -15,7 +15,6 @@ import me.m56738.easyarmorstands.platform.paper.entity.PaperPlayer;
 import me.m56738.easyarmorstands.platform.paper.inventory.PaperItemStack;
 import me.m56738.easyarmorstands.session.SessionImpl;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
-import me.m56738.easyarmorstands.session.context.ClickContextImpl;
 import org.bukkit.block.Block;
 import org.bukkit.block.Crafter;
 import org.bukkit.entity.Entity;
@@ -44,6 +43,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShowEntityEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,77 +61,29 @@ public class SessionListener implements Listener {
         this.manager = eas.sessionManager();
     }
 
-    private void handleClick(Player player, SessionImpl session, ClickContext.Type leftClick, Entity entity, Block block) {
+    private boolean handleClick(Player player, ClickContext.Type type, @Nullable Entity entity, @Nullable Block block) {
         if (!suppressClick.containsKey(player)) {
             PaperEntity paperEntity = entity != null ? PaperEntity.fromNative(entity) : null;
             PaperBlock paperBlock = block != null ? PaperBlock.fromNative(block) : null;
-            session.handleClick(new ClickContextImpl(session.eyeRay(), leftClick, paperEntity, paperBlock));
+            return eas.handleClick(PaperPlayer.fromNative(player), type, paperEntity, paperBlock);
         }
-    }
-
-    public boolean handleLeftClick(Player player, Entity entity, Block block) {
-        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
-        if (session == null) {
-            return false;
-        }
-        handleClick(player, session, ClickContext.Type.LEFT_CLICK, entity, block);
         return true;
     }
 
-    public boolean handleLeftClick(Player player) {
-        return handleLeftClick(player, null, null);
+    public boolean handleLeftClick(Player player, @Nullable Entity entity, @Nullable Block block) {
+        return handleClick(player, ClickContext.Type.LEFT_CLICK, entity, block);
     }
 
-    public boolean handleLeftClick(Player player, Block block) {
-        return handleLeftClick(player, null, block);
-    }
-
-    public boolean handleLeftClick(Player player, Entity entity) {
-        return handleLeftClick(player, entity, null);
-    }
-
-    private boolean handleRightClick(Player player, Entity entity, Block block) {
-        PaperPlayer paperPlayer = PaperPlayer.fromNative(player);
-        SessionImpl session = manager.getSession(paperPlayer);
-        if (session != null) {
-            handleClick(player, session, ClickContext.Type.RIGHT_CLICK, entity, block);
-            return true;
-        }
-        if (!manager.isHoldingTool(paperPlayer)) {
-            return false;
-        }
-        session = manager.startSession(paperPlayer);
-        session.setToolRequired(true);
-        return true;
-    }
-
-    public boolean handleRightClick(Player player) {
-        return handleRightClick(player, null, null);
-    }
-
-    public boolean handleRightClick(Player player, Block block) {
-        return handleRightClick(player, null, block);
-    }
-
-    public boolean handleRightClick(Player player, Entity entity) {
-        return handleRightClick(player, entity, null);
+    private boolean handleRightClick(Player player, @Nullable Entity entity, @Nullable Block block) {
+        return handleClick(player, ClickContext.Type.RIGHT_CLICK, entity, block);
     }
 
     public boolean handleSwap(Player player) {
-        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
-        if (session == null) {
-            return false;
-        }
-        session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.SWAP_HANDS, null, null));
-        return true;
+        return handleClick(player, ClickContext.Type.SWAP_HANDS, null, null);
     }
 
     public boolean handleDrop(Player player) {
-        SessionImpl session = manager.getSession(PaperPlayer.fromNative(player));
-        if (session == null) {
-            return false;
-        }
-        return session.handleClick(new ClickContextImpl(session.eyeRay(), ClickContext.Type.DROP, null, null));
+        return handleClick(player, ClickContext.Type.DROP, null, null);
     }
 
     @EventHandler
@@ -159,7 +111,8 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (handleLeftClick(event.getPlayer(), event.getClickedBlock())) {
+        Block block = event.getClickedBlock();
+        if (handleLeftClick(event.getPlayer(), null, block)) {
             event.setCancelled(true);
         }
     }
@@ -167,12 +120,11 @@ public class SessionListener implements Listener {
     @EventHandler
     public void onLeftClick(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
-        if (!(attacker instanceof Player)) {
+        if (!(attacker instanceof Player player)) {
             return;
         }
-        Player player = (Player) attacker;
         Entity entity = event.getEntity();
-        if (handleLeftClick(player, entity)) {
+        if (handleLeftClick(player, entity, null)) {
             event.setCancelled(true);
         }
     }
@@ -186,7 +138,7 @@ public class SessionListener implements Listener {
 
         eas.platform().getScheduler().runTask(() -> {
             if (!suppressArmSwing.containsKey(event.getPlayer())) {
-                handleLeftClick(event.getPlayer());
+                handleLeftClick(event.getPlayer(), null, null);
             }
         });
     }
@@ -222,7 +174,8 @@ public class SessionListener implements Listener {
             return;
         }
 
-        if (handleRightClick(event.getPlayer(), event.getClickedBlock())) {
+        Block block = event.getClickedBlock();
+        if (handleRightClick(event.getPlayer(), null, block)) {
             event.setCancelled(true);
         }
     }
@@ -231,7 +184,7 @@ public class SessionListener implements Listener {
     public void onRightClick(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
-        if (handleRightClick(player, entity)) {
+        if (handleRightClick(player, entity, null)) {
             event.setCancelled(true);
         }
     }
@@ -349,18 +302,18 @@ public class SessionListener implements Listener {
         }
     }
 
-    public void onVisibilityChanged(Player player, Entity entity, boolean visible) {
+    private void onVisibilityChanged(Player player, Entity entity) {
         eas.platform().getScheduler().runTask(() -> updateEntityVisibility(player, entity));
     }
 
     @EventHandler
     public void onShow(PlayerShowEntityEvent event) {
-        onVisibilityChanged(event.getPlayer(), event.getEntity(), true);
+        onVisibilityChanged(event.getPlayer(), event.getEntity());
     }
 
     @EventHandler
     public void onHide(PlayerHideEntityEvent event) {
-        onVisibilityChanged(event.getPlayer(), event.getEntity(), false);
+        onVisibilityChanged(event.getPlayer(), event.getEntity());
     }
 
     private void updateEntityVisibility(Player player, Entity entity) {

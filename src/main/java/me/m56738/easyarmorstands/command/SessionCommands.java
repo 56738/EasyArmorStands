@@ -150,7 +150,7 @@ public class SessionCommands {
             PropertyContainer properties = PropertyContainer.immutable(element.getProperties());
             if (sender.canCreateElement(type, properties)) {
                 Element clone;
-                if (element instanceof EntityElement<?> entityElement && sender.permissions().test(Permissions.COPY_ENTITY)) {
+                if (element instanceof EntityElement<?> entityElement && sender.get().hasPermission(Permissions.COPY_ENTITY)) {
                     clone = cloneEntity(entityElement);
                 } else {
                     clone = type.createElement(properties);

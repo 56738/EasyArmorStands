@@ -1,6 +1,5 @@
 package me.m56738.easyarmorstands.modded.command;
 
-import me.m56738.easyarmorstands.EasyArmorStandsHolder;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
@@ -9,17 +8,17 @@ import net.minecraft.commands.CommandSourceStack;
 import org.incendo.cloud.SenderMapper;
 
 public class ModdedCommandSourceStackMapper implements SenderMapper<CommandSourceStack, EasCommandSender> {
-    private final EasyArmorStandsHolder holder;
+    private final ModdedPlatform platform;
     private final CommandSenderMapper commandSenderMapper;
 
-    public ModdedCommandSourceStackMapper(EasyArmorStandsHolder holder, CommandSenderMapper commandSenderMapper) {
-        this.holder = holder;
+    public ModdedCommandSourceStackMapper(ModdedPlatform platform, CommandSenderMapper commandSenderMapper) {
+        this.platform = platform;
         this.commandSenderMapper = commandSenderMapper;
     }
 
     @Override
     public EasCommandSender map(CommandSourceStack base) {
-        EasCommandSender sender = commandSenderMapper.map(ModdedCommandSender.fromNative((ModdedPlatform) holder.get().platform(), base));
+        EasCommandSender sender = commandSenderMapper.map(ModdedCommandSender.fromNative(platform, base));
         sender.setSource(base);
         return sender;
     }
