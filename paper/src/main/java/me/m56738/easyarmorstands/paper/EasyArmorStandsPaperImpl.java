@@ -105,11 +105,9 @@ public class EasyArmorStandsPaperImpl extends EasyArmorStandsCommon implements E
         addonManager.load(getClassLoader());
     }
 
-    @Override
     public void onEnable() {
         gizmos = BukkitGizmos.create(plugin);
         particleProviderFactory = new PaperGizmoParticleProviderFactory(gizmos);
-        super.onEnable();
         addonManager.enable();
         try {
             loadUpdateChecker();

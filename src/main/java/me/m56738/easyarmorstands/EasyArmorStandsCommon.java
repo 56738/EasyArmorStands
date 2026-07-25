@@ -308,9 +308,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         loadConfig();
         messageManager = new MessageManager();
         messageManager.load(config);
-    }
 
-    public void onEnable() {
         sessionManager = new SessionManagerImpl(eventDispatcher(), sessionToolProvider(), this);
         historyManager = new HistoryManager(this);
         clipboardManager = new ClipboardManager(this);

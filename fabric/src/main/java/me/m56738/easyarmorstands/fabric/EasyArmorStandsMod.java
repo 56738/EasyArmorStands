@@ -52,7 +52,7 @@ public class EasyArmorStandsMod implements ModInitializer {
         ArgumentParserProvider parserProvider = new ModdedArgumentParserProvider(platform);
         EasyArmorStandsCommon.registerCommands(commandManager, parserProvider, getClass().getClassLoader(), holder);
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             platform.initialize(server);
             executor.setServer(server);
 
@@ -63,7 +63,6 @@ public class EasyArmorStandsMod implements ModInitializer {
             holder.initialize(eas);
             EasyArmorStandsFabricHolder.setInstance(server, eas);
             eas.onLoad();
-            eas.onEnable();
         });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
