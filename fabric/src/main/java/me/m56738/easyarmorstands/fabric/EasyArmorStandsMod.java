@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
+import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsFabricHolder;
 import me.m56738.easyarmorstands.fabric.event.FabricPlatformEvents;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.modded.EasyArmorStandsModdedImpl;
@@ -60,13 +61,15 @@ public class EasyArmorStandsMod implements ModInitializer {
 
             EasyArmorStandsFabricImpl eas = new EasyArmorStandsFabricImpl(translationManager, platform, commandManager);
             holder.initialize(eas);
+            EasyArmorStandsFabricHolder.setInstance(server, eas);
             eas.onLoad();
             eas.onEnable();
         });
 
-        ServerLifecycleEvents.SERVER_STOPPED.register(_ -> {
-            if (holder.isInitialized()) {
-                holder.get().onDisable();
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            EasyArmorStandsFabricImpl instance = (EasyArmorStandsFabricImpl) EasyArmorStandsFabricHolder.removeInstance(server);
+            if (instance != null) {
+                instance.onDisable();
             }
             holder.initialize(null);
             executor.setServer(null);
