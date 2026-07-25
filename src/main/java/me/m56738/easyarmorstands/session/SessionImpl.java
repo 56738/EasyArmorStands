@@ -193,12 +193,11 @@ public final class SessionImpl implements Session {
         if (layer == null) {
             return false;
         }
-        if (hasClickCooldown(context.type())) {
-            if (clickTicks > 0) {
-                return true;
-            }
-            clickTicks = 5;
+
+        if (hasClickCooldown(context.type()) && clickTicks > 0) {
+            return true;
         }
+        clickTicks = 5;
 
         if (layer.onClick(context)) {
             return true;

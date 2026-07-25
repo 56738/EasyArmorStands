@@ -29,6 +29,15 @@ public final class FabricPlatformEvents {
         return false;
     });
 
+    public static final Event<DropItemCallback> DROP_ITEM = EventFactory.createArrayBacked(DropItemCallback.class, callbacks -> player -> {
+        for (DropItemCallback callback : callbacks) {
+            if (callback.onDropItem(player)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
     public interface ArmSwingCallback {
         void onArmSwing(Player player);
     }
@@ -39,5 +48,9 @@ public final class FabricPlatformEvents {
 
     public interface SwapHandsCallback {
         boolean onSwapHands(Player player);
+    }
+
+    public interface DropItemCallback {
+        boolean onDropItem(Player player);
     }
 }

@@ -5,7 +5,8 @@
   "mixins": [
     "InventoryMixin",
     "LivingEntityMixin",
-    "ServerGamePacketListenerImplMixin"
+    "ServerGamePacketListenerImplMixin",
+    "ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
