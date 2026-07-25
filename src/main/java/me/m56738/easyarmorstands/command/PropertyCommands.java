@@ -1,14 +1,14 @@
 package me.m56738.easyarmorstands.command;
 
 import me.m56738.easyarmorstands.api.Axis;
-import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.BlockDisplayPropertyTypes;
 import me.m56738.easyarmorstands.command.parser.BlockDataArgumentParser;
-import me.m56738.easyarmorstands.command.processor.ElementProcessor;
-import me.m56738.easyarmorstands.command.requirement.ElementRequirement;
+import me.m56738.easyarmorstands.command.processor.ElementSelectionProcessor;
+import me.m56738.easyarmorstands.command.requirement.ElementSelectionRequirement;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
+import me.m56738.easyarmorstands.command.util.ElementSelection;
 import me.m56738.easyarmorstands.command.value.DisplayScaleAxisCommand;
 import me.m56738.easyarmorstands.command.value.PitchCommand;
 import me.m56738.easyarmorstands.command.value.PositionCommand;
@@ -16,7 +16,6 @@ import me.m56738.easyarmorstands.command.value.PropertyCommand;
 import me.m56738.easyarmorstands.command.value.ValueCommand;
 import me.m56738.easyarmorstands.command.value.YawCommand;
 import me.m56738.easyarmorstands.message.Message;
-import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.incendo.cloud.Command;
@@ -45,10 +44,11 @@ public final class PropertyCommands {
         commandManager.command(builder
                 .permission(permission)
                 .commandDescription(valueCommand.getShowDescription())
-                .apply(new ElementRequirement())
+                .apply(new ElementSelectionRequirement())
+                .senderType(EasPlayer.class)
                 .handler(context -> {
-                    Element element = context.get(ElementProcessor.elementKey());
-                    PropertyContainer properties = element.getProperties();
+                    ElementSelection selection = context.get(ElementSelectionProcessor.elementSelectionKey());
+                    PropertyContainer properties = selection.properties(context.sender());
                     if (!valueCommand.isSupported(properties)) {
                         valueCommand.sendNotSupported(context.sender());
                         return;
@@ -67,12 +67,12 @@ public final class PropertyCommands {
         commandManager.command(builder
                 .permission(permission)
                 .commandDescription(valueCommand.getSetterDescription())
-                .apply(new ElementRequirement())
+                .apply(new ElementSelectionRequirement())
                 .required("value", valueCommand.getParser())
                 .senderType(EasPlayer.class)
                 .handler(context -> {
-                    Element element = context.get(ElementProcessor.elementKey());
-                    PropertyContainer properties = new TrackedPropertyContainer(element, context.sender());
+                    ElementSelection selection = context.get(ElementSelectionProcessor.elementSelectionKey());
+                    PropertyContainer properties = selection.properties(context.sender());
                     if (!valueCommand.isSupported(properties)) {
                         valueCommand.sendNotSupported(context.sender());
                         return;
