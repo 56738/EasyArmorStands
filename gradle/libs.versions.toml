@@ -62,7 +62,7 @@ fancyholograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholo
 gizmo-bukkit = { module = "me.m56738.gizmo:gizmo-bukkit", version.ref = "gizmo" }
 gizmo-common = { module = "me.m56738.gizmo:gizmo-common", version.ref = "gizmo" }
 gizmo-fabric = { module = "me.m56738.gizmo:gizmo-fabric", version.ref = "gizmo-modded" }
-gizmo-modded = { module = "me.m56738.gizmo:gizmo-modded", version.ref = "gizmo-modded" }
+gizmo-modded-common = { module = "me.m56738.gizmo:gizmo-modded-common", version.ref = "gizmo-modded" }
 gizmo-neoforge = { module = "me.m56738.gizmo:gizmo-neoforge", version.ref = "gizmo-modded" }
 griefdefender-api = { module = "com.griefdefender:api", version.ref = "griefdefender" }
 griefprevention = { module = "com.github.GriefPrevention:GriefPrevention", version.ref = "griefprevention" }

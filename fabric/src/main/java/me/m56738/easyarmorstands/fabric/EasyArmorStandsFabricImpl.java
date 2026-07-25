@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.fabric.event.FabricEventDispatcher;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.modded.EasyArmorStandsModdedImpl;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import me.m56738.gizmo.fabric.api.FabricServerGizmos;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
@@ -19,7 +20,7 @@ public class EasyArmorStandsFabricImpl extends EasyArmorStandsModdedImpl impleme
     private final FabricEventDispatcher eventDispatcher = new FabricEventDispatcher();
 
     public EasyArmorStandsFabricImpl(TranslationManager translationManager, ModdedPlatform platform, FabricServerCommandManager<EasCommandSender> commandManager) {
-        super(translationManager, platform, commandManager, EasyArmorStandsFabricImpl.class.getClassLoader());
+        super(translationManager, platform, commandManager, FabricServerGizmos.create(), EasyArmorStandsFabricImpl.class.getClassLoader());
     }
 
     @Override

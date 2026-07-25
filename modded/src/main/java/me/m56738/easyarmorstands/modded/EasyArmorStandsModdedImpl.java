@@ -27,10 +27,10 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
     private final ParticleProviderFactory particleProviderFactory;
     private final ModdedSessionToolProvider sessionToolProvider;
 
-    public EasyArmorStandsModdedImpl(TranslationManager translationManager, ModdedPlatform platform, CommandManager<EasCommandSender> commandManager, ClassLoader classLoader) {
+    public EasyArmorStandsModdedImpl(TranslationManager translationManager, ModdedPlatform platform, CommandManager<EasCommandSender> commandManager, ModdedServerGizmos gizmos, ClassLoader classLoader) {
         super(translationManager, platform, commandManager);
         this.classLoader = classLoader;
-        this.gizmos = ModdedServerGizmos.create();
+        this.gizmos = gizmos;
         this.particleProviderFactory = new ModdedParticleProviderFactory(gizmos);
         this.sessionToolProvider = new ModdedSessionToolProvider(this);
     }

@@ -541,7 +541,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         if (!entity.isValid()) {
             return null;
         }
-        if (entity.hasMetadata("gizmo")) {
+        if (particleProviderFactory().isParticle(entity)) {
             return null;
         }
         return entityElementProviderRegistry.getElement(entity);

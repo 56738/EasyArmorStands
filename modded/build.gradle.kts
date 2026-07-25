@@ -9,7 +9,7 @@ dependencies {
     api(project(":"))
 
     api(libs.cloud.minecraft.modded.common)
-    api(libs.gizmo.modded)
+    api(libs.gizmo.modded.common)
 }
 
 neoForge {
