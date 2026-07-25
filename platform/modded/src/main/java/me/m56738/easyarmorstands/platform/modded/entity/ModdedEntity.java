@@ -138,11 +138,6 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     }
 
     @Override
-    default boolean hasMetadata(String key) {
-        return false;
-    }
-
-    @Override
     default @Nullable EntitySnapshot createSnapshot() {
         net.minecraft.world.entity.Entity entity = getNative();
         CompoundTag tag;

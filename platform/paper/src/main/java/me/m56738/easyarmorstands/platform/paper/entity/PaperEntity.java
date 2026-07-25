@@ -122,11 +122,6 @@ public interface PaperEntity extends Entity {
         return getNative().removeScoreboardTag(tag);
     }
 
-    @Override
-    default boolean hasMetadata(String key) {
-        return getNative().hasMetadata(key);
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     @Override
     default @Nullable PaperEntitySnapshot createSnapshot() {

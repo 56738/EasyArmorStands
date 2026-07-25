@@ -593,6 +593,8 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
 
     public abstract ItemStack createEntitySpawnEgg(Entity entity);
 
+    public abstract boolean isIgnored(Entity entity);
+
     public void update() {
         if (sessionManager != null) {
             sessionManager.update();

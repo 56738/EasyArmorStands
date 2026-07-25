@@ -45,8 +45,6 @@ public interface Entity {
 
     boolean removeScoreboardTag(String tag);
 
-    boolean hasMetadata(String key);
-
     @Nullable EntitySnapshot createSnapshot();
 
     ItemStack getPickItemStack();

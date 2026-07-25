@@ -154,6 +154,11 @@ public class EasyArmorStandsPaperImpl extends EasyArmorStandsCommon implements E
         return PaperItemStack.fromNative(PaperEntitySpawnEggProvider.createSpawnEgg(PaperEntity.toNative(entity)));
     }
 
+    @Override
+    public boolean isIgnored(Entity entity) {
+        return PaperEntity.toNative(entity).hasMetadata("NPC");
+    }
+
     private void loadUpdateChecker() {
         if (getConfiguration().updateCheck.enabled) {
             if (updateManager == null) {

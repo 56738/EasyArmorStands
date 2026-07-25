@@ -16,7 +16,7 @@ public class DefaultEntityElementProvider<E extends Entity> extends SimpleEntity
 
     @Override
     public Element getElement(@NotNull Entity entity) {
-        if (entity instanceof Player && !entity.hasMetadata("NPC") && !eas.getConfiguration().editor.allowPlayers) {
+        if (entity instanceof Player && !eas.isIgnored(entity) && !eas.getConfiguration().editor.allowPlayers) {
             return null;
         }
         return super.getElement(entity);

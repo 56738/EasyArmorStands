@@ -6,6 +6,7 @@ import me.m56738.easyarmorstands.fabric.api.EasyArmorStandsFabric;
 import me.m56738.easyarmorstands.fabric.event.FabricEventDispatcher;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.modded.EasyArmorStandsModdedImpl;
+import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.gizmo.fabric.api.FabricServerGizmos;
 import net.fabricmc.loader.api.FabricLoader;
@@ -40,5 +41,10 @@ public class EasyArmorStandsFabricImpl extends EasyArmorStandsModdedImpl impleme
     @Override
     public EventDispatcher eventDispatcher() {
         return eventDispatcher;
+    }
+
+    @Override
+    public boolean isIgnored(Entity entity) {
+        return false;
     }
 }
