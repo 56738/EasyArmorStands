@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.platform.inventory.ItemType;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatformHolder;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemType;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface ModdedBlockData extends BlockData, ModdedPlatformHolder {
@@ -20,7 +21,7 @@ public interface ModdedBlockData extends BlockData, ModdedPlatformHolder {
 
     @Override
     default String getAsString() {
-        return getNative().toString();
+        return BlockStateParser.serialize(getNative());
     }
 
     @Override
