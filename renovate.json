@@ -8,14 +8,27 @@
     "enabled": false
   },
   "ignoreDeps": [
-    "io.papermc.paper:paper-api"
+    "io.papermc.paper:paper-api",
+    "com.mojang:minecraft"
   ],
   "packageRules": [
     {
       "matchPackageNames": [
-        "org.incendo:cloud-*"
+        "net.fabricmc.fabric-api:fabric-api"
       ],
-      "allowedVersions": "!/SNAPSHOT/"
+      "versionCompatibility": "^(?<version>.*)\\+(?<compatibility>.*)$"
+    },
+    {
+      "matchPackageNames": [
+        "net.neoforged:neoforge"
+      ],
+      "versionCompatibility": "^(?<compatibility>.*)\\.(?<version>.*)$"
+    },
+    {
+      "matchPackageNames": [
+        "net.neoforged:neoform"
+      ],
+      "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$"
     }
   ]
 }
