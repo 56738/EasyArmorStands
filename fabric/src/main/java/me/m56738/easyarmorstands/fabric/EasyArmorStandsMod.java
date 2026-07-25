@@ -92,6 +92,8 @@ public class EasyArmorStandsMod implements ModInitializer {
                 result(handleClick(platform, player, level, ClickContext.Type.LEFT_CLICK, entity, null)));
         FabricPlatformEvents.ARM_SWING.register(player ->
                 handleClick(platform, player, player.level(), ClickContext.Type.LEFT_CLICK, null, null));
+        FabricPlatformEvents.SWAP_HANDS.register(player ->
+                handleClick(platform, player, player.level(), ClickContext.Type.SWAP_HANDS, null, null));
         FabricPlatformEvents.SELECT_SLOT.register((player, _) ->
                 handleSwitchSlot(platform, player));
     }

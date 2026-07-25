@@ -20,11 +20,24 @@ public final class FabricPlatformEvents {
         }
     });
 
+    public static final Event<SwapHandsCallback> SWAP_HANDS = EventFactory.createArrayBacked(SwapHandsCallback.class, callbacks -> player -> {
+        for (SwapHandsCallback callback : callbacks) {
+            if (callback.onSwapHands(player)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
     public interface ArmSwingCallback {
         void onArmSwing(Player player);
     }
 
     public interface SelectSlotCallback {
         void onSelectSlot(Player player, int slot);
+    }
+
+    public interface SwapHandsCallback {
+        boolean onSwapHands(Player player);
     }
 }
