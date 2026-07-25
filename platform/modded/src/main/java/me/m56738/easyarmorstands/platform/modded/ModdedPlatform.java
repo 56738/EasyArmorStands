@@ -56,7 +56,14 @@ public abstract class ModdedPlatform implements Platform {
     private final ModdedDialogFactory dialogFactory = new ModdedDialogFactory(this);
     private final ModdedInventoryFactory inventoryFactory = new ModdedInventoryFactory();
 
-    private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor(
+            r -> {
+                Thread thread = new Thread(r);
+                thread.setName("easyarmorstands-platform-modded-scheduler");
+                thread.setDaemon(true);
+                return thread;
+            }
+    );
 
     protected ModdedPlatform(ComponentLogger logger) {
         this.logger = logger;
