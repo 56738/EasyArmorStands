@@ -3,6 +3,8 @@ package me.m56738.easyarmorstands.platform.modded.inventory;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -50,6 +52,10 @@ public interface ModdedPlayerInventory extends PlayerInventory, ModdedInventory 
 
     @Override
     default void setHeldItemSlot(int i) {
-        getNative().setSelectedSlot(i);
+        Inventory inventory = getNative();
+        inventory.setSelectedSlot(i);
+        if (inventory.player instanceof ServerPlayer player) {
+            player.connection.send(new ClientboundSetHeldSlotPacket(inventory.getSelectedSlot()));
+        }
     }
 }
