@@ -67,7 +67,7 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     @Override
     public ItemStack createEntitySpawnEgg(Entity entity) {
-        return ModdedItemStack.fromNative((ModdedPlatform) platform(), net.minecraft.world.item.ItemStack.EMPTY);
+        return ModdedItemStack.fromNative((ModdedPlatform) platform(), net.minecraft.world.item.ItemStack.EMPTY); // TODO
     }
 
     @Override

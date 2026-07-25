@@ -18,6 +18,7 @@ public interface ModdedLivingEntity extends LivingEntity, ModdedEntity {
 
     static ModdedLivingEntity fromNative(ModdedPlatform platform, net.minecraft.world.entity.LivingEntity entity) {
         return switch (entity) {
+            // TODO
             case ServerPlayer e -> ModdedPlayer.fromNative(platform, e);
 //            case ArmorStand e -> ModdedArmorStand.fromNative(platform, e);
 //            case Mannequin e -> ModdedMannequin.fromNative(platform, e);

@@ -30,6 +30,7 @@ import java.util.UUID;
 public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     static ModdedEntity fromNative(ModdedPlatform platform, net.minecraft.world.entity.Entity entity) {
         return switch (entity) {
+            // TODO
 //            case ItemFrame e -> ModdedItemFrame.fromNative(platform, e);
 //            case Interaction e -> ModdedInteraction.fromNative(platform, e);
 //            case Display e -> ModdedDisplay.fromNative(platform, e);
