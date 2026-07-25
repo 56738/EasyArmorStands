@@ -50,11 +50,31 @@ loom {
     }
 }
 
+tasks {
+    jar {
+        archiveBaseName = "EasyArmorStands-Fabric"
+        destinationDirectory.set(layout.buildDirectory)
+        from("../src/main/resources/assets/easyarmorstands/icon.png")
+    }
+
+    val staticJar = register<Copy>("staticJar") {
+        group = "build"
+        description = "Creates a jar archive with a static file name."
+        from(jar)
+        into(layout.buildDirectory.dir("static"))
+        rename { "EasyArmorStands-Fabric.jar" }
+    }
+
+    assemble {
+        dependsOn(staticJar)
+    }
+}
+
 fabricModJson {
     id = "easyarmorstands"
     name = "EasyArmorStands"
     author("56738")
-    icon("assets/easyarmorstands/icon.png")
+    icon("icon.png")
     mainEntrypoint("me.m56738.easyarmorstands.fabric.EasyArmorStandsMod")
     mixin("easyarmorstands.mixins.json")
     depends("easyarmorstands-platform-fabric", project.version.toString())

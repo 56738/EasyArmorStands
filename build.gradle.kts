@@ -6,7 +6,6 @@ plugins {
 
 dependencies {
     api(project(":easyarmorstands-api"))
-    api(project(":easyarmorstands-assets"))
     api(project(":easyarmorstands-platform"))
     api(libs.cloud.annotations)
     api(libs.cloud.minecraft.extras) {

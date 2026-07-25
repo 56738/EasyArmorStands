@@ -20,7 +20,6 @@ fun module(name: String) {
 }
 
 module("api")
-module("assets")
 
 fun addon(name: String) {
     includeAt("easyarmorstands-$name", "addons/$name")

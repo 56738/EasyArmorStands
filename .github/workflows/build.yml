@@ -26,6 +26,7 @@ jobs:
         with:
           name: Package
           path: |
+            fabric/build/EasyArmorStands-Fabric-*.jar
             paper/build/EasyArmorStands-Paper-*.jar
       - name: Update description
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
@@ -39,6 +40,7 @@ jobs:
         with:
           body_path: CHANGELOG.md
           files: |
+            fabric/build/EasyArmorStands-Fabric-*.jar
             paper/build/EasyArmorStands-Paper-*.jar
       - name: Publish release
         if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
