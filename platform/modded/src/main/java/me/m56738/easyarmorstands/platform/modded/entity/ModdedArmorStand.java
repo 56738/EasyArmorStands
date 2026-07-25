@@ -1,79 +1,81 @@
-package me.m56738.easyarmorstands.platform.paper.entity;
+package me.m56738.easyarmorstands.platform.modded.entity;
 
 import me.m56738.easyarmorstands.platform.entity.ArmorStand;
 import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
-import me.m56738.easyarmorstands.platform.paper.PaperAdapter;
+import me.m56738.easyarmorstands.platform.modded.ModdedAdapter;
+import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.util.Rotations;
 
-public interface PaperArmorStand extends ArmorStand, PaperLivingEntity {
-    static PaperArmorStand fromNative(org.bukkit.entity.ArmorStand entity) {
-        return new PaperArmorStandImpl(entity);
+public interface ModdedArmorStand extends ArmorStand, ModdedLivingEntity {
+    @Override
+    net.minecraft.world.entity.decoration.ArmorStand getNative();
+
+    static ModdedArmorStand fromNative(ModdedPlatform platform, net.minecraft.world.entity.decoration.ArmorStand entity) {
+        return new ModdedArmorStandImpl(platform, entity);
     }
 
-    org.bukkit.entity.ArmorStand getNative();
-
-    static org.bukkit.entity.ArmorStand toNative(ArmorStand armorStand) {
-        return ((PaperArmorStand) armorStand).getNative();
+    static net.minecraft.world.entity.decoration.ArmorStand toNative(ArmorStand entity) {
+        return ((ModdedArmorStand) entity).getNative();
     }
 
     @Override
     default Rotations getHeadPose() {
-        return PaperAdapter.fromNative(getNative().getHeadRotations());
+        return ModdedAdapter.fromNative(getNative().getHeadPose());
     }
 
     @Override
     default void setHeadPose(Rotations rotations) {
-        getNative().setHeadRotations(PaperAdapter.toNative(rotations));
+        getNative().setHeadPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
     default Rotations getBodyPose() {
-        return PaperAdapter.fromNative(getNative().getBodyRotations());
+        return ModdedAdapter.fromNative(getNative().getBodyPose());
     }
 
     @Override
     default void setBodyPose(Rotations rotations) {
-        getNative().setBodyRotations(PaperAdapter.toNative(rotations));
+        getNative().setBodyPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
     default Rotations getLeftArmPose() {
-        return PaperAdapter.fromNative(getNative().getLeftArmRotations());
+        return ModdedAdapter.fromNative(getNative().getLeftArmPose());
     }
 
     @Override
     default void setLeftArmPose(Rotations rotations) {
-        getNative().setLeftArmRotations(PaperAdapter.toNative(rotations));
+        getNative().setLeftArmPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
     default Rotations getRightArmPose() {
-        return PaperAdapter.fromNative(getNative().getRightArmRotations());
+        return ModdedAdapter.fromNative(getNative().getRightArmPose());
     }
 
     @Override
     default void setRightArmPose(Rotations rotations) {
-        getNative().setRightArmRotations(PaperAdapter.toNative(rotations));
+        getNative().setRightArmPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
     default Rotations getLeftLegPose() {
-        return PaperAdapter.fromNative(getNative().getLeftLegRotations());
+        return ModdedAdapter.fromNative(getNative().getLeftLegPose());
     }
 
     @Override
     default void setLeftLegPose(Rotations rotations) {
-        getNative().setLeftLegRotations(PaperAdapter.toNative(rotations));
+        getNative().setLeftLegPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
     default Rotations getRightLegPose() {
-        return PaperAdapter.fromNative(getNative().getRightLegRotations());
+        return ModdedAdapter.fromNative(getNative().getRightLegPose());
     }
 
     @Override
     default void setRightLegPose(Rotations rotations) {
-        getNative().setRightLegRotations(PaperAdapter.toNative(rotations));
+        getNative().setRightLegPose(ModdedAdapter.toNative(rotations));
     }
 
     @Override
@@ -88,37 +90,37 @@ public interface PaperArmorStand extends ArmorStand, PaperLivingEntity {
 
     @Override
     default boolean hasEquipmentLock(EquipmentSlot slot, LockType type) {
-        return getNative().hasEquipmentLock(PaperAdapter.toNative(slot), PaperAdapter.toNative(type));
+        return (getNative().disabledSlots & ModdedAdapter.toMask(slot, type)) != 0;
     }
 
     @Override
     default void addEquipmentLock(EquipmentSlot slot, LockType type) {
-        getNative().addEquipmentLock(PaperAdapter.toNative(slot), PaperAdapter.toNative(type));
+        getNative().disabledSlots |= ModdedAdapter.toMask(slot, type);
     }
 
     @Override
     default void removeEquipmentLock(EquipmentSlot slot, LockType type) {
-        getNative().removeEquipmentLock(PaperAdapter.toNative(slot), PaperAdapter.toNative(type));
+        getNative().disabledSlots &= ~ModdedAdapter.toMask(slot, type);
     }
 
     @Override
     default boolean hasArms() {
-        return getNative().hasArms();
+        return getNative().showArms();
     }
 
     @Override
     default void setArms(boolean arms) {
-        getNative().setArms(arms);
+        getNative().setShowArms(arms);
     }
 
     @Override
     default boolean hasBasePlate() {
-        return getNative().hasBasePlate();
+        return getNative().showBasePlate();
     }
 
     @Override
     default void setBasePlate(boolean basePlate) {
-        getNative().setBasePlate(basePlate);
+        getNative().setNoBasePlate(!basePlate);
     }
 
     @Override
@@ -133,37 +135,36 @@ public interface PaperArmorStand extends ArmorStand, PaperLivingEntity {
 
     @Override
     default boolean isVisible() {
-        return getNative().isVisible();
+        return !getNative().isInvisible();
     }
 
     @Override
     default void setVisible(boolean visible) {
-        getNative().setVisible(visible);
+        getNative().setInvisible(!visible);
     }
 
     @Override
     default boolean isCanTickSupported() {
-        return true;
+        return false;
     }
 
     @Override
     default boolean canTick() {
-        return getNative().canTick();
+        return true;
     }
 
     @Override
     default void setCanTick(boolean canTick) {
-        getNative().setCanTick(canTick);
     }
 
     @Override
     default boolean hasGravity() {
-        return getNative().hasGravity();
+        return !getNative().isNoGravity();
     }
 
     @Override
     default void setGravity(boolean gravity) {
-        getNative().setGravity(gravity);
+        getNative().setNoGravity(!gravity);
     }
 
     @Override

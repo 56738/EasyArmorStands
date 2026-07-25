@@ -151,7 +151,9 @@ public class EntityElementPopulator {
                 () -> ArmorStandSize.get(entity),
                 size -> entity.setSmall(size.isSmall())));
         registry.register(Property.of(EntityPropertyTypes.VISIBLE, entity::isVisible, entity::setVisible));
-        registry.register(Property.of(ArmorStandPropertyTypes.CAN_TICK, entity::canTick, entity::setCanTick));
+        if (entity.isCanTickSupported()) {
+            registry.register(Property.of(ArmorStandPropertyTypes.CAN_TICK, entity::canTick, entity::setCanTick));
+        }
         registry.register(Property.of(ArmorStandPropertyTypes.GRAVITY, entity::hasGravity, entity::setGravity));
         registry.register(Property.of(ArmorStandPropertyTypes.INVULNERABLE, entity::isInvulnerable, entity::setInvulnerable));
         registry.register(new ArmorStandLockProperty(entity));

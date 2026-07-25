@@ -27,8 +27,6 @@ dependencies {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/easyarmorstands.classtweaker")
-
     mods {
         register("easyarmorstands") {
             sourceSet(sourceSets.main.get())
@@ -56,12 +54,8 @@ fabricModJson {
     icon("assets/easyarmorstands/icon.png")
     mainEntrypoint("me.m56738.easyarmorstands.fabric.EasyArmorStandsMod")
     mixin("easyarmorstands.mixins.json")
-    accessWidener = "easyarmorstands.classtweaker"
-    depends("adventure-platform-fabric", "*")
+    depends("easyarmorstands-platform-fabric", project.version.toString())
     depends("cloud", "*")
-    depends("fabric-api", "*")
-    depends("fabric-permissions-api-v0", "*")
-    depends("fabricloader", ">=" + libs.versions.fabric.loader.get())
     depends("gizmo", "*")
     depends("java", ">=" + java.toolchain.languageVersion.get().asInt())
     depends("minecraft", "~" + libs.versions.minecraft.get())

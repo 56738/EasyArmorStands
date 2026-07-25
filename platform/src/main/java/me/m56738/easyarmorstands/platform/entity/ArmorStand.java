@@ -54,6 +54,8 @@ public interface ArmorStand extends LivingEntity {
 
     void setVisible(boolean visible);
 
+    boolean isCanTickSupported();
+
     boolean canTick();
 
     void setCanTick(boolean canTick);

@@ -8,8 +8,11 @@ import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.platform.util.Location;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.Mannequin;
 import org.joml.Vector3d;
 
 public interface ModdedLivingEntity extends LivingEntity, ModdedEntity {
@@ -18,11 +21,10 @@ public interface ModdedLivingEntity extends LivingEntity, ModdedEntity {
 
     static ModdedLivingEntity fromNative(ModdedPlatform platform, net.minecraft.world.entity.LivingEntity entity) {
         return switch (entity) {
-            // TODO
             case ServerPlayer e -> ModdedPlayer.fromNative(platform, e);
-//            case ArmorStand e -> ModdedArmorStand.fromNative(platform, e);
-//            case Mannequin e -> ModdedMannequin.fromNative(platform, e);
-//            case Mob e -> ModdedMob.fromNative(platform, e);
+            case ArmorStand e -> ModdedArmorStand.fromNative(platform, e);
+            case Mannequin e -> ModdedMannequin.fromNative(platform, e);
+            case Mob e -> ModdedMob.fromNative(platform, e);
             default -> new ModdedLivingEntityImpl(platform, entity);
         };
     }

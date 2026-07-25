@@ -16,7 +16,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Interaction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -30,10 +33,9 @@ import java.util.UUID;
 public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     static ModdedEntity fromNative(ModdedPlatform platform, net.minecraft.world.entity.Entity entity) {
         return switch (entity) {
-            // TODO
-//            case ItemFrame e -> ModdedItemFrame.fromNative(platform, e);
-//            case Interaction e -> ModdedInteraction.fromNative(platform, e);
-//            case Display e -> ModdedDisplay.fromNative(platform, e);
+            case ItemFrame e -> ModdedItemFrame.fromNative(platform, e);
+            case Interaction e -> ModdedInteraction.fromNative(platform, e);
+            case Display e -> ModdedDisplay.fromNative(platform, e);
             case LivingEntity e -> ModdedLivingEntity.fromNative(platform, e);
             default -> new ModdedEntityImpl(platform, entity);
         };
