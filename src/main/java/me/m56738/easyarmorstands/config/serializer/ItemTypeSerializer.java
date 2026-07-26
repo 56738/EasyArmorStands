@@ -9,10 +9,10 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-public class MaterialSerializer extends ScalarSerializer<ItemType> {
+public class ItemTypeSerializer extends ScalarSerializer<ItemType> {
     private final Platform platform;
 
-    public MaterialSerializer(Platform platform) {
+    public ItemTypeSerializer(Platform platform) {
         super(ItemType.class);
         this.platform = platform;
     }

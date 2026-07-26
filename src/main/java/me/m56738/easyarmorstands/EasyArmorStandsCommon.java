@@ -169,7 +169,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         this.platform = platform;
         this.translationManager = translationManager;
         this.commandManager = commandManager;
-        this.serializers = EasSerializers.serializers(this);
+        this.serializers = EasSerializers.serializers(platform);
 
         MenuListener menuListener = new MenuListener(this);
         platform.getEventBus().subscribe(EventType.MENU_CLICK, menuListener);
