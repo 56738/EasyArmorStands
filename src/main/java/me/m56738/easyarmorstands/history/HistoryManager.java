@@ -28,13 +28,19 @@ public class HistoryManager {
     }
 
     public void remove(Player player) {
-        // TODO call
         history.remove(player);
     }
 
     public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         for (History history : history.values()) {
             history.onEntityReplaced(oldId, newId);
+        }
+    }
+
+    public void replacePlayer(Player oldPlayer, Player newPlayer) {
+        History history = this.history.remove(oldPlayer);
+        if (history != null) {
+            this.history.put(newPlayer, history);
         }
     }
 }

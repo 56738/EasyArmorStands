@@ -62,7 +62,7 @@ abstract class ElementPresenceAction implements Action {
         reference = element.getReference(eas.referenceProvider());
         UUID newId = getId(reference);
         if (oldId != null && newId != null) {
-            eas.getHistoryManager().onEntityReplaced(oldId, newId);
+            eas.historyManager().onEntityReplaced(oldId, newId);
         }
 
         return true;

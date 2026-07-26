@@ -68,7 +68,6 @@ public final class SessionImpl implements Session {
     private static final Title.Times titleTimes = Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1));
     private final LinkedList<Layer> layerStack = new LinkedList<>();
     private final EasyArmorStandsCommon eas;
-    private final EasPlayer player;
     private final SessionSnapper snapper;
     private final Set<EditorParticle> particles = new HashSet<>();
     private final ParticleProvider particleProvider;
@@ -76,6 +75,7 @@ public final class SessionImpl implements Session {
     private final LayerProvider layerProvider;
     private final InputProvider inputProvider;
     private final List<Input> inputs = new ArrayList<>();
+    private EasPlayer player;
     private int clickTicks = 5;
     private boolean valid = true;
     private Component currentTitle = Component.empty();
@@ -413,6 +413,10 @@ public final class SessionImpl implements Session {
 
     public boolean isValid() {
         return valid;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = new EasPlayer(eas, player);
     }
 
     @Override

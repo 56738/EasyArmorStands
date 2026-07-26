@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "me.m56738.easyarmorstands.fabric.mixin",
+  "package": "me.m56738.easyarmorstands.platform.fabric.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "InventoryMixin",

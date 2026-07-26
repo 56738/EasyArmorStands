@@ -1,7 +1,7 @@
-package me.m56738.easyarmorstands.fabric.mixin;
+package me.m56738.easyarmorstands.platform.fabric.mixin;
 
 import com.mojang.authlib.GameProfile;
-import me.m56738.easyarmorstands.fabric.event.FabricPlatformEvents;
+import me.m56738.easyarmorstands.platform.fabric.FabricPlatformEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -22,5 +22,10 @@ public abstract class ServerPlayerMixin extends Player {
             containerMenu.sendAllDataToRemote();
             ci.cancel();
         }
+    }
+
+    @Inject(method = "doCloseContainer", at = @At("HEAD"))
+    private void doCloseContainer(CallbackInfo ci) {
+        FabricPlatformEvents.CLOSE_CONTAINER.invoker().onCloseContainer(this);
     }
 }

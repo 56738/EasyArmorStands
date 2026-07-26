@@ -127,4 +127,12 @@ public class SessionManagerImpl implements SessionManager {
             stopSession(player);
         }
     }
+
+    public void replacePlayer(Player oldPlayer, Player newPlayer) {
+        SessionImpl session = sessions.remove(oldPlayer);
+        if (session != null) {
+            sessions.put(newPlayer, session);
+            session.setPlayer(newPlayer);
+        }
+    }
 }

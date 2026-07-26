@@ -17,19 +17,25 @@ import java.util.List;
 
 public class Clipboard {
     private final EasyArmorStandsCommon eas;
-    private final Player player;
     private final PropertyMap properties = new PropertyMap();
+    private Player player;
 
     Clipboard(EasyArmorStandsCommon eas, Player player) {
         this.eas = eas;
         this.player = player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public PropertyMap getProperties() {
+        removeDisallowed();
         return properties;
     }
 
     public void handleAutoApply(Element element) {
+        removeDisallowed();
         if (this.properties.isEmpty()) {
             return;
         }
@@ -53,7 +59,7 @@ public class Clipboard {
         }
     }
 
-    public void removeDisallowed() {
+    private void removeDisallowed() {
         List<PropertyType<?>> types = new ArrayList<>();
         properties.forEach(property -> types.add(property.getType()));
 

@@ -100,6 +100,7 @@ import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
 import me.m56738.easyarmorstands.registry.EntityTypeKeys;
 import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import me.m56738.easyarmorstands.session.SessionImpl;
+import me.m56738.easyarmorstands.session.SessionListener;
 import me.m56738.easyarmorstands.session.SessionManagerImpl;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
@@ -174,6 +175,24 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         MenuListener menuListener = new MenuListener(this);
         platform.getEventBus().subscribe(EventType.MENU_CLICK, menuListener);
         platform.getEventBus().subscribe(EventType.MENU_DRAG, menuListener);
+
+        SessionListener sessionListener = new SessionListener(this);
+        platform.getEventBus().subscribe(EventType.MENU_CLOSE, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_ADD, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_DESTROY_ENTITY, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_DROP_ITEM, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_LEFT_CLICK_BLOCK, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_LEFT_CLICK, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_LEFT_CLICK_ENTITY, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_PICK_UP_ITEM, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_PLACED_ENTITY, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_REMOVE, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_REPLACE, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_RIGHT_CLICK_BLOCK, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_RIGHT_CLICK, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_RIGHT_CLICK_ENTITY, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_SWAP_HANDS, sessionListener);
+        platform.getEventBus().subscribe(EventType.PLAYER_SWITCH_SELECTED_SLOT, sessionListener);
     }
 
     public static void registerCommands(CommandManager<EasCommandSender> commandManager, ArgumentParserProvider parserProvider, ClassLoader classLoader, EasyArmorStandsHolder holder) {
@@ -475,7 +494,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         return clipboardManager.getClipboard(player);
     }
 
-    public HistoryManager getHistoryManager() {
+    public HistoryManager historyManager() {
         return historyManager;
     }
 

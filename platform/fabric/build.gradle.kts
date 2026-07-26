@@ -21,6 +21,7 @@ loom {
 fabricModJson {
     id = "easyarmorstands-platform-fabric"
     accessWidener = "easyarmorstands-platform-fabric.classtweaker"
+    mixin("easyarmorstands-platform-fabric.mixins.json")
     depends("adventure-platform-fabric", "*")
     depends("fabric-api", "*")
     depends("fabric-permissions-api-v0", "*")

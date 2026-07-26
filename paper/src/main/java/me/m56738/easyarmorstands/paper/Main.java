@@ -6,9 +6,8 @@ import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaper;
 import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaperProvider;
 import me.m56738.easyarmorstands.paper.command.ComponentSuggestionMapper;
-import me.m56738.easyarmorstands.paper.listener.ClipboardListener;
-import me.m56738.easyarmorstands.paper.listener.PlayerListener;
-import me.m56738.easyarmorstands.paper.listener.SessionListener;
+import me.m56738.easyarmorstands.paper.listener.PaperToolListener;
+import me.m56738.easyarmorstands.paper.listener.PaperVisibilityListener;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.platform.paper.PaperPlatform;
@@ -62,13 +61,9 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
 
         eas.onEnable();
 
-        SessionListener sessionListener = new SessionListener(eas);
-        getServer().getPluginManager().registerEvents(sessionListener, this);
-        getServer().getPluginManager().registerEvents(new ClipboardListener(eas), this);
+        getServer().getPluginManager().registerEvents(new PaperToolListener(eas), this);
+        getServer().getPluginManager().registerEvents(new PaperVisibilityListener(eas), this);
         getServer().getScheduler().runTaskTimer(this, eas::update, 0, 1);
-        getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
-
-        getServer().getPluginManager().registerEvents(new PlayerListener(eas), this);
     }
 
     @Override

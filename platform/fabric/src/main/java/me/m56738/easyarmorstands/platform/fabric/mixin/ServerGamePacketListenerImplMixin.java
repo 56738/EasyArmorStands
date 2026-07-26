@@ -1,6 +1,6 @@
-package me.m56738.easyarmorstands.fabric.mixin;
+package me.m56738.easyarmorstands.platform.fabric.mixin;
 
-import me.m56738.easyarmorstands.fabric.event.FabricPlatformEvents;
+import me.m56738.easyarmorstands.platform.fabric.FabricPlatformEvents;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;

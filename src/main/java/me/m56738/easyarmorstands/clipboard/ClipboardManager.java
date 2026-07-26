@@ -25,4 +25,12 @@ public class ClipboardManager {
     private Clipboard createClipboard(Player player) {
         return new Clipboard(eas, player);
     }
+
+    public void replacePlayer(Player oldPlayer, Player newPlayer) {
+        Clipboard clipboard = clipboards.remove(oldPlayer);
+        if (clipboard != null) {
+            clipboards.put(newPlayer, clipboard);
+            clipboard.setPlayer(newPlayer);
+        }
+    }
 }

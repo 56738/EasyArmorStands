@@ -1,4 +1,4 @@
-package me.m56738.easyarmorstands.fabric.event;
+package me.m56738.easyarmorstands.platform.fabric;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -30,6 +30,12 @@ public final class FabricPlatformEvents {
             }
         }
         return false;
+    });
+
+    public static final Event<CloseContainerCallback> CLOSE_CONTAINER = EventFactory.createArrayBacked(CloseContainerCallback.class, callbacks -> player -> {
+        for (CloseContainerCallback callback : callbacks) {
+            callback.onCloseContainer(player);
+        }
     });
 
     public static final Event<DropItemCallback> DROP_ITEM = EventFactory.createArrayBacked(DropItemCallback.class, callbacks -> player -> {
@@ -64,6 +70,10 @@ public final class FabricPlatformEvents {
 
     public interface DropItemCallback {
         boolean onDropItem(Player player);
+    }
+
+    public interface CloseContainerCallback {
+        void onCloseContainer(Player player);
     }
 
     public interface CustomClickCallback {

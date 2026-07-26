@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class FabricPlatform extends ModdedPlatform {
     public FabricPlatform(ComponentLogger logger) {
         super(logger);
+        new FabricPlatformListener(this);
     }
 
     @Override
