@@ -19,6 +19,11 @@ public interface ModdedArmorStand extends ArmorStand, ModdedLivingEntity {
     }
 
     @Override
+    default float yaw() {
+        return getNative().getYRot();
+    }
+
+    @Override
     default Rotations getHeadPose() {
         return ModdedAdapter.fromNative(getNative().getHeadPose());
     }

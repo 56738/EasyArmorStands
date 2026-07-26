@@ -34,10 +34,15 @@ public interface ModdedLivingEntity extends LivingEntity, ModdedEntity {
     }
 
     @Override
+    default float yaw() {
+        return getNative().getYHeadRot();
+    }
+
+    @Override
     default Location eyeLocation() {
         net.minecraft.world.entity.Entity entity = getNative();
         Vector3d position = new Vector3d(entity.getX(), entity.getEyeY(), entity.getZ());
-        return Location.of(world(), position, entity.getYHeadRot(), entity.getXRot());
+        return Location.of(world(), position, yaw(), pitch());
     }
 
     @Override

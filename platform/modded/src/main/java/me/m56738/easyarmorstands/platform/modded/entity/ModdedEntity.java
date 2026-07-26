@@ -47,6 +47,14 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
         return ((ModdedEntity) entity).getNative();
     }
 
+    default float yaw() {
+        return getNative().getYRot();
+    }
+
+    default float pitch() {
+        return getNative().getXRot();
+    }
+
     @Override
     default World world() {
         return ModdedWorld.fromNative(getPlatform(), (ServerLevel) getNative().level());
@@ -56,7 +64,7 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     default Location location() {
         net.minecraft.world.entity.Entity entity = getNative();
         Vector3d position = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
-        return Location.of(world(), position, entity.getYHeadRot(), entity.getXRot());
+        return Location.of(world(), position, yaw(), pitch());
     }
 
     @Override
