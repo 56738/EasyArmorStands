@@ -1,3 +1,11 @@
+# Improvements
+
+* Allow using `/eas position/yaw/pitch` and `/eas scale x/y/z` with groups
+
+# Fixes
+
+* Fixed no longer being able to use `/eas block` with groups
+
 # API changes
 
 * Introduced an abstraction layer to enable adding support for other platforms in the future.
