@@ -7,7 +7,6 @@ import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaper;
 import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaperProvider;
 import me.m56738.easyarmorstands.paper.command.ComponentSuggestionMapper;
 import me.m56738.easyarmorstands.paper.listener.ClipboardListener;
-import me.m56738.easyarmorstands.paper.listener.MenuListener;
 import me.m56738.easyarmorstands.paper.listener.PlayerListener;
 import me.m56738.easyarmorstands.paper.listener.SessionListener;
 import me.m56738.easyarmorstands.paper.permission.PaperPermissionRegistrar;
@@ -54,6 +53,8 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
             return;
         }
 
+        platform.enable();
+
         commandManager.onEnable();
         commandManager.appendSuggestionMapper(new ComponentSuggestionMapper());
 
@@ -63,7 +64,6 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
 
         SessionListener sessionListener = new SessionListener(eas);
         getServer().getPluginManager().registerEvents(sessionListener, this);
-        getServer().getPluginManager().registerEvents(new MenuListener(eas), this);
         getServer().getPluginManager().registerEvents(new ClipboardListener(eas), this);
         getServer().getScheduler().runTaskTimer(this, eas::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);

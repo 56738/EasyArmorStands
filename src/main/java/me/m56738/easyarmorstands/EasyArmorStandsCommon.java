@@ -75,6 +75,7 @@ import me.m56738.easyarmorstands.history.History;
 import me.m56738.easyarmorstands.history.HistoryManager;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.menu.MenuButtonCollector;
+import me.m56738.easyarmorstands.menu.MenuListener;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
 import me.m56738.easyarmorstands.message.Message;
@@ -90,6 +91,7 @@ import me.m56738.easyarmorstands.platform.entity.EntityType;
 import me.m56738.easyarmorstands.platform.entity.ItemDisplay;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.entity.TextDisplay;
+import me.m56738.easyarmorstands.platform.event.EventType;
 import me.m56738.easyarmorstands.platform.inventory.EquipmentSlot;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.property.TrackedPropertyContainer;
@@ -168,6 +170,10 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         this.translationManager = translationManager;
         this.commandManager = commandManager;
         this.serializers = EasSerializers.serializers(this);
+
+        MenuListener menuListener = new MenuListener(this);
+        platform.getEventBus().subscribe(EventType.MENU_CLICK, menuListener);
+        platform.getEventBus().subscribe(EventType.MENU_DRAG, menuListener);
     }
 
     public static void registerCommands(CommandManager<EasCommandSender> commandManager, ArgumentParserProvider parserProvider, ClassLoader classLoader, EasyArmorStandsHolder holder) {

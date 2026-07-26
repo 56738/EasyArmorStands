@@ -5,7 +5,6 @@ import me.m56738.easyarmorstands.platform.dialog.DialogBody;
 import me.m56738.easyarmorstands.platform.dialog.DialogFactory;
 import me.m56738.easyarmorstands.platform.dialog.DialogInput;
 import me.m56738.easyarmorstands.platform.dialog.DialogResponseView;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -66,7 +65,7 @@ public class DialogBuilder {
                 callbackOptions);
     }
 
-    private void save(DialogResponseView response, Audience audience) {
+    private void save(DialogResponseView response) {
         for (DialogEntry entry : entries) {
             entry.save(response);
         }

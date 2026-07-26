@@ -1,11 +1,10 @@
 package me.m56738.easyarmorstands.platform.dialog;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public interface DialogFactory {
     DialogBodyProvider bodyProvider();
@@ -18,6 +17,6 @@ public interface DialogFactory {
             List<DialogInput> inputs,
             Component saveLabel,
             Component cancelLabel,
-            BiConsumer<DialogResponseView, Audience> saveAction,
+            Consumer<DialogResponseView> saveAction,
             ClickCallback.Options callbackOptions);
 }

@@ -11,12 +11,11 @@ import me.m56738.easyarmorstands.platform.dialog.DialogFactory;
 import me.m56738.easyarmorstands.platform.dialog.DialogInput;
 import me.m56738.easyarmorstands.platform.dialog.DialogInputProvider;
 import me.m56738.easyarmorstands.platform.dialog.DialogResponseView;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class PaperDialogFactory implements DialogFactory {
     private final PaperDialogBodyProvider bodyProvider = new PaperDialogBodyProvider();
@@ -34,7 +33,7 @@ public class PaperDialogFactory implements DialogFactory {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public PaperDialog createDialog(Component title, List<DialogBody> body, List<DialogInput> inputs, Component saveLabel, Component cancelLabel, BiConsumer<DialogResponseView, Audience> saveAction, ClickCallback.Options callbackOptions) {
+    public PaperDialog createDialog(Component title, List<DialogBody> body, List<DialogInput> inputs, Component saveLabel, Component cancelLabel, Consumer<DialogResponseView> saveAction, ClickCallback.Options callbackOptions) {
         return PaperDialog.fromNative(Dialog.create(b -> b.empty()
                 .base(DialogBase.builder(title)
                         .body(body.stream().map(PaperDialogBody::toNative).toList())
@@ -42,7 +41,7 @@ public class PaperDialogFactory implements DialogFactory {
                         .build())
                 .type(DialogType.confirmation(
                         ActionButton.builder(saveLabel)
-                                .action(DialogAction.customClick((response, audience) -> saveAction.accept(PaperDialogResponseView.fromNative(response), audience), callbackOptions))
+                                .action(DialogAction.customClick((response, _) -> saveAction.accept(PaperDialogResponseView.fromNative(response)), callbackOptions))
                                 .build(),
                         ActionButton.builder(cancelLabel)
                                 .build()))));

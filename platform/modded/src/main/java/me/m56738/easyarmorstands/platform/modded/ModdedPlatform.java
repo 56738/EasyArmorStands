@@ -7,9 +7,12 @@ import me.m56738.easyarmorstands.platform.dialog.DialogResponseView;
 import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.entity.EntityType;
 import me.m56738.easyarmorstands.platform.entity.Pose;
+import me.m56738.easyarmorstands.platform.event.EventBus;
+import me.m56738.easyarmorstands.platform.event.EventBusImpl;
 import me.m56738.easyarmorstands.platform.inventory.ItemType;
 import me.m56738.easyarmorstands.platform.modded.block.ModdedBlockData;
 import me.m56738.easyarmorstands.platform.modded.dialog.ModdedDialogFactory;
+import me.m56738.easyarmorstands.platform.modded.dialog.ModdedDialogResponseView;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntity;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntityType;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedPose;
@@ -21,7 +24,6 @@ import me.m56738.easyarmorstands.platform.scheduler.Scheduler;
 import me.m56738.easyarmorstands.platform.util.MappedCollection;
 import me.m56738.easyarmorstands.platform.util.MappedIterable;
 import me.m56738.easyarmorstands.platform.world.World;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.modcommon.MinecraftAudiences;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
@@ -31,6 +33,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -41,20 +45,22 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class ModdedPlatform implements Platform {
     private @Nullable MinecraftServer server;
     private @Nullable MinecraftServerAudiences adventure;
     private final ComponentLogger logger;
-    private final Scheduler scheduler;
+    private final ModdedScheduler scheduler;
+    private final EventBus eventBus = new EventBusImpl();
     private final ModdedClickActionRegistry clickActionRegistry = new ModdedClickActionRegistry();
     private final ModdedDialogFactory dialogFactory = new ModdedDialogFactory(this);
-    private final ModdedInventoryFactory inventoryFactory = new ModdedInventoryFactory();
+    private final ModdedInventoryFactory inventoryFactory = new ModdedInventoryFactory(this);
 
     private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor(
             r -> {
@@ -75,6 +81,10 @@ public abstract class ModdedPlatform implements Platform {
     public void initialize(MinecraftServer server) {
         this.server = server;
         this.adventure = MinecraftServerAudiences.of(server);
+    }
+
+    public void update() {
+        scheduler.execute();
     }
 
     private void throwNotInitialized() {
@@ -106,6 +116,11 @@ public abstract class ModdedPlatform implements Platform {
     @Override
     public String getGameVersion() {
         return getServer().getServerVersion();
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     @Override
@@ -185,8 +200,19 @@ public abstract class ModdedPlatform implements Platform {
         return inventoryFactory;
     }
 
-    public Identifier registerCustomClickAction(BiConsumer<DialogResponseView, Audience> action, ClickCallback.Options options) {
+    public Identifier registerCustomClickAction(Consumer<DialogResponseView> action, ClickCallback.Options options) {
         return clickActionRegistry.registerClickAction(action, options);
+    }
+
+    public boolean dispatchCustomClick(Identifier id, @Nullable Tag payload) {
+        Consumer<DialogResponseView> consumer = clickActionRegistry.resolve(id);
+        if (consumer == null) {
+            return false;
+        }
+        Tag tag = Objects.requireNonNullElseGet(payload, CompoundTag::new);
+        ModdedDialogResponseView view = ModdedDialogResponseView.fromNative(this, tag);
+        consumer.accept(view);
+        return true;
     }
 
     public abstract boolean hasPermission(ServerPlayer player, String permission);

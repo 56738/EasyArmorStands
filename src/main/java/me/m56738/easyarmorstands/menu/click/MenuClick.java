@@ -10,7 +10,6 @@ import net.kyori.adventure.identity.Identity;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4dc;
 
 import java.util.Locale;
 
@@ -26,15 +25,11 @@ public interface MenuClick extends ForwardingAudience.Single {
 
     @Nullable Session session();
 
-    @NotNull Matrix4dc eyeMatrix();
-
     default @NotNull Locale locale() {
         return getOrDefault(Identity.LOCALE, Locale.US);
     }
 
     @NotNull ItemStack cursor();
-
-    void allow();
 
     void close();
 

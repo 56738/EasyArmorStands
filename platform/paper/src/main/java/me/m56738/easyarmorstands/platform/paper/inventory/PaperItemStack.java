@@ -32,7 +32,10 @@ public interface PaperItemStack extends ItemStack {
 
     org.bukkit.inventory.ItemStack getNative();
 
-    static org.bukkit.inventory.ItemStack toNative(ItemStack item) {
+    static org.bukkit.inventory.ItemStack toNative(@Nullable ItemStack item) {
+        if (item == null) {
+            return org.bukkit.inventory.ItemStack.empty();
+        }
         return ((PaperItemStack) item).getNative();
     }
 

@@ -5,6 +5,7 @@
   "mixins": [
     "InventoryMixin",
     "LivingEntityMixin",
+    "MinecraftServerMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin"
   ],

@@ -22,6 +22,7 @@ import org.incendo.cloud.CommandManager;
 public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon implements EasyArmorStandsModded {
     public static final ComponentLogger LOGGER = ComponentLogger.logger("EasyArmorStands");
 
+    private final ModdedPlatform platform;
     private final ClassLoader classLoader;
     private final ModdedServerGizmos gizmos;
     private final ParticleProviderFactory particleProviderFactory;
@@ -29,10 +30,17 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     public EasyArmorStandsModdedImpl(TranslationManager translationManager, ModdedPlatform platform, CommandManager<EasCommandSender> commandManager, ModdedServerGizmos gizmos, ClassLoader classLoader) {
         super(translationManager, platform, commandManager);
+        this.platform = platform;
         this.classLoader = classLoader;
         this.gizmos = gizmos;
         this.particleProviderFactory = new ModdedParticleProviderFactory(gizmos);
         this.sessionToolProvider = new ModdedSessionToolProvider(this);
+    }
+
+    @Override
+    public void update() {
+        platform.update();
+        super.update();
     }
 
     @Override
@@ -67,7 +75,7 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     @Override
     public ItemStack createEntitySpawnEgg(Entity entity) {
-        return ModdedItemStack.fromNative((ModdedPlatform) platform(), net.minecraft.world.item.ItemStack.EMPTY); // TODO
+        return ModdedItemStack.fromNative(platform, net.minecraft.world.item.ItemStack.EMPTY); // TODO
     }
 
     @Override

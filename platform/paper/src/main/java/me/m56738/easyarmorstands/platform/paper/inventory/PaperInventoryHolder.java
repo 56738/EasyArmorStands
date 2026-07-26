@@ -12,7 +12,7 @@ public interface PaperInventoryHolder extends InventoryHolder {
         return new PaperInventoryHolderImpl(holder);
     }
 
-    static @Nullable InventoryHolder ofNullable(org.bukkit.inventory.@Nullable InventoryHolder holder) {
+    static @Nullable InventoryHolder fromNativeNullable(org.bukkit.inventory.@Nullable InventoryHolder holder) {
         if (holder == null) {
             return null;
         }

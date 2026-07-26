@@ -5,6 +5,7 @@ import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.platform.block.BlockData;
 import me.m56738.easyarmorstands.platform.entity.EntityType;
 import me.m56738.easyarmorstands.platform.entity.Pose;
+import me.m56738.easyarmorstands.platform.event.EventBus;
 import me.m56738.easyarmorstands.platform.paper.block.PaperBlockData;
 import me.m56738.easyarmorstands.platform.paper.dialog.PaperDialogFactory;
 import me.m56738.easyarmorstands.platform.paper.entity.PaperEntity;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 public class PaperPlatform implements Platform {
     private final Server server;
+    private final EventBus eventBus = EventBus.of();
     private final PaperDialogFactory dialogFactory = new PaperDialogFactory();
     private final PaperInventoryFactory inventoryFactory;
     private @Nullable Plugin plugin;
@@ -43,6 +45,13 @@ public class PaperPlatform implements Platform {
         this.scheduler = new PaperScheduler(server, plugin);
     }
 
+    public void enable() {
+        if (plugin == null) {
+            throw new IllegalStateException();
+        }
+        server.getPluginManager().registerEvents(new PaperPlatformListener(this), plugin);
+    }
+
     @Override
     public String getName() {
         return server.getName();
@@ -56,6 +65,11 @@ public class PaperPlatform implements Platform {
     @Override
     public String getGameVersion() {
         return ServerBuildInfo.buildInfo().minecraftVersionId();
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     @Override

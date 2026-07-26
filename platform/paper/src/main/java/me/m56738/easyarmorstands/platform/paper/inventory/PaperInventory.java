@@ -1,12 +1,9 @@
 package me.m56738.easyarmorstands.platform.paper.inventory;
 
 import me.m56738.easyarmorstands.platform.inventory.Inventory;
+import me.m56738.easyarmorstands.platform.inventory.InventoryHolder;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.jspecify.annotations.Nullable;
 
 public interface PaperInventory extends Inventory {
     static PaperInventory fromNative(org.bukkit.inventory.Inventory inventory) {
@@ -20,6 +17,11 @@ public interface PaperInventory extends Inventory {
     }
 
     @Override
+    default @Nullable InventoryHolder getHolder() {
+        return PaperInventoryHolder.fromNativeNullable(getNative().getHolder(false));
+    }
+
+    @Override
     default int getSize() {
         return getNative().getSize();
     }
@@ -30,7 +32,7 @@ public interface PaperInventory extends Inventory {
     }
 
     @Override
-    default void setItem(int i, ItemStack item) {
+    default void setItem(int i, @Nullable ItemStack item) {
         getNative().setItem(i, PaperItemStack.toNative(item));
     }
 

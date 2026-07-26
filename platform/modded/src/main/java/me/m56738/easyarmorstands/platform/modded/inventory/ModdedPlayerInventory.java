@@ -3,6 +3,7 @@ package me.m56738.easyarmorstands.platform.modded.inventory;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.PlayerInventory;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +20,11 @@ public interface ModdedPlayerInventory extends PlayerInventory, ModdedInventory 
 
     static Inventory toNative(PlayerInventory inventory) {
         return ((ModdedPlayerInventory) inventory).getNative();
+    }
+
+    @Override
+    default Component getTitle() {
+        return Component.empty();
     }
 
     @Override

@@ -34,7 +34,10 @@ public interface ModdedItemStack extends ItemStack, ModdedPlatformHolder {
         return new ModdedItemStackImpl(platform, stack.copy());
     }
 
-    static net.minecraft.world.item.ItemStack toNative(ItemStack item) {
+    static net.minecraft.world.item.ItemStack toNative(@Nullable ItemStack item) {
+        if (item == null) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
         return ((ModdedItemStack) item).getNative();
     }
 

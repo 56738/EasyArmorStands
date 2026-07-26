@@ -24,7 +24,7 @@ public class ServerGamePacketListenerImplMixin {
             ),
             cancellable = true
     )
-    private void handle(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
+    private void handlePlayerAction(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
         if (packet.getAction() == ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND) {
             if (FabricPlatformEvents.SWAP_HANDS.invoker().onSwapHands(player)) {
                 ci.cancel();

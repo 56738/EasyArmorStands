@@ -2,7 +2,10 @@ package me.m56738.easyarmorstands.fabric.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.Nullable;
 
 public final class FabricPlatformEvents {
     private FabricPlatformEvents() {
@@ -38,6 +41,15 @@ public final class FabricPlatformEvents {
         return false;
     });
 
+    public static final Event<CustomClickCallback> CUSTOM_CLICK = EventFactory.createArrayBacked(CustomClickCallback.class, callbacks -> (id, payload) -> {
+        for (CustomClickCallback callback : callbacks) {
+            if (callback.onCustomClick(id, payload)) {
+                return true;
+            }
+        }
+        return false;
+    });
+
     public interface ArmSwingCallback {
         void onArmSwing(Player player);
     }
@@ -52,5 +64,9 @@ public final class FabricPlatformEvents {
 
     public interface DropItemCallback {
         boolean onDropItem(Player player);
+    }
+
+    public interface CustomClickCallback {
+        boolean onCustomClick(Identifier id, @Nullable Tag payload);
     }
 }
