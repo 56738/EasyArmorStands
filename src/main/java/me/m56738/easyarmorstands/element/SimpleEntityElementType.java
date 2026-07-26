@@ -97,8 +97,7 @@ public abstract class SimpleEntityElementType<E extends Entity> implements Entit
 
         @Override
         public void accept(E entity) {
-            // TODO
-//            PaperEntity.toNative(entity).getPersistentDataContainer().set(EntityElementKeys.ELEMENT_TYPE, PersistentDataType.STRING, SimpleEntityElementType.this.key().asString());
+            eas.setEntityElementType(entity, SimpleEntityElementType.this.key());
             element = SimpleEntityElementType.this.getElement(entity);
             if (element != null) {
                 copyProperties(properties, element.getProperties());

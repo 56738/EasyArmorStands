@@ -588,11 +588,16 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
 
     @Override
     public void setEntityElementProvider(Entity entity, @Nullable EntityElementProvider provider) {
-        if (provider != null) {
-            entity.setCustomDataString(EntityElementKeys.ELEMENT_TYPE, provider.key().asString());
+        setEntityElementType(entity, provider != null ? provider.key() : null);
+    }
+
+    public void setEntityElementType(Entity entity, @Nullable Key key) {
+        if (key != null) {
+            entity.setCustomDataString(EntityElementKeys.ELEMENT_TYPE, key.asString());
         } else {
             entity.removeCustomData(EntityElementKeys.ELEMENT_TYPE);
         }
+
     }
 
     public abstract ItemStack createEntitySpawnEgg(Entity entity);
