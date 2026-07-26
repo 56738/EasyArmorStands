@@ -14,11 +14,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.jspecify.annotations.Nullable;
 
-public class ColorPickerContextImpl implements ColorPickerContext {
+public class PaperColorPickerContext implements ColorPickerContext {
     private final Platform platform;
     private final Property<ItemStack> property;
 
-    public ColorPickerContextImpl(Platform platform, Property<ItemStack> property) {
+    public PaperColorPickerContext(Platform platform, Property<ItemStack> property) {
         this.platform = platform;
         this.property = property;
     }

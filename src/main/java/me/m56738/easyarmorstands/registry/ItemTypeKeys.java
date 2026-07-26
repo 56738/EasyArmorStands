@@ -1,7 +1,9 @@
 package me.m56738.easyarmorstands.registry;
 
+import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.platform.Platform;
 import net.kyori.adventure.key.Key;
+import org.intellij.lang.annotations.Subst;
 
 public final class ItemTypeKeys {
     private ItemTypeKeys() {
@@ -46,5 +48,8 @@ public final class ItemTypeKeys {
 
     public static void validate(Platform platform) {
         RegistryUtil.validate(ItemTypeKeys.class, platform::getItemType);
+        for (@Subst("light_blue") String name : ColorPicker.PRESETS.keySet()) {
+            platform.getItemType(Key.key(name + "_wool"));
+        }
     }
 }

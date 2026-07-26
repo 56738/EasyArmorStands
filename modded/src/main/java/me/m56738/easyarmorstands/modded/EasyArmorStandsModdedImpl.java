@@ -2,10 +2,12 @@ package me.m56738.easyarmorstands.modded;
 
 import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.api.property.Property;
+import me.m56738.easyarmorstands.color.ColorPicker;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.menu.Menu;
 import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.modded.api.EasyArmorStandsModded;
+import me.m56738.easyarmorstands.modded.color.ModdedColorPickerContext;
 import me.m56738.easyarmorstands.modded.particle.ModdedParticleProviderFactory;
 import me.m56738.easyarmorstands.modded.session.ModdedSessionToolProvider;
 import me.m56738.easyarmorstands.particle.ParticleProviderFactory;
@@ -72,12 +74,12 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     @Override
     public Menu createColorPicker(Player player, Property<ItemStack> property) {
-        throw new IllegalArgumentException(); // TODO
+        return ColorPicker.create(this, player, new ModdedColorPickerContext(platform, property));
     }
 
     @Override
     public boolean isColorPickerSupported(ItemStack item) {
-        return false;
+        return ModdedColorPickerContext.isSupported(item);
     }
 
     @Override

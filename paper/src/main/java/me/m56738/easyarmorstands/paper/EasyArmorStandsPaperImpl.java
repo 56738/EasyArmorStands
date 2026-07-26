@@ -9,7 +9,7 @@ import me.m56738.easyarmorstands.message.TranslationManager;
 import me.m56738.easyarmorstands.paper.addon.AddonManager;
 import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaper;
 import me.m56738.easyarmorstands.paper.api.region.RegionPrivilegeManager;
-import me.m56738.easyarmorstands.paper.color.ColorPickerContextImpl;
+import me.m56738.easyarmorstands.paper.color.PaperColorPickerContext;
 import me.m56738.easyarmorstands.paper.element.PaperEntitySpawnEggProvider;
 import me.m56738.easyarmorstands.paper.event.PaperEventDispatcher;
 import me.m56738.easyarmorstands.paper.particle.PaperGizmoParticleProviderFactory;
@@ -139,12 +139,12 @@ public class EasyArmorStandsPaperImpl extends EasyArmorStandsCommon implements E
 
     @Override
     public Menu createColorPicker(Player player, Property<ItemStack> property) {
-        return ColorPicker.create(this, player, new ColorPickerContextImpl(platform(), property));
+        return ColorPicker.create(this, player, new PaperColorPickerContext(platform(), property));
     }
 
     @Override
     public boolean isColorPickerSupported(ItemStack item) {
-        return ColorPickerContextImpl.hasColor(PaperItemStack.toNative(item).getItemMeta());
+        return PaperColorPickerContext.hasColor(PaperItemStack.toNative(item).getItemMeta());
     }
 
     @Override

@@ -9,19 +9,45 @@ import me.m56738.easyarmorstands.menu.color.ColorPickerContext;
 import me.m56738.easyarmorstands.menu.layout.MenuLayout;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutBuilder;
 import me.m56738.easyarmorstands.menu.layout.MenuLayoutRule;
+import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.registry.ItemTypeKeys;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.SequencedMap;
 
 @NullMarked
 public final class ColorPicker {
+    public static final SequencedMap<String, RGBColor> PRESETS = new LinkedHashMap<>();
+
+    static {
+        PRESETS.put("white", RGBColor.of(0xF9FFFE));
+        PRESETS.put("orange", RGBColor.of(0xF9801D));
+        PRESETS.put("magenta", RGBColor.of(0xC74EBD));
+        PRESETS.put("light_blue", RGBColor.of(0x3AB3DA));
+        PRESETS.put("yellow", RGBColor.of(0xFED83D));
+        PRESETS.put("lime", RGBColor.of(0x80C71F));
+        PRESETS.put("pink", RGBColor.of(0xF38BAA));
+        PRESETS.put("gray", RGBColor.of(0x474F52));
+        PRESETS.put("light_gray", RGBColor.of(0x9D9D97));
+        PRESETS.put("cyan", RGBColor.of(0x169C9C));
+        PRESETS.put("purple", RGBColor.of(0x8932B8));
+        PRESETS.put("blue", RGBColor.of(0x3C44AA));
+        PRESETS.put("brown", RGBColor.of(0x835432));
+        PRESETS.put("green", RGBColor.of(0x5E7C16));
+        PRESETS.put("red", RGBColor.of(0xB02E26));
+        PRESETS.put("black", RGBColor.of(0x1D1D21));
+    }
+
     private ColorPicker() {
     }
 
@@ -35,15 +61,15 @@ public final class ColorPicker {
             buttons.add(new ColorAxisButton(context, EasyArmorStands.key("color_picker/axis/" + name), axis));
             buttons.add(new ColorAxisChangeButton(context, EasyArmorStands.key("color_picker/axis/" + name + "/increment"), MenuIcon.of(context.platform().getItemType(ItemTypeKeys.LIGHT_GRAY_CONCRETE)), axis, 10, 1, 100));
         }
-        // TODO readd color picker presets
-//        for (DyeColor color : DyeColor.values()) {
-//            @Subst("light_blue")
-//            String name = color.name().toLowerCase(Locale.ROOT);
-//            Key key = EasyArmorStands.key("color_picker/preset/" + name);
-//            MenuIcon icon = MenuIcon.of(Objects.requireNonNull(Material.matchMaterial(name + "_wool")));
-//            Component title = Component.translatable("easyarmorstands.color.preset." + name.replace('_', '-'));
-//            buttons.add(new ColorPresetButton(context, key, icon, title, color.getColor()));
-//        }
+
+        for (Map.Entry<String, RGBColor> entry : PRESETS.entrySet()) {
+            @Subst("light_blue")
+            String name = entry.getKey();
+            Key key = EasyArmorStands.key("color_picker/preset/" + name);
+            MenuIcon icon = MenuIcon.of(context.platform().getItemType(Key.key(name + "_wool")));
+            Component title = Component.translatable("easyarmorstands.color.preset." + name.replace('_', '-'));
+            buttons.add(new ColorPresetButton(context, key, icon, title, entry.getValue()));
+        }
 
         TranslatableComponent title = Component.translatable("easyarmorstands.menu.color-picker.title");
         return createLayout(eas).createMenu(title, player.locale(), buttons);

@@ -32,6 +32,8 @@ dependencies {
 }
 
 loom {
+    splitEnvironmentSourceSets()
+
     mods {
         register("easyarmorstands") {
             sourceSet(sourceSets.main.get())
@@ -53,10 +55,13 @@ loom {
 }
 
 tasks {
+    processResources {
+        from("../src/main/resources/assets/easyarmorstands/icon.png")
+    }
+
     jar {
         archiveBaseName = "EasyArmorStands-Fabric"
         destinationDirectory.set(layout.buildDirectory)
-        from("../src/main/resources/assets/easyarmorstands/icon.png")
     }
 
     val staticJar = register<Copy>("staticJar") {
