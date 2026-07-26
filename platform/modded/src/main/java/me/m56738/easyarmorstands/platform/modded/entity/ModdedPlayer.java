@@ -21,6 +21,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.jspecify.annotations.Nullable;
 
@@ -116,7 +117,10 @@ public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandS
 
     @Override
     default boolean isInventoryOpen(Inventory inventory) {
-        return false; // TODO
+        if (!(getNative().containerMenu instanceof ChestMenu chestMenu)) {
+            return false;
+        }
+        return chestMenu.getContainer().equals(ModdedInventory.toNative(inventory));
     }
 
     @Override
