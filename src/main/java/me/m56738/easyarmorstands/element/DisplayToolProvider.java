@@ -35,10 +35,6 @@ public class DisplayToolProvider extends SimpleEntityToolProvider implements Too
         return new DisplayAxisRotateTool(context, properties, DisplayPropertyTypes.LEFT_ROTATION, axis, entityRotationProvider);
     }
 
-    public @Nullable AxisRotateTool shear(@NotNull ToolContext context, @NotNull Axis axis) {
-        return new DisplayAxisRotateTool(context, properties, DisplayPropertyTypes.RIGHT_ROTATION, axis, rotation());
-    }
-
     @Override
     public @NotNull ScaleTool scale(@NotNull ToolContext context) {
         return new DisplayScaleTool(eas, context, properties);

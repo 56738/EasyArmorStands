@@ -4,7 +4,8 @@
 
 # Fixes
 
-* Fixed no longer being able to use `/eas block` with groups
+* Fixes no longer being able to use `/eas block` with groups
+* Restrict `/eas shear` to local position/rotation
 
 # API changes
 

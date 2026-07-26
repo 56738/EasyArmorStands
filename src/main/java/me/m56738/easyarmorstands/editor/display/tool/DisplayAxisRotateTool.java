@@ -36,6 +36,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
     private final Property<Location> locationProperty;
     private final Property<Vector3fc> translationProperty;
     private final Property<Quaternionfc> rotationProperty;
+    private final Property<Vector3fc> scaleProperty;
     private final Property<Float> heightProperty;
     private final Axis axis;
     private final RotationProvider parentRotationProvider;
@@ -47,6 +48,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
         this.translationProperty = properties.get(DisplayPropertyTypes.TRANSLATION);
         this.heightProperty = properties.get(DisplayPropertyTypes.BOX_HEIGHT);
         this.rotationProperty = properties.get(type);
+        this.scaleProperty = properties.get(DisplayPropertyTypes.SCALE);
         this.axis = axis;
         this.parentRotationProvider = parentRotationProvider;
     }

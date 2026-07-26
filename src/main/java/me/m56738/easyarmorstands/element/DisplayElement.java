@@ -44,6 +44,10 @@ public class DisplayElement<T extends Display> extends SimpleEntityElement<T> {
         return new DisplayToolProvider(eas, properties, getOffsetProvider(properties));
     }
 
+    public DisplayShearToolProvider getShearTools(@NotNull PropertyContainer properties) {
+        return new DisplayShearToolProvider(properties);
+    }
+
     private OffsetProvider getOffsetProvider(PropertyContainer properties) {
         if (entity instanceof BlockDisplay && eas.getConfiguration().editor.centeredPivot) {
             return new BlockDisplayOffsetProvider(properties);

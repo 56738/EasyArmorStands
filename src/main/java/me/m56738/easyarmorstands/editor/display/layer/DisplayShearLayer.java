@@ -1,16 +1,14 @@
 package me.m56738.easyarmorstands.editor.display.layer;
 
-import me.m56738.easyarmorstands.api.Axis;
 import me.m56738.easyarmorstands.api.editor.Session;
 import me.m56738.easyarmorstands.api.editor.context.UpdateContext;
 import me.m56738.easyarmorstands.api.editor.layer.ResettableLayer;
-import me.m56738.easyarmorstands.api.editor.tool.ToolContext;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.property.type.DisplayPropertyTypes;
 import me.m56738.easyarmorstands.editor.input.ReturnInput;
 import me.m56738.easyarmorstands.element.DisplayElement;
-import me.m56738.easyarmorstands.element.DisplayToolProvider;
+import me.m56738.easyarmorstands.element.DisplayShearToolProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
@@ -27,14 +25,8 @@ public class DisplayShearLayer extends DisplayLayer implements ResettableLayer {
         this.session = session;
         this.name = DisplayPropertyTypes.RIGHT_ROTATION.getName().color(NamedTextColor.GOLD);
         this.rightRotationProperty = properties.get(DisplayPropertyTypes.RIGHT_ROTATION);
-        DisplayToolProvider tools = element.getTools(properties);
-        for (Axis axis : Axis.values()) {
-            // TODO use ToolMenuManager
-            addNode(session.nodeProvider()
-                    .axisRotate()
-                    .setTool(tools.shear(ToolContext.of(tools.position(), tools.rotation()), axis))
-                    .build());
-        }
+        DisplayShearToolProvider tools = element.getShearTools(properties);
+        addNode(session.nodeProvider().tools(tools));
     }
 
     @Override
