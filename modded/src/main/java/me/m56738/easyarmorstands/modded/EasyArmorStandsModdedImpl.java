@@ -13,10 +13,17 @@ import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntity;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.level.storage.TagValueOutput;
 import org.incendo.cloud.CommandManager;
 
 public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon implements EasyArmorStandsModded {
@@ -75,7 +82,24 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
 
     @Override
     public ItemStack createEntitySpawnEgg(Entity entity) {
-        return ModdedItemStack.fromNative(platform, net.minecraft.world.item.ItemStack.EMPTY); // TODO
+        net.minecraft.world.entity.Entity nativeEntity = ModdedEntity.toNative(entity);
+        net.minecraft.world.item.ItemStack item = nativeEntity.getPickResult();
+        if (item == null) {
+            return ModdedItemStack.empty(platform);
+        }
+        item = item.copy();
+        CompoundTag tag;
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(nativeEntity.problemPath(), LOGGER)) {
+            TagValueOutput output = TagValueOutput.createWithContext(reporter, nativeEntity.registryAccess());
+            nativeEntity.saveAsPassenger(output);
+            tag = output.buildResult();
+        }
+        tag.remove("Pos");
+        tag.remove("Motion");
+        tag.remove("sleeping_pos");
+        TypedEntityData<EntityType<?>> data = TypedEntityData.of(nativeEntity.getType(), tag);
+        item.set(DataComponents.ENTITY_DATA, data);
+        return ModdedItemStack.fromNative(platform, item);
     }
 
     @Override
