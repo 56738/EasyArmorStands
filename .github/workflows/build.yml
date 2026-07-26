@@ -24,10 +24,14 @@ jobs:
           ORG_GRADLE_PROJECT_m56738Password: ${{ secrets.MAVEN_M56738_PASSWORD }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: Package
-          path: |
-            fabric/build/EasyArmorStands-Fabric-*.jar
-            paper/build/EasyArmorStands-Paper-*.jar
+          name: Fabric
+          path: fabric/build/EasyArmorStands-Fabric-*.jar
+          archive: 'false'
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: Paper
+          path: paper/build/EasyArmorStands-Paper-*.jar
+          archive: 'false'
       - name: Update description
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: ./gradlew modrinthSyncBody syncAllPagesToHangar
