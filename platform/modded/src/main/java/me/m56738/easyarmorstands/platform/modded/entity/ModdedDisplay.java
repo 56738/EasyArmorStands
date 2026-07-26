@@ -4,7 +4,9 @@ import me.m56738.easyarmorstands.platform.color.RGBColor;
 import me.m56738.easyarmorstands.platform.entity.Display;
 import me.m56738.easyarmorstands.platform.modded.ModdedAdapter;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
+import org.joml.Quaternionf;
 import org.joml.Quaternionfc;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
@@ -53,7 +55,7 @@ public interface ModdedDisplay extends Display, ModdedEntity {
 
     @Override
     default void setTranslation(Vector3fc translation) {
-        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_TRANSLATION_ID, translation);
+        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_TRANSLATION_ID, new Vector3f(translation));
     }
 
     @Override
@@ -63,7 +65,7 @@ public interface ModdedDisplay extends Display, ModdedEntity {
 
     @Override
     default void setLeftRotation(Quaternionfc rotation) {
-        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_LEFT_ROTATION_ID, rotation);
+        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_LEFT_ROTATION_ID, new Quaternionf(rotation));
     }
 
     @Override
@@ -73,7 +75,7 @@ public interface ModdedDisplay extends Display, ModdedEntity {
 
     @Override
     default void setScale(Vector3fc scale) {
-        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_SCALE_ID, scale);
+        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_SCALE_ID, new Vector3f(scale));
     }
 
     @Override
@@ -83,7 +85,7 @@ public interface ModdedDisplay extends Display, ModdedEntity {
 
     @Override
     default void setRightRotation(Quaternionfc rotation) {
-        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_RIGHT_ROTATION_ID, rotation);
+        getNative().getEntityData().set(net.minecraft.world.entity.Display.DATA_RIGHT_ROTATION_ID, new Quaternionf(rotation));
     }
 
     @Override
