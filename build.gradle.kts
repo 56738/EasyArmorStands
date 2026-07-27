@@ -16,3 +16,12 @@ dependencies {
     api(libs.gizmo.common)
     annotationProcessor(libs.cloud.annotations)
 }
+
+tasks {
+    jar {
+        manifest {
+            attributes("FMLModType" to "LIBRARY")
+            attributes("Automatic-Module-Name" to "me.m56738.easyarmorstands")
+        }
+    }
+}

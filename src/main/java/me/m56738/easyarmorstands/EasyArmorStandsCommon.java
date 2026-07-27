@@ -13,7 +13,6 @@ import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.ReferenceProvider;
 import me.m56738.easyarmorstands.api.property.Property;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
-import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.clipboard.Clipboard;
 import me.m56738.easyarmorstands.clipboard.ClipboardManager;
 import me.m56738.easyarmorstands.command.ClipboardCommands;
@@ -555,7 +554,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
     }
 
     @Override
-    public PropertyTypeRegistry propertyTypeRegistry() {
+    public PropertyTypeRegistryImpl propertyTypeRegistry() {
         return Objects.requireNonNull(propertyTypeRegistry);
     }
 

@@ -5,19 +5,19 @@ plugins {
 }
 
 dependencies {
-    api(project(":easyarmorstands-api"))
-    api(project(":easyarmorstands-platform-modded"))
+    api(project(":easyarmorstands-modded-api"))
+    api(project(":easyarmorstands-platform-neoforge"))
 }
 
 neoForge {
-    neoFormVersion = libs.versions.neoform.get()
+    version = libs.versions.neoforge.get()
 }
 
 tasks {
     jar {
         manifest {
             attributes("FMLModType" to "GAMELIBRARY")
-            attributes("Automatic-Module-Name" to "me.m56738.easyarmorstands.modded.api")
+            attributes("Automatic-Module-Name" to "me.m56738.easyarmorstands.neoforge.api")
         }
     }
 }

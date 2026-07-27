@@ -15,3 +15,12 @@ dependencies {
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
 }
+
+tasks {
+    jar {
+        manifest {
+            attributes("FMLModType" to "GAMELIBRARY")
+            attributes("Automatic-Module-Name" to "me.m56738.easyarmorstands.modded")
+        }
+    }
+}

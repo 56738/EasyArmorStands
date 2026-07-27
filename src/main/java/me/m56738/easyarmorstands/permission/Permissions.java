@@ -1,7 +1,11 @@
 package me.m56738.easyarmorstands.permission;
 
+import me.m56738.easyarmorstands.api.property.type.PropertyType;
 import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.platform.entity.EntityType;
+import me.m56738.easyarmorstands.property.type.PropertyTypeRegistryImpl;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.Field;
@@ -140,7 +144,7 @@ public class Permissions {
     private Permissions() {
     }
 
-    public static void registerAll(Platform platform, PermissionRegistrar registrar) {
+    public static void registerAll(Platform platform, PropertyTypeRegistryImpl propertyTypeRegistry, PermissionRegistrar registrar) {
         try {
             for (Field field : Permissions.class.getDeclaredFields()) {
                 int modifiers = field.getModifiers();
@@ -156,6 +160,14 @@ public class Permissions {
             register(entityType, SPAWN, "spawning", registrar);
             register(entityType, DESTROY, "destroying", registrar);
             register(entityType, EDIT, "editing", registrar);
+        }
+
+        for (Key key : propertyTypeRegistry.getKeys()) {
+            PropertyType<?> type = propertyTypeRegistry.get(key);
+            String permission = type.getPermission();
+            if (permission != null) {
+                registrar.registerPermission(permission, "Allow editing " + PlainTextComponentSerializer.plainText().serialize(type.getName()), Map.of());
+            }
         }
     }
 

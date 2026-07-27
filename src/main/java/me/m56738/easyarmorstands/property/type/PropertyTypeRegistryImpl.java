@@ -6,6 +6,8 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,5 +23,9 @@ public class PropertyTypeRegistryImpl implements PropertyTypeRegistry {
     @Override
     public @Nullable PropertyType<?> getOrNull(@NotNull Key key) {
         return types.get(key);
+    }
+
+    public Collection<Key> getKeys() {
+        return Collections.unmodifiableCollection(types.keySet());
     }
 }

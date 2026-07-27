@@ -11,4 +11,17 @@ dependencies {
 
 neoForge {
     neoFormVersion = libs.versions.neoform.get()
+
+    accessTransformers {
+        publish(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    }
+}
+
+tasks {
+    jar {
+        manifest {
+            attributes("FMLModType" to "GAMELIBRARY")
+            attributes("Automatic-Module-Name" to "me.m56738.easyarmorstands.platform.modded")
+        }
+    }
 }

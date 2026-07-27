@@ -26,6 +26,7 @@ lands = "7.25.4"
 minecraft = "26.2"
 minotaur = "2.9.0"
 moddev = "2.0.142"
+neoforge = "26.2.0.35-beta"
 neoform = "26.2-2"
 paper = "26.2.build.+"
 plotsquared = "7.5.13"
@@ -42,6 +43,7 @@ worldguard = "7.0.17"
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-platform-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-platform-mod" }
 adventure-platform-mod-shared = { module = "net.kyori:adventure-platform-mod-shared", version.ref = "adventure-platform-mod" }
+adventure-platform-neoforge = { module = "net.kyori:adventure-platform-neoforge", version.ref = "adventure-platform-mod" }
 adventure-text-logger-slf4j = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
