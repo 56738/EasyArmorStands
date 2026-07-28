@@ -12,12 +12,22 @@ import net.minecraft.world.entity.EntityProcessor;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
+import org.joml.Vector3dc;
 
 public interface ModdedEntitySnapshot extends EntitySnapshot, ModdedPlatformHolder {
     CompoundTag getNative();
 
     static ModdedEntitySnapshot fromNative(ModdedPlatform platform, CompoundTag tag) {
-        return new ModdedEntitySnapshotImpl(platform, tag);
+        CompoundTag compoundTag = tag.copy();
+        filterTag(compoundTag);
+        return new ModdedEntitySnapshotImpl(platform, compoundTag);
+    }
+
+    static void filterTag(CompoundTag tag) {
+        tag.remove("Pos");
+        tag.remove("Motion");
+        tag.remove("sleeping_pos");
+        tag.remove("UUID");
     }
 
     static CompoundTag toNative(EntitySnapshot snapshot) {
@@ -27,11 +37,13 @@ public interface ModdedEntitySnapshot extends EntitySnapshot, ModdedPlatformHold
     @Override
     default Entity createEntity(Location location) {
         ServerLevel level = ModdedWorld.toNative(location.world());
+        Vector3dc position = location.position();
         EntitySpawnRequest request = new EntitySpawnRequest(EntitySpawnReason.LOAD, false);
         net.minecraft.world.entity.Entity entity = EntityType.loadEntityRecursive(getNative(), level, request, EntityProcessor.NOP);
         if (entity == null) {
             throw new IllegalArgumentException();
         }
+        entity.snapTo(position.x(), position.y(), position.z(), location.yaw(), location.pitch());
         level.addFreshEntity(entity);
         return ModdedEntity.fromNative(getPlatform(), entity);
     }

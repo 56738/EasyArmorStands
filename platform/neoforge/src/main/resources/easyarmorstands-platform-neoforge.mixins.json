@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "me.m56738.easyarmorstands.platform.neoforge.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "ArmorStandMixin",
+    "EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

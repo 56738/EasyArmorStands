@@ -93,7 +93,7 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
 
     @Override
     default boolean isValid() {
-        return getNative().isAlive() && !getNative().isRemoved();
+        return !getNative().isRemoved();
     }
 
     @Override

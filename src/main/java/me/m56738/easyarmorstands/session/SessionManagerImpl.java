@@ -76,6 +76,9 @@ public class SessionManagerImpl implements SessionManager {
         for (Iterator<SessionImpl> iterator = sessions.values().iterator(); iterator.hasNext(); ) {
             SessionImpl session = iterator.next();
             boolean valid = session.update();
+            if (session.isToolRequired() && !isHoldingTool(session.player())) {
+                valid = false;
+            }
             if (!valid) {
                 iterator.remove();
                 session.stop();

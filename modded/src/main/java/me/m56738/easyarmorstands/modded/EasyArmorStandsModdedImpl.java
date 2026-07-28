@@ -16,6 +16,7 @@ import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntity;
+import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntitySnapshot;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
@@ -96,9 +97,7 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
             nativeEntity.saveAsPassenger(output);
             tag = output.buildResult();
         }
-        tag.remove("Pos");
-        tag.remove("Motion");
-        tag.remove("sleeping_pos");
+        ModdedEntitySnapshot.filterTag(tag);
         TypedEntityData<EntityType<?>> data = TypedEntityData.of(nativeEntity.getType(), tag);
         item.set(DataComponents.ENTITY_DATA, data);
         return ModdedItemStack.fromNative(platform, item);

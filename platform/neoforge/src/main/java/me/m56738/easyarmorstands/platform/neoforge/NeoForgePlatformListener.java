@@ -13,6 +13,8 @@ import me.m56738.easyarmorstands.platform.modded.block.ModdedBlock;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntity;
 import me.m56738.easyarmorstands.platform.modded.entity.ModdedPlayer;
 import me.m56738.easyarmorstands.platform.modded.world.ModdedWorld;
+import me.m56738.easyarmorstands.platform.neoforge.event.ArmorStandBreakEvent;
+import me.m56738.easyarmorstands.platform.neoforge.event.EntityPlaceEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.ICancellableEvent;
@@ -21,8 +23,10 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingSwapItemsEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -58,12 +62,10 @@ public class NeoForgePlatformListener {
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.RightClickItem.class, this::onPlayerInteractRightClick);
         NeoForge.EVENT_BUS.addListener(AttackEntityEvent.class, this::onAttackEntity);
         NeoForge.EVENT_BUS.addListener(ItemTossEvent.class, this::onItemToss);
-
-        // TODO PLAYER_PICK_ITEM
-        // TODO PLAYER_PICK_UP_ITEM
-        // TODO PLAYER_PLACED_ENTITY
-        // TODO PLAYER_DESTROY_ENTITY
-
+        NeoForge.EVENT_BUS.addListener(ItemEntityPickupEvent.Post.class, this::onItemEntityPickup);
+        NeoForge.EVENT_BUS.addListener(EntityPlaceEvent.class, this::onEntityPlace);
+        NeoForge.EVENT_BUS.addListener(LivingDeathEvent.class, this::onLivingDeath);
+        NeoForge.EVENT_BUS.addListener(ArmorStandBreakEvent.class, this::onArmorStandBreak);
         NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post.class, this::onServerTickPost);
     }
 
@@ -158,6 +160,32 @@ public class NeoForgePlatformListener {
                 event.setCanceled(true);
             }
         }
+    }
+
+    private void onItemEntityPickup(ItemEntityPickupEvent.Post event) {
+        if (!(event.getPlayer() instanceof ServerPlayer serverPlayer)) return;
+        invoker(EventType.PLAYER_PICK_UP_ITEM).onPlayerPickUpItem(ModdedPlayer.fromNative(platform, serverPlayer));
+    }
+
+    private void onEntityPlace(EntityPlaceEvent event) {
+        if (!(event.getSourceEntity() instanceof ServerPlayer serverPlayer)) return;
+        invoker(EventType.PLAYER_PLACED_ENTITY).onPlayerPlacedEntity(
+                ModdedPlayer.fromNative(platform, serverPlayer),
+                ModdedEntity.fromNative(platform, event.getEntity()));
+    }
+
+    private void onLivingDeath(LivingDeathEvent event) {
+        if (!(event.getSource().getEntity() instanceof ServerPlayer serverPlayer)) return;
+        invoker(EventType.PLAYER_DESTROY_ENTITY).onPlayerDestroyEntity(
+                ModdedPlayer.fromNative(platform, serverPlayer),
+                ModdedEntity.fromNative(platform, event.getEntity()));
+    }
+
+    private void onArmorStandBreak(ArmorStandBreakEvent event) {
+        if (!(event.getSource().getEntity() instanceof ServerPlayer serverPlayer)) return;
+        invoker(EventType.PLAYER_DESTROY_ENTITY).onPlayerDestroyEntity(
+                ModdedPlayer.fromNative(platform, serverPlayer),
+                ModdedEntity.fromNative(platform, event.getEntity()));
     }
 
     private void onServerTickPost(ServerTickEvent.Post e) {

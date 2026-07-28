@@ -181,7 +181,6 @@ public class SessionCommands {
         sender.history().push(actions, description);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private <E extends Entity> EntityElement<E> cloneEntity(EntityElement<E> element) {
         E copy = element.getType().getEntityClass().cast(element.getEntity().copy(element.getEntity().location()));
         return element.getType().getElement(copy);
