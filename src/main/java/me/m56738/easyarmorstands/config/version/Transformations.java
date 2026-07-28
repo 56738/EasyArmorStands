@@ -2,11 +2,10 @@ package me.m56738.easyarmorstands.config.version;
 
 import me.m56738.easyarmorstands.config.MessageConfig;
 import me.m56738.easyarmorstands.config.version.game.ReplaceTransformAction;
-import org.spongepowered.configurate.NodePath;
-import org.spongepowered.configurate.transformation.ConfigurationTransformation;
-import org.spongepowered.configurate.transformation.TransformAction;
+import me.m56738.easyarmorstands.lib.configurate.transformation.ConfigurationTransformation;
+import me.m56738.easyarmorstands.lib.configurate.transformation.TransformAction;
 
-import static org.spongepowered.configurate.NodePath.path;
+import static me.m56738.easyarmorstands.lib.configurate.NodePath.path;
 
 public class Transformations {
     public static ConfigurationTransformation.Versioned config() {
@@ -47,38 +46,38 @@ public class Transformations {
 
     public static ConfigurationTransformation initialTransform() {
         return ConfigurationTransformation.builder()
-                .addAction(NodePath.path("update-check"),
+                .addAction(path("update-check"),
                         (path, value) -> new Object[]{"update-check", "enabled"})
-                .addAction(NodePath.path("tool"),
+                .addAction(path("tool"),
                         (path, value) -> new Object[]{"editor", "tool"})
-                .addAction(NodePath.path("editor-scale-min-distance"),
+                .addAction(path("editor-scale-min-distance"),
                         (path, value) -> new Object[]{"editor", "scale", "min-distance"})
-                .addAction(NodePath.path("editor-scale-max-distance"),
+                .addAction(path("editor-scale-max-distance"),
                         (path, value) -> new Object[]{"editor", "scale", "max-distance"})
-                .addAction(NodePath.path("editor-range"),
+                .addAction(path("editor-range"),
                         (path, value) -> new Object[]{"editor", "button", "range"})
-                .addAction(NodePath.path("editor-selection-range"),
+                .addAction(path("editor-selection-range"),
                         (path, value) -> new Object[]{"editor", "selection", "range"})
-                .addAction(NodePath.path("editor-selection-limit"),
+                .addAction(path("editor-selection-limit"),
                         (path, value) -> new Object[]{"editor", "selection", "group", "limit"})
-                .addAction(NodePath.path("editor-selection-distance"),
+                .addAction(path("editor-selection-distance"),
                         (path, value) -> new Object[]{"editor", "selection", "group", "range"})
-                .addAction(NodePath.path("editor-button-limit"),
+                .addAction(path("editor-button-limit"),
                         (path, value) -> new Object[]{"editor", "discovery", "limit"})
-                .addAction(NodePath.path("editor-look-threshold"),
+                .addAction(path("editor-look-threshold"),
                         (path, value) -> new Object[]{"editor", "button", "threshold"})
-                .addAction(NodePath.path("interpolation-ticks"),
+                .addAction(path("interpolation-ticks"),
                         (path, value) -> new Object[]{"editor", "button", "interpolation-ticks"})
-                .addAction(NodePath.path("menu-background"),
+                .addAction(path("menu-background"),
                         (path, value) -> new Object[]{"editor", "menu", "background"})
-                .addAction(NodePath.path("message-formats"),
+                .addAction(path("message-formats"),
                         (path, value) -> {
                             value.set(MessageConfig.formatType(), value.get(MessageConfig.formatType()));
                             return new Object[]{"message", "format"};
                         })
-                .addAction(NodePath.path("server-side-translation"),
+                .addAction(path("server-side-translation"),
                         (path, value) -> new Object[]{"message", "server-side-translation"})
-                .addAction(NodePath.path("swap-hands-button"), TransformAction.remove())
+                .addAction(path("swap-hands-button"), TransformAction.remove())
                 .build();
     }
 }

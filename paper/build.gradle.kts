@@ -48,9 +48,7 @@ tasks {
         relocate("org.incendo.cloud", "$prefix.cloud")
         relocate("io.leangen.geantyref", "$prefix.geantyref")
         relocate("me.m56738.gizmo", "$prefix.gizmo")
-        relocate("net.kyori.option", "$prefix.kyori.option")
         relocate("org.bstats", "$prefix.bstats")
-        relocate("org.spongepowered.configurate", "$prefix.configurate")
         exclude("pack.mcmeta")
         mergeServiceFiles()
         archiveBaseName = "EasyArmorStands-Paper"

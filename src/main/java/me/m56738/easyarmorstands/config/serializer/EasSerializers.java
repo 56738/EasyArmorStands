@@ -1,12 +1,12 @@
 package me.m56738.easyarmorstands.config.serializer;
 
 import me.m56738.easyarmorstands.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.lib.configurate.serialize.TypeSerializerCollection;
 import me.m56738.easyarmorstands.message.MessageStyle;
 import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.platform.inventory.ItemType;
 import me.m56738.easyarmorstands.util.ItemTemplate;
 import net.kyori.adventure.text.Component;
-import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 public class EasSerializers {
     public static TypeSerializerCollection serializers(Platform platform) {

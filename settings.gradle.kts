@@ -20,6 +20,7 @@ fun module(name: String) {
 }
 
 module("api")
+module("dependencies")
 
 fun addon(name: String) {
     includeAt("easyarmorstands-$name", "addons/$name")
