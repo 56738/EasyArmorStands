@@ -57,7 +57,10 @@ class PaperPlatformListener implements Listener {
 
     @EventHandler
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        invoker(EventType.PLAYER_SWAP_HANDS).onPlayerSwapHands(PaperPlayer.fromNative(event.getPlayer()));
+        boolean handled = invoker(EventType.PLAYER_SWAP_HANDS).onPlayerSwapHands(PaperPlayer.fromNative(event.getPlayer()));
+        if (handled) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -150,7 +153,10 @@ class PaperPlatformListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        invoker(EventType.PLAYER_DROP_ITEM).onPlayerDropItem(PaperPlayer.fromNative(event.getPlayer()));
+        boolean handled = invoker(EventType.PLAYER_DROP_ITEM).onPlayerDropItem(PaperPlayer.fromNative(event.getPlayer()));
+        if (handled) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
