@@ -38,12 +38,12 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
     public void onLoad() {
         platform.initialize(this);
 
-        Permissions.registerAll(platform, holder.get().propertyTypeRegistry(), permissionRegistrar);
-
         eas = new EasyArmorStandsPaperImpl(this, translationManager, platform, commandManager);
         holder.initialize(eas);
 
         eas.onLoad();
+
+        Permissions.registerAll(platform, holder.get().propertyTypeRegistry(), permissionRegistrar);
     }
 
     @Override
