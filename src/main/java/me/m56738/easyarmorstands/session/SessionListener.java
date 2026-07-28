@@ -7,6 +7,7 @@ import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.platform.block.Block;
+import me.m56738.easyarmorstands.platform.entity.ArmorStand;
 import me.m56738.easyarmorstands.platform.entity.Entity;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.event.callback.MenuCloseCallback;
@@ -152,6 +153,9 @@ public class SessionListener implements
 
     @Override
     public void onPlayerPlacedEntity(Player player, Entity entity) {
+        if (!(entity instanceof ArmorStand)) {
+            return;
+        }
         EasPlayer context = new EasPlayer(eas, player);
         Element element = eas.getElement(entity);
         if (element != null) {
@@ -162,6 +166,9 @@ public class SessionListener implements
 
     @Override
     public void onPlayerDestroyEntity(Player player, Entity entity) {
+        if (!(entity instanceof ArmorStand)) {
+            return;
+        }
         Element element = eas.getElement(entity);
         if (element == null) {
             return;
