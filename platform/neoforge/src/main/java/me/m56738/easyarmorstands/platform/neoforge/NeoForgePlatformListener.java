@@ -26,6 +26,7 @@ import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingSwapItemsEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.CustomClickActionEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -67,6 +68,7 @@ public class NeoForgePlatformListener {
         NeoForge.EVENT_BUS.addListener(LivingDeathEvent.class, this::onLivingDeath);
         NeoForge.EVENT_BUS.addListener(ArmorStandBreakEvent.class, this::onArmorStandBreak);
         NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post.class, this::onServerTickPost);
+        NeoForge.EVENT_BUS.addListener(CustomClickActionEvent.class, this::onCustomClickAction);
     }
 
     private <C> C invoker(EventType<C> type) {
@@ -200,6 +202,10 @@ public class NeoForgePlatformListener {
                 invoker(EventType.PLAYER_LEFT_CLICK).onPlayerLeftClick(ModdedPlayer.fromNative(platform, player));
             }
         }
+    }
+
+    private void onCustomClickAction(CustomClickActionEvent event) {
+        platform.dispatchCustomClick(event.getIdentifier(), event.getPayload());
     }
 
     private static class LastSelectedSlot {
