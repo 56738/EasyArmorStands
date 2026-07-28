@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,13 +41,12 @@ public class FabricPlatformListener {
         FabricPlatformEvents.ARM_SWING.register(this::handleArmSwing);
         FabricPlatformEvents.SWAP_HANDS.register(this::handleSwapHands);
         FabricPlatformEvents.DROP_ITEM.register(this::handleDropItem);
+        FabricPlatformEvents.PICK_UP_ITEM.register(this::handlePickUpItem);
         FabricPlatformEvents.SELECT_SLOT.register(this::handleSelectSlot);
         FabricPlatformEvents.CLOSE_CONTAINER.register(this::handleCloseContainer);
         FabricPlatformEvents.CUSTOM_CLICK.register(platform::dispatchCustomClick);
-
-        // TODO PLAYER_PICK_UP_ITEM
-        // TODO PLAYER_PLACED_ENTITY
-        // TODO PLAYER_DESTROY_ENTITY
+        FabricPlatformEvents.ENTITY_PLACE.register(this::handleEntityPlace);
+        FabricPlatformEvents.ENTITY_KILL.register(this::handleEntityKill);
     }
 
     private InteractionResult result(boolean ok) {
@@ -120,6 +120,11 @@ public class FabricPlatformListener {
         return platform.getEventBus().invoker(EventType.PLAYER_DROP_ITEM).onPlayerDropItem(ModdedPlayer.fromNative(platform, serverPlayer));
     }
 
+    private void handlePickUpItem(Player player, ItemEntity entity) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        platform.getEventBus().invoker(EventType.PLAYER_PICK_UP_ITEM).onPlayerPickUpItem(ModdedPlayer.fromNative(platform, serverPlayer));
+    }
+
     private void handleSelectSlot(Player player, int slot) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
         platform.getEventBus().invoker(EventType.PLAYER_SWITCH_SELECTED_SLOT).onPlayerSwitchSelectedSlot(ModdedPlayer.fromNative(platform, serverPlayer));
@@ -128,5 +133,15 @@ public class FabricPlatformListener {
     private void handleCloseContainer(Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
         platform.getEventBus().invoker(EventType.MENU_CLOSE).onMenuClose(ModdedPlayer.fromNative(platform, serverPlayer));
+    }
+
+    private void handleEntityPlace(Player player, Entity entity) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        platform.getEventBus().invoker(EventType.PLAYER_PLACED_ENTITY).onPlayerPlacedEntity(ModdedPlayer.fromNative(platform, serverPlayer), ModdedEntity.fromNative(platform, entity));
+    }
+
+    private void handleEntityKill(Player player, Entity entity) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        platform.getEventBus().invoker(EventType.PLAYER_DESTROY_ENTITY).onPlayerDestroyEntity(ModdedPlayer.fromNative(platform, serverPlayer), ModdedEntity.fromNative(platform, entity));
     }
 }

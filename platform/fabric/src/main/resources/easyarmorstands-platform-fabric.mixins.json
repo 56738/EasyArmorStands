@@ -3,6 +3,8 @@
   "package": "me.m56738.easyarmorstands.platform.fabric.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "ArmorStandMixin",
+    "EntityMixin",
     "InventoryMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",

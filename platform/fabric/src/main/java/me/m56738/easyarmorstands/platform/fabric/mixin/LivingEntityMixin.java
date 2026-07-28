@@ -2,6 +2,7 @@ package me.m56738.easyarmorstands.platform.fabric.mixin;
 
 import me.m56738.easyarmorstands.platform.fabric.FabricPlatformEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +23,13 @@ public abstract class LivingEntityMixin extends Entity {
     private void swingHand(InteractionHand hand, boolean updateSelf, CallbackInfo ci) {
         if ((Object) this instanceof Player player) {
             FabricPlatformEvents.ARM_SWING.invoker().onArmSwing(player);
+        }
+    }
+
+    @Inject(method = "die", at = @At("HEAD"))
+    private void die(DamageSource source, CallbackInfo ci) {
+        if (source.getEntity() instanceof Player player) {
+            FabricPlatformEvents.ENTITY_KILL.invoker().onKillEntity(player, this);
         }
     }
 }

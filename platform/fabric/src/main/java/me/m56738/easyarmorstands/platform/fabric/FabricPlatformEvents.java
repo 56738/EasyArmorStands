@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 
@@ -47,6 +49,12 @@ public final class FabricPlatformEvents {
         return false;
     });
 
+    public static final Event<PickUpItemCallback> PICK_UP_ITEM = EventFactory.createArrayBacked(PickUpItemCallback.class, callbacks -> (player, entity) -> {
+        for (PickUpItemCallback callback : callbacks) {
+            callback.onPickUpItem(player, entity);
+        }
+    });
+
     public static final Event<CustomClickCallback> CUSTOM_CLICK = EventFactory.createArrayBacked(CustomClickCallback.class, callbacks -> (id, payload) -> {
         for (CustomClickCallback callback : callbacks) {
             if (callback.onCustomClick(id, payload)) {
@@ -54,6 +62,18 @@ public final class FabricPlatformEvents {
             }
         }
         return false;
+    });
+
+    public static final Event<EntityPlaceCallback> ENTITY_PLACE = EventFactory.createArrayBacked(EntityPlaceCallback.class, callbacks -> (player, entity) -> {
+        for (EntityPlaceCallback callback : callbacks) {
+            callback.onPlaceEntity(player, entity);
+        }
+    });
+
+    public static final Event<EntityKillCallback> ENTITY_KILL = EventFactory.createArrayBacked(EntityKillCallback.class, callbacks -> (player, entity) -> {
+        for (EntityKillCallback callback : callbacks) {
+            callback.onKillEntity(player, entity);
+        }
     });
 
     public interface ArmSwingCallback {
@@ -72,11 +92,23 @@ public final class FabricPlatformEvents {
         boolean onDropItem(Player player);
     }
 
+    public interface PickUpItemCallback {
+        void onPickUpItem(Player player, ItemEntity entity);
+    }
+
     public interface CloseContainerCallback {
         void onCloseContainer(Player player);
     }
 
     public interface CustomClickCallback {
         boolean onCustomClick(Identifier id, @Nullable Tag payload);
+    }
+
+    public interface EntityPlaceCallback {
+        void onPlaceEntity(Player player, Entity entity);
+    }
+
+    public interface EntityKillCallback {
+        void onKillEntity(Player player, Entity entity);
     }
 }
