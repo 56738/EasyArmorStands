@@ -20,12 +20,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class SessionManagerImpl implements SessionManager {
     private final EventDispatcher eventDispatcher;
     private final SessionToolProvider toolProvider;
     private final EasyArmorStandsCommon eas;
-    private final HashMap<Player, SessionImpl> sessions = new HashMap<>();
+    private final HashMap<UUID, SessionImpl> sessions = new HashMap<>();
 
     public SessionManagerImpl(EventDispatcher eventDispatcher, SessionToolProvider toolProvider, EasyArmorStandsCommon eas) {
         this.eventDispatcher = eventDispatcher;
@@ -34,7 +35,7 @@ public class SessionManagerImpl implements SessionManager {
     }
 
     public void startSession(SessionImpl session) {
-        final SessionImpl old = sessions.put(session.player(), session);
+        final SessionImpl old = sessions.put(session.player().uniqueId(), session);
         if (old != null) {
             old.stop();
             eventDispatcher.dispatchSessionStop(old);
@@ -55,14 +56,14 @@ public class SessionManagerImpl implements SessionManager {
     @Override
     public void stopSession(@NotNull Session session) {
         SessionImpl s = (SessionImpl) session;
-        if (sessions.remove(session.player(), s)) {
+        if (sessions.remove(session.player().uniqueId(), s)) {
             s.stop();
             eventDispatcher.dispatchSessionStop(session);
         }
     }
 
     public boolean stopSession(Player player) {
-        SessionImpl session = sessions.remove(player);
+        SessionImpl session = sessions.remove(player.uniqueId());
         if (session != null) {
             session.stop();
             eventDispatcher.dispatchSessionStop(session);
@@ -100,7 +101,7 @@ public class SessionManagerImpl implements SessionManager {
 
     @Override
     public @Nullable SessionImpl getSession(@NotNull Player player) {
-        return sessions.get(player);
+        return sessions.get(player.uniqueId());
     }
 
     public boolean isHoldingTool(Player player) {
@@ -128,10 +129,9 @@ public class SessionManagerImpl implements SessionManager {
         }
     }
 
-    public void replacePlayer(Player oldPlayer, Player newPlayer) {
-        SessionImpl session = sessions.remove(oldPlayer);
+    public void replacePlayer(Player newPlayer) {
+        SessionImpl session = sessions.get(newPlayer.uniqueId());
         if (session != null) {
-            sessions.put(newPlayer, session);
             session.setPlayer(newPlayer);
         }
     }

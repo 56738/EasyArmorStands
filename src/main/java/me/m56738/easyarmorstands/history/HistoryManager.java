@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class HistoryManager {
     private final EasyArmorStandsCommon eas;
-    private final Map<Player, History> history = new HashMap<>();
+    private final Map<UUID, History> history = new HashMap<>();
 
     public HistoryManager(EasyArmorStandsCommon eas) {
         this.eas = eas;
@@ -18,29 +18,18 @@ public class HistoryManager {
 
     public History getHistory(Player player) {
         if (!player.isOnline()) {
-            return createHistory(player);
+            return new History(eas);
         }
-        return history.computeIfAbsent(player, this::createHistory);
-    }
-
-    private History createHistory(Player player) {
-        return new History(eas);
+        return history.computeIfAbsent(player.uniqueId(), _ -> new History(eas));
     }
 
     public void remove(Player player) {
-        history.remove(player);
+        history.remove(player.uniqueId());
     }
 
     public void onEntityReplaced(@NotNull UUID oldId, @NotNull UUID newId) {
         for (History history : history.values()) {
             history.onEntityReplaced(oldId, newId);
-        }
-    }
-
-    public void replacePlayer(Player oldPlayer, Player newPlayer) {
-        History history = this.history.remove(oldPlayer);
-        if (history != null) {
-            this.history.put(newPlayer, history);
         }
     }
 }

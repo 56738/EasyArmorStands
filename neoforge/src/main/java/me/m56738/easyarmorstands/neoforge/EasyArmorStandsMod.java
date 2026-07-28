@@ -18,6 +18,7 @@ import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.platform.neoforge.NeoForgePlatform;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minecraft.server.MinecraftServer;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -39,10 +40,10 @@ public class EasyArmorStandsMod {
     private final NeoForgeServerCommandManager<EasCommandSender> commandManager;
     private final ModContainer modContainer;
 
-    public EasyArmorStandsMod(ModContainer modContainer) {
+    public EasyArmorStandsMod(IEventBus modBus, ModContainer modContainer) {
         this.modContainer = modContainer;
 
-        this.platform = new NeoForgePlatform(LOGGER);
+        this.platform = new NeoForgePlatform(LOGGER, modBus);
         this.commandManager = new NeoForgeServerCommandManager<>(
                 ExecutionCoordinator.coordinatorFor(executor),
                 new ModdedCommandSourceStackMapper(platform, new CommandSenderMapper(holder)));

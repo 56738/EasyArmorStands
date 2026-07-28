@@ -42,9 +42,9 @@ public interface EventType<C> extends Keyed {
             });
 
     EventType<PlayerReplaceCallback> PLAYER_REPLACE = of(Platform.key("player/replace"), callbacks ->
-            (oldPlayer, newPlayer) -> {
+            newPlayer -> {
                 for (PlayerReplaceCallback callback : callbacks) {
-                    callback.onReplacePlayer(oldPlayer, newPlayer);
+                    callback.onReplacePlayer(newPlayer);
                 }
             });
 

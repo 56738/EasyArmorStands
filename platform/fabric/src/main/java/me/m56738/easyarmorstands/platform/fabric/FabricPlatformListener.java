@@ -44,6 +44,7 @@ public class FabricPlatformListener {
         FabricPlatformEvents.CLOSE_CONTAINER.register(this::handleCloseContainer);
         FabricPlatformEvents.CUSTOM_CLICK.register(platform::dispatchCustomClick);
 
+        // TODO PLAYER_PICK_ITEM
         // TODO PLAYER_PICK_UP_ITEM
         // TODO PLAYER_PLACED_ENTITY
         // TODO PLAYER_DESTROY_ENTITY
@@ -66,7 +67,7 @@ public class FabricPlatformListener {
     }
 
     private void handleAfterRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
-        platform.getEventBus().invoker(EventType.PLAYER_REPLACE).onReplacePlayer(ModdedPlayer.fromNative(platform, oldPlayer), ModdedPlayer.fromNative(platform, newPlayer));
+        platform.getEventBus().invoker(EventType.PLAYER_REPLACE).onReplacePlayer(ModdedPlayer.fromNative(platform, newPlayer));
     }
 
     private InteractionResult handleUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {

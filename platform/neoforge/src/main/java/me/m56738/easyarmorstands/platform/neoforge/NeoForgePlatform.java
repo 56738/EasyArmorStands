@@ -5,14 +5,16 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permission;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.server.permission.PermissionAPI;
 
 public class NeoForgePlatform extends ModdedPlatform {
     private final NeoForgePermissionManager permissionManager = new NeoForgePermissionManager();
 
-    public NeoForgePlatform(ComponentLogger logger) {
+    public NeoForgePlatform(ComponentLogger logger, IEventBus modBus) {
         super(logger);
+        new NeoForgePlatformListener(this, modBus);
     }
 
     public NeoForgePermissionManager getPermissionManager() {

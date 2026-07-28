@@ -69,12 +69,17 @@ public class SessionListener implements
     }
 
     public boolean handleDrop(Player player) {
+        scheduleUpdateHeldItem(player);
         return handleClick(player, ClickContext.Type.DROP, null, null);
+    }
+
+    private void scheduleUpdateHeldItem(Player player) {
+        eas.platform().getScheduler().runTask(() -> eas.sessionManager().updateHeldItem(player));
     }
 
     @Override
     public void onAddPlayer(Player player) {
-        eas.platform().getScheduler().runTask(() -> eas.sessionManager().updateHeldItem(player));
+        scheduleUpdateHeldItem(player);
     }
 
     @Override
@@ -85,10 +90,9 @@ public class SessionListener implements
     }
 
     @Override
-    public void onReplacePlayer(Player oldPlayer, Player newPlayer) {
-        eas.sessionManager().replacePlayer(oldPlayer, newPlayer);
-        eas.clipboardManager().replacePlayer(oldPlayer, newPlayer);
-        eas.historyManager().replacePlayer(oldPlayer, newPlayer);
+    public void onReplacePlayer(Player newPlayer) {
+        eas.sessionManager().replacePlayer(newPlayer);
+        eas.clipboardManager().replacePlayer(newPlayer);
     }
 
     @Override
@@ -133,17 +137,17 @@ public class SessionListener implements
 
     @Override
     public void onPlayerSwitchSelectedSlot(Player player) {
-        eas.platform().getScheduler().runTask(() -> eas.sessionManager().updateHeldItem(player));
+        scheduleUpdateHeldItem(player);
     }
 
     @Override
     public void onPlayerPickUpItem(Player player) {
-        eas.platform().getScheduler().runTask(() -> eas.sessionManager().updateHeldItem(player));
+        scheduleUpdateHeldItem(player);
     }
 
     @Override
     public void onMenuClose(Player player) {
-        eas.platform().getScheduler().runTask(() -> eas.sessionManager().updateHeldItem(player));
+        scheduleUpdateHeldItem(player);
     }
 
     @Override
