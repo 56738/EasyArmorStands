@@ -137,7 +137,7 @@ public class EntityElementPopulator {
     }
 
     private boolean hasSlot(LivingEntity entity, EquipmentSlot slot) {
-        if (entity.type().key().equals(EntityTypeKeys.ARMOR_STAND)) {
+        if (EntityTypeKeys.ARMOR_STAND.equals(entity.type().key())) {
             return DEFAULT_SLOTS.contains(slot);
         }
         return entity.hasEquipmentSlot(slot);

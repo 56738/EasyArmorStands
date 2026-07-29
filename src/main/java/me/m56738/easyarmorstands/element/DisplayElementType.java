@@ -28,7 +28,7 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
         Property<Location> locationProperty = properties.get(EntityPropertyTypes.LOCATION);
         Location location = locationProperty.getValue().withYaw(0).withPitch(0);
         locationProperty.setValue(location);
-        if (getEntityType().key().equals(EntityTypeKeys.BLOCK_DISPLAY) && eas.getConfiguration().editor.centeredPivot) {
+        if (EntityTypeKeys.BLOCK_DISPLAY.equals(getEntityType().key()) && eas.getConfiguration().editor.centeredPivot) {
             properties.put(DisplayPropertyTypes.TRANSLATION, new Vector3f(-0.5f));
         }
     }

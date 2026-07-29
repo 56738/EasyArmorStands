@@ -38,7 +38,7 @@ public class BlockDataHandler implements ButtonHandler {
         if (itemType == null) {
             return icon;
         }
-        if (itemType.key().equals(ItemTypeKeys.AIR)) {
+        if (ItemTypeKeys.AIR.equals(itemType.key())) {
             itemType = eas.platform().getItemType(ItemTypeKeys.GLASS_PANE);
         }
         return MenuIcon.of(icon.asItem().withType(itemType));
