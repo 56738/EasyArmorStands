@@ -9,7 +9,7 @@
 
 # API changes
 
-* Introduced an abstraction layer to enable adding support for other platforms in the future.
+* Introduced an abstraction layer to enable adding support for other platforms.
 * Plugins should use the `easyarmorstands-paper-api` dependency instead of `easyarmorstands-api`.
 * Most objects can be converted from and to Paper objects using e.g. `PaperPlayer.fromNative(player)` and
   `PaperPlayer.toNative(player)`.

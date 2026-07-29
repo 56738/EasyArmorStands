@@ -4,6 +4,7 @@ plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.fabric.loom)
     alias(libs.plugins.resource.factory.fabric.convention)
+    alias(libs.plugins.minotaur)
 }
 
 dependencies {
@@ -110,3 +111,13 @@ data class ModMenu(
     @get:Input
     val links: Map<String, String>
 )
+
+modrinth {
+    projectId = "easyarmorstands"
+    versionName = project.version.toString() + " for Fabric"
+    uploadFile.set(tasks.jar)
+    versionType = "release"
+    changelog = provider { rootProject.file("CHANGELOG.md").readText() }
+    gameVersions.add(libs.versions.minecraft.get())
+    loaders = listOf("fabric")
+}

@@ -2,6 +2,7 @@ plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.moddev) apply false
     alias(libs.plugins.fabric.loom) apply false
+    alias(libs.plugins.minotaur) apply false
 }
 
 dependencies {

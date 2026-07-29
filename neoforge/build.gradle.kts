@@ -4,6 +4,7 @@ plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.moddev)
     alias(libs.plugins.resource.factory.neoforge.convention)
+    alias(libs.plugins.minotaur)
 }
 
 dependencies {
@@ -101,4 +102,14 @@ neoForgeModsToml {
         }
     }
     mixin("easyarmorstands-platform-neoforge.mixins.json")
+}
+
+modrinth {
+    projectId = "easyarmorstands"
+    versionName = project.version.toString() + " for NeoForge"
+    uploadFile.set(tasks.jar)
+    versionType = "release"
+    changelog = provider { rootProject.file("CHANGELOG.md").readText() }
+    gameVersions.add(libs.versions.minecraft.get())
+    loaders = listOf("neoforge")
 }

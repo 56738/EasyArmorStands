@@ -197,6 +197,7 @@ val supportedGameVersions = listOf(
 
 modrinth {
     projectId = "easyarmorstands"
+    versionName = project.version.toString() + " for Paper"
     uploadFile.set(tasks.shadowJar)
     versionType = "release"
     changelog = provider { rootProject.file("CHANGELOG.md").readText() }
