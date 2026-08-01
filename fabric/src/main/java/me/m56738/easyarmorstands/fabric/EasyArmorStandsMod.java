@@ -2,7 +2,6 @@ package me.m56738.easyarmorstands.fabric;
 
 import me.m56738.easyarmorstands.EasyArmorStandsCommon;
 import me.m56738.easyarmorstands.EasyArmorStandsHolder;
-import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.command.parser.ArgumentParserProvider;
 import me.m56738.easyarmorstands.command.sender.CommandSenderMapper;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
@@ -13,23 +12,12 @@ import me.m56738.easyarmorstands.modded.command.ModdedArgumentParserProvider;
 import me.m56738.easyarmorstands.modded.command.ModdedCommandSourceStackMapper;
 import me.m56738.easyarmorstands.modded.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.platform.fabric.FabricPlatform;
-import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
-import me.m56738.easyarmorstands.platform.modded.block.ModdedBlock;
-import me.m56738.easyarmorstands.platform.modded.entity.ModdedEntity;
-import me.m56738.easyarmorstands.platform.modded.entity.ModdedPlayer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.fabric.FabricServerCommandManager;
-import org.jspecify.annotations.Nullable;
 
 public class EasyArmorStandsMod implements ModInitializer {
     private final MainThreadExecutor executor = new MainThreadExecutor(null);
@@ -55,15 +43,16 @@ public class EasyArmorStandsMod implements ModInitializer {
 
             EasyArmorStandsFabricImpl eas = new EasyArmorStandsFabricImpl(translationManager, platform, commandManager);
             holder.initialize(eas);
-            EasyArmorStandsFabricHolder.setInstance(server, eas);
+            EasyArmorStandsFabricHolder.setInstance(eas);
             eas.onLoad();
         });
 
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            EasyArmorStandsFabricImpl instance = (EasyArmorStandsFabricImpl) EasyArmorStandsFabricHolder.removeInstance(server);
+        ServerLifecycleEvents.SERVER_STOPPED.register(_ -> {
+            EasyArmorStandsFabricImpl instance = (EasyArmorStandsFabricImpl) EasyArmorStandsFabricHolder.getInstance();
             if (instance != null) {
                 instance.onDisable();
             }
+            EasyArmorStandsFabricHolder.setInstance(null);
             holder.initialize(null);
             executor.setServer(null);
         });
@@ -73,5 +62,13 @@ public class EasyArmorStandsMod implements ModInitializer {
                 holder.get().update();
             }
         });
+    }
+
+    public static boolean isTool(ItemStack item) {
+        EasyArmorStandsModdedImpl eas = (EasyArmorStandsModdedImpl) EasyArmorStandsFabricHolder.getInstance();
+        if (eas == null) {
+            return false;
+        }
+        return eas.isTool(item);
     }
 }

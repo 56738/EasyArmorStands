@@ -1,8 +1,7 @@
 package me.m56738.easyarmorstands.modded.session;
 
-import me.m56738.easyarmorstands.EasyArmorStandsCommon;
+import me.m56738.easyarmorstands.modded.EasyArmorStandsModdedImpl;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
-import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import net.minecraft.core.component.DataComponents;
@@ -13,9 +12,9 @@ import java.util.Locale;
 
 public class ModdedSessionToolProvider implements SessionToolProvider {
     private static final String KEY = "easyarmorstands:tool";
-    private final EasyArmorStandsCommon eas;
+    private final EasyArmorStandsModdedImpl eas;
 
-    public ModdedSessionToolProvider(EasyArmorStandsCommon eas) {
+    public ModdedSessionToolProvider(EasyArmorStandsModdedImpl eas) {
         this.eas = eas;
     }
 
@@ -26,7 +25,7 @@ public class ModdedSessionToolProvider implements SessionToolProvider {
         CompoundTag tag = data.copyTag();
         tag.putBoolean(KEY, true);
         item.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        return ModdedItemStack.fromNative((ModdedPlatform) eas.platform(), item);
+        return ModdedItemStack.fromNative(eas.platform(), item);
     }
 
     @Override

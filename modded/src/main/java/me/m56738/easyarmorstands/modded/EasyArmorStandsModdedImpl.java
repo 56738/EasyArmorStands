@@ -54,6 +54,11 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
     }
 
     @Override
+    public ModdedPlatform platform() {
+        return platform;
+    }
+
+    @Override
     public ParticleProviderFactory particleProviderFactory() {
         return particleProviderFactory;
     }
@@ -107,5 +112,9 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
     public void onDisable() {
         super.onDisable();
         gizmos.close();
+    }
+
+    public boolean isTool(net.minecraft.world.item.ItemStack item) {
+        return sessionToolProvider.isTool(ModdedItemStack.fromNative(platform, item));
     }
 }

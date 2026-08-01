@@ -101,6 +101,7 @@ neoForgeModsToml {
             required("minecraft", "[${libs.versions.minecraft.get()},)")
         }
     }
+    mixin("easyarmorstands-neoforge.mixins.json")
     mixin("easyarmorstands-platform-neoforge.mixins.json")
 }
 

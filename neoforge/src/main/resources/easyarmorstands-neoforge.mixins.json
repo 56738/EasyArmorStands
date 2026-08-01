@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "me.m56738.easyarmorstands.neoforge.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "IngredientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -13,11 +13,13 @@ import me.m56738.easyarmorstands.modded.command.ModdedArgumentParserProvider;
 import me.m56738.easyarmorstands.modded.command.ModdedCommandSourceStackMapper;
 import me.m56738.easyarmorstands.modded.util.MainThreadExecutor;
 import me.m56738.easyarmorstands.neoforge.api.EasyArmorStandsNeoForgeHolder;
+import me.m56738.easyarmorstands.neoforge.listener.NeoForgeToolListener;
 import me.m56738.easyarmorstands.neoforge.permission.NeoForgePermissionRegistrar;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.platform.neoforge.NeoForgePlatform;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -56,6 +58,8 @@ public class EasyArmorStandsMod {
         NeoForge.EVENT_BUS.addListener(ServerStartingEvent.class, this::onServerStarting);
         NeoForge.EVENT_BUS.addListener(ServerStoppingEvent.class, this::onServerStopping);
         NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post.class, this::onServerTickPost);
+
+        new NeoForgeToolListener();
     }
 
     private void onServerAboutToStart(ServerAboutToStartEvent event) {
@@ -93,5 +97,13 @@ public class EasyArmorStandsMod {
         if (holder.isInitialized()) {
             holder.get().update();
         }
+    }
+
+    public static boolean isTool(ItemStack item) {
+        EasyArmorStandsModdedImpl eas = (EasyArmorStandsModdedImpl) EasyArmorStandsNeoForgeHolder.getInstance();
+        if (eas == null) {
+            return false;
+        }
+        return eas.isTool(item);
     }
 }

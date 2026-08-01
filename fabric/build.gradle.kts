@@ -84,6 +84,7 @@ fabricModJson {
     author("56738")
     icon("icon.png")
     mainEntrypoint("me.m56738.easyarmorstands.fabric.EasyArmorStandsMod")
+    mixin("easyarmorstands-fabric.mixins.json")
     license("GPL-3.0-or-later")
     contact {
         homepage = "https://modrinth.com/mod/easyarmorstands"
