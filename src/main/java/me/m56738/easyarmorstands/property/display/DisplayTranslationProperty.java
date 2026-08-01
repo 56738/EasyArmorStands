@@ -34,6 +34,7 @@ public class DisplayTranslationProperty implements Property<Vector3fc> {
                 transformation.getLeftRotation(),
                 transformation.getScale(),
                 transformation.getRightRotation()));
+        entity.setInterpolationDelay(0);
         return true;
     }
 }

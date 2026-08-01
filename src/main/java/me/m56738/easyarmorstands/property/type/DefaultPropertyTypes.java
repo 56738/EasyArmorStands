@@ -63,6 +63,8 @@ public class DefaultPropertyTypes {
         registry.register(DisplayPropertyTypes.SCALE);
         registry.register(DisplayPropertyTypes.TRANSLATION);
         registry.register(DisplayPropertyTypes.VIEW_RANGE);
+        registry.register(DisplayPropertyTypes.INTERPOLATION_DURATION);
+        registry.register(DisplayPropertyTypes.TELEPORT_DURATION);
         registry.register(ItemDisplayPropertyTypes.ITEM);
         registry.register(ItemDisplayPropertyTypes.TRANSFORM);
         registry.register(TextDisplayPropertyTypes.ALIGNMENT);

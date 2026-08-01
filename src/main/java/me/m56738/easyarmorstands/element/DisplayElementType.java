@@ -29,6 +29,8 @@ public class DisplayElementType<E extends Display> extends SimpleEntityElementTy
         location.setYaw(0);
         location.setPitch(0);
         locationProperty.setValue(location);
+        properties.put(DisplayPropertyTypes.INTERPOLATION_DURATION, 3);
+        properties.put(DisplayPropertyTypes.TELEPORT_DURATION, 3);
         if (getEntityType() == EntityType.BLOCK_DISPLAY && EasyArmorStandsPlugin.getInstance().getConfiguration().editor.centeredPivot) {
             properties.put(DisplayPropertyTypes.TRANSLATION, new Vector3f(-0.5f));
         }

@@ -88,6 +88,14 @@ public final class DisplayPropertyTypes {
             .formatter(NumberFormatter.pattern("0.0"))
             .permission("easyarmorstands.property.display.viewrange")
             .build();
+    public static final PropertyType<Integer> INTERPOLATION_DURATION = PropertyType.builder(key("display/interpolation_duration"), Integer.class)
+            .name(translatable("easyarmorstands.property.display.interpolation-duration.name"))
+            .permission("easyarmorstands.property.display.interpolation.duration")
+            .build();
+    public static final PropertyType<Integer> TELEPORT_DURATION = PropertyType.builder(key("display/teleport_duration"), Integer.class)
+            .name(translatable("easyarmorstands.property.display.teleport-duration.name"))
+            .permission("easyarmorstands.property.display.teleport.duration")
+            .build();
 
     private DisplayPropertyTypes() {
     }

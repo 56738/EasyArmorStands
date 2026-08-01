@@ -34,6 +34,7 @@ public class DisplayRightRotationProperty implements Property<Quaternionfc> {
                 transformation.getLeftRotation(),
                 transformation.getScale(),
                 new Quaternionf(value)));
+        entity.setInterpolationDelay(0);
         return true;
     }
 }

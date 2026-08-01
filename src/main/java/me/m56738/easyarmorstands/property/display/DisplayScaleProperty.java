@@ -34,6 +34,7 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
                 transformation.getLeftRotation(),
                 new Vector3f(value),
                 transformation.getRightRotation()));
+        entity.setInterpolationDelay(0);
         return true;
     }
 }
