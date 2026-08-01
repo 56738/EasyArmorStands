@@ -27,6 +27,9 @@ public class SimpleEntityElementProvider<E extends Entity> implements EntityElem
         if (!EasyArmorStandsPlugin.getInstance().getConfiguration().editor.allowEntities) {
             return false;
         }
+        if (!entity.isPersistent() && !EasyArmorStandsPlugin.getInstance().getConfiguration().editor.allowNonPersistent) {
+            return false;
+        }
         return type.getEntityClass().isInstance(entity);
     }
 
