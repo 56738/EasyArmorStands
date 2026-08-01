@@ -14,7 +14,7 @@ public class SessionRequirement implements CommandRequirement {
         EasCommandSender sender = context.sender();
         sender.sendMessage(Message.error("easyarmorstands.error.not-using-editor"));
         if (sender.get().hasPermission(Permissions.GIVE)) {
-            sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas give")));
+            sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas")));
         }
     }
 

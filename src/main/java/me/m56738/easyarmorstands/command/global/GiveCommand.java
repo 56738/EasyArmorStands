@@ -40,6 +40,14 @@ public class GiveCommand {
     @Command("eas give")
     @Permission(Permissions.GIVE)
     @CommandDescription("easyarmorstands.command.description.give")
+    public void legacyGive(EasPlayer sender, SessionListener sessionListener) {
+        give(sender, sessionListener);
+        sender.sendMessage(Message.hint("easyarmorstands.hint.give-tool", Message.command("/eas")));
+    }
+
+    @Command("eas")
+    @Permission(Permissions.GIVE)
+    @CommandDescription("easyarmorstands.command.description.give")
     public void give(EasPlayer sender, SessionListener sessionListener) {
         EasyArmorStandsPlugin plugin = EasyArmorStandsPlugin.getInstance();
         Player player = sender.get();
