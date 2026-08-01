@@ -1,13 +1,9 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.SkinPart;
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.entity.Pose;
@@ -71,13 +67,5 @@ public final class MannequinPropertyTypes {
                     .build());
 
     private MannequinPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }

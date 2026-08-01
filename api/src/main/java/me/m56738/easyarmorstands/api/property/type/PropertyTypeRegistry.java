@@ -19,6 +19,7 @@ public interface PropertyTypeRegistry {
         return propertyType;
     }
 
+    @Deprecated
     @SuppressWarnings("unchecked")
     default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull TypeToken<T> type) {
         PropertyType<?> propertyType = getOrNull(key);
@@ -28,6 +29,7 @@ public interface PropertyTypeRegistry {
         return (PropertyType<T>) propertyType;
     }
 
+    @Deprecated
     default @NotNull <T> PropertyType<T> get(@NotNull Key key, @NotNull TypeToken<T> type) {
         PropertyType<T> propertyType = getOrNull(key, type);
         if (propertyType == null) {

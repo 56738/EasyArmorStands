@@ -1,12 +1,8 @@
 package me.m56738.easyarmorstands.api.property.type;
 
-import com.google.common.reflect.TypeToken;
-import me.m56738.easyarmorstands.api.EasyArmorStands;
 import me.m56738.easyarmorstands.api.formatter.BooleanFormatter;
 import me.m56738.easyarmorstands.api.formatter.ColorFormatter;
 import me.m56738.easyarmorstands.api.formatter.OptionalFormatter;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
@@ -54,13 +50,5 @@ public final class TextDisplayPropertyTypes {
             .build();
 
     private TextDisplayPropertyTypes() {
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, TypeToken<T> type) {
-        return EasyArmorStands.get().propertyTypeRegistry().get(Key.key("easyarmorstands", name), type);
-    }
-
-    private static <T> PropertyType<T> get(@KeyPattern.Value String name, Class<T> type) {
-        return get(name, TypeToken.of(type));
     }
 }
