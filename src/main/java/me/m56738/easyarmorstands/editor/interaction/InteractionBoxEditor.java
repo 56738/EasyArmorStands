@@ -10,7 +10,6 @@ import me.m56738.easyarmorstands.editor.box.BoundingBoxEditor;
 import me.m56738.easyarmorstands.editor.box.BoundingBoxEditorSession;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.util.Location;
-import me.m56738.easyarmorstands.util.Util;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -30,7 +29,7 @@ public class InteractionBoxEditor implements BoundingBoxEditor {
     @Override
     public BoundingBox getBoundingBox() {
         return BoundingBox.of(
-                Util.toVector3d(locationProperty.getValue()),
+                locationProperty.getValue().position(),
                 (double) widthProperty.getValue(),
                 (double) heightProperty.getValue());
     }

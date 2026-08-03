@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.api.property.type.EntityPropertyTypes;
 import me.m56738.easyarmorstands.editor.tool.AbstractToolSession;
 import me.m56738.easyarmorstands.platform.entity.Player;
 import me.m56738.easyarmorstands.platform.util.Location;
-import me.m56738.easyarmorstands.util.Util;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionf;
@@ -83,7 +82,7 @@ public abstract class AbstractDisplayScaleTool<S extends ToolSession> implements
             this.originalRotation = new Quaternionf(getRotation());
             this.originalScale = new Vector3f(scaleProperty.getValue());
             this.currentScale = new Vector3f(originalScale);
-            this.originalOffset = Util.toVector3d(originalLocation)
+            this.originalOffset = new Vector3d(originalLocation.position())
                     .add(0, height / 2, 0)
                     .sub(getPosition());
             this.offsetChange = new Vector3d();

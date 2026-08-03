@@ -118,7 +118,7 @@ public final class SessionImpl implements Session {
     @Override
     public double getScale(Vector3dc position) {
         EasConfig config = eas.getConfiguration();
-        Vector3d eyePosition = Util.toVector3d(player.get().eyeLocation());
+        Vector3dc eyePosition = player.get().eyeLocation().position();
         double minDistance = config.editor.scale.minDistance;
         double maxDistance = config.editor.scale.maxDistance;
         if (maxDistance <= minDistance) {

@@ -102,7 +102,7 @@ public class DisplayAxisRotateTool implements AxisRotateTool {
             this.originalLocation = locationProperty.getValue();
             this.originalTranslation = new Vector3f(translationProperty.getValue());
             this.originalRotation = new Quaternionf(rotationProperty.getValue());
-            this.originalOffset = Util.toVector3d(originalLocation)
+            this.originalOffset = new Vector3d(originalLocation.position())
                     .add(0, height / 2, 0)
                     .sub(getPosition());
             this.translationOffset = new Vector3d(originalTranslation)

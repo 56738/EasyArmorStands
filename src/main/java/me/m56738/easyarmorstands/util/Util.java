@@ -49,7 +49,7 @@ public class Util {
     }
 
     public static Component formatLocation(Location location) {
-        return formatPosition(Util.toVector3d(location));
+        return formatPosition(location.position());
     }
 
     public static Component formatOffset(Vector3dc offset) {
@@ -119,16 +119,6 @@ public class Util {
         Vector3d dest = new Vector3d();
         rotation.getEulerAnglesZYX(dest);
         return Rotations.ofDegrees(Math.toDegrees(dest.x), -Math.toDegrees(dest.y), -Math.toDegrees(dest.z));
-    }
-
-    @Deprecated
-    public static Vector3d toVector3d(Location location) {
-        return new Vector3d(location.position());
-    }
-
-    @Deprecated
-    public static Vector3d toVector3d(Location location, Vector3d dest) {
-        return dest.set(location.position());
     }
 
     public static Matrix4d toMatrix4d(Location location) {
