@@ -281,6 +281,7 @@ public abstract class EasyArmorStandsCommon implements EasyArmorStands {
         return miniMessage;
     }
 
+    @Override
     public Platform platform() {
         return platform;
     }

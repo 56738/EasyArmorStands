@@ -8,6 +8,7 @@ import me.m56738.easyarmorstands.api.element.ElementTypeRegistry;
 import me.m56738.easyarmorstands.api.element.EntityElementProvider;
 import me.m56738.easyarmorstands.api.element.EntityElementProviderRegistry;
 import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
+import me.m56738.easyarmorstands.platform.Platform;
 import me.m56738.easyarmorstands.platform.entity.Entity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
@@ -21,6 +22,9 @@ public interface EasyArmorStands {
     static @NotNull Key key(@KeyPattern.Value String value) {
         return Key.key(NAMESPACE, value);
     }
+
+    @Contract(pure = true)
+    @NotNull Platform platform();
 
     @Contract(pure = true)
     @NotNull ElementTypeRegistry elementTypeRegistry();
