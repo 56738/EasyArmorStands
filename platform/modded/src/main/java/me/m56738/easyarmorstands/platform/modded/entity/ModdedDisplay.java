@@ -135,4 +135,29 @@ public interface ModdedDisplay extends Display, ModdedEntity {
     default void setViewRange(float range) {
         getNative().setViewRange(range);
     }
+
+    @Override
+    default int getInterpolationDuration() {
+        return getNative().getTransformationInterpolationDuration();
+    }
+
+    @Override
+    default void setInterpolationDuration(int duration) {
+        getNative().setTransformationInterpolationDuration(duration);
+    }
+
+    @Override
+    default int getTeleportDuration() {
+        return getNative().getPosRotInterpolationDuration();
+    }
+
+    @Override
+    default void setTeleportDuration(int duration) {
+        getNative().setPosRotInterpolationDuration(duration);
+    }
+
+    @Override
+    default void setInterpolationDelay(int delay) {
+        getNative().setTransformationInterpolationDelay(delay);
+    }
 }

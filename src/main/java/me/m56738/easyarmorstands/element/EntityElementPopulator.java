@@ -188,6 +188,8 @@ public class EntityElementPopulator {
         registry.register(Property.of(DisplayPropertyTypes.BOX_HEIGHT, entity::getDisplayHeight, entity::setDisplayHeight));
         registry.register(Property.ofNullable(DisplayPropertyTypes.GLOW_COLOR, entity::getGlowColorOverride, entity::setGlowColorOverride));
         registry.register(Property.of(DisplayPropertyTypes.VIEW_RANGE, entity::getViewRange, entity::setViewRange));
+        registry.register(Property.of(DisplayPropertyTypes.INTERPOLATION_DURATION, entity::getInterpolationDuration, entity::setInterpolationDuration));
+        registry.register(Property.of(DisplayPropertyTypes.TELEPORT_DURATION, entity::getTeleportDuration, entity::setTeleportDuration));
     }
 
     private void registerItemDisplayProperties(ItemDisplay entity, PropertyRegistry registry) {

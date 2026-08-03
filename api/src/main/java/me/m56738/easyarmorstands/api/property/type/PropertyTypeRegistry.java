@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.api.property.type;
 
+import com.google.gson.reflect.TypeToken;
 import me.m56738.easyarmorstands.api.property.UnknownPropertyTypeException;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,25 @@ public interface PropertyTypeRegistry {
 
     default @NotNull PropertyType<?> get(@NotNull Key key) {
         PropertyType<?> propertyType = getOrNull(key);
+        if (propertyType == null) {
+            throw new UnknownPropertyTypeException(key);
+        }
+        return propertyType;
+    }
+
+    @Deprecated
+    @SuppressWarnings("unchecked")
+    default @Nullable <T> PropertyType<T> getOrNull(@NotNull Key key, @NotNull TypeToken<T> type) {
+        PropertyType<?> propertyType = getOrNull(key);
+        if (propertyType == null) {
+            return null;
+        }
+        return (PropertyType<T>) propertyType;
+    }
+
+    @Deprecated
+    default @NotNull <T> PropertyType<T> get(@NotNull Key key, @NotNull TypeToken<T> type) {
+        PropertyType<T> propertyType = getOrNull(key, type);
         if (propertyType == null) {
             throw new UnknownPropertyTypeException(key);
         }

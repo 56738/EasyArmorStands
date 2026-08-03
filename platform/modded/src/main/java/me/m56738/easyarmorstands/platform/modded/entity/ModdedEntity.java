@@ -226,4 +226,9 @@ public interface ModdedEntity extends Entity, ModdedPlatformHolder {
     default void setCustomNameVisible(boolean visible) {
         getNative().setCustomNameVisible(visible);
     }
+
+    @Override
+    default boolean isPersistent() {
+        return true;
+    }
 }

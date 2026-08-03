@@ -185,4 +185,9 @@ public interface PaperEntity extends Entity {
     default void setCustomNameVisible(boolean visible) {
         getNative().setCustomNameVisible(visible);
     }
+
+    @Override
+    default boolean isPersistent() {
+        return getNative().isPersistent();
+    }
 }

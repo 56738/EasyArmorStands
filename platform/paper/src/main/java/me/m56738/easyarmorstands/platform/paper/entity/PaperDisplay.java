@@ -143,4 +143,29 @@ public interface PaperDisplay extends Display, PaperEntity {
     default void setViewRange(float range) {
         getNative().setViewRange(range);
     }
+
+    @Override
+    default int getInterpolationDuration() {
+        return getNative().getInterpolationDuration();
+    }
+
+    @Override
+    default void setInterpolationDuration(int duration) {
+        getNative().setInterpolationDuration(duration);
+    }
+
+    @Override
+    default int getTeleportDuration() {
+        return getNative().getTeleportDuration();
+    }
+
+    @Override
+    default void setTeleportDuration(int duration) {
+        getNative().setTeleportDuration(duration);
+    }
+
+    @Override
+    default void setInterpolationDelay(int delay) {
+        getNative().setInterpolationDelay(delay);
+    }
 }

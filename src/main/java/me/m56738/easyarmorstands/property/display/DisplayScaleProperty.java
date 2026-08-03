@@ -27,6 +27,7 @@ public class DisplayScaleProperty implements Property<Vector3fc> {
     @Override
     public boolean setValue(@NotNull Vector3fc value) {
         entity.setScale(value);
+        entity.setInterpolationDelay(0);
         return true;
     }
 }

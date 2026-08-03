@@ -66,4 +66,6 @@ public interface Entity {
     boolean isCustomNameVisible();
 
     void setCustomNameVisible(boolean visible);
+
+    boolean isPersistent();
 }

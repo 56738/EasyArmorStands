@@ -46,6 +46,16 @@ public interface Display extends Entity {
 
     void setViewRange(float range);
 
+    int getInterpolationDuration();
+
+    void setInterpolationDuration(int duration);
+
+    int getTeleportDuration();
+
+    void setTeleportDuration(int duration);
+
+    void setInterpolationDelay(int delay);
+
     enum Billboard {
         FIXED,
         VERTICAL,

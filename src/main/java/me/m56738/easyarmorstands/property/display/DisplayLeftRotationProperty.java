@@ -27,6 +27,7 @@ public class DisplayLeftRotationProperty implements Property<Quaternionfc> {
     @Override
     public boolean setValue(@NotNull Quaternionfc value) {
         entity.setLeftRotation(value);
+        entity.setInterpolationDelay(0);
         return true;
     }
 }

@@ -29,6 +29,9 @@ public class SimpleEntityElementProvider<E extends Entity> implements EntityElem
         if (!eas.getConfiguration().editor.allowEntities) {
             return false;
         }
+        if (!entity.isPersistent() && !eas.getConfiguration().editor.allowNonPersistent) {
+            return false;
+        }
         return type.getEntityType().equals(entity.type());
     }
 

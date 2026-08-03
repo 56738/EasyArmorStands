@@ -10,6 +10,7 @@ _version:
   game: 1.21.3
 editor:
   allow-entities: true
+  allow-non-persistent: false
   allow-players: false
   button:
     interpolation-ticks: 1

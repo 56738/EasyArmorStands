@@ -13,6 +13,7 @@ public class EditorConfig {
     public SimpleItemTemplate tool;
     public boolean allowEntities;
     public boolean allowPlayers;
+    public boolean allowNonPersistent;
     public boolean flattenArmorStands;
     public boolean centeredPivot;
 }

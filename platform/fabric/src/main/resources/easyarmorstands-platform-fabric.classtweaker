@@ -12,12 +12,17 @@ accessible method net/minecraft/world/entity/Display getBillboardConstraints ()L
 accessible method net/minecraft/world/entity/Display getBrightnessOverride ()Lnet/minecraft/util/Brightness;
 accessible method net/minecraft/world/entity/Display getGlowColorOverride ()I
 accessible method net/minecraft/world/entity/Display getHeight ()F
+accessible method net/minecraft/world/entity/Display getPosRotInterpolationDuration ()I
+accessible method net/minecraft/world/entity/Display getTransformationInterpolationDuration ()I
 accessible method net/minecraft/world/entity/Display getViewRange ()F
 accessible method net/minecraft/world/entity/Display getWidth ()F
 accessible method net/minecraft/world/entity/Display setBillboardConstraints (Lnet/minecraft/world/entity/Display$BillboardConstraints;)V
 accessible method net/minecraft/world/entity/Display setBrightnessOverride (Lnet/minecraft/util/Brightness;)V
 accessible method net/minecraft/world/entity/Display setGlowColorOverride (I)V
 accessible method net/minecraft/world/entity/Display setHeight (F)V
+accessible method net/minecraft/world/entity/Display setPosRotInterpolationDuration (I)V
+accessible method net/minecraft/world/entity/Display setTransformationInterpolationDelay (I)V
+accessible method net/minecraft/world/entity/Display setTransformationInterpolationDuration (I)V
 accessible method net/minecraft/world/entity/Display setViewRange (F)V
 accessible method net/minecraft/world/entity/Display setWidth (F)V
 accessible method net/minecraft/world/entity/Display$BlockDisplay getBlockState ()Lnet/minecraft/world/level/block/state/BlockState;

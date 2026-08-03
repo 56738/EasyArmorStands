@@ -27,6 +27,7 @@ public class DisplayTranslationProperty implements Property<Vector3fc> {
     @Override
     public boolean setValue(@NotNull Vector3fc value) {
         entity.setTranslation(value);
+        entity.setInterpolationDelay(0);
         return true;
     }
 }
