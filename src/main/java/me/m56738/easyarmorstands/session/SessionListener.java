@@ -1,5 +1,6 @@
 package me.m56738.easyarmorstands.session;
 
+import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent;
 import me.m56738.easyarmorstands.EasyArmorStandsPlugin;
 import me.m56738.easyarmorstands.api.editor.context.ClickContext;
 import me.m56738.easyarmorstands.api.editor.layer.ElementSelectionLayer;
@@ -11,7 +12,9 @@ import me.m56738.easyarmorstands.history.action.ElementCreateAction;
 import me.m56738.easyarmorstands.history.action.ElementDestroyAction;
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.session.context.ClickContextImpl;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Crafter;
 import org.bukkit.entity.Entity;
@@ -51,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SessionListener implements Listener {
+    private static final Key OBTAIN_BLAZE_ROD = Key.key("nether/obtain_blaze_rod");
+
     private final EasyArmorStandsPlugin plugin;
     private final SessionManagerImpl manager;
     private final Map<Player, Integer> suppressClick = new HashMap<>();
@@ -342,6 +347,34 @@ public class SessionListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerAdvancementCriterionGrant(PlayerAdvancementCriterionGrantEvent event) {
+        if (!event.getAdvancement().key().equals(OBTAIN_BLAZE_ROD)) {
+            return;
+        }
+
+        if (!event.getCriterion().equals("blaze_rod")) {
+            return;
+        }
+
+        boolean hasValid = false;
+        for (ItemStack item : event.getPlayer().getInventory()) {
+            if (item != null) {
+                if (item.getType() == Material.BLAZE_ROD) {
+                    if (!plugin.isTool(item)) {
+                        hasValid = true;
+                    }
+                }
+            }
+        }
+
+        if (hasValid) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler

@@ -12,3 +12,4 @@
 # Fixes
 
 * Fixed no longer being able to use `/eas block` with groups
+* Fixed the "Into Fire" advancement being awarded when obtaining the tool
