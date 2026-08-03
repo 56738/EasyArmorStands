@@ -12,6 +12,7 @@
 # Fixes
 
 * Fixes no longer being able to use `/eas block` with groups
+* Fixes the "Into Fire" advancement being awarded when obtaining the tool
 * Restrict `/eas shear` to local position/rotation
 
 # API changes
