@@ -28,7 +28,7 @@ public class ItemPropertySlot implements MenuSlot {
     @SuppressWarnings("UnstableApiUsage")
     @Override
     public ItemStack getItem(Locale locale) {
-        ItemStack item = Util.wrapItem(property.getValue());
+        ItemStack item = Util.wrapItem(property.getValue()).clone();
         if (item.isEmpty()) {
             item = MenuButtonSlot.createItem(
                     MenuIcon.of(Material.GLASS_PANE),
