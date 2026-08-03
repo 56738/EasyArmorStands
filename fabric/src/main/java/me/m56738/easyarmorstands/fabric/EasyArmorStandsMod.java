@@ -15,7 +15,7 @@ import me.m56738.easyarmorstands.platform.fabric.FabricPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponentGetter;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.fabric.FabricServerCommandManager;
 
@@ -64,7 +64,7 @@ public class EasyArmorStandsMod implements ModInitializer {
         });
     }
 
-    public static boolean isTool(ItemStack item) {
+    public static boolean isTool(DataComponentGetter item) {
         EasyArmorStandsModdedImpl eas = (EasyArmorStandsModdedImpl) EasyArmorStandsFabricHolder.getInstance();
         if (eas == null) {
             return false;

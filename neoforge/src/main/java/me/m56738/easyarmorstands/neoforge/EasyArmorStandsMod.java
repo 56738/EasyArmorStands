@@ -18,8 +18,8 @@ import me.m56738.easyarmorstands.neoforge.permission.NeoForgePermissionRegistrar
 import me.m56738.easyarmorstands.permission.Permissions;
 import me.m56738.easyarmorstands.platform.neoforge.NeoForgePlatform;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -99,7 +99,7 @@ public class EasyArmorStandsMod {
         }
     }
 
-    public static boolean isTool(ItemStack item) {
+    public static boolean isTool(DataComponentGetter item) {
         EasyArmorStandsModdedImpl eas = (EasyArmorStandsModdedImpl) EasyArmorStandsNeoForgeHolder.getInstance();
         if (eas == null) {
             return false;

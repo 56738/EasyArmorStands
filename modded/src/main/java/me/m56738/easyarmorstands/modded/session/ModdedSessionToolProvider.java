@@ -4,6 +4,7 @@ import me.m56738.easyarmorstands.modded.EasyArmorStandsModdedImpl;
 import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.component.CustomData;
@@ -30,7 +31,11 @@ public class ModdedSessionToolProvider implements SessionToolProvider {
 
     @Override
     public boolean isTool(ItemStack item) {
-        CustomData data = ModdedItemStack.toNative(item).get(DataComponents.CUSTOM_DATA);
+        return isTool(ModdedItemStack.toNative(item));
+    }
+
+    public boolean isTool(DataComponentGetter item) {
+        CustomData data = item.get(DataComponents.CUSTOM_DATA);
         if (data != null) {
             return data.copyTag().getBooleanOr(KEY, false);
         }

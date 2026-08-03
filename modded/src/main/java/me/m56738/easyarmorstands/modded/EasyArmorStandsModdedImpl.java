@@ -21,6 +21,7 @@ import me.m56738.easyarmorstands.platform.modded.inventory.ModdedItemStack;
 import me.m56738.easyarmorstands.session.SessionToolProvider;
 import me.m56738.gizmo.modded.api.ModdedServerGizmos;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ProblemReporter;
@@ -114,7 +115,7 @@ public abstract class EasyArmorStandsModdedImpl extends EasyArmorStandsCommon im
         gizmos.close();
     }
 
-    public boolean isTool(net.minecraft.world.item.ItemStack item) {
-        return sessionToolProvider.isTool(ModdedItemStack.fromNative(platform, item));
+    public boolean isTool(DataComponentGetter item) {
+        return sessionToolProvider.isTool(item);
     }
 }
