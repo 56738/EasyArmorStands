@@ -72,7 +72,7 @@ public interface ModdedItemStack extends ItemStack, ModdedPlatformHolder {
         }
         net.minecraft.world.item.ItemStack oldItem = getNative();
         net.minecraft.world.item.ItemStack newItem = new net.minecraft.world.item.ItemStack(ModdedItemType.toNative(type), oldItem.getCount());
-        newItem.applyComponents(oldItem.getComponents());
+        newItem.applyComponents(oldItem.getComponentsPatch());
         return ModdedItemStack.fromNative(getPlatform(), newItem);
     }
 
