@@ -16,6 +16,12 @@
         "org.incendo:cloud-*"
       ],
       "allowedVersions": "!/SNAPSHOT/"
+    },
+    {
+      "matchPackageNames": [
+        "com.palmergames.bukkit.towny:towny"
+      ],
+      "allowedVersions": "/^\\d+\\.\\d+\\.\\d+\\.0$/"
     }
   ]
 }
