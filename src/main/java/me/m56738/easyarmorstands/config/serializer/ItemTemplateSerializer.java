@@ -33,7 +33,7 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
             meta.setHideTooltip(node.node("hide-tooltip").getBoolean());
             template.setItemMeta(meta);
         }
-        String name = node.node("name").getString();
+        String name = node.node("name").getString("");
         List<String> description = node.node("description").getList(String.class);
         return new SimpleItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());
     }
