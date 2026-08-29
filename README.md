@@ -206,6 +206,8 @@ Players with the `easyarmorstands.residence.bypass` permission bypass this restr
 If Lands is installed, the role flag `easyarmorstands_edit` (in the menu: *Edit entities*)
 can be used to restrict editing entities.
 
+Add the flag to `land.display` in `plugins/Lands/roles.yml` to show it in the menu.
+
 Players with the `easyarmorstands.lands.bypass` permission bypass this restriction.
 
 ## BentoBox integration

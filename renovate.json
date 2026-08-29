@@ -29,6 +29,12 @@
         "net.neoforged:neoform"
       ],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$"
+    },
+    {
+      "matchPackageNames": [
+        "com.palmergames.bukkit.towny:towny"
+      ],
+      "allowedVersions": "/^\\d+\\.\\d+\\.\\d+\\.0$/"
     }
   ]
 }

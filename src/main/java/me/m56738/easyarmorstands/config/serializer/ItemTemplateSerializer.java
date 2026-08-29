@@ -30,7 +30,7 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
         ItemStack template = itemType.createItemStack(node.node("amount").getInt(1))
                 .withHideTooltip(node.node("hide-tooltip").getBoolean())
                 .withCustomModelData(node.node("custom-model-data").get(Integer.class));
-        String name = node.node("name").getString();
+        String name = node.node("name").getString("");
         List<String> description = node.node("description").getList(String.class);
         return new SimpleItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());
     }
