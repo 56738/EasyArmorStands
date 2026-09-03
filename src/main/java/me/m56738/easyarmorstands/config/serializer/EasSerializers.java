@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 import java.text.DecimalFormat;
@@ -17,6 +18,7 @@ public class EasSerializers {
             .register(Component.class, new MiniMessageSerializer(EasyArmorStandsPlugin.getInstance().getMiniMessage()))
             .register(DecimalFormat.class, new DecimalFormatSerializer())
             .register(ItemTemplate.class, new ItemTemplateSerializer())
+            .register(NamespacedKey.class, new NamespacedKeySerializer())
             .register(Key.class, new KeySerializer())
             .register(Material.class, new MaterialSerializer())
             .register(PropertyTypeSerializer.TYPE, new PropertyTypeSerializer())

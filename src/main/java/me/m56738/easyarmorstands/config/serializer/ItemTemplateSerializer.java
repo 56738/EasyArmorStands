@@ -5,7 +5,9 @@ import me.m56738.easyarmorstands.item.ItemRenderer;
 import me.m56738.easyarmorstands.item.SimpleItemTemplate;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -23,14 +25,17 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
         if (data < 0) {
             throw new SerializationException("Data cannot be negative");
         }
-        ItemStack template = new ItemStack(
+        ItemStack template = ItemStack.of(
                 node.node("type").get(Material.class, Material.AIR),
-                node.node("amount").getInt(1),
-                data);
+                node.node("amount").getInt(1));
         ItemMeta meta = template.getItemMeta();
         if (meta != null) {
             meta.setCustomModelData(node.node("custom-model-data").get(Integer.class));
+            meta.setItemModel(node.node("item-model").get(NamespacedKey.class));
             meta.setHideTooltip(node.node("hide-tooltip").getBoolean());
+            if (meta instanceof Damageable damageable) {
+                damageable.setDamage(data);
+            }
             template.setItemMeta(meta);
         }
         String name = node.node("name").getString("");
