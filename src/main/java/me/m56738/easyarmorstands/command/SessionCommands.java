@@ -28,6 +28,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireSession;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.command.util.MiniMessageProvider;
 import me.m56738.easyarmorstands.command.util.MultipleEntitySelector;
 import me.m56738.easyarmorstands.command.util.SingleEntitySelector;
 import me.m56738.easyarmorstands.editor.layer.ValueLayer;
@@ -315,7 +316,7 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:entity/custom_name")
     @CommandDescription("easyarmorstands.command.description.name.set")
     @RequireElementSelection
-    public void setName(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component name) {
+    public void setName(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder(MiniMessageProvider.class) @Greedy Component name) {
         PropertyContainer properties = selection.properties(sender);
         Property<Optional<Component>> nameProperty = properties.getOrNull(EntityPropertyTypes.CUSTOM_NAME);
         if (nameProperty == null) {
@@ -396,7 +397,7 @@ public class SessionCommands {
     @PropertyPermission("easyarmorstands:mannequin/description")
     @CommandDescription("easyarmorstands.command.description.description.set")
     @RequireElementSelection
-    public void setDescription(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component description) {
+    public void setDescription(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder(MiniMessageProvider.class) @Greedy Component description) {
         PropertyContainer properties = selection.properties(sender);
         Property<Optional<Component>> property = properties.getOrNull(MannequinPropertyTypes.DESCRIPTION);
         if (property == null) {

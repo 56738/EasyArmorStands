@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.ItemType;
 import me.m56738.easyarmorstands.registry.ItemTypeKeys;
 import me.m56738.easyarmorstands.util.ItemTemplate;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,8 @@ public class ItemTemplateSerializer implements TypeSerializer<ItemTemplate> {
         ItemType itemType = node.node("type").get(ItemType.class, (Supplier<ItemType>) () -> platform.getItemType(ItemTypeKeys.AIR));
         ItemStack template = itemType.createItemStack(node.node("amount").getInt(1))
                 .withHideTooltip(node.node("hide-tooltip").getBoolean())
-                .withCustomModelData(node.node("custom-model-data").get(Integer.class));
+                .withCustomModelData(node.node("custom-model-data").get(Integer.class))
+                .withItemModel(node.node("item-model").get(Key.class));
         String name = node.node("name").getString("");
         List<String> description = node.node("description").getList(String.class);
         return new SimpleItemTemplate(template, name, description, TagResolver.empty(), ItemRenderer.button());

@@ -10,6 +10,7 @@ import me.m56738.easyarmorstands.platform.inventory.ItemStack;
 import me.m56738.easyarmorstands.platform.inventory.ItemType;
 import me.m56738.easyarmorstands.platform.paper.profile.PaperProfile;
 import me.m56738.easyarmorstands.platform.profile.Profile;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.jspecify.annotations.Nullable;
@@ -124,6 +125,12 @@ public interface PaperItemStack extends ItemStack {
                 data != null ? CustomModelData.customModelData()
                         .addFloat(data)
                         .build() : null);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Override
+    default ItemStack withItemModel(@Nullable Key itemModel) {
+        return withDataOrReset(DataComponentTypes.ITEM_MODEL, itemModel);
     }
 
     @SuppressWarnings("UnstableApiUsage")

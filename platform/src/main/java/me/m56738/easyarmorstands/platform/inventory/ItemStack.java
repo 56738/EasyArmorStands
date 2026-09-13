@@ -1,6 +1,7 @@
 package me.m56738.easyarmorstands.platform.inventory;
 
 import me.m56738.easyarmorstands.platform.profile.Profile;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.Nullable;
 
@@ -24,6 +25,8 @@ public interface ItemStack {
     ItemStack withHideTooltip(boolean hideTooltip);
 
     ItemStack withCustomModelData(@Nullable Integer data);
+
+    ItemStack withItemModel(@Nullable Key itemModel);
 
     ItemStack withEnchantmentGlintOverride(boolean value);
 

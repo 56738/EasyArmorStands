@@ -8,6 +8,7 @@ repositories {
     maven("https://maven.enginehub.org/repo/") {
         mavenContent {
             includeGroupByRegex("com\\.sk89q\\..*")
+            includeGroupByRegex("org\\.enginehub\\..*")
         }
     }
     maven("https://repo.papermc.io/repository/maven-public/")

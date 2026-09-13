@@ -8,6 +8,8 @@ import me.m56738.easyarmorstands.platform.modded.ModdedPlatform;
 import me.m56738.easyarmorstands.platform.modded.ModdedPlatformHolder;
 import me.m56738.easyarmorstands.platform.modded.profile.ModdedProfile;
 import me.m56738.easyarmorstands.platform.profile.Profile;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.platform.modcommon.MinecraftAudiences;
 import net.kyori.adventure.text.Component;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -115,6 +117,11 @@ public interface ModdedItemStack extends ItemStack, ModdedPlatformHolder {
     default ItemStack withCustomModelData(@Nullable Integer data) {
         return withDataOrReset(DataComponents.CUSTOM_MODEL_DATA,
                 data != null ? new CustomModelData(List.of((float) data), List.of(), List.of(), List.of()) : null);
+    }
+
+    @Override
+    default ItemStack withItemModel(@Nullable Key itemModel) {
+        return withDataOrReset(DataComponents.ITEM_MODEL, MinecraftAudiences.asNative(itemModel));
     }
 
     @Override
