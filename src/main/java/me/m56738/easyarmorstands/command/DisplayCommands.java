@@ -12,6 +12,7 @@ import me.m56738.easyarmorstands.command.requirement.RequireElement;
 import me.m56738.easyarmorstands.command.requirement.RequireElementSelection;
 import me.m56738.easyarmorstands.command.sender.EasPlayer;
 import me.m56738.easyarmorstands.command.util.ElementSelection;
+import me.m56738.easyarmorstands.command.util.MiniMessageProvider;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayBoxLayer;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayLayer;
 import me.m56738.easyarmorstands.editor.display.layer.DisplayShearLayer;
@@ -236,7 +237,7 @@ public class DisplayCommands {
     @PropertyPermission("easyarmorstands:text_display/text")
     @CommandDescription("easyarmorstands.command.description.text.set")
     @RequireElementSelection
-    public void setText(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder.MiniMessage @Greedy Component value) {
+    public void setText(EasPlayer sender, ElementSelection selection, @Argument("value") @Decoder(MiniMessageProvider.class) @Greedy Component value) {
         PropertyContainer properties = selection.properties(sender);
         Property<Component> property = properties.getOrNull(TextDisplayPropertyTypes.TEXT);
         if (property == null) {

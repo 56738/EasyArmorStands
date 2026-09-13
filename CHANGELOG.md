@@ -6,4 +6,5 @@
 
 # Fixes
 
-* Fix Lands integration failing to load due to missing icon item name
+* Fixed Lands integration failing to load due to missing icon item name
+* Fixed MiniMessage virtual tags not being retained by commands
