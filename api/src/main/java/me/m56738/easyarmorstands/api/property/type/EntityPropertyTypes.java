@@ -57,6 +57,7 @@ public final class EntityPropertyTypes {
             .name(translatable("easyarmorstands.property.location.name"))
             .formatter(new LocationFormatter())
             .permission("easyarmorstands.property.location")
+            .canCopyPredicate(_ -> false)
             .build();
     public static final PropertyType<Double> SCALE = PropertyType.builder(key("entity/scale"), Double.class)
             .name(translatable("easyarmorstands.property.scale.name"))
