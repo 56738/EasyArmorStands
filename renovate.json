@@ -22,6 +22,12 @@
         "com.palmergames.bukkit.towny:towny"
       ],
       "allowedVersions": "/^\\d+\\.\\d+\\.\\d+\\.0$/"
+    },
+    {
+      "matchDatasources": [
+        "java-version"
+      ],
+      "enabled": false
     }
   ]
 }
