@@ -1,7 +1,7 @@
 [versions]
 adventure = "5.2.0"
 adventure-platform-mod = "7.2.0"
-bentobox = "3.23.0"
+bentobox = "3.23.1"
 bstats = "3.2.1"
 cloud = "2.1.0"
 cloud-minecraft = "2.0.1"
