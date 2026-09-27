@@ -84,9 +84,9 @@ public interface ModdedItemStack extends ItemStack, ModdedPlatformHolder {
         return ModdedItemStack.fromNative(getPlatform(), item);
     }
 
-    default ItemStack withResetData(DataComponentType<?> type) {
+    default <T> ItemStack withResetData(DataComponentType<T> type) {
         net.minecraft.world.item.ItemStack item = getNative();
-        item.remove(type);
+        item.set(type, item.getItem().components().get(type));
         return ModdedItemStack.fromNative(getPlatform(), item);
     }
 

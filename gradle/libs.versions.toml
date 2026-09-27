@@ -1,43 +1,43 @@
 [versions]
 adventure = "5.2.0"
-adventure-platform-mod = "7.1.1"
-bentobox = "3.17.0"
+adventure-platform-mod = "7.2.0"
+bentobox = "3.23.0"
 bstats = "3.2.1"
 cloud = "2.1.0"
 cloud-minecraft = "2.0.1"
-cloud-minecraft-modded = "2.0.0"
+cloud-minecraft-modded = "2.1.0"
 configurate = "4.2.0"
-fabric-api = "0.155.2+26.2"
-fabric-loader = "0.19.3"
-fabric-loom = "1.17-SNAPSHOT"
+fabric-api = "0.161.0+26.3"
+fabric-loader = "0.19.5"
+fabric-loom = "1.18-SNAPSHOT"
 fabric-permissions-api = "0.7.0"
 fancyholograms = "2.10.0"
 gizmo = "1.1.1"
 gizmo-modded = "1.0.0-SNAPSHOT"
 griefdefender = "2.1.1-SNAPSHOT"
 griefprevention = "18.0.0"
-gson = "2.11.0"
+gson = "2.14.0"
 hangar-publish-plugin = "0.1.4"
 headdatabase-api = "1.3.2"
 huskclaims = "1.5.10"
 joml = "1.10.8"
 jspecify = "1.0.0"
 lands = "7.25.4"
-minecraft = "26.2"
+minecraft = "26.3"
 minotaur = "2.10.0"
-moddev = "2.0.142"
-neoforge = "26.2.0.35-beta"
-neoform = "26.2-2"
-paper = "26.2.build.+"
+moddev = "2.0.147"
+neoforge = "26.3.0.23-beta"
+neoform = "26.3-1"
+paper = "26.3.build.+"
 plotsquared = "7.6.0"
 residence = "6.0.2.3"
-resource-factory = "1.3.1"
+resource-factory = "1.4.0"
 run-task = "3.1.0"
 shadow = "9.6.1"
 slf4j = "2.0.17"
 towny = "0.103.2.0"
 traincarts = "2.0.1"
-worldguard = "7.0.17"
+worldguard = "7.0.19"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
@@ -56,7 +56,6 @@ cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", versio
 cloud-minecraft-modded-common = { module = "org.incendo:cloud-minecraft-modded-common", version.ref = "cloud-minecraft-modded" }
 cloud-neoforge = { module = "org.incendo:cloud-neoforge", version.ref = "cloud-minecraft-modded" }
 cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-minecraft" }
-configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }

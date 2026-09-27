@@ -57,7 +57,6 @@ public class NeoForgePlatformListener {
         NeoForge.EVENT_BUS.addListener(PlayerContainerEvent.Close.class, this::onPlayerContainerClose);
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.LeftClickBlock.class, this::onPlayerInteractLeftClickBlock);
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.LeftClickEmpty.class, this::onPlayerInteractLeftClickEmpty);
-        NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.EntityInteractSpecific.class, this::onPlayerInteractEntitySpecific);
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.EntityInteract.class, this::onPlayerInteractEntity);
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.RightClickBlock.class, this::onPlayerInteractRightClickBlock);
         NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.RightClickItem.class, this::onPlayerInteractRightClick);
@@ -120,13 +119,6 @@ public class NeoForgePlatformListener {
         invokeBoolean(event, EventType.PLAYER_LEFT_CLICK, PlayerLeftClickCallback::onPlayerLeftClick);
     }
 
-    private void onPlayerInteractEntitySpecific(PlayerInteractEvent.EntityInteractSpecific event) {
-        invokeBoolean(event, EventType.PLAYER_RIGHT_CLICK_ENTITY, (callback, player) -> {
-            ModdedEntity entity = ModdedEntity.fromNative(platform, event.getTarget());
-            return callback.onPlayerRightClickEntity(player, entity);
-        });
-    }
-
     private void onPlayerInteractEntity(PlayerInteractEvent.EntityInteract event) {
         invokeBoolean(event, EventType.PLAYER_RIGHT_CLICK_ENTITY, (callback, player) -> {
             ModdedEntity entity = ModdedEntity.fromNative(platform, event.getTarget());
@@ -184,7 +176,7 @@ public class NeoForgePlatformListener {
     }
 
     private void onArmorStandBreak(ArmorStandBreakEvent event) {
-        if (!(event.getSource().getEntity() instanceof ServerPlayer serverPlayer)) return;
+        if (!(event.getAttributedTo() instanceof ServerPlayer serverPlayer)) return;
         invoker(EventType.PLAYER_DESTROY_ENTITY).onPlayerDestroyEntity(
                 ModdedPlayer.fromNative(platform, serverPlayer),
                 ModdedEntity.fromNative(platform, event.getEntity()));
@@ -198,7 +190,8 @@ public class NeoForgePlatformListener {
                 lastSlot.slot = slot;
                 invoker(EventType.PLAYER_SWITCH_SELECTED_SLOT).onPlayerSwitchSelectedSlot(ModdedPlayer.fromNative(platform, player));
             }
-            if (player.swinging && player.swingTime == 0) {
+            if (player.isSwinging() && player.getSwingAnimation(1f) == 0) {
+                // TODO test
                 invoker(EventType.PLAYER_LEFT_CLICK).onPlayerLeftClick(ModdedPlayer.fromNative(platform, player));
             }
         }

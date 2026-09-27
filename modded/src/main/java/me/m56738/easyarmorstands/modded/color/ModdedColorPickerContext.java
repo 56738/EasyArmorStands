@@ -12,7 +12,6 @@ import me.m56738.easyarmorstands.util.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.item.component.MapItemColor;
 
 import java.util.List;
 
@@ -27,13 +26,7 @@ public class ModdedColorPickerContext implements ColorPickerContext {
                             || h.is(ItemIds.LEATHER_BOOTS)
                             || h.is(ItemIds.LEATHER_HORSE_ARMOR),
                     DyedItemColor::new,
-                    DyedItemColor::rgb),
-            new DataItemColorAccessor<>(
-                    DataComponents.MAP_COLOR,
-                    MapItemColor.DEFAULT,
-                    h -> h.is(ItemIds.FILLED_MAP),
-                    MapItemColor::new,
-                    MapItemColor::rgb));
+                    DyedItemColor::rgb));
 
     private final ModdedPlatform platform;
     private final Property<ItemStack> property;

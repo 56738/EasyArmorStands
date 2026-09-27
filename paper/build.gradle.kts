@@ -194,7 +194,7 @@ paperPluginYaml {
 }
 
 val supportedGameVersions = listOf(
-    "26.2",
+    "26.3",
 )
 
 modrinth {

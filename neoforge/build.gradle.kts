@@ -86,8 +86,8 @@ neoForgeModsToml {
         version = project.version.toString()
         displayName = "EasyArmorStands"
         displayUrl = "https://modrinth.com/mod/easyarmorstands"
-        logoFile = "icon.png"
-        logoBlur = false
+        issueTrackerUrl = "https://github.com/56738/EasyArmorStands/issues"
+        iconFile = "icon.png"
         authors = "56738"
         description = "Armor stand and display entity editor"
         dependencies {

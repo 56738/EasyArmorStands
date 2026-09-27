@@ -174,11 +174,11 @@ public interface ModdedArmorStand extends ArmorStand, ModdedLivingEntity {
 
     @Override
     default boolean isInvulnerable() {
-        return getNative().isInvulnerable();
+        return getNative().isPermanentlyInvulnerable();
     }
 
     @Override
     default void setInvulnerable(boolean invulnerable) {
-        getNative().setInvulnerable(invulnerable);
+        getNative().setPermanentlyInvulnerable(invulnerable);
     }
 }

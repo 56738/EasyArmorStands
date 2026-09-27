@@ -1,18 +1,17 @@
 package me.m56738.easyarmorstands.platform.neoforge.event;
 
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.event.entity.EntityEvent;
 
 public class ArmorStandBreakEvent extends EntityEvent {
-    private final DamageSource source;
+    private final Entity attributedTo;
 
-    public ArmorStandBreakEvent(Entity entity, DamageSource source) {
+    public ArmorStandBreakEvent(Entity entity, Entity attributedTo) {
         super(entity);
-        this.source = source;
+        this.attributedTo = attributedTo;
     }
 
-    public DamageSource getSource() {
-        return source;
+    public Entity getAttributedTo() {
+        return attributedTo;
     }
 }

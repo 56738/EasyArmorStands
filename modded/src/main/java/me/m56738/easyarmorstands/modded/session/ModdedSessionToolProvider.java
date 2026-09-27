@@ -26,6 +26,7 @@ public class ModdedSessionToolProvider implements SessionToolProvider {
         CompoundTag tag = data.copyTag();
         tag.putBoolean(KEY, true);
         item.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        item.remove(DataComponents.COOKING_FUEL);
         return ModdedItemStack.fromNative(eas.platform(), item);
     }
 

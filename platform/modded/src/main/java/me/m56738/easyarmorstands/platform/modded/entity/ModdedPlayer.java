@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.Translator;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -135,7 +136,7 @@ public interface ModdedPlayer extends Player, ModdedLivingEntity, ModdedCommandS
 
     @Override
     default void dropItem(ItemStack item) {
-        getNative().drop(ModdedItemStack.toNative(item), false);
+        getNative().drop(ModdedItemStack.toNative(item), false, Prediction.SERVER_ONLY);
     }
 
     @Override
