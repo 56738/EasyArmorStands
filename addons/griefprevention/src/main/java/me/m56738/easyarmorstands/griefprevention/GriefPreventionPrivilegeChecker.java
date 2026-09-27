@@ -1,20 +1,21 @@
 package me.m56738.easyarmorstands.griefprevention;
 
-import com.griefprevention.protection.ProtectionHelper;
 import me.m56738.easyarmorstands.api.element.Element;
 import me.m56738.easyarmorstands.api.property.PropertyContainer;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeChecker;
 import me.m56738.easyarmorstands.message.Message;
 import me.m56738.easyarmorstands.permission.Permissions;
-import me.ryanhamshire.GriefPrevention.ClaimPermission;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class GriefPreventionPrivilegeChecker implements RegionPrivilegeChecker {
     @Override
     public boolean isAllowed(Player player, Location location) {
-        return ProtectionHelper.checkPermission(player, location, ClaimPermission.Build, null) == null;
+        String reason = GriefPrevention.instance.allowBuild(player, location, Material.ARMOR_STAND);
+        return reason == null;
     }
 
     @Override
