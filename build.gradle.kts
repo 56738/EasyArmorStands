@@ -93,6 +93,7 @@ paperPluginYaml {
         server("BentoBox", PaperPluginYaml.Load.BEFORE, false)
         server("FancyHolograms", PaperPluginYaml.Load.BEFORE, false)
         server("GriefDefender", PaperPluginYaml.Load.BEFORE, false)
+        server("GriefPrevention", PaperPluginYaml.Load.BEFORE, false)
         server("HeadDatabase", PaperPluginYaml.Load.BEFORE, false)
         server("HuskClaims", PaperPluginYaml.Load.BEFORE, false)
         server("Lands", PaperPluginYaml.Load.BEFORE, false)
