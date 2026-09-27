@@ -20,6 +20,7 @@ import me.m56738.easyarmorstands.api.property.type.PropertyTypeRegistry;
 import me.m56738.easyarmorstands.api.region.RegionPrivilegeManager;
 import me.m56738.easyarmorstands.capability.CapabilityLoader;
 import me.m56738.easyarmorstands.capability.command.CommandCapability;
+import me.m56738.easyarmorstands.capability.crafter.CrafterCapability;
 import me.m56738.easyarmorstands.capability.handswap.SwapHandItemsCapability;
 import me.m56738.easyarmorstands.capability.mannequin.MannequinCapability;
 import me.m56738.easyarmorstands.capability.tool.ToolCapability;
@@ -266,6 +267,11 @@ public class EasyArmorStandsPlugin extends JavaPlugin implements EasyArmorStands
         }
         getServer().getScheduler().runTaskTimer(this, sessionManager::update, 0, 1);
         getServer().getScheduler().runTaskTimer(this, sessionListener::update, 0, 1);
+
+        CrafterCapability crafterCapability = getCapability(CrafterCapability.class);
+        if (crafterCapability != null) {
+            crafterCapability.register();
+        }
 
         SwapHandItemsCapability swapHandItemsCapability = getCapability(SwapHandItemsCapability.class);
         if (swapHandItemsCapability != null) {
