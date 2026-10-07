@@ -26,19 +26,19 @@ jobs:
           ORG_GRADLE_PROJECT_m56738Username: ${{ secrets.MAVEN_M56738_USERNAME }}
           ORG_GRADLE_PROJECT_m56738Password: ${{ secrets.MAVEN_M56738_PASSWORD }}
       - name: Upload Fabric artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: Fabric
           path: fabric/build/EasyArmorStands-Fabric-*.jar
           archive: 'false'
       - name: Upload NeoForge artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: NeoForge
           path: neoforge/build/EasyArmorStands-NeoForge-*.jar
           archive: 'false'
       - name: Upload Paper artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: Paper
           path: paper/build/EasyArmorStands-Paper-*.jar
