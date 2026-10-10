@@ -3,8 +3,7 @@ package me.m56738.easyarmorstands.paper;
 import me.m56738.easyarmorstands.EasyArmorStandsHolder;
 import me.m56738.easyarmorstands.command.sender.EasCommandSender;
 import me.m56738.easyarmorstands.message.TranslationManager;
-import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaper;
-import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaperProvider;
+import me.m56738.easyarmorstands.paper.api.EasyArmorStandsPaperHolder;
 import me.m56738.easyarmorstands.paper.command.ComponentSuggestionMapper;
 import me.m56738.easyarmorstands.paper.listener.PaperToolListener;
 import me.m56738.easyarmorstands.paper.listener.PaperVisibilityListener;
@@ -16,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jspecify.annotations.Nullable;
 
-public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
+public class Main extends JavaPlugin {
     private final EasyArmorStandsHolder holder;
     private final MainThreadExecutor executor;
     private final TranslationManager translationManager;
@@ -40,6 +39,7 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
 
         eas = new EasyArmorStandsPaperImpl(this, translationManager, platform, commandManager);
         holder.initialize(eas);
+        EasyArmorStandsPaperHolder.initialize(eas);
 
         eas.onLoad();
 
@@ -73,13 +73,5 @@ public class Main extends JavaPlugin implements EasyArmorStandsPaperProvider {
         }
 
         permissionRegistrar.unregisterAll();
-    }
-
-    @Override
-    public EasyArmorStandsPaper getEasyArmorStands() {
-        if (eas == null) {
-            throw new IllegalStateException("EasyArmorStands is not loaded");
-        }
-        return eas;
     }
 }
