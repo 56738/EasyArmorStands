@@ -9,7 +9,8 @@
   },
   "ignoreDeps": [
     "io.papermc.paper:paper-api",
-    "com.mojang:minecraft"
+    "com.mojang:minecraft",
+    "org.slf4j:slf4j-api"
   ],
   "packageRules": [
     {
