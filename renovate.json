@@ -38,6 +38,12 @@
       "allowedVersions": "/^\\d+\\.\\d+\\.\\d+\\.0$/"
     },
     {
+      "matchDepNames": [
+        "net.fabricmc.fabric-loom"
+      ],
+      "allowedVersions": "/-SNAPSHOT$/"
+    },
+    {
       "matchDatasources": [
         "java-version"
       ],
