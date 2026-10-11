@@ -36,7 +36,7 @@ run-task = "3.1.0"
 shadow = "9.6.1"
 slf4j = "2.0.17"
 towny = "0.103.2.0"
-traincarts = "2.0.1"
+traincarts = "2.0.2"
 worldguard = "7.0.19"
 
 [libraries]
