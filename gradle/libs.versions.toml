@@ -37,7 +37,7 @@ shadow = "9.6.1"
 slf4j = "2.0.17"
 towny = "0.103.2.0"
 traincarts = "2.0.2"
-worldguard = "7.0.19"
+worldguard = "7.0.20"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
