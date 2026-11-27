@@ -1,5 +1,3 @@
-import org.spongepowered.configurate.objectmapping.ConfigSerializable
-
 plugins {
     id("easyarmorstands.base")
     alias(libs.plugins.fabric.loom)
@@ -96,22 +94,12 @@ fabricModJson {
     depends("gizmo", "*")
     depends("java", ">=" + java.toolchain.languageVersion.get().asInt())
     depends("minecraft", "~" + libs.versions.minecraft.get())
-    custom(
-        "modmenu", complexCustomValue(
-            ModMenu(
-                links = mapOf(
-                    "modmenu.discord" to "https://discord.gg/AgNps57FFJ"
-                )
-            )
-        )
-    )
+    modMenu {
+        builtInLinks {
+            discord("https://discord.gg/AgNps57FFJ")
+        }
+    }
 }
-
-@ConfigSerializable
-data class ModMenu(
-    @get:Input
-    val links: Map<String, String>
-)
 
 modrinth {
     projectId = "easyarmorstands"

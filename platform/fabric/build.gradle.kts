@@ -28,5 +28,7 @@ fabricModJson {
     depends("fabricloader", ">=" + libs.versions.fabric.loader.get())
     depends("java", ">=" + java.toolchain.languageVersion.get().asInt())
     depends("minecraft", "~" + libs.versions.minecraft.get())
-    custom("modmenu", simpleCustomValueMap(mapOf("parent" to "easyarmorstands")))
+    modMenu {
+        parent("easyarmorstands")
+    }
 }
